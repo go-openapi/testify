@@ -1,3 +1,3 @@
-module github.com/stretchr/testify/_codegen
+module github.com/go-openapi/testify/_codegen
 
-go 1.11
+go 1.24.0

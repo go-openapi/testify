@@ -82,16 +82,16 @@ func TestCompare(t *testing.T) {
 		}
 
 		if resGreater != compareGreater {
-			t.Errorf("object greater should be greater than less for type " + currCase.cType)
+			t.Errorf("object greater should be greater than less for type %s", currCase.cType)
 		}
 
 		resEqual, isComparable := compare(currCase.less, currCase.less, reflect.ValueOf(currCase.less).Kind())
 		if !isComparable {
-			t.Error("object are comparable for type " + currCase.cType)
+			t.Errorf("object are comparable for type %s", currCase.cType)
 		}
 
 		if resEqual != 0 {
-			t.Errorf("objects should be equal for type " + currCase.cType)
+			t.Errorf("objects should be equal for type %s", currCase.cType)
 		}
 	}
 }
@@ -170,7 +170,7 @@ func TestGreater(t *testing.T) {
 		out := &outputT{buf: bytes.NewBuffer(nil)}
 		False(t, Greater(out, currCase.less, currCase.greater))
 		Contains(t, out.buf.String(), currCase.msg)
-		Contains(t, out.helpers, "github.com/stretchr/testify/assert.Greater")
+		Contains(t, out.helpers, "github.com/go-openapi/testify/assert.Greater")
 	}
 }
 
@@ -216,7 +216,7 @@ func TestGreaterOrEqual(t *testing.T) {
 		out := &outputT{buf: bytes.NewBuffer(nil)}
 		False(t, GreaterOrEqual(out, currCase.less, currCase.greater))
 		Contains(t, out.buf.String(), currCase.msg)
-		Contains(t, out.helpers, "github.com/stretchr/testify/assert.GreaterOrEqual")
+		Contains(t, out.helpers, "github.com/go-openapi/testify/assert.GreaterOrEqual")
 	}
 }
 
@@ -262,7 +262,7 @@ func TestLess(t *testing.T) {
 		out := &outputT{buf: bytes.NewBuffer(nil)}
 		False(t, Less(out, currCase.greater, currCase.less))
 		Contains(t, out.buf.String(), currCase.msg)
-		Contains(t, out.helpers, "github.com/stretchr/testify/assert.Less")
+		Contains(t, out.helpers, "github.com/go-openapi/testify/assert.Less")
 	}
 }
 
@@ -308,7 +308,7 @@ func TestLessOrEqual(t *testing.T) {
 		out := &outputT{buf: bytes.NewBuffer(nil)}
 		False(t, LessOrEqual(out, currCase.greater, currCase.less))
 		Contains(t, out.buf.String(), currCase.msg)
-		Contains(t, out.helpers, "github.com/stretchr/testify/assert.LessOrEqual")
+		Contains(t, out.helpers, "github.com/go-openapi/testify/assert.LessOrEqual")
 	}
 }
 
@@ -349,7 +349,7 @@ func TestPositive(t *testing.T) {
 		out := &outputT{buf: bytes.NewBuffer(nil)}
 		False(t, Positive(out, currCase.e))
 		Contains(t, out.buf.String(), currCase.msg)
-		Contains(t, out.helpers, "github.com/stretchr/testify/assert.Positive")
+		Contains(t, out.helpers, "github.com/go-openapi/testify/assert.Positive")
 	}
 }
 
@@ -390,7 +390,7 @@ func TestNegative(t *testing.T) {
 		out := &outputT{buf: bytes.NewBuffer(nil)}
 		False(t, Negative(out, currCase.e))
 		Contains(t, out.buf.String(), currCase.msg)
-		Contains(t, out.helpers, "github.com/stretchr/testify/assert.Negative")
+		Contains(t, out.helpers, "github.com/go-openapi/testify/assert.Negative")
 	}
 }
 
