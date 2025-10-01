@@ -17,7 +17,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/go-openapi/testify/assert/internal/yaml"
+	"github.com/go-openapi/testify/assert/yaml"
 	"github.com/go-openapi/testify/internal/difflib"
 	"github.com/go-openapi/testify/internal/spew"
 )

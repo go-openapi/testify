@@ -1542,10 +1542,17 @@ func TestDidPanic(t *testing.T) {
 		t.Error("didPanic should return true, panicMsg")
 	}
 
-	if funcDidPanic, msg, _ := didPanic(func() {
-		panic(nil)
-	}); !funcDidPanic || msg != nil {
-		t.Error("didPanic should return true, nil")
+	{
+		funcDidPanic, msg, _ := didPanic(func() {
+			err := errors.New("test")
+			panic(err) // nil is no longer supported as a panic value and returns a runtime.PanicNil error
+		})
+		if !funcDidPanic {
+			t.Error("didPanic should have panicked")
+		}
+		if msg == nil {
+			t.Errorf("didPanic should have returned something, but got nil")
+		}
 	}
 
 	if funcDidPanic, _, _ := didPanic(func() {
@@ -1582,10 +1589,13 @@ func TestPanicsWithValue(t *testing.T) {
 		t.Error("PanicsWithValue should return true")
 	}
 
-	if !PanicsWithValue(mockT, nil, func() {
-		panic(nil)
-	}) {
-		t.Error("PanicsWithValue should return true")
+	{
+		err := errors.New("test")
+		if !PanicsWithValue(mockT, err, func() {
+			panic(err) // panic no longer supports a nil argument
+		}) {
+			t.Error("PanicsWithValue should return true")
+		}
 	}
 
 	if PanicsWithValue(mockT, "Panic!", func() {
@@ -2771,126 +2781,6 @@ func TestJSONEq_ArraysOfDifferentOrder(t *testing.T) {
 
 	mockT := new(testing.T)
 	False(t, JSONEq(mockT, `["foo", {"hello": "world", "nested": "hash"}]`, `[{ "hello": "world", "nested": "hash"}, "foo"]`))
-}
-
-func TestYAMLEq_EqualYAMLString(t *testing.T) {
-	t.Parallel()
-
-	mockT := new(testing.T)
-	True(t, YAMLEq(mockT, `{"hello": "world", "foo": "bar"}`, `{"hello": "world", "foo": "bar"}`))
-}
-
-func TestYAMLEq_EquivalentButNotEqual(t *testing.T) {
-	t.Parallel()
-
-	mockT := new(testing.T)
-	True(t, YAMLEq(mockT, `{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`))
-}
-
-func TestYAMLEq_HashOfArraysAndHashes(t *testing.T) {
-	t.Parallel()
-
-	mockT := new(testing.T)
-	expected := `
-numeric: 1.5
-array:
-  - foo: bar
-  - 1
-  - "string"
-  - ["nested", "array", 5.5]
-hash:
-  nested: hash
-  nested_slice: [this, is, nested]
-string: "foo"
-`
-
-	actual := `
-numeric: 1.5
-hash:
-  nested: hash
-  nested_slice: [this, is, nested]
-string: "foo"
-array:
-  - foo: bar
-  - 1
-  - "string"
-  - ["nested", "array", 5.5]
-`
-	True(t, YAMLEq(mockT, expected, actual))
-}
-
-func TestYAMLEq_Array(t *testing.T) {
-	t.Parallel()
-
-	mockT := new(testing.T)
-	True(t, YAMLEq(mockT, `["foo", {"hello": "world", "nested": "hash"}]`, `["foo", {"nested": "hash", "hello": "world"}]`))
-}
-
-func TestYAMLEq_HashAndArrayNotEquivalent(t *testing.T) {
-	t.Parallel()
-
-	mockT := new(testing.T)
-	False(t, YAMLEq(mockT, `["foo", {"hello": "world", "nested": "hash"}]`, `{"foo": "bar", {"nested": "hash", "hello": "world"}}`))
-}
-
-func TestYAMLEq_HashesNotEquivalent(t *testing.T) {
-	t.Parallel()
-
-	mockT := new(testing.T)
-	False(t, YAMLEq(mockT, `{"foo": "bar"}`, `{"foo": "bar", "hello": "world"}`))
-}
-
-func TestYAMLEq_ActualIsSimpleString(t *testing.T) {
-	t.Parallel()
-
-	mockT := new(testing.T)
-	False(t, YAMLEq(mockT, `{"foo": "bar"}`, "Simple String"))
-}
-
-func TestYAMLEq_ExpectedIsSimpleString(t *testing.T) {
-	t.Parallel()
-
-	mockT := new(testing.T)
-	False(t, YAMLEq(mockT, "Simple String", `{"foo": "bar", "hello": "world"}`))
-}
-
-func TestYAMLEq_ExpectedAndActualSimpleString(t *testing.T) {
-	t.Parallel()
-
-	mockT := new(testing.T)
-	True(t, YAMLEq(mockT, "Simple String", "Simple String"))
-}
-
-func TestYAMLEq_ArraysOfDifferentOrder(t *testing.T) {
-	t.Parallel()
-
-	mockT := new(testing.T)
-	False(t, YAMLEq(mockT, `["foo", {"hello": "world", "nested": "hash"}]`, `[{ "hello": "world", "nested": "hash"}, "foo"]`))
-}
-
-func TestYAMLEq_OnlyFirstDocument(t *testing.T) {
-	t.Parallel()
-
-	mockT := new(testing.T)
-	True(t, YAMLEq(mockT,
-		`---
-doc1: same
----
-doc2: different
-`,
-		`---
-doc1: same
----
-doc2: notsame
-`,
-	))
-}
-
-func TestYAMLEq_InvalidIdenticalYAML(t *testing.T) {
-	t.Parallel()
-
-	mockT := new(testing.T)
-	False(t, YAMLEq(mockT, `}`, `}`))
 }
 
 type diffTestingStruct struct {
