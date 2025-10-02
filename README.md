@@ -1,10 +1,15 @@
-[![Build Status](https://github.com/go-openapi/testify/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/go-openapi/testify/actions/workflows/main.yml) [![Go Report Card](https://goreportcard.com/badge/github.com/go-openapi/testify)](https://goreportcard.com/report/github.com/go-openapi/testify) [![PkgGoDev](https://pkg.go.dev/badge/github.com/go-openapi/testify)](https://pkg.go.dev/github.com/go-openapi/testify)
+# Testify [![Build Status](https://github.com/go-openapi/testify/actions/workflows/go-test.yml/badge.svg)](https://github.com/go-openapi/testify/actions?query=workflow%3A"go+test") [![codecov](https://codecov.io/gh/go-openapi/testify/branch/master/graph/badge.svg)](https://codecov.io/gh/go-openapi/testify)
 
-# Testify - Thou Shalt Write Tests
+[![Slack Status](https://slackin.goswagger.io/badge.svg)](https://slackin.goswagger.io)
+[![license](https://img.shields.io/badge/license-Apache%20v2-orange.svg)](https://raw.githubusercontent.com/go-openapi/testify/master/LICENSE)
+[![Go Reference](https://pkg.go.dev/badge/github.com/go-openapi/testify.svg)](https://pkg.go.dev/github.com/go-openapi/testify)
+[![Go Report Card](https://goreportcard.com/badge/github.com/go-openapi/testify)](https://goreportcard.com/report/github.com/go-openapi/testify)
 
-Go code (golang) set of packages that provide many tools for testifying that your code will behave as you intend.
+## Testify - Thou Shalt Write Tests
 
-This is the go-openapi fork of the great [testify](github.com/stretchr/testify) package.
+A golang set of packages that provide tools for testifying that your code will behave as you intend.
+
+This is the go-openapi fork of the great [testify](https://github.com/stretchr/testify) package.
 
 ## Why this fork?
 
@@ -17,12 +22,12 @@ However, at `go-openapi` we would like to address the well-known issues in `test
 1. We want first to remove all external dependencies.
 
 > For all our libraries and generated test code we don't want test dependencies
-> to drill farther than `import github.com/go-openapi/testify`, but on some specific (and controlled)
+> to drill farther than `import github.com/go-openapi/testify/v2`, but on some specific (and controlled)
 > occasions.
 >
 > In this fork, all external stuff is either internalized (`go-spew`, `difflib`),
 > removed (`mocks`, `suite`, `http`) or specifically enabled by importing a specific module
-> (`github.com/go-openapi/testify/enable/yaml`).
+> (`github.com/go-openapi/testify/v2/enable/yaml`).
 
 2. We want to remove most of the chrome that has been added over the years
 
@@ -42,15 +47,16 @@ However, at `go-openapi` we would like to address the well-known issues in `test
 
 ## What's next with this project?
 
-1. The first release comes with zero dependencies and an unstable API (see below [our use case](#usage-at-go-openapi))
+1. [x] The first release comes with zero dependencies and an unstable API (see below [our use case](#usage-at-go-openapi))
 2. This project is going to be injected as the main and sole test dependency of the `go-openapi` libraries and the `go-swagger` tool
 3. Valuable pending pull requests from the original project could be merged (e.g. `JSONEqBytes`) or transformed as "enable" modules (e.g. colorized output)
 4. Unclear assertions may be provided an alternative verb (e.g. `InDelta`)
-5. Since we leveled the go requirements to the rest of the go-openapi (currently go1.24) quite a bit of relinting is ahead.
+5. Since we have leveled the go requirements to the rest of the go-openapi (currently go1.24) there is quite a bit of relinting lying ahead.
 
 ## Usage at go-openapi
 
 At this moment, we have identified the following usage in our tools. This API shall remain stable.
+Currently, there are no guarantees about the entry points not in this list.
 
 ```
 Condition
@@ -86,22 +92,21 @@ YAMLEq,YAMLEqf
 Zero,Zerof
 ```
 
-## Installaton
+## Installation
 
 To use this package in your projects:
 
 ```cmd
-    go get github.com/stretchr/testify
+    go get github.com/go-openapi/testify/v2
 ```
-
 
 ## Get started
 
 Features include:
 
-  * [Easy assertions](#assert-package)
-  * ~[Mocking](#mock-package)~
-  * ~[Testing suite interfaces and functions](#suite-package)~
+  * [Easy assertions](./original.md#assert-package)
+  * ~[Mocking](./original.md#mock-package)~ removed
+  * ~[Testing suite interfaces and functions](./original.md#suite-package)~ removed
 
 ## Examples
 
@@ -109,25 +114,13 @@ See [the original README)(./original.md)
 
 ## Licensing
 
-All `go-openapi` projects are distributed under an Apache 2 license
+See the license [NOTICE](./NOTICE), which recalls the licensing terms of all the pieces of software
+distributed with this fork, including internalized libraries.
 
-The original project is licensed under the terms of the MIT license, and this fork has kept the original
-license.
-
-This project is therefore  dual-licensed.
-
-Internalized libraries come this their original licensing terms:
-
-* `go-difflib` was copied with the original license from its author (Patrick Nezard)
-* `go-spew` was copied with the original license from its author (Dave Cheney)
-
-[SPDX-License-Identifier: Apache-2.0](./LICENSE)
-[SPDX-License-Identifier: MIT](./LICENSE.MIT)
-
-Internalized libraries:
-
-[SPDX-License-Identifier: ISC](./internal/spew/LICENSE)
-[SPDX-License-Identifier: ](./internal/difflib/LICENSE)
+* [SPDX-License-Identifier: Apache-2.0](./LICENSE)
+* [SPDX-License-Identifier: MIT](./NOTICE)
+* [SPDX-License-Identifier: ISC](./internal/spew/LICENSE)
+* [SPDX-License-Identifier: ](./internal/difflib/LICENSE)
 
 ## Contributing
 
@@ -138,4 +131,4 @@ Extra credit for those using Testify to write the test code that demonstrates it
 
 Code generation is used. Run `go generate ./...` to update generated files.
 
-## [Original README](./original.md)
+## [The original README](./original.md)

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
+// SPDX-License-Identifier: Apache-2.0
+
 // Module testify is a set of packages that provide many tools for testifying that your code will behave as you intend.
 //
 // Testify contains the following packages:
