@@ -23,11 +23,11 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/go-openapi/testify/_codegen/internal/imports"
+	"github.com/go-openapi/testify/v2/_codegen/internal/imports"
 )
 
 var (
-	pkg       = flag.String("assert-path", "github.com/go-openapi/testify/assert", "Path to the assert package")
+	pkg       = flag.String("assert-path", "github.com/go-openapi/testify/v2/assert", "Path to the assert package")
 	includeF  = flag.Bool("include-format-funcs", false, "include format functions such as Errorf and Equalf")
 	outputPkg = flag.String("output-package", "", "package for the resulting code")
 	tmplFile  = flag.String("template", "", "What file to load the function template from")

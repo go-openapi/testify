@@ -29,8 +29,8 @@ func TestCompare(t *testing.T) {
 	type customTime time.Time
 	type customBytes []byte
 	for _, currCase := range []struct {
-		less    interface{}
-		greater interface{}
+		less    any
+		greater any
 		cType   string
 	}{
 		{less: customString("a"), greater: customString("b"), cType: "string"},
@@ -102,7 +102,7 @@ type outputT struct {
 }
 
 // Implements TestingT
-func (t *outputT) Errorf(format string, args ...interface{}) {
+func (t *outputT) Errorf(format string, args ...any) {
 	s := fmt.Sprintf(format, args...)
 	t.buf.WriteString(s)
 }
@@ -147,8 +147,8 @@ func TestGreater(t *testing.T) {
 
 	// Check error report
 	for _, currCase := range []struct {
-		less    interface{}
-		greater interface{}
+		less    any
+		greater any
 		msg     string
 	}{
 		{less: "a", greater: "b", msg: `"a" is not greater than "b"`},
@@ -170,7 +170,7 @@ func TestGreater(t *testing.T) {
 		out := &outputT{buf: bytes.NewBuffer(nil)}
 		False(t, Greater(out, currCase.less, currCase.greater))
 		Contains(t, out.buf.String(), currCase.msg)
-		Contains(t, out.helpers, "github.com/go-openapi/testify/assert.Greater")
+		Contains(t, out.helpers, "github.com/go-openapi/testify/v2/assert.Greater")
 	}
 }
 
@@ -193,8 +193,8 @@ func TestGreaterOrEqual(t *testing.T) {
 
 	// Check error report
 	for _, currCase := range []struct {
-		less    interface{}
-		greater interface{}
+		less    any
+		greater any
 		msg     string
 	}{
 		{less: "a", greater: "b", msg: `"a" is not greater than or equal to "b"`},
@@ -216,7 +216,7 @@ func TestGreaterOrEqual(t *testing.T) {
 		out := &outputT{buf: bytes.NewBuffer(nil)}
 		False(t, GreaterOrEqual(out, currCase.less, currCase.greater))
 		Contains(t, out.buf.String(), currCase.msg)
-		Contains(t, out.helpers, "github.com/go-openapi/testify/assert.GreaterOrEqual")
+		Contains(t, out.helpers, "github.com/go-openapi/testify/v2/assert.GreaterOrEqual")
 	}
 }
 
@@ -239,8 +239,8 @@ func TestLess(t *testing.T) {
 
 	// Check error report
 	for _, currCase := range []struct {
-		less    interface{}
-		greater interface{}
+		less    any
+		greater any
 		msg     string
 	}{
 		{less: "a", greater: "b", msg: `"b" is not less than "a"`},
@@ -262,7 +262,7 @@ func TestLess(t *testing.T) {
 		out := &outputT{buf: bytes.NewBuffer(nil)}
 		False(t, Less(out, currCase.greater, currCase.less))
 		Contains(t, out.buf.String(), currCase.msg)
-		Contains(t, out.helpers, "github.com/go-openapi/testify/assert.Less")
+		Contains(t, out.helpers, "github.com/go-openapi/testify/v2/assert.Less")
 	}
 }
 
@@ -285,8 +285,8 @@ func TestLessOrEqual(t *testing.T) {
 
 	// Check error report
 	for _, currCase := range []struct {
-		less    interface{}
-		greater interface{}
+		less    any
+		greater any
 		msg     string
 	}{
 		{less: "a", greater: "b", msg: `"b" is not less than or equal to "a"`},
@@ -308,7 +308,7 @@ func TestLessOrEqual(t *testing.T) {
 		out := &outputT{buf: bytes.NewBuffer(nil)}
 		False(t, LessOrEqual(out, currCase.greater, currCase.less))
 		Contains(t, out.buf.String(), currCase.msg)
-		Contains(t, out.helpers, "github.com/go-openapi/testify/assert.LessOrEqual")
+		Contains(t, out.helpers, "github.com/go-openapi/testify/v2/assert.LessOrEqual")
 	}
 }
 
@@ -335,7 +335,7 @@ func TestPositive(t *testing.T) {
 
 	// Check error report
 	for _, currCase := range []struct {
-		e   interface{}
+		e   any
 		msg string
 	}{
 		{e: int(-1), msg: `"-1" is not positive`},
@@ -349,7 +349,7 @@ func TestPositive(t *testing.T) {
 		out := &outputT{buf: bytes.NewBuffer(nil)}
 		False(t, Positive(out, currCase.e))
 		Contains(t, out.buf.String(), currCase.msg)
-		Contains(t, out.helpers, "github.com/go-openapi/testify/assert.Positive")
+		Contains(t, out.helpers, "github.com/go-openapi/testify/v2/assert.Positive")
 	}
 }
 
@@ -376,7 +376,7 @@ func TestNegative(t *testing.T) {
 
 	// Check error report
 	for _, currCase := range []struct {
-		e   interface{}
+		e   any
 		msg string
 	}{
 		{e: int(1), msg: `"1" is not negative`},
@@ -390,7 +390,7 @@ func TestNegative(t *testing.T) {
 		out := &outputT{buf: bytes.NewBuffer(nil)}
 		False(t, Negative(out, currCase.e))
 		Contains(t, out.buf.String(), currCase.msg)
-		Contains(t, out.helpers, "github.com/go-openapi/testify/assert.Negative")
+		Contains(t, out.helpers, "github.com/go-openapi/testify/v2/assert.Negative")
 	}
 }
 
@@ -400,8 +400,8 @@ func Test_compareTwoValuesDifferentValuesTypes(t *testing.T) {
 	mockT := new(testing.T)
 
 	for _, currCase := range []struct {
-		v1            interface{}
-		v2            interface{}
+		v1            any
+		v2            any
 		compareResult bool
 	}{
 		{v1: 123, v2: "abc"},
@@ -423,8 +423,8 @@ func Test_compareTwoValuesNotComparableValues(t *testing.T) {
 	}
 
 	for _, currCase := range []struct {
-		v1 interface{}
-		v2 interface{}
+		v1 any
+		v2 any
 	}{
 		{v1: CompareStruct{}, v2: CompareStruct{}},
 		{v1: map[string]int{}, v2: map[string]int{}},
@@ -441,8 +441,8 @@ func Test_compareTwoValuesCorrectCompareResult(t *testing.T) {
 	mockT := new(testing.T)
 
 	for _, currCase := range []struct {
-		v1             interface{}
-		v2             interface{}
+		v1             any
+		v2             any
 		allowedResults []compareResult
 	}{
 		{v1: 1, v2: 2, allowedResults: []compareResult{compareLess}},
@@ -476,7 +476,7 @@ func Test_containsValue(t *testing.T) {
 }
 
 func TestComparingMsgAndArgsForwarding(t *testing.T) {
-	msgAndArgs := []interface{}{"format %s %x", "this", 0xc001}
+	msgAndArgs := []any{"format %s %x", "this", 0xc001}
 	expectedOutput := "format this c001\n"
 	funcs := []func(t TestingT){
 		func(t TestingT) { Greater(t, 1, 2, msgAndArgs...) },

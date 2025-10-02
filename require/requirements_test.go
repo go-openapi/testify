@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/go-openapi/testify/assert"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 // AssertionTesterInterface defines an interface to be used for testing assertion methods

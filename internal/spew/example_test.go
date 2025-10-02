@@ -19,7 +19,7 @@ package spew_test
 import (
 	"fmt"
 
-	"github.com/go-openapi/testify/internal/spew"
+	"github.com/go-openapi/testify/v2/internal/spew"
 )
 
 type Flag int

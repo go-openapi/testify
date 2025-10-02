@@ -21,7 +21,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/go-openapi/testify/internal/spew"
+	"github.com/go-openapi/testify/v2/internal/spew"
 )
 
 // custom type to test Stinger interface on non-pointer receiver.

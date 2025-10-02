@@ -3,7 +3,7 @@
 package require
 
 import (
-	assert "github.com/go-openapi/testify/assert"
+	assert "github.com/go-openapi/testify/v2/assert"
 	http "net/http"
 	url "net/url"
 	time "time"

@@ -3,7 +3,7 @@ package yaml
 import (
 	"testing"
 
-	target "github.com/go-openapi/testify/require"
+	target "github.com/go-openapi/testify/v2/require"
 )
 
 func TestRequireYAMLEqWrapper_EqualYAMLString(t *testing.T) {

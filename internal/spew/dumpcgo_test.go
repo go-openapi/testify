@@ -19,7 +19,6 @@
 // does not require cgo to run even though it does handle certain cgo types
 // specially.  Rather than forcing all clients to require cgo and an external
 // C compiler just to run the tests, this scheme makes them optional.
-//go:build cgo && testcgo
 // +build cgo,testcgo
 
 package spew_test
@@ -27,7 +26,7 @@ package spew_test
 import (
 	"fmt"
 
-	"github.com/go-openapi/testify/internal/spew/testdata"
+	"github.com/go-openapi/testify/v2/internal/spew/testdata"
 )
 
 func addCgoDumpTests() {
