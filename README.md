@@ -131,4 +131,7 @@ Extra credit for those using Testify to write the test code that demonstrates it
 
 Code generation is used. Run `go generate ./...` to update generated files.
 
+See also the [CONTRIBUTING guidelines](.github/CONTRIBUTING.md).
+
+
 ## [The original README](./original.md)
