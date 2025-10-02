@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func httpOK(w http.ResponseWriter, r *http.Request) {
+func httpOK(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -18,15 +18,15 @@ func httpReadBody(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write([]byte("hello"))
 }
 
-func httpRedirect(w http.ResponseWriter, r *http.Request) {
+func httpRedirect(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusTemporaryRedirect)
 }
 
-func httpError(w http.ResponseWriter, r *http.Request) {
+func httpError(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusInternalServerError)
 }
 
-func httpStatusCode(w http.ResponseWriter, r *http.Request) {
+func httpStatusCode(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusSwitchingProtocols)
 }
 

@@ -1,7 +1,6 @@
 package require
 
 import (
-	"encoding/json"
 	"errors"
 	"testing"
 	"time"
@@ -36,7 +35,7 @@ func (t *MockT) FailNow() {
 	t.Failed = true
 }
 
-func (t *MockT) Errorf(format string, args ...interface{}) {
+func (t *MockT) Errorf(format string, args ...any) {
 	_, _ = format, args
 }
 
@@ -428,36 +427,6 @@ func TestJSONEq_ArraysOfDifferentOrder(t *testing.T) {
 	}
 }
 
-func ExampleComparisonAssertionFunc() {
-	t := &testing.T{} // provided by test
-
-	adder := func(x, y int) int {
-		return x + y
-	}
-
-	type args struct {
-		x int
-		y int
-	}
-
-	tests := []struct {
-		name      string
-		args      args
-		expect    int
-		assertion ComparisonAssertionFunc
-	}{
-		{"2+2=4", args{2, 2}, 4, Equal},
-		{"2+2!=5", args{2, 2}, 5, NotEqual},
-		{"2+3==5", args{2, 3}, 5, Exactly},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.assertion(t, tt.expect, adder(tt.args.x, tt.args.y))
-		})
-	}
-}
-
 func TestComparisonAssertionFunc(t *testing.T) {
 	t.Parallel()
 
@@ -467,8 +436,8 @@ func TestComparisonAssertionFunc(t *testing.T) {
 
 	tests := []struct {
 		name      string
-		expect    interface{}
-		got       interface{}
+		expect    any
+		got       any
 		assertion ComparisonAssertionFunc
 	}{
 		{"implements", (*iface)(nil), t, Implements},
@@ -493,40 +462,12 @@ func TestComparisonAssertionFunc(t *testing.T) {
 	}
 }
 
-func ExampleValueAssertionFunc() {
-	t := &testing.T{} // provided by test
-
-	dumbParse := func(input string) interface{} {
-		var x interface{}
-		json.Unmarshal([]byte(input), &x)
-		return x
-	}
-
-	tests := []struct {
-		name      string
-		arg       string
-		assertion ValueAssertionFunc
-	}{
-		{"true is not nil", "true", NotNil},
-		{"empty string is nil", "", Nil},
-		{"zero is not nil", "0", NotNil},
-		{"zero is zero", "0", Zero},
-		{"false is zero", "false", Zero},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.assertion(t, dumbParse(tt.arg))
-		})
-	}
-}
-
 func TestValueAssertionFunc(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
 		name      string
-		value     interface{}
+		value     any
 		assertion ValueAssertionFunc
 	}{
 		{"notNil", true, NotNil},
@@ -540,31 +481,6 @@ func TestValueAssertionFunc(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.assertion(t, tt.value)
-		})
-	}
-}
-
-func ExampleBoolAssertionFunc() {
-	t := &testing.T{} // provided by test
-
-	isOkay := func(x int) bool {
-		return x >= 42
-	}
-
-	tests := []struct {
-		name      string
-		arg       int
-		assertion BoolAssertionFunc
-	}{
-		{"-1 is bad", -1, False},
-		{"42 is good", 42, True},
-		{"41 is bad", 41, False},
-		{"45 is cool", 45, True},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.assertion(t, isOkay(tt.arg))
 		})
 	}
 }
@@ -584,32 +500,6 @@ func TestBoolAssertionFunc(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.assertion(t, tt.value)
-		})
-	}
-}
-
-func ExampleErrorAssertionFunc() {
-	t := &testing.T{} // provided by test
-
-	dumbParseNum := func(input string, v interface{}) error {
-		return json.Unmarshal([]byte(input), v)
-	}
-
-	tests := []struct {
-		name      string
-		arg       string
-		assertion ErrorAssertionFunc
-	}{
-		{"1.2 is number", "1.2", NoError},
-		{"1.2.3 not number", "1.2.3", Error},
-		{"true is not number", "true", Error},
-		{"3 is number", "3", NoError},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			var x float64
-			tt.assertion(t, dumbParseNum(tt.arg, &x))
 		})
 	}
 }
@@ -654,7 +544,7 @@ func TestEventuallyWithTTrue(t *testing.T) {
 	counter := 0
 	condition := func(collect *assert.CollectT) {
 		defer func() {
-			counter += 1
+			counter++
 		}()
 		True(collect, counter == 1)
 	}

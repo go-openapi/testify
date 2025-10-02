@@ -277,7 +277,7 @@ func (f *testFunc) ParamsFormat() string {
 }
 
 func (f *testFunc) ForwardedParamsFormat() string {
-	return strings.Replace(f.ForwardedParams(), "msgAndArgs", "append([]interface{}{msg}, args...)", 1)
+	return strings.Replace(f.ForwardedParams(), "msgAndArgs", "append([]any{msg}, args...)", 1)
 }
 
 func (f *testFunc) Comment() string {
@@ -299,7 +299,7 @@ func (f *testFunc) CommentWithoutT(receiver string) string {
 }
 
 // Standard header https://go.dev/s/generatedcode.
-var headerTemplate = `// Code generated with github.com/go-openapi/testify/_codegen; DO NOT EDIT.
+var headerTemplate = `// Code generated with github.com/go-openapi/testify/v2/_codegen; DO NOT EDIT.
 
 package {{.Name}}
 

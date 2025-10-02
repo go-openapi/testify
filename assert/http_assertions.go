@@ -1,6 +1,7 @@
 package assert
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -12,7 +13,7 @@ import (
 // an error if building a new request fails.
 func httpCode(handler http.HandlerFunc, method, url string, values url.Values) (int, error) {
 	w := httptest.NewRecorder()
-	req, err := http.NewRequest(method, url, http.NoBody)
+	req, err := http.NewRequestWithContext(context.Background(), method, url, http.NoBody)
 	if err != nil {
 		return -1, err
 	}
@@ -26,7 +27,7 @@ func httpCode(handler http.HandlerFunc, method, url string, values url.Values) (
 //	assert.HTTPSuccess(t, myHandler, "POST", "http://www.google.com", nil)
 //
 // Returns whether the assertion was successful (true) or not (false).
-func HTTPSuccess(t TestingT, handler http.HandlerFunc, method, url string, values url.Values, msgAndArgs ...interface{}) bool {
+func HTTPSuccess(t TestingT, handler http.HandlerFunc, method, url string, values url.Values, msgAndArgs ...any) bool {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
 	}
@@ -48,7 +49,7 @@ func HTTPSuccess(t TestingT, handler http.HandlerFunc, method, url string, value
 //	assert.HTTPRedirect(t, myHandler, "GET", "/a/b/c", url.Values{"a": []string{"b", "c"}}
 //
 // Returns whether the assertion was successful (true) or not (false).
-func HTTPRedirect(t TestingT, handler http.HandlerFunc, method, url string, values url.Values, msgAndArgs ...interface{}) bool {
+func HTTPRedirect(t TestingT, handler http.HandlerFunc, method, url string, values url.Values, msgAndArgs ...any) bool {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
 	}
@@ -70,7 +71,7 @@ func HTTPRedirect(t TestingT, handler http.HandlerFunc, method, url string, valu
 //	assert.HTTPError(t, myHandler, "POST", "/a/b/c", url.Values{"a": []string{"b", "c"}}
 //
 // Returns whether the assertion was successful (true) or not (false).
-func HTTPError(t TestingT, handler http.HandlerFunc, method, url string, values url.Values, msgAndArgs ...interface{}) bool {
+func HTTPError(t TestingT, handler http.HandlerFunc, method, url string, values url.Values, msgAndArgs ...any) bool {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
 	}
@@ -92,7 +93,7 @@ func HTTPError(t TestingT, handler http.HandlerFunc, method, url string, values 
 //	assert.HTTPStatusCode(t, myHandler, "GET", "/notImplemented", nil, 501)
 //
 // Returns whether the assertion was successful (true) or not (false).
-func HTTPStatusCode(t TestingT, handler http.HandlerFunc, method, url string, values url.Values, statuscode int, msgAndArgs ...interface{}) bool {
+func HTTPStatusCode(t TestingT, handler http.HandlerFunc, method, url string, values url.Values, statuscode int, msgAndArgs ...any) bool {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
 	}
@@ -116,7 +117,7 @@ func HTTPBody(handler http.HandlerFunc, method, url string, values url.Values) s
 	if len(values) > 0 {
 		url += "?" + values.Encode()
 	}
-	req, err := http.NewRequest(method, url, http.NoBody)
+	req, err := http.NewRequestWithContext(context.Background(), method, url, http.NoBody)
 	if err != nil {
 		return ""
 	}
@@ -130,7 +131,7 @@ func HTTPBody(handler http.HandlerFunc, method, url string, values url.Values) s
 //	assert.HTTPBodyContains(t, myHandler, "GET", "www.google.com", nil, "I'm Feeling Lucky")
 //
 // Returns whether the assertion was successful (true) or not (false).
-func HTTPBodyContains(t TestingT, handler http.HandlerFunc, method, url string, values url.Values, str interface{}, msgAndArgs ...interface{}) bool {
+func HTTPBodyContains(t TestingT, handler http.HandlerFunc, method, url string, values url.Values, str any, msgAndArgs ...any) bool {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
 	}
@@ -150,7 +151,7 @@ func HTTPBodyContains(t TestingT, handler http.HandlerFunc, method, url string, 
 //	assert.HTTPBodyNotContains(t, myHandler, "GET", "www.google.com", nil, "I'm Feeling Lucky")
 //
 // Returns whether the assertion was successful (true) or not (false).
-func HTTPBodyNotContains(t TestingT, handler http.HandlerFunc, method, url string, values url.Values, str interface{}, msgAndArgs ...interface{}) bool {
+func HTTPBodyNotContains(t TestingT, handler http.HandlerFunc, method, url string, values url.Values, str any, msgAndArgs ...any) bool {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
 	}
