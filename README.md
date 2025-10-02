@@ -121,6 +121,7 @@ distributed with this fork, including internalized libraries.
 * [SPDX-License-Identifier: MIT](./NOTICE)
 * [SPDX-License-Identifier: ISC](./internal/spew/LICENSE)
 * [SPDX-License-Identifier: ](./internal/difflib/LICENSE)
+* [SPDX-License-Identifier: MIT](./_codegen/internal/imports/LICENSE)
 
 ## Contributing
 
