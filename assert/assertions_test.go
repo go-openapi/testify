@@ -3,7 +3,6 @@ package assert
 import (
 	"bufio"
 	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -18,6 +17,7 @@ import (
 	"time"
 )
 
+//nolint:gochecknoglobals // private globals to store zero values. Not exposed, not mutated: should be fine
 var (
 	i     any
 	zeros = []any{
@@ -85,18 +85,18 @@ var (
 	}
 )
 
-// AssertionTesterInterface defines an interface to be used for testing assertion methods
+// AssertionTesterInterface defines an interface to be used for testing assertion methods.
 type AssertionTesterInterface interface {
 	TestMethod()
 }
 
-// AssertionTesterConformingObject is an object that conforms to the AssertionTesterInterface interface
+// AssertionTesterConformingObject is an object that conforms to the AssertionTesterInterface interface.
 type AssertionTesterConformingObject struct{}
 
 func (a *AssertionTesterConformingObject) TestMethod() {
 }
 
-// AssertionTesterNonConformingObject is an object that does not conform to the AssertionTesterInterface interface
+// AssertionTesterNonConformingObject is an object that does not conform to the AssertionTesterInterface interface.
 type AssertionTesterNonConformingObject struct{}
 
 func TestObjectsAreEqual(t *testing.T) {
@@ -149,7 +149,8 @@ func TestObjectsAreEqualValues(t *testing.T) {
 		{uint32(10), int32(10), true},
 		{0, nil, false},
 		{nil, 0, false},
-		{now, now.In(time.Local), false}, // should not be time zone independent
+		// should not be time zone independent
+		{now, now.In(time.Local), false}, //nolint:gosmopolitan // ok in this context: this is precisely the goal of this test
 		{int(270), int8(14), false},      // should handle overflow/underflow
 		{int8(14), int(270), false},
 		{[]int{270, 270}, []int8{14, 14}, false},
@@ -809,7 +810,21 @@ func TestStringEqual(t *testing.T) {
 		msgAndArgs []any
 		want       string
 	}{
-		{equalWant: "hi, \nmy name is", equalGot: "what,\nmy name is", want: "\tassertions.go:\\d+: \n\t+Error Trace:\t\n\t+Error:\\s+Not equal:\\s+\n\\s+expected: \"hi, \\\\nmy name is\"\n\\s+actual\\s+: \"what,\\\\nmy name is\"\n\\s+Diff:\n\\s+-+ Expected\n\\s+\\++ Actual\n\\s+@@ -1,2 \\+1,2 @@\n\\s+-hi, \n\\s+\\+what,\n\\s+my name is"},
+		{
+			equalWant: "hi, \nmy name is",
+			equalGot:  "what,\nmy name is",
+			want: "\tassertions.go:\\d+: \n" +
+				"\t+Error Trace:\t\n+" +
+				"\t+Error:\\s+Not equal:\\s+\n" +
+				"\\s+expected: \"hi, \\\\nmy name is\"\n" +
+				"\\s+actual\\s+: " + "\"what,\\\\nmy name is\"\n" +
+				"\\s+Diff:\n" +
+				"\\s+-+ Expected\n\\s+\\++ " +
+				"Actual\n" +
+				"\\s+@@ -1,2 \\+1,2 @@\n" +
+				"\\s+-hi, \n\\s+\\+what,\n" +
+				"\\s+my name is",
+		},
 	} {
 		mockT := &bufferT{}
 		Equal(mockT, currCase.equalWant, currCase.equalGot, currCase.msgAndArgs...)
@@ -826,10 +841,71 @@ func TestEqualFormatting(t *testing.T) {
 		msgAndArgs []any
 		want       string
 	}{
-		{equalWant: "want", equalGot: "got", want: "\tassertions.go:\\d+: \n\t+Error Trace:\t\n\t+Error:\\s+Not equal:\\s+\n\\s+expected: \"want\"\n\\s+actual\\s+: \"got\"\n\\s+Diff:\n\\s+-+ Expected\n\\s+\\++ Actual\n\\s+@@ -1 \\+1 @@\n\\s+-want\n\\s+\\+got\n"},
-		{equalWant: "want", equalGot: "got", msgAndArgs: []any{"hello, %v!", "world"}, want: "\tassertions.go:[0-9]+: \n\t+Error Trace:\t\n\t+Error:\\s+Not equal:\\s+\n\\s+expected: \"want\"\n\\s+actual\\s+: \"got\"\n\\s+Diff:\n\\s+-+ Expected\n\\s+\\++ Actual\n\\s+@@ -1 \\+1 @@\n\\s+-want\n\\s+\\+got\n\\s+Messages:\\s+hello, world!\n"},
-		{equalWant: "want", equalGot: "got", msgAndArgs: []any{123}, want: "\tassertions.go:[0-9]+: \n\t+Error Trace:\t\n\t+Error:\\s+Not equal:\\s+\n\\s+expected: \"want\"\n\\s+actual\\s+: \"got\"\n\\s+Diff:\n\\s+-+ Expected\n\\s+\\++ Actual\n\\s+@@ -1 \\+1 @@\n\\s+-want\n\\s+\\+got\n\\s+Messages:\\s+123\n"},
-		{equalWant: "want", equalGot: "got", msgAndArgs: []any{struct{ a string }{"hello"}}, want: "\tassertions.go:[0-9]+: \n\t+Error Trace:\t\n\t+Error:\\s+Not equal:\\s+\n\\s+expected: \"want\"\n\\s+actual\\s+: \"got\"\n\\s+Diff:\n\\s+-+ Expected\n\\s+\\++ Actual\n\\s+@@ -1 \\+1 @@\n\\s+-want\n\\s+\\+got\n\\s+Messages:\\s+{a:hello}\n"},
+		{
+			equalWant: "want",
+			equalGot:  "got",
+			want: "\tassertions.go:\\d+: \n" +
+				"\t+Error Trace:\t\n" +
+				"\t+Error:\\s+Not equal:\\s+\n" +
+				"\\s+expected: \"want\"\n" +
+				"\\s+actual\\s+: \"got\"\n" +
+				"\\s+Diff:\n\\s+-+ Expected\n\\s+\\++ " +
+				"Actual\n" +
+				"\\s+@@ -1 \\+1 @@\n" +
+				"\\s+-want\n" +
+				"\\s+\\+got\n",
+		},
+		{
+			equalWant:  "want",
+			equalGot:   "got",
+			msgAndArgs: []any{"hello, %v!", "world"},
+			want: "\tassertions.go:[0-9]+: \n" +
+				"\t+Error Trace:\t\n" +
+				"\t+Error:\\s+Not equal:\\s+\n" +
+				"\\s+expected: \"want\"\n" +
+				"\\s+actual\\s+: \"got\"\n" +
+				"\\s+Diff:\n" +
+				"\\s+-+ Expected\n" +
+				"\\s+\\++ Actual\n" +
+				"\\s+@@ -1 \\+1 @@\n" +
+				"\\s+-want\n" +
+				"\\s+\\+got\n" +
+				"\\s+Messages:\\s+hello, world!\n",
+		},
+		{
+			equalWant:  "want",
+			equalGot:   "got",
+			msgAndArgs: []any{123},
+			want: "\tassertions.go:[0-9]+: \n" +
+				"\t+Error Trace:\t\n" +
+				"\t+Error:\\s+Not equal:\\s+\n" +
+				"\\s+expected: \"want\"\n" +
+				"\\s+actual\\s+: \"got\"\n" +
+				"\\s+Diff:\n" +
+				"\\s+-+ Expected\n" +
+				"\\s+\\++ Actual\n" +
+				"\\s+@@ -1 \\+1 @@\n" +
+				"\\s+-want\n" +
+				"\\s+\\+got\n" +
+				"\\s+Messages:\\s+123\n",
+		},
+		{
+			equalWant:  "want",
+			equalGot:   "got",
+			msgAndArgs: []any{struct{ a string }{"hello"}},
+			want: "\tassertions.go:[0-9]+: \n" +
+				"\t+Error Trace:\t\n" +
+				"\t+Error:\\s+Not equal:\\s+\n" +
+				"\\s+expected: \"want\"\n" +
+				"\\s+actual\\s+: \"got\"\n" +
+				"\\s+Diff:\n" +
+				"\\s+-+ Expected\n" +
+				"\\s+\\++ Actual\n" +
+				"\\s+@@ -1 \\+1 @@\n" +
+				"\\s+-want\n" +
+				"\\s+\\+got\n" +
+				"\\s+Messages:\\s+{a:hello}\n",
+		},
 	} {
 		mockT := &bufferT{}
 		Equal(mockT, currCase.equalWant, currCase.equalGot, currCase.msgAndArgs...)
@@ -1630,7 +1706,7 @@ func TestPanicsWithError(t *testing.T) {
 	Contains(t, mockT.msg, `Error message:	"actual panic err msg"`)
 
 	succeeded = PanicsWithError(mockT, "expected panic err msg", func() {
-		panic(&PanicsWithErrorWrapper{"wrapped", errors.New("actual panic err msg")})
+		panic(&PanicsWrapperError{"wrapped", errors.New("actual panic err msg")})
 	})
 	Equal(t, false, succeeded, "PanicsWithError should return false")
 	Contains(t, mockT.msg, `Error message:	"wrapped: actual panic err msg"`)
@@ -1643,12 +1719,12 @@ func TestPanicsWithError(t *testing.T) {
 	NotContains(t, mockT.msg, "Error message:", "PanicsWithError should not report error message if not due an error")
 }
 
-type PanicsWithErrorWrapper struct {
+type PanicsWrapperError struct {
 	Prefix string
 	Err    error
 }
 
-func (e PanicsWithErrorWrapper) Error() string {
+func (e PanicsWrapperError) Error() string {
 	return e.Prefix + ": " + e.Err.Error()
 }
 
@@ -1897,9 +1973,8 @@ func Benchmark_isEmpty(b *testing.B) {
 	b.ReportAllocs()
 
 	v := new(int)
-	b.ResetTimer()
 
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		isEmpty("")
 		isEmpty(42)
 		isEmpty(v)
@@ -3001,7 +3076,7 @@ func TestDiffEmptyCases(t *testing.T) {
 	Equal(t, "", diff([]int{1}, []bool{true}))
 }
 
-// Ensure there are no data races
+// Ensure there are no data races.
 func TestDiffRace(t *testing.T) {
 	t.Parallel()
 
@@ -3071,7 +3146,10 @@ type mockFailNowTestingT struct{}
 // Helper is like [testing.T.Helper] but does nothing.
 func (mockFailNowTestingT) Helper() {}
 
-func (m *mockFailNowTestingT) Errorf(format string, args ...any) {}
+func (m *mockFailNowTestingT) Errorf(format string, args ...any) {
+	_ = format
+	_ = args
+}
 
 func (m *mockFailNowTestingT) FailNow() {}
 
@@ -3110,45 +3188,15 @@ func BenchmarkBytesEqual(b *testing.B) {
 	copy(s2, s)
 
 	mockT := &mockFailNowTestingT{}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+
+	for b.Loop() {
 		Equal(mockT, s, s2)
 	}
 }
 
 func BenchmarkNotNil(b *testing.B) {
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		NotNil(b, b)
-	}
-}
-
-func ExampleComparisonAssertionFunc() {
-	t := &testing.T{} // provided by test
-
-	adder := func(x, y int) int {
-		return x + y
-	}
-
-	type args struct {
-		x int
-		y int
-	}
-
-	tests := []struct {
-		name      string
-		args      args
-		expect    int
-		assertion ComparisonAssertionFunc
-	}{
-		{"2+2=4", args{2, 2}, 4, Equal},
-		{"2+2!=5", args{2, 2}, 5, NotEqual},
-		{"2+3==5", args{2, 3}, 5, Exactly},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.assertion(t, tt.expect, adder(tt.args.x, tt.args.y))
-		})
 	}
 }
 
@@ -3187,34 +3235,6 @@ func TestComparisonAssertionFunc(t *testing.T) {
 	}
 }
 
-func ExampleValueAssertionFunc() {
-	t := &testing.T{} // provided by test
-
-	dumbParse := func(input string) any {
-		var x any
-		_ = json.Unmarshal([]byte(input), &x)
-		return x
-	}
-
-	tests := []struct {
-		name      string
-		arg       string
-		assertion ValueAssertionFunc
-	}{
-		{"true is not nil", "true", NotNil},
-		{"empty string is nil", "", Nil},
-		{"zero is not nil", "0", NotNil},
-		{"zero is zero", "0", Zero},
-		{"false is zero", "false", Zero},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.assertion(t, dumbParse(tt.arg))
-		})
-	}
-}
-
 func TestValueAssertionFunc(t *testing.T) {
 	t.Parallel()
 
@@ -3238,31 +3258,6 @@ func TestValueAssertionFunc(t *testing.T) {
 	}
 }
 
-func ExampleBoolAssertionFunc() {
-	t := &testing.T{} // provided by test
-
-	isOkay := func(x int) bool {
-		return x >= 42
-	}
-
-	tests := []struct {
-		name      string
-		arg       int
-		assertion BoolAssertionFunc
-	}{
-		{"-1 is bad", -1, False},
-		{"42 is good", 42, True},
-		{"41 is bad", 41, False},
-		{"45 is cool", 45, True},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.assertion(t, isOkay(tt.arg))
-		})
-	}
-}
-
 func TestBoolAssertionFunc(t *testing.T) {
 	t.Parallel()
 
@@ -3282,32 +3277,6 @@ func TestBoolAssertionFunc(t *testing.T) {
 	}
 }
 
-func ExampleErrorAssertionFunc() {
-	t := &testing.T{} // provided by test
-
-	dumbParseNum := func(input string, v any) error {
-		return json.Unmarshal([]byte(input), v)
-	}
-
-	tests := []struct {
-		name      string
-		arg       string
-		assertion ErrorAssertionFunc
-	}{
-		{"1.2 is number", "1.2", NoError},
-		{"1.2.3 not number", "1.2.3", Error},
-		{"true is not number", "true", Error},
-		{"3 is number", "3", NoError},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			var x float64
-			tt.assertion(t, dumbParseNum(tt.arg, &x))
-		})
-	}
-}
-
 func TestErrorAssertionFunc(t *testing.T) {
 	t.Parallel()
 
@@ -3323,25 +3292,6 @@ func TestErrorAssertionFunc(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.assertion(t, tt.err)
-		})
-	}
-}
-
-func ExamplePanicAssertionFunc() {
-	t := &testing.T{} // provided by test
-
-	tests := []struct {
-		name      string
-		panicFn   PanicTestFunc
-		assertion PanicAssertionFunc
-	}{
-		{"with panic", func() { panic(nil) }, Panics},
-		{"without panic", func() {}, NotPanics},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.assertion(t, tt.panicFn)
 		})
 	}
 }
@@ -3485,7 +3435,7 @@ func TestEventuallyWithTFailNow(t *testing.T) {
 }
 
 // Check that a long running condition doesn't block Eventually.
-// See issue 805 (and its long tail of following issues)
+// See issue 805 (and its long tail of following issues).
 func TestEventuallyTimeout(t *testing.T) {
 	t.Parallel()
 

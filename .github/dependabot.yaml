@@ -14,6 +14,8 @@ updates:
       development-dependencies:
         patterns:
           - '*'
+    assignees:
+      - fredbi
 
   - package-ecosystem: "gomod"
     # We define 4 groups of dependencies to regroup update pull requests:
@@ -30,11 +32,14 @@ updates:
     # 2. golang.org-dependencies are auto-merged
     # 3. go-openapi patch updates are auto-merged. Minor/major version updates require a manual merge.
     # 4. other dependencies require a manual merge
-    directory: "/"
+    directories:
+      - "**/*"
     schedule:
       interval: "weekly"
       day: "friday"
     open-pull-requests-limit: 4
+    allow:
+      - dependency-type: all
     groups:
       development-dependencies:
         patterns:
@@ -53,3 +58,5 @@ updates:
           - "github.com/go-openapi/*"
           - "github.com/stretchr/testify"
           - "golang.org/*"
+    assignees:
+      - fredbi

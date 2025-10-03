@@ -24,32 +24,7 @@ func TestYAMLEq_HashOfArraysAndHashes(t *testing.T) {
 	t.Parallel()
 
 	mockT := new(testing.T)
-	expected := `
-numeric: 1.5
-array:
-  - foo: bar
-  - 1
-  - "string"
-  - ["nested", "array", 5.5]
-hash:
-  nested: hash
-  nested_slice: [this, is, nested]
-string: "foo"
-`
-
-	actual := `
-numeric: 1.5
-hash:
-  nested: hash
-  nested_slice: [this, is, nested]
-string: "foo"
-array:
-  - foo: bar
-  - 1
-  - "string"
-  - ["nested", "array", 5.5]
-`
-	target.True(t, target.YAMLEq(mockT, expected, actual))
+	target.True(t, target.YAMLEq(mockT, expectedYAML, actualYAML))
 }
 
 func TestYAMLEq_Array(t *testing.T) {

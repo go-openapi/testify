@@ -10,6 +10,6 @@ import (
 	yaml "go.yaml.in/yaml/v3"
 )
 
-func init() {
+func init() { //nolint:gochecknoinits // we precisely want this init to run when importing the package
 	yamlstub.EnableYAMLUnmarshal = yaml.Unmarshal
 }

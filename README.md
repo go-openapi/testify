@@ -1,9 +1,22 @@
-# Testify [![Build Status](https://github.com/go-openapi/testify/actions/workflows/go-test.yml/badge.svg)](https://github.com/go-openapi/testify/actions?query=workflow%3A"go+test") [![codecov](https://codecov.io/gh/go-openapi/testify/branch/master/graph/badge.svg)](https://codecov.io/gh/go-openapi/testify)
+# Testify
 
 [![Slack Status](https://slackin.goswagger.io/badge.svg)](https://slackin.goswagger.io)
 [![license](https://img.shields.io/badge/license-Apache%20v2-orange.svg)](https://raw.githubusercontent.com/go-openapi/testify/master/LICENSE)
 [![Go Reference](https://pkg.go.dev/badge/github.com/go-openapi/testify.svg)](https://pkg.go.dev/github.com/go-openapi/testify)
 [![Go Report Card](https://goreportcard.com/badge/github.com/go-openapi/testify)](https://goreportcard.com/report/github.com/go-openapi/testify)
+
+<!-- Badges: status  -->
+[![Tests][test-badge]][test-url] [![Coverage][cov-badge]][cov-url] [![CI vuln scan][vuln-scan-badge]][vuln-scan-url] [![CodeQL][codeql-badge]][codeql-url]
+<!-- Badges: release & docker images  -->
+<!-- Badges: code quality  -->
+<!-- Badges: license & compliance -->
+[![Release][release-badge]][release-url] [![Go Report Card][gocard-badge]][gocard-url] [![CodeFactor Grade][codefactor-badge]][codefactor-url] [![License][license-badge]][license-url]
+<!-- Badges: documentation & support -->
+<!-- Badges: others & stats -->
+<!-- Slack badge disabled until I am able to restore a valid link to the chat -->
+[![GoDoc][godoc-badge]][godoc-url] <!-- [![Slack Channel][slack-badge]][slack-url] -->[![go version][goversion-badge]][goversion-url] ![Top language][top-badge] ![Commits since latest release][commits-badge]
+
+---
 
 ## Testify - Thou Shalt Write Tests
 
@@ -48,10 +61,11 @@ However, at `go-openapi` we would like to address the well-known issues in `test
 ## What's next with this project?
 
 1. [x] The first release comes with zero dependencies and an unstable API (see below [our use case](#usage-at-go-openapi))
-2. This project is going to be injected as the main and sole test dependency of the `go-openapi` libraries and the `go-swagger` tool
-3. Valuable pending pull requests from the original project could be merged (e.g. `JSONEqBytes`) or transformed as "enable" modules (e.g. colorized output)
-4. Unclear assertions may be provided an alternative verb (e.g. `InDelta`)
-5. Since we have leveled the go requirements to the rest of the go-openapi (currently go1.24) there is quite a bit of relinting lying ahead.
+2. |x] This project is going to be injected as the main and sole test dependency of the `go-openapi` libraries
+2. [ ] ... and the `go-swagger` tool
+3. [ ) Valuable pending pull requests from the original project could be merged (e.g. `JSONEqBytes`) or transformed as "enable" modules (e.g. colorized output)
+4. [ ] Unclear assertions may be provided an alternative verb (e.g. `InDelta`)
+5. [ ] Since we have leveled the go requirements to the rest of the go-openapi (currently go1.24) there is quite a bit of relinting lying ahead.
 
 ### What won't come anytime soon
 
@@ -122,10 +136,13 @@ See [the original README](./original.md)
 
 ## Licensing
 
+`SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers`
+
+This library ships under the [SPDX-License-Identifier: Apache-2.0](./LICENSE).
+
 See the license [NOTICE](./NOTICE), which recalls the licensing terms of all the pieces of software
 distributed with this fork, including internalized libraries.
 
-* go-openapi/testify [SPDX-License-Identifier: Apache-2.0](./LICENSE)
 * stretchr/testify [SPDX-License-Identifier: MIT](./NOTICE)
 * github.com/davecgh/go-spew [SPDX-License-Identifier: ISC](./internal/spew/LICENSE)
 * github.com/pmezard/go-difflib [SPDX-License-Identifier: MIT-like](./internal/difflib/LICENSE)
@@ -166,3 +183,36 @@ See also the [CONTRIBUTING guidelines](.github/CONTRIBUTING.md).
 
 
 ## [The original README](./original.md)
+
+<!-- Badges: status  -->
+[test-badge]: https://github.com/go-openapi/testify/actions/workflows/go-test.yml/badge.svg
+[test-url]: https://github.com/go-openapi/testify/actions/workflows/go-test.yml
+[cov-badge]: https://codecov.io/gh/go-openapi/testify/branch/master/graph/badge.svg
+[cov-url]: https://codecov.io/gh/go-openapi/testify
+[vuln-scan-badge]: https://github.com/go-openapi/testify/actions/workflows/scanner.yml/badge.svg
+[vuln-scan-url]: https://github.com/go-openapi/testify/actions/workflows/scanner.yml
+[codeql-badge]: https://github.com/go-openapi/testify/actions/workflows/codeql.yml/badge.svg
+[codeql-url]: https://github.com/go-openapi/testify/actions/workflows/codeql.yml
+<!-- Badges: release & docker images  -->
+[release-badge]: https://badge.fury.io/go/github.com%2Fgo-openapi%2Ftestify.svg
+[release-url]: https://badge.fury.io/go/github.com%2Fgo-openapi%2Ftestify
+<!-- Badges: code quality  -->
+[gocard-badge]: https://goreportcard.com/badge/github.com/go-openapi/testify
+[gocard-url]: https://goreportcard.com/report/github.com/go-openapi/testify
+[codefactor-badge]: https://img.shields.io/codefactor/grade/github/go-openapi/testify
+[codefactor-url]: https://www.codefactor.io/repository/github/go-openapi/testify
+<!-- Badges: documentation & support -->
+[doc-badge]: https://img.shields.io/badge/doc-site-blue?link=https%3A%2F%2Fgoswagger.io%2Fgo-openapi%2F
+[doc-url]: https://goswagger.io/go-openapi
+[godoc-badge]: https://pkg.go.dev/badge/github.com/go-openapi/testify
+[godoc-url]: http://pkg.go.dev/github.com/go-openapi/testify
+[slack-badge]: https://slackin.goswagger.io/badge.svg
+[slack-url]: https://slackin.goswagger.io
+<!-- Badges: license & compliance -->
+[license-badge]: http://img.shields.io/badge/license-Apache%20v2-orange.svg
+[license-url]: https://github.com/go-openapi/testify/?tab=Apache-2.0-1-ov-file#readme
+<!-- Badges: others & stats -->
+[goversion-badge]: https://img.shields.io/github/go-mod/go-version/go-openapi/testify
+[goversion-url]: https://github.com/go-openapi/testify/blob/master/go.mod
+[top-badge]: https://img.shields.io/github/languages/top/go-openapi/testify
+[commits-badge]: https://img.shields.io/github/commits-since/go-openapi/testify/latest

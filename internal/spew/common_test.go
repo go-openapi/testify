@@ -19,6 +19,8 @@ package spew_test
 import (
 	"fmt"
 	"reflect"
+	"slices"
+	"strings"
 	"testing"
 
 	"github.com/go-openapi/testify/v2/internal/spew"
@@ -71,11 +73,12 @@ type embed struct {
 // embedwrap is used to test embedded structures.
 type embedwrap struct {
 	*embed
+
 	e *embed
 }
 
 // panicer is used to intentionally cause a panic for testing spew properly
-// handles them
+// handles them.
 type panicer int
 
 func (p panicer) String() string {
@@ -93,25 +96,22 @@ func (e customError) Error() string {
 // for a test error message.
 func stringizeWants(wants []string) string {
 	s := ""
+	var sSb97 strings.Builder
 	for i, want := range wants {
 		if i > 0 {
-			s += fmt.Sprintf("want%d: %s", i+1, want)
+			sSb97.WriteString(fmt.Sprintf("want%d: %s", i+1, want))
 		} else {
-			s += "want: " + want
+			sSb97.WriteString("want: " + want)
 		}
 	}
+	s += sSb97.String()
 	return s
 }
 
 // testFailed returns whether or not a test failed by checking if the result
 // of the test is in the slice of wanted strings.
 func testFailed(result string, wants []string) bool {
-	for _, want := range wants {
-		if result == want {
-			return false
-		}
-	}
-	return true
+	return !slices.Contains(wants, result)
 }
 
 type sortableStruct struct {
@@ -131,9 +131,11 @@ type sortTestCase struct {
 	expected []reflect.Value
 }
 
-func helpTestSortValues(tests []sortTestCase, cs *spew.ConfigState, t *testing.T) {
-	getInterfaces := func(values []reflect.Value) []interface{} {
-		interfaces := []interface{}{}
+func helpTestSortValues(t *testing.T, tests []sortTestCase, cs *spew.ConfigState) {
+	t.Helper()
+
+	getInterfaces := func(values []reflect.Value) []any {
+		interfaces := []any{}
 		for _, v := range values {
 			interfaces = append(interfaces, v.Interface())
 		}
@@ -225,7 +227,7 @@ func TestSortValues(t *testing.T) {
 		},
 	}
 	cs := spew.ConfigState{DisableMethods: true, SpewKeys: false}
-	helpTestSortValues(tests, &cs, t)
+	helpTestSortValues(t, tests, &cs)
 }
 
 // TestSortValuesWithMethods ensures the sort functionality for relect.Value
@@ -260,7 +262,7 @@ func TestSortValuesWithMethods(t *testing.T) {
 		},
 	}
 	cs := spew.ConfigState{DisableMethods: false, SpewKeys: false}
-	helpTestSortValues(tests, &cs, t)
+	helpTestSortValues(t, tests, &cs)
 }
 
 // TestSortValuesWithSpew ensures the sort functionality for relect.Value
@@ -294,5 +296,5 @@ func TestSortValuesWithSpew(t *testing.T) {
 		},
 	}
 	cs := spew.ConfigState{DisableMethods: true, SpewKeys: true}
-	helpTestSortValues(tests, &cs, t)
+	helpTestSortValues(t, tests, &cs)
 }

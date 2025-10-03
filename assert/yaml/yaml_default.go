@@ -7,7 +7,7 @@
 // [gopkg.in/yaml.v3] (for example for license compatibility reasons, see [PR #1120]).
 package yaml
 
-var EnableYAMLUnmarshal func([]byte, any) error
+var EnableYAMLUnmarshal func([]byte, any) error //nolint:gochecknoglobals // in this particular case, we need a global to enable the feature from another module
 
 // Unmarshal is just a wrapper of [gopkg.in/yaml.v3.Unmarshal].
 func Unmarshal(in []byte, out any) error {
@@ -19,7 +19,7 @@ You should enable a YAML library before running this test,
 e.g. by adding the following to your imports:
 
 import (
-			_ "github.com/go-openapi/testify/v2/enable/yaml"
+			_ "github.com/go-openapi/testify/enable/yaml/v2"
 )
 `,
 		)

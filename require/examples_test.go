@@ -1,3 +1,4 @@
+//nolint:testableexamples // not possible at this moment to build a testable example that involves testing.T
 package require_test
 
 import (
