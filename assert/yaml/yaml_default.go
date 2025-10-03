@@ -19,7 +19,7 @@ You should enable a YAML library before running this test,
 e.g. by adding the following to your imports:
 
 import (
-			_ "github.com/go-openapi/testify/enable/yaml"
+			_ "github.com/go-openapi/testify/v2/enable/yaml"
 )
 `,
 		)

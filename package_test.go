@@ -6,7 +6,7 @@ package testify
 import (
 	"testing"
 
-	"github.com/go-openapi/testify/assert"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func TestImports(t *testing.T) {

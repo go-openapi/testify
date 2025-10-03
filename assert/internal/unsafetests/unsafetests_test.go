@@ -5,7 +5,7 @@ import (
 	"testing"
 	"unsafe"
 
-	"github.com/go-openapi/testify/assert"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 type ignoreTestingT struct{}
@@ -14,7 +14,7 @@ var _ assert.TestingT = ignoreTestingT{}
 
 func (ignoreTestingT) Helper() {}
 
-func (ignoreTestingT) Errorf(format string, args ...interface{}) {
+func (ignoreTestingT) Errorf(format string, args ...any) {
 	// Run the formatting, but ignore the result
 	msg := fmt.Sprintf(format, args...)
 	_ = msg
