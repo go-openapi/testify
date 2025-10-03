@@ -53,10 +53,18 @@ However, at `go-openapi` we would like to address the well-known issues in `test
 4. Unclear assertions may be provided an alternative verb (e.g. `InDelta`)
 5. Since we have leveled the go requirements to the rest of the go-openapi (currently go1.24) there is quite a bit of relinting lying ahead.
 
+### What won't come anytime soon
+
+* mocks: we use [mockery](https://github.com/vektra/mockery) and prefer the simpler `matryer` mocking-style.
+  testify-style mocks are thus not going to be supported anytime soon.
+* extra convoluted stuff in the like of `InDeltaSlice`
+
 ## Usage at go-openapi
 
 At this moment, we have identified the following usage in our tools. This API shall remain stable.
 Currently, there are no guarantees about the entry points not in this list.
+
+TODO: extend the list with usage by go-swagger.
 
 ```
 Condition
@@ -140,7 +148,10 @@ These would probably need some rework/fix or adaptation, but the proposed idea i
 * github.com/stretchr/testify/pull#1460 (ci)
 * github.com/stretchr/testify#1467 (colorized output)
 * github.com/stretchr/testify#1480 (colorized output)
+* github.com/stretchr/testify/pull#1232 (colorized output)
+* github.com/stretchr/testify#994 (colorized output)
 * github.com/stretchr/testify#1495 (bug fix)
+* github.com/stretchr/testify#1223 (layout bug fix)
 
 ## Contributing
 
