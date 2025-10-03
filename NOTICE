@@ -68,7 +68,7 @@ github.com/pmezard/go-difflib
 ===========================
 
 // SPDX-FileCopyrightText: Copyright (c) 2013, Patrick Mezard
-// SPDX-License-Identifier: ISC
+// SPDX-License-Identifier: MIT-like
 
 Copyright (c) 2013, Patrick Mezard
 All rights reserved.

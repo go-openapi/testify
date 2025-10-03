@@ -125,11 +125,11 @@ See [the original README)(./original.md)
 See the license [NOTICE](./NOTICE), which recalls the licensing terms of all the pieces of software
 distributed with this fork, including internalized libraries.
 
-* [SPDX-License-Identifier: Apache-2.0](./LICENSE)
-* [SPDX-License-Identifier: MIT](./NOTICE)
-* [SPDX-License-Identifier: ISC](./internal/spew/LICENSE)
-* [SPDX-License-Identifier: ](./internal/difflib/LICENSE)
-* [SPDX-License-Identifier: MIT](./_codegen/internal/imports/LICENSE)
+* go-openapi/testify [SPDX-License-Identifier: Apache-2.0](./LICENSE)
+* stretchr/testify [SPDX-License-Identifier: MIT](./NOTICE)
+* github.com/davecgh/go-spew [SPDX-License-Identifier: ISC](./internal/spew/LICENSE)
+* github.com/pmezard/go-difflib [SPDX-License-Identifier: MIT-like](./internal/difflib/LICENSE)
+* imports [SPDX-License-Identifier: MIT](./_codegen/internal/imports/LICENSE)
 
 ## PRs from the original repo
 
@@ -145,7 +145,7 @@ some adaptations into this fork:
 
 These would probably need some rework/fix or adaptation, but the proposed idea is worthwile, IMHO.
 
-* github.com/stretchr/testify/pull#1460 (ci)
+* github.com/stretchr/testify#1460 (ci)
 * github.com/stretchr/testify#1467 (colorized output)
 * github.com/stretchr/testify#1480 (colorized output)
 * github.com/stretchr/testify/pull#1232 (colorized output)
