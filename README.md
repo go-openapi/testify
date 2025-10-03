@@ -133,6 +133,15 @@ some adaptations into this fork:
 * github.com/stretchr/testify#1797
 * github.com/stretchr/testify#1356
 
+### Other noticeable contributions, not merged
+
+These would probably need some rework/fix or adaptation, but the proposed idea is worthwile, IMHO.
+
+* github.com/stretchr/testify/pull#1460 (ci)
+* github.com/stretchr/testify#1467 (colorized output)
+* github.com/stretchr/testify#1480 (colorized output)
+* github.com/stretchr/testify#1495 (bug fix)
+
 ## Contributing
 
 Please feel free to submit issues, fork the repository and send pull requests!
