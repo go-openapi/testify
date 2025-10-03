@@ -84,7 +84,7 @@ NotEmpty,NotEmptyf
 NotEqual
 NotNil,NotNilf
 NotPanics
-NotZero
+NotZeroG
 Panics,PanicsWithValue
 Subset
 True,Truef
@@ -122,6 +122,16 @@ distributed with this fork, including internalized libraries.
 * [SPDX-License-Identifier: ISC](./internal/spew/LICENSE)
 * [SPDX-License-Identifier: ](./internal/difflib/LICENSE)
 * [SPDX-License-Identifier: MIT](./_codegen/internal/imports/LICENSE)
+
+## PRs from the original repo
+
+The following proposed contributions to the original repo have been merged or incorporated with
+some adaptations into this fork:
+
+* github.com/stretchr/testify#1513
+* github.com/stretchr/testify#1772
+* github.com/stretchr/testify#1797
+* github.com/stretchr/testify#1356
 
 ## Contributing
 

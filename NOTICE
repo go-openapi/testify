@@ -1,5 +1,6 @@
 Copyright 2025 go-swagger maintainers
 
+// SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
 // SPDX-License-Identifier: Apache-2.0
 
 This software library, github.com/go-openapi/testify, includes software developed
