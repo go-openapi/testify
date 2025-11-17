@@ -7,7 +7,7 @@
 
 ## Testify - Thou Shalt Write Tests
 
-A golang set of packages that provide tools for testifying that your code will behave as you intend.
+A Go set of packages that provide tools for testifying that your code will behave as you intend.
 
 This is the go-openapi fork of the great [testify](https://github.com/stretchr/testify) package.
 
@@ -36,12 +36,12 @@ However, at `go-openapi` we would like to address the well-known issues in `test
 > With this first version of the fork, we have removed `mocks` and `suite`, which we don't use.
 > They might be added later on, with better controlled dependencies.
 >
-> In the forthcoming maintenances of this fork, much of the "chrome" or "ambiguous" API will be pared down.
+> In the forthcoming maintenance of this fork, much of the "chrome" or "ambiguous" API will be pared down.
 > There is no commitment yet on the stability of the API.
 >
 > Chrome would be added later: we have the "enable" packages just for that.
 
-3. We hope that this endeavour will help the original project with a live-drill of what a v2 could look like.
+3. We hope that this endeavor will help the original project with a live-drill of what a v2 could look like.
    We are always happy to discuss with people who face the same problems as we do: avoid breaking changes, 
    APIs that became bloated over a decade or so, uncontrolled dependencies, conflicting demands from users etc.
 
@@ -118,7 +118,7 @@ Features include:
 
 ## Examples
 
-See [the original README)(./original.md)
+See [the original README](./original.md)
 
 ## Licensing
 
@@ -143,7 +143,7 @@ some adaptations into this fork:
 
 ### Other noticeable contributions, not merged
 
-These would probably need some rework/fix or adaptation, but the proposed idea is worthwile, IMHO.
+These would probably need some rework/fix or adaptation, but the proposed idea is worthwhile, IMHO.
 
 * github.com/stretchr/testify#1460 (ci)
 * github.com/stretchr/testify#1467 (colorized output)
