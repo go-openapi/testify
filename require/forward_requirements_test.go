@@ -1,7 +1,7 @@
 package require
 
 import (
-	"errors"
+	"fmt"
 	"testing"
 	"time"
 )
@@ -220,7 +220,7 @@ func TestNoErrorWrapper(t *testing.T) {
 
 	mockT := new(MockT)
 	mockRequire := New(mockT)
-	mockRequire.NoError(errors.New("some error"))
+	mockRequire.NoError(someError())
 	if !mockT.Failed {
 		t.Error("Check should fail")
 	}
@@ -230,7 +230,7 @@ func TestErrorWrapper(t *testing.T) {
 	t.Parallel()
 
 	require := New(t)
-	require.Error(errors.New("some error"))
+	require.Error(someError())
 
 	mockT := new(MockT)
 	mockRequire := New(mockT)
@@ -244,11 +244,11 @@ func TestErrorContainsWrapper(t *testing.T) {
 	t.Parallel()
 
 	require := New(t)
-	require.ErrorContains(errors.New("some error: another error"), "some error")
+	require.ErrorContains(fmt.Errorf("some error: another error: %w", errSentinel), "some error")
 
 	mockT := new(MockT)
 	mockRequire := New(mockT)
-	mockRequire.ErrorContains(errors.New("some error: another error"), "different error")
+	mockRequire.ErrorContains(fmt.Errorf("some error: another error: %w", errSentinel), "different error")
 	if !mockT.Failed {
 		t.Error("Check should fail")
 	}
@@ -258,11 +258,11 @@ func TestEqualErrorWrapper(t *testing.T) {
 	t.Parallel()
 
 	require := New(t)
-	require.EqualError(errors.New("some error"), "some error")
+	require.EqualError(someError(), "some error: test error")
 
 	mockT := new(MockT)
 	mockRequire := New(mockT)
-	mockRequire.EqualError(errors.New("some error"), "Not some error")
+	mockRequire.EqualError(someError(), "Not some error")
 	if !mockT.Failed {
 		t.Error("Check should fail")
 	}
@@ -361,7 +361,7 @@ func TestJSONEqWrapper_EqualSONString(t *testing.T) {
 	mockT := new(MockT)
 	mockRequire := New(mockT)
 
-	mockRequire.JSONEq(`{"hello": "world", "foo": "bar"}`, `{"hello": "world", "foo": "bar"}`)
+	mockRequire.JSONEq(simpleJSONObject, simpleJSONObject)
 	if mockT.Failed {
 		t.Error("Check should pass")
 	}
@@ -373,7 +373,7 @@ func TestJSONEqWrapper_EquivalentButNotEqual(t *testing.T) {
 	mockT := new(MockT)
 	mockRequire := New(mockT)
 
-	mockRequire.JSONEq(`{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
+	mockRequire.JSONEq(simpleJSONObject, simpleJSONObjectReversed)
 	if mockT.Failed {
 		t.Error("Check should pass")
 	}
@@ -385,8 +385,7 @@ func TestJSONEqWrapper_HashOfArraysAndHashes(t *testing.T) {
 	mockT := new(MockT)
 	mockRequire := New(mockT)
 
-	mockRequire.JSONEq("{\r\n\t\"numeric\": 1.5,\r\n\t\"array\": [{\"foo\": \"bar\"}, 1, \"string\", [\"nested\", \"array\", 5.5]],\r\n\t\"hash\": {\"nested\": \"hash\", \"nested_slice\": [\"this\", \"is\", \"nested\"]},\r\n\t\"string\": \"foo\"\r\n}",
-		"{\r\n\t\"numeric\": 1.5,\r\n\t\"hash\": {\"nested\": \"hash\", \"nested_slice\": [\"this\", \"is\", \"nested\"]},\r\n\t\"string\": \"foo\",\r\n\t\"array\": [{\"foo\": \"bar\"}, 1, \"string\", [\"nested\", \"array\", 5.5]]\r\n}")
+	mockRequire.JSONEq(nestedJSONObject, nestedJSONObjectShuffled)
 	if mockT.Failed {
 		t.Error("Check should pass")
 	}
@@ -398,7 +397,7 @@ func TestJSONEqWrapper_Array(t *testing.T) {
 	mockT := new(MockT)
 	mockRequire := New(mockT)
 
-	mockRequire.JSONEq(`["foo", {"hello": "world", "nested": "hash"}]`, `["foo", {"nested": "hash", "hello": "world"}]`)
+	mockRequire.JSONEq(simpleJSONNested, simpleJSONNestedReversed)
 	if mockT.Failed {
 		t.Error("Check should pass")
 	}
@@ -410,7 +409,7 @@ func TestJSONEqWrapper_HashAndArrayNotEquivalent(t *testing.T) {
 	mockT := new(MockT)
 	mockRequire := New(mockT)
 
-	mockRequire.JSONEq(`["foo", {"hello": "world", "nested": "hash"}]`, `{"foo": "bar", {"nested": "hash", "hello": "world"}}`)
+	mockRequire.JSONEq(simpleJSONNested, simpleJSONNestedNotEq)
 	if !mockT.Failed {
 		t.Error("Check should fail")
 	}
@@ -422,7 +421,7 @@ func TestJSONEqWrapper_HashesNotEquivalent(t *testing.T) {
 	mockT := new(MockT)
 	mockRequire := New(mockT)
 
-	mockRequire.JSONEq(`{"foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
+	mockRequire.JSONEq(fooBarObject, simpleJSONObjectReversed)
 	if !mockT.Failed {
 		t.Error("Check should fail")
 	}
@@ -434,7 +433,7 @@ func TestJSONEqWrapper_ActualIsNotJSON(t *testing.T) {
 	mockT := new(MockT)
 	mockRequire := New(mockT)
 
-	mockRequire.JSONEq(`{"foo": "bar"}`, "Not JSON")
+	mockRequire.JSONEq(fooBarObject, notJSONString)
 	if !mockT.Failed {
 		t.Error("Check should fail")
 	}
@@ -446,7 +445,7 @@ func TestJSONEqWrapper_ExpectedIsNotJSON(t *testing.T) {
 	mockT := new(MockT)
 	mockRequire := New(mockT)
 
-	mockRequire.JSONEq("Not JSON", `{"foo": "bar", "hello": "world"}`)
+	mockRequire.JSONEq(notJSONString, simpleJSONObjectReversed)
 	if !mockT.Failed {
 		t.Error("Check should fail")
 	}
@@ -458,7 +457,7 @@ func TestJSONEqWrapper_ExpectedAndActualNotJSON(t *testing.T) {
 	mockT := new(MockT)
 	mockRequire := New(mockT)
 
-	mockRequire.JSONEq("Not JSON", "Not JSON")
+	mockRequire.JSONEq(notJSONString, notJSONString)
 	if !mockT.Failed {
 		t.Error("Check should fail")
 	}
@@ -470,7 +469,7 @@ func TestJSONEqWrapper_ArraysOfDifferentOrder(t *testing.T) {
 	mockT := new(MockT)
 	mockRequire := New(mockT)
 
-	mockRequire.JSONEq(`["foo", {"hello": "world", "nested": "hash"}]`, `[{ "hello": "world", "nested": "hash"}, "foo"]`)
+	mockRequire.JSONEq(simpleJSONArray, simpleJSONArrayReversed)
 	if !mockT.Failed {
 		t.Error("Check should fail")
 	}

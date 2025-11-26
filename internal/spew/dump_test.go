@@ -64,6 +64,7 @@ package spew_test
 import (
 	"bytes"
 	"fmt"
+	"strconv"
 	"testing"
 	"unsafe"
 
@@ -72,7 +73,7 @@ import (
 
 // dumpTest is used to describe a test to be performed against the Dump method.
 type dumpTest struct {
-	in    interface{}
+	in    any
 	wants []string
 }
 
@@ -80,8 +81,8 @@ type dumpTest struct {
 var dumpTests = make([]dumpTest, 0)
 
 // addDumpTest is a helper method to append the passed input and desired result
-// to dumpTests
-func addDumpTest(in interface{}, wants ...string) {
+// to dumpTests.
+func addDumpTest(in any, wants ...string) {
 	test := dumpTest{in, wants}
 	dumpTests = append(dumpTests, test)
 }
@@ -305,8 +306,8 @@ func addComplexDumpTests() {
 func addArrayDumpTests() {
 	// Array containing standard ints.
 	v := [3]int{1, 2, 3}
-	vLen := fmt.Sprintf("%d", len(v))
-	vCap := fmt.Sprintf("%d", cap(v))
+	vLen := strconv.Itoa(len(v))
+	vCap := strconv.Itoa(cap(v))
 	nv := (*[3]int)(nil)
 	pv := &v
 	vAddr := fmt.Sprintf("%p", pv)
@@ -324,11 +325,11 @@ func addArrayDumpTests() {
 	v2i1 := pstringer("2")
 	v2i2 := pstringer("3")
 	v2 := [3]pstringer{v2i0, v2i1, v2i2}
-	v2i0Len := fmt.Sprintf("%d", len(v2i0))
-	v2i1Len := fmt.Sprintf("%d", len(v2i1))
-	v2i2Len := fmt.Sprintf("%d", len(v2i2))
-	v2Len := fmt.Sprintf("%d", len(v2))
-	v2Cap := fmt.Sprintf("%d", cap(v2))
+	v2i0Len := strconv.Itoa(len(v2i0))
+	v2i1Len := strconv.Itoa(len(v2i1))
+	v2i2Len := strconv.Itoa(len(v2i2))
+	v2Len := strconv.Itoa(len(v2))
+	v2Cap := strconv.Itoa(cap(v2))
 	nv2 := (*[3]pstringer)(nil)
 	pv2 := &v2
 	v2Addr := fmt.Sprintf("%p", pv2)
@@ -352,11 +353,11 @@ func addArrayDumpTests() {
 
 	// Array containing interfaces.
 	v3i0 := "one"
-	v3 := [3]interface{}{v3i0, int(2), uint(3)}
-	v3i0Len := fmt.Sprintf("%d", len(v3i0))
-	v3Len := fmt.Sprintf("%d", len(v3))
-	v3Cap := fmt.Sprintf("%d", cap(v3))
-	nv3 := (*[3]interface{})(nil)
+	v3 := [3]any{v3i0, int(2), uint(3)}
+	v3i0Len := strconv.Itoa(len(v3i0))
+	v3Len := strconv.Itoa(len(v3))
+	v3Cap := strconv.Itoa(cap(v3))
+	nv3 := (*[3]any)(nil)
 	pv3 := &v3
 	v3Addr := fmt.Sprintf("%p", pv3)
 	pv3Addr := fmt.Sprintf("%p", &pv3)
@@ -380,8 +381,8 @@ func addArrayDumpTests() {
 		0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x30,
 		0x31, 0x32,
 	}
-	v4Len := fmt.Sprintf("%d", len(v4))
-	v4Cap := fmt.Sprintf("%d", cap(v4))
+	v4Len := strconv.Itoa(len(v4))
+	v4Cap := strconv.Itoa(cap(v4))
 	nv4 := (*[34]byte)(nil)
 	pv4 := &v4
 	v4Addr := fmt.Sprintf("%p", pv4)
@@ -403,8 +404,8 @@ func addArrayDumpTests() {
 func addSliceDumpTests() {
 	// Slice containing standard float32 values.
 	v := []float32{3.14, 6.28, 12.56}
-	vLen := fmt.Sprintf("%d", len(v))
-	vCap := fmt.Sprintf("%d", cap(v))
+	vLen := strconv.Itoa(len(v))
+	vCap := strconv.Itoa(cap(v))
 	nv := (*[]float32)(nil)
 	pv := &v
 	vAddr := fmt.Sprintf("%p", pv)
@@ -422,11 +423,11 @@ func addSliceDumpTests() {
 	v2i1 := pstringer("2")
 	v2i2 := pstringer("3")
 	v2 := []pstringer{v2i0, v2i1, v2i2}
-	v2i0Len := fmt.Sprintf("%d", len(v2i0))
-	v2i1Len := fmt.Sprintf("%d", len(v2i1))
-	v2i2Len := fmt.Sprintf("%d", len(v2i2))
-	v2Len := fmt.Sprintf("%d", len(v2))
-	v2Cap := fmt.Sprintf("%d", cap(v2))
+	v2i0Len := strconv.Itoa(len(v2i0))
+	v2i1Len := strconv.Itoa(len(v2i1))
+	v2i2Len := strconv.Itoa(len(v2i2))
+	v2Len := strconv.Itoa(len(v2))
+	v2Cap := strconv.Itoa(cap(v2))
 	nv2 := (*[]pstringer)(nil)
 	pv2 := &v2
 	v2Addr := fmt.Sprintf("%p", pv2)
@@ -443,11 +444,11 @@ func addSliceDumpTests() {
 
 	// Slice containing interfaces.
 	v3i0 := "one"
-	v3 := []interface{}{v3i0, int(2), uint(3), nil}
-	v3i0Len := fmt.Sprintf("%d", len(v3i0))
-	v3Len := fmt.Sprintf("%d", len(v3))
-	v3Cap := fmt.Sprintf("%d", cap(v3))
-	nv3 := (*[]interface{})(nil)
+	v3 := []any{v3i0, int(2), uint(3), nil}
+	v3i0Len := strconv.Itoa(len(v3i0))
+	v3Len := strconv.Itoa(len(v3))
+	v3Cap := strconv.Itoa(cap(v3))
+	nv3 := (*[]any)(nil)
 	pv3 := &v3
 	v3Addr := fmt.Sprintf("%p", pv3)
 	pv3Addr := fmt.Sprintf("%p", &pv3)
@@ -472,8 +473,8 @@ func addSliceDumpTests() {
 		0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x30,
 		0x31, 0x32,
 	}
-	v4Len := fmt.Sprintf("%d", len(v4))
-	v4Cap := fmt.Sprintf("%d", cap(v4))
+	v4Len := strconv.Itoa(len(v4))
+	v4Cap := strconv.Itoa(cap(v4))
 	nv4 := (*[]byte)(nil)
 	pv4 := &v4
 	v4Addr := fmt.Sprintf("%p", pv4)
@@ -508,7 +509,7 @@ func addSliceDumpTests() {
 func addStringDumpTests() {
 	// Standard string.
 	v := "test"
-	vLen := fmt.Sprintf("%d", len(v))
+	vLen := strconv.Itoa(len(v))
 	nv := (*string)(nil)
 	pv := &v
 	vAddr := fmt.Sprintf("%p", pv)
@@ -523,8 +524,8 @@ func addStringDumpTests() {
 
 func addInterfaceDumpTests() {
 	// Nil interface.
-	var v interface{}
-	nv := (*interface{})(nil)
+	var v any
+	nv := (*any)(nil)
 	pv := &v
 	vAddr := fmt.Sprintf("%p", pv)
 	pvAddr := fmt.Sprintf("%p", &pv)
@@ -536,7 +537,7 @@ func addInterfaceDumpTests() {
 	addDumpTest(nv, "(*"+vt+")(<nil>)\n")
 
 	// Sub-interface.
-	v2 := interface{}(uint16(65535))
+	v2 := any(uint16(65535))
 	pv2 := &v2
 	v2Addr := fmt.Sprintf("%p", pv2)
 	pv2Addr := fmt.Sprintf("%p", &pv2)
@@ -552,9 +553,9 @@ func addMapDumpTests() {
 	k := "one"
 	kk := "two"
 	m := map[string]int{k: 1, kk: 2}
-	klen := fmt.Sprintf("%d", len(k)) // not kLen to shut golint up
-	kkLen := fmt.Sprintf("%d", len(kk))
-	mLen := fmt.Sprintf("%d", len(m))
+	klen := strconv.Itoa(len(k)) // not kLen to shut golint up
+	kkLen := strconv.Itoa(len(kk))
+	mLen := strconv.Itoa(len(m))
 	nilMap := map[string]int(nil)
 	nm := (*map[string]int)(nil)
 	pm := &m
@@ -581,9 +582,9 @@ func addMapDumpTests() {
 	k2 := pstringer("one")
 	v2 := pstringer("1")
 	m2 := map[pstringer]pstringer{k2: v2}
-	k2Len := fmt.Sprintf("%d", len(k2))
-	v2Len := fmt.Sprintf("%d", len(v2))
-	m2Len := fmt.Sprintf("%d", len(m2))
+	k2Len := strconv.Itoa(len(k2))
+	v2Len := strconv.Itoa(len(v2))
+	m2Len := strconv.Itoa(len(m2))
 	nilMap2 := map[pstringer]pstringer(nil)
 	nm2 := (*map[pstringer]pstringer)(nil)
 	pm2 := &m2
@@ -607,11 +608,11 @@ func addMapDumpTests() {
 
 	// Map with interface keys and values.
 	k3 := "one"
-	k3Len := fmt.Sprintf("%d", len(k3))
-	m3 := map[interface{}]interface{}{k3: 1}
-	m3Len := fmt.Sprintf("%d", len(m3))
-	nilMap3 := map[interface{}]interface{}(nil)
-	nm3 := (*map[interface{}]interface{})(nil)
+	k3Len := strconv.Itoa(len(k3))
+	m3 := map[any]any{k3: 1}
+	m3Len := strconv.Itoa(len(m3))
+	nilMap3 := map[any]any(nil)
+	nm3 := (*map[any]any)(nil)
 	pm3 := &m3
 	m3Addr := fmt.Sprintf("%p", pm3)
 	pm3Addr := fmt.Sprintf("%p", &pm3)
@@ -628,11 +629,11 @@ func addMapDumpTests() {
 
 	// Map with nil interface value.
 	k4 := "nil"
-	k4Len := fmt.Sprintf("%d", len(k4))
-	m4 := map[string]interface{}{k4: nil}
-	m4Len := fmt.Sprintf("%d", len(m4))
-	nilMap4 := map[string]interface{}(nil)
-	nm4 := (*map[string]interface{})(nil)
+	k4Len := strconv.Itoa(len(k4))
+	m4 := map[string]any{k4: nil}
+	m4Len := strconv.Itoa(len(m4))
+	nilMap4 := map[string]any(nil)
+	nm4 := (*map[string]any)(nil)
 	pm4 := &m4
 	m4Addr := fmt.Sprintf("%p", pm4)
 	pm4Addr := fmt.Sprintf("%p", &pm4)
@@ -719,7 +720,7 @@ func addStructDumpTests() {
 
 	// Struct that contains embedded struct and field to same struct.
 	e := embed{"embedstr"}
-	eLen := fmt.Sprintf("%d", len("embedstr"))
+	eLen := strconv.Itoa(len("embedstr"))
 	v4 := embedwrap{embed: &e, e: &e}
 	nv4 := (*embedwrap)(nil)
 	pv4 := &v4

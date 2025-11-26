@@ -70,6 +70,7 @@ var hexDigits = "0123456789abcdef"
 // catchPanic handles any panics that might occur during the handleMethods
 // calls.
 func catchPanic(w io.Writer, v reflect.Value) {
+	_ = v // currently we do not render the panic value
 	if err := recover(); err != nil {
 		w.Write(panicBytes)
 		fmt.Fprintf(w, "%v", err)
@@ -150,7 +151,7 @@ func printBool(w io.Writer, val bool) {
 }
 
 // printInt outputs a signed integer value to Writer w.
-func printInt(w io.Writer, val int64, base int) {
+func printInt(w io.Writer, val int64, base int) { //nolint: unparam  // we leave base even though it is alway 10, to remain consistent with FormatInt
 	w.Write([]byte(strconv.FormatInt(val, base)))
 }
 
@@ -270,8 +271,9 @@ func canSortSimply(kind reflect.Kind) bool {
 		return true
 	case reflect.Array:
 		return true
+	default:
+		return false
 	}
-	return false
 }
 
 // Len returns the number of values in the slice.  It is part of the
@@ -309,7 +311,7 @@ func valueSortLess(a, b reflect.Value) bool {
 	case reflect.Array:
 		// Compare the contents of both arrays.
 		l := a.Len()
-		for i := 0; i < l; i++ {
+		for i := range l {
 			av := a.Index(i)
 			bv := b.Index(i)
 			if av.Interface() == bv.Interface() {
@@ -317,8 +319,10 @@ func valueSortLess(a, b reflect.Value) bool {
 			}
 			return valueSortLess(av, bv)
 		}
+		fallthrough
+	default:
+		return a.String() < b.String()
 	}
-	return a.String() < b.String()
 }
 
 // Less returns whether the value at index i should sort before the

@@ -91,7 +91,7 @@ func DirExistsf(t TestingT, path string, msg string, args ...any) {
 // listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 // the number of appearances of each of them in both lists should match.
 //
-// require.ElementsMatch(t, [1, 3, 2, 3], [1, 3, 3, 2])
+// require.ElementsMatch(t, [1, 3, 2, 3], [1, 3, 3, 2]).
 func ElementsMatch(t TestingT, listA any, listB any, msgAndArgs ...any) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -511,7 +511,7 @@ func Exactlyf(t TestingT, expected any, actual any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// Fail reports a failure through
+// Fail reports a failure through.
 func Fail(t TestingT, failureMessage string, msgAndArgs ...any) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -522,7 +522,7 @@ func Fail(t TestingT, failureMessage string, msgAndArgs ...any) {
 	t.FailNow()
 }
 
-// FailNow fails test
+// FailNow fails test.
 func FailNow(t TestingT, failureMessage string, msgAndArgs ...any) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -947,7 +947,7 @@ func InDeltaf(t TestingT, expected any, actual any, delta float64, msg string, a
 	t.FailNow()
 }
 
-// InEpsilon asserts that expected and actual have a relative error less than epsilon
+// InEpsilon asserts that expected and actual have a relative error less than epsilon.
 func InEpsilon(t TestingT, expected any, actual any, epsilon float64, msgAndArgs ...any) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -1508,7 +1508,7 @@ func NotContainsf(t TestingT, s any, contains any, msg string, args ...any) {
 //
 // require.NotElementsMatch(t, [1, 1, 2, 3], [1, 2, 3]) -> true
 //
-// require.NotElementsMatch(t, [1, 2, 3], [1, 2, 4]) -> true
+// require.NotElementsMatch(t, [1, 2, 3], [1, 2, 4]) -> true.
 func NotElementsMatch(t TestingT, listA any, listB any, msgAndArgs ...any) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()

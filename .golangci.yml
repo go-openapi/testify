@@ -2,36 +2,19 @@ version: "2"
 linters:
   default: all
   disable:
-    - cyclop
     - depguard
-    - errchkjson
-    - errorlint
-    - exhaustruct
-    - forcetypeassert
+    - err113
     - funlen
-    - gochecknoglobals
-    - gochecknoinits
-    - gocognit
-    - godot
     - godox
     - gomoddirectives
-    - gosmopolitan
-    - inamedparam
-    - intrange
-    - ireturn
-    - lll
-    - musttag
-    - nestif
+    - exhaustruct
     - nlreturn
     - nonamedreturns
     - noinlineerr
     - paralleltest
     - recvcheck
     - testpackage
-    - thelper
-    - tagliatelle
     - tparallel
-    - unparam
     - varnamelen
     - whitespace
     - wrapcheck
@@ -43,8 +26,15 @@ linters:
     goconst:
       min-len: 2
       min-occurrences: 3
+    cyclop:
+      max-complexity: 22
     gocyclo:
-      min-complexity: 45
+      min-complexity: 22
+    exhaustive:
+      default-signifies-exhaustive: true
+      default-case-required: true
+    lll:
+      line-length: 180
   exclusions:
     generated: lax
     presets:

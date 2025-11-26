@@ -23,22 +23,9 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"strconv"
 	"strings"
 )
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 
 type Match struct {
 	A    int
@@ -99,13 +86,13 @@ func NewMatcher(a, b []string) *SequenceMatcher {
 	return &m
 }
 
-// Set two sequences to be compared.
+// SetSeqs sets two sequences to be compared.
 func (m *SequenceMatcher) SetSeqs(a, b []string) {
 	m.SetSeq1(a)
 	m.SetSeq2(b)
 }
 
-// Set the first sequence to be compared. The second sequence to be compared is
+// SetSeq1 sets the first sequence to be compared. The second sequence to be compared is
 // not changed.
 //
 // SequenceMatcher computes and caches detailed information about the second
@@ -123,7 +110,7 @@ func (m *SequenceMatcher) SetSeq1(a []string) {
 	m.opCodes = nil
 }
 
-// Set the second sequence to be compared. The first sequence to be compared is
+// SetSeq2 sets the second sequence to be compared. The first sequence to be compared is
 // not changed.
 func (m *SequenceMatcher) SetSeq2(b []string) {
 	if &b == &m.b {
@@ -134,6 +121,168 @@ func (m *SequenceMatcher) SetSeq2(b []string) {
 	m.opCodes = nil
 	m.fullBCount = nil
 	m.chainB()
+}
+
+// GetMatchingBlocks return the list of triples describing matching subsequences.
+//
+// Each triple is of the form (i, j, n), and means that
+// a[i:i+n] == b[j:j+n].  The triples are monotonically increasing in
+// i and in j. It's also guaranteed that if (i, j, n) and (i', j', n') are
+// adjacent triples in the list, and the second is not the last triple in the
+// list, then i+n != i' or j+n != j'. IOW, adjacent triples never describe
+// adjacent equal blocks.
+//
+// The last triple is a dummy, (len(a), len(b), 0), and is the only
+// triple with n==0.
+func (m *SequenceMatcher) GetMatchingBlocks() []Match {
+	if m.matchingBlocks != nil {
+		return m.matchingBlocks
+	}
+
+	var matchBlocks func(alo, ahi, blo, bhi int, matched []Match) []Match
+	matchBlocks = func(alo, ahi, blo, bhi int, matched []Match) []Match {
+		match := m.findLongestMatch(alo, ahi, blo, bhi)
+		i, j, k := match.A, match.B, match.Size
+		if match.Size > 0 {
+			if alo < i && blo < j {
+				matched = matchBlocks(alo, i, blo, j, matched)
+			}
+			matched = append(matched, match)
+			if i+k < ahi && j+k < bhi {
+				matched = matchBlocks(i+k, ahi, j+k, bhi, matched)
+			}
+		}
+		return matched
+	}
+	matched := matchBlocks(0, len(m.a), 0, len(m.b), nil)
+
+	// It's possible that we have adjacent equal blocks in the
+	// matching_blocks list now.
+	nonAdjacent := []Match{}
+	i1, j1, k1 := 0, 0, 0
+	for _, b := range matched {
+		// Is this block adjacent to i1, j1, k1?
+		i2, j2, k2 := b.A, b.B, b.Size
+		if i1+k1 == i2 && j1+k1 == j2 {
+			// Yes, so collapse them -- this just increases the length of
+			// the first block by the length of the second, and the first
+			// block so lengthened remains the block to compare against.
+			k1 += k2
+		} else {
+			// Not adjacent.  Remember the first block (k1==0 means it's
+			// the dummy we started with), and make the second block the
+			// new block to compare against.
+			if k1 > 0 {
+				nonAdjacent = append(nonAdjacent, Match{i1, j1, k1})
+			}
+			i1, j1, k1 = i2, j2, k2
+		}
+	}
+	if k1 > 0 {
+		nonAdjacent = append(nonAdjacent, Match{i1, j1, k1})
+	}
+
+	nonAdjacent = append(nonAdjacent, Match{len(m.a), len(m.b), 0})
+	m.matchingBlocks = nonAdjacent
+	return m.matchingBlocks
+}
+
+// GetOpCodes return the list of 5-tuples describing how to turn a into b.
+//
+// Each tuple is of the form (tag, i1, i2, j1, j2).  The first tuple
+// has i1 == j1 == 0, and remaining tuples have i1 == the i2 from the
+// tuple preceding it, and likewise for j1 == the previous j2.
+//
+// The tags are characters, with these meanings:
+//
+// 'r' (replace):  a[i1:i2] should be replaced by b[j1:j2]
+//
+// 'd' (delete):   a[i1:i2] should be deleted, j1==j2 in this case.
+//
+// 'i' (insert):   b[j1:j2] should be inserted at a[i1:i1], i1==i2 in this case.
+//
+// 'e' (equal):    a[i1:i2] == b[j1:j2].
+func (m *SequenceMatcher) GetOpCodes() []OpCode {
+	if m.opCodes != nil {
+		return m.opCodes
+	}
+	i, j := 0, 0
+	matching := m.GetMatchingBlocks()
+	opCodes := make([]OpCode, 0, len(matching))
+	for _, m := range matching {
+		//  invariant:  we've pumped out correct diffs to change
+		//  a[:i] into b[:j], and the next matching block is
+		//  a[ai:ai+size] == b[bj:bj+size]. So we need to pump
+		//  out a diff to change a[i:ai] into b[j:bj], pump out
+		//  the matching block, and move (i,j) beyond the match
+		ai, bj, size := m.A, m.B, m.Size
+		tag := byte(0)
+		switch {
+		case i < ai && j < bj:
+			tag = 'r'
+		case i < ai:
+			tag = 'd'
+		case j < bj:
+			tag = 'i'
+		}
+
+		if tag > 0 {
+			opCodes = append(opCodes, OpCode{tag, i, ai, j, bj})
+		}
+		i, j = ai+size, bj+size
+		// the list of matching blocks is terminated by a
+		// sentinel with size 0
+		if size > 0 {
+			opCodes = append(opCodes, OpCode{'e', ai, i, bj, j})
+		}
+	}
+	m.opCodes = opCodes
+	return m.opCodes
+}
+
+// GetGroupedOpCodes isolates change clusters by eliminating ranges with no changes.
+//
+// Return a generator of groups with up to n lines of context.
+// Each group is in the same format as returned by GetOpCodes().
+func (m *SequenceMatcher) GetGroupedOpCodes(n int) [][]OpCode {
+	if n < 0 {
+		n = 3
+	}
+	codes := m.GetOpCodes()
+	if len(codes) == 0 {
+		codes = []OpCode{{'e', 0, 1, 0, 1}}
+	}
+	// Fixup leading and trailing groups if they show no changes.
+	if codes[0].Tag == 'e' {
+		c := codes[0]
+		i1, i2, j1, j2 := c.I1, c.I2, c.J1, c.J2
+		codes[0] = OpCode{c.Tag, max(i1, i2-n), i2, max(j1, j2-n), j2}
+	}
+	if codes[len(codes)-1].Tag == 'e' {
+		c := codes[len(codes)-1]
+		i1, i2, j1, j2 := c.I1, c.I2, c.J1, c.J2
+		codes[len(codes)-1] = OpCode{c.Tag, i1, min(i2, i1+n), j1, min(j2, j1+n)}
+	}
+	nn := n + n
+	groups := [][]OpCode{}
+	group := []OpCode{}
+	for _, c := range codes {
+		i1, i2, j1, j2 := c.I1, c.I2, c.J1, c.J2
+		// End the current group and start a new one whenever
+		// there is a large range with no changes.
+		if c.Tag == 'e' && i2-i1 > nn {
+			group = append(group, OpCode{c.Tag, i1, min(i2, i1+n),
+				j1, min(j2, j1+n)})
+			groups = append(groups, group)
+			group = []OpCode{}
+			i1, j1 = max(i1, i2-n), max(j1, j2-n)
+		}
+		group = append(group, OpCode{c.Tag, i1, i2, j1, j2})
+	}
+	if len(group) > 0 && (len(group) != 1 || group[0].Tag != 'e') {
+		groups = append(groups, group)
+	}
+	return groups
 }
 
 func (m *SequenceMatcher) chainB() {
@@ -149,27 +298,31 @@ func (m *SequenceMatcher) chainB() {
 	m.bJunk = map[string]struct{}{}
 	if m.IsJunk != nil {
 		junk := m.bJunk
-		for s, _ := range b2j {
+		for s := range b2j {
 			if m.IsJunk(s) {
 				junk[s] = struct{}{}
 			}
 		}
-		for s, _ := range junk {
+		for s := range junk {
 			delete(b2j, s)
 		}
 	}
 
 	// Purge remaining popular elements
+	const (
+		hundred            = 100
+		maxDisplayElements = 2 * hundred
+	)
 	popular := map[string]struct{}{}
 	n := len(m.b)
-	if m.autoJunk && n >= 200 {
-		ntest := n/100 + 1
+	if m.autoJunk && n >= maxDisplayElements {
+		ntest := n/hundred + 1
 		for s, indices := range b2j {
 			if len(indices) > ntest {
 				popular[s] = struct{}{}
 			}
 		}
-		for s, _ := range popular {
+		for s := range popular {
 			delete(b2j, s)
 		}
 	}
@@ -259,7 +412,7 @@ func (m *SequenceMatcher) findLongestMatch(alo, ahi, blo, bhi int) Match {
 	for besti+bestsize < ahi && bestj+bestsize < bhi &&
 		!m.isBJunk(m.b[bestj+bestsize]) &&
 		m.a[besti+bestsize] == m.b[bestj+bestsize] {
-		bestsize += 1
+		bestsize++
 	}
 
 	// Now that we have a wholly interesting match (albeit possibly
@@ -276,187 +429,27 @@ func (m *SequenceMatcher) findLongestMatch(alo, ahi, blo, bhi int) Match {
 	for besti+bestsize < ahi && bestj+bestsize < bhi &&
 		m.isBJunk(m.b[bestj+bestsize]) &&
 		m.a[besti+bestsize] == m.b[bestj+bestsize] {
-		bestsize += 1
+		bestsize++
 	}
 
 	return Match{A: besti, B: bestj, Size: bestsize}
 }
 
-// Return list of triples describing matching subsequences.
-//
-// Each triple is of the form (i, j, n), and means that
-// a[i:i+n] == b[j:j+n].  The triples are monotonically increasing in
-// i and in j. It's also guaranteed that if (i, j, n) and (i', j', n') are
-// adjacent triples in the list, and the second is not the last triple in the
-// list, then i+n != i' or j+n != j'. IOW, adjacent triples never describe
-// adjacent equal blocks.
-//
-// The last triple is a dummy, (len(a), len(b), 0), and is the only
-// triple with n==0.
-func (m *SequenceMatcher) GetMatchingBlocks() []Match {
-	if m.matchingBlocks != nil {
-		return m.matchingBlocks
-	}
-
-	var matchBlocks func(alo, ahi, blo, bhi int, matched []Match) []Match
-	matchBlocks = func(alo, ahi, blo, bhi int, matched []Match) []Match {
-		match := m.findLongestMatch(alo, ahi, blo, bhi)
-		i, j, k := match.A, match.B, match.Size
-		if match.Size > 0 {
-			if alo < i && blo < j {
-				matched = matchBlocks(alo, i, blo, j, matched)
-			}
-			matched = append(matched, match)
-			if i+k < ahi && j+k < bhi {
-				matched = matchBlocks(i+k, ahi, j+k, bhi, matched)
-			}
-		}
-		return matched
-	}
-	matched := matchBlocks(0, len(m.a), 0, len(m.b), nil)
-
-	// It's possible that we have adjacent equal blocks in the
-	// matching_blocks list now.
-	nonAdjacent := []Match{}
-	i1, j1, k1 := 0, 0, 0
-	for _, b := range matched {
-		// Is this block adjacent to i1, j1, k1?
-		i2, j2, k2 := b.A, b.B, b.Size
-		if i1+k1 == i2 && j1+k1 == j2 {
-			// Yes, so collapse them -- this just increases the length of
-			// the first block by the length of the second, and the first
-			// block so lengthened remains the block to compare against.
-			k1 += k2
-		} else {
-			// Not adjacent.  Remember the first block (k1==0 means it's
-			// the dummy we started with), and make the second block the
-			// new block to compare against.
-			if k1 > 0 {
-				nonAdjacent = append(nonAdjacent, Match{i1, j1, k1})
-			}
-			i1, j1, k1 = i2, j2, k2
-		}
-	}
-	if k1 > 0 {
-		nonAdjacent = append(nonAdjacent, Match{i1, j1, k1})
-	}
-
-	nonAdjacent = append(nonAdjacent, Match{len(m.a), len(m.b), 0})
-	m.matchingBlocks = nonAdjacent
-	return m.matchingBlocks
-}
-
-// Return list of 5-tuples describing how to turn a into b.
-//
-// Each tuple is of the form (tag, i1, i2, j1, j2).  The first tuple
-// has i1 == j1 == 0, and remaining tuples have i1 == the i2 from the
-// tuple preceding it, and likewise for j1 == the previous j2.
-//
-// The tags are characters, with these meanings:
-//
-// 'r' (replace):  a[i1:i2] should be replaced by b[j1:j2]
-//
-// 'd' (delete):   a[i1:i2] should be deleted, j1==j2 in this case.
-//
-// 'i' (insert):   b[j1:j2] should be inserted at a[i1:i1], i1==i2 in this case.
-//
-// 'e' (equal):    a[i1:i2] == b[j1:j2]
-func (m *SequenceMatcher) GetOpCodes() []OpCode {
-	if m.opCodes != nil {
-		return m.opCodes
-	}
-	i, j := 0, 0
-	matching := m.GetMatchingBlocks()
-	opCodes := make([]OpCode, 0, len(matching))
-	for _, m := range matching {
-		//  invariant:  we've pumped out correct diffs to change
-		//  a[:i] into b[:j], and the next matching block is
-		//  a[ai:ai+size] == b[bj:bj+size]. So we need to pump
-		//  out a diff to change a[i:ai] into b[j:bj], pump out
-		//  the matching block, and move (i,j) beyond the match
-		ai, bj, size := m.A, m.B, m.Size
-		tag := byte(0)
-		if i < ai && j < bj {
-			tag = 'r'
-		} else if i < ai {
-			tag = 'd'
-		} else if j < bj {
-			tag = 'i'
-		}
-		if tag > 0 {
-			opCodes = append(opCodes, OpCode{tag, i, ai, j, bj})
-		}
-		i, j = ai+size, bj+size
-		// the list of matching blocks is terminated by a
-		// sentinel with size 0
-		if size > 0 {
-			opCodes = append(opCodes, OpCode{'e', ai, i, bj, j})
-		}
-	}
-	m.opCodes = opCodes
-	return m.opCodes
-}
-
-// Isolate change clusters by eliminating ranges with no changes.
-//
-// Return a generator of groups with up to n lines of context.
-// Each group is in the same format as returned by GetOpCodes().
-func (m *SequenceMatcher) GetGroupedOpCodes(n int) [][]OpCode {
-	if n < 0 {
-		n = 3
-	}
-	codes := m.GetOpCodes()
-	if len(codes) == 0 {
-		codes = []OpCode{OpCode{'e', 0, 1, 0, 1}}
-	}
-	// Fixup leading and trailing groups if they show no changes.
-	if codes[0].Tag == 'e' {
-		c := codes[0]
-		i1, i2, j1, j2 := c.I1, c.I2, c.J1, c.J2
-		codes[0] = OpCode{c.Tag, max(i1, i2-n), i2, max(j1, j2-n), j2}
-	}
-	if codes[len(codes)-1].Tag == 'e' {
-		c := codes[len(codes)-1]
-		i1, i2, j1, j2 := c.I1, c.I2, c.J1, c.J2
-		codes[len(codes)-1] = OpCode{c.Tag, i1, min(i2, i1+n), j1, min(j2, j1+n)}
-	}
-	nn := n + n
-	groups := [][]OpCode{}
-	group := []OpCode{}
-	for _, c := range codes {
-		i1, i2, j1, j2 := c.I1, c.I2, c.J1, c.J2
-		// End the current group and start a new one whenever
-		// there is a large range with no changes.
-		if c.Tag == 'e' && i2-i1 > nn {
-			group = append(group, OpCode{c.Tag, i1, min(i2, i1+n),
-				j1, min(j2, j1+n)})
-			groups = append(groups, group)
-			group = []OpCode{}
-			i1, j1 = max(i1, i2-n), max(j1, j2-n)
-		}
-		group = append(group, OpCode{c.Tag, i1, i2, j1, j2})
-	}
-	if len(group) > 0 && !(len(group) == 1 && group[0].Tag == 'e') {
-		groups = append(groups, group)
-	}
-	return groups
-}
-
-// Convert range to the "ed" format
+// Convert range to the "ed" format.
 func formatRangeUnified(start, stop int) string {
 	// Per the diff spec at http://www.unix.org/single_unix_specification/
 	beginning := start + 1 // lines start numbering with one
 	length := stop - start
 	if length == 1 {
-		return fmt.Sprintf("%d", beginning)
+		return strconv.Itoa(beginning)
 	}
 	if length == 0 {
-		beginning -= 1 // empty ranges begin at line just before the range
+		beginning-- // empty ranges begin at line just before the range
 	}
 	return fmt.Sprintf("%d,%d", beginning, length)
 }
 
-// Unified diff parameters
+// UnifiedDiff holds the unified diff parameters.
 type UnifiedDiff struct {
 	A        []string // First sequence lines
 	FromFile string   // First file name
@@ -468,7 +461,11 @@ type UnifiedDiff struct {
 	Context  int      // Number of context lines
 }
 
-// Compare two sequences of lines; generate the delta as a unified diff.
+type formatter func(format string, args ...any) error
+type printer func(string) error
+
+// WriteUnifiedDiff write the comparison between two sequences of lines.
+// It generates the delta as a unified diff.
 //
 // Unified diffs are a compact way of showing line changes and a few
 // lines of context.  The number of context lines is set by 'n' which
@@ -484,16 +481,17 @@ type UnifiedDiff struct {
 // argument to "" so that the output will be uniformly newline free.
 //
 // The unidiff format normally has a header for filenames and modification
-// times.  Any or all of these may be specified using strings for
 // 'fromfile', 'tofile', 'fromfiledate', and 'tofiledate'.
 // The modification times are normally expressed in the ISO 8601 format.
 func WriteUnifiedDiff(writer io.Writer, diff UnifiedDiff) error {
 	buf := bufio.NewWriter(writer)
 	defer buf.Flush()
-	wf := func(format string, args ...interface{}) error {
-		_, err := buf.WriteString(fmt.Sprintf(format, args...))
+
+	wf := func(format string, args ...any) error {
+		_, err := fmt.Fprintf(buf, format, args...)
 		return err
 	}
+
 	ws := func(s string) error {
 		_, err := buf.WriteString(s)
 		return err
@@ -503,70 +501,130 @@ func WriteUnifiedDiff(writer io.Writer, diff UnifiedDiff) error {
 		diff.Eol = "\n"
 	}
 
-	started := false
 	m := NewMatcher(diff.A, diff.B)
-	for _, g := range m.GetGroupedOpCodes(diff.Context) {
-		if !started {
-			started = true
-			fromDate := ""
-			if len(diff.FromDate) > 0 {
-				fromDate = "\t" + diff.FromDate
-			}
-			toDate := ""
-			if len(diff.ToDate) > 0 {
-				toDate = "\t" + diff.ToDate
-			}
-			if diff.FromFile != "" || diff.ToFile != "" {
-				err := wf("--- %s%s%s", diff.FromFile, fromDate, diff.Eol)
-				if err != nil {
-					return err
-				}
-				err = wf("+++ %s%s%s", diff.ToFile, toDate, diff.Eol)
-				if err != nil {
-					return err
-				}
-			}
-		}
-		first, last := g[0], g[len(g)-1]
-		range1 := formatRangeUnified(first.I1, last.I2)
-		range2 := formatRangeUnified(first.J1, last.J2)
-		if err := wf("@@ -%s +%s @@%s", range1, range2, diff.Eol); err != nil {
+	groups := m.GetGroupedOpCodes(diff.Context)
+
+	if len(groups) == 0 {
+		return nil
+	}
+
+	if err := writeFirstGroup(groups[0], diff, wf, ws); err != nil {
+		return err
+	}
+
+	for _, g := range groups[1:] {
+		if err := writeGroup(g, diff, wf, ws); err != nil {
 			return err
 		}
-		for _, c := range g {
-			i1, i2, j1, j2 := c.I1, c.I2, c.J1, c.J2
-			if c.Tag == 'e' {
-				for _, line := range diff.A[i1:i2] {
-					if err := ws(" " + line); err != nil {
-						return err
-					}
-				}
-				continue
-			}
-			if c.Tag == 'r' || c.Tag == 'd' {
-				for _, line := range diff.A[i1:i2] {
-					if err := ws("-" + line); err != nil {
-						return err
-					}
-				}
-			}
-			if c.Tag == 'r' || c.Tag == 'i' {
-				for _, line := range diff.B[j1:j2] {
-					if err := ws("+" + line); err != nil {
-						return err
-					}
-				}
-			}
-		}
 	}
+
 	return nil
 }
 
-// Like WriteUnifiedDiff but returns the diff a string.
+func writeFirstGroup(g []OpCode, diff UnifiedDiff, wf formatter, ws printer) error {
+	fromDate := ""
+	if len(diff.FromDate) > 0 {
+		fromDate = "\t" + diff.FromDate
+	}
+
+	toDate := ""
+	if len(diff.ToDate) > 0 {
+		toDate = "\t" + diff.ToDate
+	}
+
+	if diff.FromFile != "" || diff.ToFile != "" {
+		err := wf("--- %s%s%s", diff.FromFile, fromDate, diff.Eol)
+		if err != nil {
+			return err
+		}
+		err = wf("+++ %s%s%s", diff.ToFile, toDate, diff.Eol)
+		if err != nil {
+			return err
+		}
+	}
+
+	return writeGroup(g, diff, wf, ws)
+}
+
+func writeGroup(group []OpCode, diff UnifiedDiff, wf formatter, ws printer) error {
+	first, last := group[0], group[len(group)-1]
+	range1 := formatRangeUnified(first.I1, last.I2)
+	range2 := formatRangeUnified(first.J1, last.J2)
+	if err := wf("@@ -%s +%s @@%s", range1, range2, diff.Eol); err != nil {
+		return err
+	}
+
+	for _, c := range group {
+		// 'r' (replace)
+		// 'd' (delete)
+		// 'i' (insert)
+		// 'e' (equal)
+		if c.Tag != 'r' && c.Tag != 'e' && c.Tag != 'd' && c.Tag != 'i' {
+			continue
+		}
+
+		i1, i2, j1, j2 := c.I1, c.I2, c.J1, c.J2
+		switch c.Tag {
+		case 'e':
+			if err := writeEqual(diff.A[i1:i2], ws); err != nil {
+				return err
+			}
+		case 'd':
+			if err := writeReplaceOrDelete(diff.A[i1:i2], ws); err != nil {
+				return err
+			}
+		case 'i':
+			if err := writeReplaceOrInsert(diff.B[j1:j2], ws); err != nil {
+				return err
+			}
+		case 'r':
+			if err := writeReplaceOrDelete(diff.A[i1:i2], ws); err != nil {
+				return err
+			}
+			if err := writeReplaceOrInsert(diff.B[j1:j2], ws); err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+func writeEqual(lines []string, ws printer) error {
+	for _, line := range lines {
+		if err := ws(" " + line); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func writeReplaceOrDelete(lines []string, ws printer) error {
+	for _, line := range lines {
+		if err := ws("-" + line); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func writeReplaceOrInsert(lines []string, ws printer) error {
+	for _, line := range lines {
+		if err := ws("+" + line); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// GetUnifiedDiffString is like WriteUnifiedDiff but returns the diff a string.
 func GetUnifiedDiffString(diff UnifiedDiff) (string, error) {
-	w := &bytes.Buffer{}
+	w := new(bytes.Buffer)
 	err := WriteUnifiedDiff(w, diff)
-	return string(w.Bytes()), err
+	return w.String(), err
 }
 
 // Convert range to the "ed" format.
@@ -575,15 +633,15 @@ func formatRangeContext(start, stop int) string {
 	beginning := start + 1 // lines start numbering with one
 	length := stop - start
 	if length == 0 {
-		beginning -= 1 // empty ranges begin at line just before the range
+		beginning-- // empty ranges begin at line just before the range
 	}
 	if length <= 1 {
-		return fmt.Sprintf("%d", beginning)
+		return strconv.Itoa(beginning)
 	}
 	return fmt.Sprintf("%d,%d", beginning, beginning+length-1)
 }
 
-// Split a string on "\n" while preserving them. The output can be used
+// SplitLines splits a string on "\n" while preserving them. The output can be used
 // as input for UnifiedDiff and ContextDiff structures.
 func SplitLines(s string) []string {
 	lines := strings.SplitAfter(s, "\n")

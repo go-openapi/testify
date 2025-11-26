@@ -2,25 +2,26 @@ package require
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 	"time"
 
 	"github.com/go-openapi/testify/v2/assert"
 )
 
-// AssertionTesterInterface defines an interface to be used for testing assertion methods
+// AssertionTesterInterface defines an interface to be used for testing assertion methods.
 type AssertionTesterInterface interface {
 	TestMethod()
 }
 
-// AssertionTesterConformingObject is an object that conforms to the AssertionTesterInterface interface
+// AssertionTesterConformingObject is an object that conforms to the AssertionTesterInterface interface.
 type AssertionTesterConformingObject struct {
 }
 
 func (a *AssertionTesterConformingObject) TestMethod() {
 }
 
-// AssertionTesterNonConformingObject is an object that does not conform to the AssertionTesterInterface interface
+// AssertionTesterNonConformingObject is an object that does not conform to the AssertionTesterInterface interface.
 type AssertionTesterNonConformingObject struct {
 }
 
@@ -209,7 +210,7 @@ func TestNoError(t *testing.T) {
 	NoError(t, nil)
 
 	mockT := new(MockT)
-	NoError(mockT, errors.New("some error"))
+	NoError(mockT, someError())
 	if !mockT.Failed {
 		t.Error("Check should fail")
 	}
@@ -218,7 +219,7 @@ func TestNoError(t *testing.T) {
 func TestError(t *testing.T) {
 	t.Parallel()
 
-	Error(t, errors.New("some error"))
+	Error(t, someError())
 
 	mockT := new(MockT)
 	Error(mockT, nil)
@@ -230,10 +231,10 @@ func TestError(t *testing.T) {
 func TestErrorContains(t *testing.T) {
 	t.Parallel()
 
-	ErrorContains(t, errors.New("some error: another error"), "some error")
+	ErrorContains(t, fmt.Errorf("some error: another error: %w", errSentinel), "some error")
 
 	mockT := new(MockT)
-	ErrorContains(mockT, errors.New("some error"), "different error")
+	ErrorContains(mockT, someError(), "different error")
 	if !mockT.Failed {
 		t.Error("Check should fail")
 	}
@@ -242,10 +243,10 @@ func TestErrorContains(t *testing.T) {
 func TestEqualError(t *testing.T) {
 	t.Parallel()
 
-	EqualError(t, errors.New("some error"), "some error")
+	EqualError(t, someError(), "some error: test error")
 
 	mockT := new(MockT)
-	EqualError(mockT, errors.New("some error"), "Not some error")
+	EqualError(mockT, someError(), "Not some error")
 	if !mockT.Failed {
 		t.Error("Check should fail")
 	}
@@ -330,7 +331,7 @@ func TestJSONEq_EqualSONString(t *testing.T) {
 	t.Parallel()
 
 	mockT := new(MockT)
-	JSONEq(mockT, `{"hello": "world", "foo": "bar"}`, `{"hello": "world", "foo": "bar"}`)
+	JSONEq(mockT, simpleJSONObject, simpleJSONObject)
 	if mockT.Failed {
 		t.Error("Check should pass")
 	}
@@ -340,7 +341,7 @@ func TestJSONEq_EquivalentButNotEqual(t *testing.T) {
 	t.Parallel()
 
 	mockT := new(MockT)
-	JSONEq(mockT, `{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
+	JSONEq(mockT, simpleJSONObject, simpleJSONObjectReversed)
 	if mockT.Failed {
 		t.Error("Check should pass")
 	}
@@ -350,8 +351,7 @@ func TestJSONEq_HashOfArraysAndHashes(t *testing.T) {
 	t.Parallel()
 
 	mockT := new(MockT)
-	JSONEq(mockT, "{\r\n\t\"numeric\": 1.5,\r\n\t\"array\": [{\"foo\": \"bar\"}, 1, \"string\", [\"nested\", \"array\", 5.5]],\r\n\t\"hash\": {\"nested\": \"hash\", \"nested_slice\": [\"this\", \"is\", \"nested\"]},\r\n\t\"string\": \"foo\"\r\n}",
-		"{\r\n\t\"numeric\": 1.5,\r\n\t\"hash\": {\"nested\": \"hash\", \"nested_slice\": [\"this\", \"is\", \"nested\"]},\r\n\t\"string\": \"foo\",\r\n\t\"array\": [{\"foo\": \"bar\"}, 1, \"string\", [\"nested\", \"array\", 5.5]]\r\n}")
+	JSONEq(mockT, nestedJSONObject, nestedJSONObjectShuffled)
 	if mockT.Failed {
 		t.Error("Check should pass")
 	}
@@ -361,7 +361,7 @@ func TestJSONEq_Array(t *testing.T) {
 	t.Parallel()
 
 	mockT := new(MockT)
-	JSONEq(mockT, `["foo", {"hello": "world", "nested": "hash"}]`, `["foo", {"nested": "hash", "hello": "world"}]`)
+	JSONEq(mockT, simpleJSONNested, simpleJSONNestedReversed)
 	if mockT.Failed {
 		t.Error("Check should pass")
 	}
@@ -371,7 +371,7 @@ func TestJSONEq_HashAndArrayNotEquivalent(t *testing.T) {
 	t.Parallel()
 
 	mockT := new(MockT)
-	JSONEq(mockT, `["foo", {"hello": "world", "nested": "hash"}]`, `{"foo": "bar", {"nested": "hash", "hello": "world"}}`)
+	JSONEq(mockT, simpleJSONNested, simpleJSONNestedNotEq)
 	if !mockT.Failed {
 		t.Error("Check should fail")
 	}
@@ -381,7 +381,7 @@ func TestJSONEq_HashesNotEquivalent(t *testing.T) {
 	t.Parallel()
 
 	mockT := new(MockT)
-	JSONEq(mockT, `{"foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
+	JSONEq(mockT, fooBarObject, simpleJSONObjectReversed)
 	if !mockT.Failed {
 		t.Error("Check should fail")
 	}
@@ -391,7 +391,7 @@ func TestJSONEq_ActualIsNotJSON(t *testing.T) {
 	t.Parallel()
 
 	mockT := new(MockT)
-	JSONEq(mockT, `{"foo": "bar"}`, "Not JSON")
+	JSONEq(mockT, fooBarObject, notJSONString)
 	if !mockT.Failed {
 		t.Error("Check should fail")
 	}
@@ -401,7 +401,7 @@ func TestJSONEq_ExpectedIsNotJSON(t *testing.T) {
 	t.Parallel()
 
 	mockT := new(MockT)
-	JSONEq(mockT, "Not JSON", `{"foo": "bar", "hello": "world"}`)
+	JSONEq(mockT, notJSONString, simpleJSONObjectReversed)
 	if !mockT.Failed {
 		t.Error("Check should fail")
 	}
@@ -411,7 +411,7 @@ func TestJSONEq_ExpectedAndActualNotJSON(t *testing.T) {
 	t.Parallel()
 
 	mockT := new(MockT)
-	JSONEq(mockT, "Not JSON", "Not JSON")
+	JSONEq(mockT, notJSONString, notJSONString)
 	if !mockT.Failed {
 		t.Error("Check should fail")
 	}
@@ -421,7 +421,7 @@ func TestJSONEq_ArraysOfDifferentOrder(t *testing.T) {
 	t.Parallel()
 
 	mockT := new(MockT)
-	JSONEq(mockT, `["foo", {"hello": "world", "nested": "hash"}]`, `[{ "hello": "world", "nested": "hash"}, "foo"]`)
+	JSONEq(mockT, simpleJSONArray, simpleJSONArrayReversed)
 	if !mockT.Failed {
 		t.Error("Check should fail")
 	}
@@ -513,7 +513,7 @@ func TestErrorAssertionFunc(t *testing.T) {
 		assertion ErrorAssertionFunc
 	}{
 		{"noError", nil, NoError},
-		{"error", errors.New("whoops"), Error},
+		{"error", fmt.Errorf("whoops: %w", errSentinel), Error},
 	}
 
 	for _, tt := range tests {
@@ -552,4 +552,10 @@ func TestEventuallyWithTTrue(t *testing.T) {
 	EventuallyWithT(mockT, condition, 100*time.Millisecond, 20*time.Millisecond)
 	False(t, mockT.Failed, "Check should pass")
 	Equal(t, 2, counter, "Condition is expected to be called 2 times")
+}
+
+var errSentinel = errors.New("test error")
+
+func someError() error {
+	return fmt.Errorf("some error: %w", errSentinel)
 }

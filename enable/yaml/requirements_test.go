@@ -6,6 +6,34 @@ import (
 	target "github.com/go-openapi/testify/v2/require"
 )
 
+const (
+	expectedYAML = `
+numeric: 1.5
+array:
+  - foo: bar
+  - 1
+  - "string"
+  - ["nested", "array", 5.5]
+hash:
+  nested: hash
+  nested_slice: [this, is, nested]
+string: "foo"
+`
+
+	actualYAML = `
+numeric: 1.5
+hash:
+  nested: hash
+  nested_slice: [this, is, nested]
+string: "foo"
+array:
+  - foo: bar
+  - 1
+  - "string"
+  - ["nested", "array", 5.5]
+`
+)
+
 func TestRequireYAMLEq_EqualYAMLString(t *testing.T) {
 	t.Parallel()
 
@@ -30,32 +58,7 @@ func TestRequireYAMLEq_HashOfArraysAndHashes(t *testing.T) {
 	t.Parallel()
 
 	mockT := new(MockT)
-	expected := `
-numeric: 1.5
-array:
-  - foo: bar
-  - 1
-  - "string"
-  - ["nested", "array", 5.5]
-hash:
-  nested: hash
-  nested_slice: [this, is, nested]
-string: "foo"
-`
-
-	actual := `
-numeric: 1.5
-hash:
-  nested: hash
-  nested_slice: [this, is, nested]
-string: "foo"
-array:
-  - foo: bar
-  - 1
-  - "string"
-  - ["nested", "array", 5.5]
-`
-	target.YAMLEq(mockT, expected, actual)
+	target.YAMLEq(mockT, expectedYAML, actualYAML)
 	if mockT.Failed {
 		t.Error("Check should pass")
 	}
@@ -142,6 +145,6 @@ func (t *MockT) FailNow() {
 	t.Failed = true
 }
 
-func (t *MockT) Errorf(format string, args ...interface{}) {
+func (t *MockT) Errorf(format string, args ...any) {
 	_, _ = format, args
 }

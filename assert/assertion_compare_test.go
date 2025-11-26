@@ -3,8 +3,11 @@ package assert
 import (
 	"bytes"
 	"fmt"
+	"iter"
 	"reflect"
 	"runtime"
+	"slices"
+	"strings"
 	"testing"
 	"time"
 )
@@ -61,7 +64,12 @@ func TestCompare(t *testing.T) {
 		{less: uintptr(1), greater: uintptr(2), cType: "uintptr"},
 		{less: customUintptr(1), greater: customUintptr(2), cType: "uint64"},
 		{less: time.Now(), greater: time.Now().Add(time.Hour), cType: "time.Time"},
-		{less: time.Date(2024, 0, 0, 0, 0, 0, 0, time.Local), greater: time.Date(2263, 0, 0, 0, 0, 0, 0, time.Local), cType: "time.Time"},
+		{
+			// using time.Local is ok in this context: this is precisely the goal of this test
+			less:    time.Date(2024, 0, 0, 0, 0, 0, 0, time.Local), //nolint:gosmopolitan // ok. See above
+			greater: time.Date(2263, 0, 0, 0, 0, 0, 0, time.Local), //nolint:gosmopolitan // ok. See above
+			cType:   "time.Time",
+		},
 		{less: customTime(time.Now()), greater: customTime(time.Now().Add(time.Hour)), cType: "time.Time"},
 		{less: []byte{1, 1}, greater: []byte{1, 2}, cType: "[]byte"},
 		{less: customBytes([]byte{1, 1}), greater: customBytes([]byte{1, 2}), cType: "[]byte"},
@@ -101,7 +109,7 @@ type outputT struct {
 	helpers map[string]struct{}
 }
 
-// Implements TestingT
+// Implements TestingT.
 func (t *outputT) Errorf(format string, args ...any) {
 	s := fmt.Sprintf(format, args...)
 	t.buf.WriteString(s)
@@ -128,6 +136,12 @@ func callerName(skip int) string {
 	return frame.Function
 }
 
+type compareFixture struct {
+	less    any
+	greater any
+	msg     string
+}
+
 func TestGreater(t *testing.T) {
 	t.Parallel()
 
@@ -145,28 +159,8 @@ func TestGreater(t *testing.T) {
 		t.Error("Greater should return false")
 	}
 
-	// Check error report
-	for _, currCase := range []struct {
-		less    any
-		greater any
-		msg     string
-	}{
-		{less: "a", greater: "b", msg: `"a" is not greater than "b"`},
-		{less: int(1), greater: int(2), msg: `"1" is not greater than "2"`},
-		{less: int8(1), greater: int8(2), msg: `"1" is not greater than "2"`},
-		{less: int16(1), greater: int16(2), msg: `"1" is not greater than "2"`},
-		{less: int32(1), greater: int32(2), msg: `"1" is not greater than "2"`},
-		{less: int64(1), greater: int64(2), msg: `"1" is not greater than "2"`},
-		{less: uint8(1), greater: uint8(2), msg: `"1" is not greater than "2"`},
-		{less: uint16(1), greater: uint16(2), msg: `"1" is not greater than "2"`},
-		{less: uint32(1), greater: uint32(2), msg: `"1" is not greater than "2"`},
-		{less: uint64(1), greater: uint64(2), msg: `"1" is not greater than "2"`},
-		{less: float32(1.23), greater: float32(2.34), msg: `"1.23" is not greater than "2.34"`},
-		{less: float64(1.23), greater: float64(2.34), msg: `"1.23" is not greater than "2.34"`},
-		{less: uintptr(1), greater: uintptr(2), msg: `"1" is not greater than "2"`},
-		{less: time.Time{}, greater: time.Time{}.Add(time.Hour), msg: `"0001-01-01 00:00:00 +0000 UTC" is not greater than "0001-01-01 01:00:00 +0000 UTC"`},
-		{less: []byte{1, 1}, greater: []byte{1, 2}, msg: `"[1 1]" is not greater than "[1 2]"`},
-	} {
+	// check error report
+	for currCase := range compareIncreasingFixtures() {
 		out := &outputT{buf: bytes.NewBuffer(nil)}
 		False(t, Greater(out, currCase.less, currCase.greater))
 		Contains(t, out.buf.String(), currCase.msg)
@@ -191,31 +185,11 @@ func TestGreaterOrEqual(t *testing.T) {
 		t.Error("GreaterOrEqual should return false")
 	}
 
-	// Check error report
-	for _, currCase := range []struct {
-		less    any
-		greater any
-		msg     string
-	}{
-		{less: "a", greater: "b", msg: `"a" is not greater than or equal to "b"`},
-		{less: int(1), greater: int(2), msg: `"1" is not greater than or equal to "2"`},
-		{less: int8(1), greater: int8(2), msg: `"1" is not greater than or equal to "2"`},
-		{less: int16(1), greater: int16(2), msg: `"1" is not greater than or equal to "2"`},
-		{less: int32(1), greater: int32(2), msg: `"1" is not greater than or equal to "2"`},
-		{less: int64(1), greater: int64(2), msg: `"1" is not greater than or equal to "2"`},
-		{less: uint8(1), greater: uint8(2), msg: `"1" is not greater than or equal to "2"`},
-		{less: uint16(1), greater: uint16(2), msg: `"1" is not greater than or equal to "2"`},
-		{less: uint32(1), greater: uint32(2), msg: `"1" is not greater than or equal to "2"`},
-		{less: uint64(1), greater: uint64(2), msg: `"1" is not greater than or equal to "2"`},
-		{less: float32(1.23), greater: float32(2.34), msg: `"1.23" is not greater than or equal to "2.34"`},
-		{less: float64(1.23), greater: float64(2.34), msg: `"1.23" is not greater than or equal to "2.34"`},
-		{less: uintptr(1), greater: uintptr(2), msg: `"1" is not greater than or equal to "2"`},
-		{less: time.Time{}, greater: time.Time{}.Add(time.Hour), msg: `"0001-01-01 00:00:00 +0000 UTC" is not greater than or equal to "0001-01-01 01:00:00 +0000 UTC"`},
-		{less: []byte{1, 1}, greater: []byte{1, 2}, msg: `"[1 1]" is not greater than or equal to "[1 2]"`},
-	} {
+	// check error report
+	for currCase := range compareIncreasingFixtures() {
 		out := &outputT{buf: bytes.NewBuffer(nil)}
 		False(t, GreaterOrEqual(out, currCase.less, currCase.greater))
-		Contains(t, out.buf.String(), currCase.msg)
+		Contains(t, out.buf.String(), strings.ReplaceAll(currCase.msg, "than", "than or equal to"))
 		Contains(t, out.helpers, "github.com/go-openapi/testify/v2/assert.GreaterOrEqual")
 	}
 }
@@ -237,28 +211,8 @@ func TestLess(t *testing.T) {
 		t.Error("Less should return false")
 	}
 
-	// Check error report
-	for _, currCase := range []struct {
-		less    any
-		greater any
-		msg     string
-	}{
-		{less: "a", greater: "b", msg: `"b" is not less than "a"`},
-		{less: int(1), greater: int(2), msg: `"2" is not less than "1"`},
-		{less: int8(1), greater: int8(2), msg: `"2" is not less than "1"`},
-		{less: int16(1), greater: int16(2), msg: `"2" is not less than "1"`},
-		{less: int32(1), greater: int32(2), msg: `"2" is not less than "1"`},
-		{less: int64(1), greater: int64(2), msg: `"2" is not less than "1"`},
-		{less: uint8(1), greater: uint8(2), msg: `"2" is not less than "1"`},
-		{less: uint16(1), greater: uint16(2), msg: `"2" is not less than "1"`},
-		{less: uint32(1), greater: uint32(2), msg: `"2" is not less than "1"`},
-		{less: uint64(1), greater: uint64(2), msg: `"2" is not less than "1"`},
-		{less: float32(1.23), greater: float32(2.34), msg: `"2.34" is not less than "1.23"`},
-		{less: float64(1.23), greater: float64(2.34), msg: `"2.34" is not less than "1.23"`},
-		{less: uintptr(1), greater: uintptr(2), msg: `"2" is not less than "1"`},
-		{less: time.Time{}, greater: time.Time{}.Add(time.Hour), msg: `"0001-01-01 01:00:00 +0000 UTC" is not less than "0001-01-01 00:00:00 +0000 UTC"`},
-		{less: []byte{1, 1}, greater: []byte{1, 2}, msg: `"[1 2]" is not less than "[1 1]"`},
-	} {
+	// check error report
+	for currCase := range compareIncreasingFixtures3() {
 		out := &outputT{buf: bytes.NewBuffer(nil)}
 		False(t, Less(out, currCase.greater, currCase.less))
 		Contains(t, out.buf.String(), currCase.msg)
@@ -283,31 +237,11 @@ func TestLessOrEqual(t *testing.T) {
 		t.Error("LessOrEqual should return false")
 	}
 
-	// Check error report
-	for _, currCase := range []struct {
-		less    any
-		greater any
-		msg     string
-	}{
-		{less: "a", greater: "b", msg: `"b" is not less than or equal to "a"`},
-		{less: int(1), greater: int(2), msg: `"2" is not less than or equal to "1"`},
-		{less: int8(1), greater: int8(2), msg: `"2" is not less than or equal to "1"`},
-		{less: int16(1), greater: int16(2), msg: `"2" is not less than or equal to "1"`},
-		{less: int32(1), greater: int32(2), msg: `"2" is not less than or equal to "1"`},
-		{less: int64(1), greater: int64(2), msg: `"2" is not less than or equal to "1"`},
-		{less: uint8(1), greater: uint8(2), msg: `"2" is not less than or equal to "1"`},
-		{less: uint16(1), greater: uint16(2), msg: `"2" is not less than or equal to "1"`},
-		{less: uint32(1), greater: uint32(2), msg: `"2" is not less than or equal to "1"`},
-		{less: uint64(1), greater: uint64(2), msg: `"2" is not less than or equal to "1"`},
-		{less: float32(1.23), greater: float32(2.34), msg: `"2.34" is not less than or equal to "1.23"`},
-		{less: float64(1.23), greater: float64(2.34), msg: `"2.34" is not less than or equal to "1.23"`},
-		{less: uintptr(1), greater: uintptr(2), msg: `"2" is not less than or equal to "1"`},
-		{less: time.Time{}, greater: time.Time{}.Add(time.Hour), msg: `"0001-01-01 01:00:00 +0000 UTC" is not less than or equal to "0001-01-01 00:00:00 +0000 UTC"`},
-		{less: []byte{1, 1}, greater: []byte{1, 2}, msg: `"[1 2]" is not less than or equal to "[1 1]"`},
-	} {
+	// check error report
+	for currCase := range compareIncreasingFixtures3() {
 		out := &outputT{buf: bytes.NewBuffer(nil)}
 		False(t, LessOrEqual(out, currCase.greater, currCase.less))
-		Contains(t, out.buf.String(), currCase.msg)
+		Contains(t, out.buf.String(), strings.ReplaceAll(currCase.msg, "than", "than or equal to"))
 		Contains(t, out.helpers, "github.com/go-openapi/testify/v2/assert.LessOrEqual")
 	}
 }
@@ -491,4 +425,50 @@ func TestComparingMsgAndArgsForwarding(t *testing.T) {
 		f(out)
 		Contains(t, out.buf.String(), expectedOutput)
 	}
+}
+
+//nolint:dupl // factoring further the message to save a little duplication would make the test harder to read
+func compareIncreasingFixtures() iter.Seq[compareFixture] {
+	return slices.Values(
+		[]compareFixture{
+			{less: "a", greater: "b", msg: `"a" is not greater than "b"`},
+			{less: int(1), greater: int(2), msg: `"1" is not greater than "2"`},
+			{less: int8(1), greater: int8(2), msg: `"1" is not greater than "2"`},
+			{less: int16(1), greater: int16(2), msg: `"1" is not greater than "2"`},
+			{less: int32(1), greater: int32(2), msg: `"1" is not greater than "2"`},
+			{less: int64(1), greater: int64(2), msg: `"1" is not greater than "2"`},
+			{less: uint8(1), greater: uint8(2), msg: `"1" is not greater than "2"`},
+			{less: uint16(1), greater: uint16(2), msg: `"1" is not greater than "2"`},
+			{less: uint32(1), greater: uint32(2), msg: `"1" is not greater than "2"`},
+			{less: uint64(1), greater: uint64(2), msg: `"1" is not greater than "2"`},
+			{less: float32(1.23), greater: float32(2.34), msg: `"1.23" is not greater than "2.34"`},
+			{less: float64(1.23), greater: float64(2.34), msg: `"1.23" is not greater than "2.34"`},
+			{less: uintptr(1), greater: uintptr(2), msg: `"1" is not greater than "2"`},
+			{less: time.Time{}, greater: time.Time{}.Add(time.Hour), msg: `"0001-01-01 00:00:00 +0000 UTC" is not greater than "0001-01-01 01:00:00 +0000 UTC"`},
+			{less: []byte{1, 1}, greater: []byte{1, 2}, msg: `"[1 1]" is not greater than "[1 2]"`},
+		},
+	)
+}
+
+//nolint:dupl // factoring further the message to save a little duplication would make the test harder to read
+func compareIncreasingFixtures3() iter.Seq[compareFixture] {
+	return slices.Values(
+		[]compareFixture{
+			{less: "a", greater: "b", msg: `"b" is not less than "a"`},
+			{less: int(1), greater: int(2), msg: `"2" is not less than "1"`},
+			{less: int8(1), greater: int8(2), msg: `"2" is not less than "1"`},
+			{less: int16(1), greater: int16(2), msg: `"2" is not less than "1"`},
+			{less: int32(1), greater: int32(2), msg: `"2" is not less than "1"`},
+			{less: int64(1), greater: int64(2), msg: `"2" is not less than "1"`},
+			{less: uint8(1), greater: uint8(2), msg: `"2" is not less than "1"`},
+			{less: uint16(1), greater: uint16(2), msg: `"2" is not less than "1"`},
+			{less: uint32(1), greater: uint32(2), msg: `"2" is not less than "1"`},
+			{less: uint64(1), greater: uint64(2), msg: `"2" is not less than "1"`},
+			{less: float32(1.23), greater: float32(2.34), msg: `"2.34" is not less than "1.23"`},
+			{less: float64(1.23), greater: float64(2.34), msg: `"2.34" is not less than "1.23"`},
+			{less: uintptr(1), greater: uintptr(2), msg: `"2" is not less than "1"`},
+			{less: time.Time{}, greater: time.Time{}.Add(time.Hour), msg: `"0001-01-01 01:00:00 +0000 UTC" is not less than "0001-01-01 00:00:00 +0000 UTC"`},
+			{less: []byte{1, 1}, greater: []byte{1, 2}, msg: `"[1 2]" is not less than "[1 1]"`},
+		},
+	)
 }

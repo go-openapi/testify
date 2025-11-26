@@ -36,13 +36,17 @@ type Importer interface {
 	Imports() map[string]string
 }
 
-// imports contains metadata about all the imports from a given package
+type Imports struct {
+	*imports
+}
+
+// imports contains metadata about all the imports from a given package.
 type imports struct {
 	currentpkg string
 	imp        map[string]string
 }
 
-// AddImportsFrom adds imports used in the passed type
+// AddImportsFrom adds imports used in the passed type.
 func (imp *imports) AddImportsFrom(t types.Type) {
 	switch el := t.(type) {
 	case *types.Basic:
@@ -60,8 +64,8 @@ func (imp *imports) AddImportsFrom(t types.Type) {
 		}
 		imp.imp[cleanImportPath(pkg.Path())] = pkg.Name()
 	case *types.Tuple:
-		for i := 0; i < el.Len(); i++ {
-			imp.AddImportsFrom(el.At(i).Type())
+		for v := range el.Variables() {
+			imp.AddImportsFrom(v.Type())
 		}
 	default:
 	}
@@ -74,15 +78,15 @@ func cleanImportPath(ipath string) string {
 }
 
 func gopathlessImportPath(ipath string) string {
-	paths := strings.Split(os.Getenv("GOPATH"), ":")
-	for _, p := range paths {
+	paths := strings.SplitSeq(os.Getenv("GOPATH"), ":")
+	for p := range paths {
 		ipath = strings.TrimPrefix(ipath, filepath.Join(p, "src")+string(filepath.Separator))
 	}
 	return ipath
 }
 
 // vendorlessImportPath returns the devendorized version of the provided import path.
-// e.g. "foo/bar/vendor/a/b" => "a/b"
+// e.g. "foo/bar/vendor/a/b" => "a/b".
 func vendorlessImportPath(ipath string) string {
 	// Devendorize for use in import statement.
 	if i := strings.LastIndex(ipath, "/vendor/"); i >= 0 {
@@ -94,15 +98,17 @@ func vendorlessImportPath(ipath string) string {
 	return ipath
 }
 
-// AddImportsFrom adds imports used in the passed type
+// Imports adds imports used in the passed type.
 func (imp *imports) Imports() map[string]string {
 	return imp.imp
 }
 
-// New initializes a new structure to track packages imported by the currentpkg
-func New(currentpkg string) Importer {
-	return &imports{
-		currentpkg: currentpkg,
-		imp:        make(map[string]string),
+// New initializes a new structure to track packages imported by the currentpkg.
+func New(currentpkg string) *Imports {
+	return &Imports{
+		imports: &imports{
+			currentpkg: currentpkg,
+			imp:        make(map[string]string),
+		},
 	}
 }

@@ -26,6 +26,7 @@ import (
 	"github.com/go-openapi/testify/v2/_codegen/internal/imports"
 )
 
+//nolint:gochecknoglobals // ok to register flags as globals
 var (
 	pkg       = flag.String("assert-path", "github.com/go-openapi/testify/v2/assert", "Path to the assert package")
 	includeF  = flag.Bool("include-format-funcs", false, "include format functions such as Errorf and Equalf")
@@ -73,7 +74,7 @@ func generateCode(importer imports.Importer, funcs []testFunc) error {
 
 	// Generate funcs
 	for _, fn := range funcs {
-		buff.Write([]byte("\n\n"))
+		buff.WriteString("\n\n")
 		if err := tmplFunc.Execute(buff, &fn); err != nil {
 			return err
 		}
@@ -99,19 +100,24 @@ func parseTemplates() (*template.Template, *template.Template, error) {
 	if err != nil {
 		return nil, nil, err
 	}
+	var funcTemplate string
 	if *tmplFile != "" {
 		f, err := os.ReadFile(*tmplFile)
 		if err != nil {
 			return nil, nil, err
 		}
 		funcTemplate = string(f)
+	} else {
+		funcTemplate = defaultTemplate
 	}
+
 	tmpl, err := template.New("function").Funcs(template.FuncMap{
 		"replace": strings.ReplaceAll,
 	}).Parse(funcTemplate)
 	if err != nil {
 		return nil, nil, err
 	}
+
 	return tmplHead, tmpl, nil
 }
 
@@ -128,11 +134,15 @@ func outputFile() (*os.File, error) {
 
 // analyzeCode takes the types scope and the docs and returns the import
 // information and information about all the assertion functions.
-func analyzeCode(scope *types.Scope, docs *doc.Package) (imports.Importer, []testFunc, error) {
-	testingT := scope.Lookup("TestingT").Type().Underlying().(*types.Interface)
+func analyzeCode(scope *types.Scope, docs *doc.Package) (imports.Importer, []testFunc, error) { //nolint:ireturn // ok to use what stdlib does here
+	underlying := scope.Lookup("TestingT").Type().Underlying()
+	testingT, ok := underlying.(*types.Interface)
+	if !ok {
+		panic(fmt.Errorf("internal error: expected go type to resolve as *types.Interface but got: %T", underlying))
+	}
 
 	importer := imports.New(*outputPkg)
-	var funcs []testFunc
+	funcs := make([]testFunc, 0, len(docs.Funcs))
 	// Go through all the top level functions
 	for _, fdocs := range docs.Funcs {
 		// Find the function
@@ -142,9 +152,15 @@ func analyzeCode(scope *types.Scope, docs *doc.Package) (imports.Importer, []tes
 		if !ok {
 			continue
 		}
+
 		// Check function signature has at least two arguments
-		sig := fn.Type().(*types.Signature)
-		if sig.Params().Len() < 2 {
+		sig, ok := fn.Type().(*types.Signature)
+		if !ok {
+			return nil, nil, fmt.Errorf("internal error: expected go type to resolve as *types.Signature but got: %T", sig)
+		}
+
+		const minParams = 2
+		if sig.Params().Len() < minParams {
 			continue
 		}
 		// Check first argument is of type testingT
@@ -152,6 +168,7 @@ func analyzeCode(scope *types.Scope, docs *doc.Package) (imports.Importer, []tes
 		if !ok {
 			continue
 		}
+
 		firstType, ok := first.Underlying().(*types.Interface)
 		if !ok {
 			continue
@@ -168,10 +185,11 @@ func analyzeCode(scope *types.Scope, docs *doc.Package) (imports.Importer, []tes
 		funcs = append(funcs, testFunc{*outputPkg, fdocs, fn})
 		importer.AddImportsFrom(sig.Params())
 	}
+
 	return importer, funcs, nil
 }
 
-// parsePackageSource returns the types scope and the package documentation from the package
+// parsePackageSource returns the types scope and the package documentation from the package.
 func parsePackageSource(pkg string) (*types.Scope, *doc.Package, error) {
 	pd, err := build.Import(pkg, ".", 0)
 	if err != nil {
@@ -195,7 +213,7 @@ func parsePackageSource(pkg string) (*types.Scope, *doc.Package, error) {
 	}
 
 	cfg := types.Config{
-		Importer: importer.For("source", nil),
+		Importer: importer.ForCompiler(token.NewFileSet(), "source", nil),
 	}
 	info := types.Info{
 		Defs: make(map[*ast.Ident]types.Object),
@@ -207,7 +225,7 @@ func parsePackageSource(pkg string) (*types.Scope, *doc.Package, error) {
 
 	scope := tp.Scope()
 
-	ap, _ := ast.NewPackage(fset, files, nil, nil)
+	ap, _ := ast.NewPackage(fset, files, nil, nil) //nolint:staticcheck // will need more work to upgrade
 	docs := doc.New(ap, pkg, 0)
 
 	return scope, docs, nil
@@ -227,9 +245,12 @@ func (f *testFunc) Qualifier(p *types.Package) string {
 }
 
 func (f *testFunc) Params() string {
-	sig := f.TypeInfo.Type().(*types.Signature)
+	sig, ok := f.TypeInfo.Type().(*types.Signature)
+	if !ok {
+		panic(fmt.Errorf("internal error: expected go type to resolve as *types.Interface but got: %T", f.TypeInfo.Type()))
+	}
 	params := sig.Params()
-	p := ""
+	var p strings.Builder
 	comma := ""
 	to := params.Len()
 	var i int
@@ -239,20 +260,28 @@ func (f *testFunc) Params() string {
 	}
 	for i = 1; i < to; i++ {
 		param := params.At(i)
-		p += fmt.Sprintf("%s%s %s", comma, param.Name(), types.TypeString(param.Type(), f.Qualifier))
+		p.WriteString(fmt.Sprintf("%s%s %s", comma, param.Name(), types.TypeString(param.Type(), f.Qualifier)))
 		comma = ", "
 	}
 	if sig.Variadic() {
 		param := params.At(params.Len() - 1)
-		p += fmt.Sprintf("%s%s ...%s", comma, param.Name(), types.TypeString(param.Type().(*types.Slice).Elem(), f.Qualifier))
+		slice, ok := param.Type().(*types.Slice)
+		if !ok {
+			panic(fmt.Errorf("internal error: expected go type to resolve as *types.Slice but got: %T", param.Type()))
+		}
+		p.WriteString(fmt.Sprintf("%s%s ...%s", comma, param.Name(), types.TypeString(slice.Elem(), f.Qualifier)))
 	}
-	return p
+
+	return p.String()
 }
 
 func (f *testFunc) ForwardedParams() string {
-	sig := f.TypeInfo.Type().(*types.Signature)
+	sig, ok := f.TypeInfo.Type().(*types.Signature)
+	if !ok {
+		panic(fmt.Errorf("internal error: expected go type to resolve as *types.Signature but got: %T", sig))
+	}
 	params := sig.Params()
-	p := ""
+	var p strings.Builder
 	comma := ""
 	to := params.Len()
 	var i int
@@ -262,14 +291,14 @@ func (f *testFunc) ForwardedParams() string {
 	}
 	for i = 1; i < to; i++ {
 		param := params.At(i)
-		p += fmt.Sprintf("%s%s", comma, param.Name())
+		p.WriteString(fmt.Sprintf("%s%s", comma, param.Name()))
 		comma = ", "
 	}
 	if sig.Variadic() {
 		param := params.At(params.Len() - 1)
-		p += fmt.Sprintf("%s%s...", comma, param.Name())
+		p.WriteString(fmt.Sprintf("%s%s...", comma, param.Name()))
 	}
-	return p
+	return p.String()
 }
 
 func (f *testFunc) ParamsFormat() string {
@@ -281,13 +310,13 @@ func (f *testFunc) ForwardedParamsFormat() string {
 }
 
 func (f *testFunc) Comment() string {
-	return "// " + strings.Replace(strings.TrimSpace(f.DocInfo.Doc), "\n", "\n// ", -1)
+	return "// " + strings.ReplaceAll(strings.TrimSpace(f.DocInfo.Doc), "\n", "\n// ")
 }
 
 func (f *testFunc) CommentFormat() string {
-	search := fmt.Sprintf("%s", f.DocInfo.Name)
-	replace := fmt.Sprintf("%sf", f.DocInfo.Name)
-	comment := strings.Replace(f.Comment(), search, replace, -1)
+	search := f.DocInfo.Name
+	replace := f.DocInfo.Name + "f"
+	comment := strings.ReplaceAll(f.Comment(), search, replace)
 	exp := regexp.MustCompile(replace + `\(((\(\)|[^\n])+)\)`)
 	return exp.ReplaceAllString(comment, replace+`($1, "error message %s", "formatted")`)
 }
@@ -295,11 +324,11 @@ func (f *testFunc) CommentFormat() string {
 func (f *testFunc) CommentWithoutT(receiver string) string {
 	search := fmt.Sprintf("assert.%s(t, ", f.DocInfo.Name)
 	replace := fmt.Sprintf("%s.%s(", receiver, f.DocInfo.Name)
-	return strings.Replace(f.Comment(), search, replace, -1)
+	return strings.ReplaceAll(f.Comment(), search, replace)
 }
 
 // Standard header https://go.dev/s/generatedcode.
-var headerTemplate = `// Code generated with github.com/go-openapi/testify/v2/_codegen; DO NOT EDIT.
+const headerTemplate = `// Code generated with github.com/go-openapi/testify/v2/_codegen; DO NOT EDIT.
 
 package {{.Name}}
 
@@ -309,7 +338,7 @@ import (
 )
 `
 
-var funcTemplate = `{{.Comment}}
+const defaultTemplate = `{{.Comment}}
 func (fwd *AssertionsForwarder) {{.DocInfo.Name}}({{.Params}}) bool {
 	return assert.{{.DocInfo.Name}}({{.ForwardedParams}})
 }`

@@ -24,7 +24,7 @@ import (
 
 //go:generate sh -c "cd ../_codegen && go build && cd - && ../_codegen/_codegen -output-package=assert -template=assertion_format.go.tmpl"
 
-// TestingT is an interface wrapper around *testing.T
+// TestingT is an interface wrapper around *testing.T.
 type TestingT interface {
 	Errorf(format string, args ...any)
 }
@@ -49,7 +49,7 @@ type ErrorAssertionFunc func(TestingT, error, ...any) bool
 // for table driven tests.
 type PanicAssertionFunc = func(t TestingT, f PanicTestFunc, msgAndArgs ...any) bool
 
-// Comparison is a custom function that returns true on success and false on failure
+// Comparison is a custom function that returns true on success and false on failure.
 type Comparison func() (success bool)
 
 /*
@@ -120,7 +120,7 @@ func copyExportedFields(expected any) any {
 		} else {
 			result = reflect.MakeSlice(expectedType, expectedValue.Len(), expectedValue.Len())
 		}
-		for i := 0; i < expectedValue.Len(); i++ {
+		for i := range expectedValue.Len() {
 			index := expectedValue.Index(i)
 			if isNil(index) {
 				continue
@@ -195,7 +195,7 @@ func ObjectsAreEqualValues(expected, actual any) bool {
 
 // isNumericType returns true if the type is one of:
 // int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64,
-// float32, float64, complex64, complex128
+// float32, float64, complex64, complex128.
 func isNumericType(t reflect.Type) bool {
 	return t.Kind() >= reflect.Int && t.Kind() <= reflect.Complex128
 }
@@ -311,7 +311,10 @@ func messageFromMsgAndArgs(msgAndArgs ...any) string {
 		return fmt.Sprintf("%+v", msg)
 	}
 	if len(msgAndArgs) > 1 {
-		return fmt.Sprintf(msgAndArgs[0].(string), msgAndArgs[1:]...)
+		format, ok := msgAndArgs[0].(string)
+		if ok {
+			return fmt.Sprintf(format, msgAndArgs[1:]...)
+		}
 	}
 	return ""
 }
@@ -341,7 +344,7 @@ type failNower interface {
 	FailNow()
 }
 
-// FailNow fails test
+// FailNow fails test.
 func FailNow(t TestingT, failureMessage string, msgAndArgs ...any) bool {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -362,7 +365,7 @@ func FailNow(t TestingT, failureMessage string, msgAndArgs ...any) bool {
 	return false
 }
 
-// Fail reports a failure through
+// Fail reports a failure through.
 func Fail(t TestingT, failureMessage string, msgAndArgs ...any) bool {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -410,11 +413,11 @@ func labeledOutput(content ...labeledContent) string {
 			longestLabel = len(v.label)
 		}
 	}
-	var output string
+	var output strings.Builder
 	for _, v := range content {
-		output += "\t" + v.label + ":" + strings.Repeat(" ", longestLabel-len(v.label)) + "\t" + indentMessageLines(v.content, longestLabel) + "\n"
+		output.WriteString("\t" + v.label + ":" + strings.Repeat(" ", longestLabel-len(v.label)) + "\t" + indentMessageLines(v.content, longestLabel) + "\n")
 	}
-	return output
+	return output.String()
 }
 
 // Implements asserts that an object is implemented by the specified interface.
@@ -619,9 +622,10 @@ func formatUnequalValues(expected, actual any) (e string, a string) {
 // This helps keep formatted error messages lines from exceeding the
 // bufio.MaxScanTokenSize max line length that the go testing framework imposes.
 func truncatingFormat(format string, data any) string {
+	const maxMessageSize = bufio.MaxScanTokenSize/2 - 100
+
 	value := fmt.Sprintf(format, data)
 	// Give us space for two truncated objects and the surrounding sentence.
-	maxMessageSize := bufio.MaxScanTokenSize/2 - 100
 	if len(value) > maxMessageSize {
 		value = value[0:maxMessageSize] + "<... truncated>"
 	}
@@ -729,9 +733,9 @@ func isNil(object any) bool {
 		reflect.Ptr, reflect.Slice, reflect.UnsafePointer:
 
 		return value.IsNil()
+	default:
+		return false
 	}
-
-	return false
 }
 
 // Nil asserts that the specified object is nil.
@@ -771,8 +775,9 @@ func isEmptyValue(objValue reflect.Value) bool {
 	// non-nil pointers are empty if the value they point to is empty
 	case reflect.Ptr:
 		return isEmptyValue(objValue.Elem())
+	default:
+		return false
 	}
-	return false
 }
 
 // Empty asserts that the given value is "empty".
@@ -936,7 +941,7 @@ func containsElement(list any, element any) (ok, found bool) {
 
 	if listKind == reflect.Map {
 		mapKeys := listValue.MapKeys()
-		for i := 0; i < len(mapKeys); i++ {
+		for i := range mapKeys {
 			if ObjectsAreEqual(mapKeys[i].Interface(), element) {
 				return true, true
 			}
@@ -944,7 +949,7 @@ func containsElement(list any, element any) (ok, found bool) {
 		return true, false
 	}
 
-	for i := 0; i < listValue.Len(); i++ {
+	for i := range listValue.Len() {
 		if ObjectsAreEqual(listValue.Index(i).Interface(), element) {
 			return true, true
 		}
@@ -1050,7 +1055,8 @@ func Subset(t TestingT, list, subset any, msgAndArgs ...any) (ok bool) {
 		}
 		subsetList = reflect.ValueOf(keys)
 	}
-	for i := 0; i < subsetList.Len(); i++ {
+
+	for i := range subsetList.Len() {
 		element := subsetList.Index(i).Interface()
 		ok, found := containsElement(list, element)
 		if !ok {
@@ -1118,7 +1124,7 @@ func NotSubset(t TestingT, list, subset any, msgAndArgs ...any) (ok bool) {
 		}
 		subsetList = reflect.ValueOf(keys)
 	}
-	for i := 0; i < subsetList.Len(); i++ {
+	for i := range subsetList.Len() {
 		element := subsetList.Index(i).Interface()
 		ok, found := containsElement(list, element)
 		if !ok {
@@ -1136,7 +1142,7 @@ func NotSubset(t TestingT, list, subset any, msgAndArgs ...any) (ok bool) {
 // listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 // the number of appearances of each of them in both lists should match.
 //
-// assert.ElementsMatch(t, [1, 3, 2, 3], [1, 3, 3, 2])
+// assert.ElementsMatch(t, [1, 3, 2, 3], [1, 3, 3, 2]).
 func ElementsMatch(t TestingT, listA, listB any, msgAndArgs ...any) (ok bool) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -1180,10 +1186,10 @@ func diffLists(listA, listB any) (extraA, extraB []any) {
 
 	// Mark indexes in bValue that we already used
 	visited := make([]bool, bLen)
-	for i := 0; i < aLen; i++ {
+	for i := range aLen {
 		element := aValue.Index(i).Interface()
 		found := false
-		for j := 0; j < bLen; j++ {
+		for j := range bLen {
 			if visited[j] {
 				continue
 			}
@@ -1198,7 +1204,7 @@ func diffLists(listA, listB any) (extraA, extraB []any) {
 		}
 	}
 
-	for j := 0; j < bLen; j++ {
+	for j := range bLen {
 		if visited[j] {
 			continue
 		}
@@ -1237,7 +1243,7 @@ func formatListDiff(listA, listB any, extraA, extraB []any) string {
 //
 // assert.NotElementsMatch(t, [1, 1, 2, 3], [1, 2, 3]) -> true
 //
-// assert.NotElementsMatch(t, [1, 2, 3], [1, 2, 4]) -> true
+// assert.NotElementsMatch(t, [1, 2, 3], [1, 2, 4]) -> true.
 func NotElementsMatch(t TestingT, listA, listB any, msgAndArgs ...any) (ok bool) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -1504,7 +1510,7 @@ func InDeltaSlice(t TestingT, expected, actual any, delta float64, msgAndArgs ..
 	actualSlice := reflect.ValueOf(actual)
 	expectedSlice := reflect.ValueOf(expected)
 
-	for i := 0; i < actualSlice.Len(); i++ {
+	for i := range actualSlice.Len() {
 		result := InDelta(t, actualSlice.Index(i).Interface(), expectedSlice.Index(i).Interface(), delta, msgAndArgs...)
 		if !result {
 			return result
@@ -1562,7 +1568,7 @@ func calcRelativeError(expected, actual any) (float64, error) {
 	af, aok := toFloat(expected)
 	bf, bok := toFloat(actual)
 	if !aok || !bok {
-		return 0, errors.New("Parameters must be numerical")
+		return 0, errors.New("parameters must be numerical")
 	}
 	if math.IsNaN(af) && math.IsNaN(bf) {
 		return 0, nil
@@ -1580,7 +1586,7 @@ func calcRelativeError(expected, actual any) (float64, error) {
 	return math.Abs(af-bf) / math.Abs(af), nil
 }
 
-// InEpsilon asserts that expected and actual have a relative error less than epsilon
+// InEpsilon asserts that expected and actual have a relative error less than epsilon.
 func InEpsilon(t TestingT, expected, actual any, epsilon float64, msgAndArgs ...any) bool {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -1625,7 +1631,7 @@ func InEpsilonSlice(t TestingT, expected, actual any, epsilon float64, msgAndArg
 		return false
 	}
 
-	for i := 0; i < expectedLen; i++ {
+	for i := range expectedLen {
 		if !InEpsilon(t, expectedSlice.Index(i).Interface(), actualSlice.Index(i).Interface(), epsilon, "at index %d", i) {
 			return false
 		}
@@ -1745,7 +1751,7 @@ func Regexp(t TestingT, rx any, str any, msgAndArgs ...any) bool {
 	match := matchRegexp(rx, str)
 
 	if !match {
-		Fail(t, fmt.Sprintf("Expect \"%v\" to match \"%v\"", str, rx), msgAndArgs...)
+		Fail(t, fmt.Sprintf(`Expect "%v" to match "%v"`, str, rx), msgAndArgs...)
 	}
 
 	return match
@@ -1962,10 +1968,10 @@ func diff(expected any, actual any) string {
 	var e, a string
 
 	switch et {
-	case reflect.TypeOf(""):
+	case reflect.TypeFor[string]():
 		e = reflect.ValueOf(expected).String()
 		a = reflect.ValueOf(actual).String()
-	case reflect.TypeOf(time.Time{}):
+	case reflect.TypeFor[time.Time]():
 		e = spewConfigStringerEnabled.Sdump(expected)
 		a = spewConfigStringerEnabled.Sdump(actual)
 	default:
@@ -1993,22 +1999,27 @@ func isFunction(arg any) bool {
 	return reflect.TypeOf(arg).Kind() == reflect.Func
 }
 
-var spewConfig = spew.ConfigState{
-	Indent:                  " ",
-	DisablePointerAddresses: true,
-	DisableCapacities:       true,
-	SortKeys:                true,
-	DisableMethods:          true,
-	MaxDepth:                10,
-}
+const spewMaxDepth = 10
 
-var spewConfigStringerEnabled = spew.ConfigState{
-	Indent:                  " ",
-	DisablePointerAddresses: true,
-	DisableCapacities:       true,
-	SortKeys:                true,
-	MaxDepth:                10,
-}
+//nolint:gochecknoglobals // spew is more easily configured using a global default config. This is okay in this context.
+var (
+	spewConfig = spew.ConfigState{
+		Indent:                  " ",
+		DisablePointerAddresses: true,
+		DisableCapacities:       true,
+		SortKeys:                true,
+		DisableMethods:          true,
+		MaxDepth:                spewMaxDepth,
+	}
+
+	spewConfigStringerEnabled = spew.ConfigState{
+		Indent:                  " ",
+		DisablePointerAddresses: true,
+		DisableCapacities:       true,
+		SortKeys:                true,
+		MaxDepth:                spewMaxDepth,
+	}
+)
 
 type tHelper = interface {
 	Helper()
@@ -2293,7 +2304,7 @@ func NotErrorAs(t TestingT, err error, target any, msgAndArgs ...any) bool {
 
 func unwrapAll(err error) (errs []error) {
 	errs = append(errs, err)
-	switch x := err.(type) {
+	switch x := err.(type) { //nolint:errorlint // false positive: this type switch is checking for interfaces
 	case interface{ Unwrap() error }:
 		err = x.Unwrap()
 		if err == nil {
@@ -2313,16 +2324,16 @@ func buildErrorChainString(err error, withType bool) string {
 		return ""
 	}
 
-	var chain string
+	var chain strings.Builder
 	errs := unwrapAll(err)
 	for i := range errs {
 		if i != 0 {
-			chain += "\n\t"
+			chain.WriteString("\n\t")
 		}
-		chain += fmt.Sprintf("%q", errs[i].Error())
+		chain.WriteString(fmt.Sprintf("%q", errs[i].Error()))
 		if withType {
-			chain += fmt.Sprintf(" (%T)", errs[i])
+			chain.WriteString(fmt.Sprintf(" (%T)", errs[i]))
 		}
 	}
-	return chain
+	return chain.String()
 }

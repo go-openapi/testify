@@ -1,5 +1,9 @@
 name: go test
 
+permissions:
+  contents: read
+  pull-requests: read
+
 on:
   push:
     tags:
@@ -9,104 +13,59 @@ on:
 
   pull_request:
 
-permissions:
-  pull-requests: read 
-  contents: read
-
 jobs:
-  module-matrix:
-    name: Go module matrix
+  lint:
+    name: Go lint mono-repo
     runs-on: ubuntu-latest
-
-    outputs:
-      modules: ${{ steps.modules.outputs.modules }}
-
     steps:
-      - uses: actions/checkout@v5
-      - name: Find go modules
-        id: modules
-        shell: bash
-        run: |
-          # This script finds all go modules declared in this repo and resolves to a relative path to each of those.
-          #
-          # NOTES:
-          #
-          # > * git bash on a windows runner should support GNU find. find flags should be supported by find on macos.
-          # > * with go.work file enabled, we may now collect all submodules with go list -m
-          # >
-          # > The outcome is currently only used for linting. Tests may now skip that part.
-          set -euxo pipefail
-
-          root="$(git rev-parse --show-toplevel)"
-          cd "${root}"
-
-          declare -i index=0
-          declare -a all_mods
-          printf "modules=[" >> "$GITHUB_OUTPUT"
-          while read module_location ; do
-            if [ $index -gt 0 ] ; then
-              printf "," >> "$GITHUB_OUTPUT"
-            fi
-            relative_location=${module_location#"$root"/}
-            module_dir=${relative_location%"/go.mod"}
-            base_dir="${module_dir#"./"}"
-            printf " \"${base_dir}\"" >> "$GITHUB_OUTPUT"
-            all_mods+=("${base_dir}")
-            ((index++)) || true
-          done < <(go list -f '{{.Dir}}' -m)
-          printf "]" >> "$GITHUB_OUTPUT"
-
-          echo "::notice title=Modules found::${all_mods[@]}"
-
-  module-lint:
-    name: Go module lint
-    runs-on: ubuntu-latest
-    needs: [ module-matrix ]
-
-    strategy:
-      matrix:
-        # all sub modules in this repo must be linted separately
-        module: ${{ fromJSON(needs.module-matrix.outputs.modules) }}
-
-    steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-go@v6
+      -
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          fetch-depth: '0'
+      -
+        uses: actions/setup-go@4dc6199c7b1a012772edbd06daecab0f50c9053c # v6.1.0
         with:
           go-version: stable
           check-latest: true
           cache: true
           cache-dependency-path: '**/go.sum'
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v8
+      -
+        name: Install golangci-lint
+        uses: golangci/golangci-lint-action@0a35821d5c230e903fcfe077583637dea1b27b47 # v9.0.0
         with:
           version: latest
-          only-new-issues: true
           skip-cache: true
-          # golangci-lint doesn't support go.work to lint multiple modules in one single pass
-          working-directory: '${{ matrix.module }}'
-
-  lint:
-    needs: [ module-lint ]
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Linting complete
+          install-only: true
+      -
+        name: Lint multiple modules
+        # golangci-lint doesn't support go.work to lint multiple modules in one single pass
         run: |
-          echo "All modules linted"
+          set -euxo pipefail
+
+          git fetch origin master
+          git show --no-patch --oneline origin/master
+
+          while read module_location ; do
+            pushd "${module_location}"
+            golangci-lint run --new-from-rev origin/master
+            popd
+          done < <(go list -f '{{.Dir}}' -m)
 
   module-test:
     name: Unit tests
     runs-on: ${{ matrix.os }}
-    needs: [ module-matrix ]
+    needs: [ lint ]
 
     strategy:
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
         go_version: ['oldstable', 'stable' ]
+    env:
+      TEST_REPORT: 'all_modules.report.${{ matrix.os }}.${{ matrix.go_version }}.json'
 
     steps:
-    - uses: actions/checkout@v5
-    - uses: actions/setup-go@v6
+    - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+    - uses: actions/setup-go@4dc6199c7b1a012772edbd06daecab0f50c9053c # v6.1.0
       with:
         go-version: '${{ matrix.go_version }}'
         check-latest: true
@@ -117,9 +76,9 @@ jobs:
       shell: bash
       env:
         # *.coverage.* pattern is automatically detected by codecov
-        COVER_PROFILE:  'all_modules.coverage.${{ matrix.os }}.${{ matrix.go_version }}.out'
+        COVER_PROFILE: 'all_modules.coverage.${{ matrix.os }}.${{ matrix.go_version }}.out'
       run: |
-        # when go1.25 becomes the oldstable, we may replace this bash with "go work test"
+        # when go1.25 becomes the oldstable, we may replace this bash with "go test work"
         declare -a ALL_MODULES
         BASH_MAJOR=$(echo $BASH_VERSION|cut -d'.' -f1)
         if [[ "${BASH_MAJOR}" -ge 4 ]] ; then
@@ -134,15 +93,23 @@ jobs:
 
         # with go.work file enabled, go test recognizes sub-modules and collects all packages to be covered
         # without specifying -coverpkg.
-        go test -v -race -coverprofile="${COVER_PROFILE}" -covermode=atomic ${ALL_MODULES[@]}
+        go test -race -coverprofile="${COVER_PROFILE}" -covermode=atomic -json ${ALL_MODULES[@]}|tee -a "${TEST_REPORT}"
 
     - name: Upload coverage to codecov
-      uses: codecov/codecov-action@v5
+      if: ${{ success() }}  # we do this only if all previous steps succeeded
+      uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
       with:
         name: Multi modules aggregated coverage
         flags: '${{ matrix.go_version }}-${{ matrix.os }}'
         fail_ci_if_error: false
-        verbose: true
+        verbose: false
+
+    - name: Upload JSON test Results
+      if: always()
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: 'all_modules.report.${{ matrix.os }}.${{ matrix.go_version }}'
+        path: ${{ env.TEST_REPORT }}
 
   test:
     needs: [ module-test ]
@@ -151,4 +118,94 @@ jobs:
     steps:
       - name: Tests complete
         run: |
-          echo "All tests completed"
+          echo "::notice title=Success::All tests completed"
+
+  collect-reports:
+    if: always()
+    needs: [ module-test ]
+    name: Collect and merge test reports
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@4dc6199c7b1a012772edbd06daecab0f50c9053c # v6.1.0
+        with:
+          go-version: stable
+          check-latest: true
+          cache: true
+
+      - name: Download all JSON artifacts
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        with:
+          run-id: "${{ github.run_id }}"
+          pattern: "all_modules.report.*"
+          # artifacts resolve as folders
+          path: reports/
+
+      - name: Convert test reports to a merged JUnit XML
+        # NOTE: codecov test reports only support JUnit format at this moment. See https://docs.codecov.com/docs/test-analytics.
+        # Ideally, codecov improve a bit their platform, so we may only need a single pass to CTRF format.
+        #
+        # As a contemplated alternative, we could use gotestsum above to produce the JUnit XML directly.
+        run: |
+          go install github.com/jstemmer/go-junit-report/v2@latest
+          cat reports/*/*.json | go-junit-report -parser gojson -out=reports/junit_report.xml
+
+      - name: Upload test results to Codecov
+        if: always()
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        with:
+          files: '**/junit_report.xml'
+          report_type: 'test_results'
+          fail_ci_if_error: false
+          handle_no_reports_found: true
+          verbose: true
+
+      - name: Convert test reports to CTRF JSON
+        run: |
+          go install github.com/ctrf-io/go-ctrf-json-reporter/cmd/go-ctrf-json-reporter@v0.0.10
+
+          appName="swag"
+          buildNumber="${{ github.run_id }}"
+          appVersion="${{ github.event.pull_request.head.sha }}"
+
+          while read report ; do
+            echo "::notice::converting report: ${report}"
+            #TEST_REPORT: 'all_modules.report.${{ matrix.os }}.${{ matrix.go_version }}.json'
+            reformated=$(echo "${report##*/}"|sed -E 's/(go)([[:digit:]]+)\.([[:digit:]]+)/\1\2\3/') # e.g. go1.24 becomes go124
+            mapfile -d'.' -t -s 2 -n 2 split < <(echo $reformated) # skip the first 2 parts, stop on 2 more parts
+            osPlatform="${split[0]}"
+            osRelease="${split[1]}"
+
+            go-ctrf-json-reporter \
+              -verbose \
+              -appName "${appName}" \
+              -appVersion "${appVersion}" \
+              -buildNumber "${buildNumber}" \
+              -osPlatform "${osPlatform}" \
+              -osRelease "${osRelease}" \
+              -output "./reports/ctrf_report_${osPlatform}_${osRelease}.json" \
+              -quiet < "${report}"
+          done < <(find reports -name \*.json)
+
+      # NOTE: at this moment, we don't upload CTRF reports as artifacts.
+      # Some of the CTRF reports are therefore not available (flaky tests, history, ...).
+      #
+      # See https://github.com/ctrf-io/github-test-reporter?tab=readme-ov-file#report-showcase
+      # for more reporting possibilities. At the moment, we keep it simple, as most advanced features
+      # require a github token (thus adding the complexity of a separate workflow starting on pull_request_target).
+      #
+      # For the moment, we are contented with these simple reports. This is an opportunity to compare the insight they
+      # provide as compared to what is uploaded to codecov.
+      #
+      # Codecov analytics are pretty poor at this moment. On the other hand, they manage the bot that pushes back
+      # PR comments.
+      #
+      # They also handle the storage of past test reports, so as to assess flaky tests.
+      - name: Publish Test Summary Results
+        uses: ctrf-io/github-test-reporter@024bc4b64d997ca9da86833c6b9548c55c620e40 # v1.0.26
+        with:
+          report-path: 'reports/ctrf_report_*.json'
+          use-suite-name: true
+          summary-report: true             # post a report to the github actions summary
+          github-report: true
+          failed-folded-report: true
+

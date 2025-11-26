@@ -32,7 +32,7 @@ const supportedFlags = "0-+# "
 // be used to get a new Formatter which can be used directly as arguments
 // in standard fmt package printing calls.
 type formatState struct {
-	value          interface{}
+	value          any
 	fs             fmt.State
 	depth          int
 	pointers       map[uintptr]int
@@ -270,7 +270,7 @@ func (f *formatState) format(v reflect.Value) {
 			f.fs.Write(maxShortBytes)
 		} else {
 			numEntries := v.Len()
-			for i := 0; i < numEntries; i++ {
+			for i := range numEntries {
 				if i > 0 {
 					f.fs.Write(spaceBytes)
 				}
@@ -333,7 +333,7 @@ func (f *formatState) format(v reflect.Value) {
 			f.fs.Write(maxShortBytes)
 		} else {
 			vt := v.Type()
-			for i := 0; i < numFields; i++ {
+			for i := range numFields {
 				if i > 0 {
 					f.fs.Write(spaceBytes)
 				}
@@ -391,7 +391,7 @@ func (f *formatState) Format(fs fmt.State, verb rune) {
 
 // newFormatter is a helper function to consolidate the logic from the various
 // public methods which take varying config states.
-func newFormatter(cs *ConfigState, v interface{}) fmt.Formatter {
+func newFormatter(cs *ConfigState, v any) fmt.Formatter {
 	fs := &formatState{value: v, cs: cs}
 	fs.pointers = make(map[uintptr]int)
 	return fs
@@ -405,15 +405,16 @@ types similar to the standard %v format specifier.
 
 The custom formatter only responds to the %v (most compact), %+v (adds pointer
 addresses), %#v (adds types), or %#+v (adds types and pointer addresses) verb
-combinations.  Any other verbs such as %x and %q will be sent to the the
-standard fmt package for formatting.  In addition, the custom formatter ignores
-the width and precision arguments (however they will still work on the format
-specifiers not handled by the custom formatter).
+combinations.
+
+Any other verbs such as %x and %q will be sent to the standard fmt package for formatting.
+In addition, the custom formatter ignores the width and precision arguments
+(however they will still work on the format specifiers not handled by the custom formatter).
 
 Typically this function shouldn't be called directly.  It is much easier to make
 use of the custom formatter by calling one of the convenience functions such as
 Printf, Println, or Fprintf.
 */
-func NewFormatter(v interface{}) fmt.Formatter {
+func NewFormatter(v any) fmt.Formatter {
 	return newFormatter(&Config, v)
 }

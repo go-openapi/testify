@@ -16,7 +16,8 @@
 // when either cgo is not supported or "-tags testcgo" is not added to the go
 // test command line.  This file intentionally does not setup any cgo tests in
 // this scenario.
-// +build !cgo !testcgo
+
+//go:build !cgo || !testcgo
 
 package spew_test
 

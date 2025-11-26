@@ -73,7 +73,7 @@ func (a *Assertions) DirExistsf(path string, msg string, args ...any) {
 // listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 // the number of appearances of each of them in both lists should match.
 //
-// a.ElementsMatch([1, 3, 2, 3], [1, 3, 3, 2])
+// a.ElementsMatch([1, 3, 2, 3], [1, 3, 3, 2]).
 func (a *Assertions) ElementsMatch(listA any, listB any, msgAndArgs ...any) {
 	if h, ok := a.t.(tHelper); ok {
 		h.Helper()
@@ -415,7 +415,7 @@ func (a *Assertions) Exactlyf(expected any, actual any, msg string, args ...any)
 	Exactlyf(a.t, expected, actual, msg, args...)
 }
 
-// Fail reports a failure through
+// Fail reports a failure through.
 func (a *Assertions) Fail(failureMessage string, msgAndArgs ...any) {
 	if h, ok := a.t.(tHelper); ok {
 		h.Helper()
@@ -423,7 +423,7 @@ func (a *Assertions) Fail(failureMessage string, msgAndArgs ...any) {
 	Fail(a.t, failureMessage, msgAndArgs...)
 }
 
-// FailNow fails test
+// FailNow fails test.
 func (a *Assertions) FailNow(failureMessage string, msgAndArgs ...any) {
 	if h, ok := a.t.(tHelper); ok {
 		h.Helper()
@@ -755,7 +755,7 @@ func (a *Assertions) InDeltaf(expected any, actual any, delta float64, msg strin
 	InDeltaf(a.t, expected, actual, delta, msg, args...)
 }
 
-// InEpsilon asserts that expected and actual have a relative error less than epsilon
+// InEpsilon asserts that expected and actual have a relative error less than epsilon.
 func (a *Assertions) InEpsilon(expected any, actual any, epsilon float64, msgAndArgs ...any) {
 	if h, ok := a.t.(tHelper); ok {
 		h.Helper()
@@ -1196,7 +1196,7 @@ func (a *Assertions) NotContainsf(s any, contains any, msg string, args ...any) 
 //
 // a.NotElementsMatch([1, 1, 2, 3], [1, 2, 3]) -> true
 //
-// a.NotElementsMatch([1, 2, 3], [1, 2, 4]) -> true
+// a.NotElementsMatch([1, 2, 3], [1, 2, 4]) -> true.
 func (a *Assertions) NotElementsMatch(listA any, listB any, msgAndArgs ...any) {
 	if h, ok := a.t.(tHelper); ok {
 		h.Helper()
