@@ -1,4 +1,4 @@
-// Code generated with github.com/stretchr/testify/_codegen; DO NOT EDIT.
+// Code generated with github.com/go-openapi/testify/v2/_codegen; DO NOT EDIT.
 
 package assert
 
@@ -42,7 +42,7 @@ func DirExistsf(t TestingT, path string, msg string, args ...any) bool {
 // listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 // the number of appearances of each of them in both lists should match.
 //
-// assert.ElementsMatchf(t, [1, 3, 2, 3], [1, 3, 3, 2], "error message %s", "formatted")
+// assert.ElementsMatchf(t, [1, 3, 2, 3], [1, 3, 3, 2], "error message %s", "formatted").
 func ElementsMatchf(t TestingT, listA any, listB any, msg string, args ...any) bool {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -211,7 +211,7 @@ func Exactlyf(t TestingT, expected any, actual any, msg string, args ...any) boo
 	return Exactly(t, expected, actual, append([]any{msg}, args...)...)
 }
 
-// Failf reports a failure through
+// Failf reports a failure through.
 func Failf(t TestingT, failureMessage string, msg string, args ...any) bool {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -219,7 +219,7 @@ func Failf(t TestingT, failureMessage string, msg string, args ...any) bool {
 	return Fail(t, failureMessage, append([]any{msg}, args...)...)
 }
 
-// FailNowf fails test
+// FailNowf fails test.
 func FailNowf(t TestingT, failureMessage string, msg string, args ...any) bool {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -237,6 +237,15 @@ func Falsef(t TestingT, value bool, msg string, args ...any) bool {
 	return False(t, value, append([]any{msg}, args...)...)
 }
 
+// FileEmptyf checks whether a file exists in the given path and is empty.
+// It fails if the file is not empty, if the path points to a directory or there is an error when trying to check the file.
+func FileEmptyf(t TestingT, path string, msg string, args ...any) bool {
+	if h, ok := t.(tHelper); ok {
+		h.Helper()
+	}
+	return FileEmpty(t, path, append([]any{msg}, args...)...)
+}
+
 // FileExistsf checks whether a file exists in the given path. It also fails if
 // the path points to a directory or there is an error when trying to check the file.
 func FileExistsf(t TestingT, path string, msg string, args ...any) bool {
@@ -244,6 +253,15 @@ func FileExistsf(t TestingT, path string, msg string, args ...any) bool {
 		h.Helper()
 	}
 	return FileExists(t, path, append([]any{msg}, args...)...)
+}
+
+// FileNotEmptyf checks whether a file exists in the given path and is not empty.
+// It fails if the file is empty, if the path points to a directory or there is an error when trying to check the file.
+func FileNotEmptyf(t TestingT, path string, msg string, args ...any) bool {
+	if h, ok := t.(tHelper); ok {
+		h.Helper()
+	}
+	return FileNotEmpty(t, path, append([]any{msg}, args...)...)
 }
 
 // Greaterf asserts that the first element is greater than the second
@@ -381,7 +399,7 @@ func InDeltaSlicef(t TestingT, expected any, actual any, delta float64, msg stri
 	return InDeltaSlice(t, expected, actual, delta, append([]any{msg}, args...)...)
 }
 
-// InEpsilonf asserts that expected and actual have a relative error less than epsilon
+// InEpsilonf asserts that expected and actual have a relative error less than epsilon.
 func InEpsilonf(t TestingT, expected any, actual any, epsilon float64, msg string, args ...any) bool {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -606,7 +624,7 @@ func NotContainsf(t TestingT, s any, contains any, msg string, args ...any) bool
 //
 // assert.NotElementsMatchf(t, [1, 1, 2, 3], [1, 2, 3], "error message %s", "formatted") -> true
 //
-// assert.NotElementsMatchf(t, [1, 2, 3], [1, 2, 4], "error message %s", "formatted") -> true
+// assert.NotElementsMatchf(t, [1, 2, 3], [1, 2, 4], "error message %s", "formatted") -> true.
 func NotElementsMatchf(t TestingT, listA any, listB any, msg string, args ...any) bool {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -841,7 +859,7 @@ func Truef(t TestingT, value bool, msg string, args ...any) bool {
 
 // WithinDurationf asserts that the two times are within duration delta of each other.
 //
-//	assert.WithinDurationf(t, time.Now(), time.Now(), 10*time.Second, "error message %s", "formatted")
+//	assert.WithinDurationf(t, time.Now(), 10*time.Second, "error message %s", "formatted")
 func WithinDurationf(t TestingT, expected time.Time, actual time.Time, delta time.Duration, msg string, args ...any) bool {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()

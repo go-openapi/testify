@@ -1,4 +1,4 @@
-// Code generated with github.com/stretchr/testify/_codegen; DO NOT EDIT.
+// Code generated with github.com/go-openapi/testify/v2/_codegen; DO NOT EDIT.
 
 package assert
 
@@ -72,7 +72,7 @@ func (a *Assertions) DirExistsf(path string, msg string, args ...any) bool {
 // listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 // the number of appearances of each of them in both lists should match.
 //
-// a.ElementsMatch([1, 3, 2, 3], [1, 3, 3, 2])
+// a.ElementsMatch([1, 3, 2, 3], [1, 3, 3, 2]).
 func (a *Assertions) ElementsMatch(listA any, listB any, msgAndArgs ...any) bool {
 	if h, ok := a.t.(tHelper); ok {
 		h.Helper()
@@ -84,7 +84,7 @@ func (a *Assertions) ElementsMatch(listA any, listB any, msgAndArgs ...any) bool
 // listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 // the number of appearances of each of them in both lists should match.
 //
-// a.ElementsMatchf([1, 3, 2, 3], [1, 3, 3, 2], "error message %s", "formatted")
+// a.ElementsMatchf([1, 3, 2, 3], [1, 3, 3, 2], "error message %s", "formatted").
 func (a *Assertions) ElementsMatchf(listA any, listB any, msg string, args ...any) bool {
 	if h, ok := a.t.(tHelper); ok {
 		h.Helper()
@@ -414,7 +414,7 @@ func (a *Assertions) Exactlyf(expected any, actual any, msg string, args ...any)
 	return Exactlyf(a.t, expected, actual, msg, args...)
 }
 
-// Fail reports a failure through
+// Fail reports a failure through.
 func (a *Assertions) Fail(failureMessage string, msgAndArgs ...any) bool {
 	if h, ok := a.t.(tHelper); ok {
 		h.Helper()
@@ -422,7 +422,7 @@ func (a *Assertions) Fail(failureMessage string, msgAndArgs ...any) bool {
 	return Fail(a.t, failureMessage, msgAndArgs...)
 }
 
-// FailNow fails test
+// FailNow fails test.
 func (a *Assertions) FailNow(failureMessage string, msgAndArgs ...any) bool {
 	if h, ok := a.t.(tHelper); ok {
 		h.Helper()
@@ -430,7 +430,7 @@ func (a *Assertions) FailNow(failureMessage string, msgAndArgs ...any) bool {
 	return FailNow(a.t, failureMessage, msgAndArgs...)
 }
 
-// FailNowf fails test
+// FailNowf fails test.
 func (a *Assertions) FailNowf(failureMessage string, msg string, args ...any) bool {
 	if h, ok := a.t.(tHelper); ok {
 		h.Helper()
@@ -438,7 +438,7 @@ func (a *Assertions) FailNowf(failureMessage string, msg string, args ...any) bo
 	return FailNowf(a.t, failureMessage, msg, args...)
 }
 
-// Failf reports a failure through
+// Failf reports a failure through.
 func (a *Assertions) Failf(failureMessage string, msg string, args ...any) bool {
 	if h, ok := a.t.(tHelper); ok {
 		h.Helper()
@@ -466,6 +466,24 @@ func (a *Assertions) Falsef(value bool, msg string, args ...any) bool {
 	return Falsef(a.t, value, msg, args...)
 }
 
+// FileEmpty checks whether a file exists in the given path and is empty.
+// It fails if the file is not empty, if the path points to a directory or there is an error when trying to check the file.
+func (a *Assertions) FileEmpty(path string, msgAndArgs ...any) bool {
+	if h, ok := a.t.(tHelper); ok {
+		h.Helper()
+	}
+	return FileEmpty(a.t, path, msgAndArgs...)
+}
+
+// FileEmptyf checks whether a file exists in the given path and is empty.
+// It fails if the file is not empty, if the path points to a directory or there is an error when trying to check the file.
+func (a *Assertions) FileEmptyf(path string, msg string, args ...any) bool {
+	if h, ok := a.t.(tHelper); ok {
+		h.Helper()
+	}
+	return FileEmptyf(a.t, path, msg, args...)
+}
+
 // FileExists checks whether a file exists in the given path. It also fails if
 // the path points to a directory or there is an error when trying to check the file.
 func (a *Assertions) FileExists(path string, msgAndArgs ...any) bool {
@@ -482,6 +500,24 @@ func (a *Assertions) FileExistsf(path string, msg string, args ...any) bool {
 		h.Helper()
 	}
 	return FileExistsf(a.t, path, msg, args...)
+}
+
+// FileNotEmpty checks whether a file exists in the given path and is not empty.
+// It fails if the file is empty, if the path points to a directory or there is an error when trying to check the file.
+func (a *Assertions) FileNotEmpty(path string, msgAndArgs ...any) bool {
+	if h, ok := a.t.(tHelper); ok {
+		h.Helper()
+	}
+	return FileNotEmpty(a.t, path, msgAndArgs...)
+}
+
+// FileNotEmptyf checks whether a file exists in the given path and is not empty.
+// It fails if the file is empty, if the path points to a directory or there is an error when trying to check the file.
+func (a *Assertions) FileNotEmptyf(path string, msg string, args ...any) bool {
+	if h, ok := a.t.(tHelper); ok {
+		h.Helper()
+	}
+	return FileNotEmptyf(a.t, path, msg, args...)
 }
 
 // Greater asserts that the first element is greater than the second
@@ -754,7 +790,7 @@ func (a *Assertions) InDeltaf(expected any, actual any, delta float64, msg strin
 	return InDeltaf(a.t, expected, actual, delta, msg, args...)
 }
 
-// InEpsilon asserts that expected and actual have a relative error less than epsilon
+// InEpsilon asserts that expected and actual have a relative error less than epsilon.
 func (a *Assertions) InEpsilon(expected any, actual any, epsilon float64, msgAndArgs ...any) bool {
 	if h, ok := a.t.(tHelper); ok {
 		h.Helper()
@@ -778,7 +814,7 @@ func (a *Assertions) InEpsilonSlicef(expected any, actual any, epsilon float64, 
 	return InEpsilonSlicef(a.t, expected, actual, epsilon, msg, args...)
 }
 
-// InEpsilonf asserts that expected and actual have a relative error less than epsilon
+// InEpsilonf asserts that expected and actual have a relative error less than epsilon.
 func (a *Assertions) InEpsilonf(expected any, actual any, epsilon float64, msg string, args ...any) bool {
 	if h, ok := a.t.(tHelper); ok {
 		h.Helper()
@@ -1195,7 +1231,7 @@ func (a *Assertions) NotContainsf(s any, contains any, msg string, args ...any) 
 //
 // a.NotElementsMatch([1, 1, 2, 3], [1, 2, 3]) -> true
 //
-// a.NotElementsMatch([1, 2, 3], [1, 2, 4]) -> true
+// a.NotElementsMatch([1, 2, 3], [1, 2, 4]) -> true.
 func (a *Assertions) NotElementsMatch(listA any, listB any, msgAndArgs ...any) bool {
 	if h, ok := a.t.(tHelper); ok {
 		h.Helper()
@@ -1212,7 +1248,7 @@ func (a *Assertions) NotElementsMatch(listA any, listB any, msgAndArgs ...any) b
 //
 // a.NotElementsMatchf([1, 1, 2, 3], [1, 2, 3], "error message %s", "formatted") -> true
 //
-// a.NotElementsMatchf([1, 2, 3], [1, 2, 4], "error message %s", "formatted") -> true
+// a.NotElementsMatchf([1, 2, 3], [1, 2, 4], "error message %s", "formatted") -> true.
 func (a *Assertions) NotElementsMatchf(listA any, listB any, msg string, args ...any) bool {
 	if h, ok := a.t.(tHelper); ok {
 		h.Helper()
@@ -1672,7 +1708,7 @@ func (a *Assertions) Truef(value bool, msg string, args ...any) bool {
 
 // WithinDuration asserts that the two times are within duration delta of each other.
 //
-//	a.WithinDuration(time.Now(), time.Now(), 10*time.Second)
+//	a.WithinDuration(time.Now(), 10*time.Second)
 func (a *Assertions) WithinDuration(expected time.Time, actual time.Time, delta time.Duration, msgAndArgs ...any) bool {
 	if h, ok := a.t.(tHelper); ok {
 		h.Helper()
@@ -1682,7 +1718,7 @@ func (a *Assertions) WithinDuration(expected time.Time, actual time.Time, delta 
 
 // WithinDurationf asserts that the two times are within duration delta of each other.
 //
-//	a.WithinDurationf(time.Now(), time.Now(), 10*time.Second, "error message %s", "formatted")
+//	a.WithinDurationf(time.Now(), 10*time.Second, "error message %s", "formatted")
 func (a *Assertions) WithinDurationf(expected time.Time, actual time.Time, delta time.Duration, msg string, args ...any) bool {
 	if h, ok := a.t.(tHelper); ok {
 		h.Helper()

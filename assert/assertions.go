@@ -1869,6 +1869,52 @@ func NoDirExists(t TestingT, path string, msgAndArgs ...any) bool {
 	return Fail(t, fmt.Sprintf("directory %q exists", path), msgAndArgs...)
 }
 
+// FileEmpty checks whether a file exists in the given path and is empty.
+// It fails if the file is not empty, if the path points to a directory or there is an error when trying to check the file.
+func FileEmpty(t TestingT, path string, msgAndArgs ...any) bool {
+	if h, ok := t.(tHelper); ok {
+		h.Helper()
+	}
+	info, err := os.Lstat(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return Fail(t, fmt.Sprintf("unable to find file %q", path), msgAndArgs...)
+		}
+		return Fail(t, fmt.Sprintf("error when running os.Lstat(%q): %s", path, err), msgAndArgs...)
+	}
+	if info.IsDir() {
+		return Fail(t, fmt.Sprintf("%q is a directory", path), msgAndArgs...)
+	}
+	if info.Size() > 0 {
+		return Fail(t, fmt.Sprintf("%q is not empty", path), msgAndArgs...)
+	}
+
+	return true
+}
+
+// FileNotEmpty checks whether a file exists in the given path and is not empty.
+// It fails if the file is empty, if the path points to a directory or there is an error when trying to check the file.
+func FileNotEmpty(t TestingT, path string, msgAndArgs ...any) bool {
+	if h, ok := t.(tHelper); ok {
+		h.Helper()
+	}
+	info, err := os.Lstat(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return Fail(t, fmt.Sprintf("unable to find file %q", path), msgAndArgs...)
+		}
+		return Fail(t, fmt.Sprintf("error when running os.Lstat(%q): %s", path, err), msgAndArgs...)
+	}
+	if info.IsDir() {
+		return Fail(t, fmt.Sprintf("%q is a directory", path), msgAndArgs...)
+	}
+	if info.Size() == 0 {
+		return Fail(t, fmt.Sprintf("%q is empty", path), msgAndArgs...)
+	}
+
+	return true
+}
+
 // JSONEqBytes asserts that two JSON byte slices are equivalent.
 //
 //	assert.JSONEqBytes(t, []byte(`{"hello": "world", "foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`))

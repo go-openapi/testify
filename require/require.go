@@ -106,7 +106,7 @@ func ElementsMatch(t TestingT, listA any, listB any, msgAndArgs ...any) {
 // listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 // the number of appearances of each of them in both lists should match.
 //
-// require.ElementsMatchf(t, [1, 3, 2, 3], [1, 3, 3, 2], "error message %s", "formatted")
+// require.ElementsMatchf(t, [1, 3, 2, 3], [1, 3, 3, 2], "error message %s", "formatted").
 func ElementsMatchf(t TestingT, listA any, listB any, msg string, args ...any) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -533,7 +533,7 @@ func FailNow(t TestingT, failureMessage string, msgAndArgs ...any) {
 	t.FailNow()
 }
 
-// FailNowf fails test
+// FailNowf fails test.
 func FailNowf(t TestingT, failureMessage string, msg string, args ...any) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -544,7 +544,7 @@ func FailNowf(t TestingT, failureMessage string, msg string, args ...any) {
 	t.FailNow()
 }
 
-// Failf reports a failure through
+// Failf reports a failure through.
 func Failf(t TestingT, failureMessage string, msg string, args ...any) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -581,6 +581,30 @@ func Falsef(t TestingT, value bool, msg string, args ...any) {
 	t.FailNow()
 }
 
+// FileEmpty checks whether a file exists in the given path and is empty.
+// It fails if the file is not empty, if the path points to a directory or there is an error when trying to check the file.
+func FileEmpty(t TestingT, path string, msgAndArgs ...any) {
+	if h, ok := t.(tHelper); ok {
+		h.Helper()
+	}
+	if assert.FileEmpty(t, path, msgAndArgs...) {
+		return
+	}
+	t.FailNow()
+}
+
+// FileEmptyf checks whether a file exists in the given path and is empty.
+// It fails if the file is not empty, if the path points to a directory or there is an error when trying to check the file.
+func FileEmptyf(t TestingT, path string, msg string, args ...any) {
+	if h, ok := t.(tHelper); ok {
+		h.Helper()
+	}
+	if assert.FileEmptyf(t, path, msg, args...) {
+		return
+	}
+	t.FailNow()
+}
+
 // FileExists checks whether a file exists in the given path. It also fails if
 // the path points to a directory or there is an error when trying to check the file.
 func FileExists(t TestingT, path string, msgAndArgs ...any) {
@@ -600,6 +624,30 @@ func FileExistsf(t TestingT, path string, msg string, args ...any) {
 		h.Helper()
 	}
 	if assert.FileExistsf(t, path, msg, args...) {
+		return
+	}
+	t.FailNow()
+}
+
+// FileNotEmpty checks whether a file exists in the given path and is not empty.
+// It fails if the file is empty, if the path points to a directory or there is an error when trying to check the file.
+func FileNotEmpty(t TestingT, path string, msgAndArgs ...any) {
+	if h, ok := t.(tHelper); ok {
+		h.Helper()
+	}
+	if assert.FileNotEmpty(t, path, msgAndArgs...) {
+		return
+	}
+	t.FailNow()
+}
+
+// FileNotEmptyf checks whether a file exists in the given path and is not empty.
+// It fails if the file is empty, if the path points to a directory or there is an error when trying to check the file.
+func FileNotEmptyf(t TestingT, path string, msg string, args ...any) {
+	if h, ok := t.(tHelper); ok {
+		h.Helper()
+	}
+	if assert.FileNotEmptyf(t, path, msg, args...) {
 		return
 	}
 	t.FailNow()
@@ -980,7 +1028,7 @@ func InEpsilonSlicef(t TestingT, expected any, actual any, epsilon float64, msg 
 	t.FailNow()
 }
 
-// InEpsilonf asserts that expected and actual have a relative error less than epsilon
+// InEpsilonf asserts that expected and actual have a relative error less than epsilon.
 func InEpsilonf(t TestingT, expected any, actual any, epsilon float64, msg string, args ...any) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -1528,7 +1576,7 @@ func NotElementsMatch(t TestingT, listA any, listB any, msgAndArgs ...any) {
 //
 // require.NotElementsMatchf(t, [1, 1, 2, 3], [1, 2, 3], "error message %s", "formatted") -> true
 //
-// require.NotElementsMatchf(t, [1, 2, 3], [1, 2, 4], "error message %s", "formatted") -> true
+// require.NotElementsMatchf(t, [1, 2, 3], [1, 2, 4], "error message %s", "formatted") -> true.
 func NotElementsMatchf(t TestingT, listA any, listB any, msg string, args ...any) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -2124,7 +2172,7 @@ func WithinDuration(t TestingT, expected time.Time, actual time.Time, delta time
 
 // WithinDurationf asserts that the two times are within duration delta of each other.
 //
-//	require.WithinDurationf(t, time.Now(), time.Now(), 10*time.Second, "error message %s", "formatted")
+//	require.WithinDurationf(t, time.Now(), 10*time.Second, "error message %s", "formatted")
 func WithinDurationf(t TestingT, expected time.Time, actual time.Time, delta time.Duration, msg string, args ...any) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
