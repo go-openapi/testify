@@ -73,6 +73,46 @@ However, at `go-openapi` we would like to address the well-known issues in `test
   testify-style mocks are thus not going to be supported anytime soon.
 * extra convoluted stuff in the like of `InDeltaSlice`
 
+## Generics adoption
+
+### Context from the original repository
+
+Several attempts have been made to introduce generics in the original stretchr/testify repository:
+
+* **github.com/stretchr/testify#1308** - Comprehensive refactor replacing `interface{}` with generic type parameters across assertions (Draft, v2.0.0 milestone)
+* **github.com/stretchr/testify#1805** - Proposal for generic `IsOfType[T]()` to avoid dummy value instantiation in type checks
+* **github.com/stretchr/testify#1685** - Iterator support (`iter.Seq`) for Contains/ElementsMatch assertions (Go 1.23+)
+* **github.com/stretchr/testify#1147** - General discussion about generics adoption (marked "Not Planned")
+
+### Challenges identified
+
+The original repository's exploration of generics revealed several design challenges:
+
+1. **Type inference limitations**: Go's type inference struggles with complex generic signatures, often requiring explicit type parameters that burden the API (e.g., `Contains[int, int](arr1, arr2)`)
+
+2. **Overly broad type constraints**: PR #1308's approach used constraints like `ConvertibleToFloat64` that accepted more types than intended, weakening type safety
+
+3. **Loss of flexibility**: Testify currently compares non-comparable types (slices, maps) via `reflect.DeepEqual`. Generic constraints would eliminate this capability, as Go generics require comparable or explicitly constrained types
+
+4. **Breaking changes**: Any comprehensive generics adoption requires a major version bump and Go 1.18+ minimum version
+
+5. **Inconsistent design patterns**: Different assertions would need different constraint strategies, making a uniform approach difficult
+
+### Approach in this fork
+
+This fork targets **go1.24** and can leverage generics without backward compatibility concerns.
+
+The approach will be **selective and pragmatic** rather than comprehensive:
+
+* **Targeted improvements** where generics provide clear value without compromising existing functionality
+* **Focus on eliminating anti-patterns** like dummy value instantiation in `IsType` (see #1805)
+* **Preserve reflection-based flexibility** for comparing complex types rather than forcing everything through generic constraints
+* **Careful constraint design** to ensure type safety without being overly restrictive or permissive
+
+The goal is to enhance type safety and developer experience where it matters most, while maintaining the flexibility that makes testify useful for real-world testing scenarios.
+
+**Status**: Design and exploration phase. Contributions and proposals welcome.
+
 ## Usage at go-openapi
 
 At this moment, we have identified the following usage in our tools. This API shall remain stable.
@@ -150,25 +190,46 @@ distributed with this fork, including internalized libraries.
 
 ## PRs from the original repo
 
+### Already merged or incorporated
+
 The following proposed contributions to the original repo have been merged or incorporated with
 some adaptations into this fork:
 
-* github.com/stretchr/testify#1513
-* github.com/stretchr/testify#1772
-* github.com/stretchr/testify#1797
-* github.com/stretchr/testify#1356
+* github.com/stretchr/testify#1513 - JSONEqBytes for byte slice JSON comparison
+* github.com/stretchr/testify#1772 - YAML library migration to maintained fork (go.yaml.in/yaml)
+* github.com/stretchr/testify#1797 - Codegen package consolidation and licensing
+* github.com/stretchr/testify#1356 - panic(nil) handling for Go 1.21+
 
-### Other noticeable contributions, not merged
+### Planned merges
 
-These would probably need some rework/fix or adaptation, but the proposed idea is worthwhile, IMHO.
+#### Critical safety fixes (high priority)
 
-* github.com/stretchr/testify#1460 (ci)
-* github.com/stretchr/testify#1467 (colorized output)
-* github.com/stretchr/testify#1480 (colorized output)
-* github.com/stretchr/testify/pull#1232 (colorized output)
-* github.com/stretchr/testify#994 (colorized output)
-* github.com/stretchr/testify#1495 (bug fix)
-* github.com/stretchr/testify#1223 (layout bug fix)
+* github.com/stretchr/testify#1825 - Fix panic when using EqualValues with uncomparable types
+* github.com/stretchr/testify#1818 - Fix panic on invalid regex in Regexp/NotRegexp assertions
+
+#### Leveraging internalized dependencies (go-spew, difflib)
+
+These improvements apply to the internalized and modernized copies of dependencies in this fork:
+
+* github.com/stretchr/testify#1829 - Fix time.Time rendering in diffs (internalized go-spew)
+* github.com/stretchr/testify#1822 - Deterministic map ordering in diffs (internalized go-spew)
+* github.com/stretchr/testify#1816 - Fix panic on unexported struct key in map (internalized go-spew - may need deeper fix)
+
+#### UX improvements
+
+* github.com/stretchr/testify#1223 - Display uint values in decimal instead of hex in diffs
+
+### Under consideration
+
+#### Colorized output
+
+Several PRs propose colorized terminal output with different approaches and dependencies.
+If implemented, this would be provided as an optional `enable/color` module:
+
+* github.com/stretchr/testify#1467 - Colorized output with terminal detection (most mature implementation)
+* github.com/stretchr/testify#1480 - Colorized diffs via TESTIFY_COLORED_DIFF env var
+* github.com/stretchr/testify#1232 - Colorized output for expected/actual/errors
+* github.com/stretchr/testify#994 - Colorize expected vs actual values
 
 ## Contributing
 
