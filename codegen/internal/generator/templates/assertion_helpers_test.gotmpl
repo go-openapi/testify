@@ -1,0 +1,26 @@
+{{ comment .Copyright }}
+
+// Code generated with {{ .Tool }}; DO NOT EDIT.
+
+package {{ .Package }}
+
+{{- if .Imports.HasImports }}
+
+import (
+  "testing"
+{{ imports .Imports }}
+)
+{{- end }}
+
+{{- range .Functions }} 
+  {{- if .IsHelper }}
+
+func Test{{ .Name }}f(t *testing.T) {
+  {{- if (not .HasTest) }}
+	t.Skip() // this function doesn't have tests yet
+  {{- else }}
+	// TODO
+  {{- end }}
+}
+  {{- end }}
+{{- end }}

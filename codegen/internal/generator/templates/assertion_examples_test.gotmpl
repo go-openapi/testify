@@ -1,0 +1,108 @@
+{{ comment .Copyright }}
+
+// Code generated with {{ .Tool }}; DO NOT EDIT.
+
+package {{ .Package }}_test
+
+import (
+  "fmt"
+  "net/http"
+  "path/filepath"
+  "testing"
+  "github.com/go-openapi/testify/v2/{{ .Package }}"
+{{ imports .Imports }}
+)
+
+{{- $pkg := .Package }}
+{{- $runnable := .RunnableExamples }}
+{{- range .Functions }}
+  {{- if or (not .IsGeneric) ($.EnableGenerics) }}
+    {{- if and (not .IsHelper) (not .IsConstructor) }}
+      {{- if not .HasSuccessTest }}
+
+// func Example{{ .Name }}() {
+// no success example available. Please add some examples to produce a testable example.
+// }
+      {{- else }}
+
+func Example{{ .Name }}() {
+        {{- $fn := . }}
+        {{- $isRequire := (eq $.Package "require") }}
+        {{- $first := true }}
+        {{- range .Tests }}
+          {{- if eq .ExpectedOutcome 0 }}{{/* TestSuccess */}}
+            {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
+    t := new(testing.T)
+            {{- if $isRequire }}
+    {{ $pkg }}.{{ $fn.Name }}(t, {{ relocate .TestedValue $pkg }})
+    fmt.Println("passed")
+              {{- if $runnable }}
+
+    // Output: passed
+              {{- end }}
+            {{- else }}
+    success := {{ $pkg }}.{{ $fn.Name }}(t, {{ relocate .TestedValue $pkg }})
+    fmt.Printf("success: %t\n", success)
+              {{- if $runnable }}
+
+    // Output: success: true
+              {{- end }}
+            {{- end }}
+          {{- end }}
+          {{- break }}{{/* just produce one single example, in case there are multiple success examples */}}
+        {{- end }}
+}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+// Test helpers (also in the tests for package {{ .Package }}
+//
+// This code is duplicated because the current test is run as a separate test package: {{ .Package }}_test
+
+func testDataPath() string {
+  return filepath.Join({{ pathparts .TestDataPath }})
+}
+
+func httpOK(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
+
+func httpError(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusInternalServerError)
+}
+
+func httpRedirect(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusTemporaryRedirect)
+}
+
+func httpBody(w http.ResponseWriter, r *http.Request) {
+	name := r.FormValue("name")
+	_, _ = fmt.Fprintf(w, "Hello, %s!", name)
+}
+
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
+var (
+  staticVar = "static string" 
+  staticVarPtr = &staticVar
+  dummyInterface {{ .Package }}.T
+)
+
+func ptr[T any](value T) *T {
+  p := value
+
+  return &p
+}
+
+type dummyStruct struct {
+  A string
+  b int
+}
+
+type dummyError struct {
+}
+
+func (d *dummyError) Error() string {
+  return "dummy error"
+}

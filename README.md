@@ -166,13 +166,13 @@ To use this package in your projects:
 
 Features include:
 
-  * [Easy assertions](./original.md#assert-package)
-  * ~[Mocking](./original.md#mock-package)~ removed
-  * ~[Testing suite interfaces and functions](./original.md#suite-package)~ removed
+  * [Easy assertions](./docs/ORIGINAL.md#assert-package)
+  * ~[Mocking](./docs/ORIGINAL.md#mock-package)~ removed
+  * ~[Testing suite interfaces and functions](./docs/ORIGINAL.md#suite-package)~ removed
 
 ## Examples
 
-See [the original README](./original.md)
+See [the original README](./docs/ORIGINAL.md)
 
 ## Licensing
 
@@ -186,7 +186,6 @@ distributed with this fork, including internalized libraries.
 * stretchr/testify [SPDX-License-Identifier: MIT](./NOTICE)
 * github.com/davecgh/go-spew [SPDX-License-Identifier: ISC](./internal/spew/LICENSE)
 * github.com/pmezard/go-difflib [SPDX-License-Identifier: MIT-like](./internal/difflib/LICENSE)
-* imports [SPDX-License-Identifier: MIT](./_codegen/internal/imports/LICENSE)
 
 ## PRs from the original repo
 

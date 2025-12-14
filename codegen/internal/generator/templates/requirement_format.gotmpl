@@ -1,0 +1,43 @@
+{{ comment .Copyright }}
+
+// Code generated with {{ .Tool }}; DO NOT EDIT.
+
+package {{ .Package }}
+
+{{- if .Imports.HasImports }}
+
+import (
+{{ imports .Imports }}
+)
+{{- end }}
+
+{{- range .Functions }} 
+  {{- if or (not .IsGeneric) ($.EnableGenerics) }}
+    {{- if and (not .IsHelper) (not .IsConstructor) }}
+
+{{ docStringFor "format" .Name }}
+//
+{{ docStringPackage $.Package }}
+func {{ .Name }}f(t T, {{ params .Params }}, msg string, args ...any) {
+	if h, ok := t.(H); ok { h.Helper() }
+      {{- if or (eq .Name "Fail") (eq .Name "FailNow") }}{{/* special semantics for these two, which can only fail */}}
+	_ = {{ .TargetPackage }}.{{ .Name }}(t, {{ forward .Params }}, forwardArgs(msg, args))
+      {{- else }}
+	if {{ .TargetPackage }}.{{ .Name }}(t, {{ forward .Params }}, forwardArgs(msg, args)) {
+		return
+	}
+      {{- end }}
+
+	t.FailNow()
+}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+func forwardArgs(msg string, args []any) []any {
+  result := make([]any, len(args)+1)
+  result[0]=msg
+  copy(result[1:], args)
+
+  return result
+}

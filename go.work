@@ -1,6 +1,6 @@
 use (
 	.
-	./_codegen
+	./codegen
 	./enable/yaml
 )
 

@@ -1,0 +1,73 @@
+{{ comment .Copyright }}
+
+// Code generated with {{ .Tool }}; DO NOT EDIT.
+
+package {{ .Package }}
+
+{{- if .Imports.HasImports }}
+
+import (
+{{ imports .Imports }}
+)
+{{- end }}
+
+{{- with .Consts }}
+
+const (
+  {{- range $i,$v := . }}
+    {{- if gt $i 0 }}{{ println "" }}{{- end }}
+    {{- with $v }}
+    {{ comment .DocString }}
+    {{ .Name }} = {{ .TargetPackage }}.{{ .Name }}
+    {{- end }}
+  {{- end }}
+)
+{{- end }}
+
+{{- with .Vars }}
+
+var (
+  {{- range $i,$v := . }}
+    {{- if gt $i 0 }}{{ println "" }}{{- end }}
+    {{- with $v }}
+    {{ comment .DocString }}
+    {{ .Name }} = {{ .TargetPackage }}.{{ .Name }}
+    {{- end }}
+  {{- end }}
+)
+{{- end }}
+
+{{- with .Types }}
+
+type (
+  {{- $first := true }}
+  {{- $isRequire := (eq $.Package "require") }}
+  {{- range . }}
+    {{- if not (eq .Name $.Receiver) }}{{/* we declare that type separately */}}
+      {{- if not $first }}{{ println "" }}{{- end }}
+      {{- $first = false }}
+    {{ comment .DocString }}
+      {{- if and (eq .Name "T") (eq $.Package "require") }}{{/* to use with require, T must support FailNow() */}}
+    {{ .Name }} interface {
+        {{ .TargetPackage }}.{{ .Name }}
+        FailNow()
+    }
+     {{- else if and $isRequire .Function ( hasSuffix .Name "Func" ) (gt (len .Function.Returns) 0) }}{{/* special override with require of function types */}}
+      {{ .Name }} func({{ params .Function.AllParams }})
+      {{- else }}
+    {{ .Name }} = {{ .TargetPackage }}.{{ .Name }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+)
+{{- end }}
+
+// Type declarations for backward compatibility.
+type (
+  // TestingT is like [T] and is declared here to remain compatible with previous versions of this package.
+  //
+  // Most users should not be affected, as the implementation of [T] that is widely used is [testing.T].
+  //
+  // Deprecated: use [T] as a more concise alternative.
+  TestingT = T
+)
