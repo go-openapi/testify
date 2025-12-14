@@ -2738,7 +2738,7 @@ func getTempSymlinkPath(t *testing.T, file string) string {
 	t.Helper()
 
 	tempDir := t.TempDir()
-	link := filepath.Join(tempDir, file+"_symlink")
+	link := filepath.Join(tempDir, filepath.Base(file)+"_symlink")
 	if err := os.Symlink(file, link); err != nil {
 		t.Fatalf("could not create temp symlink %q pointing to %q: %v", link, file, err)
 	}
@@ -2785,6 +2785,62 @@ func TestNoDirExists(t *testing.T) {
 	link = getTempSymlinkPath(t, "non_existent_dir")
 	mockT = new(testing.T)
 	True(t, NoDirExists(mockT, link))
+}
+
+func TestFileEmpty(t *testing.T) {
+	t.Parallel()
+
+	mockT := new(testing.T)
+	True(t, FileEmpty(mockT, filepath.Join("testdata", "empty_file")))
+
+	mockT = new(testing.T)
+	False(t, FileEmpty(mockT, "assertions.go"))
+
+	mockT = new(testing.T)
+	False(t, FileEmpty(mockT, "random_file"))
+
+	mockT = new(testing.T)
+	False(t, FileEmpty(mockT, "../_codegen"))
+
+	link := getTempSymlinkPath(t, filepath.Join("testdata", "empty_file"))
+	mockT = new(testing.T)
+	True(t, FileEmpty(mockT, link))
+
+	link = getTempSymlinkPath(t, "assertions.go")
+	mockT = new(testing.T)
+	False(t, FileEmpty(mockT, link))
+
+	link = getTempSymlinkPath(t, "non_existent_file")
+	mockT = new(testing.T)
+	False(t, FileEmpty(mockT, link))
+}
+
+func TestFileNotEmpty(t *testing.T) {
+	t.Parallel()
+
+	mockT := new(testing.T)
+	True(t, FileNotEmpty(mockT, "assertions.go"))
+
+	mockT = new(testing.T)
+	False(t, FileNotEmpty(mockT, filepath.Join("testdata", "empty_file")))
+
+	mockT = new(testing.T)
+	False(t, FileNotEmpty(mockT, "non_existent_file"))
+
+	mockT = new(testing.T)
+	False(t, FileNotEmpty(mockT, "../_codegen"))
+
+	link := getTempSymlinkPath(t, filepath.Join("testdata", "empty_file"))
+	mockT = new(testing.T)
+	False(t, FileNotEmpty(mockT, link))
+
+	link = getTempSymlinkPath(t, "assertions.go")
+	mockT = new(testing.T)
+	True(t, FileNotEmpty(mockT, link))
+
+	link = getTempSymlinkPath(t, "non_existent_file")
+	mockT = new(testing.T)
+	False(t, NoFileExists(mockT, link))
 }
 
 func TestJSONEq_EqualSONString(t *testing.T) {
