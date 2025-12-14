@@ -1,0 +1,69 @@
+{{ comment .Copyright }}
+
+// Code generated with {{ .Tool }}; DO NOT EDIT.
+
+package {{ .Package }}
+
+{{- if .Imports.HasImports }}
+
+import (
+{{ imports .Imports }}
+)
+{{- end }}
+
+// {{ .Receiver }} exposes all assertion functions as methods.
+//
+// NOTE: assertion methods with parameterized types (generics) are not supported as methods.
+//
+{{ docStringPackage .Package }}
+type {{ .Receiver }} struct {
+  t T
+}
+
+// New makes a new [{{ .Receiver }}] object for the specified [T] (e.g. [testing.T]).
+func New(t T) *{{ .Receiver }} {
+  return &{{ .Receiver }}{
+    t: t,
+  }
+}
+
+{{- range .Functions }} 
+  {{- if and (not .IsGeneric) (not .IsHelper) (not .IsConstructor) }}{{/* generics can't be added to the receiver */}}
+
+{{ docStringFor "forward" .Name }}
+//
+{{ docStringPackage $.Package }}
+func (a *{{ $.Receiver }}) {{.Name}}({{ params .Params }}, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok { h.Helper() }
+    {{- if or (eq .Name "Fail") (eq .Name "FailNow") }}{{/* special semantics for these two, which can only fail */}}
+	_ = {{ .TargetPackage }}.{{.Name}}(a.t, {{ forward .Params }}, msgAndArgs...)
+    {{- else }}
+	if {{ .TargetPackage }}.{{.Name}}(a.t, {{ forward .Params }}, msgAndArgs...) {
+		return
+	}
+    {{- end }}
+
+	a.t.FailNow()
+}
+    {{- if $.EnableFormat }}
+
+{{ docStringFor "format" (concat $.Receiver "." .Name) }}
+//
+{{ docStringPackage $.Package }}
+func (a *{{ $.Receiver }}){{ .Name }}f({{ params .Params }}, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+    h.Helper()
+  }
+    {{- if or (eq .Name "Fail") (eq .Name "FailNow") }}{{/* special semantics for these two, which can only fail */}}
+	_ = {{ .TargetPackage }}.{{ .Name }}(a.t, {{ forward .Params }}, forwardArgs(msg, args))
+    {{- else }}
+	if {{ .TargetPackage }}.{{ .Name }}(a.t, {{ forward .Params }}, forwardArgs(msg, args)) {
+		return
+	}
+    {{- end }}
+
+	a.t.FailNow()
+}
+    {{- end }}
+  {{- end }}
+{{- end }}

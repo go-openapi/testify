@@ -5,11 +5,11 @@
 package yaml
 
 import (
-	yamlstub "github.com/go-openapi/testify/v2/assert/yaml"
+	yamlstub "github.com/go-openapi/testify/v2/assert/enable/yaml"
 
 	yaml "go.yaml.in/yaml/v3"
 )
 
 func init() { //nolint:gochecknoinits // we precisely want this init to run when importing the package
-	yamlstub.EnableYAMLUnmarshal = yaml.Unmarshal
+	yamlstub.EnableYAMLWithUnmarshal(yaml.Unmarshal)
 }

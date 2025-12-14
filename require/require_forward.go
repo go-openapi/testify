@@ -1,1804 +1,2234 @@
-// Code generated with github.com/go-openapi/testify/v2/_codegen; DO NOT EDIT.
+// SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
+// SPDX-License-Identifier: Apache-2.0
+
+// Code generated with github.com/go-openapi/testify/v2/codegen@master [sha: bb2c19fba6c03f46cb643b3bcdc1d647ea1453ab]; DO NOT EDIT.
 
 package require
 
 import (
-	assert "github.com/go-openapi/testify/v2/assert"
-	http "net/http"
-	url "net/url"
-	time "time"
+	"net/http"
+	"net/url"
+	"time"
+
+	"github.com/go-openapi/testify/v2/internal/assertions"
 )
 
-// Condition uses a Comparison to assert a complex condition.
-func (a *Assertions) Condition(comp assert.Comparison, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	Condition(a.t, comp, msgAndArgs...)
-}
-
-// Conditionf uses a Comparison to assert a complex condition.
-func (a *Assertions) Conditionf(comp assert.Comparison, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	Conditionf(a.t, comp, msg, args...)
-}
-
-// Contains asserts that the specified string, list(array, slice...) or map contains the
-// specified substring or element.
+// Assertions exposes all assertion functions as methods.
 //
-//	a.Contains("Hello World", "World")
-//	a.Contains(["Hello", "World"], "World")
-//	a.Contains({"Hello": "World"}, "Hello")
+// NOTE: assertion methods with parameterized types (generics) are not supported as methods.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+type Assertions struct {
+	t T
+}
+
+// New makes a new [Assertions] object for the specified [T] (e.g. [testing.T]).
+func New(t T) *Assertions {
+	return &Assertions{
+		t: t,
+	}
+}
+
+// Condition is the same as [Condition], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) Condition(comp Comparison, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.Condition(a.t, comp, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// Conditionf is the same as [Assertions.Condition], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) Conditionf(comp Comparison, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.Condition(a.t, comp, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// Contains is the same as [Contains], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Contains(s any, contains any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Contains(a.t, s, contains, msgAndArgs...)
+	if assertions.Contains(a.t, s, contains, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Containsf asserts that the specified string, list(array, slice...) or map contains the
-// specified substring or element.
+// Containsf is the same as [Assertions.Contains], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.Containsf("Hello World", "World", "error message %s", "formatted")
-//	a.Containsf(["Hello", "World"], "World", "error message %s", "formatted")
-//	a.Containsf({"Hello": "World"}, "Hello", "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Containsf(s any, contains any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Containsf(a.t, s, contains, msg, args...)
+	if assertions.Contains(a.t, s, contains, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// DirExists checks whether a directory exists in the given path. It also fails
-// if the path is a file rather a directory or there is an error checking whether it exists.
+// DirExists is the same as [DirExists], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) DirExists(path string, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	DirExists(a.t, path, msgAndArgs...)
+	if assertions.DirExists(a.t, path, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// DirExistsf checks whether a directory exists in the given path. It also fails
-// if the path is a file rather a directory or there is an error checking whether it exists.
+// DirExistsf is the same as [Assertions.DirExists], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) DirExistsf(path string, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	DirExistsf(a.t, path, msg, args...)
+	if assertions.DirExists(a.t, path, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// ElementsMatch asserts that the specified listA(array, slice...) is equal to specified
-// listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
-// the number of appearances of each of them in both lists should match.
+// ElementsMatch is the same as [ElementsMatch], as a method rather than a package-level function.
 //
-// a.ElementsMatch([1, 3, 2, 3], [1, 3, 3, 2]).
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) ElementsMatch(listA any, listB any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	ElementsMatch(a.t, listA, listB, msgAndArgs...)
+	if assertions.ElementsMatch(a.t, listA, listB, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// ElementsMatchf asserts that the specified listA(array, slice...) is equal to specified
-// listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
-// the number of appearances of each of them in both lists should match.
+// ElementsMatchf is the same as [Assertions.ElementsMatch], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-// a.ElementsMatchf([1, 3, 2, 3], [1, 3, 3, 2], "error message %s", "formatted").
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) ElementsMatchf(listA any, listB any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	ElementsMatchf(a.t, listA, listB, msg, args...)
+	if assertions.ElementsMatch(a.t, listA, listB, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Empty asserts that the given value is "empty".
+// Empty is the same as [Empty], as a method rather than a package-level function.
 //
-// [Zero values] are "empty".
-//
-// Arrays are "empty" if every element is the zero value of the type (stricter than "empty").
-//
-// Slices, maps and channels with zero length are "empty".
-//
-// Pointer values are "empty" if the pointer is nil or if the pointed value is "empty".
-//
-//	a.Empty(obj)
-//
-// [Zero values]: https://go.dev/ref/spec#The_zero_value
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Empty(object any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Empty(a.t, object, msgAndArgs...)
+	if assertions.Empty(a.t, object, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Emptyf asserts that the given value is "empty".
+// Emptyf is the same as [Assertions.Empty], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-// [Zero values] are "empty".
-//
-// Arrays are "empty" if every element is the zero value of the type (stricter than "empty").
-//
-// Slices, maps and channels with zero length are "empty".
-//
-// Pointer values are "empty" if the pointer is nil or if the pointed value is "empty".
-//
-//	a.Emptyf(obj, "error message %s", "formatted")
-//
-// [Zero values]: https://go.dev/ref/spec#The_zero_value
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Emptyf(object any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Emptyf(a.t, object, msg, args...)
+	if assertions.Empty(a.t, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Equal asserts that two objects are equal.
+// Equal is the same as [Equal], as a method rather than a package-level function.
 //
-//	a.Equal(123, 123)
-//
-// Pointer variable equality is determined based on the equality of the
-// referenced values (as opposed to the memory addresses). Function equality
-// cannot be determined and will always fail.
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Equal(expected any, actual any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Equal(a.t, expected, actual, msgAndArgs...)
-}
-
-// EqualError asserts that a function returned a non-nil error (i.e. an error)
-// and that it is equal to the provided error.
-//
-//	actualObj, err := SomeFunction()
-//	a.EqualError(err,  expectedErrorString)
-func (a *Assertions) EqualError(theError error, errString string, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
+	if assertions.Equal(a.t, expected, actual, msgAndArgs...) {
+		return
 	}
-	EqualError(a.t, theError, errString, msgAndArgs...)
+
+	a.t.FailNow()
 }
 
-// EqualErrorf asserts that a function returned a non-nil error (i.e. an error)
-// and that it is equal to the provided error.
+// Equalf is the same as [Assertions.Equal], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	actualObj, err := SomeFunction()
-//	a.EqualErrorf(err,  expectedErrorString, "error message %s", "formatted")
-func (a *Assertions) EqualErrorf(theError error, errString string, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	EqualErrorf(a.t, theError, errString, msg, args...)
-}
-
-// EqualExportedValues asserts that the types of two objects are equal and their public
-// fields are also equal. This is useful for comparing structs that have private fields
-// that could potentially differ.
-//
-//	 type S struct {
-//		Exported     	int
-//		notExported   	int
-//	 }
-//	 a.EqualExportedValues(S{1, 2}, S{1, 3}) => true
-//	 a.EqualExportedValues(S{1, 2}, S{2, 3}) => false
-func (a *Assertions) EqualExportedValues(expected any, actual any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	EqualExportedValues(a.t, expected, actual, msgAndArgs...)
-}
-
-// EqualExportedValuesf asserts that the types of two objects are equal and their public
-// fields are also equal. This is useful for comparing structs that have private fields
-// that could potentially differ.
-//
-//	 type S struct {
-//		Exported     	int
-//		notExported   	int
-//	 }
-//	 a.EqualExportedValuesf(S{1, 2}, S{1, 3}, "error message %s", "formatted") => true
-//	 a.EqualExportedValuesf(S{1, 2}, S{2, 3}, "error message %s", "formatted") => false
-func (a *Assertions) EqualExportedValuesf(expected any, actual any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	EqualExportedValuesf(a.t, expected, actual, msg, args...)
-}
-
-// EqualValues asserts that two objects are equal or convertible to the larger
-// type and equal.
-//
-//	a.EqualValues(uint32(123), int32(123))
-func (a *Assertions) EqualValues(expected any, actual any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	EqualValues(a.t, expected, actual, msgAndArgs...)
-}
-
-// EqualValuesf asserts that two objects are equal or convertible to the larger
-// type and equal.
-//
-//	a.EqualValuesf(uint32(123), int32(123), "error message %s", "formatted")
-func (a *Assertions) EqualValuesf(expected any, actual any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	EqualValuesf(a.t, expected, actual, msg, args...)
-}
-
-// Equalf asserts that two objects are equal.
-//
-//	a.Equalf(123, 123, "error message %s", "formatted")
-//
-// Pointer variable equality is determined based on the equality of the
-// referenced values (as opposed to the memory addresses). Function equality
-// cannot be determined and will always fail.
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Equalf(expected any, actual any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Equalf(a.t, expected, actual, msg, args...)
+	if assertions.Equal(a.t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Error asserts that a function returned a non-nil error (ie. an error).
+// EqualError is the same as [EqualError], as a method rather than a package-level function.
 //
-//	actualObj, err := SomeFunction()
-//	a.Error(err)
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) EqualError(theError error, errString string, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.EqualError(a.t, theError, errString, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// EqualErrorf is the same as [Assertions.EqualError], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) EqualErrorf(theError error, errString string, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.EqualError(a.t, theError, errString, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// EqualExportedValues is the same as [EqualExportedValues], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) EqualExportedValues(expected any, actual any, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.EqualExportedValues(a.t, expected, actual, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// EqualExportedValuesf is the same as [Assertions.EqualExportedValues], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) EqualExportedValuesf(expected any, actual any, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.EqualExportedValues(a.t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// EqualValues is the same as [EqualValues], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) EqualValues(expected any, actual any, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.EqualValues(a.t, expected, actual, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// EqualValuesf is the same as [Assertions.EqualValues], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) EqualValuesf(expected any, actual any, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.EqualValues(a.t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// Error is the same as [Error], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Error(err error, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Error(a.t, err, msgAndArgs...)
-}
-
-// ErrorAs asserts that at least one of the errors in err's chain matches target, and if so, sets target to that error value.
-// This is a wrapper for errors.As.
-func (a *Assertions) ErrorAs(err error, target any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
+	if assertions.Error(a.t, err, msgAndArgs...) {
+		return
 	}
-	ErrorAs(a.t, err, target, msgAndArgs...)
+
+	a.t.FailNow()
 }
 
-// ErrorAsf asserts that at least one of the errors in err's chain matches target, and if so, sets target to that error value.
-// This is a wrapper for errors.As.
-func (a *Assertions) ErrorAsf(err error, target any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	ErrorAsf(a.t, err, target, msg, args...)
-}
-
-// ErrorContains asserts that a function returned a non-nil error (i.e. an
-// error) and that the error contains the specified substring.
+// Errorf is the same as [Assertions.Error], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	actualObj, err := SomeFunction()
-//	a.ErrorContains(err,  expectedErrorSubString)
-func (a *Assertions) ErrorContains(theError error, contains string, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	ErrorContains(a.t, theError, contains, msgAndArgs...)
-}
-
-// ErrorContainsf asserts that a function returned a non-nil error (i.e. an
-// error) and that the error contains the specified substring.
-//
-//	actualObj, err := SomeFunction()
-//	a.ErrorContainsf(err,  expectedErrorSubString, "error message %s", "formatted")
-func (a *Assertions) ErrorContainsf(theError error, contains string, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	ErrorContainsf(a.t, theError, contains, msg, args...)
-}
-
-// ErrorIs asserts that at least one of the errors in err's chain matches target.
-// This is a wrapper for errors.Is.
-func (a *Assertions) ErrorIs(err error, target error, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	ErrorIs(a.t, err, target, msgAndArgs...)
-}
-
-// ErrorIsf asserts that at least one of the errors in err's chain matches target.
-// This is a wrapper for errors.Is.
-func (a *Assertions) ErrorIsf(err error, target error, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	ErrorIsf(a.t, err, target, msg, args...)
-}
-
-// Errorf asserts that a function returned a non-nil error (ie. an error).
-//
-//	actualObj, err := SomeFunction()
-//	a.Errorf(err, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Errorf(err error, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Errorf(a.t, err, msg, args...)
+	if assertions.Error(a.t, err, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Eventually asserts that given condition will be met in waitFor time,
-// periodically checking target function each tick.
+// ErrorAs is the same as [ErrorAs], as a method rather than a package-level function.
 //
-//	a.Eventually(func() bool { return true; }, time.Second, 10*time.Millisecond)
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) ErrorAs(err error, target any, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.ErrorAs(a.t, err, target, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// ErrorAsf is the same as [Assertions.ErrorAs], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) ErrorAsf(err error, target any, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.ErrorAs(a.t, err, target, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// ErrorContains is the same as [ErrorContains], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) ErrorContains(theError error, contains string, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.ErrorContains(a.t, theError, contains, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// ErrorContainsf is the same as [Assertions.ErrorContains], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) ErrorContainsf(theError error, contains string, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.ErrorContains(a.t, theError, contains, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// ErrorIs is the same as [ErrorIs], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) ErrorIs(err error, target error, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.ErrorIs(a.t, err, target, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// ErrorIsf is the same as [Assertions.ErrorIs], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) ErrorIsf(err error, target error, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.ErrorIs(a.t, err, target, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// Eventually is the same as [Eventually], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Eventually(condition func() bool, waitFor time.Duration, tick time.Duration, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Eventually(a.t, condition, waitFor, tick, msgAndArgs...)
-}
-
-// EventuallyWithT asserts that given condition will be met in waitFor time,
-// periodically checking target function each tick. In contrast to Eventually,
-// it supplies a CollectT to the condition function, so that the condition
-// function can use the CollectT to call other assertions.
-// The condition is considered "met" if no errors are raised in a tick.
-// The supplied CollectT collects all errors from one tick (if there are any).
-// If the condition is not met before waitFor, the collected errors of
-// the last tick are copied to t.
-//
-//	externalValue := false
-//	go func() {
-//		time.Sleep(8*time.Second)
-//		externalValue = true
-//	}()
-//	a.EventuallyWithT(func(c *assert.CollectT) {
-//		// add assertions as needed; any assertion failure will fail the current tick
-//		assert.True(c, externalValue, "expected 'externalValue' to be true")
-//	}, 10*time.Second, 1*time.Second, "external state has not changed to 'true'; still false")
-func (a *Assertions) EventuallyWithT(condition func(collect *assert.CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
+	if assertions.Eventually(a.t, condition, waitFor, tick, msgAndArgs...) {
+		return
 	}
-	EventuallyWithT(a.t, condition, waitFor, tick, msgAndArgs...)
+
+	a.t.FailNow()
 }
 
-// EventuallyWithTf asserts that given condition will be met in waitFor time,
-// periodically checking target function each tick. In contrast to Eventually,
-// it supplies a CollectT to the condition function, so that the condition
-// function can use the CollectT to call other assertions.
-// The condition is considered "met" if no errors are raised in a tick.
-// The supplied CollectT collects all errors from one tick (if there are any).
-// If the condition is not met before waitFor, the collected errors of
-// the last tick are copied to t.
+// Eventuallyf is the same as [Assertions.Eventually], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	externalValue := false
-//	go func() {
-//		time.Sleep(8*time.Second)
-//		externalValue = true
-//	}()
-//	a.EventuallyWithTf(func(c *assert.CollectT, "error message %s", "formatted") {
-//		// add assertions as needed; any assertion failure will fail the current tick
-//		assert.True(c, externalValue, "expected 'externalValue' to be true")
-//	}, 10*time.Second, 1*time.Second, "external state has not changed to 'true'; still false")
-func (a *Assertions) EventuallyWithTf(condition func(collect *assert.CollectT), waitFor time.Duration, tick time.Duration, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	EventuallyWithTf(a.t, condition, waitFor, tick, msg, args...)
-}
-
-// Eventuallyf asserts that given condition will be met in waitFor time,
-// periodically checking target function each tick.
-//
-//	a.Eventuallyf(func() bool { return true; }, time.Second, 10*time.Millisecond, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Eventuallyf(condition func() bool, waitFor time.Duration, tick time.Duration, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Eventuallyf(a.t, condition, waitFor, tick, msg, args...)
+	if assertions.Eventually(a.t, condition, waitFor, tick, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Exactly asserts that two objects are equal in value and type.
+// EventuallyWithT is the same as [EventuallyWithT], as a method rather than a package-level function.
 //
-//	a.Exactly(int32(123), int64(123))
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) EventuallyWithT(condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.EventuallyWithT(a.t, condition, waitFor, tick, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// EventuallyWithTf is the same as [Assertions.EventuallyWithT], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) EventuallyWithTf(condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.EventuallyWithT(a.t, condition, waitFor, tick, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// Exactly is the same as [Exactly], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Exactly(expected any, actual any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Exactly(a.t, expected, actual, msgAndArgs...)
+	if assertions.Exactly(a.t, expected, actual, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Exactlyf asserts that two objects are equal in value and type.
+// Exactlyf is the same as [Assertions.Exactly], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.Exactlyf(int32(123), int64(123), "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Exactlyf(expected any, actual any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Exactlyf(a.t, expected, actual, msg, args...)
+	if assertions.Exactly(a.t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Fail reports a failure through.
+// Fail is the same as [Fail], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Fail(failureMessage string, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Fail(a.t, failureMessage, msgAndArgs...)
+	_ = assertions.Fail(a.t, failureMessage, msgAndArgs...)
+
+	a.t.FailNow()
 }
 
-// FailNow fails test.
-func (a *Assertions) FailNow(failureMessage string, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	FailNow(a.t, failureMessage, msgAndArgs...)
-}
-
-// FailNowf fails test.
-func (a *Assertions) FailNowf(failureMessage string, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	FailNowf(a.t, failureMessage, msg, args...)
-}
-
-// Failf reports a failure through.
+// Failf is the same as [Assertions.Fail], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Failf(failureMessage string, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Failf(a.t, failureMessage, msg, args...)
+	_ = assertions.Fail(a.t, failureMessage, forwardArgs(msg, args))
+
+	a.t.FailNow()
 }
 
-// False asserts that the specified value is false.
+// FailNow is the same as [FailNow], as a method rather than a package-level function.
 //
-//	a.False(myBool)
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) FailNow(failureMessage string, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	_ = assertions.FailNow(a.t, failureMessage, msgAndArgs...)
+
+	a.t.FailNow()
+}
+
+// FailNowf is the same as [Assertions.FailNow], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) FailNowf(failureMessage string, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	_ = assertions.FailNow(a.t, failureMessage, forwardArgs(msg, args))
+
+	a.t.FailNow()
+}
+
+// False is the same as [False], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) False(value bool, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	False(a.t, value, msgAndArgs...)
+	if assertions.False(a.t, value, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Falsef asserts that the specified value is false.
+// Falsef is the same as [Assertions.False], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.Falsef(myBool, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Falsef(value bool, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Falsef(a.t, value, msg, args...)
+	if assertions.False(a.t, value, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// FileEmpty checks whether a file exists in the given path and is empty.
-// It fails if the file is not empty, if the path points to a directory or there is an error when trying to check the file.
+// FileEmpty is the same as [FileEmpty], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) FileEmpty(path string, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	FileEmpty(a.t, path, msgAndArgs...)
+	if assertions.FileEmpty(a.t, path, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// FileEmptyf checks whether a file exists in the given path and is empty.
-// It fails if the file is not empty, if the path points to a directory or there is an error when trying to check the file.
+// FileEmptyf is the same as [Assertions.FileEmpty], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) FileEmptyf(path string, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	FileEmptyf(a.t, path, msg, args...)
+	if assertions.FileEmpty(a.t, path, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// FileExists checks whether a file exists in the given path. It also fails if
-// the path points to a directory or there is an error when trying to check the file.
+// FileExists is the same as [FileExists], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) FileExists(path string, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	FileExists(a.t, path, msgAndArgs...)
+	if assertions.FileExists(a.t, path, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// FileExistsf checks whether a file exists in the given path. It also fails if
-// the path points to a directory or there is an error when trying to check the file.
+// FileExistsf is the same as [Assertions.FileExists], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) FileExistsf(path string, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	FileExistsf(a.t, path, msg, args...)
+	if assertions.FileExists(a.t, path, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// FileNotEmpty checks whether a file exists in the given path and is not empty.
-// It fails if the file is empty, if the path points to a directory or there is an error when trying to check the file.
+// FileNotEmpty is the same as [FileNotEmpty], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) FileNotEmpty(path string, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	FileNotEmpty(a.t, path, msgAndArgs...)
+	if assertions.FileNotEmpty(a.t, path, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// FileNotEmptyf checks whether a file exists in the given path and is not empty.
-// It fails if the file is empty, if the path points to a directory or there is an error when trying to check the file.
+// FileNotEmptyf is the same as [Assertions.FileNotEmpty], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) FileNotEmptyf(path string, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	FileNotEmptyf(a.t, path, msg, args...)
+	if assertions.FileNotEmpty(a.t, path, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Greater asserts that the first element is greater than the second
+// Greater is the same as [Greater], as a method rather than a package-level function.
 //
-//	a.Greater(2, 1)
-//	a.Greater(float64(2), float64(1))
-//	a.Greater("b", "a")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Greater(e1 any, e2 any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Greater(a.t, e1, e2, msgAndArgs...)
-}
-
-// GreaterOrEqual asserts that the first element is greater than or equal to the second
-//
-//	a.GreaterOrEqual(2, 1)
-//	a.GreaterOrEqual(2, 2)
-//	a.GreaterOrEqual("b", "a")
-//	a.GreaterOrEqual("b", "b")
-func (a *Assertions) GreaterOrEqual(e1 any, e2 any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
+	if assertions.Greater(a.t, e1, e2, msgAndArgs...) {
+		return
 	}
-	GreaterOrEqual(a.t, e1, e2, msgAndArgs...)
+
+	a.t.FailNow()
 }
 
-// GreaterOrEqualf asserts that the first element is greater than or equal to the second
+// Greaterf is the same as [Assertions.Greater], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.GreaterOrEqualf(2, 1, "error message %s", "formatted")
-//	a.GreaterOrEqualf(2, 2, "error message %s", "formatted")
-//	a.GreaterOrEqualf("b", "a", "error message %s", "formatted")
-//	a.GreaterOrEqualf("b", "b", "error message %s", "formatted")
-func (a *Assertions) GreaterOrEqualf(e1 any, e2 any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	GreaterOrEqualf(a.t, e1, e2, msg, args...)
-}
-
-// Greaterf asserts that the first element is greater than the second
-//
-//	a.Greaterf(2, 1, "error message %s", "formatted")
-//	a.Greaterf(float64(2), float64(1), "error message %s", "formatted")
-//	a.Greaterf("b", "a", "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Greaterf(e1 any, e2 any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Greaterf(a.t, e1, e2, msg, args...)
+	if assertions.Greater(a.t, e1, e2, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// HTTPBodyContains asserts that a specified handler returns a
-// body that contains a string.
+// GreaterOrEqual is the same as [GreaterOrEqual], as a method rather than a package-level function.
 //
-//	a.HTTPBodyContains(myHandler, "GET", "www.google.com", nil, "I'm Feeling Lucky")
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) GreaterOrEqual(e1 any, e2 any, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.GreaterOrEqual(a.t, e1, e2, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// GreaterOrEqualf is the same as [Assertions.GreaterOrEqual], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-// Returns whether the assertion was successful (true) or not (false).
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) GreaterOrEqualf(e1 any, e2 any, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.GreaterOrEqual(a.t, e1, e2, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// HTTPBodyContains is the same as [HTTPBodyContains], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) HTTPBodyContains(handler http.HandlerFunc, method string, url string, values url.Values, str any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	HTTPBodyContains(a.t, handler, method, url, values, str, msgAndArgs...)
+	if assertions.HTTPBodyContains(a.t, handler, method, url, values, str, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// HTTPBodyContainsf asserts that a specified handler returns a
-// body that contains a string.
+// HTTPBodyContainsf is the same as [Assertions.HTTPBodyContains], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.HTTPBodyContainsf(myHandler, "GET", "www.google.com", nil, "I'm Feeling Lucky", "error message %s", "formatted")
-//
-// Returns whether the assertion was successful (true) or not (false).
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) HTTPBodyContainsf(handler http.HandlerFunc, method string, url string, values url.Values, str any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	HTTPBodyContainsf(a.t, handler, method, url, values, str, msg, args...)
+	if assertions.HTTPBodyContains(a.t, handler, method, url, values, str, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// HTTPBodyNotContains asserts that a specified handler returns a
-// body that does not contain a string.
+// HTTPBodyNotContains is the same as [HTTPBodyNotContains], as a method rather than a package-level function.
 //
-//	a.HTTPBodyNotContains(myHandler, "GET", "www.google.com", nil, "I'm Feeling Lucky")
-//
-// Returns whether the assertion was successful (true) or not (false).
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) HTTPBodyNotContains(handler http.HandlerFunc, method string, url string, values url.Values, str any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	HTTPBodyNotContains(a.t, handler, method, url, values, str, msgAndArgs...)
+	if assertions.HTTPBodyNotContains(a.t, handler, method, url, values, str, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// HTTPBodyNotContainsf asserts that a specified handler returns a
-// body that does not contain a string.
+// HTTPBodyNotContainsf is the same as [Assertions.HTTPBodyNotContains], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.HTTPBodyNotContainsf(myHandler, "GET", "www.google.com", nil, "I'm Feeling Lucky", "error message %s", "formatted")
-//
-// Returns whether the assertion was successful (true) or not (false).
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) HTTPBodyNotContainsf(handler http.HandlerFunc, method string, url string, values url.Values, str any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	HTTPBodyNotContainsf(a.t, handler, method, url, values, str, msg, args...)
+	if assertions.HTTPBodyNotContains(a.t, handler, method, url, values, str, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// HTTPError asserts that a specified handler returns an error status code.
+// HTTPError is the same as [HTTPError], as a method rather than a package-level function.
 //
-//	a.HTTPError(myHandler, "POST", "/a/b/c", url.Values{"a": []string{"b", "c"}}
-//
-// Returns whether the assertion was successful (true) or not (false).
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) HTTPError(handler http.HandlerFunc, method string, url string, values url.Values, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	HTTPError(a.t, handler, method, url, values, msgAndArgs...)
+	if assertions.HTTPError(a.t, handler, method, url, values, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// HTTPErrorf asserts that a specified handler returns an error status code.
+// HTTPErrorf is the same as [Assertions.HTTPError], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.HTTPErrorf(myHandler, "POST", "/a/b/c", url.Values{"a": []string{"b", "c"}}
-//
-// Returns whether the assertion was successful (true) or not (false).
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) HTTPErrorf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	HTTPErrorf(a.t, handler, method, url, values, msg, args...)
+	if assertions.HTTPError(a.t, handler, method, url, values, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// HTTPRedirect asserts that a specified handler returns a redirect status code.
+// HTTPRedirect is the same as [HTTPRedirect], as a method rather than a package-level function.
 //
-//	a.HTTPRedirect(myHandler, "GET", "/a/b/c", url.Values{"a": []string{"b", "c"}}
-//
-// Returns whether the assertion was successful (true) or not (false).
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) HTTPRedirect(handler http.HandlerFunc, method string, url string, values url.Values, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	HTTPRedirect(a.t, handler, method, url, values, msgAndArgs...)
+	if assertions.HTTPRedirect(a.t, handler, method, url, values, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// HTTPRedirectf asserts that a specified handler returns a redirect status code.
+// HTTPRedirectf is the same as [Assertions.HTTPRedirect], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.HTTPRedirectf(myHandler, "GET", "/a/b/c", url.Values{"a": []string{"b", "c"}}
-//
-// Returns whether the assertion was successful (true) or not (false).
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) HTTPRedirectf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	HTTPRedirectf(a.t, handler, method, url, values, msg, args...)
+	if assertions.HTTPRedirect(a.t, handler, method, url, values, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// HTTPStatusCode asserts that a specified handler returns a specified status code.
+// HTTPStatusCode is the same as [HTTPStatusCode], as a method rather than a package-level function.
 //
-//	a.HTTPStatusCode(myHandler, "GET", "/notImplemented", nil, 501)
-//
-// Returns whether the assertion was successful (true) or not (false).
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) HTTPStatusCode(handler http.HandlerFunc, method string, url string, values url.Values, statuscode int, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	HTTPStatusCode(a.t, handler, method, url, values, statuscode, msgAndArgs...)
+	if assertions.HTTPStatusCode(a.t, handler, method, url, values, statuscode, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// HTTPStatusCodef asserts that a specified handler returns a specified status code.
+// HTTPStatusCodef is the same as [Assertions.HTTPStatusCode], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.HTTPStatusCodef(myHandler, "GET", "/notImplemented", nil, 501, "error message %s", "formatted")
-//
-// Returns whether the assertion was successful (true) or not (false).
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) HTTPStatusCodef(handler http.HandlerFunc, method string, url string, values url.Values, statuscode int, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	HTTPStatusCodef(a.t, handler, method, url, values, statuscode, msg, args...)
+	if assertions.HTTPStatusCode(a.t, handler, method, url, values, statuscode, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// HTTPSuccess asserts that a specified handler returns a success status code.
+// HTTPSuccess is the same as [HTTPSuccess], as a method rather than a package-level function.
 //
-//	a.HTTPSuccess(myHandler, "POST", "http://www.google.com", nil)
-//
-// Returns whether the assertion was successful (true) or not (false).
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) HTTPSuccess(handler http.HandlerFunc, method string, url string, values url.Values, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	HTTPSuccess(a.t, handler, method, url, values, msgAndArgs...)
+	if assertions.HTTPSuccess(a.t, handler, method, url, values, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// HTTPSuccessf asserts that a specified handler returns a success status code.
+// HTTPSuccessf is the same as [Assertions.HTTPSuccess], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.HTTPSuccessf(myHandler, "POST", "http://www.google.com", nil, "error message %s", "formatted")
-//
-// Returns whether the assertion was successful (true) or not (false).
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) HTTPSuccessf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	HTTPSuccessf(a.t, handler, method, url, values, msg, args...)
+	if assertions.HTTPSuccess(a.t, handler, method, url, values, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Implements asserts that an object is implemented by the specified interface.
+// Implements is the same as [Implements], as a method rather than a package-level function.
 //
-//	a.Implements((*MyInterface)(nil), new(MyObject))
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Implements(interfaceObject any, object any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Implements(a.t, interfaceObject, object, msgAndArgs...)
+	if assertions.Implements(a.t, interfaceObject, object, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Implementsf asserts that an object is implemented by the specified interface.
+// Implementsf is the same as [Assertions.Implements], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.Implementsf((*MyInterface)(nil), new(MyObject), "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Implementsf(interfaceObject any, object any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Implementsf(a.t, interfaceObject, object, msg, args...)
+	if assertions.Implements(a.t, interfaceObject, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// InDelta asserts that the two numerals are within delta of each other.
+// InDelta is the same as [InDelta], as a method rather than a package-level function.
 //
-//	a.InDelta(math.Pi, 22/7.0, 0.01)
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) InDelta(expected any, actual any, delta float64, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	InDelta(a.t, expected, actual, delta, msgAndArgs...)
-}
-
-// InDeltaMapValues is the same as InDelta, but it compares all values between two maps. Both maps must have exactly the same keys.
-func (a *Assertions) InDeltaMapValues(expected any, actual any, delta float64, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
+	if assertions.InDelta(a.t, expected, actual, delta, msgAndArgs...) {
+		return
 	}
-	InDeltaMapValues(a.t, expected, actual, delta, msgAndArgs...)
+
+	a.t.FailNow()
 }
 
-// InDeltaMapValuesf is the same as InDelta, but it compares all values between two maps. Both maps must have exactly the same keys.
-func (a *Assertions) InDeltaMapValuesf(expected any, actual any, delta float64, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	InDeltaMapValuesf(a.t, expected, actual, delta, msg, args...)
-}
-
-// InDeltaSlice is the same as InDelta, except it compares two slices.
-func (a *Assertions) InDeltaSlice(expected any, actual any, delta float64, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	InDeltaSlice(a.t, expected, actual, delta, msgAndArgs...)
-}
-
-// InDeltaSlicef is the same as InDelta, except it compares two slices.
-func (a *Assertions) InDeltaSlicef(expected any, actual any, delta float64, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	InDeltaSlicef(a.t, expected, actual, delta, msg, args...)
-}
-
-// InDeltaf asserts that the two numerals are within delta of each other.
+// InDeltaf is the same as [Assertions.InDelta], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.InDeltaf(math.Pi, 22/7.0, 0.01, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) InDeltaf(expected any, actual any, delta float64, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	InDeltaf(a.t, expected, actual, delta, msg, args...)
+	if assertions.InDelta(a.t, expected, actual, delta, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// InEpsilon asserts that expected and actual have a relative error less than epsilon.
+// InDeltaMapValues is the same as [InDeltaMapValues], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) InDeltaMapValues(expected any, actual any, delta float64, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.InDeltaMapValues(a.t, expected, actual, delta, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// InDeltaMapValuesf is the same as [Assertions.InDeltaMapValues], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) InDeltaMapValuesf(expected any, actual any, delta float64, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.InDeltaMapValues(a.t, expected, actual, delta, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// InDeltaSlice is the same as [InDeltaSlice], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) InDeltaSlice(expected any, actual any, delta float64, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.InDeltaSlice(a.t, expected, actual, delta, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// InDeltaSlicef is the same as [Assertions.InDeltaSlice], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) InDeltaSlicef(expected any, actual any, delta float64, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.InDeltaSlice(a.t, expected, actual, delta, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// InEpsilon is the same as [InEpsilon], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) InEpsilon(expected any, actual any, epsilon float64, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	InEpsilon(a.t, expected, actual, epsilon, msgAndArgs...)
-}
-
-// InEpsilonSlice is the same as InEpsilon, except it compares each value from two slices.
-func (a *Assertions) InEpsilonSlice(expected any, actual any, epsilon float64, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
+	if assertions.InEpsilon(a.t, expected, actual, epsilon, msgAndArgs...) {
+		return
 	}
-	InEpsilonSlice(a.t, expected, actual, epsilon, msgAndArgs...)
+
+	a.t.FailNow()
 }
 
-// InEpsilonSlicef is the same as InEpsilon, except it compares each value from two slices.
-func (a *Assertions) InEpsilonSlicef(expected any, actual any, epsilon float64, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	InEpsilonSlicef(a.t, expected, actual, epsilon, msg, args...)
-}
-
-// InEpsilonf asserts that expected and actual have a relative error less than epsilon.
+// InEpsilonf is the same as [Assertions.InEpsilon], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) InEpsilonf(expected any, actual any, epsilon float64, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	InEpsilonf(a.t, expected, actual, epsilon, msg, args...)
+	if assertions.InEpsilon(a.t, expected, actual, epsilon, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// IsDecreasing asserts that the collection is decreasing
+// InEpsilonSlice is the same as [InEpsilonSlice], as a method rather than a package-level function.
 //
-//	a.IsDecreasing([]int{2, 1, 0})
-//	a.IsDecreasing([]float{2, 1})
-//	a.IsDecreasing([]string{"b", "a"})
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) InEpsilonSlice(expected any, actual any, epsilon float64, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.InEpsilonSlice(a.t, expected, actual, epsilon, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// InEpsilonSlicef is the same as [Assertions.InEpsilonSlice], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) InEpsilonSlicef(expected any, actual any, epsilon float64, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.InEpsilonSlice(a.t, expected, actual, epsilon, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// IsDecreasing is the same as [IsDecreasing], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) IsDecreasing(object any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	IsDecreasing(a.t, object, msgAndArgs...)
+	if assertions.IsDecreasing(a.t, object, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// IsDecreasingf asserts that the collection is decreasing
+// IsDecreasingf is the same as [Assertions.IsDecreasing], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.IsDecreasingf([]int{2, 1, 0}, "error message %s", "formatted")
-//	a.IsDecreasingf([]float{2, 1}, "error message %s", "formatted")
-//	a.IsDecreasingf([]string{"b", "a"}, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) IsDecreasingf(object any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	IsDecreasingf(a.t, object, msg, args...)
+	if assertions.IsDecreasing(a.t, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// IsIncreasing asserts that the collection is increasing
+// IsIncreasing is the same as [IsIncreasing], as a method rather than a package-level function.
 //
-//	a.IsIncreasing([]int{1, 2, 3})
-//	a.IsIncreasing([]float{1, 2})
-//	a.IsIncreasing([]string{"a", "b"})
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) IsIncreasing(object any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	IsIncreasing(a.t, object, msgAndArgs...)
+	if assertions.IsIncreasing(a.t, object, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// IsIncreasingf asserts that the collection is increasing
+// IsIncreasingf is the same as [Assertions.IsIncreasing], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.IsIncreasingf([]int{1, 2, 3}, "error message %s", "formatted")
-//	a.IsIncreasingf([]float{1, 2}, "error message %s", "formatted")
-//	a.IsIncreasingf([]string{"a", "b"}, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) IsIncreasingf(object any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	IsIncreasingf(a.t, object, msg, args...)
+	if assertions.IsIncreasing(a.t, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// IsNonDecreasing asserts that the collection is not decreasing
+// IsNonDecreasing is the same as [IsNonDecreasing], as a method rather than a package-level function.
 //
-//	a.IsNonDecreasing([]int{1, 1, 2})
-//	a.IsNonDecreasing([]float{1, 2})
-//	a.IsNonDecreasing([]string{"a", "b"})
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) IsNonDecreasing(object any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	IsNonDecreasing(a.t, object, msgAndArgs...)
+	if assertions.IsNonDecreasing(a.t, object, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// IsNonDecreasingf asserts that the collection is not decreasing
+// IsNonDecreasingf is the same as [Assertions.IsNonDecreasing], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.IsNonDecreasingf([]int{1, 1, 2}, "error message %s", "formatted")
-//	a.IsNonDecreasingf([]float{1, 2}, "error message %s", "formatted")
-//	a.IsNonDecreasingf([]string{"a", "b"}, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) IsNonDecreasingf(object any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	IsNonDecreasingf(a.t, object, msg, args...)
+	if assertions.IsNonDecreasing(a.t, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// IsNonIncreasing asserts that the collection is not increasing
+// IsNonIncreasing is the same as [IsNonIncreasing], as a method rather than a package-level function.
 //
-//	a.IsNonIncreasing([]int{2, 1, 1})
-//	a.IsNonIncreasing([]float{2, 1})
-//	a.IsNonIncreasing([]string{"b", "a"})
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) IsNonIncreasing(object any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	IsNonIncreasing(a.t, object, msgAndArgs...)
+	if assertions.IsNonIncreasing(a.t, object, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// IsNonIncreasingf asserts that the collection is not increasing
+// IsNonIncreasingf is the same as [Assertions.IsNonIncreasing], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.IsNonIncreasingf([]int{2, 1, 1}, "error message %s", "formatted")
-//	a.IsNonIncreasingf([]float{2, 1}, "error message %s", "formatted")
-//	a.IsNonIncreasingf([]string{"b", "a"}, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) IsNonIncreasingf(object any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	IsNonIncreasingf(a.t, object, msg, args...)
+	if assertions.IsNonIncreasing(a.t, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// IsNotType asserts that the specified objects are not of the same type.
+// IsNotType is the same as [IsNotType], as a method rather than a package-level function.
 //
-//	a.IsNotType(&NotMyStruct{}, &MyStruct{})
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) IsNotType(theType any, object any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	IsNotType(a.t, theType, object, msgAndArgs...)
+	if assertions.IsNotType(a.t, theType, object, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// IsNotTypef asserts that the specified objects are not of the same type.
+// IsNotTypef is the same as [Assertions.IsNotType], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.IsNotTypef(&NotMyStruct{}, &MyStruct{}, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) IsNotTypef(theType any, object any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	IsNotTypef(a.t, theType, object, msg, args...)
+	if assertions.IsNotType(a.t, theType, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// IsType asserts that the specified objects are of the same type.
+// IsType is the same as [IsType], as a method rather than a package-level function.
 //
-//	a.IsType(&MyStruct{}, &MyStruct{})
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) IsType(expectedType any, object any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	IsType(a.t, expectedType, object, msgAndArgs...)
+	if assertions.IsType(a.t, expectedType, object, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// IsTypef asserts that the specified objects are of the same type.
+// IsTypef is the same as [Assertions.IsType], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.IsTypef(&MyStruct{}, &MyStruct{}, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) IsTypef(expectedType any, object any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	IsTypef(a.t, expectedType, object, msg, args...)
+	if assertions.IsType(a.t, expectedType, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// JSONEq asserts that two JSON strings are equivalent.
+// JSONEq is the same as [JSONEq], as a method rather than a package-level function.
 //
-//	a.JSONEq(`{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) JSONEq(expected string, actual string, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	JSONEq(a.t, expected, actual, msgAndArgs...)
-}
-
-// JSONEqBytes asserts that two JSON byte slices are equivalent.
-//
-//	a.JSONEqBytes([]byte(`{"hello": "world", "foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`))
-func (a *Assertions) JSONEqBytes(expected []byte, actual []byte, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
+	if assertions.JSONEq(a.t, expected, actual, msgAndArgs...) {
+		return
 	}
-	JSONEqBytes(a.t, expected, actual, msgAndArgs...)
+
+	a.t.FailNow()
 }
 
-// JSONEqBytesf asserts that two JSON byte slices are equivalent.
+// JSONEqf is the same as [Assertions.JSONEq], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.JSONEqBytesf([]byte(`{"hello": "world", "foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`), "error message %s", "formatted")
-func (a *Assertions) JSONEqBytesf(expected []byte, actual []byte, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	JSONEqBytesf(a.t, expected, actual, msg, args...)
-}
-
-// JSONEqf asserts that two JSON strings are equivalent.
-//
-//	a.JSONEqf(`{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) JSONEqf(expected string, actual string, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	JSONEqf(a.t, expected, actual, msg, args...)
+	if assertions.JSONEq(a.t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Len asserts that the specified object has specific length.
-// Len also fails if the object has a type that len() not accept.
+// JSONEqBytes is the same as [JSONEqBytes], as a method rather than a package-level function.
 //
-//	a.Len(mySlice, 3)
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) JSONEqBytes(expected []byte, actual []byte, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.JSONEqBytes(a.t, expected, actual, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// JSONEqBytesf is the same as [Assertions.JSONEqBytes], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) JSONEqBytesf(expected []byte, actual []byte, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.JSONEqBytes(a.t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// Len is the same as [Len], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Len(object any, length int, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Len(a.t, object, length, msgAndArgs...)
+	if assertions.Len(a.t, object, length, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Lenf asserts that the specified object has specific length.
-// Lenf also fails if the object has a type that len() not accept.
+// Lenf is the same as [Assertions.Len], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.Lenf(mySlice, 3, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Lenf(object any, length int, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Lenf(a.t, object, length, msg, args...)
+	if assertions.Len(a.t, object, length, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Less asserts that the first element is less than the second
+// Less is the same as [Less], as a method rather than a package-level function.
 //
-//	a.Less(1, 2)
-//	a.Less(float64(1), float64(2))
-//	a.Less("a", "b")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Less(e1 any, e2 any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Less(a.t, e1, e2, msgAndArgs...)
-}
-
-// LessOrEqual asserts that the first element is less than or equal to the second
-//
-//	a.LessOrEqual(1, 2)
-//	a.LessOrEqual(2, 2)
-//	a.LessOrEqual("a", "b")
-//	a.LessOrEqual("b", "b")
-func (a *Assertions) LessOrEqual(e1 any, e2 any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
+	if assertions.Less(a.t, e1, e2, msgAndArgs...) {
+		return
 	}
-	LessOrEqual(a.t, e1, e2, msgAndArgs...)
+
+	a.t.FailNow()
 }
 
-// LessOrEqualf asserts that the first element is less than or equal to the second
+// Lessf is the same as [Assertions.Less], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.LessOrEqualf(1, 2, "error message %s", "formatted")
-//	a.LessOrEqualf(2, 2, "error message %s", "formatted")
-//	a.LessOrEqualf("a", "b", "error message %s", "formatted")
-//	a.LessOrEqualf("b", "b", "error message %s", "formatted")
-func (a *Assertions) LessOrEqualf(e1 any, e2 any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	LessOrEqualf(a.t, e1, e2, msg, args...)
-}
-
-// Lessf asserts that the first element is less than the second
-//
-//	a.Lessf(1, 2, "error message %s", "formatted")
-//	a.Lessf(float64(1), float64(2), "error message %s", "formatted")
-//	a.Lessf("a", "b", "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Lessf(e1 any, e2 any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Lessf(a.t, e1, e2, msg, args...)
+	if assertions.Less(a.t, e1, e2, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Negative asserts that the specified element is negative
+// LessOrEqual is the same as [LessOrEqual], as a method rather than a package-level function.
 //
-//	a.Negative(-1)
-//	a.Negative(-1.23)
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) LessOrEqual(e1 any, e2 any, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.LessOrEqual(a.t, e1, e2, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// LessOrEqualf is the same as [Assertions.LessOrEqual], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) LessOrEqualf(e1 any, e2 any, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.LessOrEqual(a.t, e1, e2, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// Negative is the same as [Negative], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Negative(e any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Negative(a.t, e, msgAndArgs...)
+	if assertions.Negative(a.t, e, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Negativef asserts that the specified element is negative
+// Negativef is the same as [Assertions.Negative], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.Negativef(-1, "error message %s", "formatted")
-//	a.Negativef(-1.23, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Negativef(e any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Negativef(a.t, e, msg, args...)
+	if assertions.Negative(a.t, e, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Never asserts that the given condition doesn't satisfy in waitFor time,
-// periodically checking the target function each tick.
+// Never is the same as [Never], as a method rather than a package-level function.
 //
-//	a.Never(func() bool { return false; }, time.Second, 10*time.Millisecond)
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Never(condition func() bool, waitFor time.Duration, tick time.Duration, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Never(a.t, condition, waitFor, tick, msgAndArgs...)
+	if assertions.Never(a.t, condition, waitFor, tick, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Neverf asserts that the given condition doesn't satisfy in waitFor time,
-// periodically checking the target function each tick.
+// Neverf is the same as [Assertions.Never], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.Neverf(func() bool { return false; }, time.Second, 10*time.Millisecond, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Neverf(condition func() bool, waitFor time.Duration, tick time.Duration, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Neverf(a.t, condition, waitFor, tick, msg, args...)
+	if assertions.Never(a.t, condition, waitFor, tick, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Nil asserts that the specified object is nil.
+// Nil is the same as [Nil], as a method rather than a package-level function.
 //
-//	a.Nil(err)
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Nil(object any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Nil(a.t, object, msgAndArgs...)
+	if assertions.Nil(a.t, object, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Nilf asserts that the specified object is nil.
+// Nilf is the same as [Assertions.Nil], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.Nilf(err, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Nilf(object any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Nilf(a.t, object, msg, args...)
+	if assertions.Nil(a.t, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NoDirExists checks whether a directory does not exist in the given path.
-// It fails if the path points to an existing _directory_ only.
+// NoDirExists is the same as [NoDirExists], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NoDirExists(path string, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NoDirExists(a.t, path, msgAndArgs...)
+	if assertions.NoDirExists(a.t, path, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NoDirExistsf checks whether a directory does not exist in the given path.
-// It fails if the path points to an existing _directory_ only.
+// NoDirExistsf is the same as [Assertions.NoDirExists], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NoDirExistsf(path string, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NoDirExistsf(a.t, path, msg, args...)
+	if assertions.NoDirExists(a.t, path, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NoError asserts that a function returned a nil error (ie. no error).
+// NoError is the same as [NoError], as a method rather than a package-level function.
 //
-//	  actualObj, err := SomeFunction()
-//	  if a.NoError(err) {
-//		   assert.Equal(t, expectedObj, actualObj)
-//	  }
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NoError(err error, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NoError(a.t, err, msgAndArgs...)
+	if assertions.NoError(a.t, err, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NoErrorf asserts that a function returned a nil error (ie. no error).
+// NoErrorf is the same as [Assertions.NoError], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	  actualObj, err := SomeFunction()
-//	  if a.NoErrorf(err, "error message %s", "formatted") {
-//		   assert.Equal(t, expectedObj, actualObj)
-//	  }
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NoErrorf(err error, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NoErrorf(a.t, err, msg, args...)
+	if assertions.NoError(a.t, err, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NoFileExists checks whether a file does not exist in a given path. It fails
-// if the path points to an existing _file_ only.
+// NoFileExists is the same as [NoFileExists], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NoFileExists(path string, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NoFileExists(a.t, path, msgAndArgs...)
+	if assertions.NoFileExists(a.t, path, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NoFileExistsf checks whether a file does not exist in a given path. It fails
-// if the path points to an existing _file_ only.
+// NoFileExistsf is the same as [Assertions.NoFileExists], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NoFileExistsf(path string, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NoFileExistsf(a.t, path, msg, args...)
+	if assertions.NoFileExists(a.t, path, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotContains asserts that the specified string, list(array, slice...) or map does NOT contain the
-// specified substring or element.
+// NotContains is the same as [NotContains], as a method rather than a package-level function.
 //
-//	a.NotContains("Hello World", "Earth")
-//	a.NotContains(["Hello", "World"], "Earth")
-//	a.NotContains({"Hello": "World"}, "Earth")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotContains(s any, contains any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotContains(a.t, s, contains, msgAndArgs...)
+	if assertions.NotContains(a.t, s, contains, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotContainsf asserts that the specified string, list(array, slice...) or map does NOT contain the
-// specified substring or element.
+// NotContainsf is the same as [Assertions.NotContains], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.NotContainsf("Hello World", "Earth", "error message %s", "formatted")
-//	a.NotContainsf(["Hello", "World"], "Earth", "error message %s", "formatted")
-//	a.NotContainsf({"Hello": "World"}, "Earth", "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotContainsf(s any, contains any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotContainsf(a.t, s, contains, msg, args...)
+	if assertions.NotContains(a.t, s, contains, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotElementsMatch asserts that the specified listA(array, slice...) is NOT equal to specified
-// listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
-// the number of appearances of each of them in both lists should not match.
-// This is an inverse of ElementsMatch.
+// NotElementsMatch is the same as [NotElementsMatch], as a method rather than a package-level function.
 //
-// a.NotElementsMatch([1, 1, 2, 3], [1, 1, 2, 3]) -> false
-//
-// a.NotElementsMatch([1, 1, 2, 3], [1, 2, 3]) -> true
-//
-// a.NotElementsMatch([1, 2, 3], [1, 2, 4]) -> true.
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotElementsMatch(listA any, listB any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotElementsMatch(a.t, listA, listB, msgAndArgs...)
+	if assertions.NotElementsMatch(a.t, listA, listB, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotElementsMatchf asserts that the specified listA(array, slice...) is NOT equal to specified
-// listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
-// the number of appearances of each of them in both lists should not match.
-// This is an inverse of ElementsMatch.
+// NotElementsMatchf is the same as [Assertions.NotElementsMatch], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-// a.NotElementsMatchf([1, 1, 2, 3], [1, 1, 2, 3], "error message %s", "formatted") -> false
-//
-// a.NotElementsMatchf([1, 1, 2, 3], [1, 2, 3], "error message %s", "formatted") -> true
-//
-// a.NotElementsMatchf([1, 2, 3], [1, 2, 4], "error message %s", "formatted") -> true.
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotElementsMatchf(listA any, listB any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotElementsMatchf(a.t, listA, listB, msg, args...)
+	if assertions.NotElementsMatch(a.t, listA, listB, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotEmpty asserts that the specified object is NOT [Empty].
+// NotEmpty is the same as [NotEmpty], as a method rather than a package-level function.
 //
-//	if a.NotEmpty(obj) {
-//	  assert.Equal(t, "two", obj[1])
-//	}
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotEmpty(object any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotEmpty(a.t, object, msgAndArgs...)
+	if assertions.NotEmpty(a.t, object, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotEmptyf asserts that the specified object is NOT [Empty].
+// NotEmptyf is the same as [Assertions.NotEmpty], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	if a.NotEmptyf(obj, "error message %s", "formatted") {
-//	  assert.Equal(t, "two", obj[1])
-//	}
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotEmptyf(object any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotEmptyf(a.t, object, msg, args...)
+	if assertions.NotEmpty(a.t, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotEqual asserts that the specified values are NOT equal.
+// NotEqual is the same as [NotEqual], as a method rather than a package-level function.
 //
-//	a.NotEqual(obj1, obj2)
-//
-// Pointer variable equality is determined based on the equality of the
-// referenced values (as opposed to the memory addresses).
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotEqual(expected any, actual any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotEqual(a.t, expected, actual, msgAndArgs...)
-}
-
-// NotEqualValues asserts that two objects are not equal even when converted to the same type
-//
-//	a.NotEqualValues(obj1, obj2)
-func (a *Assertions) NotEqualValues(expected any, actual any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
+	if assertions.NotEqual(a.t, expected, actual, msgAndArgs...) {
+		return
 	}
-	NotEqualValues(a.t, expected, actual, msgAndArgs...)
+
+	a.t.FailNow()
 }
 
-// NotEqualValuesf asserts that two objects are not equal even when converted to the same type
+// NotEqualf is the same as [Assertions.NotEqual], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.NotEqualValuesf(obj1, obj2, "error message %s", "formatted")
-func (a *Assertions) NotEqualValuesf(expected any, actual any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
-		h.Helper()
-	}
-	NotEqualValuesf(a.t, expected, actual, msg, args...)
-}
-
-// NotEqualf asserts that the specified values are NOT equal.
-//
-//	a.NotEqualf(obj1, obj2, "error message %s", "formatted")
-//
-// Pointer variable equality is determined based on the equality of the
-// referenced values (as opposed to the memory addresses).
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotEqualf(expected any, actual any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotEqualf(a.t, expected, actual, msg, args...)
+	if assertions.NotEqual(a.t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotErrorAs asserts that none of the errors in err's chain matches target,
-// but if so, sets target to that error value.
+// NotEqualValues is the same as [NotEqualValues], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) NotEqualValues(expected any, actual any, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotEqualValues(a.t, expected, actual, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// NotEqualValuesf is the same as [Assertions.NotEqualValues], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) NotEqualValuesf(expected any, actual any, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotEqualValues(a.t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// NotErrorAs is the same as [NotErrorAs], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotErrorAs(err error, target any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotErrorAs(a.t, err, target, msgAndArgs...)
+	if assertions.NotErrorAs(a.t, err, target, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotErrorAsf asserts that none of the errors in err's chain matches target,
-// but if so, sets target to that error value.
+// NotErrorAsf is the same as [Assertions.NotErrorAs], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotErrorAsf(err error, target any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotErrorAsf(a.t, err, target, msg, args...)
+	if assertions.NotErrorAs(a.t, err, target, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotErrorIs asserts that none of the errors in err's chain matches target.
-// This is a wrapper for errors.Is.
+// NotErrorIs is the same as [NotErrorIs], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotErrorIs(err error, target error, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotErrorIs(a.t, err, target, msgAndArgs...)
+	if assertions.NotErrorIs(a.t, err, target, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotErrorIsf asserts that none of the errors in err's chain matches target.
-// This is a wrapper for errors.Is.
+// NotErrorIsf is the same as [Assertions.NotErrorIs], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotErrorIsf(err error, target error, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotErrorIsf(a.t, err, target, msg, args...)
+	if assertions.NotErrorIs(a.t, err, target, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotImplements asserts that an object does not implement the specified interface.
+// NotImplements is the same as [NotImplements], as a method rather than a package-level function.
 //
-//	a.NotImplements((*MyInterface)(nil), new(MyObject))
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotImplements(interfaceObject any, object any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotImplements(a.t, interfaceObject, object, msgAndArgs...)
+	if assertions.NotImplements(a.t, interfaceObject, object, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotImplementsf asserts that an object does not implement the specified interface.
+// NotImplementsf is the same as [Assertions.NotImplements], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.NotImplementsf((*MyInterface)(nil), new(MyObject), "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotImplementsf(interfaceObject any, object any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotImplementsf(a.t, interfaceObject, object, msg, args...)
+	if assertions.NotImplements(a.t, interfaceObject, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotNil asserts that the specified object is not nil.
+// NotNil is the same as [NotNil], as a method rather than a package-level function.
 //
-//	a.NotNil(err)
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotNil(object any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotNil(a.t, object, msgAndArgs...)
+	if assertions.NotNil(a.t, object, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotNilf asserts that the specified object is not nil.
+// NotNilf is the same as [Assertions.NotNil], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.NotNilf(err, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotNilf(object any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotNilf(a.t, object, msg, args...)
+	if assertions.NotNil(a.t, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotPanics asserts that the code inside the specified PanicTestFunc does NOT panic.
+// NotPanics is the same as [NotPanics], as a method rather than a package-level function.
 //
-//	a.NotPanics(func(){ RemainCalm() })
-func (a *Assertions) NotPanics(f assert.PanicTestFunc, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) NotPanics(f assertions.PanicTestFunc, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotPanics(a.t, f, msgAndArgs...)
+	if assertions.NotPanics(a.t, f, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotPanicsf asserts that the code inside the specified PanicTestFunc does NOT panic.
+// NotPanicsf is the same as [Assertions.NotPanics], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.NotPanicsf(func(){ RemainCalm() }, "error message %s", "formatted")
-func (a *Assertions) NotPanicsf(f assert.PanicTestFunc, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) NotPanicsf(f assertions.PanicTestFunc, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotPanicsf(a.t, f, msg, args...)
+	if assertions.NotPanics(a.t, f, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotRegexp asserts that a specified regexp does not match a string.
+// NotRegexp is the same as [NotRegexp], as a method rather than a package-level function.
 //
-//	a.NotRegexp(regexp.MustCompile("starts"), "it's starting")
-//	a.NotRegexp("^start", "it's not starting")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotRegexp(rx any, str any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotRegexp(a.t, rx, str, msgAndArgs...)
+	if assertions.NotRegexp(a.t, rx, str, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotRegexpf asserts that a specified regexp does not match a string.
+// NotRegexpf is the same as [Assertions.NotRegexp], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.NotRegexpf(regexp.MustCompile("starts"), "it's starting", "error message %s", "formatted")
-//	a.NotRegexpf("^start", "it's not starting", "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotRegexpf(rx any, str any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotRegexpf(a.t, rx, str, msg, args...)
+	if assertions.NotRegexp(a.t, rx, str, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotSame asserts that two pointers do not reference the same object.
+// NotSame is the same as [NotSame], as a method rather than a package-level function.
 //
-//	a.NotSame(ptr1, ptr2)
-//
-// Both arguments must be pointer variables. Pointer variable sameness is
-// determined based on the equality of both type and value.
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotSame(expected any, actual any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotSame(a.t, expected, actual, msgAndArgs...)
+	if assertions.NotSame(a.t, expected, actual, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotSamef asserts that two pointers do not reference the same object.
+// NotSamef is the same as [Assertions.NotSame], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.NotSamef(ptr1, ptr2, "error message %s", "formatted")
-//
-// Both arguments must be pointer variables. Pointer variable sameness is
-// determined based on the equality of both type and value.
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotSamef(expected any, actual any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotSamef(a.t, expected, actual, msg, args...)
+	if assertions.NotSame(a.t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotSubset asserts that the list (array, slice, or map) does NOT contain all
-// elements given in the subset (array, slice, or map).
-// Map elements are key-value pairs unless compared with an array or slice where
-// only the map key is evaluated.
+// NotSubset is the same as [NotSubset], as a method rather than a package-level function.
 //
-//	a.NotSubset([1, 3, 4], [1, 2])
-//	a.NotSubset({"x": 1, "y": 2}, {"z": 3})
-//	a.NotSubset([1, 3, 4], {1: "one", 2: "two"})
-//	a.NotSubset({"x": 1, "y": 2}, ["z"])
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotSubset(list any, subset any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotSubset(a.t, list, subset, msgAndArgs...)
+	if assertions.NotSubset(a.t, list, subset, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotSubsetf asserts that the list (array, slice, or map) does NOT contain all
-// elements given in the subset (array, slice, or map).
-// Map elements are key-value pairs unless compared with an array or slice where
-// only the map key is evaluated.
+// NotSubsetf is the same as [Assertions.NotSubset], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.NotSubsetf([1, 3, 4], [1, 2], "error message %s", "formatted")
-//	a.NotSubsetf({"x": 1, "y": 2}, {"z": 3}, "error message %s", "formatted")
-//	a.NotSubsetf([1, 3, 4], {1: "one", 2: "two"}, "error message %s", "formatted")
-//	a.NotSubsetf({"x": 1, "y": 2}, ["z"], "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotSubsetf(list any, subset any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotSubsetf(a.t, list, subset, msg, args...)
+	if assertions.NotSubset(a.t, list, subset, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotZero asserts that i is not the zero value for its type.
+// NotZero is the same as [NotZero], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotZero(i any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotZero(a.t, i, msgAndArgs...)
+	if assertions.NotZero(a.t, i, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// NotZerof asserts that i is not the zero value for its type.
+// NotZerof is the same as [Assertions.NotZero], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) NotZerof(i any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	NotZerof(a.t, i, msg, args...)
+	if assertions.NotZero(a.t, i, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Panics asserts that the code inside the specified PanicTestFunc panics.
+// Panics is the same as [Panics], as a method rather than a package-level function.
 //
-//	a.Panics(func(){ GoCrazy() })
-func (a *Assertions) Panics(f assert.PanicTestFunc, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) Panics(f assertions.PanicTestFunc, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Panics(a.t, f, msgAndArgs...)
+	if assertions.Panics(a.t, f, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// PanicsWithError asserts that the code inside the specified PanicTestFunc
-// panics, and that the recovered panic value is an error that satisfies the
-// EqualError comparison.
+// Panicsf is the same as [Assertions.Panics], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.PanicsWithError("crazy error", func(){ GoCrazy() })
-func (a *Assertions) PanicsWithError(errString string, f assert.PanicTestFunc, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) Panicsf(f assertions.PanicTestFunc, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	PanicsWithError(a.t, errString, f, msgAndArgs...)
+	if assertions.Panics(a.t, f, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// PanicsWithErrorf asserts that the code inside the specified PanicTestFunc
-// panics, and that the recovered panic value is an error that satisfies the
-// EqualError comparison.
+// PanicsWithError is the same as [PanicsWithError], as a method rather than a package-level function.
 //
-//	a.PanicsWithErrorf("crazy error", func(){ GoCrazy() }, "error message %s", "formatted")
-func (a *Assertions) PanicsWithErrorf(errString string, f assert.PanicTestFunc, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) PanicsWithError(errString string, f assertions.PanicTestFunc, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	PanicsWithErrorf(a.t, errString, f, msg, args...)
+	if assertions.PanicsWithError(a.t, errString, f, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// PanicsWithValue asserts that the code inside the specified PanicTestFunc panics, and that
-// the recovered panic value equals the expected panic value.
+// PanicsWithErrorf is the same as [Assertions.PanicsWithError], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.PanicsWithValue("crazy error", func(){ GoCrazy() })
-func (a *Assertions) PanicsWithValue(expected any, f assert.PanicTestFunc, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) PanicsWithErrorf(errString string, f assertions.PanicTestFunc, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	PanicsWithValue(a.t, expected, f, msgAndArgs...)
+	if assertions.PanicsWithError(a.t, errString, f, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// PanicsWithValuef asserts that the code inside the specified PanicTestFunc panics, and that
-// the recovered panic value equals the expected panic value.
+// PanicsWithValue is the same as [PanicsWithValue], as a method rather than a package-level function.
 //
-//	a.PanicsWithValuef("crazy error", func(){ GoCrazy() }, "error message %s", "formatted")
-func (a *Assertions) PanicsWithValuef(expected any, f assert.PanicTestFunc, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) PanicsWithValue(expected any, f assertions.PanicTestFunc, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	PanicsWithValuef(a.t, expected, f, msg, args...)
+	if assertions.PanicsWithValue(a.t, expected, f, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Panicsf asserts that the code inside the specified PanicTestFunc panics.
+// PanicsWithValuef is the same as [Assertions.PanicsWithValue], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.Panicsf(func(){ GoCrazy() }, "error message %s", "formatted")
-func (a *Assertions) Panicsf(f assert.PanicTestFunc, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) PanicsWithValuef(expected any, f assertions.PanicTestFunc, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Panicsf(a.t, f, msg, args...)
+	if assertions.PanicsWithValue(a.t, expected, f, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Positive asserts that the specified element is positive
+// Positive is the same as [Positive], as a method rather than a package-level function.
 //
-//	a.Positive(1)
-//	a.Positive(1.23)
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Positive(e any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Positive(a.t, e, msgAndArgs...)
+	if assertions.Positive(a.t, e, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Positivef asserts that the specified element is positive
+// Positivef is the same as [Assertions.Positive], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.Positivef(1, "error message %s", "formatted")
-//	a.Positivef(1.23, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Positivef(e any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Positivef(a.t, e, msg, args...)
+	if assertions.Positive(a.t, e, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Regexp asserts that a specified regexp matches a string.
+// Regexp is the same as [Regexp], as a method rather than a package-level function.
 //
-//	a.Regexp(regexp.MustCompile("start"), "it's starting")
-//	a.Regexp("start...$", "it's not starting")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Regexp(rx any, str any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Regexp(a.t, rx, str, msgAndArgs...)
+	if assertions.Regexp(a.t, rx, str, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Regexpf asserts that a specified regexp matches a string.
+// Regexpf is the same as [Assertions.Regexp], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.Regexpf(regexp.MustCompile("start"), "it's starting", "error message %s", "formatted")
-//	a.Regexpf("start...$", "it's not starting", "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Regexpf(rx any, str any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Regexpf(a.t, rx, str, msg, args...)
+	if assertions.Regexp(a.t, rx, str, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Same asserts that two pointers reference the same object.
+// Same is the same as [Same], as a method rather than a package-level function.
 //
-//	a.Same(ptr1, ptr2)
-//
-// Both arguments must be pointer variables. Pointer variable sameness is
-// determined based on the equality of both type and value.
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Same(expected any, actual any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Same(a.t, expected, actual, msgAndArgs...)
+	if assertions.Same(a.t, expected, actual, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Samef asserts that two pointers reference the same object.
+// Samef is the same as [Assertions.Same], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.Samef(ptr1, ptr2, "error message %s", "formatted")
-//
-// Both arguments must be pointer variables. Pointer variable sameness is
-// determined based on the equality of both type and value.
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Samef(expected any, actual any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Samef(a.t, expected, actual, msg, args...)
+	if assertions.Same(a.t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Subset asserts that the list (array, slice, or map) contains all elements
-// given in the subset (array, slice, or map).
-// Map elements are key-value pairs unless compared with an array or slice where
-// only the map key is evaluated.
+// Subset is the same as [Subset], as a method rather than a package-level function.
 //
-//	a.Subset([1, 2, 3], [1, 2])
-//	a.Subset({"x": 1, "y": 2}, {"x": 1})
-//	a.Subset([1, 2, 3], {1: "one", 2: "two"})
-//	a.Subset({"x": 1, "y": 2}, ["x"])
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Subset(list any, subset any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Subset(a.t, list, subset, msgAndArgs...)
+	if assertions.Subset(a.t, list, subset, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Subsetf asserts that the list (array, slice, or map) contains all elements
-// given in the subset (array, slice, or map).
-// Map elements are key-value pairs unless compared with an array or slice where
-// only the map key is evaluated.
+// Subsetf is the same as [Assertions.Subset], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.Subsetf([1, 2, 3], [1, 2], "error message %s", "formatted")
-//	a.Subsetf({"x": 1, "y": 2}, {"x": 1}, "error message %s", "formatted")
-//	a.Subsetf([1, 2, 3], {1: "one", 2: "two"}, "error message %s", "formatted")
-//	a.Subsetf({"x": 1, "y": 2}, ["x"], "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Subsetf(list any, subset any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Subsetf(a.t, list, subset, msg, args...)
+	if assertions.Subset(a.t, list, subset, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// True asserts that the specified value is true.
+// True is the same as [True], as a method rather than a package-level function.
 //
-//	a.True(myBool)
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) True(value bool, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	True(a.t, value, msgAndArgs...)
+	if assertions.True(a.t, value, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Truef asserts that the specified value is true.
+// Truef is the same as [Assertions.True], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.Truef(myBool, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Truef(value bool, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Truef(a.t, value, msg, args...)
+	if assertions.True(a.t, value, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// WithinDuration asserts that the two times are within duration delta of each other.
+// WithinDuration is the same as [WithinDuration], as a method rather than a package-level function.
 //
-//	a.WithinDuration(time.Now(), 10*time.Second)
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) WithinDuration(expected time.Time, actual time.Time, delta time.Duration, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	WithinDuration(a.t, expected, actual, delta, msgAndArgs...)
+	if assertions.WithinDuration(a.t, expected, actual, delta, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// WithinDurationf asserts that the two times are within duration delta of each other.
+// WithinDurationf is the same as [Assertions.WithinDuration], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.WithinDurationf(time.Now(), 10*time.Second, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) WithinDurationf(expected time.Time, actual time.Time, delta time.Duration, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	WithinDurationf(a.t, expected, actual, delta, msg, args...)
+	if assertions.WithinDuration(a.t, expected, actual, delta, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// WithinRange asserts that a time is within a time range (inclusive).
+// WithinRange is the same as [WithinRange], as a method rather than a package-level function.
 //
-//	a.WithinRange(time.Now(), time.Now().Add(-time.Second), time.Now().Add(time.Second))
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) WithinRange(actual time.Time, start time.Time, end time.Time, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	WithinRange(a.t, actual, start, end, msgAndArgs...)
+	if assertions.WithinRange(a.t, actual, start, end, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// WithinRangef asserts that a time is within a time range (inclusive).
+// WithinRangef is the same as [Assertions.WithinRange], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	a.WithinRangef(time.Now(), time.Now().Add(-time.Second), time.Now().Add(time.Second), "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) WithinRangef(actual time.Time, start time.Time, end time.Time, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	WithinRangef(a.t, actual, start, end, msg, args...)
+	if assertions.WithinRange(a.t, actual, start, end, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// YAMLEq asserts that the first documents in the two YAML strings are equivalent.
+// YAMLEq is the same as [YAMLEq], as a method rather than a package-level function.
 //
-//	expected := `---
-//	key: value
-//	---
-//	key: this is a second document, it is not evaluated
-//	`
-//	actual := `---
-//	key: value
-//	---
-//	key: this is a subsequent document, it is not evaluated
-//	`
-//	a.YAMLEq(expected, actual)
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) YAMLEq(expected string, actual string, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	YAMLEq(a.t, expected, actual, msgAndArgs...)
+	if assertions.YAMLEq(a.t, expected, actual, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// YAMLEqf asserts that the first documents in the two YAML strings are equivalent.
+// YAMLEqf is the same as [Assertions.YAMLEq], but accepts a format msg string to format arguments like [fmt.Printf].
 //
-//	expected := `---
-//	key: value
-//	---
-//	key: this is a second document, it is not evaluated
-//	`
-//	actual := `---
-//	key: value
-//	---
-//	key: this is a subsequent document, it is not evaluated
-//	`
-//	a.YAMLEqf(expected, actual, "error message %s", "formatted")
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) YAMLEqf(expected string, actual string, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	YAMLEqf(a.t, expected, actual, msg, args...)
+	if assertions.YAMLEq(a.t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Zero asserts that i is the zero value for its type.
+// Zero is the same as [Zero], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Zero(i any, msgAndArgs ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Zero(a.t, i, msgAndArgs...)
+	if assertions.Zero(a.t, i, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
 }
 
-// Zerof asserts that i is the zero value for its type.
+// Zerof is the same as [Assertions.Zero], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
 func (a *Assertions) Zerof(i any, msg string, args ...any) {
-	if h, ok := a.t.(tHelper); ok {
+	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	Zerof(a.t, i, msg, args...)
+	if assertions.Zero(a.t, i, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
 }

@@ -1,0 +1,150 @@
+{{ comment .Copyright }}
+
+// Code generated with {{ .Tool }}; DO NOT EDIT.
+
+package {{ .Package }}
+
+import (
+  "net/http"
+  "path/filepath"
+  "testing"
+{{ imports .Imports }}
+)
+
+{{- range .Functions }}
+  {{- if or (not .IsGeneric) ($.EnableGenerics) }}
+    {{- if and (not .IsHelper) (not .IsConstructor) }}
+
+func Test{{ .Name }}(t *testing.T) {
+  t.Parallel()
+
+      {{- if (not .HasTest) }}{{/* no testcases captured from the Example section of the original function */}}
+	t.Skip() // this function doesn't have tests yet: feed the original function with examples to test.
+      {{- else }}
+        {{- $fn := . }}
+        {{- $isRequire := (eq $.Package "require") }}
+        {{- $first := true }}
+        {{- range .Tests }}
+          {{- if eq .ExpectedOutcome 0 }}{{/* TestSuccess */}}
+            {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
+	t.Run("success", func(t *testing.T) {
+    t.Parallel()
+
+            {{- if $isRequire }}
+		{{ $fn.Name }}(t, {{ .TestedValue }})
+		// require functions don't return a value
+            {{- else }}
+		result := {{ $fn.Name }}(t, {{ .TestedValue }})
+		if !result {
+			t.Error("{{ $fn.Name }} should return true on success")
+		}
+            {{- end }}
+	})
+          {{- else if eq .ExpectedOutcome 1 }}{{/* TestFailure */}}
+            {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
+	t.Run("failure", func(t *testing.T) {
+    t.Parallel()
+
+		mock := new({{ $fn.UseMock }})
+            {{- if $isRequire }}
+		{{ $fn.Name }}(mock, {{ .TestedValue }})
+		// require functions don't return a value
+            {{- else }}
+		result := {{ $fn.Name }}(mock, {{ .TestedValue }})
+		if result {
+			t.Error("{{ $fn.Name }} should return false on failure")
+		}
+            {{- end }}
+		if !mock.failed {
+      t.Error("{{ $fn.Name }} {{ if eq $fn.UseMock "mockFailNowT" }}should call FailNow(){{ else }}should mark test as failed{{ end }}")
+		}
+	})
+          {{- else if eq .ExpectedOutcome 2 }}{{/* TestPanic */}}
+            {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
+	t.Run("panic", func(t *testing.T) {
+    t.Parallel()
+
+		Panics(t, func() {
+      {{ $fn.Name }}(t, {{ .TestedValue }})
+		}, "{{ .AssertionMessage }}")
+	})
+          {{- end }}
+        {{- end }}
+      {{- end }}
+}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+// mockT is a mock testing.T for assertion tests
+type mockT struct {
+	failed bool
+}
+
+func (m *mockT) Helper() {}
+
+func (m *mockT) Errorf(format string, args ...any) {
+	m.failed = true
+}
+
+type mockFailNowT struct {
+	failed bool
+}
+
+// Helper is like [testing.T.Helper] but does nothing.
+func (mockFailNowT) Helper() {}
+
+func (m *mockFailNowT) Errorf(format string, args ...any) {
+	_ = format
+	_ = args
+}
+
+func (m *mockFailNowT) FailNow() {
+	m.failed = true
+}
+
+func testDataPath() string {
+  return filepath.Join({{ pathparts .TestDataPath }})
+}
+
+func httpOK(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
+
+func httpError(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusInternalServerError)
+}
+
+func httpRedirect(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusTemporaryRedirect)
+}
+
+func httpBody(w http.ResponseWriter, r *http.Request) {
+	name := r.FormValue("name")
+	_, _ = fmt.Fprintf(w, "Hello, %s!", name)
+}
+
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
+var (
+  staticVar = "static string" 
+  staticVarPtr = &staticVar
+  dummyInterface T
+)
+
+func ptr[T any](value T) *T {
+  p := value
+
+  return &p
+}
+
+type dummyStruct struct {
+  A string
+  b int
+}
+
+type dummyError struct {
+}
+
+func (d *dummyError) Error() string {
+  return "dummy error"
+}

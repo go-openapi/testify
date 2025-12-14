@@ -8,18 +8,72 @@ This is the go-openapi fork of the testify testing package. The main goal is to 
 
 ## Key Architecture
 
-### Core Packages
-- **assert**: Provides non-fatal test assertions (tests continue after failures)
-- **require**: Provides fatal test assertions (tests stop immediately on failure via `FailNow()`)
-- Both packages share similar APIs, but `require` wraps `assert` functions to make them fatal
+### Single Source of Truth: `internal/assertions/`
 
-### Code Generation
-- The codebase uses code generation extensively via `_codegen/main.go`
-- Generated files include:
-  - `assert/assertion_format.go` - Format string variants of assertions
-  - `assert/assertion_forward.go` - Forwarded assertion methods
-  - `require/require.go` - Require variants of all assert functions
-  - `require/require_forward.go` - Forwarded require methods
+All assertion implementations live in `internal/assertions/`, organized by domain:
+- **boolean.go** - True, False
+- **collection.go** - Contains, Empty, Len, ElementsMatch, Subset, etc.
+- **compare.go** - Greater, Less, comparison assertions
+- **equal.go** - Equal, EqualValues, NotEqual, Same, etc.
+- **error.go** - Error, NoError, ErrorIs, ErrorAs, etc.
+- **file.go** - FileExists, DirExists, FileEmpty, FileNotEmpty
+- **http.go** - HTTPSuccess, HTTPError, HTTPStatusCode, etc.
+- **json.go** - JSONEq
+- **number.go** - InDelta, InEpsilon, Positive, Negative
+- **panic.go** - Panics, NotPanics, PanicsWithValue
+- **string.go** - Regexp, NotRegexp
+- **time.go** - WithinDuration
+- **type.go** - IsType, Zero, NotZero, Implements
+- **yaml.go** - YAMLEq
+
+**Key principle:** Write assertions once in `internal/assertions/` with comprehensive tests. Everything else is generated.
+
+### Core Packages (Generated)
+- **assert**: Provides non-fatal test assertions (tests continue after failures)
+  - Generated from `internal/assertions/` by `codegen/`
+  - Returns `bool` to indicate success/failure
+- **require**: Provides fatal test assertions (tests stop immediately on failure via `FailNow()`)
+  - Generated from `internal/assertions/` by `codegen/`
+  - Void functions that call `FailNow()` on failure
+
+Both packages are 100% generated and maintain API consistency mechanically.
+
+### Code Generation Architecture
+
+The codebase uses sophisticated code generation via the `codegen/` directory:
+
+**Structure:**
+```
+codegen/
+├── internal/
+│   ├── scanner/       # Parses internal/assertions using go/packages and go/types
+│   ├── generator/     # Template-based code generation engine
+│   ├── model/         # Data model for assertions
+├── main.go            # CLI orchestration
+└── (generated outputs in assert/ and require/)
+```
+
+**Generated files include:**
+- **assert/assertion_assertions.go** - Package-level assertion functions
+- **assert/assertion_format.go** - Format string variants (Equalf, Truef, etc.)
+- **assert/assertion_forward.go** - Forwarded assertion methods for chaining
+- **assert/assertion_*_test.go** - Generated tests for all assert variants
+- **require/requirement_assertions.go** - Fatal assertion functions
+- **require/requirement_format.go** - Fatal format variants
+- **require/requirement_forward.go** - Fatal forwarded methods
+- **require/requirement_*_test.go** - Generated tests for all require variants
+
+**Each assertion function generates 8 variants:**
+1. `assert.Equal(t, ...)` - package-level function
+2. `assert.Equalf(t, ..., "msg")` - format variant
+3. `a.Equal(...)` - forward method (where `a := assert.New(t)`)
+4. `a.Equalf(..., "msg")` - forward format variant
+5. `require.Equal(t, ...)` - fatal package-level
+6. `require.Equalf(t, ..., "msg")` - fatal format variant
+7. `r.Equal(...)` - fatal forward method
+8. `r.Equalf(..., "msg")` - fatal forward format variant
+
+With 76 assertion functions, this generates 608 functions automatically.
 
 ### Dependency Isolation Strategy
 - **internal/spew**: Internalized copy of go-spew for pretty-printing values
@@ -36,31 +90,110 @@ The "enable" pattern allows YAML functionality to be opt-in: import `_ "github.c
 # Run all tests
 go test ./...
 
-# Run tests in a specific package
-go test ./assert
-go test ./require
+# Run tests in specific packages
+go test ./internal/assertions  # Source of truth with exhaustive tests
+go test ./assert               # Generated package tests
+go test ./require              # Generated package tests
 
 # Run a single test
-go test ./assert -run TestEqual
+go test ./internal/assertions -run TestEqual
+
+# Run with coverage
+go test -cover ./internal/assertions  # Should be 90%+
+go test -cover ./assert               # Should be ~100%
+go test -cover ./require              # Should be ~100%
 
 # Run tests with verbose output
 go test -v ./...
 ```
 
-### Code Generation
-When modifying assertion functions in `assert/assertions.go`, regenerate derived code:
-```bash
-# Generate all code
-go generate ./...
+### Adding a New Assertion
 
-# This runs the codegen tool which:
-# 1. Parses assert/assertions.go for TestingT functions
-# 2. Generates format variants (e.g., Equalf from Equal)
-# 3. Generates require variants (fatal versions)
-# 4. Generates forwarded assertion methods
+**The entire workflow:**
+1. Add function to appropriate file in `internal/assertions/`
+2. Add "Examples:" section to doc comment
+3. Add tests to corresponding `*_test.go` file
+4. Run `go generate ./...`
+5. Done - all 8 variants generated with tests
+
+**Example - Adding a new assertion:**
+```go
+// In internal/assertions/string.go
+
+// StartsWith asserts that the string starts with the given prefix.
+//
+// Examples:
+//
+//   success: "hello world", "hello"
+//   failure: "hello world", "bye"
+func StartsWith(t T, str, prefix string, msgAndArgs ...any) bool {
+    if h, ok := t.(H); ok {
+        h.Helper()
+    }
+    if !strings.HasPrefix(str, prefix) {
+        return Fail(t, fmt.Sprintf("Expected %q to start with %q", str, prefix), msgAndArgs...)
+    }
+    return true
+}
 ```
 
-The code generator looks for functions with signature `func(TestingT, ...) bool` in the assert package and creates corresponding variants.
+Then add tests in `internal/assertions/string_test.go` and run `go generate ./...`.
+
+This generates:
+- `assert.StartsWith(t, str, prefix)`
+- `assert.StartsWithf(t, str, prefix, "msg")`
+- `a.StartsWith(str, prefix)` (forward method)
+- `a.StartsWithf(str, prefix, "msg")`
+- `require.StartsWith(t, str, prefix)`
+- `require.StartsWithf(t, str, prefix, "msg")`
+- `r.StartsWith(str, prefix)` (forward method)
+- `r.StartsWithf(str, prefix, "msg")`
+- Tests for all 8 variants
+
+### Code Generation
+```bash
+# Generate all code from internal/assertions
+go generate ./...
+
+# Or run the generator directly
+cd codegen && go run . -target assert
+cd codegen && go run . -target require
+
+# The generator:
+# 1. Scans internal/assertions/ for exported functions
+# 2. Extracts "Examples:" from doc comments
+# 3. Generates assert/ package with all variants + tests
+# 4. Generates require/ package with all variants + tests
+# 5. Ensures 100% test coverage via example-driven tests
+```
+
+### Example-Driven Test Generation
+
+The generator reads "Examples:" sections from doc comments:
+
+```go
+// Equal asserts that two objects are equal.
+//
+// Examples:
+//
+//   success: 123, 123
+//   failure: 123, 456
+func Equal(t T, expected, actual any, msgAndArgs ...any) bool {
+    // implementation
+}
+```
+
+From this, it generates tests that verify:
+- Success case works correctly
+- Failure case works correctly and calls appropriate failure methods
+- Format variants work with message parameter
+- Forward methods work with chaining
+
+**Test case types:**
+- `success: <args>` - Test should pass
+- `failure: <args>` - Test should fail
+- `panic: <args>` - Test should panic (followed by assertion message on next line)
+  `<expected panic message>`
 
 ### Build and Verify
 ```bash
@@ -68,10 +201,18 @@ The code generator looks for functions with signature `func(TestingT, ...) bool`
 go mod tidy
 
 # Build code generator
-cd _codegen && go build
+cd codegen && go build
 
 # Format code
 go fmt ./...
+
+# Run all tests
+go test ./...
+
+# Check coverage
+go test -cover ./internal/assertions
+go test -cover ./assert
+go test -cover ./require
 ```
 
 ## Important Constraints
@@ -106,3 +247,89 @@ When using YAML assertions (YAMLEq, YAMLEqf):
 ## Testing Philosophy
 
 Keep tests simple and focused. The assert package provides detailed failure messages automatically, so test code should be minimal and readable. Use `require` when a test cannot continue meaningfully after a failure, and `assert` when subsequent checks might provide additional context.
+
+### Testing Strategy: Layered Coverage
+
+**Layer 1: Exhaustive Tests in `internal/assertions/`** (94% coverage)
+- Comprehensive table-driven tests using Go 1.23 `iter.Seq` patterns
+- Error message content and format validation
+- Edge cases, nil handling, type coercion scenarios
+- Domain-organized test files mirroring implementation
+- Source of truth for assertion correctness
+
+**Layer 2: Generated Smoke Tests in `assert/` and `require/`** (~100% coverage)
+- Minimal mechanical tests proving functions exist and work
+- Success case: verify correct return value / no FailNow
+- Failure case: verify correct return value / FailNow called
+- Generated from "Examples:" in doc comments
+- No error message testing (already covered in Layer 1)
+
+**Layer 3: Meta Tests for Generator** (future)
+- Test that code generation produces correct output
+- Verify function signatures, imports, structure
+- Optional golden file testing
+
+This layered approach ensures:
+- Deep testing where it matters (source implementation)
+- Complete coverage of generated forwarding code
+- Simple, maintainable test generation
+- No duplication of complex test logic
+
+## Architecture Benefits
+
+### Why This Design Wins
+
+**For Contributors:**
+- Add assertion in focused, domain-organized file
+- Write tests once in single location
+- Run `go generate` and get all variants for free
+- Clear separation: source vs generated code
+
+**For Maintainers:**
+- Mechanical consistency across 608 generated functions
+- Template changes affect all functions uniformly
+- Easy to add new variants (e.g., generics)
+- Single source of truth prevents drift
+
+**For Users:**
+- Comprehensive API with 76 assertions
+- All expected variants (package, format, forward, require)
+- Zero external dependencies
+- Drop-in replacement for stretchr/testify
+
+**The Math:**
+- 76 assertion functions × 8 variants = 608 functions
+- Old model: Manually maintain 608 functions across multiple packages
+- New model: Write 76 functions once, generate the rest
+- Result: 87% reduction in manual code maintenance
+
+### Technical Innovations
+
+**Go AST/Types Integration:**
+- Scanner uses `go/packages` and `go/types` for semantic analysis
+- Position-based lookup bridges AST and type information
+- Import alias resolution for accurate code generation
+- Handles complex Go constructs (generics, interfaces, variadic args)
+
+**Example-Driven Testing:**
+- "Examples:" sections in doc comments drive test generation
+- success/failure/panic cases extracted automatically
+- Tests generated for all 8 variants per function
+- Achieves 100% coverage with minimal test complexity
+
+**Template Architecture:**
+- Separate templates for assert vs require packages
+- Conditional logic handles return values vs void functions
+- Mock selection based on FailNow requirements
+- Consistent formatting and structure across all output
+
+## Example Coverage Status
+
+Most assertion functions now have "Examples:" sections in their doc comments. The generator extracts these to create both tests and testable examples.
+
+**Coverage notes:**
+- Basic assertions (Equal, Error, Contains, Len, True, False) have complete examples
+- Some complex assertions use TODO placeholders for pointer/struct values
+- All new assertions should include Examples before merging
+
+For the complete guide on adding examples, see `docs/MAINTAINERS.md` section "Maintaining Generated Code".

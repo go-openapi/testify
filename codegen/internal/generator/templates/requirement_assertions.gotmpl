@@ -1,0 +1,35 @@
+{{ comment .Copyright }}
+
+// Code generated with {{ .Tool }}; DO NOT EDIT.
+
+package {{ .Package }}
+
+{{- if .Imports.HasImports }}
+
+import (
+{{ imports .Imports }}
+)
+{{- end }}
+
+{{- range .Functions }} 
+  {{- if or (not .IsGeneric) ($.EnableGenerics) }}
+    {{- if and (not .IsHelper) (not .IsConstructor) }}
+
+{{ comment .DocString }}
+//
+{{ docStringPackage $.Package }}
+func {{ .Name }}({{ params .AllParams }}) {
+	if h, ok := t.(H); ok { h.Helper() }
+      {{- if or (eq .Name "Fail") (eq .Name "FailNow") }}{{/* special semantics for these two, which can only fail */}}
+  _ = {{ .TargetPackage }}.{{ .Name }}({{ forward .AllParams }})
+      {{- else }}
+  if {{ .TargetPackage }}.{{ .Name }}({{ forward .AllParams }}) {
+    return
+  }
+      {{- end }}
+
+	t.FailNow()
+}
+    {{- end }}
+  {{- end }}
+{{- end }}

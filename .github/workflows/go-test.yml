@@ -72,6 +72,16 @@ jobs:
         cache: true
         cache-dependency-path: '**/go.sum'
 
+    - name: Ensure TMP is created on windows runners
+      # On windows, tests require testing.TempDir to reside on the same drive as the code.
+      # TMP is used by os.TempDir() to determine the location of temporary files.
+      if: ${{ runner.os  == 'Windows' }}
+      shell: bash
+      run: |
+        TMP="${{ github.workspace }}\..\tmp"
+        mkdir -p ${TMP}
+        echo "TMP=${TMP}" >> "${GITHUB_ENV}"
+
     - name: Run unit tests on all modules in this repo
       shell: bash
       env:

@@ -1,0 +1,22 @@
+{{ comment .Copyright }}
+
+// Code generated with {{ .Tool }}; DO NOT EDIT.
+
+package {{ .Package }}
+
+{{- if .Imports.HasImports }}
+
+import (
+{{ imports .Imports }}
+)
+{{- end }}
+
+{{- range .Functions }} 
+  {{- if .IsHelper }}
+
+{{ comment .DocString }}
+func {{ .Name }}({{ params .AllParams }}) {{ returns .Returns }} {
+  return {{ .TargetPackage }}.{{ .Name }}({{ forward .AllParams }})
+}
+  {{- end }}
+{{- end }}
