@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/fs"
 	"math"
 	"os"
 	"reflect"
@@ -1885,6 +1886,14 @@ func FileEmpty(t TestingT, path string, msgAndArgs ...any) bool {
 	if info.IsDir() {
 		return Fail(t, fmt.Sprintf("%q is a directory", path), msgAndArgs...)
 	}
+	if info.Mode()&fs.ModeSymlink > 0 {
+		target, err := os.Readlink(path)
+		if err != nil {
+			return Fail(t, fmt.Sprintf("could not resolve symlink %q", path), msgAndArgs...)
+		}
+		return FileEmpty(t, target, msgAndArgs...)
+	}
+
 	if info.Size() > 0 {
 		return Fail(t, fmt.Sprintf("%q is not empty", path), msgAndArgs...)
 	}
@@ -1908,6 +1917,14 @@ func FileNotEmpty(t TestingT, path string, msgAndArgs ...any) bool {
 	if info.IsDir() {
 		return Fail(t, fmt.Sprintf("%q is a directory", path), msgAndArgs...)
 	}
+	if info.Mode()&fs.ModeSymlink > 0 {
+		target, err := os.Readlink(path)
+		if err != nil {
+			return Fail(t, fmt.Sprintf("could not resolve symlink %q", path), msgAndArgs...)
+		}
+		return FileNotEmpty(t, target, msgAndArgs...)
+	}
+
 	if info.Size() == 0 {
 		return Fail(t, fmt.Sprintf("%q is empty", path), msgAndArgs...)
 	}
