@@ -63,7 +63,7 @@ However, at `go-openapi` we would like to address the well-known issues in `test
 1. [x] The first release comes with zero dependencies and an unstable API (see below [our use case](#usage-at-go-openapi))
 2. |x] This project is going to be injected as the main and sole test dependency of the `go-openapi` libraries
 2. [ ] ... and the `go-swagger` tool
-3. [ ) Valuable pending pull requests from the original project could be merged (e.g. `JSONEqBytes`) or transformed as "enable" modules (e.g. colorized output)
+3. [x] Valuable pending pull requests from the original project could be merged (e.g. `JSONEqBytes`) or transformed as "enable" modules (e.g. colorized output)
 4. [ ] Unclear assertions may be provided an alternative verb (e.g. `InDelta`)
 5. [ ] Since we have leveled the go requirements to the rest of the go-openapi (currently go1.24) there is quite a bit of relinting lying ahead.
 
@@ -200,6 +200,7 @@ some adaptations into this fork:
 * github.com/stretchr/testify#1356 - panic(nil) handling for Go 1.21+
 * github.com/stretchr/testify#1825 - Fix panic when using EqualValues with uncomparable types [merged]
 * github.com/stretchr/testify#1818 - Fix panic on invalid regex in Regexp/NotRegexp assertions [merged]
+* github.com/stretchr/testify#1223 - Display uint values in decimal instead of hex in diffs [merged]
 
 ### Planned merges
 
@@ -207,7 +208,7 @@ some adaptations into this fork:
 
 * Follow / adapt https://github.com/stretchr/testify/pull/1824
 
-Not PRs, but reported issues in the original repo:
+Not PRs, but reported issues in the original repo (need to investigate):
 
 * https://github.com/stretchr/testify/issues/1826
 * https://github.com/stretchr/testify/issues/1611
@@ -223,7 +224,7 @@ These improvements apply to the internalized and modernized copies of dependenci
 
 #### UX improvements
 
-* github.com/stretchr/testify#1223 - Display uint values in decimal instead of hex in diffs
+* diff rendering
 
 ### Under consideration
 

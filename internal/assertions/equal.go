@@ -148,8 +148,8 @@ func formatUnequalValues(expected, actual any) (e string, a string) {
 			fmt.Sprintf("%T(%s)", actual, truncatingFormat("%#v", actual))
 	}
 	switch expected.(type) {
-	case time.Duration:
-		return fmt.Sprintf("%v", expected), fmt.Sprintf("%v", actual)
+	case time.Duration, uint, uint8, uint16, uint32, uint64:
+		return fmt.Sprint(expected), fmt.Sprint(actual)
 	default:
 		return truncatingFormat("%#v", expected), truncatingFormat("%#v", actual)
 	}
