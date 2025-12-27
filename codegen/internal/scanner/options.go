@@ -3,11 +3,14 @@
 
 package scanner
 
+const stdTarget = "github.com/go-openapi/testify/v2/internal/assertions"
+
 type Option func(*options)
 
 type options struct {
-	dir string
-	pkg string
+	dir        string
+	pkg        string
+	collectDoc bool
 }
 
 // WithWorkDir gives a workdir to the code scanner.
@@ -24,10 +27,17 @@ func WithPackage(pkg string) Option {
 	}
 }
 
+// WithCollectDoc indicates that the scanner should extract more information from comments.
+func WithCollectDoc(enabled bool) Option {
+	return func(o *options) {
+		o.collectDoc = enabled
+	}
+}
+
 func optionsWithDefaults(opts []Option) options {
 	o := options{
 		dir: "..",
-		pkg: "github.com/go-openapi/testify/v2/internal/assertions",
+		pkg: stdTarget,
 	}
 
 	for _, apply := range opts {

@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
 // SPDX-License-Identifier: Apache-2.0
 
-// Code generated with github.com/go-openapi/testify/v2/codegen@master [sha: bb2c19fba6c03f46cb643b3bcdc1d647ea1453ab]; DO NOT EDIT.
+// Code generated with github.com/go-openapi/testify/v2/codegen; DO NOT EDIT.
+// Generated on 2026-01-02 (version v1.2.2-760-g97c29e3) using codegen version master [sha: 97c29e3dbfc40800a080863ceea81db0cfd6e858]
 
 package assert
 
@@ -23,11 +24,8 @@ type (
 	// for table driven tests.
 	BoolAssertionFunc = assertions.BoolAssertionFunc
 
-	// CollectT implements the T interface and collects all errors.
+	// CollectT implements the [T] interface and collects all errors.
 	CollectT = assertions.CollectT
-
-	// Deprecated: CompareType has only ever been for internal use and has accidentally been published since v1.6.0. Do not use it.
-	CompareType = assertions.CompareType
 
 	// Comparison is a custom function that returns true on success and false on failure.
 	Comparison = assertions.Comparison

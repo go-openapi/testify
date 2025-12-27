@@ -13,13 +13,16 @@ import (
 
 // InDelta asserts that the two numerals are within delta of each other.
 //
-//	assert.InDelta(t, math.Pi, 22/7.0, 0.01)
+// # Usage
 //
-// Examples:
+// assertions.InDelta(t, math.Pi, 22/7.0, 0.01)
+//
+// # Examples
 //
 //	success: 1.0, 1.01, 0.02
 //	failure: 1.0, 1.1, 0.05
 func InDelta(t T, expected, actual any, delta float64, msgAndArgs ...any) bool {
+	// Domain: number
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -53,11 +56,16 @@ func InDelta(t T, expected, actual any, delta float64, msgAndArgs ...any) bool {
 
 // InDeltaSlice is the same as InDelta, except it compares two slices.
 //
-// Examples:
+// # Usage
+//
+//	assertions.InDeltaSlice(t, []float64{1.0, 2.0}, []float64{1.01, 2.01}, 0.02)
+//
+// # Examples
 //
 //	success: []float64{1.0, 2.0}, []float64{1.01, 2.01}, 0.02
 //	failure: []float64{1.0, 2.0}, []float64{1.1, 2.1}, 0.05
 func InDeltaSlice(t T, expected, actual any, delta float64, msgAndArgs ...any) bool {
+	// Domain: number
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -82,11 +90,16 @@ func InDeltaSlice(t T, expected, actual any, delta float64, msgAndArgs ...any) b
 
 // InDeltaMapValues is the same as InDelta, but it compares all values between two maps. Both maps must have exactly the same keys.
 //
-// Examples:
+// # Usage
+//
+//	assertions.InDeltaMapValues(t, map[string]float64{"a": 1.0}, map[string]float64{"a": 1.01}, 0.02)
+//
+// # Examples
 //
 //	success: map[string]float64{"a": 1.0}, map[string]float64{"a": 1.01}, 0.02
 //	failure: map[string]float64{"a": 1.0}, map[string]float64{"a": 1.1}, 0.05
 func InDeltaMapValues(t T, expected, actual any, delta float64, msgAndArgs ...any) bool {
+	// Domain: number
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -129,35 +142,18 @@ func InDeltaMapValues(t T, expected, actual any, delta float64, msgAndArgs ...an
 	return true
 }
 
-func calcRelativeError(expected, actual any) (float64, error) {
-	af, aok := toFloat(expected)
-	bf, bok := toFloat(actual)
-	if !aok || !bok {
-		return 0, errors.New("parameters must be numerical")
-	}
-	if math.IsNaN(af) && math.IsNaN(bf) {
-		return 0, nil
-	}
-	if math.IsNaN(af) {
-		return 0, errors.New("expected value must not be NaN")
-	}
-	if af == 0 {
-		return 0, errors.New("expected value must have a value other than zero to calculate the relative error")
-	}
-	if math.IsNaN(bf) {
-		return 0, errors.New("actual value must not be NaN")
-	}
-
-	return math.Abs(af-bf) / math.Abs(af), nil
-}
-
 // InEpsilon asserts that expected and actual have a relative error less than epsilon.
 //
-// Examples:
+// # Usage
+//
+//	assertions.InEpsilon(t, 100.0, 101.0, 0.02)
+//
+// # Examples
 //
 //	success: 100.0, 101.0, 0.02
 //	failure: 100.0, 110.0, 0.05
 func InEpsilon(t T, expected, actual any, epsilon float64, msgAndArgs ...any) bool {
+	// Domain: number
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -181,11 +177,16 @@ func InEpsilon(t T, expected, actual any, epsilon float64, msgAndArgs ...any) bo
 
 // InEpsilonSlice is the same as InEpsilon, except it compares each value from two slices.
 //
-// Examples:
+// # Usage
+//
+//	assertions.InEpsilonSlice(t, []float64{100.0, 200.0}, []float64{101.0, 202.0}, 0.02)
+//
+// # Examples
 //
 //	success: []float64{100.0, 200.0}, []float64{101.0, 202.0}, 0.02
 //	failure: []float64{100.0, 200.0}, []float64{110.0, 220.0}, 0.05
 func InEpsilonSlice(t T, expected, actual any, epsilon float64, msgAndArgs ...any) bool {
+	// Domain: number
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -213,6 +214,28 @@ func InEpsilonSlice(t T, expected, actual any, epsilon float64, msgAndArgs ...an
 	}
 
 	return true
+}
+
+func calcRelativeError(expected, actual any) (float64, error) {
+	af, aok := toFloat(expected)
+	bf, bok := toFloat(actual)
+	if !aok || !bok {
+		return 0, errors.New("parameters must be numerical")
+	}
+	if math.IsNaN(af) && math.IsNaN(bf) {
+		return 0, nil
+	}
+	if math.IsNaN(af) {
+		return 0, errors.New("expected value must not be NaN")
+	}
+	if af == 0 {
+		return 0, errors.New("expected value must have a value other than zero to calculate the relative error")
+	}
+	if math.IsNaN(bf) {
+		return 0, errors.New("actual value must not be NaN")
+	}
+
+	return math.Abs(af-bf) / math.Abs(af), nil
 }
 
 func toFloat(x any) (float64, bool) {

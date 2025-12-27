@@ -1,0 +1,175 @@
+---
+title: {{ .Title | quote }}
+description: {{ titleize .Description | quote }}
+modified: {{ date }}
+weight: {{ .Weight }}
+domains:
+  - {{ .Domain | quote }}
+keywords:
+{{- with .Package }}
+  {{- $enableFormat := .EnableFormat }}
+  {{- range .Functions }}
+  - {{ .Name | quote }}
+    {{- if $enableFormat }}
+  - {{ printf "%sf" .Name | quote }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+---
+
+{{ titleize .Description }}{{/* description of the domain, as annotated in internal/assertions/doc.go */}}
+
+## Assertions
+
+[![GoDoc][godoc-badge]][godoc-url]
+{class="inline-badge"}
+
+{{- $extraPackages := .ExtraPackages }}
+{{- $github := .GitHubURL }}
+{{- $godoc := .PkgGoDevURL }}
+
+_All links point to <{{ $godoc }}>_
+
+This domain exposes {{ .RefCount }} functionalities.
+
+{{- with .Package }}
+  {{- range .Functions }}{{/* functions in internal/assertions annotated with "domain:" */}}
+    {{- if or (not .IsGeneric) ($.EnableGenerics) }}
+      {{- if and (not .IsHelper) (not .IsConstructor) }}
+
+### {{ .Name }}
+        {{- if .IsDeprecated }}
+
+{{ print "{{" }}% expand title="{{ .Name }} [DEPRECATED]" %{{ print "}}" }}
+<div style="background-color: #fceea5;">{{/* like godoc TODO: use css */}}
+        {{- end }}
+
+{{ mdformat .DocString }}{{/* reformat inner markdown and reformat */}}
+
+        {{- $funcName := .Name }}
+        {{- with $extraPackages }}
+
+{{ print "{{" }}< tabs >{{ print "}}" }}
+          {{- range .LookupFunction $funcName }}
+{{ print "{{" }}% tab title="{{ .Package }}" style="secondary" %{{ print "}}" }}
+| Signature | Usage |
+|--|--|
+| [`{{.Package }}.{{ .Name }}({{ params .AllParams }}) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Name }}) | package-level function |
+            {{- if .EnableFormat }}
+| [`{{ .Package }}.{{ .Name }}f(t T, {{ params .Params }}, msg string, args ...any) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Name }}f) | formatted variant |
+            {{- end }}
+            {{- if .EnableForward }}
+| [`{{ .Package}}.(*{{ .Receiver }}).{{ .Name }}({{ params .Params }}) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Receiver }}.{{ .Name }}) | method variant |
+            {{- end }}
+            {{- if and .EnableForward .EnableFormat }}
+| [`{{ .Package }}.(*{{ .Receiver }}).{{ .Name }}f({{ params .Params }}, msg string, args ..any)`]({{ $godoc }}/{{ .Package }}#{{ .Receiver }}.{{ .Name }}f) | method formatted variant |
+            {{- end }}
+{{ print "{{" }}% /tab %{{ print "}}" }}
+          {{- end }}
+        {{- end }}
+
+{{ print "{{" }}% tab title="internal" style="accent" icon="wrench" %{{ print "}}" }}
+| Signature | Usage |
+|--|--|
+        {{- $pkg := $.Package.Package }} 
+| [`{{ $pkg }}.{{ .Name }}({{ params .AllParams }}) {{ returns .Returns }}`]({{ $godoc }}/internal/{{ $pkg }}#{{ .Name }}) | internal implementation |
+
+**Source:** [{{ .SourcePackage }}#{{ .Name }}]({{ sourceLink $github .SourceLink }})
+
+        {{- range .ExtraComments }}
+          {{- if eq .Tag 2 }}{{/* maintainers section */}}
+
+> **Maintainer Note**
+> {{ .Text }}{{/* Proposal for enhancement: clean rendered markdown for multi-line comments */}}
+          {{- else if eq .Tag 4 }}{{/* notes section */}}
+
+> **Note**
+> {{ .Text }}
+          {{- end }}
+        {{- end }}
+{{ print "{{" }}% /tab %{{ print "}}" }}
+{{ print "{{" }}< /tabs >{{ print "}}" }}
+        {{- if .IsDeprecated }}
+</div>
+{{ print "{{" }}% /expand %{{ print "}}" }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+---
+
+{{- with .Package }}{{ if .HasHelpers }}
+
+## Other helpers
+  {{- range .Functions }}{{/* functions in internal/assertions annotated with "domain:" */}}
+    {{- if or (not .IsGeneric) ($.EnableGenerics) }}
+      {{- if or .IsHelper .IsConstructor }}
+
+### {{ .Name }}
+        {{- if .IsDeprecated }}
+
+{{ print "{{" }}% expand title="{{ .Name }} [DEPRECATED]" %{{ print "}}" }}
+<div style="background-color: #fceea5;">{{/* like godoc */}}
+        {{- end }}
+
+{{ mdformat .DocString }}
+
+        {{- $funcName := .Name }}
+        {{- with $extraPackages }}
+
+{{ print "{{" }}< tabs >{{ print "}}" }}
+          {{- range .LookupFunction $funcName }}
+{{ print "{{" }}% tab title="{{ .Package }}" style="secondary" %{{ print "}}" }}
+| Signature | Usage |
+|--|--|
+| [`{{.Package }}.{{ .Name }}({{ params .AllParams }}) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Name }}) | package-level function |
+{{ print "{{" }}% /tab %{{ print "}}" }}
+          {{- end }}
+        {{- end }}
+
+{{ print "{{" }}% tab title="internal" style="accent" icon="wrench" %{{ print "}}" }}
+| Signature | Usage |
+|--|--|
+        {{- $pkg := $.Package.Package }} 
+| [`{{ $pkg }}.{{ .Name }}({{ params .AllParams }}) {{ returns .Returns }}`]({{ $godoc }}/internal/{{ $pkg }}#{{ .Name }}) | internal implementation |
+
+**Source:** [{{ .SourcePackage }}#{{ .Name }}]({{ sourceLink $github .SourceLink }})
+
+        {{- range .ExtraComments }}
+          {{- if eq .Tag 2 }}{{/* maintainers section */}}
+
+> **Maintainer Note**
+> {{ .Text }}{{/* Proposal for enhancement: clean rendered markdown for multi-line comments */}}
+          {{- else if eq .Tag 4 }}{{/* notes section */}}
+
+> **Note**
+> {{ .Text }}
+          {{- end }}
+        {{- end }}
+{{ print "{{" }}% /tab %{{ print "}}" }}
+{{ print "{{" }}< /tabs >{{ print "}}" }}
+        {{- if .IsDeprecated }}
+</div>
+{{ print "{{" }}% /expand %{{ print "}}" }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}{{- end }}
+
+---
+
+Generated with {{ .Package.Tool }}
+
+[godoc-badge]: {{ godocbadge .PkgGoDevURL }}
+[godoc-url]: {{ .PkgGoDevURL }}
+
+<!--
+{{ .Package.Copyright }}
+
+Document generated by {{ .Package.Tool }} DO NOT EDIT.
+
+{{ .Package.Header }}
+-->

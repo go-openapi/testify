@@ -18,17 +18,22 @@ import (
 //
 // See also [reflect.Len].
 //
-// Usage:
+// # Usage
 //
 //	assertions.Len(t, mySlice, 3)
 //	assertions.Len(t, myString, 4)
 //	assertions.Len(t, myMap, 5)
 //
-// Examples:
+// # Examples
 //
 //	success: []string{"A","B"}, 2
 //	failure: []string{"A","B"}, 1
 func Len(t T, object any, length int, msgAndArgs ...any) bool {
+	// Domain: collection
+	// Maintainer: The implementation is based on [reflect.Len]. The potential panic is handled with recover.
+	// A better approach could be to check for the [reflect.Type] before calling [reflect.Len].
+	//
+	// Note: (proposals) this does not currently support iterators, or collection objects that have a Len() method.
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -46,17 +51,18 @@ func Len(t T, object any, length int, msgAndArgs ...any) bool {
 // Contains asserts that the specified string, list(array, slice...) or map contains the
 // specified substring or element.
 //
-// Usage:
+// # Usage
 //
 //	assertions.Contains(t, "Hello World", "World")
-//	assertions.Contains(t, ["Hello", "World"], "World")
-//	assertions.Contains(t, {"Hello": "World"}, "Hello")
+//	assertions.Contains(t, []string{"Hello", "World"}, "World")
+//	assertions.Contains(t, map[string]string{"Hello": "World"}, "Hello")
 //
-// Examples:
+// # Examples
 //
 //	success: []string{"A","B"}, "A"
 //	failure: []string{"A","B"}, "C"
 func Contains(t T, s, contains any, msgAndArgs ...any) bool {
+	// Domain: collection
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -75,17 +81,18 @@ func Contains(t T, s, contains any, msgAndArgs ...any) bool {
 // NotContains asserts that the specified string, list(array, slice...) or map does NOT contain the
 // specified substring or element.
 //
-// Usage:
+// # Usage
 //
 //	assertions.NotContains(t, "Hello World", "Earth")
 //	assertions.NotContains(t, ["Hello", "World"], "Earth")
 //	assertions.NotContains(t, {"Hello": "World"}, "Earth")
 //
-// Examples:
+// # Examples
 //
 //	success: []string{"A","B"}, "C"
 //	failure: []string{"A","B"}, "B"
 func NotContains(t T, s, contains any, msgAndArgs ...any) bool {
+	// Domain: collection
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -107,16 +114,19 @@ func NotContains(t T, s, contains any, msgAndArgs ...any) bool {
 // Map elements are key-value pairs unless compared with an array or slice where
 // only the map key is evaluated.
 //
-//	assert.Subset(t, [1, 2, 3], [1, 2])
-//	assert.Subset(t, {"x": 1, "y": 2}, {"x": 1})
-//	assert.Subset(t, [1, 2, 3], {1: "one", 2: "two"})
-//	assert.Subset(t, {"x": 1, "y": 2}, ["x"])
+// # Usage
 //
-// Examples:
+//	assertions.Subset(t, [1, 2, 3], [1, 2])
+//	assertions.Subset(t, {"x": 1, "y": 2}, {"x": 1})
+//	assertions.Subset(t, [1, 2, 3], {1: "one", 2: "two"})
+//	assertions.Subset(t, {"x": 1, "y": 2}, ["x"])
+//
+// # Examples
 //
 //	success: []int{1, 2, 3}, []int{1, 2}
 //	failure: []int{1, 2, 3}, []int{4, 5}
 func Subset(t T, list, subset any, msgAndArgs ...any) (ok bool) {
+	// Domain: collection
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -181,16 +191,19 @@ func Subset(t T, list, subset any, msgAndArgs ...any) (ok bool) {
 // Map elements are key-value pairs unless compared with an array or slice where
 // only the map key is evaluated.
 //
-//	assert.NotSubset(t, [1, 3, 4], [1, 2])
-//	assert.NotSubset(t, {"x": 1, "y": 2}, {"z": 3})
-//	assert.NotSubset(t, [1, 3, 4], {1: "one", 2: "two"})
-//	assert.NotSubset(t, {"x": 1, "y": 2}, ["z"])
+// # Usage
 //
-// Examples:
+//	assertions.NotSubset(t, [1, 3, 4], [1, 2])
+//	assertions.NotSubset(t, {"x": 1, "y": 2}, {"z": 3})
+//	assertions.NotSubset(t, [1, 3, 4], {1: "one", 2: "two"})
+//	assertions.NotSubset(t, {"x": 1, "y": 2}, ["z"])
+//
+// # Examples
 //
 //	success: []int{1, 2, 3}, []int{4, 5}
 //	failure: []int{1, 2, 3}, []int{1, 2}
 func NotSubset(t T, list, subset any, msgAndArgs ...any) (ok bool) {
+	// Domain: collection
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -253,13 +266,16 @@ func NotSubset(t T, list, subset any, msgAndArgs ...any) (ok bool) {
 // listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 // the number of appearances of each of them in both lists should match.
 //
-// assert.ElementsMatch(t, [1, 3, 2, 3], [1, 3, 3, 2]).
+// # Usage
 //
-// Examples:
+//	assertions.ElementsMatch(t, [1, 3, 2, 3], [1, 3, 3, 2])
+//
+// # Examples
 //
 //	success: []int{1, 3, 2, 3}, []int{1, 3, 3, 2}
 //	failure: []int{1, 2, 3}, []int{1, 2, 4}
 func ElementsMatch(t T, listA, listB any, msgAndArgs ...any) (ok bool) {
+	// Domain: collection
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -278,6 +294,45 @@ func ElementsMatch(t T, listA, listB any, msgAndArgs ...any) (ok bool) {
 	}
 
 	return Fail(t, formatListDiff(listA, listB, extraA, extraB), msgAndArgs...)
+}
+
+// NotElementsMatch asserts that the specified listA(array, slice...) is NOT equal to specified
+// listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
+// the number of appearances of each of them in both lists should not match.
+// This is an inverse of ElementsMatch.
+//
+// # Usage
+//
+//	assertions.NotElementsMatch(t, [1, 1, 2, 3], [1, 1, 2, 3]) -> false
+//	assertions.NotElementsMatch(t, [1, 1, 2, 3], [1, 2, 3]) -> true
+//	assertions.NotElementsMatch(t, [1, 2, 3], [1, 2, 4]) -> true
+//
+// # Examples
+//
+//	success: []int{1, 2, 3}, []int{1, 2, 4}
+//	failure: []int{1, 3, 2, 3}, []int{1, 3, 3, 2}
+func NotElementsMatch(t T, listA, listB any, msgAndArgs ...any) (ok bool) {
+	// Domain: collection
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if isEmpty(listA) && isEmpty(listB) {
+		return Fail(t, "listA and listB contain the same elements", msgAndArgs)
+	}
+
+	if !isList(t, listA, msgAndArgs...) {
+		return Fail(t, "listA is not a list type", msgAndArgs...)
+	}
+	if !isList(t, listB, msgAndArgs...) {
+		return Fail(t, "listB is not a list type", msgAndArgs...)
+	}
+
+	extraA, extraB := diffLists(listA, listB)
+	if len(extraA) == 0 && len(extraB) == 0 {
+		return Fail(t, "listA and listB contain the same elements", msgAndArgs)
+	}
+
+	return true
 }
 
 // containsElement tries to loop over the list check if the list includes the element.
@@ -391,44 +446,6 @@ func formatListDiff(listA, listB any, extraA, extraB []any) string {
 	msg.WriteString(spewConfig.Sdump(listB))
 
 	return msg.String()
-}
-
-// NotElementsMatch asserts that the specified listA(array, slice...) is NOT equal to specified
-// listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
-// the number of appearances of each of them in both lists should not match.
-// This is an inverse of ElementsMatch.
-//
-// assert.NotElementsMatch(t, [1, 1, 2, 3], [1, 1, 2, 3]) -> false
-//
-// assert.NotElementsMatch(t, [1, 1, 2, 3], [1, 2, 3]) -> true
-//
-// assert.NotElementsMatch(t, [1, 2, 3], [1, 2, 4]) -> true.
-//
-// Examples:
-//
-//	success: []int{1, 2, 3}, []int{1, 2, 4}
-//	failure: []int{1, 3, 2, 3}, []int{1, 3, 3, 2}
-func NotElementsMatch(t T, listA, listB any, msgAndArgs ...any) (ok bool) {
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-	if isEmpty(listA) && isEmpty(listB) {
-		return Fail(t, "listA and listB contain the same elements", msgAndArgs)
-	}
-
-	if !isList(t, listA, msgAndArgs...) {
-		return Fail(t, "listA is not a list type", msgAndArgs...)
-	}
-	if !isList(t, listB, msgAndArgs...) {
-		return Fail(t, "listB is not a list type", msgAndArgs...)
-	}
-
-	extraA, extraB := diffLists(listA, listB)
-	if len(extraA) == 0 && len(extraB) == 0 {
-		return Fail(t, "listA and listB contain the same elements", msgAndArgs)
-	}
-
-	return true
 }
 
 // getLen tries to get the length of an object.

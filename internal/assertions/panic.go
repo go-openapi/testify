@@ -16,40 +16,18 @@ type PanicTestFunc func()
 // for table driven tests.
 type PanicAssertionFunc func(t T, f PanicTestFunc, msgAndArgs ...any) bool
 
-// didPanic returns true if the function passed to it panics. Otherwise, it returns false.
-func didPanic(f PanicTestFunc) (didPanic bool, message any, stack string) {
-	didPanic = true
-
-	defer func() {
-		message = recover()
-		if didPanic {
-			stack = string(debug.Stack())
-		}
-		// Go 1.21 introduces runtime.PanicNilError on panic(nil),
-		// so maintain the same logic going forward (https://github.com/golang/go/issues/25448).
-		if err, ok := message.(error); ok {
-			if err.Error() == "panic called with nil argument" {
-				message = nil
-			}
-		}
-	}()
-
-	// call the target function
-	f()
-	didPanic = false
-
-	return
-}
-
 // Panics asserts that the code inside the specified PanicTestFunc panics.
 //
-//	assert.Panics(t, func(){ GoCrazy() })
+// # Usage
 //
-// Examples:
+//	assertions.Panics(t, func(){ GoCrazy() })
+//
+// # Examples
 //
 //	success: func() { panic("panicking") }
 //	failure: func() { }
 func Panics(t T, f PanicTestFunc, msgAndArgs ...any) bool {
+	// Domain: panic
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -64,13 +42,16 @@ func Panics(t T, f PanicTestFunc, msgAndArgs ...any) bool {
 // PanicsWithValue asserts that the code inside the specified PanicTestFunc panics, and that
 // the recovered panic value equals the expected panic value.
 //
-//	assert.PanicsWithValue(t, "crazy error", func(){ GoCrazy() })
+// # Usage
 //
-// Examples:
+//	assertions.PanicsWithValue(t, "crazy error", func(){ GoCrazy() })
+//
+// # Examples
 //
 //	success: "panicking", func() { panic("panicking") }
 //	failure: "panicking", func() { }
 func PanicsWithValue(t T, expected any, f PanicTestFunc, msgAndArgs ...any) bool {
+	// Domain: panic
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -90,13 +71,16 @@ func PanicsWithValue(t T, expected any, f PanicTestFunc, msgAndArgs ...any) bool
 // panics, and that the recovered panic value is an error that satisfies the
 // EqualError comparison.
 //
-//	assert.PanicsWithError(t, "crazy error", func(){ GoCrazy() })
+// # Usage
 //
-// Examples:
+//	assertions.PanicsWithError(t, "crazy error", func(){ GoCrazy() })
+//
+// # Examples
 //
 //	success: ErrTest.Error(), func() { panic(ErrTest) }
 //	failure: ErrTest.Error(), func() { }
 func PanicsWithError(t T, errString string, f PanicTestFunc, msgAndArgs ...any) bool {
+	// Domain: panic
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -121,13 +105,16 @@ func PanicsWithError(t T, errString string, f PanicTestFunc, msgAndArgs ...any) 
 
 // NotPanics asserts that the code inside the specified PanicTestFunc does NOT panic.
 //
-//	assert.NotPanics(t, func(){ RemainCalm() })
+// # Usage
 //
-// Examples:
+//	assertions.NotPanics(t, func(){ RemainCalm() })
+//
+// # Examples
 //
 //	success: func() { }
 //	failure: func() { panic("panicking") }
 func NotPanics(t T, f PanicTestFunc, msgAndArgs ...any) bool {
+	// Domain: panic
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -137,4 +124,29 @@ func NotPanics(t T, f PanicTestFunc, msgAndArgs ...any) bool {
 	}
 
 	return true
+}
+
+// didPanic returns true if the function passed to it panics. Otherwise, it returns false.
+func didPanic(f PanicTestFunc) (didPanic bool, message any, stack string) {
+	didPanic = true
+
+	defer func() {
+		message = recover()
+		if didPanic {
+			stack = string(debug.Stack())
+		}
+		// Go 1.21 introduces runtime.PanicNilError on panic(nil),
+		// so maintain the same logic going forward (https://github.com/golang/go/issues/25448).
+		if err, ok := message.(error); ok {
+			if err.Error() == "panic called with nil argument" {
+				message = nil
+			}
+		}
+	}()
+
+	// call the target function
+	f()
+	didPanic = false
+
+	return
 }

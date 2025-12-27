@@ -11,13 +11,16 @@ import (
 
 // JSONEqBytes asserts that two JSON byte slices are equivalent.
 //
-//	assert.JSONEqBytes(t, []byte(`{"hello": "world", "foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`))
+// # Usage
 //
-// Examples:
+//	assertions.JSONEqBytes(t, []byte(`{"hello": "world", "foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`))
+//
+// # Examples
 //
 //	success: []byte(`{"hello": "world", "foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`)
 //	failure: []byte(`{"hello": "world", "foo": "bar"}`), []byte(`[{"foo": "bar"}, {"hello": "world"}]`)
 func JSONEqBytes(t T, expected, actual []byte, msgAndArgs ...any) bool {
+	// Domain: json
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -41,12 +44,15 @@ func JSONEqBytes(t T, expected, actual []byte, msgAndArgs ...any) bool {
 
 // JSONEq asserts that two JSON strings are equivalent.
 //
-//	assert.JSONEq(t, `{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
+// # Usage
 //
-// Examples:
+//	assertions.JSONEq(t, `{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
+//
+// # Examples
 //
 //	success: `{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`
 //	failure: `{"hello": "world", "foo": "bar"}`, `[{"foo": "bar"}, {"hello": "world"}]`
 func JSONEq(t T, expected, actual string, msgAndArgs ...any) bool {
+	// Domain: json
 	return JSONEqBytes(t, []byte(expected), []byte(actual), msgAndArgs)
 }

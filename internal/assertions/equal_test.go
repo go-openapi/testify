@@ -140,9 +140,8 @@ func TestEqualSame(t *testing.T) {
 		if Same(mock, dps, ps) {
 			t.Error("Same should return false")
 		}
-		expPat :=
-			fmt.Sprintf(`expected: &%[1]s.s\{i:1\} \(%[1]s.sPtr\)\((0x[a-f0-9]+)\)\s*\n`, shortpkg) +
-				fmt.Sprintf(`\s+actual  : &%[1]s.s\{i:1\} \(\*%[1]s.s\)\((0x[a-f0-9]+)\)`, shortpkg)
+		expPat := fmt.Sprintf(`expected: &%[1]s.s\{i:1\} \(%[1]s.sPtr\)\((0x[a-f0-9]+)\)\s*\n`, shortpkg) +
+			fmt.Sprintf(`\s+actual  : &%[1]s.s\{i:1\} \(\*%[1]s.s\)\((0x[a-f0-9]+)\)`, shortpkg)
 		Regexp(t, regexp.MustCompile(expPat), mock.errorString())
 	})
 }
@@ -216,7 +215,7 @@ func TestEqualValuesAndNotEqualValues(t *testing.T) {
 func TestEqualEmpty(t *testing.T) {
 	t.Parallel()
 
-	// TODO(fredbi): redundant test context declaration
+	// Proposal for enhancement: redundant test context declaration
 	chWithValue := make(chan struct{}, 1)
 	chWithValue <- struct{}{}
 	var tiP *time.Time
@@ -592,20 +591,20 @@ func equalEmptyCases() iter.Seq[equalEmptyCase] {
 			name:           "string with only spaces is not empty",
 			value:          "   ",
 			expectedResult: false,
-			expectedErrMsg: "Should be empty, but was    \n", // TODO FIX THIS strange error message
+			expectedErrMsg: "Should be empty, but was    \n", // Proposal for enhancement: FIX THIS strange error message
 		},
 		{
 			name:           "string with a line feed is not empty",
 			value:          "\n",
 			expectedResult: false,
-			// TODO This is the exact same error message as for an empty string
-			expectedErrMsg: "Should be empty, but was \n", // TODO FIX THIS strange error message
+			// Proposal for enhancement: This is the exact same error message as for an empty string
+			expectedErrMsg: "Should be empty, but was \n", // Proposal for enhancement: FIX THIS strange error message
 		},
 		{
 			name:           "string with only tabulation and lines feed is not empty",
 			value:          "\n\t\n",
 			expectedResult: false,
-			// TODO The line feeds and tab are not helping to spot what is expected
+			// Proposal for enhancement: The line feeds and tab are not helping to spot what is expected
 			expectedErrMsg: "" + // this syntax is used to show how errors are reported.
 				"Should be empty, but was \n" +
 				"\t\n",
@@ -614,14 +613,14 @@ func equalEmptyCases() iter.Seq[equalEmptyCase] {
 			name:           "string with trailing lines feed is not empty",
 			value:          "foo\n\n",
 			expectedResult: false,
-			// TODO it's not clear if one or two lines feed are expected
+			// Proposal for enhancement: it's not clear if one or two lines feed are expected
 			expectedErrMsg: "Should be empty, but was foo\n\n",
 		},
 		{
 			name:           "string with leading and trailing tabulation and lines feed is not empty",
 			value:          "\n\nfoo\t\n\t\n",
 			expectedResult: false,
-			// TODO The line feeds and tab are not helping to figure what is expected
+			// Proposal for enhancement: The line feeds and tab are not helping to figure what is expected
 			expectedErrMsg: "" +
 				"Should be empty, but was \n" +
 				"\n" +
@@ -633,7 +632,7 @@ func equalEmptyCases() iter.Seq[equalEmptyCase] {
 			name:           "non-printable character is not empty",
 			value:          "\u00a0", // NO-BREAK SPACE UNICODE CHARACTER
 			expectedResult: false,
-			// TODO here you cannot figure out what is expected
+			// Proposal for enhancement: here you cannot figure out what is expected
 			expectedErrMsg: "Should be empty, but was \u00a0\n",
 		},
 
@@ -660,7 +659,7 @@ func equalNotEmptyCases() iter.Seq[equalNotEmptyCase] {
 			name:           "Empty string is empty",
 			value:          "",
 			expectedResult: false,
-			expectedErrMsg: `Should NOT be empty, but was ` + "\n", // TODO FIX THIS strange error message
+			expectedErrMsg: `Should NOT be empty, but was ` + "\n", // Proposal for enhancement: FIX THIS strange error message
 		},
 		{
 			name:           "Nil is empty",

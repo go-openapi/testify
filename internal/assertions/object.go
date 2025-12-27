@@ -33,19 +33,6 @@ func ObjectsAreEqual(expected, actual any) bool {
 	return bytes.Equal(exp, act)
 }
 
-// ObjectsExportedFieldsAreEqual determines if the exported (public) fields of two objects are
-// considered equal. This comparison of only exported fields is applied recursively to nested data
-// structures.
-//
-// This function does no assertion of any kind.
-//
-// Deprecated: Use [EqualExportedValues] instead.
-func ObjectsExportedFieldsAreEqual(expected, actual any) bool {
-	expectedCleaned := copyExportedFields(expected)
-	actualCleaned := copyExportedFields(actual)
-	return ObjectsAreEqualValues(expectedCleaned, actualCleaned)
-}
-
 // ObjectsAreEqualValues gets whether two objects are equal, or if their
 // values are equal.
 func ObjectsAreEqualValues(expected, actual any) bool {

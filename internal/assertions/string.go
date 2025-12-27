@@ -10,14 +10,17 @@ import (
 
 // Regexp asserts that a specified regexp matches a string.
 //
-//	assert.Regexp(t, regexp.MustCompile("start"), "it's starting")
-//	assert.Regexp(t, "start...$", "it's not starting")
+// # Usage
 //
-// Examples:
+//	assertions.Regexp(t, regexp.MustCompile("start"), "it's starting")
+//	assertions.Regexp(t, "start...$", "it's not starting")
+//
+// # Examples
 //
 //	success: "^start", "starting"
 //	failure: "^start", "not starting"
 func Regexp(t T, rx any, str any, msgAndArgs ...any) bool {
+	// Domain: string
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -38,14 +41,17 @@ func Regexp(t T, rx any, str any, msgAndArgs ...any) bool {
 
 // NotRegexp asserts that a specified regexp does not match a string.
 //
-//	assert.NotRegexp(t, regexp.MustCompile("starts"), "it's starting")
-//	assert.NotRegexp(t, "^start", "it's not starting")
+// # Usage
 //
-// Examples:
+//	assertions.NotRegexp(t, regexp.MustCompile("starts"), "it's starting")
+//	assertions.NotRegexp(t, "^start", "it's not starting")
+//
+// # Examples
 //
 //	success: "^start", "not starting"
 //	failure: "^start", "starting"
 func NotRegexp(t T, rx any, str any, msgAndArgs ...any) bool {
+	// Domain: string
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}

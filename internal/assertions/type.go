@@ -10,13 +10,16 @@ import (
 
 // Implements asserts that an object is implemented by the specified interface.
 //
-//	assert.Implements(t, (*MyInterface)(nil), new(MyObject))
+// # Usage
 //
-// Examples:
+//	assertions.Implements(t, (*MyInterface)(nil), new(MyObject))
+//
+// # Examples
 //
 //	success: ptr(dummyInterface), new(testing.T)
 //	failure: (*error)(nil), new(testing.T)
 func Implements(t T, interfaceObject any, object any, msgAndArgs ...any) bool {
+	// Domain: type
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -34,13 +37,16 @@ func Implements(t T, interfaceObject any, object any, msgAndArgs ...any) bool {
 
 // NotImplements asserts that an object does not implement the specified interface.
 //
-//	assert.NotImplements(t, (*MyInterface)(nil), new(MyObject))
+// # Usage
 //
-// Examples:
+//	assertions.NotImplements(t, (*MyInterface)(nil), new(MyObject))
+//
+// # Examples
 //
 //	success: (*error)(nil), new(testing.T)
 //	failure: ptr(dummyInterface), new(testing.T)
 func NotImplements(t T, interfaceObject any, object any, msgAndArgs ...any) bool {
+	// Domain: type
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -56,19 +62,18 @@ func NotImplements(t T, interfaceObject any, object any, msgAndArgs ...any) bool
 	return true
 }
 
-func isType(expectedType, object any) bool {
-	return ObjectsAreEqual(reflect.TypeOf(object), reflect.TypeOf(expectedType))
-}
-
 // IsType asserts that the specified objects are of the same type.
 //
-//	assert.IsType(t, &MyStruct{}, &MyStruct{})
+// # Usage
 //
-// Examples:
+//	assertions.IsType(t, &MyStruct{}, &MyStruct{})
+//
+// # Examples
 //
 //	success: 123, 456
 //	failure: int32(123), int64(456)
 func IsType(t T, expectedType, object any, msgAndArgs ...any) bool {
+	// Domain: type
 	if isType(expectedType, object) {
 		return true
 	}
@@ -80,13 +85,16 @@ func IsType(t T, expectedType, object any, msgAndArgs ...any) bool {
 
 // IsNotType asserts that the specified objects are not of the same type.
 //
-//	assert.IsNotType(t, &NotMyStruct{}, &MyStruct{})
+// # Usage
 //
-// Examples:
+//	assertions.IsNotType(t, &NotMyStruct{}, &MyStruct{})
+//
+// # Examples
 //
 //	success: int32(123), int64(456)
 //	failure: 123, 456
 func IsNotType(t T, theType, object any, msgAndArgs ...any) bool {
+	// Domain: type
 	if !isType(theType, object) {
 		return true
 	}
@@ -98,11 +106,16 @@ func IsNotType(t T, theType, object any, msgAndArgs ...any) bool {
 
 // Zero asserts that i is the zero value for its type.
 //
-// Examples:
+// # Usage
+//
+//	assertions.Zero(t, obj)
+//
+// # Examples
 //
 //	success: 0
 //	failure: 1
 func Zero(t T, i any, msgAndArgs ...any) bool {
+	// Domain: type
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -114,11 +127,16 @@ func Zero(t T, i any, msgAndArgs ...any) bool {
 
 // NotZero asserts that i is not the zero value for its type.
 //
-// Examples:
+// # Usage
+//
+//	assertions.NotZero(t, obj)
+//
+// # Examples
 //
 //	success: 1
 //	failure: 0
 func NotZero(t T, i any, msgAndArgs ...any) bool {
+	// Domain: type
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -126,4 +144,8 @@ func NotZero(t T, i any, msgAndArgs ...any) bool {
 		return Fail(t, fmt.Sprintf("Should not be zero, but was %v", i), msgAndArgs...)
 	}
 	return true
+}
+
+func isType(expectedType, object any) bool {
+	return ObjectsAreEqual(reflect.TypeOf(object), reflect.TypeOf(expectedType))
 }

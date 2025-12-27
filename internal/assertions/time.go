@@ -10,13 +10,16 @@ import (
 
 // WithinDuration asserts that the two times are within duration delta of each other.
 //
-//	assert.WithinDuration(t, time.Now(), 10*time.Second)
+// # Usage
 //
-// Examples:
+//	assertions.WithinDuration(t, time.Now(), 10*time.Second)
+//
+// # Examples
 //
 //	success: time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 12, 0, 1, 0, time.UTC), 2*time.Second
 //	failure: time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 12, 0, 10, 0, time.UTC), 1*time.Second
 func WithinDuration(t T, expected, actual time.Time, delta time.Duration, msgAndArgs ...any) bool {
+	// Domain: time
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -31,13 +34,16 @@ func WithinDuration(t T, expected, actual time.Time, delta time.Duration, msgAnd
 
 // WithinRange asserts that a time is within a time range (inclusive).
 //
-//	assert.WithinRange(t, time.Now(), time.Now().Add(-time.Second), time.Now().Add(time.Second))
+// # Usage
 //
-// Examples:
+//	assertions.WithinRange(t, time.Now(), time.Now().Add(-time.Second), time.Now().Add(time.Second))
+//
+// # Examples
 //
 //	success: time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 11, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 13, 0, 0, 0, time.UTC)
 //	failure: time.Date(2024, 1, 1, 14, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 11, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 13, 0, 0, 0, time.UTC)
 func WithinRange(t T, actual, start, end time.Time, msgAndArgs ...any) bool {
+	// Domain: time
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}

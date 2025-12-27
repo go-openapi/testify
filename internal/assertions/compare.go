@@ -12,27 +12,26 @@ import (
 	"time"
 )
 
-// ComparisonAssertionFunc is a common function prototype when comparing two values.  Can be useful
-// for table driven tests.
-type ComparisonAssertionFunc func(T, any, any, ...any) bool
+type (
+	// ComparisonAssertionFunc is a common function prototype when comparing two values.  Can be useful
+	// for table driven tests.
+	ComparisonAssertionFunc func(T, any, any, ...any) bool
 
-// ValueAssertionFunc is a common function prototype when validating a single value.  Can be useful
-// for table driven tests.
-type ValueAssertionFunc func(T, any, ...any) bool
+	// ValueAssertionFunc is a common function prototype when validating a single value.  Can be useful
+	// for table driven tests.
+	ValueAssertionFunc func(T, any, ...any) bool
 
-// BoolAssertionFunc is a common function prototype when validating a bool value.  Can be useful
-// for table driven tests.
-type BoolAssertionFunc func(T, bool, ...any) bool
+	// BoolAssertionFunc is a common function prototype when validating a bool value.  Can be useful
+	// for table driven tests.
+	BoolAssertionFunc func(T, bool, ...any) bool
 
-// ErrorAssertionFunc is a common function prototype when validating an error value.  Can be useful
-// for table driven tests.
-type ErrorAssertionFunc func(T, error, ...any) bool
+	// ErrorAssertionFunc is a common function prototype when validating an error value.  Can be useful
+	// for table driven tests.
+	ErrorAssertionFunc func(T, error, ...any) bool
 
-// Comparison is a custom function that returns true on success and false on failure.
-type Comparison func() (success bool)
-
-// Deprecated: CompareType has only ever been for internal use and has accidentally been published since v1.6.0. Do not use it.
-type CompareType = compareResult
+	// Comparison is a custom function that returns true on success and false on failure.
+	Comparison func() (success bool)
+)
 
 type compareResult int
 
@@ -41,6 +40,161 @@ const (
 	compareEqual
 	compareGreater
 )
+
+// Greater asserts that the first element is strictly greater than the second.
+//
+// # Usage
+//
+//	assertions.Greater(t, 2, 1)
+//	assertions.Greater(t, float64(2), float64(1))
+//	assertions.Greater(t, "b", "a")
+//
+// # Examples
+//
+//	success: 2, 1
+//	failure: 1, 2
+func Greater(t T, e1 any, e2 any, msgAndArgs ...any) bool {
+	// Domain: comparison
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	failMessage := fmt.Sprintf("\"%v\" is not greater than \"%v\"", e1, e2)
+	return compareTwoValues(t, e1, e2, []compareResult{compareGreater}, failMessage, msgAndArgs...)
+}
+
+// GreaterOrEqual asserts that the first element is greater than or equal to the second.
+//
+// # Usage
+//
+//	assertions.GreaterOrEqual(t, 2, 1)
+//	assertions.GreaterOrEqual(t, 2, 2)
+//	assertions.GreaterOrEqual(t, "b", "a")
+//	assertions.GreaterOrEqual(t, "b", "b")
+//
+// # Examples
+//
+//	success: 2, 1
+//	failure: 1, 2
+func GreaterOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) bool {
+	// Domain: comparison
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	failMessage := fmt.Sprintf("\"%v\" is not greater than or equal to \"%v\"", e1, e2)
+	return compareTwoValues(t, e1, e2, []compareResult{compareGreater, compareEqual}, failMessage, msgAndArgs...)
+}
+
+// Less asserts that the first element is strictly less than the second.
+//
+// # Usage
+//
+//	assertions.Less(t, 1, 2)
+//	assertions.Less(t, float64(1), float64(2))
+//	assertions.Less(t, "a", "b")
+//
+// # Examples
+//
+//	success: 1, 2
+//	failure: 2, 1
+func Less(t T, e1 any, e2 any, msgAndArgs ...any) bool {
+	// Domain: comparison
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	failMessage := fmt.Sprintf("\"%v\" is not less than \"%v\"", e1, e2)
+	return compareTwoValues(t, e1, e2, []compareResult{compareLess}, failMessage, msgAndArgs...)
+}
+
+// LessOrEqual asserts that the first element is less than or equal to the second.
+//
+// # Usage
+//
+//	assertions.LessOrEqual(t, 1, 2)
+//	assertions.LessOrEqual(t, 2, 2)
+//	assertions.LessOrEqual(t, "a", "b")
+//	assertions.LessOrEqual(t, "b", "b")
+//
+// # Examples
+//
+//	success: 1, 2
+//	failure: 2, 1
+func LessOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) bool {
+	// Domain: comparison
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	failMessage := fmt.Sprintf("\"%v\" is not less than or equal to \"%v\"", e1, e2)
+	return compareTwoValues(t, e1, e2, []compareResult{compareLess, compareEqual}, failMessage, msgAndArgs...)
+}
+
+// Positive asserts that the specified element is strictly positive.
+//
+// # Usage
+//
+//	assertions.Positive(t, 1)
+//	assertions.Positive(t, 1.23)
+//
+// # Examples
+//
+//	success: 1
+//	failure: -1
+func Positive(t T, e any, msgAndArgs ...any) bool {
+	// Domain: comparison
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	zero := reflect.Zero(reflect.TypeOf(e))
+	failMessage := fmt.Sprintf("\"%v\" is not positive", e)
+	return compareTwoValues(t, e, zero.Interface(), []compareResult{compareGreater}, failMessage, msgAndArgs...)
+}
+
+// Negative asserts that the specified element is strictly negative.
+//
+// # Usage
+//
+//	assertions.Negative(t, -1)
+//	assertions.Negative(t, -1.23)
+//
+// # Examples
+//
+//	success: -1
+//	failure: 1
+func Negative(t T, e any, msgAndArgs ...any) bool {
+	// Domain: comparison
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	zero := reflect.Zero(reflect.TypeOf(e))
+	failMessage := fmt.Sprintf("\"%v\" is not negative", e)
+	return compareTwoValues(t, e, zero.Interface(), []compareResult{compareLess}, failMessage, msgAndArgs...)
+}
+
+func compareTwoValues(t T, e1 any, e2 any, allowedComparesResults []compareResult, failMessage string, msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	e1Kind := reflect.ValueOf(e1).Kind()
+	e2Kind := reflect.ValueOf(e2).Kind()
+	if e1Kind != e2Kind {
+		return Fail(t, "Elements should be the same type", msgAndArgs...)
+	}
+
+	compareResult, isComparable := compare(e1, e2, e1Kind)
+	if !isComparable {
+		return Fail(t, fmt.Sprintf(`Can not compare type "%T"`, e1), msgAndArgs...)
+	}
+
+	if !containsValue(allowedComparesResults, compareResult) {
+		return Fail(t, failMessage, msgAndArgs...)
+	}
+
+	return true
+}
+
+func containsValue(values []compareResult, value compareResult) bool {
+	return slices.Contains(values, value)
+}
 
 func compare(obj1, obj2 any, kind reflect.Kind) (compareResult, bool) {
 	obj1Value := reflect.ValueOf(obj1)
@@ -185,143 +339,4 @@ func convertReflectValue[T any](obj any, value reflect.Value) T { //nolint:iretu
 	}
 
 	return converted
-}
-
-// Greater asserts that the first element is strictly greater than the second.
-//
-// Usage:
-//
-//	assertions.Greater(t, 2, 1)
-//	assertions.Greater(t, float64(2), float64(1))
-//	assertions.Greater(t, "b", "a")
-//
-// Examples:
-//
-//	success: 2, 1
-//	failure: 1, 2
-func Greater(t T, e1 any, e2 any, msgAndArgs ...any) bool {
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-	failMessage := fmt.Sprintf("\"%v\" is not greater than \"%v\"", e1, e2)
-	return compareTwoValues(t, e1, e2, []compareResult{compareGreater}, failMessage, msgAndArgs...)
-}
-
-// GreaterOrEqual asserts that the first element is greater than or equal to the second.
-//
-//	assert.GreaterOrEqual(t, 2, 1)
-//	assert.GreaterOrEqual(t, 2, 2)
-//	assert.GreaterOrEqual(t, "b", "a")
-//	assert.GreaterOrEqual(t, "b", "b")
-//
-// Examples:
-//
-//	success: 2, 1
-//	failure: 1, 2
-func GreaterOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) bool {
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-	failMessage := fmt.Sprintf("\"%v\" is not greater than or equal to \"%v\"", e1, e2)
-	return compareTwoValues(t, e1, e2, []compareResult{compareGreater, compareEqual}, failMessage, msgAndArgs...)
-}
-
-// Less asserts that the first element is strictly less than the second.
-//
-//	assert.Less(t, 1, 2)
-//	assert.Less(t, float64(1), float64(2))
-//	assert.Less(t, "a", "b")
-//
-// Examples:
-//
-//	success: 1, 2
-//	failure: 2, 1
-func Less(t T, e1 any, e2 any, msgAndArgs ...any) bool {
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-	failMessage := fmt.Sprintf("\"%v\" is not less than \"%v\"", e1, e2)
-	return compareTwoValues(t, e1, e2, []compareResult{compareLess}, failMessage, msgAndArgs...)
-}
-
-// LessOrEqual asserts that the first element is less than or equal to the second.
-//
-//	assert.LessOrEqual(t, 1, 2)
-//	assert.LessOrEqual(t, 2, 2)
-//	assert.LessOrEqual(t, "a", "b")
-//	assert.LessOrEqual(t, "b", "b")
-//
-// Examples:
-//
-//	success: 1, 2
-//	failure: 2, 1
-func LessOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) bool {
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-	failMessage := fmt.Sprintf("\"%v\" is not less than or equal to \"%v\"", e1, e2)
-	return compareTwoValues(t, e1, e2, []compareResult{compareLess, compareEqual}, failMessage, msgAndArgs...)
-}
-
-// Positive asserts that the specified element is strictly positive.
-//
-//	assert.Positive(t, 1)
-//	assert.Positive(t, 1.23)
-//
-// Examples:
-//
-//	success: 1
-//	failure: -1
-func Positive(t T, e any, msgAndArgs ...any) bool {
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-	zero := reflect.Zero(reflect.TypeOf(e))
-	failMessage := fmt.Sprintf("\"%v\" is not positive", e)
-	return compareTwoValues(t, e, zero.Interface(), []compareResult{compareGreater}, failMessage, msgAndArgs...)
-}
-
-// Negative asserts that the specified element is strictly negative.
-//
-//	assert.Negative(t, -1)
-//	assert.Negative(t, -1.23)
-//
-// Examples:
-//
-//	success: -1
-//	failure: 1
-func Negative(t T, e any, msgAndArgs ...any) bool {
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-	zero := reflect.Zero(reflect.TypeOf(e))
-	failMessage := fmt.Sprintf("\"%v\" is not negative", e)
-	return compareTwoValues(t, e, zero.Interface(), []compareResult{compareLess}, failMessage, msgAndArgs...)
-}
-
-func compareTwoValues(t T, e1 any, e2 any, allowedComparesResults []compareResult, failMessage string, msgAndArgs ...any) bool {
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-
-	e1Kind := reflect.ValueOf(e1).Kind()
-	e2Kind := reflect.ValueOf(e2).Kind()
-	if e1Kind != e2Kind {
-		return Fail(t, "Elements should be the same type", msgAndArgs...)
-	}
-
-	compareResult, isComparable := compare(e1, e2, e1Kind)
-	if !isComparable {
-		return Fail(t, fmt.Sprintf(`Can not compare type "%T"`, e1), msgAndArgs...)
-	}
-
-	if !containsValue(allowedComparesResults, compareResult) {
-		return Fail(t, failMessage, msgAndArgs...)
-	}
-
-	return true
-}
-
-func containsValue(values []compareResult, value compareResult) bool {
-	return slices.Contains(values, value)
 }

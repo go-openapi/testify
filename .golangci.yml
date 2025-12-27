@@ -48,8 +48,13 @@ linters:
       - examples$
 formatters:
   enable:
-    - gofmt
+    - gofumpt
     - goimports
+  settings:
+    # local prefixes regroup imports from these packages
+    goimports:
+      local-prefixes:
+        - github.com/go-openapi
   exclusions:
     generated: lax
     paths:

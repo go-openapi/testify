@@ -4,14 +4,16 @@
 package model
 
 import (
+	"go/ast"
+	"go/token"
 	"maps"
 	"slices"
-	"strings"
 )
 
 // AssertionPackage describes the internal/assertions package.
 type AssertionPackage struct {
 	Tool             string
+	Header           string
 	Package          string
 	DocString        string
 	Copyright        string
@@ -28,6 +30,19 @@ type AssertionPackage struct {
 	Types     []Ident
 	Consts    []Ident
 	Vars      []Ident
+
+	// extraneous information when scanning in collectDoc mode
+	ExtraComments []ExtraComment
+}
+
+func (a *AssertionPackage) HasHelpers() (ok bool) {
+	for _, fn := range a.Functions {
+		if fn.IsHelper || fn.IsConstructor {
+			return true
+		}
+	}
+
+	return false
 }
 
 // New empty [AssertionPackage].
@@ -73,8 +88,14 @@ type Function struct {
 	Returns       Parameters
 	IsGeneric     bool
 	IsHelper      bool
+	IsDeprecated  bool
 	IsConstructor bool
 	Tests         []Test
+
+	// extraneous information when scanning in collectDoc mode
+	Domain        string
+	SourceLink    *token.Position
+	ExtraComments []ExtraComment
 }
 
 func (f Function) HasTest() bool {
@@ -88,42 +109,6 @@ func (f Function) HasSuccessTest() bool {
 }
 
 type Parameters []Parameter
-
-func (vars Parameters) String() string {
-	var b strings.Builder
-	l := len(vars)
-
-	if l == 0 {
-		return ""
-	}
-
-	if l > 1 || vars[0].Name != "" {
-		b.WriteByte('(')
-	}
-
-	if vars[0].Name != "" {
-		b.WriteString(vars[0].Name)
-		b.WriteByte(' ')
-	}
-	b.WriteString(vars[0].GoType)
-
-	for _, v := range vars[1:] {
-		b.WriteByte(',')
-		b.WriteByte(' ')
-		if v.Name != "" {
-			b.WriteString(v.Name)
-			b.WriteByte(' ')
-		}
-		b.WriteString(v.GoType)
-
-	}
-
-	if l > 1 || vars[0].Name != "" {
-		b.WriteByte(')')
-	}
-
-	return b.String()
-}
 
 // Parameter represents a function parameter or return value.
 type Parameter struct {
@@ -141,20 +126,56 @@ type Ident struct {
 	TargetPackage string
 	DocString     string
 	IsAlias       bool
-	Function      *Function // for function types
+	IsDeprecated  bool
+	Function      *Function // for function types (or vars)
+
+	// extraneous information when scanning in collectDoc mode
+	Domain        string
+	SourceLink    *token.Position
+	ExtraComments []ExtraComment
 }
 
-// Test captures simple test values to use with generated tests.
+// TestValue represents a single parsed test value expression.
+//
+// It stores both the original string (for debugging/audit) and the parsed AST.
+type TestValue struct {
+	Raw   string   // Original string from doc comment
+	Expr  ast.Expr // Parsed Go expression (nil if parse failed)
+	Error error    // Parse error if any
+}
+
+// Test captures test values to use with generated tests.
+//
+// Test values are parsed as Go expressions and stored with their AST representation.
 type Test struct {
-	TestedValue      string
-	ExpectedOutcome  TestExpectedOutcome
-	AssertionMessage string
+	TestedValue      string              // DEPRECATED: Original raw string, kept for backward compatibility
+	TestedValues     []TestValue         // Parsed test value expressions
+	ExpectedOutcome  TestExpectedOutcome // Expected test outcome (success/failure/panic)
+	AssertionMessage string              // Optional assertion message for panic tests
 }
 
 type TestExpectedOutcome uint8
 
 const (
-	TestSuccess TestExpectedOutcome = iota
+	TestNone TestExpectedOutcome = iota
+	TestSuccess
 	TestFailure
 	TestPanic
 )
+
+type CommentTag uint8
+
+const (
+	CommentTagNone CommentTag = iota
+	CommentTagDomain
+	CommentTagMaintainer
+	CommentTagMention
+	CommentTagNote
+	CommentTagDomainDescription
+)
+
+type ExtraComment struct {
+	Tag  CommentTag
+	Key  string
+	Text string
+}

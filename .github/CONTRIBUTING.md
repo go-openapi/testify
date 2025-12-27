@@ -138,7 +138,7 @@ Most documentation for this library is directly found in code as comments for go
 
 The documentation for the go-openapi packages is published on the public go docs site:
 
-<https://pkg.go.dev/github.com/go-openapi/jsonpointer>
+<https://pkg.go.dev/github.com/go-openapi/testify>
 
 Check your documentation changes for clarity, concision, and correctness.
 

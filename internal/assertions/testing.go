@@ -13,23 +13,29 @@ import (
 	"unicode/utf8"
 )
 
-/* CallerInfo is necessary because the assert functions use the testing object
-internally, causing it to print the file:line of the assert method, rather than where
-the problem actually occurred in calling code.*/
-
 // CallerInfo returns an array of strings containing the file and line number
 // of each stack frame leading from the current test to the assert call that
 // failed.
 func CallerInfo() []string {
+	// CallerInfo is necessary because the assert functions use the testing object
+	// internally, causing it to print the file:line of the assert method, rather than where
+	// the problem actually occurred in calling code.*/
+	//
+	// Maintainer: it is not necessary to export CallerInfo. This should remain an internal implementation detail.
 	return callerInfo(1)
 }
 
 // FailNow fails test.
 //
-// Example:
+// # Usage
+//
+//	assertions.FailNow(t, "failed")
+//
+// # Examples
 //
 //	failure: "failed"
 func FailNow(t T, failureMessage string, msgAndArgs ...any) bool {
+	// Domain: testing
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -52,10 +58,15 @@ func FailNow(t T, failureMessage string, msgAndArgs ...any) bool {
 
 // Fail reports a failure through.
 //
-// Example:
+// # Usage
+//
+//	assertions.Fail(t, "failed")
+//
+// # Examples
 //
 //	failure: "failed"
 func Fail(t T, failureMessage string, msgAndArgs ...any) bool {
+	// Domain: testing
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}

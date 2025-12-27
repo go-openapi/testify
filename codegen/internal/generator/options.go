@@ -13,15 +13,21 @@ type GenerateOption func(*generateOptions)
 // Currently unused (reserved for future use).
 type Option func(*options)
 
-func WithTargetRoot(root string) GenerateOption {
+func WithTargetRoot(dir string) GenerateOption {
 	return func(o *generateOptions) {
-		o.targetRoot = root
+		o.targetRoot = dir
 	}
 }
 
 func WithTargetPackage(pkg string) GenerateOption {
 	return func(o *generateOptions) {
 		o.targetPkg = pkg
+	}
+}
+
+func WithTargetDoc(dir string) GenerateOption {
+	return func(o *generateOptions) {
+		o.targetDoc = dir
 	}
 }
 
@@ -67,9 +73,16 @@ func WithRunnableExamples(enabled bool) GenerateOption {
 	}
 }
 
+func WithIncludeDoc(enabled bool) GenerateOption {
+	return func(o *generateOptions) {
+		o.generateDoc = enabled
+	}
+}
+
 type generateOptions struct {
 	targetPkg        string
 	targetRoot       string
+	targetDoc        string
 	enableForward    bool
 	enableFormat     bool
 	enableGenerics   bool
@@ -77,21 +90,23 @@ type generateOptions struct {
 	generateTests    bool
 	generateExamples bool
 	runnableExamples bool
+	generateDoc      bool
 	formatOptions    *imports.Options
 }
 
-type options struct {
-}
+type options struct{}
 
 func generateOptionsWithDefaults(opts []GenerateOption) generateOptions {
 	o := generateOptions{
 		targetRoot:       ".",
+		targetDoc:        ".",
 		enableForward:    true,
 		enableFormat:     true,
 		enableGenerics:   false,
 		generateHelpers:  true,
 		generateTests:    false,
 		generateExamples: false,
+		generateDoc:      false,
 		runnableExamples: false,
 	}
 

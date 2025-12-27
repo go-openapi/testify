@@ -1,0 +1,16 @@
+# Dynamic configuration generated at build time
+# This file provides version information extracted from the repository
+
+params:
+  testify:
+    # Go version requirement (from go.mod)
+    goVersion: '1.24.0'
+
+    # Latest release tag (from git tags)
+    latestRelease: 'v2.0.2'
+
+    # Version message for the documentation set
+    versionMessage: 'Documentation for Testify v2.0.2'
+
+    # Build timestamp
+    buildTime: '2026-01-01T21:42:33Z'

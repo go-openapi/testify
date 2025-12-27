@@ -6,6 +6,7 @@ toolchain go1.25.0
 
 require (
 	github.com/go-openapi/testify/v2 v2.0.2
+	golang.org/x/text v0.32.0
 	golang.org/x/tools v0.40.0
 )
 

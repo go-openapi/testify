@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
 // SPDX-License-Identifier: Apache-2.0
 
-// Code generated with github.com/go-openapi/testify/v2/codegen@master [sha: bb2c19fba6c03f46cb643b3bcdc1d647ea1453ab]; DO NOT EDIT.
+// Code generated with github.com/go-openapi/testify/v2/codegen; DO NOT EDIT.
+// Generated on 2026-01-02 (version v1.2.2-760-g97c29e3) using codegen version master [sha: 97c29e3dbfc40800a080863ceea81db0cfd6e858]
 
 package require_test
 
@@ -14,12 +15,15 @@ import (
 	"testing"
 	"time"
 
+	"github.com/go-openapi/testify/v2/assert"
 	"github.com/go-openapi/testify/v2/require"
 )
 
 func ExampleCondition() {
 	t := new(testing.T)
-	require.Condition(t, func() bool { return true })
+	require.Condition(t, func() bool {
+		return true
+	})
 	fmt.Println("passed")
 
 	// Output: passed
@@ -123,7 +127,9 @@ func ExampleErrorIs() {
 
 func ExampleEventually() {
 	t := new(testing.T)
-	require.Eventually(t, func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond)
+	require.Eventually(t, func() bool {
+		return true
+	}, 100*time.Millisecond, 20*time.Millisecond)
 	fmt.Println("passed")
 
 	// Output: passed
@@ -131,7 +137,9 @@ func ExampleEventually() {
 
 func ExampleEventuallyWithT() {
 	t := new(testing.T)
-	require.EventuallyWithT(t, func(c *require.CollectT) { require.True(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
+	require.EventuallyWithT(t, func(c *assert.CollectT) {
+		assert.True(c, true)
+	}, 100*time.Millisecond, 20*time.Millisecond)
 	fmt.Println("passed")
 
 	// Output: passed
@@ -395,7 +403,9 @@ func ExampleNegative() {
 
 func ExampleNever() {
 	t := new(testing.T)
-	require.Never(t, func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond)
+	require.Never(t, func() bool {
+		return false
+	}, 100*time.Millisecond, 20*time.Millisecond)
 	fmt.Println("passed")
 
 	// Output: passed
@@ -507,7 +517,8 @@ func ExampleNotNil() {
 
 func ExampleNotPanics() {
 	t := new(testing.T)
-	require.NotPanics(t, func() {})
+	require.NotPanics(t, func() {
+	})
 	fmt.Println("passed")
 
 	// Output: passed
@@ -547,7 +558,9 @@ func ExampleNotZero() {
 
 func ExamplePanics() {
 	t := new(testing.T)
-	require.Panics(t, func() { panic("panicking") })
+	require.Panics(t, func() {
+		panic("panicking")
+	})
 	fmt.Println("passed")
 
 	// Output: passed
@@ -555,7 +568,9 @@ func ExamplePanics() {
 
 func ExamplePanicsWithError() {
 	t := new(testing.T)
-	require.PanicsWithError(t, require.ErrTest.Error(), func() { panic(require.ErrTest) })
+	require.PanicsWithError(t, assert.ErrTest.Error(), func() {
+		panic(assert.ErrTest)
+	})
 	fmt.Println("passed")
 
 	// Output: passed
@@ -563,7 +578,9 @@ func ExamplePanicsWithError() {
 
 func ExamplePanicsWithValue() {
 	t := new(testing.T)
-	require.PanicsWithValue(t, "panicking", func() { panic("panicking") })
+	require.PanicsWithValue(t, "panicking", func() {
+		panic("panicking")
+	})
 	fmt.Println("passed")
 
 	// Output: passed

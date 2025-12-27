@@ -4,18 +4,15 @@
 package generator
 
 import (
-	"bytes"
 	"embed"
 	"errors"
 	"fmt"
 	"os"
 	"path"
 	"path/filepath"
-	"sort"
 	"text/template"
 
 	"github.com/go-openapi/testify/v2/codegen/internal/model"
-	"golang.org/x/tools/imports"
 )
 
 const (
@@ -25,14 +22,12 @@ const (
 )
 
 const (
-	dirPermissions  = 0750
-	filePermissions = 0600
+	dirPermissions  = 0o750
+	filePermissions = 0o600
 )
 
-var (
-	//go:embed templates/*.gotmpl
-	templatesFS embed.FS
-)
+//go:embed templates/*.gotmpl
+var templatesFS embed.FS
 
 // Generator generates testify packages (assert, require) from the internal assertions package.
 type Generator struct {
@@ -40,6 +35,7 @@ type Generator struct {
 
 	source *model.AssertionPackage
 	ctx    *genCtx
+	docs   model.Documentation
 }
 
 type genCtx struct {
@@ -48,6 +44,7 @@ type genCtx struct {
 	index      map[string]string
 	templates  map[string]*template.Template
 	target     *model.AssertionPackage
+	docs       *model.Documentation
 	targetBase string
 }
 
@@ -63,15 +60,24 @@ func (g *Generator) Generate(opts ...GenerateOption) error {
 		return err
 	}
 	defer func() {
+		if g.ctx.docs != nil {
+			g.docs = *g.ctx.docs // before we leave, stash the transformed documentation for the current package
+		}
 		g.ctx = nil
 	}()
 
-	if err := g.loadTemplates(); err != nil {
-		return err
-	}
+	{
+		// prepare steps
 
-	if err := g.transformModel(); err != nil {
-		return err
+		if err := g.loadTemplates(); err != nil {
+			return err
+		}
+
+		if err := g.transformModel(); err != nil {
+			return err
+		}
+
+		g.buildDocs()
 	}
 
 	{
@@ -122,8 +128,18 @@ func (g *Generator) Generate(opts ...GenerateOption) error {
 			return err
 		}
 
-		return g.generateHelpersTests()
+		if err := g.generateHelpersTests(); err != nil {
+			return err
+		}
 	}
+
+	return nil
+}
+
+// Documentation yields the transformed package model as a [model.Documentation]
+// usable by a generation step by the [DocGenerator].
+func (g *Generator) Documentation() model.Documentation {
+	return g.docs
 }
 
 func (g *Generator) initContext(opts []GenerateOption) error {
@@ -148,7 +164,11 @@ func (g *Generator) initContext(opts []GenerateOption) error {
 }
 
 func (g *Generator) loadTemplates() error {
-	const expectedTemplates = 10
+	const (
+		tplExt            = ".gotmpl"
+		expectedTemplates = 10
+	)
+
 	index := make(map[string]string, expectedTemplates)
 
 	switch g.ctx.targetBase {
@@ -160,23 +180,13 @@ func (g *Generator) loadTemplates() error {
 		panic(fmt.Errorf("internal error: invalid targetBase: %q", g.ctx.targetBase))
 	}
 
+	templates, err := loadTemplatesFromIndex(index, tplExt, templatesFS)
+	if err != nil {
+		return err
+	}
+
 	g.ctx.index = index
-	needed := make([]string, 0, len(index))
-	for _, v := range index {
-		needed = append(needed, v)
-	}
-	sort.Strings(needed)
-
-	g.ctx.templates = make(map[string]*template.Template, len(needed))
-	for _, name := range needed {
-		file := name + ".gotmpl"
-		tpl, err := template.New(file).Funcs(funcMap()).ParseFS(templatesFS, path.Join("templates", file))
-		if err != nil {
-			return fmt.Errorf("failed to load template %q from %q: %w", name, file, err)
-		}
-
-		g.ctx.templates[name] = tpl
-	}
+	g.ctx.templates = templates
 
 	return nil
 }
@@ -268,6 +278,9 @@ func (g *Generator) transformModel() error {
 		return err
 	}
 
+	// NOTE: the use of [filepath.Rel] here imposes a constraint that the target resides on the same
+	// drive as the source. This may cause issues, e.g. on windows (currently, our CI ensures any temp file
+	// resides on the same drive as the source).
 	testdata, err := filepath.Rel(filepath.Join(absRoot, g.ctx.targetBase), g.source.TestDataPath)
 	if err != nil {
 		return err
@@ -408,28 +421,16 @@ func (g *Generator) generateHelpersTests() error {
 }
 
 func (g *Generator) render(name string, target string, data any) error {
-	tplName, ok := g.ctx.index[name]
-	if !ok {
-		panic(fmt.Errorf("internal error: expect template name %q", name))
-	}
-
-	tpl, ok := g.ctx.templates[tplName]
-	if !ok {
-		panic(fmt.Errorf("internal error: expect template %q", name))
-	}
-
-	var buffer bytes.Buffer
-	if err := tpl.Execute(&buffer, data); err != nil {
-		return fmt.Errorf("error executing template %q (%s): %w", name, tplName, err)
-	}
-
-	formatted, err := imports.Process(target, buffer.Bytes(), g.ctx.formatOptions)
-	if err != nil {
-		_ = os.WriteFile(target, buffer.Bytes(), filePermissions)
-		return fmt.Errorf("error formatting go code: %w:%w", err, fmt.Errorf("details available at: %v", target))
-	}
-
-	return os.WriteFile(target, formatted, filePermissions)
+	return renderTemplate(
+		g.ctx.index,
+		g.ctx.templates,
+		name,
+		target,
+		data,
+		func(tpl *template.Template, target string, data any) error {
+			return render(tpl, target, data, g.ctx.formatOptions)
+		},
+	)
 }
 
 func (g *Generator) transformArgs(in model.Parameters) model.Parameters {
@@ -441,4 +442,41 @@ func (g *Generator) transformArgs(in model.Parameters) model.Parameters {
 	}
 
 	return in
+}
+
+// buildDocs builds a hierarchy of documents for the current package.
+//
+// Documents are NOT rendered by the [Generator].
+func (g *Generator) buildDocs() {
+	if !g.ctx.generateDoc {
+		return
+	}
+
+	docs := model.NewDocumentation()
+	docs.Package = g.ctx.target
+
+	// create a single document representing this package's contribution.
+	//
+	// This document will be reorganized by domain by the [DocGenerator] later on.
+	// The [DocGenerator] carries out the heavy lifting when building a layout-ready Document.
+	doc := model.Document{
+		Title:   g.ctx.target.Package,
+		Path:    g.ctx.targetBase, // "assert" or "require"
+		Kind:    model.KindFolder,
+		Package: g.ctx.target,
+	}
+
+	source := model.Document{
+		Title:   g.source.Package,
+		Path:    assertions,
+		Kind:    model.KindFolder,
+		Package: g.source,
+	}
+
+	docs.Documents = []model.Document{
+		doc,
+		source,
+	}
+
+	g.ctx.docs = docs
 }

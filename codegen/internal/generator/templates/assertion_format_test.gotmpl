@@ -1,6 +1,7 @@
 {{ comment .Copyright }}
 
 // Code generated with {{ .Tool }}; DO NOT EDIT.
+// {{ .Header }}
 
 package {{ .Package }}
 
@@ -26,7 +27,7 @@ func Test{{ .Name }}f(t *testing.T) {
         {{- $isRequire := (eq $.Package "require") }}
         {{- $first := true }}
         {{- range .Tests }}
-          {{- if eq .ExpectedOutcome 0 }}{{/* TestSuccess */}}
+          {{- if eq .ExpectedOutcome 1 }}{{/* TestSuccess */}}
             {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
 	t.Run("success", func(t *testing.T) {
     t.Parallel()
@@ -41,7 +42,7 @@ func Test{{ .Name }}f(t *testing.T) {
 		}
 {{- end }}
 	})
-          {{- else if eq .ExpectedOutcome 1 }}{{/* TestFailure */}}
+          {{- else if eq .ExpectedOutcome 2 }}{{/* TestFailure */}}
             {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
 	t.Run("failure", func(t *testing.T) {
     t.Parallel()
@@ -60,7 +61,7 @@ func Test{{ .Name }}f(t *testing.T) {
       			t.Error("{{ $fn.Name }} {{ if eq $fn.UseMock "mockFailNowT" }}should call FailNow(){{ else }}should mark test as failed{{ end }}")
 		}
 	})
-          {{- else if eq .ExpectedOutcome 2 }}{{/* TestPanic */}}
+          {{- else if eq .ExpectedOutcome 3 }}{{/* TestPanic */}}
             {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
 	t.Run("panic", func(t *testing.T) {
     t.Parallel()

@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
 // SPDX-License-Identifier: Apache-2.0
 
-// Code generated with github.com/go-openapi/testify/v2/codegen@master [sha: bb2c19fba6c03f46cb643b3bcdc1d647ea1453ab]; DO NOT EDIT.
+// Code generated with github.com/go-openapi/testify/v2/codegen; DO NOT EDIT.
+// Generated on 2026-01-02 (version v1.2.2-760-g97c29e3) using codegen version master [sha: 97c29e3dbfc40800a080863ceea81db0cfd6e858]
 
 package assert
 
@@ -1854,7 +1855,7 @@ func TestYAMLEqf(t *testing.T) {
 
 		Panicsf(t, func() {
 			YAMLEqf(t, "key: value", "key: value", "test message")
-		}, "should panic without the yaml feature enabled")
+		}, "should panic without the yaml feature enabled.")
 	})
 }
 

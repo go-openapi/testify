@@ -11,11 +11,16 @@ import (
 
 // Condition uses a Comparison to assert a complex condition.
 //
-// Examples:
+// # Usage
+//
+//	assertions.Condition(t, func() bool { return myCondition })
+//
+// # Examples
 //
 //	success:  func() bool { return true }
 //	failure:  func() bool { return false }
 func Condition(t T, comp Comparison, msgAndArgs ...any) bool {
+	// Domain: condition
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -29,13 +34,16 @@ func Condition(t T, comp Comparison, msgAndArgs ...any) bool {
 // Eventually asserts that given condition will be met in waitFor time,
 // periodically checking target function each tick.
 //
-//	assert.Eventually(t, func() bool { return true; }, time.Second, 10*time.Millisecond)
+// # Usage
 //
-// Examples:
+//	assertions.Eventually(t, func() bool { return true; }, time.Second, 10*time.Millisecond)
+//
+// # Examples
 //
 //	success:  func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond
 //	failure:  func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond
 func Eventually(t T, condition func() bool, waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+	// Domain: condition
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -70,8 +78,14 @@ func Eventually(t T, condition func() bool, waitFor time.Duration, tick time.Dur
 	}
 }
 
-// CollectT implements the T interface and collects all errors.
+// CollectT implements the [T] interface and collects all errors.
 type CollectT struct {
+	// Domain: condition
+	//
+	// Maintainer:
+	//   1. we should verify if the use of runtime.GoExit is correct in this context.
+	//   2. deprecated methods removed.
+
 	// A slice of errors. Non-nil slice denotes a failure.
 	// If it's non-nil but len(c.errors) == 0, this is also a failure
 	// obtained by direct c.FailNow() call.
@@ -90,16 +104,6 @@ func (c *CollectT) Errorf(format string, args ...any) {
 func (c *CollectT) FailNow() {
 	c.fail()
 	runtime.Goexit()
-}
-
-// Deprecated: That was a method for internal usage that should not have been published. Now just panics.
-func (*CollectT) Reset() {
-	panic("Reset() is deprecated")
-}
-
-// Deprecated: That was a method for internal usage that should not have been published. Now just panics.
-func (*CollectT) Copy(T) {
-	panic("Copy() is deprecated")
 }
 
 func (c *CollectT) fail() {
@@ -121,21 +125,24 @@ func (c *CollectT) failed() bool {
 // If the condition is not met before waitFor, the collected errors of
 // the last tick are copied to t.
 //
+// # Usage
+//
 //	externalValue := false
 //	go func() {
 //		time.Sleep(8*time.Second)
 //		externalValue = true
 //	}()
-//	assert.EventuallyWithT(t, func(c *assert.CollectT) {
+//	assertions.EventuallyWithT(t, func(c *assertions.CollectT) {
 //		// add assertions as needed; any assertion failure will fail the current tick
-//		assert.True(c, externalValue, "expected 'externalValue' to be true")
+//		assertions.True(c, externalValue, "expected 'externalValue' to be true")
 //	}, 10*time.Second, 1*time.Second, "external state has not changed to 'true'; still false")
 //
-// Examples:
+// # Examples
 //
 //	success: func(c *CollectT) { True(c,true) }, 100*time.Millisecond, 20*time.Millisecond
 //	failure: func(c *CollectT) { False(c,true) }, 100*time.Millisecond, 20*time.Millisecond
 func EventuallyWithT(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+	// Domain: condition
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -186,13 +193,16 @@ func EventuallyWithT(t T, condition func(collect *CollectT), waitFor time.Durati
 // Never asserts that the given condition doesn't satisfy in waitFor time,
 // periodically checking the target function each tick.
 //
-//	assert.Never(t, func() bool { return false; }, time.Second, 10*time.Millisecond)
+// # Usage
 //
-// Examples:
+//	assertions.Never(t, func() bool { return false; }, time.Second, 10*time.Millisecond)
+//
+// # Examples
 //
 //	success:  func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond
 //	failure:  func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond
 func Never(t T, condition func() bool, waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+	// Domain: condition
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
