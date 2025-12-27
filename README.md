@@ -198,13 +198,20 @@ some adaptations into this fork:
 * github.com/stretchr/testify#1772 - YAML library migration to maintained fork (go.yaml.in/yaml)
 * github.com/stretchr/testify#1797 - Codegen package consolidation and licensing
 * github.com/stretchr/testify#1356 - panic(nil) handling for Go 1.21+
+* github.com/stretchr/testify#1825 - Fix panic when using EqualValues with uncomparable types [merged]
+* github.com/stretchr/testify#1818 - Fix panic on invalid regex in Regexp/NotRegexp assertions [merged]
 
 ### Planned merges
 
 #### Critical safety fixes (high priority)
 
-* github.com/stretchr/testify#1825 - Fix panic when using EqualValues with uncomparable types
-* github.com/stretchr/testify#1818 - Fix panic on invalid regex in Regexp/NotRegexp assertions
+* Follow / adapt https://github.com/stretchr/testify/pull/1824
+
+Not PRs, but reported issues in the original repo:
+
+* https://github.com/stretchr/testify/issues/1826
+* https://github.com/stretchr/testify/issues/1611
+* https://github.com/stretchr/testify/issues/1813
 
 #### Leveraging internalized dependencies (go-spew, difflib)
 

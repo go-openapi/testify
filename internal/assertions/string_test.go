@@ -61,6 +61,37 @@ func TestStringRegexp(t *testing.T) {
 	}
 }
 
+// Verifies that invalid patterns no longer cause a panic when using Regexp/NotRegexp.
+// Instead, the assertion should fail and return false.
+func TestStringRegexp_InvalidPattern(t *testing.T) {
+	t.Parallel()
+
+	const (
+		invalidPattern = "\\C"
+		msg            = "whatever"
+	)
+
+	t.Run("Regexp should not panic on invalid patterns", func(t *testing.T) {
+		result := NotPanics(t, func() {
+			mockT := new(testing.T)
+			False(t, Regexp(mockT, invalidPattern, msg))
+		})
+		if !result {
+			t.Failed()
+		}
+	})
+
+	t.Run("NoRegexp should not panic on invalid patterns", func(t *testing.T) {
+		result := NotPanics(t, func() {
+			mockT := new(testing.T)
+			False(t, NotRegexp(mockT, invalidPattern, msg))
+		})
+		if !result {
+			t.Failed()
+		}
+	})
+}
+
 type stringEqualCase struct {
 	equalWant  string
 	equalGot   string
