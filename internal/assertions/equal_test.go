@@ -372,6 +372,7 @@ func equalCases() iter.Seq[equalCase] {
 
 		// A case that might be confusing, especially with numeric literals
 		{10, uint(10), false, ""},
+		{int(1), uint(1), false, ""},
 	})
 }
 

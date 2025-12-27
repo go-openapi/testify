@@ -6,6 +6,8 @@ package assertions
 import (
 	"errors"
 	"fmt"
+	"iter"
+	"slices"
 	"testing"
 	"time"
 )
@@ -39,29 +41,15 @@ func testFormatUnequalValues() func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
 
-		expected, actual := formatUnequalValues("foo", "bar")
-		Equal(t, `"foo"`, expected, "value should not include type")
-		Equal(t, `"bar"`, actual, "value should not include type")
+		for tt := range formatUnequalCases() {
+			t.Run(tt.testName, func(t *testing.T) {
+				t.Parallel()
 
-		expected, actual = formatUnequalValues(123, 123)
-		Equal(t, `123`, expected, "value should not include type")
-		Equal(t, `123`, actual, "value should not include type")
-
-		expected, actual = formatUnequalValues(int64(123), int32(123))
-		Equal(t, `int64(123)`, expected, "value should include type")
-		Equal(t, `int32(123)`, actual, "value should include type")
-
-		expected, actual = formatUnequalValues(int64(123), nil)
-		Equal(t, `int64(123)`, expected, "value should include type")
-		Equal(t, `<nil>(<nil>)`, actual, "value should include type")
-
-		type testStructType struct {
-			Val string
+				expected, actual := formatUnequalValues(tt.unequalExpected, tt.unequalActual)
+				Equal(t, tt.expectedExpected, expected, tt.testName)
+				Equal(t, tt.expectedActual, actual, tt.testName)
+			})
 		}
-
-		expected, actual = formatUnequalValues(&testStructType{Val: "test"}, &testStructType{Val: "test"})
-		Equal(t, fmt.Sprintf(`&%s.testStructType{Val:"test"}`, shortpkg), expected, "value should not include type annotation")
-		Equal(t, fmt.Sprintf(`&%s.testStructType{Val:"test"}`, shortpkg), actual, "value should not include type annotation")
 	}
 }
 
@@ -206,4 +194,37 @@ func testValidateEqualArgs() func(*testing.T) {
 			t.Error("nil functions are equal")
 		}
 	}
+}
+
+type formatUnequalCase struct {
+	unequalExpected  any
+	unequalActual    any
+	expectedExpected string
+	expectedActual   string
+	testName         string
+}
+
+func formatUnequalCases() iter.Seq[formatUnequalCase] {
+	type testStructType struct {
+		Val string
+	}
+
+	return slices.Values([]formatUnequalCase{
+		{"foo", "bar", `"foo"`, `"bar"`, "value should not include type"},
+		{123, 123, `123`, `123`, "value should not include type"},
+		{int64(123), int32(123), `int64(123)`, `int32(123)`, "value should include type"},
+		{int64(123), nil, `int64(123)`, `<nil>(<nil>)`, "value should include type"},
+		{
+			unequalExpected:  &testStructType{Val: "test"},
+			unequalActual:    &testStructType{Val: "test"},
+			expectedExpected: fmt.Sprintf(`&%s.testStructType{Val:"test"}`, shortpkg),
+			expectedActual:   fmt.Sprintf(`&%s.testStructType{Val:"test"}`, shortpkg),
+			testName:         "value should not include type annotation",
+		},
+		{uint(123), uint(124), `123`, `124`, "uint should print clean"},
+		{uint8(123), uint8(124), `123`, `124`, "uint8 should print clean"},
+		{uint16(123), uint16(124), `123`, `124`, "uint16 should print clean"},
+		{uint32(123), uint32(124), `123`, `124`, "uint32 should print clean"},
+		{uint64(123), uint64(124), `123`, `124`, "uint64 should print clean"},
+	})
 }
