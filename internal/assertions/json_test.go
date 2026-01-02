@@ -5,7 +5,7 @@ package assertions
 
 import "testing"
 
-// TODO(fred): load fixtures and assertions from embedded testdata
+// Proposal for enhancement: load fixtures and assertions from embedded testdata
 
 func TestJSONEq_EqualSONString(t *testing.T) {
 	t.Parallel()

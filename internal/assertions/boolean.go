@@ -5,15 +5,16 @@ package assertions
 
 // True asserts that the specified value is true.
 //
-// Usage:
+// # Usage
 //
 //	assertions.True(t, myBool)
 //
-// Examples:
+// # Examples
 //
 //	success: 1 == 1
 //	failure: 1 == 0
 func True(t T, value bool, msgAndArgs ...any) bool {
+	// Domain: boolean
 	if !value {
 		if h, ok := t.(H); ok {
 			h.Helper()
@@ -26,15 +27,16 @@ func True(t T, value bool, msgAndArgs ...any) bool {
 
 // False asserts that the specified value is false.
 //
-// Usage:
+// # Usage
 //
 //	assertions.False(t, myBool)
 //
-// Examples:
+// # Examples
 //
 //	success: 1 == 0
 //	failure: 1 == 1
 func False(t T, value bool, msgAndArgs ...any) bool {
+	// Domain: boolean
 	if value {
 		if h, ok := t.(H); ok {
 			h.Helper()

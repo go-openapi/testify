@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
 // SPDX-License-Identifier: Apache-2.0
 
-// Code generated with github.com/go-openapi/testify/v2/codegen@master [sha: bb2c19fba6c03f46cb643b3bcdc1d647ea1453ab]; DO NOT EDIT.
+// Code generated with github.com/go-openapi/testify/v2/codegen; DO NOT EDIT.
+// Generated on 2026-01-02 (version v1.2.2-760-g97c29e3) using codegen version master [sha: 97c29e3dbfc40800a080863ceea81db0cfd6e858]
 
 package assert
 
@@ -36,15 +37,4 @@ func ObjectsAreEqual(expected any, actual any) bool {
 // values are equal.
 func ObjectsAreEqualValues(expected any, actual any) bool {
 	return assertions.ObjectsAreEqualValues(expected, actual)
-}
-
-// ObjectsExportedFieldsAreEqual determines if the exported (public) fields of two objects are
-// considered equal. This comparison of only exported fields is applied recursively to nested data
-// structures.
-//
-// This function does no assertion of any kind.
-//
-// Deprecated: Use [EqualExportedValues] instead.
-func ObjectsExportedFieldsAreEqual(expected any, actual any) bool {
-	return assertions.ObjectsExportedFieldsAreEqual(expected, actual)
 }

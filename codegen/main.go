@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
+// SPDX-License-Identifier: Apache-2.0
+
 // Package main provides the testify code generator.
 //
 // This program reads all assertion functions from the internal/assertions package and
@@ -10,12 +13,15 @@ import (
 	"strings"
 
 	"github.com/go-openapi/testify/v2/codegen/internal/generator"
+	"github.com/go-openapi/testify/v2/codegen/internal/model"
 	"github.com/go-openapi/testify/v2/codegen/internal/scanner"
 )
 
 type config struct {
 	dir        string
 	targetRoot string
+	targetDoc  string
+
 	inputPkg   string
 	outputPkgs string
 
@@ -25,6 +31,7 @@ type config struct {
 	includeGen bool
 	includeHlp bool
 	includeExa bool
+	includeDoc bool
 	runExa     bool
 }
 
@@ -43,6 +50,7 @@ func registerFlags(cfg *config) {
 	flag.StringVar(&cfg.inputPkg, "input-package", "github.com/go-openapi/testify/v2/internal/assertions", "source package to scan to produce generated output")
 	flag.StringVar(&cfg.outputPkgs, "output-packages", "assert,require", "package(s) to generate")
 	flag.StringVar(&cfg.targetRoot, "target-root", "..", "where to place the generated packages (default is in the parent folder)")
+	flag.StringVar(&cfg.targetDoc, "target-doc", "docs/doc-site/api", "where to place the generated documentation, relative to the target root")
 
 	flag.BoolVar(&cfg.includeFmt, "include-format-funcs", true, "include format functions such as Errorf and Equalf")
 	flag.BoolVar(&cfg.includeFwd, "include-forward-funcs", true, "include forward assertions functions as methods of the Assertions object")
@@ -51,12 +59,14 @@ func registerFlags(cfg *config) {
 	flag.BoolVar(&cfg.includeHlp, "include-helpers", true, "include helper functions that are not assertions")
 	flag.BoolVar(&cfg.includeExa, "include-examples", true, "include generated testable examples")
 	flag.BoolVar(&cfg.runExa, "runnable-examples", true, "include Output to generated testable examples, so they are run as tests")
+	flag.BoolVar(&cfg.includeDoc, "include-doc", true, "include generated markdown documentation")
 }
 
 func execute(cfg *config) error {
 	scanner := scanner.New(
 		scanner.WithWorkDir(cfg.dir),
 		scanner.WithPackage(cfg.inputPkg),
+		scanner.WithCollectDoc(cfg.includeDoc), // collects extra documentation from comments
 	)
 	scanned, err := scanner.Scan()
 	if err != nil {
@@ -64,6 +74,7 @@ func execute(cfg *config) error {
 	}
 
 	builder := generator.New(scanned)
+	var doc model.Documentation
 
 	for targetPkg := range strings.SplitSeq(cfg.outputPkgs, ",") {
 		err = builder.Generate(
@@ -78,10 +89,36 @@ func execute(cfg *config) error {
 			generator.WithIncludeHelpers(cfg.includeHlp),
 			generator.WithIncludeExamples(cfg.includeExa),
 			generator.WithRunnableExamples(cfg.runExa),
+			generator.WithIncludeDoc(cfg.includeDoc),
 		)
 		if err != nil {
 			return err
 		}
+
+		if cfg.includeDoc {
+			// stash the transformed doc
+			doc.Merge(builder.Documentation())
+		}
+	}
+	if !cfg.includeDoc {
+		// we're done with codegen
+		return nil
+	}
+
+	// and now for something completely different: generating the documentation
+	documentalist := generator.NewDocGenerator(doc)
+	err = documentalist.Generate(
+		// where to generate
+		generator.WithTargetRoot(cfg.targetRoot),
+		generator.WithTargetDoc(cfg.targetDoc),
+		// what to generate
+		generator.WithIncludeFormatFuncs(cfg.includeFmt),
+		generator.WithIncludeForwardFuncs(cfg.includeFwd),
+		generator.WithIncludeGenerics(cfg.includeGen),
+		generator.WithIncludeHelpers(cfg.includeHlp),
+	)
+	if err != nil {
+		return err
 	}
 
 	return nil

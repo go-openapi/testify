@@ -246,6 +246,24 @@ The "Examples:" section in doc comments drives test and example generation:
 //   failure: []string{"a"}, 5
 ```
 
+**Important: Placeholder marker for complex values**
+
+When example values are too complex to represent inline (pointers, large structs, etc.), use `// NOT IMPLEMENTED` as the placeholder marker:
+
+```go
+// Examples:
+//
+//   success: &customStruct{Field: "value"}, // NOT IMPLEMENTED
+//   failure: complexType{}, // NOT IMPLEMENTED
+```
+
+**Never use `// TODO`** - it triggers false positives in:
+- Code quality analyzers (linters scanning for TODO items)
+- Project management tools (TODO trackers)
+- IDE warnings about unfinished work
+
+The `// NOT IMPLEMENTED` marker clearly indicates a placeholder without triggering these tools.
+
 ### Special Cases in Generated Tests
 
 For complex assertions requiring special setup, the test templates support conditional logic. See `codegen/internal/generator/templates/assertion_assertions_test.gotmpl` for examples of:

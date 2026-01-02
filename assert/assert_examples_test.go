@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
 // SPDX-License-Identifier: Apache-2.0
 
-// Code generated with github.com/go-openapi/testify/v2/codegen@master [sha: bb2c19fba6c03f46cb643b3bcdc1d647ea1453ab]; DO NOT EDIT.
+// Code generated with github.com/go-openapi/testify/v2/codegen; DO NOT EDIT.
+// Generated on 2026-01-02 (version v1.2.2-760-g97c29e3) using codegen version master [sha: 97c29e3dbfc40800a080863ceea81db0cfd6e858]
 
 package assert_test
 
@@ -19,7 +20,9 @@ import (
 
 func ExampleCondition() {
 	t := new(testing.T)
-	success := assert.Condition(t, func() bool { return true })
+	success := assert.Condition(t, func() bool {
+		return true
+	})
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -123,7 +126,9 @@ func ExampleErrorIs() {
 
 func ExampleEventually() {
 	t := new(testing.T)
-	success := assert.Eventually(t, func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond)
+	success := assert.Eventually(t, func() bool {
+		return true
+	}, 100*time.Millisecond, 20*time.Millisecond)
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -131,7 +136,9 @@ func ExampleEventually() {
 
 func ExampleEventuallyWithT() {
 	t := new(testing.T)
-	success := assert.EventuallyWithT(t, func(c *assert.CollectT) { assert.True(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
+	success := assert.EventuallyWithT(t, func(c *assert.CollectT) {
+		assert.True(c, true)
+	}, 100*time.Millisecond, 20*time.Millisecond)
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -395,7 +402,9 @@ func ExampleNegative() {
 
 func ExampleNever() {
 	t := new(testing.T)
-	success := assert.Never(t, func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond)
+	success := assert.Never(t, func() bool {
+		return false
+	}, 100*time.Millisecond, 20*time.Millisecond)
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -507,7 +516,8 @@ func ExampleNotNil() {
 
 func ExampleNotPanics() {
 	t := new(testing.T)
-	success := assert.NotPanics(t, func() {})
+	success := assert.NotPanics(t, func() {
+	})
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -547,7 +557,9 @@ func ExampleNotZero() {
 
 func ExamplePanics() {
 	t := new(testing.T)
-	success := assert.Panics(t, func() { panic("panicking") })
+	success := assert.Panics(t, func() {
+		panic("panicking")
+	})
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -555,7 +567,9 @@ func ExamplePanics() {
 
 func ExamplePanicsWithError() {
 	t := new(testing.T)
-	success := assert.PanicsWithError(t, assert.ErrTest.Error(), func() { panic(assert.ErrTest) })
+	success := assert.PanicsWithError(t, assert.ErrTest.Error(), func() {
+		panic(assert.ErrTest)
+	})
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -563,7 +577,9 @@ func ExamplePanicsWithError() {
 
 func ExamplePanicsWithValue() {
 	t := new(testing.T)
-	success := assert.PanicsWithValue(t, "panicking", func() { panic("panicking") })
+	success := assert.PanicsWithValue(t, "panicking", func() {
+		panic("panicking")
+	})
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true

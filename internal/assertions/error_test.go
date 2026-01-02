@@ -213,11 +213,6 @@ func TestError(t *testing.T) {
 
 	True(t, Error(mock, err), "Error with error should return True")
 
-	/* TODO(fred): testing formatted versions of method should be generated
-	// go vet check
-	True(t, Errorf(mockT, err, "example with %s", "formatted message"), "Errorf with error should return True")
-	*/
-
 	// returning an empty error interface
 	err = func() error {
 		var err *customError

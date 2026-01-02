@@ -11,7 +11,7 @@ import (
 
 // YAMLEq asserts that the first documents in the two YAML strings are equivalent.
 //
-// Usage:
+// # Usage
 //
 //	expected := `---
 //	key: value
@@ -25,11 +25,12 @@ import (
 //	`
 //	assertions.YAMLEq(t, expected, actual)
 //
-// Example:
+// # Examples
 //
-// panic: "key: value", "key: value"
-// should panic without the yaml feature enabled.
+//	panic: "key: value", "key: value"
+//	should panic without the yaml feature enabled.
 func YAMLEq(t T, expected string, actual string, msgAndArgs ...any) bool {
+	// Domain: yaml
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}

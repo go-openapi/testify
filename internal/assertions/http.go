@@ -12,30 +12,20 @@ import (
 	"strings"
 )
 
-// httpCode is a helper that returns HTTP code of the response. It returns -1 and
-// an error if building a new request fails.
-func httpCode(handler http.HandlerFunc, method, url string, values url.Values) (int, error) {
-	w := httptest.NewRecorder()
-	req, err := http.NewRequestWithContext(context.Background(), method, url, http.NoBody)
-	if err != nil {
-		return -1, err
-	}
-	req.URL.RawQuery = values.Encode()
-	handler(w, req)
-	return w.Code, nil
-}
-
 // HTTPSuccess asserts that a specified handler returns a success status code.
-//
-//	assert.HTTPSuccess(t, myHandler, "POST", "http://www.google.com", nil)
 //
 // Returns whether the assertion was successful (true) or not (false).
 //
-// Examples:
+// # Usage
+//
+//	assertions.HTTPSuccess(t, myHandler, "POST", "http://www.google.com", nil)
+//
+// # Examples
 //
 //	success: httpOK, "GET", "/", nil
 //	failure: httpError, "GET", "/", nil
 func HTTPSuccess(t T, handler http.HandlerFunc, method, url string, values url.Values, msgAndArgs ...any) bool {
+	// Domain: http
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -54,15 +44,18 @@ func HTTPSuccess(t T, handler http.HandlerFunc, method, url string, values url.V
 
 // HTTPRedirect asserts that a specified handler returns a redirect status code.
 //
-//	assert.HTTPRedirect(t, myHandler, "GET", "/a/b/c", url.Values{"a": []string{"b", "c"}}
-//
 // Returns whether the assertion was successful (true) or not (false).
 //
-// Examples:
+// # Usage
+//
+//	assertions.HTTPRedirect(t, myHandler, "GET", "/a/b/c", url.Values{"a": []string{"b", "c"}}
+//
+// # Examples
 //
 //	success: httpRedirect, "GET", "/", nil
 //	failure: httpError, "GET", "/", nil
 func HTTPRedirect(t T, handler http.HandlerFunc, method, url string, values url.Values, msgAndArgs ...any) bool {
+	// Domain: http
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -81,15 +74,18 @@ func HTTPRedirect(t T, handler http.HandlerFunc, method, url string, values url.
 
 // HTTPError asserts that a specified handler returns an error status code.
 //
-//	assert.HTTPError(t, myHandler, "POST", "/a/b/c", url.Values{"a": []string{"b", "c"}}
-//
 // Returns whether the assertion was successful (true) or not (false).
 //
-// Examples:
+// # Usage
+//
+//	assertions.HTTPError(t, myHandler, "POST", "/a/b/c", url.Values{"a": []string{"b", "c"}}
+//
+// # Examples
 //
 //	success: httpError, "GET", "/", nil
 //	failure: httpOK, "GET", "/", nil
 func HTTPError(t T, handler http.HandlerFunc, method, url string, values url.Values, msgAndArgs ...any) bool {
+	// Domain: http
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -108,15 +104,18 @@ func HTTPError(t T, handler http.HandlerFunc, method, url string, values url.Val
 
 // HTTPStatusCode asserts that a specified handler returns a specified status code.
 //
-//	assert.HTTPStatusCode(t, myHandler, "GET", "/notImplemented", nil, 501)
-//
 // Returns whether the assertion was successful (true) or not (false).
 //
-// Examples:
+// # Usage
+//
+//	assertions.HTTPStatusCode(t, myHandler, "GET", "/notImplemented", nil, 501)
+//
+// # Examples
 //
 //	success: httpOK, "GET", "/", nil, http.StatusOK
 //	failure: httpError, "GET", "/", nil, http.StatusOK
 func HTTPStatusCode(t T, handler http.HandlerFunc, method, url string, values url.Values, statuscode int, msgAndArgs ...any) bool {
+	// Domain: http
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -136,6 +135,7 @@ func HTTPStatusCode(t T, handler http.HandlerFunc, method, url string, values ur
 // HTTPBody is a helper that returns the HTTP body of the response.
 // It returns the empty string if building a new request fails.
 func HTTPBody(handler http.HandlerFunc, method, url string, values url.Values) string {
+	// Domain: http
 	w := httptest.NewRecorder()
 	if len(values) > 0 {
 		url += "?" + values.Encode()
@@ -150,15 +150,18 @@ func HTTPBody(handler http.HandlerFunc, method, url string, values url.Values) s
 
 // HTTPBodyContains asserts that a specified handler returns a body that contains a string.
 //
-//	assert.HTTPBodyContains(t, myHandler, "GET", "www.google.com", nil, "I'm Feeling Lucky")
-//
 // Returns whether the assertion was successful (true) or not (false).
 //
-// Examples:
+// # Usage
+//
+//	assertions.HTTPBodyContains(t, myHandler, "GET", "www.google.com", nil, "I'm Feeling Lucky")
+//
+// # Examples
 //
 //	success: httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, World!"
 //	failure: httpBody, "GET", "/", url.Values{"name": []string{"Bob"}}, "Hello, World!"
 func HTTPBodyContains(t T, handler http.HandlerFunc, method, url string, values url.Values, str any, msgAndArgs ...any) bool {
+	// Domain: http
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -175,15 +178,18 @@ func HTTPBodyContains(t T, handler http.HandlerFunc, method, url string, values 
 // HTTPBodyNotContains asserts that a specified handler returns a
 // body that does not contain a string.
 //
-//	assert.HTTPBodyNotContains(t, myHandler, "GET", "www.google.com", nil, "I'm Feeling Lucky")
-//
 // Returns whether the assertion was successful (true) or not (false).
 //
-// Examples:
+// # Usage
+//
+//	assertions.HTTPBodyNotContains(t, myHandler, "GET", "www.google.com", nil, "I'm Feeling Lucky")
+//
+// # Examples
 //
 //	success: httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, Bob!"
 //	failure: httpBody, "GET", "/", url.Values{"name": []string{"Bob"}}, "Hello, Bob!"
 func HTTPBodyNotContains(t T, handler http.HandlerFunc, method, url string, values url.Values, str any, msgAndArgs ...any) bool {
+	// Domain: http
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -195,4 +201,18 @@ func HTTPBodyNotContains(t T, handler http.HandlerFunc, method, url string, valu
 	}
 
 	return !contains
+}
+
+// httpCode is a helper that returns the HTTP code of the response.
+//
+// It returns -1 and an error if building a new request fails.
+func httpCode(handler http.HandlerFunc, method, url string, values url.Values) (int, error) {
+	w := httptest.NewRecorder()
+	req, err := http.NewRequestWithContext(context.Background(), method, url, http.NoBody)
+	if err != nil {
+		return -1, err
+	}
+	req.URL.RawQuery = values.Encode()
+	handler(w, req)
+	return w.Code, nil
 }

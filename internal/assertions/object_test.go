@@ -41,20 +41,6 @@ func TestObjectsAreEqualValues(t *testing.T) {
 	}
 }
 
-func TestObjectsExportedFieldsAreEqual(t *testing.T) {
-	t.Parallel()
-
-	for c := range objectExportedFieldsCases() {
-		t.Run(fmt.Sprintf("ObjectsExportedFieldsAreEqual(%#v, %#v)", c.expected, c.actual), func(t *testing.T) {
-			res := ObjectsExportedFieldsAreEqual(c.expected, c.actual)
-
-			if res != c.result {
-				t.Errorf("ObjectsExportedFieldsAreEqual(%#v, %#v) should return %#v", c.expected, c.actual, c.result)
-			}
-		})
-	}
-}
-
 func TestObjectsCopyExportedFields(t *testing.T) {
 	t.Parallel()
 
@@ -98,10 +84,6 @@ type S struct {
 	Exported2    Nested
 	notExported1 any
 	notExported2 Nested
-}
-
-type S2 struct {
-	foo any
 }
 
 type S3 struct {
@@ -170,65 +152,6 @@ func objectEqualValuesCases() iter.Seq[objectEqualCase] {
 		{complex128(1e+10 + 1e+10i), complex64(1e+10 + 1e+10i), true},
 		{complex64(1e+10 + 1e+10i), complex128(1e+10 + 1e+10i), true},
 		{[]int{1, 2}, (*[3]int)(nil), false}, // panics should be caught and treated as inequality (https://github.com/stretchr/testify/issues/1699)
-	})
-}
-
-func objectExportedFieldsCases() iter.Seq[objectEqualCase] {
-	intValue := 1
-
-	return slices.Values([]objectEqualCase{
-		{S{1, Nested{2, 3}, 4, Nested{5, 6}}, S{1, Nested{2, 3}, 4, Nested{5, 6}}, true},
-		{S{1, Nested{2, 3}, 4, Nested{5, 6}}, S{1, Nested{2, 3}, "a", Nested{5, 6}}, true},
-		{S{1, Nested{2, 3}, 4, Nested{5, 6}}, S{1, Nested{2, 3}, 4, Nested{5, "a"}}, true},
-		{S{1, Nested{2, 3}, 4, Nested{5, 6}}, S{1, Nested{2, 3}, 4, Nested{"a", "a"}}, true},
-		{S{1, Nested{2, 3}, 4, Nested{5, 6}}, S{1, Nested{2, "a"}, 4, Nested{5, 6}}, true},
-		{S{1, Nested{2, 3}, 4, Nested{5, 6}}, S{"a", Nested{2, 3}, 4, Nested{5, 6}}, false},
-		{S{1, Nested{2, 3}, 4, Nested{5, 6}}, S{1, Nested{"a", 3}, 4, Nested{5, 6}}, false},
-		{S{1, Nested{2, 3}, 4, Nested{5, 6}}, S2{1}, false},
-		{1, S{1, Nested{2, 3}, 4, Nested{5, 6}}, false},
-
-		{S3{&Nested{1, 2}, &Nested{3, 4}}, S3{&Nested{1, 2}, &Nested{3, 4}}, true},
-		{S3{nil, &Nested{3, 4}}, S3{nil, &Nested{3, 4}}, true},
-		{S3{&Nested{1, 2}, &Nested{3, 4}}, S3{&Nested{1, 2}, &Nested{3, "b"}}, true},
-		{S3{&Nested{1, 2}, &Nested{3, 4}}, S3{&Nested{1, "a"}, &Nested{3, "b"}}, true},
-		{S3{&Nested{1, 2}, &Nested{3, 4}}, S3{&Nested{"a", 2}, &Nested{3, 4}}, false},
-		{S3{&Nested{1, 2}, &Nested{3, 4}}, S3{}, false},
-		{S3{}, S3{}, true},
-
-		{S4{[]*Nested{{1, 2}}}, S4{[]*Nested{{1, 2}}}, true},
-		{S4{[]*Nested{{1, 2}}}, S4{[]*Nested{{1, 3}}}, true},
-		{S4{[]*Nested{{1, 2}, {3, 4}}}, S4{[]*Nested{{1, "a"}, {3, "b"}}}, true},
-		{S4{[]*Nested{{1, 2}, {3, 4}}}, S4{[]*Nested{{1, "a"}, {2, "b"}}}, false},
-
-		{Nested{&intValue, 2}, Nested{&intValue, 2}, true},
-		{Nested{&Nested{1, 2}, 3}, Nested{&Nested{1, "b"}, 3}, true},
-		{Nested{&Nested{1, 2}, 3}, Nested{nil, 3}, false},
-
-		{
-			Nested{map[any]*Nested{nil: nil}, 2},
-			Nested{map[any]*Nested{nil: nil}, 2},
-			true,
-		},
-		{
-			Nested{map[any]*Nested{"a": nil}, 2},
-			Nested{map[any]*Nested{"a": nil}, 2},
-			true,
-		},
-		{
-			Nested{map[any]*Nested{"a": nil}, 2},
-			Nested{map[any]*Nested{"a": {1, 2}}, 2},
-			false,
-		},
-		{
-			Nested{map[any]Nested{"a": {1, 2}, "b": {3, 4}}, 2},
-			Nested{map[any]Nested{"a": {1, 5}, "b": {3, 7}}, 2},
-			true,
-		},
-		{
-			Nested{map[any]Nested{"a": {1, 2}, "b": {3, 4}}, 2},
-			Nested{map[any]Nested{"a": {2, 2}, "b": {3, 4}}, 2},
-			false,
-		},
 	})
 }
 

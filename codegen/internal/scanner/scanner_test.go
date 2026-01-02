@@ -14,7 +14,7 @@ import (
 //
 // You may use this smoke test to verify the content of the constructed model.
 func TestScanner(t *testing.T) {
-	s := New()
+	s := New(WithCollectDoc(true))
 
 	r, err := s.Scan()
 	if err != nil {

@@ -111,7 +111,7 @@ func TestHTTPStatusCode(t *testing.T) {
 	False(t, mock4.Failed())
 }
 
-func TestHTTPStatusWrapper(t *testing.T) { // TODO(fredbi): check if redundant (wrappers tests are generated)
+func TestHTTPStatusWrapper(t *testing.T) {
 	t.Parallel()
 	mock := new(mockT)
 

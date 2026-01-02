@@ -8,6 +8,7 @@ import (
 	"slices"
 	"testing"
 
+	"github.com/go-openapi/testify/v2/codegen/internal/generator/funcmaps"
 	"github.com/go-openapi/testify/v2/codegen/internal/model"
 )
 
@@ -76,7 +77,7 @@ func TestTransformArgs(t *testing.T) {
 			t.Parallel()
 
 			params := gen.transformArgs(tt.input)
-			result := params.String()
+			result := funcmaps.PrintReturns(params)
 
 			if result != tt.expected {
 				t.Errorf("Expected %q, got %q", tt.expected, result)

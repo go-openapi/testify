@@ -7,10 +7,15 @@ import (
 	"testing"
 
 	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
-func TestImports(t *testing.T) {
+func TestImportAssert(t *testing.T) {
 	if assert.Equal(t, 1, 1) != true {
 		t.Error("Something is wrong.")
 	}
+}
+
+func TestImportRequire(t *testing.T) {
+	require.Equal(t, 1, 1)
 }

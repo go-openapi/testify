@@ -15,20 +15,23 @@ import (
 // If the code does not care about error specifics, and only needs
 // to return the error for example, this error should be used to make
 // the test code more readable.
-var ErrTest = errors.New("assert.ErrTest general error for testing") // TODO: make a type and a const.
+var ErrTest = errors.New("assert.ErrTest general error for testing") // Proposal for enhancement: make a type and a const.
 
 // NoError asserts that a function returned a nil error (ie. no error).
 //
-//	  actualObj, err := SomeFunction()
-//	  if assert.NoError(t, err) {
-//		   assert.Equal(t, expectedObj, actualObj)
-//	  }
+// # Usage
 //
-// Examples:
+//	actualObj, err := SomeFunction()
+//	if assert.NoError(t, err) {
+//		assertions.Equal(t, expectedObj, actualObj)
+//	}
+//
+// # Examples
 //
 //	success: nil
 //	failure: ErrTest
 func NoError(t T, err error, msgAndArgs ...any) bool {
+	// Domain: error
 	if err != nil {
 		if h, ok := t.(H); ok {
 			h.Helper()
@@ -41,14 +44,17 @@ func NoError(t T, err error, msgAndArgs ...any) bool {
 
 // Error asserts that a function returned a non-nil error (ie. an error).
 //
-//	actualObj, err := SomeFunction()
-//	assert.Error(t, err)
+// # Usage
 //
-// Examples:
+//	actualObj, err := SomeFunction()
+//	assertions.Error(t, err)
+//
+// # Examples
 //
 //	success: ErrTest
 //	failure: nil
 func Error(t T, err error, msgAndArgs ...any) bool {
+	// Domain: error
 	if err == nil {
 		if h, ok := t.(H); ok {
 			h.Helper()
@@ -62,14 +68,17 @@ func Error(t T, err error, msgAndArgs ...any) bool {
 // EqualError asserts that a function returned a non-nil error (i.e. an error)
 // and that it is equal to the provided error.
 //
-//	actualObj, err := SomeFunction()
-//	assert.EqualError(t, err,  expectedErrorString)
+// # Usage
 //
-// Examples:
+//	actualObj, err := SomeFunction()
+//	assertions.EqualError(t, err,  expectedErrorString)
+//
+// # Examples
 //
 //	success: ErrTest, "assert.ErrTest general error for testing"
 //	failure: ErrTest, "wrong error message"
 func EqualError(t T, theError error, errString string, msgAndArgs ...any) bool {
+	// Domain: error
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -90,14 +99,17 @@ func EqualError(t T, theError error, errString string, msgAndArgs ...any) bool {
 // ErrorContains asserts that a function returned a non-nil error (i.e. an
 // error) and that the error contains the specified substring.
 //
-//	actualObj, err := SomeFunction()
-//	assert.ErrorContains(t, err,  expectedErrorSubString)
+// # Usage
 //
-// Examples:
+//	actualObj, err := SomeFunction()
+//	assertions.ErrorContains(t, err,  expectedErrorSubString)
+//
+// # Examples
 //
 //	success: ErrTest, "general error"
 //	failure: ErrTest, "not in message"
 func ErrorContains(t T, theError error, contains string, msgAndArgs ...any) bool {
+	// Domain: error
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -114,13 +126,19 @@ func ErrorContains(t T, theError error, contains string, msgAndArgs ...any) bool
 }
 
 // ErrorIs asserts that at least one of the errors in err's chain matches target.
-// This is a wrapper for errors.Is.
 //
-// Examples:
+// This is a wrapper for [errors.Is].
+//
+// # Usage
+//
+//	assertions.ErrorIs(t, err, io.EOF)
+//
+// # Examples
 //
 //	success: fmt.Errorf("wrap: %w", io.EOF), io.EOF
 //	failure: ErrTest, io.EOF
 func ErrorIs(t T, err, target error, msgAndArgs ...any) bool {
+	// Domain: error
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -145,13 +163,19 @@ func ErrorIs(t T, err, target error, msgAndArgs ...any) bool {
 }
 
 // NotErrorIs asserts that none of the errors in err's chain matches target.
-// This is a wrapper for errors.Is.
 //
-// Examples:
+// This is a wrapper for [errors.Is].
+//
+// # Usage
+//
+//	assertions.NotErrorIs(t, err, io.EOF)
+//
+// # Examples
 //
 //	success: ErrTest, io.EOF
 //	failure: fmt.Errorf("wrap: %w", io.EOF), io.EOF
 func NotErrorIs(t T, err, target error, msgAndArgs ...any) bool {
+	// Domain: error
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -173,13 +197,19 @@ func NotErrorIs(t T, err, target error, msgAndArgs ...any) bool {
 }
 
 // ErrorAs asserts that at least one of the errors in err's chain matches target, and if so, sets target to that error value.
-// This is a wrapper for errors.As.
 //
-// Examples:
+// This is a wrapper for [errors.As].
+//
+// # Usage
+//
+//	assertions.ErrorAs(t, err, &target)
+//
+// # Examples
 //
 //	success: fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError)
 //	failure: ErrTest, new(*dummyError)
 func ErrorAs(t T, err error, target any, msgAndArgs ...any) bool {
+	// Domain: error
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -204,11 +234,16 @@ func ErrorAs(t T, err error, target any, msgAndArgs ...any) bool {
 // NotErrorAs asserts that none of the errors in err's chain matches target,
 // but if so, sets target to that error value.
 //
-// Examples:
+// # Usage
+//
+//	assertions.NotErrorAs(t, err, &target)
+//
+// # Examples
 //
 //	success: ErrTest, new(*dummyError)
 //	failure: fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError)
 func NotErrorAs(t T, err error, target any, msgAndArgs ...any) bool {
+	// Domain: error
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}

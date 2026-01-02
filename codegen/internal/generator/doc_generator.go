@@ -1,0 +1,235 @@
+// SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
+// SPDX-License-Identifier: Apache-2.0
+
+package generator
+
+import (
+	"errors"
+	"fmt"
+	"iter"
+	"os"
+	"path"
+	"path/filepath"
+
+	"github.com/go-openapi/testify/v2/codegen/internal/generator/domains"
+	"github.com/go-openapi/testify/v2/codegen/internal/generator/funcmaps"
+	"github.com/go-openapi/testify/v2/codegen/internal/model"
+)
+
+const (
+	// index page metadata.
+	indexTitle       = "Assertions index"
+	indexDescription = "Index of assertion domains"
+	indexFile        = "_index.md"
+
+	// sensible default preallocated slots.
+	allocatedEntries = 15
+)
+
+type DocGenerator struct {
+	options
+
+	ctx *genCtx
+	doc model.Documentation
+}
+
+func NewDocGenerator(doc model.Documentation, opts ...Option) *DocGenerator {
+	return &DocGenerator{
+		options: optionsWithDefaults(opts),
+		doc:     doc,
+	}
+}
+
+func (d *DocGenerator) Generate(opts ...GenerateOption) error {
+	// prepare options
+	d.ctx = &genCtx{
+		generateOptions: generateOptionsWithDefaults(opts),
+	}
+	if d.ctx.targetDoc == "" {
+		return errors.New("a target directory is required for docs")
+	}
+
+	if err := d.loadTemplates(); err != nil {
+		return err
+	}
+
+	// Proposal for enhancement: other fun stuff
+	// - capture testable examples and render their source code
+
+	// reorganize accumulated package-based docs into domain-based docs
+	//
+	// This iterator renders all domains in the desired order.
+	domainDocs, extraUniqueValues := d.reorganizeByDomain()
+
+	// generate an index page with all domains
+	indexDoc := d.buildIndexDocument(domainDocs, extraUniqueValues)
+	if err := d.generateDomainIndex(indexDoc); err != nil {
+		return err
+	}
+
+	// generate one page per domain. Each document knows about the domain.
+	for _, document := range domainDocs {
+		if err := d.generateDomainPage(document); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+type uniqueValues struct {
+	tool        string
+	receiver    string
+	copyright   string
+	header      string
+	githubURL   string
+	pkggodevURL string
+}
+
+func (d *DocGenerator) reorganizeByDomain() (iter.Seq2[string, model.Document], uniqueValues) {
+	docs := domains.FlattenDocumentation(d.doc)
+	discoveredDomains := domains.MakeDomainIndex(docs)
+	githubURL := "https://" + path.Dir(discoveredDomains.RootPackage())
+	pkggodevURL := "https://pkg.go.dev/" + discoveredDomains.RootPackage()
+
+	return func(yield func(string, model.Document) bool) {
+			weight := 1
+			for domain, entry := range discoveredDomains.Entries() {
+				doc := model.Document{
+					Title:       funcmaps.Titleize(domain),
+					Domain:      domain,
+					Description: entry.Description(),
+					Kind:        model.KindPage,
+					File:        domain + ".md",
+					Package: &model.AssertionPackage{
+						Package:          assertions, // package that is the single source of truth
+						Tool:             discoveredDomains.Tool(),
+						Copyright:        discoveredDomains.Copyright(),
+						Receiver:         discoveredDomains.Receiver(),
+						Header:           discoveredDomains.Header(),
+						EnableFormat:     d.ctx.enableFormat,
+						EnableForward:    d.ctx.enableForward,
+						EnableGenerics:   d.ctx.enableGenerics,
+						EnableExamples:   d.ctx.generateExamples,
+						RunnableExamples: d.ctx.runnableExamples,
+						// skip package-level docstring
+						// skip other package-level extra comments
+						// filtered functions and types for this domain across all packages
+						Functions: entry.Functions(),
+						Types:     entry.Types(),
+						Vars:      entry.Vars(),
+						Consts:    entry.Consts(),
+					},
+					ExtraPackages: entry.ExtraPackages(),
+					GitHubURL:     githubURL,
+					PkgGoDevURL:   pkggodevURL,
+					RefCount:      entry.Len(),
+					Weight:        weight,
+				}
+				weight++
+
+				if !yield(doc.Domain, doc) {
+					return
+				}
+			}
+		}, uniqueValues{
+			// metadata that are unique
+			tool:        discoveredDomains.Tool(),
+			receiver:    discoveredDomains.Receiver(),
+			copyright:   discoveredDomains.Copyright(),
+			header:      discoveredDomains.Header(),
+			githubURL:   githubURL,
+			pkggodevURL: pkggodevURL,
+		}
+}
+
+func (d *DocGenerator) buildIndexDocument(docsByDomain iter.Seq2[string, model.Document], extras uniqueValues) model.Document {
+	doc := model.Document{
+		Title:       indexTitle,
+		Description: indexDescription,
+		Kind:        model.KindIndex,
+		File:        indexFile,
+		Index:       buildIndexEntries(docsByDomain),
+		Package: &model.AssertionPackage{
+			Tool:      extras.tool,
+			Copyright: extras.copyright,
+			Receiver:  extras.receiver,
+			Header:    extras.header,
+			// skip everything else
+		},
+		GitHubURL:   extras.githubURL,
+		PkgGoDevURL: extras.pkggodevURL,
+	}
+
+	doc.RefCount = len(doc.Index)
+
+	return doc
+}
+
+func buildIndexEntries(docsByDomain iter.Seq2[string, model.Document]) []model.IndexEntry {
+	entries := make([]model.IndexEntry, 0, allocatedEntries)
+
+	weight := 1
+	for domain, doc := range docsByDomain {
+		entries = append(entries, model.IndexEntry{
+			Name:        domain,
+			Title:       doc.Title,
+			Description: doc.Description,
+			Link:        "./" + doc.File,
+			RefCount:    len(doc.Package.Functions),
+			Weight:      weight,
+		})
+		weight++
+	}
+
+	return entries
+}
+
+func (d *DocGenerator) generateDomainIndex(document model.Document) error {
+	base := filepath.Join(d.ctx.targetRoot, d.ctx.targetDoc, document.Path)
+	if err := os.MkdirAll(base, dirPermissions); err != nil {
+		return fmt.Errorf("can't make target folder: %w", err)
+	}
+	return d.render("doc_index", filepath.Join(base, document.File), document)
+}
+
+func (d *DocGenerator) generateDomainPage(document model.Document) error {
+	base := filepath.Join(d.ctx.targetRoot, d.ctx.targetDoc, document.Path)
+	if err := os.MkdirAll(base, dirPermissions); err != nil {
+		return fmt.Errorf("can't make target folder: %w", err)
+	}
+
+	return d.render("doc_page", filepath.Join(base, document.File), document)
+}
+
+func (d *DocGenerator) loadTemplates() error {
+	const (
+		tplExt            = ".md.gotmpl"
+		expectedTemplates = 10
+	)
+
+	index := make(map[string]string, expectedTemplates)
+	index["doc_index"] = "doc_index"
+	index["doc_page"] = "doc_page"
+
+	templates, err := loadTemplatesFromIndex(index, tplExt, templatesFS)
+	if err != nil {
+		return err
+	}
+
+	d.ctx.index = index
+	d.ctx.templates = templates
+
+	return nil
+}
+
+func (d *DocGenerator) render(name string, target string, data any) error {
+	return renderTemplate(
+		d.ctx.index,
+		d.ctx.templates,
+		name,
+		target,
+		data,
+		renderMD,
+	)
+}

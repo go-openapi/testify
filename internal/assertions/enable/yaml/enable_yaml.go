@@ -28,7 +28,6 @@ import (
 )
 `,
 		)
-
 	}
 	return enableYAMLUnmarshal(in, out)
 }
