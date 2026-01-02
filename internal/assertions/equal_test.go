@@ -344,6 +344,109 @@ func TestEqualBytes(t *testing.T) {
 	}
 }
 
+func TestEqualValuePanics(t *testing.T) {
+	t.Parallel()
+
+	for tt := range panicCases() {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			mock := new(mockT)
+			NotPanics(t, func() {
+				Equal(mock, tt.value1, tt.value2)
+			}, "should not panic")
+
+			if !tt.expectEqual {
+				True(t, mock.Failed(), "should have failed")
+				Contains(t, mock.errorString(), "Not equal:", "error message should mention inequality")
+
+				return
+			}
+
+			False(t, mock.Failed(), "should have been successful")
+			Empty(t, mock.errorString())
+		})
+	}
+}
+
+type panicCase struct {
+	name        string
+	value1      any
+	value2      any
+	expectEqual bool
+}
+
+func panicCases() iter.Seq[panicCase] {
+	type structWithUnexportedMapWithArrayKey struct {
+		m any
+	}
+
+	return slices.Values([]panicCase{
+		{
+			// from issue https://github.com/stretchr/testify/pull/1816
+			name: "panic behavior on struct with array key and unexported field (some keys vs none)",
+			value1: structWithUnexportedMapWithArrayKey{
+				map[[1]byte]*struct{}{
+					{1}: nil,
+					{2}: nil,
+				},
+			},
+			value2: structWithUnexportedMapWithArrayKey{
+				map[[1]byte]*struct{}{},
+			},
+			expectEqual: false,
+		},
+		{
+			name: "panic behavior on struct with array key and unexported field (same keys)",
+			value1: structWithUnexportedMapWithArrayKey{
+				map[[1]byte]*struct{}{
+					{1}: nil,
+					{2}: nil,
+				},
+			},
+			value2: structWithUnexportedMapWithArrayKey{
+				map[[1]byte]*struct{}{
+					{2}: nil,
+					{1}: nil,
+				},
+			},
+			expectEqual: true,
+		},
+		{
+			name: "panic behavior on struct with array key and unexported field (non-nil values)",
+			value1: structWithUnexportedMapWithArrayKey{
+				map[[1]byte]*struct{}{
+					{1}: {},
+					{2}: nil,
+				},
+			},
+			value2: structWithUnexportedMapWithArrayKey{
+				map[[1]byte]*struct{}{
+					{1}: {},
+					{2}: nil,
+				},
+			},
+			expectEqual: true,
+		},
+		{
+			name: "panic behavior on struct with array key and unexported field (different, non-nil values)",
+			value1: structWithUnexportedMapWithArrayKey{
+				map[[1]byte]*struct{}{
+					{1}: {},
+					{2}: nil,
+				},
+			},
+			value2: structWithUnexportedMapWithArrayKey{
+				map[[1]byte]*struct{}{
+					{1}: nil,
+					{2}: {},
+				},
+			},
+			expectEqual: false,
+		},
+	})
+}
+
 type equalCase struct {
 	expected any
 	actual   any
