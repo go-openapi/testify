@@ -17,9 +17,8 @@ import (
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 
-	"github.com/go-openapi/testify/v2/codegen/internal/model"
-	parser "github.com/go-openapi/testify/v2/codegen/internal/scanner/comments-parser"
-	"github.com/go-openapi/testify/v2/internal/spew"
+	"github.com/go-openapi/testify/codegen/v2/internal/model"
+	parser "github.com/go-openapi/testify/codegen/v2/internal/scanner/comments-parser"
 )
 
 const (
@@ -338,7 +337,7 @@ func godocbadge(pkggodevURL string) (string, error) {
 }
 
 func printDebug(in any) string {
-	return spew.Sdump(in)
+	return fmt.Sprintf("%#v", in)
 }
 
 func printDate() string {

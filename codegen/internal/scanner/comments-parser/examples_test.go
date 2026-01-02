@@ -8,7 +8,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/codegen/internal/model"
+	"github.com/go-openapi/testify/codegen/v2/internal/model"
 )
 
 func TestParseTestExamples(t *testing.T) {

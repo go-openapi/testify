@@ -11,9 +11,9 @@ import (
 	"path"
 	"path/filepath"
 
-	"github.com/go-openapi/testify/v2/codegen/internal/generator/domains"
-	"github.com/go-openapi/testify/v2/codegen/internal/generator/funcmaps"
-	"github.com/go-openapi/testify/v2/codegen/internal/model"
+	"github.com/go-openapi/testify/codegen/v2/internal/generator/domains"
+	"github.com/go-openapi/testify/codegen/v2/internal/generator/funcmaps"
+	"github.com/go-openapi/testify/codegen/v2/internal/model"
 )
 
 const (

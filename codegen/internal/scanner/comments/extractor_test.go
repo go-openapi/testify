@@ -10,7 +10,7 @@ import (
 
 	"golang.org/x/tools/go/packages"
 
-	"github.com/go-openapi/testify/v2/codegen/internal/model"
+	"github.com/go-openapi/testify/codegen/v2/internal/model"
 )
 
 //nolint:gochecknoglobals // we use [sync.Once] to cache the parsed test source and run the tests faster

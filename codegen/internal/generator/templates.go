@@ -10,7 +10,7 @@ import (
 	"sort"
 	"text/template"
 
-	"github.com/go-openapi/testify/v2/codegen/internal/generator/funcmaps"
+	"github.com/go-openapi/testify/codegen/v2/internal/generator/funcmaps"
 )
 
 // buildTemplateIndex extracts template names from the index and returns them sorted.

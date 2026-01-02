@@ -6,8 +6,6 @@ package scanner
 import (
 	"os"
 	"testing"
-
-	"github.com/go-openapi/testify/v2/internal/spew"
 )
 
 // TestScanner exercises the [Scanner] without asserting anything else than running without error.
@@ -26,9 +24,6 @@ func TestScanner(t *testing.T) {
 		// skip output when run on CI
 		return
 	}
-	spew.Config = spew.ConfigState{
-		DisableMethods: true,
-	}
 
-	spew.Dump(r)
+	t.Logf("%#v", r)
 }

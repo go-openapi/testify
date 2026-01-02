@@ -10,8 +10,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/go-openapi/testify/v2/codegen/internal/model"
-	parser "github.com/go-openapi/testify/v2/codegen/internal/scanner/comments-parser"
+	"github.com/go-openapi/testify/codegen/v2/internal/model"
+	parser "github.com/go-openapi/testify/codegen/v2/internal/scanner/comments-parser"
 )
 
 var copyrightRex = regexp.MustCompile(`(?i)copyright`)

@@ -7,7 +7,7 @@ import (
 	"go/types"
 	"strings"
 
-	"github.com/go-openapi/testify/v2/codegen/internal/model"
+	"github.com/go-openapi/testify/codegen/v2/internal/model"
 )
 
 // Extractor extracts function signatures and formats types with proper package qualification.

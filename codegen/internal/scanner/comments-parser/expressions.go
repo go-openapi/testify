@@ -11,7 +11,7 @@ import (
 	"go/token"
 	"strings"
 
-	"github.com/go-openapi/testify/v2/codegen/internal/model"
+	"github.com/go-openapi/testify/codegen/v2/internal/model"
 )
 
 // ParseTestValues parses a comma-separated list of Go expressions.

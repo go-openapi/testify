@@ -12,9 +12,9 @@ import (
 	"log"
 	"strings"
 
-	"github.com/go-openapi/testify/v2/codegen/internal/generator"
-	"github.com/go-openapi/testify/v2/codegen/internal/model"
-	"github.com/go-openapi/testify/v2/codegen/internal/scanner"
+	"github.com/go-openapi/testify/codegen/v2/internal/generator"
+	"github.com/go-openapi/testify/codegen/v2/internal/model"
+	"github.com/go-openapi/testify/codegen/v2/internal/scanner"
 )
 
 type config struct {

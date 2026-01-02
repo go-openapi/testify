@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/go-openapi/testify/v2/codegen/internal/model"
+	"github.com/go-openapi/testify/codegen/v2/internal/model"
 )
 
 // ParseTaggedComments extracts tagged comments from text.

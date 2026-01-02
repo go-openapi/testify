@@ -10,8 +10,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/codegen/internal/model"
-	parser "github.com/go-openapi/testify/v2/codegen/internal/scanner/comments-parser"
+	"github.com/go-openapi/testify/codegen/v2/internal/model"
+	parser "github.com/go-openapi/testify/codegen/v2/internal/scanner/comments-parser"
 )
 
 const (
@@ -294,7 +294,7 @@ func TestDebug(t *testing.T) {
 	t.Parallel()
 
 	result := printDebug(1)
-	const expected = "(int) 1\n"
+	const expected = "1"
 	if result != expected {
 		t.Errorf("Expected: %q, Got: %q", expected, result)
 	}

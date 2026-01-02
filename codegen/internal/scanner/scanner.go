@@ -14,10 +14,10 @@ import (
 
 	"golang.org/x/tools/go/packages"
 
-	"github.com/go-openapi/testify/v2/codegen/internal/model"
-	"github.com/go-openapi/testify/v2/codegen/internal/scanner/comments"
-	parser "github.com/go-openapi/testify/v2/codegen/internal/scanner/comments-parser"
-	"github.com/go-openapi/testify/v2/codegen/internal/scanner/signature"
+	"github.com/go-openapi/testify/codegen/v2/internal/model"
+	"github.com/go-openapi/testify/codegen/v2/internal/scanner/comments"
+	parser "github.com/go-openapi/testify/codegen/v2/internal/scanner/comments-parser"
+	"github.com/go-openapi/testify/codegen/v2/internal/scanner/signature"
 )
 
 const pkgLoadMode = packages.NeedName | packages.NeedFiles | packages.NeedImports | packages.NeedDeps | packages.NeedTypes | packages.NeedSyntax | packages.NeedTypesInfo

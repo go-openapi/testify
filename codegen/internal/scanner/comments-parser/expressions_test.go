@@ -9,7 +9,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/codegen/internal/model"
+	"github.com/go-openapi/testify/codegen/v2/internal/model"
 )
 
 // TestParseTestValues tests parsing of test value expressions.

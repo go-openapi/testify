@@ -3,7 +3,7 @@ package scanner
 import "testing"
 
 func TestModuleName(t *testing.T) {
-	const expected = "github.com/go-openapi/testify/v2/codegen"
+	const expected = "github.com/go-openapi/testify/codegen/v2"
 	result := moduleName()
 	if result != expected {
 		t.Errorf("Expected %q but got %q", expected, result)
