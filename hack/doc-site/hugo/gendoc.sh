@@ -29,7 +29,7 @@ echo "==> Generated testify.yaml"
 # Check if theme exists
 if [ ! -d "themes/hugo-relearn" ]; then
   echo "ERROR: Relearn theme not found at themes/hugo-relearn"
-  echo "Run: unzip ../../hugo-theme-relearn-main.zip -d themes/ && mv themes/hugo-theme-relearn-main themes/hugo-relearn"
+  echo "Run: unzip hugo-theme-relearn-main.zip -d themes/ && mv themes/hugo-theme-relearn-main themes/hugo-relearn"
   exit 1
 fi
 

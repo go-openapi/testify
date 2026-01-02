@@ -13,7 +13,6 @@ func TestYAMLEqWrapper_EqualYAMLString(t *testing.T) {
 	if !assert.YAMLEq(`{"hello": "world", "foo": "bar"}`, `{"hello": "world", "foo": "bar"}`) {
 		t.Error("YAMLEq should return true")
 	}
-
 }
 
 func TestYAMLEqWrapper_EquivalentButNotEqual(t *testing.T) {
@@ -23,7 +22,6 @@ func TestYAMLEqWrapper_EquivalentButNotEqual(t *testing.T) {
 	if !assert.YAMLEq(`{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`) {
 		t.Error("YAMLEq should return true")
 	}
-
 }
 
 func TestYAMLEqWrapper_HashOfArraysAndHashes(t *testing.T) {
@@ -67,7 +65,6 @@ func TestYAMLEqWrapper_Array(t *testing.T) {
 	if !assert.YAMLEq(`["foo", {"hello": "world", "nested": "hash"}]`, `["foo", {"nested": "hash", "hello": "world"}]`) {
 		t.Error("YAMLEq should return true")
 	}
-
 }
 
 func TestYAMLEqWrapper_HashAndArrayNotEquivalent(t *testing.T) {
