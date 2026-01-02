@@ -13,5 +13,5 @@ on:
 
 jobs:
   test:
-    uses: go-openapi/ci-workflows/.github/workflows/go-test-monorepo.yml@4bcac7e777c0a3e54a764f275fc171ba46e87e26 # v0.2.3
+    uses: go-openapi/ci-workflows/.github/workflows/go-test-monorepo.yml@9f8b5be8a961946631c7b7f0ba3e103600135388 # v0.2.3
     secrets: inherit
