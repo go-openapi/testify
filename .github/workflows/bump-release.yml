@@ -3,6 +3,7 @@ name: Bump Release
 permissions:
   contents: read
 
+
 on:
   workflow_dispatch:
     inputs:
@@ -30,6 +31,7 @@ jobs:
   bump-release:
     permissions:
       contents: write
+      pull-requests: write
     uses: go-openapi/ci-workflows/.github/workflows/bump-release-monorepo.yml@e77a5bc724d0ab14dd086ee6e13153129ddfe3f9 # v0.2.2
     with:
       bump-type: ${{ inputs.bump-type }}
