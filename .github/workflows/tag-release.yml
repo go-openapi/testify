@@ -13,7 +13,7 @@ jobs:
     name: Create release
     permissions:
       contents: write
-    uses: go-openapi/ci-workflows/.github/workflows/release.yml@8b33fd43a192e822252fbbfc7134fab8834e4baa # v0.2.3
+    uses: go-openapi/ci-workflows/.github/workflows/release.yml@ee2b2f541275f68d81b048e9e8d3effc3c58e999 # v0.2.3
     with:
       tag: ${{ github.ref_name }}
       is-monorepo: true

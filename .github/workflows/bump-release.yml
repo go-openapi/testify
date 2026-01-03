@@ -32,7 +32,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    uses: go-openapi/ci-workflows/.github/workflows/bump-release-monorepo.yml@8b33fd43a192e822252fbbfc7134fab8834e4baa # v0.2.3
+    uses: go-openapi/ci-workflows/.github/workflows/bump-release-monorepo.yml@ee2b2f541275f68d81b048e9e8d3effc3c58e999 # v0.2.3
     with:
       bump-type: ${{ inputs.bump-type }}
       tag-message-title: ${{ inputs.tag-message-title }}
