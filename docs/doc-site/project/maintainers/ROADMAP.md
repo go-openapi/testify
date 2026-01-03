@@ -38,7 +38,7 @@ timeline
 
 * mocks: we use [mockery](https://github.com/vektra/mockery) and prefer the simpler `matryer` mocking-style.
   testify-style mocks are thus not going to be supported anytime soon.
-* extra convoluted stuff in the like of `InDeltaSlice`
+* extra convoluted stuff in the like of `InDeltaSlice` (more likely to be removed)
 
 ## Generics adoption
 

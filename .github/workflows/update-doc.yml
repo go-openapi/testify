@@ -135,4 +135,4 @@ jobs:
       -
         name: Report URL
         run: |
-          echo "::notice::Deployed doc site to {{ steps.deployment.outputs.page_url }}"
+          echo "::notice::Deployed doc site to ${{ steps.deployment.outputs.page_url }}"

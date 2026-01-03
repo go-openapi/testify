@@ -6,7 +6,7 @@ This policy outlines the commitment and practices of the go-openapi maintainers 
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 2.0.x   | :white_check_mark: |
+| 2.1.x   | :white_check_mark: |
 
 ## Reporting a vulnerability
 

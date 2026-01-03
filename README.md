@@ -1,9 +1,4 @@
-# Testify
-
-[![Slack Status](https://slackin.goswagger.io/badge.svg)](https://slackin.goswagger.io)
-[![license](https://img.shields.io/badge/license-Apache%20v2-orange.svg)](https://raw.githubusercontent.com/go-openapi/testify/master/LICENSE)
-[![Go Reference](https://pkg.go.dev/badge/github.com/go-openapi/testify.svg)](https://pkg.go.dev/github.com/go-openapi/testify)
-[![Go Report Card](https://goreportcard.com/badge/github.com/go-openapi/testify)](https://goreportcard.com/report/github.com/go-openapi/testify)
+# Testify/v2
 
 <!-- Badges: status  -->
 [![Tests][test-badge]][test-url] [![Coverage][cov-badge]][cov-url] [![CI vuln scan][vuln-scan-badge]][vuln-scan-url] [![CodeQL][codeql-badge]][codeql-url]
@@ -13,166 +8,93 @@
 [![Release][release-badge]][release-url] [![Go Report Card][gocard-badge]][gocard-url] [![CodeFactor Grade][codefactor-badge]][codefactor-url] [![License][license-badge]][license-url]
 <!-- Badges: documentation & support -->
 <!-- Badges: others & stats -->
-<!-- Slack badge disabled until I am able to restore a valid link to the chat -->
-[![GoDoc][godoc-badge]][godoc-url] <!-- [![Slack Channel][slack-badge]][slack-url] -->[![go version][goversion-badge]][goversion-url] ![Top language][top-badge] ![Commits since latest release][commits-badge]
+[![GoDoc][godoc-badge]][godoc-url] [![Discord Channel][discord-badge]][discord-url] [![go version][goversion-badge]][goversion-url] ![Top language][top-badge] ![Commits since latest release][commits-badge]
 
 ---
 
+**The v2 our tests wanted**
+
 ## Testify - Thou Shalt Write Tests
 
-A Go set of packages that provide tools for testifying that your code will behave as you intend.
+A set of `go` packages that provide tools for testifying that your code behaves as you intended.
 
 This is the go-openapi fork of the great [testify](https://github.com/stretchr/testify) package.
 
-## Why this fork?
+> [!NOTE]
+> This is the home of `github.com/go-openapi/testify/v2`, an active, opinionated fork of `github.com/stretchr/testify`.
 
-From the maintainers of `testify`, it looks like a v2 is coming up, but they'll do it at their own pace.
+Main features:
 
-We like all the principles they put forward to build this v2. [See discussion about v2](https://github.com/stretchr/testify/discussions/1560)
+* zero external dependencies
+* opt-in dependencies for extra features (e.g. asserting YAML)
+* searchable documentation
 
-However, at `go-openapi` we would like to address the well-known issues in `testify` with different priorities.
+### Status
 
-1. We want first to remove all external dependencies.
+Design and exploration phase. Contributions and proposals are welcome.
 
-> For all our libraries and generated test code we don't want test dependencies
-> to drill farther than `import github.com/go-openapi/testify/v2`, but on some specific (and controlled)
-> occasions.
+> **Recent news**
+> Fully refactored how assertions are generated and documented.
 >
-> In this fork, all external stuff is either internalized (`go-spew`, `difflib`),
-> removed (`mocks`, `suite`, `http`) or specifically enabled by importing a specific module
-> (`github.com/go-openapi/testify/v2/enable/yaml`).
+> Now on our way to apply more fixes, features and adopt generics.
 
-2. We want to remove most of the chrome that has been added over the years
-
-> The `go-openapi` libraries and the `go-swagger` project make a rather limited use of the vast API provided by `testify`.
->
-> With this first version of the fork, we have removed `mocks` and `suite`, which we don't use.
-> They might be added later on, with better controlled dependencies.
->
-> In the forthcoming maintenance of this fork, much of the "chrome" or "ambiguous" API will be pared down.
-> There is no commitment yet on the stability of the API.
->
-> Chrome would be added later: we have the "enable" packages just for that.
-
-3. We hope that this endeavor will help the original project with a live-drill of what a v2 could look like.
-   We are always happy to discuss with people who face the same problems as we do: avoid breaking changes, 
-   APIs that became bloated over a decade or so, uncontrolled dependencies, conflicting demands from users etc.
-
-## What's next with this project?
-
-1. [x] The first release comes with zero dependencies and an unstable API (see below [our use case](#usage-at-go-openapi))
-2. |x] This project is going to be injected as the main and sole test dependency of the `go-openapi` libraries
-2. [ ] ... and the `go-swagger` tool
-3. [x] Valuable pending pull requests from the original project could be merged (e.g. `JSONEqBytes`) or transformed as "enable" modules (e.g. colorized output)
-4. [ ] Unclear assertions may be provided an alternative verb (e.g. `InDelta`)
-5. [ ] Since we have leveled the go requirements to the rest of the go-openapi (currently go1.24) there is quite a bit of relinting lying ahead.
-
-### What won't come anytime soon
-
-* mocks: we use [mockery](https://github.com/vektra/mockery) and prefer the simpler `matryer` mocking-style.
-  testify-style mocks are thus not going to be supported anytime soon.
-* extra convoluted stuff in the like of `InDeltaSlice`
-
-## Generics adoption
-
-### Context from the original repository
-
-Several attempts have been made to introduce generics in the original stretchr/testify repository:
-
-* **github.com/stretchr/testify#1308** - Comprehensive refactor replacing `interface{}` with generic type parameters across assertions (Draft, v2.0.0 milestone)
-* **github.com/stretchr/testify#1805** - Proposal for generic `IsOfType[T]()` to avoid dummy value instantiation in type checks
-* **github.com/stretchr/testify#1685** - Iterator support (`iter.Seq`) for Contains/ElementsMatch assertions (Go 1.23+)
-* **github.com/stretchr/testify#1147** - General discussion about generics adoption (marked "Not Planned")
-
-### Challenges identified
-
-The original repository's exploration of generics revealed several design challenges:
-
-1. **Type inference limitations**: Go's type inference struggles with complex generic signatures, often requiring explicit type parameters that burden the API (e.g., `Contains[int, int](arr1, arr2)`)
-
-2. **Overly broad type constraints**: PR #1308's approach used constraints like `ConvertibleToFloat64` that accepted more types than intended, weakening type safety
-
-3. **Loss of flexibility**: Testify currently compares non-comparable types (slices, maps) via `reflect.DeepEqual`. Generic constraints would eliminate this capability, as Go generics require comparable or explicitly constrained types
-
-4. **Breaking changes**: Any comprehensive generics adoption requires a major version bump and Go 1.18+ minimum version
-
-5. **Inconsistent design patterns**: Different assertions would need different constraint strategies, making a uniform approach difficult
-
-### Approach in this fork
-
-This fork targets **go1.24** and can leverage generics without backward compatibility concerns.
-
-The approach will be **selective and pragmatic** rather than comprehensive:
-
-* **Targeted improvements** where generics provide clear value without compromising existing functionality
-* **Focus on eliminating anti-patterns** like dummy value instantiation in `IsType` (see #1805)
-* **Preserve reflection-based flexibility** for comparing complex types rather than forcing everything through generic constraints
-* **Careful constraint design** to ensure type safety without being overly restrictive or permissive
-
-The goal is to enhance type safety and developer experience where it matters most, while maintaining the flexibility that makes testify useful for real-world testing scenarios.
-
-**Status**: Design and exploration phase. Contributions and proposals welcome.
-
-## Usage at go-openapi
-
-At this moment, we have identified the following usage in our tools. This API shall remain stable.
-Currently, there are no guarantees about the entry points not in this list.
-
-TODO: extend the list with usage by go-swagger.
-
-```
-Condition
-Contains,Containsf
-Empty,Emptyf
-Equal,Equalf
-EqualError,EqualErrorf
-EqualValues,EqualValuesf
-Error,Errorf
-ErrorContains
-ErrorIs
-Fail,Failf
-FailNow
-False,Falsef
-Greater
-Implements
-InDelta,InDeltaf
-IsType,IsTypef
-JSONEq,JSONEqf
-Len,Lenf
-Nil,Nilf
-NoError,NoErrorf
-NotContains,NotContainsf
-NotEmpty,NotEmptyf
-NotEqual
-NotNil,NotNilf
-NotPanics
-NotZeroG
-Panics,PanicsWithValue
-Subset
-True,Truef
-YAMLEq,YAMLEqf
-Zero,Zerof
-```
-
-## Installation
-
-To use this package in your projects:
+## Import this library in your project
 
 ```cmd
-    go get github.com/go-openapi/testify/v2
+go get github.com/go-openapi/testify/v2
 ```
 
-## Get started
+## Basic usage
 
-Features include:
+`testify` simplifies your test assertions like so.
 
-  * [Easy assertions](./docs/ORIGINAL.md#assert-package)
-  * ~[Mocking](./docs/ORIGINAL.md#mock-package)~ removed
-  * ~[Testing suite interfaces and functions](./docs/ORIGINAL.md#suite-package)~ removed
+```go
+    import (
+        "testing"
+    )
+    ...
+    
+    const expected = "expected result"
 
-## Examples
+	result := printImports(input)
+	if result != expected {
+		t.Errorf(
+            "Expected: %s. Got: %s", expected, result, 
+        )
 
-See [the original README](./docs/ORIGINAL.md)
+        return
+	}
+```
+
+Becomes:
+
+```go
+    import (
+        "testing"
+        "github.com/go-openapi/testify/v2"
+    )
+    ...
+
+    const expected = "expected result"
+
+	require.Equalf(t,
+        expected, printImports(input), "Expected: %s. Got: %s",
+        expected, result, 
+    )
+```
+
+## Usage at go-openapi and go-swagger
+
+This fork now full replaces the original project for all go-openapi projects,
+thus reducing their dependencies footprint.
+
+Go-swagger will be adapted over Q1 2026.
+
+Features will probably be added to support our main use cases there.
+
+## Change log
+
+See <https://github.com/go-openapi/testify/releases>
 
 ## Licensing
 
@@ -183,74 +105,29 @@ This library ships under the [SPDX-License-Identifier: Apache-2.0](./LICENSE).
 See the license [NOTICE](./NOTICE), which recalls the licensing terms of all the pieces of software
 distributed with this fork, including internalized libraries.
 
-* stretchr/testify [SPDX-License-Identifier: MIT](./NOTICE)
-* github.com/davecgh/go-spew [SPDX-License-Identifier: ISC](./internal/spew/LICENSE)
-* github.com/pmezard/go-difflib [SPDX-License-Identifier: MIT-like](./internal/difflib/LICENSE)
+## Other documentation
 
-## PRs from the original repo
+* [Getting started](https://go-openapi.github.io/testify/examples/)
+* [Motivations](https://go-openapi.github.io/testify/project/readme)
+* [Roadmap](https://go-openapi.github.io/testify/project/maintainers/roadmap)
+* [Internal architecture](https://go-openapi.github.io/testify/project/maintainers/architecture)
 
-### Already merged or incorporated
+* [All-time contributors](./CONTRIBUTORS.md)
+* [Contributing guidelines](https://go-openapi.github.io/testify/project/contributing/)
+* [Maintainers documentation](https://go-openapi.github.io/testify/project/maintainers/)
+* [Coding style](https://go-openapi.github.io/testify/project/contributing/style)
+* [Security policy](https://go-openapi.github.io/testify/project/security)
 
-The following proposed contributions to the original repo have been merged or incorporated with
-some adaptations into this fork:
+## Cutting a new release
 
-* github.com/stretchr/testify#1513 - JSONEqBytes for byte slice JSON comparison
-* github.com/stretchr/testify#1772 - YAML library migration to maintained fork (go.yaml.in/yaml)
-* github.com/stretchr/testify#1797 - Codegen package consolidation and licensing
-* github.com/stretchr/testify#1356 - panic(nil) handling for Go 1.21+
-* github.com/stretchr/testify#1825 - Fix panic when using EqualValues with uncomparable types [merged]
-* github.com/stretchr/testify#1818 - Fix panic on invalid regex in Regexp/NotRegexp assertions [merged]
-* github.com/stretchr/testify#1223 - Display uint values in decimal instead of hex in diffs [merged]
+Maintainers can cut a new release by either:
 
-### Planned merges
-
-#### Critical safety fixes (high priority)
-
-* Follow / adapt https://github.com/stretchr/testify/pull/1824
-
-Not PRs, but reported issues in the original repo (need to investigate):
-
-* https://github.com/stretchr/testify/issues/1826
-* https://github.com/stretchr/testify/issues/1611
-* https://github.com/stretchr/testify/issues/1813
-
-#### Leveraging internalized dependencies (go-spew, difflib)
-
-These improvements apply to the internalized and modernized copies of dependencies in this fork:
-
-* github.com/stretchr/testify#1829 - Fix time.Time rendering in diffs (internalized go-spew)
-* github.com/stretchr/testify#1822 - Deterministic map ordering in diffs (internalized go-spew)
-* github.com/stretchr/testify#1816 - Fix panic on unexported struct key in map (internalized go-spew - may need deeper fix)
-
-#### UX improvements
-
-* diff rendering
-
-### Under consideration
-
-#### Colorized output
-
-Several PRs propose colorized terminal output with different approaches and dependencies.
-If implemented, this would be provided as an optional `enable/color` module:
-
-* github.com/stretchr/testify#1467 - Colorized output with terminal detection (most mature implementation)
-* github.com/stretchr/testify#1480 - Colorized diffs via TESTIFY_COLORED_DIFF env var
-* github.com/stretchr/testify#1232 - Colorized output for expected/actual/errors
-* github.com/stretchr/testify#994 - Colorize expected vs actual values
-
-## Contributing
-
-Please feel free to submit issues, fork the repository and send pull requests!
-
-When submitting an issue, we ask that you please include a complete test function that demonstrates the issue.
-Extra credit for those using Testify to write the test code that demonstrates it.
-
-Code generation is used. Run `go generate ./...` to update generated files.
-
-See also the [CONTRIBUTING guidelines](.github/CONTRIBUTING.md).
-
-
-## [The original README](./original.md)
+* running [this workflow](https://github.com/go-openapi/testify/actions/workflows/bump-release.yml) (recommended)
+* or :
+  1. preparing go.mod files with the next tag, merge
+  2. pushing a semver tag
+  * signed tags are preferred
+  * The tag message is prepended to release notes
 
 <!-- Badges: status  -->
 [test-badge]: https://github.com/go-openapi/testify/actions/workflows/go-test.yml/badge.svg
@@ -262,20 +139,26 @@ See also the [CONTRIBUTING guidelines](.github/CONTRIBUTING.md).
 [codeql-badge]: https://github.com/go-openapi/testify/actions/workflows/codeql.yml/badge.svg
 [codeql-url]: https://github.com/go-openapi/testify/actions/workflows/codeql.yml
 <!-- Badges: release & docker images  -->
-[release-badge]: https://badge.fury.io/go/github.com%2Fgo-openapi%2Ftestify.svg
-[release-url]: https://badge.fury.io/go/github.com%2Fgo-openapi%2Ftestify
+[release-badge]: https://badge.fury.io/gh/go-openapi%2Ftestify.svg
+[release-url]: https://badge.fury.io/gh/go-openapi%2Ftestify
+[gomod-badge]: https://badge.fury.io/go/github.com%2Fgo-openapi%2Ftestify.svg
+[gomod-url]: https://badge.fury.io/go/github.com%2Fgo-openapi%2Ftestify
 <!-- Badges: code quality  -->
 [gocard-badge]: https://goreportcard.com/badge/github.com/go-openapi/testify
 [gocard-url]: https://goreportcard.com/report/github.com/go-openapi/testify
 [codefactor-badge]: https://img.shields.io/codefactor/grade/github/go-openapi/testify
 [codefactor-url]: https://www.codefactor.io/repository/github/go-openapi/testify
 <!-- Badges: documentation & support -->
-[doc-badge]: https://img.shields.io/badge/doc-site-blue?link=https%3A%2F%2Fgoswagger.io%2Fgo-openapi%2F
-[doc-url]: https://goswagger.io/go-openapi
+[doc-badge]: https://img.shields.io/badge/doc-site-blue?link=https%3A%2F%2Fgo-openapi.github.io%2Ftestify%2F
+[doc-url]: https://go-openapi.github.io/testify
 [godoc-badge]: https://pkg.go.dev/badge/github.com/go-openapi/testify
 [godoc-url]: http://pkg.go.dev/github.com/go-openapi/testify
-[slack-badge]: https://slackin.goswagger.io/badge.svg
-[slack-url]: https://slackin.goswagger.io
+[slack-logo]: https://a.slack-edge.com/e6a93c1/img/icons/favicon-32.png
+[slack-badge]: https://img.shields.io/badge/slack-blue?link=https%3A%2F%2Fgoswagger.slack.com%2Farchives%2FC04R30YM
+[slack-url]: https://goswagger.slack.com/archives/C04R30YMU
+[discord-badge]: https://img.shields.io/discord/1446918742398341256?logo=discord&label=discord&color=blue
+[discord-url]: https://discord.gg/DrafRmZx
+
 <!-- Badges: license & compliance -->
 [license-badge]: http://img.shields.io/badge/license-Apache%20v2-orange.svg
 [license-url]: https://github.com/go-openapi/testify/?tab=Apache-2.0-1-ov-file#readme

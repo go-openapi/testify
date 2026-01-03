@@ -9,6 +9,8 @@ description: |
 weight: 1
 ---
 
+**The testify/v2 we wanted**
+
 ## Motivation
 
 From the maintainers of `testify`, it looks like a v2 is coming up, but they'll do it at their own pace.
@@ -77,7 +79,7 @@ while maintaining the flexibility that makes testify useful for real-world testi
 
 * `YAMLEq` panics by default: must enable the feature with an additional blank import
 * deprecated types and methods have been removed
-* removed the `suite` and `http` packages
+* removed the `suite`, `mocks` and `http` packages
 * replaced internal utility package `_codegen` by `codegen`
 
 ### Other (non-breaking) changes
