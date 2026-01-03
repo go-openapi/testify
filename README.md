@@ -1,6 +1,6 @@
 # Testify/v2
 
-<!-- Badges: status  -->
+<!-- Badges: s[roadmap]tatus  -->
 [![Tests][test-badge]][test-url] [![Coverage][cov-badge]][cov-url] [![CI vuln scan][vuln-scan-badge]][vuln-scan-url] [![CodeQL][codeql-badge]][codeql-url]
 <!-- Badges: release & docker images  -->
 <!-- Badges: code quality  -->
@@ -8,13 +8,11 @@
 [![Release][release-badge]][release-url] [![Go Report Card][gocard-badge]][gocard-url] [![CodeFactor Grade][codefactor-badge]][codefactor-url] [![License][license-badge]][license-url]
 <!-- Badges: documentation & support -->
 <!-- Badges: others & stats -->
-[![GoDoc][godoc-badge]][godoc-url] [![Discord Channel][discord-badge]][discord-url] [![go version][goversion-badge]][goversion-url] ![Top language][top-badge] ![Commits since latest release][commits-badge]
+[![Doc][doc-badge]][doc-url] [![GoDoc][godoc-badge]][godoc-url] [![Discord Channel][discord-badge]][discord-url] [![go version][goversion-badge]][goversion-url] ![Top language][top-badge] ![Commits since latest release][commits-badge]
 
 ---
 
 **The v2 our tests wanted**
-
-## Testify - Thou Shalt Write Tests
 
 A set of `go` packages that provide tools for testifying that your code behaves as you intended.
 
@@ -27,7 +25,17 @@ Main features:
 
 * zero external dependencies
 * opt-in dependencies for extra features (e.g. asserting YAML)
-* searchable documentation
+* [searchable documentation][doc-url]
+
+## Announcements
+
+* **2025-12-19** : new community chat on discord
+  * a new discord community channel is available to be notified of changes and support users
+  * our venerable Slack channel remains open, and will be eventually discontinued on **2026-03-31**
+
+You may join the discord community by clicking the invite link on the discord badge (also above). [![Discord Channel][discord-badge]][discord-url]
+
+Or join our Slack channel: [![Slack Channel][slack-logo]![slack-badge]][slack-url]
 
 ### Status
 
@@ -36,7 +44,7 @@ Design and exploration phase. Contributions and proposals are welcome.
 > **Recent news**
 > Fully refactored how assertions are generated and documented.
 >
-> Now on our way to apply more fixes, features and adopt generics.
+> Now on our way to apply more fixes, features and adopt generics. See [ROADMAP][roadmap].
 
 ## Import this library in your project
 
@@ -109,7 +117,7 @@ distributed with this fork, including internalized libraries.
 
 * [Getting started](https://go-openapi.github.io/testify/examples/)
 * [Motivations](https://go-openapi.github.io/testify/project/readme)
-* [Roadmap](https://go-openapi.github.io/testify/project/maintainers/roadmap)
+* [Roadmap][roadmap]
 * [Internal architecture](https://go-openapi.github.io/testify/project/maintainers/architecture)
 
 * [All-time contributors](./CONTRIBUTORS.md)
@@ -129,6 +137,8 @@ Maintainers can cut a new release by either:
   * signed tags are preferred
   * The tag message is prepended to release notes
 
+<!-- Doc links -->
+[roadmap]: https://go-openapi.github.io/testify/project/maintainers/roadmap
 <!-- Badges: status  -->
 [test-badge]: https://github.com/go-openapi/testify/actions/workflows/go-test.yml/badge.svg
 [test-url]: https://github.com/go-openapi/testify/actions/workflows/go-test.yml
