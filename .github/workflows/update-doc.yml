@@ -61,8 +61,10 @@ jobs:
 
           # Clone theme
           curl -sL -o relearn.tgz https://github.com/McShelby/hugo-theme-relearn/archive/refs/tags/"${RELEARN_VERSION}".tar.gz
-          tar xvf relearn.tgz
-          mv "hugo-theme-relearn-${RELEARN_VERSION}" themes/hugo-theme-relearn
+          tar xf relearn.tgz
+          rm -rf themes/hugo-relearn
+          mv "hugo-theme-relearn-${RELEARN_VERSION}" hugo-relearn
+          mv hugo-relearn themes/
       -
         name: Prepare config
         run: |
