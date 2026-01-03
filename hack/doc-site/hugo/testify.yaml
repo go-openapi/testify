@@ -10,7 +10,7 @@ params:
     latestRelease: 'v2.0.2'
 
     # Version message for the documentation set
-    versionMessage: 'Documentation for Testify v2.0.2'
+    versionMessage: 'Documentation for testify v2.0.2'
 
     # Build timestamp
     buildTime: '2026-01-02T14:19:49Z'

@@ -12,6 +12,7 @@ echo "==> Preparing Hugo documentation site..."
 LATEST_RELEASE=$(git tag --list --sort -version:refname 'v*' 2>/dev/null | head -1 || echo "dev")
 REQUIRED_GO_VERSION=$(grep "^go\s" ../../../go.mod | awk '{print $2}')
 BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+VERSION_MESSAGE="Documentation test for latest master"
 
 echo "    Latest release: ${LATEST_RELEASE}"
 echo "    Go version: ${REQUIRED_GO_VERSION}"
@@ -21,6 +22,7 @@ echo "    Build time: ${BUILD_TIME}"
 cat testify.yaml.template \
   | sed "s|{{ GO_VERSION }}|${REQUIRED_GO_VERSION}|g" \
   | sed "s|{{ LATEST_RELEASE }}|${LATEST_RELEASE}|g" \
+  | sed "s|{{ VERSION_MESSAGE }}|${VERSION_MESSAGE}|g" \
   | sed "s|{{ BUILD_TIME }}|${BUILD_TIME}|g" \
   > testify.yaml
 

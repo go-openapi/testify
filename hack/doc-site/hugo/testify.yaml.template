@@ -10,7 +10,7 @@ params:
     latestRelease: '{{ LATEST_RELEASE }}'
 
     # Version message for the documentation set
-    versionMessage: 'Documentation for Testify {{ LATEST_RELEASE }}'
+    versionMessage: '{{ VERSION_MESSAGE }}'
 
     # Build timestamp
     buildTime: '{{ BUILD_TIME }}'

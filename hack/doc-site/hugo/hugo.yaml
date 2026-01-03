@@ -115,6 +115,7 @@ params:
     goVersion: ''
     latestRelease: ''
     versionMessage: ''
+    buildTime: ''
 
 # Menu configuration
 menu:
