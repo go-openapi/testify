@@ -11,13 +11,13 @@ on:
     paths:
     - docs/**
     - hack/doc-site/**
-    - .github/workflows/update-doc.yaml
+    - .github/workflows/update-doc.yml
 
   pull_request:
     paths:
     - docs/**
     - hack/doc-site/**
-    - .github/workflows/update-doc.yaml
+    - .github/workflows/update-doc.yml
 
 concurrency:
   group: "pages"
