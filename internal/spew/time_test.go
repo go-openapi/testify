@@ -35,6 +35,7 @@ func isTimeCases() iter.Seq[isTimeCase] {
 	type te struct {
 		time.Time
 	}
+	nilTimePtr := (*time.Time)(nil)
 
 	return slices.Values([]isTimeCase{
 		{
@@ -49,7 +50,7 @@ func isTimeCases() iter.Seq[isTimeCase] {
 		},
 		{
 			name:         "nil *time.Time",
-			value:        (*time.Time)(nil),
+			value:        nilTimePtr,
 			expectedTime: true,
 		},
 		{
@@ -73,6 +74,16 @@ func isTimeCases() iter.Seq[isTimeCase] {
 			expectedTime: true,
 		},
 		{
+			name:         "pointer indirection **time.Time",
+			value:        ptr(ptr(time.Now())),
+			expectedTime: true,
+		},
+		{
+			name:         "pointer indirection to nil **time.Time",
+			value:        ptr(nilTimePtr),
+			expectedTime: true,
+		},
+		{
 			name:         "embedded time.Time",
 			value:        te{},
 			expectedTime: false,
@@ -80,6 +91,11 @@ func isTimeCases() iter.Seq[isTimeCase] {
 		{
 			name:         "pointer to embedded time.Time",
 			value:        &te{},
+			expectedTime: false,
+		},
+		{
+			name:         "invalid **time.Time",
+			value:        (**time.Time)(nil),
 			expectedTime: false,
 		},
 		{

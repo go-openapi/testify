@@ -965,9 +965,12 @@ type (
 	embeddedTimePtr struct { // this type is an example where the unsafeReflectValue does not work well
 		*time.Time
 	}
-	redeclaredTime    time.Time
-	redeclaredTimePtr *time.Time
-	aliasedTime       = time.Time
+	redeclaredTime         time.Time
+	redeclaredTimePtr      *time.Time
+	aliasedTime            = time.Time
+	embeddedRedeclaredTime struct {
+		redeclaredTime
+	}
 )
 
 func addTimeDumpTests() {
@@ -988,6 +991,9 @@ func addTimeDumpTests() {
 	ppts := ptr(ptr(ts))
 	ppAddr := fmt.Sprintf("%p", ppts)
 	ppIAddr := fmt.Sprintf("%p", *ppts)
+	er := embeddedRedeclaredTime{
+		redeclaredTime: redeclaredTime(ts),
+	}
 
 	addDumpTest(
 		// simple time.Time
@@ -1040,6 +1046,12 @@ func addTimeDumpTests() {
 		// how displaying pointer type information is displayed (i.e. using v.Elem().Type()).
 		rtptr,
 		"(*time.Time)("+tsAddr+")(2006-01-02 15:04:05.999999999 +0000 UTC)\n",
+	)
+	addDumpTest(
+		// embedded redeclared type convertible to time.Time
+		er,
+		"(spew_test.embeddedRedeclaredTime) {\n"+
+			" redeclaredTime: (spew_test.redeclaredTime) 2006-01-02 15:04:05.999999999 +0000 UTC\n}\n",
 	)
 }
 

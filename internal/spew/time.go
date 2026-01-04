@@ -13,6 +13,10 @@ import (
 // Conversely, a struct that embeds a time.Time or *time.Time is not considered a time.Time
 // and we'll have to dig the individual fields.
 func isTime(v reflect.Value) bool {
+	if !v.IsValid() {
+		return false
+	}
+
 	k := v.Kind()
 	t := v.Type()
 
@@ -31,6 +35,10 @@ func isTime(v reflect.Value) bool {
 
 // isConvertibleToTime returns a converted reflect.Value and true when v is convertible to time.Time or *time.Time.
 func isConvertibleToTime(v reflect.Value) (reflect.Value, bool) {
+	if !v.IsValid() {
+		return reflect.Value{}, false
+	}
+
 	k := v.Kind()
 
 	timeTyp := reflect.TypeFor[time.Time]()
@@ -41,6 +49,10 @@ func isConvertibleToTime(v reflect.Value) (reflect.Value, bool) {
 	timePtrTyp := reflect.TypeFor[*time.Time]()
 	if k == reflect.Pointer && v.Elem().Kind() == reflect.Struct && v.CanConvert(timePtrTyp) {
 		return v.Convert(timePtrTyp), true
+	}
+
+	if k == reflect.Pointer && v.Elem().Kind() == reflect.Pointer {
+		return isConvertibleToTime(v.Elem())
 	}
 
 	return reflect.Value{}, false // the returned value is Invalid in this case

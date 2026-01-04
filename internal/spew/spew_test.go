@@ -161,10 +161,15 @@ func initSpewTests() {
 
 	// Variable for tests on types which implement error interface.
 	te := customError(10)
+
+	// Variables for testing time.Time behavior
 	tm := time.Date(2006, time.January, 2, 15, 4, 5, 999999999, time.UTC)
 	tmAddr := fmt.Sprintf("%p", &tm)
 	em := embeddedTime{Time: tm}
 	emptr := embeddedTimePtr{Time: &tm}
+	er := embeddedRedeclaredTime{
+		redeclaredTime: redeclaredTime(tm),
+	}
 
 	spewTests = []spewTest{
 		// default config
@@ -234,21 +239,27 @@ func initSpewTests() {
 				" {\n wall: (uint64) 999999999,\n ext: (int64) 63271811045,\n loc: (*time.Location)(<nil>)\n}\n",
 		},
 		{
-			scsContinue, fCSFdump, "", &tm, // this prints time and continues digging the struct
+			scsContinue, fCSFdump, "", &tm,
 			"(*time.Time)(" + tmAddr + ")((2006-01-02 15:04:05.999999999 +0000 UTC)" +
 				" {\n wall: (uint64) 999999999,\n ext: (int64) 63271811045,\n loc: (*time.Location)(<nil>)\n})\n",
 		},
 		{
-			scsContinue, fCSFdump, "", em, // this prints time and continues digging the struct
+			scsContinue, fCSFdump, "", em,
 			"(spew_test.embeddedTime) (2006-01-02 15:04:05.999999999 +0000 UTC) {\n" +
 				" Time: (time.Time) (2006-01-02 15:04:05.999999999 +0000 UTC) {\n" +
 				"  wall: (uint64) 999999999,\n  ext: (int64) 63271811045,\n  loc: (*time.Location)(<nil>)\n }\n}\n",
 		},
 		{
-			scsContinue, fCSFdump, "", emptr, // this prints time and continues digging the struct
+			scsContinue, fCSFdump, "", emptr,
 			"(spew_test.embeddedTimePtr) (2006-01-02 15:04:05.999999999 +0000 UTC) {\n" +
 				" Time: (*time.Time)(" + tmAddr + ")((2006-01-02 15:04:05.999999999 +0000 UTC) {\n" +
 				"  wall: (uint64) 999999999,\n  ext: (int64) 63271811045,\n  loc: (*time.Location)(<nil>)\n })\n}\n",
+		},
+		{
+			scsContinue, fCSFdump, "", er,
+			"(spew_test.embeddedRedeclaredTime) {\n" +
+				" redeclaredTime: (spew_test.redeclaredTime) (2006-01-02 15:04:05.999999999 +0000 UTC) {\n" +
+				"  wall: (uint64) 999999999,\n  ext: (int64) 63271811045,\n  loc: (*time.Location)(<nil>)\n }\n}\n",
 		},
 		{scsNoMethodsButTimeStringer, fCSFprint, "", tm, "2006-01-02 15:04:05.999999999 +0000 UTC"},
 		{scsNoMethodsButTimeStringer, fCSFdump, "", tm, "(time.Time) 2006-01-02 15:04:05.999999999 +0000 UTC\n"},
