@@ -53,6 +53,12 @@ type ConfigState struct {
 	// invoked for types that implement them.
 	DisableMethods bool
 
+	// EnableTimeStringer specifies whether to invoke the Stringer interface on
+	// time.Time values even when DisableMethods is true. This is useful to get
+	// human-readable output for time.Time values while keeping method calls
+	// disabled for other types.
+	EnableTimeStringer bool
+
 	// DisablePointerMethods specifies whether or not to check for and invoke
 	// error and Stringer interfaces on types which only accept a pointer
 	// receiver when the current type is not a pointer.
@@ -102,7 +108,10 @@ type ConfigState struct {
 
 // Config is the active configuration of the top-level functions.
 // The configuration can be changed by modifying the contents of spew.Config.
-var Config = ConfigState{Indent: " "}
+var Config = ConfigState{ //nolint:gochecknoglobals // this is global configuration and we leave it for backward-compatibility
+	Indent:             " ",
+	EnableTimeStringer: true,
+}
 
 // Errorf is a wrapper for fmt.Errorf that treats each argument as if it were
 // passed with a Formatter interface returned by c.NewFormatter.  It returns

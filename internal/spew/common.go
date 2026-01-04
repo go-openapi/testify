@@ -98,47 +98,99 @@ func handleMethods(cs *ConfigState, w io.Writer, v reflect.Value) (handled bool)
 		v = unsafeReflectValue(v)
 	}
 
+	defer catchPanic(w, v)
+	handled, continued := handleErrorOrStringer(cs, w, v)
+	if handled {
+		// short-circuit: if we can handle directly without trying to convert to a pointer receiver, we're done.
+		// This allows avoiding to call unsafeReflectValue() or retrieving the value's address when not necessary.
+		return true
+	}
+	if continued {
+		// printed, and wants to return now to continue digging
+		return false
+	}
+
 	// Choose whether or not to do error and Stringer interface lookups against
 	// the base type or a pointer to the base type depending on settings.
+	//
 	// Technically calling one of these methods with a pointer receiver can
-	// mutate the value, however, types which choose to satisify an error or
+	// mutate the value, however, types which choose to satisfy an error or
 	// Stringer interface with a pointer receiver should not be mutating their
 	// state inside these interface methods.
 	if !cs.DisablePointerMethods && !UnsafeDisabled && !v.CanAddr() {
+		// since this is unsafe, there are a few edge cases where it doesn't work well
 		v = unsafeReflectValue(v)
 	}
+
 	if v.CanAddr() {
 		v = v.Addr()
 	}
 
+	handled, _ = handleErrorOrStringer(cs, w, v)
+
+	return handled
+}
+
+// handleErrorOrString is only called when v.CanInterface().
+//
+// NOTE: we should prove that unsafReflectValue doesn't alter this property.
+func handleErrorOrStringer(cs *ConfigState, w io.Writer, v reflect.Value) (handled, continued bool) {
 	// Is it an error or Stringer?
 	switch iface := v.Interface().(type) {
 	case error:
-		defer catchPanic(w, v)
 		if cs.ContinueOnMethod {
 			w.Write(openParenBytes)
 			w.Write([]byte(iface.Error()))
 			w.Write(closeParenBytes)
 			w.Write(spaceBytes)
-			return false
+			return false, true
 		}
 
 		w.Write([]byte(iface.Error()))
-		return true
+		return true, false
 
 	case fmt.Stringer:
-		defer catchPanic(w, v)
 		if cs.ContinueOnMethod {
 			w.Write(openParenBytes)
 			w.Write([]byte(iface.String()))
 			w.Write(closeParenBytes)
 			w.Write(spaceBytes)
-			return false
+			return false, true
 		}
+
 		w.Write([]byte(iface.String()))
-		return true
+		return true, false
+
+	default:
+		// is it convertible to time.Time (or *time.Time)?
+		converted, ok := isConvertibleToTime(v)
+		if !ok {
+			// can't handle this value
+			return false, false
+		}
+
+		if !converted.CanInterface() {
+			return false, false // safeguard
+		}
+
+		timeIface := converted.Interface()
+		stringer, ok := timeIface.(fmt.Stringer)
+		if !ok {
+			return false, false // safeguard
+		}
+
+		if cs.ContinueOnMethod {
+			_, _ = w.Write(openParenBytes)
+			_, _ = w.Write([]byte(stringer.String()))
+			_, _ = w.Write(closeParenBytes)
+			_, _ = w.Write(spaceBytes)
+			return false, true
+		}
+
+		_, _ = w.Write([]byte(stringer.String()))
+
+		return true, false
 	}
-	return false
 }
 
 // printBool outputs a boolean value as true or false to Writer w.
@@ -242,12 +294,14 @@ func newValuesSorter(values []reflect.Value, cs *ConfigState) sort.Interface {
 			vs.strings[i] = b.String()
 		}
 	}
+
 	if vs.strings == nil && cs.SpewKeys {
 		vs.strings = make([]string, len(values))
 		for i := range vs.values {
 			vs.strings[i] = Sprintf("%#v", vs.values[i].Interface())
 		}
 	}
+
 	return vs
 }
 
