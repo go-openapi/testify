@@ -23,6 +23,7 @@ import (
 	"reflect"
 	"sort"
 	"strconv"
+	"time"
 )
 
 // Some constants in the form of bytes to avoid string overhead.  This mirrors
@@ -98,47 +99,100 @@ func handleMethods(cs *ConfigState, w io.Writer, v reflect.Value) (handled bool)
 		v = unsafeReflectValue(v)
 	}
 
+	defer catchPanic(w, v)
+	handled, continued := handleErrorOrStringer(cs, w, v)
+	if handled {
+		// short-circuit: if we can handle directly without trying to convert to a pointer receiver, we're done.
+		// This allows avoiding to call unsafeReflectValue() or retrieving the value's address when not necessary.
+		return true
+	}
+	if continued {
+		// printed, and wants to return now to continue digging
+		return false
+	}
+
 	// Choose whether or not to do error and Stringer interface lookups against
 	// the base type or a pointer to the base type depending on settings.
+	//
 	// Technically calling one of these methods with a pointer receiver can
-	// mutate the value, however, types which choose to satisify an error or
+	// mutate the value, however, types which choose to satisfy an error or
 	// Stringer interface with a pointer receiver should not be mutating their
 	// state inside these interface methods.
 	if !cs.DisablePointerMethods && !UnsafeDisabled && !v.CanAddr() {
+		// since this is unsafe, there are a few edge cases where it doesn't work well
 		v = unsafeReflectValue(v)
 	}
+
 	if v.CanAddr() {
 		v = v.Addr()
 	}
 
+	handled, _ = handleErrorOrStringer(cs, w, v)
+
+	return handled
+}
+
+// handleErrorOrString is only called when v.CanInterface().
+//
+// NOTE: we should prove that unsafReflectValue doesn't alter this property.
+func handleErrorOrStringer(cs *ConfigState, w io.Writer, v reflect.Value) (handled, continued bool) {
 	// Is it an error or Stringer?
 	switch iface := v.Interface().(type) {
 	case error:
-		defer catchPanic(w, v)
 		if cs.ContinueOnMethod {
 			w.Write(openParenBytes)
 			w.Write([]byte(iface.Error()))
 			w.Write(closeParenBytes)
 			w.Write(spaceBytes)
-			return false
+			return false, true
 		}
 
 		w.Write([]byte(iface.Error()))
-		return true
+		return true, false
 
 	case fmt.Stringer:
-		defer catchPanic(w, v)
 		if cs.ContinueOnMethod {
 			w.Write(openParenBytes)
 			w.Write([]byte(iface.String()))
 			w.Write(closeParenBytes)
 			w.Write(spaceBytes)
-			return false
+			return false, true
 		}
+
 		w.Write([]byte(iface.String()))
-		return true
+		return true, false
+
+	default:
+		// is it convertible to time.Time (or *time.Time)?
+		converted, ok := isConvertibleToTime(v)
+		if !ok {
+			// can't handle this value
+			return false, false
+		}
+
+		// rendering time.Time
+		if !converted.CanInterface() {
+			return false, false // safeguard: should never be the case
+		}
+
+		timeIface := converted.Interface()
+		stringer, ok := timeIface.(fmt.Stringer)
+		if !ok {
+			return false, false // safeguard: should never be the case
+		}
+
+		if cs.ContinueOnMethod {
+			_, _ = w.Write(openParenBytes)
+			_, _ = w.Write([]byte(stringer.String()))
+			_, _ = w.Write(closeParenBytes)
+			_, _ = w.Write(spaceBytes)
+			return false, true
+		}
+
+		_, _ = w.Write([]byte(stringer.String()))
+
+		return true, false
 	}
-	return false
 }
 
 // printBool outputs a boolean value as true or false to Writer w.
@@ -226,12 +280,21 @@ type valuesSorter struct {
 // newValuesSorter initializes a valuesSorter instance, which holds a set of
 // surrogate keys on which the data should be sorted.  It uses flags in
 // ConfigState to decide if and how to populate those surrogate keys.
+//
+// Values that are convertible to a time.Time are compared using [time.Time.Compare()].
+// This is safer than sorting their string representation, because the [time.Location]
+// may differ.
+//
+// NOTE: if all values are not of the same underlying type,
+// comparison will resort to the default reflect.Value.String() representation.
 func newValuesSorter(values []reflect.Value, cs *ConfigState) sort.Interface {
 	vs := &valuesSorter{values: values, cs: cs}
-	if canSortSimply(vs.values[0].Kind()) {
+	v0 := vs.values[0]
+	if canSortSimply(v0.Kind()) || isTime(v0) {
 		return vs
 	}
-	if !cs.DisableMethods {
+
+	if !vs.cs.DisableMethods {
 		vs.strings = make([]string, len(values))
 		for i := range vs.values {
 			b := bytes.Buffer{}
@@ -242,12 +305,14 @@ func newValuesSorter(values []reflect.Value, cs *ConfigState) sort.Interface {
 			vs.strings[i] = b.String()
 		}
 	}
+
 	if vs.strings == nil && cs.SpewKeys {
 		vs.strings = make([]string, len(values))
 		for i := range vs.values {
 			vs.strings[i] = Sprintf("%#v", vs.values[i].Interface())
 		}
 	}
+
 	return vs
 }
 
@@ -291,6 +356,15 @@ func (s *valuesSorter) Swap(i, j int) {
 	}
 }
 
+// Less returns whether the value at index i should sort before the
+// value at index j.  It is part of the sort.Interface implementation.
+func (s *valuesSorter) Less(i, j int) bool {
+	if s.strings == nil {
+		return valueSortLess(s.values[i], s.values[j])
+	}
+	return s.strings[i] < s.strings[j]
+}
+
 // valueSortLess returns whether the first value should sort before the second
 // value.  It is used by valueSorter.Less as part of the sort.Interface
 // implementation.
@@ -327,17 +401,64 @@ func valueSortLess(a, b reflect.Value) bool {
 		}
 		fallthrough
 	default:
-		return a.String() < b.String()
+		isTimeA := isTime(a)
+		isTimeB := isTime(b)
+		if !isTimeA || !isTimeB {
+			return a.String() < b.String()
+		}
+
+		return timeLess(a, b)
 	}
 }
 
-// Less returns whether the value at index i should sort before the
-// value at index j.  It is part of the sort.Interface implementation.
-func (s *valuesSorter) Less(i, j int) bool {
-	if s.strings == nil {
-		return valueSortLess(s.values[i], s.values[j])
+// timeLess compare two values that convert to a time.Time.
+//
+// This handles nil values gracefully.
+func timeLess(a, b reflect.Value) bool {
+	convertedA, okForA := isConvertibleToTime(a)
+	convertedB, okForB := isConvertibleToTime(b)
+	if !okForA || !okForB {
+		// types can convert, but not values: this means we have at least one nil
+		if !okForA { // a =< b because nil =< (any value)
+			return true
+		}
+
+		return false // b > a
 	}
-	return s.strings[i] < s.strings[j]
+
+	// time comparison: we need to retrieve the time.Time values from a chain of pointers
+	for convertedA.Kind() == reflect.Pointer && convertedA.IsValid() {
+		convertedA = reflect.Indirect(convertedA)
+	}
+	for convertedB.Kind() == reflect.Pointer && convertedB.IsValid() {
+		convertedB = reflect.Indirect(convertedB)
+	}
+
+	// handle the case when some values are nil, after resolving pointers
+	switch {
+	case !convertedA.IsValid(): // nil <= (any value)
+		return true
+	case !convertedB.IsValid(): // (valid) > nil
+		return false
+	}
+
+	okIfaceA := convertedA.CanInterface()
+	okIfaceB := convertedB.CanInterface()
+
+	if !okIfaceA || !okIfaceB {
+		// defensive safeguard (should never get there, since we have successfully converted)
+		return a.String() < b.String()
+	}
+
+	tA, okTimeA := convertedA.Interface().(time.Time)
+	tB, okTimeB := convertedB.Interface().(time.Time)
+
+	if !okTimeA || !okTimeB {
+		// defensive safeguard (should never get there, since we have successfully indirected and converted)
+		return a.String() < b.String()
+	}
+
+	return tA.Compare(tB) <= 0
 }
 
 // sortValues is a sort function that handles both native types and any type that

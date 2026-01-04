@@ -66,6 +66,7 @@ import (
 	"fmt"
 	"strconv"
 	"testing"
+	"time"
 	"unsafe"
 
 	"github.com/go-openapi/testify/v2/internal/spew"
@@ -957,6 +958,103 @@ func addErrorDumpTests() {
 	addDumpTest(nv, "(*"+vt+")(<nil>)\n")
 }
 
+type (
+	embeddedTime struct {
+		time.Time
+	}
+	embeddedTimePtr struct { // this type is an example where the unsafeReflectValue does not work well
+		*time.Time
+	}
+	redeclaredTime         time.Time
+	redeclaredTimePtr      *time.Time
+	aliasedTime            = time.Time
+	embeddedRedeclaredTime struct {
+		redeclaredTime
+	}
+)
+
+func addTimeDumpTests() {
+	ts := time.Date(2006, time.January, 2, 15, 4, 5, 999999999, time.UTC)
+	alias := aliasedTime(ts) //nolint:unconvert // we want to prove here that aliased types don't matter
+	tsAddr := fmt.Sprintf("%p", &ts)
+	es := embeddedTime{
+		Time: ts,
+	}
+	ps := embeddedTimePtr{
+		Time: &ts,
+	}
+	var tptr *time.Time
+	panick := embeddedTimePtr{
+		Time: nil,
+	}
+	rtptr := redeclaredTimePtr(&ts)
+	ppts := ptr(ptr(ts))
+	ppAddr := fmt.Sprintf("%p", ppts)
+	ppIAddr := fmt.Sprintf("%p", *ppts)
+	er := embeddedRedeclaredTime{
+		redeclaredTime: redeclaredTime(ts),
+	}
+
+	addDumpTest(
+		// simple time.Time
+		ts,
+		"(time.Time) 2006-01-02 15:04:05.999999999 +0000 UTC\n",
+	)
+	addDumpTest(
+		// aliases are ignored at runtime
+		alias,
+		"(time.Time) 2006-01-02 15:04:05.999999999 +0000 UTC\n",
+	)
+	addDumpTest(
+		// pointer to time.Time
+		&ts,
+		"(*time.Time)("+tsAddr+")(2006-01-02 15:04:05.999999999 +0000 UTC)\n",
+	)
+	addDumpTest(
+		// struct with embedded time.Time
+		es,
+		"(spew_test.embeddedTime) 2006-01-02 15:04:05.999999999 +0000 UTC\n",
+	)
+	addDumpTest(
+		// struct with embedded pointer to time.Time
+		ps,
+		"(spew_test.embeddedTimePtr) 2006-01-02 15:04:05.999999999 +0000 UTC\n",
+	)
+	addDumpTest(
+		// nil time.Time
+		tptr,
+		"(*time.Time)(<nil>)\n",
+	)
+	addDumpTest(
+		// **time.Time
+		ppts,
+		"(**time.Time)("+ppAddr+"->"+ppIAddr+")(2006-01-02 15:04:05.999999999 +0000 UTC)\n",
+	)
+	addDumpTest(
+		panick, // this is a stringer, but the inner member that implements String() string is nil
+		"(spew_test.embeddedTimePtr) (PANIC=runtime error: invalid memory address or nil pointer dereference){\n Time: (*time.Time)(<nil>)\n}\n",
+	)
+	addDumpTest(
+		// redeclared type convertible to time.Time
+		redeclaredTime(ts),
+		"(spew_test.redeclaredTime) 2006-01-02 15:04:05.999999999 +0000 UTC\n",
+	)
+	addDumpTest(
+		// redeclared type convertible to *time.Time
+		//
+		// NOTE: the information about the original (redeclared) type is lost. This is due to
+		// how displaying pointer type information is displayed (i.e. using v.Elem().Type()).
+		rtptr,
+		"(*time.Time)("+tsAddr+")(2006-01-02 15:04:05.999999999 +0000 UTC)\n",
+	)
+	addDumpTest(
+		// embedded redeclared type convertible to time.Time
+		er,
+		"(spew_test.embeddedRedeclaredTime) {\n"+
+			" redeclaredTime: (spew_test.redeclaredTime) 2006-01-02 15:04:05.999999999 +0000 UTC\n}\n",
+	)
+}
+
 // TestDump executes all of the tests described by dumpTests.
 func TestDump(t *testing.T) {
 	// Setup tests.
@@ -979,6 +1077,7 @@ func TestDump(t *testing.T) {
 	addPanicDumpTests()
 	addErrorDumpTests()
 	addCgoDumpTests()
+	addTimeDumpTests()
 
 	t.Logf("Running %d tests", len(dumpTests))
 	for i, test := range dumpTests {
@@ -986,7 +1085,7 @@ func TestDump(t *testing.T) {
 		spew.Fdump(buf, test.in)
 		s := buf.String()
 		if testFailed(s, test.wants) {
-			t.Errorf("Dump #%d\n got: %s %s", i, s, stringizeWants(test.wants))
+			t.Errorf("Dump #%d\n  got: %s %s", i, s, stringizeWants(test.wants))
 			continue
 		}
 	}
@@ -1040,4 +1139,9 @@ func TestDumpSortedKeys(t *testing.T) {
 		t.Errorf("Sorted keys mismatch:\n  %v %v", s, expected)
 	}
 
+}
+
+func ptr[T any](value T) *T {
+	v := value
+	return &v
 }

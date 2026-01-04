@@ -86,7 +86,7 @@ To use this package in your projects:
 ```go
     import (
         "testing"
-        "github.com/go-openapi/testify/v2"
+        "github.com/go-openapi/testify/v2/require"
     )
     ...
 

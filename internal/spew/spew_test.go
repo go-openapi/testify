@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/go-openapi/testify/v2/internal/spew"
 )
@@ -126,6 +127,7 @@ func initSpewTests() {
 	// Config states with various settings.
 	scsDefault := spew.NewDefaultConfig()
 	scsNoMethods := &spew.ConfigState{Indent: " ", DisableMethods: true}
+	scsNoMethodsButTimeStringer := &spew.ConfigState{Indent: " ", DisableMethods: true, EnableTimeStringer: true}
 	scsNoPmethods := &spew.ConfigState{Indent: " ", DisablePointerMethods: true}
 	scsMaxDepth := &spew.ConfigState{Indent: " ", MaxDepth: 1}
 	scsContinue := &spew.ConfigState{Indent: " ", ContinueOnMethod: true}
@@ -150,13 +152,27 @@ func initSpewTests() {
 		slice []string
 		m     map[string]int
 	}
-	dt := depthTester{indirCir1{nil}, [1]string{"arr"}, []string{"slice"},
-		map[string]int{"one": 1}}
+	dt := depthTester{
+		indirCir1{nil},
+		[1]string{"arr"},
+		[]string{"slice"},
+		map[string]int{"one": 1},
+	}
 
 	// Variable for tests on types which implement error interface.
 	te := customError(10)
 
+	// Variables for testing time.Time behavior
+	tm := time.Date(2006, time.January, 2, 15, 4, 5, 999999999, time.UTC)
+	tmAddr := fmt.Sprintf("%p", &tm)
+	em := embeddedTime{Time: tm}
+	emptr := embeddedTimePtr{Time: &tm}
+	er := embeddedRedeclaredTime{
+		redeclaredTime: redeclaredTime(tm),
+	}
+
 	spewTests = []spewTest{
+		// default config
 		{scsDefault, fCSFdump, "", int8(127), "(int8) 127\n"},
 		{scsDefault, fCSFprint, "", int16(32767), "32767"},
 		{scsDefault, fCSFprintf, "%v", int32(2147483647), "2147483647"},
@@ -178,6 +194,7 @@ func initSpewTests() {
 		{scsDefault, fSprint, "", complex(-1, -2), "(-1-2i)"},
 		{scsDefault, fSprintf, "%v", complex(float32(-3), -4), "(-3-4i)"},
 		{scsDefault, fSprintln, "", complex(float64(-5), -6), "(-5-6i)\n"},
+		// config with no methods
 		{scsNoMethods, fCSFprint, "", ts, "test"},
 		{scsNoMethods, fCSFprint, "", &ts, "<*>test"},
 		{scsNoMethods, fCSFprint, "", tps, "test"},
@@ -186,22 +203,71 @@ func initSpewTests() {
 		{scsNoPmethods, fCSFprint, "", &ts, "<*>stringer test"},
 		{scsNoPmethods, fCSFprint, "", tps, "test"},
 		{scsNoPmethods, fCSFprint, "", &tps, "<*>stringer test"},
+		// config with maxdepth
 		{scsMaxDepth, fCSFprint, "", dt, "{{<max>} [<max>] [<max>] map[<max>]}"},
 		{scsMaxDepth, fCSFdump, "", dt, "(spew_test.depthTester) {\n" +
 			" ic: (spew_test.indirCir1) {\n  <max depth reached>\n },\n" +
 			" arr: ([1]string) (len=1 cap=1) {\n  <max depth reached>\n },\n" +
 			" slice: ([]string) (len=1 cap=1) {\n  <max depth reached>\n },\n" +
 			" m: (map[string]int) (len=1) {\n  <max depth reached>\n }\n}\n"},
+		// config with continue on method
 		{scsContinue, fCSFprint, "", ts, "(stringer test) test"},
-		{scsContinue, fCSFdump, "", ts, "(spew_test.stringer) " +
-			"(len=4) (stringer test) \"test\"\n"},
+		{scsContinue, fCSFdump, "", ts, "(spew_test.stringer) (len=4) (stringer test) \"test\"\n"},
 		{scsContinue, fCSFprint, "", te, "(error: 10) 10"},
-		{scsContinue, fCSFdump, "", te, "(spew_test.customError) " +
-			"(error: 10) 10\n"},
+		{scsContinue, fCSFdump, "", te, "(spew_test.customError) (error: 10) 10\n"},
 		{scsNoPtrAddr, fCSFprint, "", tptr, "<*>{<*>{}}"},
 		{scsNoPtrAddr, fCSSdump, "", tptr, "(*spew_test.ptrTester)({\ns: (*struct {})({\n})\n})\n"},
 		{scsNoCap, fCSSdump, "", make([]string, 0, 10), "([]string) {\n}\n"},
 		{scsNoCap, fCSSdump, "", make([]string, 1, 10), "([]string) (len=1) {\n(string) \"\"\n}\n"},
+		//
+		// time.Time formatting with all configs
+		{scsDefault, fCSFprint, "", tm, "2006-01-02 15:04:05.999999999 +0000 UTC"},
+		{scsDefault, fCSFdump, "", tm, "(time.Time) 2006-01-02 15:04:05.999999999 +0000 UTC\n"},
+		{scsDefault, fCSFprint, "", &tm, "<*>2006-01-02 15:04:05.999999999 +0000 UTC"},
+		{scsDefault, fCSFdump, "", &tm, "(*time.Time)(" + tmAddr + ")(2006-01-02 15:04:05.999999999 +0000 UTC)\n"},
+		{scsDefault, fCSFprint, "", em, "2006-01-02 15:04:05.999999999 +0000 UTC"},
+		{scsDefault, fCSFdump, "", em, "(spew_test.embeddedTime) 2006-01-02 15:04:05.999999999 +0000 UTC\n"},
+		{scsDefault, fCSFprint, "", emptr, "2006-01-02 15:04:05.999999999 +0000 UTC"},
+		{scsDefault, fCSFdump, "", emptr, "(spew_test.embeddedTimePtr) 2006-01-02 15:04:05.999999999 +0000 UTC\n"},
+		{scsNoMethods, fCSFprint, "", tm, "{999999999 63271811045 <nil>}"},
+		{scsNoMethods, fCSFprint, "", &tm, "<*>{999999999 63271811045 <nil>}"},
+		{scsNoMethods, fCSFprint, "", em, "{{999999999 63271811045 <nil>}}"},
+		{scsNoMethods, fCSFprint, "", emptr, "{<*>{999999999 63271811045 <nil>}}"}, // NOTE: the type of the embedded pointer is not rendered, on purpose
+		{
+			scsContinue, fCSFdump, "", tm, // this prints time and continues digging the struct
+			"(time.Time) (2006-01-02 15:04:05.999999999 +0000 UTC)" +
+				" {\n wall: (uint64) 999999999,\n ext: (int64) 63271811045,\n loc: (*time.Location)(<nil>)\n}\n",
+		},
+		{
+			scsContinue, fCSFdump, "", &tm,
+			"(*time.Time)(" + tmAddr + ")((2006-01-02 15:04:05.999999999 +0000 UTC)" +
+				" {\n wall: (uint64) 999999999,\n ext: (int64) 63271811045,\n loc: (*time.Location)(<nil>)\n})\n",
+		},
+		{
+			scsContinue, fCSFdump, "", em,
+			"(spew_test.embeddedTime) (2006-01-02 15:04:05.999999999 +0000 UTC) {\n" +
+				" Time: (time.Time) (2006-01-02 15:04:05.999999999 +0000 UTC) {\n" +
+				"  wall: (uint64) 999999999,\n  ext: (int64) 63271811045,\n  loc: (*time.Location)(<nil>)\n }\n}\n",
+		},
+		{
+			scsContinue, fCSFdump, "", emptr,
+			"(spew_test.embeddedTimePtr) (2006-01-02 15:04:05.999999999 +0000 UTC) {\n" +
+				" Time: (*time.Time)(" + tmAddr + ")((2006-01-02 15:04:05.999999999 +0000 UTC) {\n" +
+				"  wall: (uint64) 999999999,\n  ext: (int64) 63271811045,\n  loc: (*time.Location)(<nil>)\n })\n}\n",
+		},
+		{
+			scsContinue, fCSFdump, "", er,
+			"(spew_test.embeddedRedeclaredTime) {\n" +
+				" redeclaredTime: (spew_test.redeclaredTime) (2006-01-02 15:04:05.999999999 +0000 UTC) {\n" +
+				"  wall: (uint64) 999999999,\n  ext: (int64) 63271811045,\n  loc: (*time.Location)(<nil>)\n }\n}\n",
+		},
+		{scsNoMethodsButTimeStringer, fCSFprint, "", tm, "2006-01-02 15:04:05.999999999 +0000 UTC"},
+		{scsNoMethodsButTimeStringer, fCSFdump, "", tm, "(time.Time) 2006-01-02 15:04:05.999999999 +0000 UTC\n"},
+		{scsNoMethodsButTimeStringer, fCSFprint, "", &tm, "<*>2006-01-02 15:04:05.999999999 +0000 UTC"},
+		{scsNoMethodsButTimeStringer, fCSFprint, "", em, "{2006-01-02 15:04:05.999999999 +0000 UTC}"},
+		{scsNoMethodsButTimeStringer, fCSFdump, "", em, "(spew_test.embeddedTime) {\n Time: (time.Time) 2006-01-02 15:04:05.999999999 +0000 UTC\n}\n"},
+		{scsNoMethodsButTimeStringer, fCSFprint, "", emptr, "{<*>2006-01-02 15:04:05.999999999 +0000 UTC}"},
+		{scsNoMethodsButTimeStringer, fCSFdump, "", emptr, "(spew_test.embeddedTimePtr) {\n Time: (*time.Time)(" + tmAddr + ")(2006-01-02 15:04:05.999999999 +0000 UTC)\n}\n"},
 	}
 }
 
@@ -312,7 +378,7 @@ func TestSpew(t *testing.T) {
 		}
 		s := buf.String()
 		if test.want != s {
-			t.Errorf("ConfigState #%d\n got: %s want: %s", i, s, test.want)
+			t.Errorf("ConfigState #%d\n  got: %s want: %s", i, s, test.want)
 			continue
 		}
 	}

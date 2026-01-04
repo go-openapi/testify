@@ -22,6 +22,7 @@ import (
 	"slices"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/go-openapi/testify/v2/internal/spew"
 )
@@ -92,7 +93,7 @@ func (e customError) Error() string {
 	return fmt.Sprintf("error: %d", int(e))
 }
 
-// stringizeWants converts a slice of wanted test output into a format suitable
+// stringizeWants verts a slice of wanted test output into a format suitable
 // for a test error message.
 func stringizeWants(wants []string) string {
 	s := ""
@@ -151,7 +152,7 @@ func helpTestSortValues(t *testing.T, tests []sortTestCase, cs *spew.ConfigState
 		input := getInterfaces(test.input)
 		expected := getInterfaces(test.expected)
 		if !reflect.DeepEqual(input, expected) {
-			t.Errorf("Sort mismatch:\n %v != %v", input, expected)
+			t.Errorf("Sort mismatch:\n %v != %v\n\n%#v != %#v", input, expected, input, expected)
 		}
 	}
 }
@@ -167,6 +168,16 @@ func TestSortValues(t *testing.T) {
 	embedA := v(embed{"a"})
 	embedB := v(embed{"b"})
 	embedC := v(embed{"c"})
+
+	// test values for times
+	t0, t1, t2 := testTimings()
+	lt0, lt1, lt2 := testTimingsWithLocation()
+	pt0, pt1, pt2 := ptr(t0), ptr(t1), ptr(t2)
+	ppt2 := ptr(pt2)
+	nilTimePtr := (*time.Time)(nil)
+	nilTimePtrPtr := &nilTimePtr
+	invalidTime := (**time.Time)(nil)
+
 	tests := []sortTestCase{
 		// No values.
 		{
@@ -220,6 +231,41 @@ func TestSortValues(t *testing.T) {
 			[]reflect.Value{v(unsortableStruct{2}), v(unsortableStruct{1}), v(unsortableStruct{3})},
 			[]reflect.Value{v(unsortableStruct{2}), v(unsortableStruct{1}), v(unsortableStruct{3})},
 		},
+		// time.Time
+		{
+			[]reflect.Value{v(t0), v(t2), v(t1)},
+			[]reflect.Value{v(t0), v(t1), v(t2)},
+		},
+		// comparison with location
+		{
+			[]reflect.Value{v(lt2), v(lt1), v(lt0)},
+			[]reflect.Value{v(lt0), v(lt1), v(lt2)},
+		},
+		// *time.Time and types that vert to it
+		{
+			[]reflect.Value{v(pt0), v(pt2), v(pt1)},
+			[]reflect.Value{v(pt0), v(pt1), v(pt2)},
+		},
+		// hybrid pointers: *time.Time
+		{
+			[]reflect.Value{v(pt0), v(t2), v(pt1)},
+			[]reflect.Value{v(pt0), v(pt1), v(t2)},
+		},
+		// nil pointers: *time.Time (vention: nil < any value)
+		{
+			[]reflect.Value{v(pt0), v(t2), v(pt1), v(nilTimePtr)},
+			[]reflect.Value{v(nilTimePtr), v(pt0), v(pt1), v(t2)},
+		},
+		// indirection pointers: **time.Time
+		{
+			[]reflect.Value{v(pt0), v(ppt2), v((nilTimePtrPtr)), v(t1)},
+			[]reflect.Value{v(nilTimePtrPtr), v(pt0), v(t1), v(ppt2)},
+		},
+		// invalid **time.Time (nil)
+		{
+			[]reflect.Value{v(pt0), v(invalidTime)},
+			[]reflect.Value{v(invalidTime), v(pt0)},
+		},
 		// Invalid.
 		{
 			[]reflect.Value{embedB, embedA, embedC},
@@ -238,6 +284,9 @@ func TestSortValuesWithMethods(t *testing.T) {
 	a := v("a")
 	b := v("b")
 	c := v("c")
+	t0, t1, t2 := testTimings()
+	lt0, lt1, lt2 := testTimingsWithLocation()
+
 	tests := []sortTestCase{
 		// Ints.
 		{
@@ -253,6 +302,16 @@ func TestSortValuesWithMethods(t *testing.T) {
 		{
 			[]reflect.Value{v(sortableStruct{2}), v(sortableStruct{1}), v(sortableStruct{3})},
 			[]reflect.Value{v(sortableStruct{1}), v(sortableStruct{2}), v(sortableStruct{3})},
+		},
+		// time.Time and types that convvert to it
+		{
+			[]reflect.Value{v(t0), v(t2), v(t1)},
+			[]reflect.Value{v(t0), v(t1), v(t2)},
+		},
+		// comparison with location
+		{
+			[]reflect.Value{v(lt2), v(lt1), v(lt0)},
+			[]reflect.Value{v(lt0), v(lt1), v(lt2)},
 		},
 		// UnsortableStructs.
 		{
@@ -273,6 +332,8 @@ func TestSortValuesWithSpew(t *testing.T) {
 	a := v("a")
 	b := v("b")
 	c := v("c")
+	t0, t1, t2 := testTimings()
+
 	tests := []sortTestCase{
 		// Ints.
 		{
@@ -289,6 +350,11 @@ func TestSortValuesWithSpew(t *testing.T) {
 			[]reflect.Value{v(sortableStruct{2}), v(sortableStruct{1}), v(sortableStruct{3})},
 			[]reflect.Value{v(sortableStruct{1}), v(sortableStruct{2}), v(sortableStruct{3})},
 		},
+		// time.Time and types that vert to it
+		{
+			[]reflect.Value{v(t0), v(t2), v(t1)},
+			[]reflect.Value{v(t0), v(t1), v(t2)},
+		},
 		// UnsortableStructs.
 		{
 			[]reflect.Value{v(unsortableStruct{2}), v(unsortableStruct{1}), v(unsortableStruct{3})},
@@ -297,4 +363,37 @@ func TestSortValuesWithSpew(t *testing.T) {
 	}
 	cs := spew.ConfigState{DisableMethods: true, SpewKeys: true}
 	helpTestSortValues(t, tests, &cs)
+}
+
+// TestSortValuesWithString ensures the sort functionality for relect.Value
+// based string sorting for times works as intended.
+func TestSortTimeValuesWithString(t *testing.T) {
+	v := reflect.ValueOf
+	t0, t1, t2 := testTimings()
+
+	tests := []sortTestCase{
+		// time.Time and types that vert to it
+		{
+			[]reflect.Value{v(t0), v(t2), v(t1)},
+			[]reflect.Value{v(t0), v(t1), v(t2)},
+		},
+	}
+	cs := spew.ConfigState{DisableMethods: true, EnableTimeStringer: true}
+	helpTestSortValues(t, tests, &cs)
+}
+
+func testTimings() (t0, t1, t2 time.Time) {
+	t0 = time.Now()
+	t1 = t0.Add(time.Hour)
+	t2 = t1.Add(time.Hour)
+	return t0, t1, t2
+}
+
+func testTimingsWithLocation() (lt0, lt1, lt2 time.Time) {
+	t0, t1, t2 := testTimings()
+	lt0 = t0.In(time.FixedZone("UTC+5", 5))
+	lt1 = t1.In(time.FixedZone("UTC-4", -4))
+	lt2 = t2.In(time.FixedZone("UTC-6", -6))
+
+	return lt0, lt1, lt2
 }
