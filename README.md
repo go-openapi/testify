@@ -79,7 +79,7 @@ Becomes:
 ```go
     import (
         "testing"
-        "github.com/go-openapi/testify/v2"
+        "github.com/go-openapi/testify/v2/require"
     )
     ...
 
