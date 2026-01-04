@@ -3,6 +3,8 @@
 
 package assertions
 
+import "context"
+
 // T is an interface wrapper around [testing.T].
 type T interface {
 	Errorf(format string, args ...any)
@@ -20,4 +22,8 @@ type failNower interface {
 
 type namer interface {
 	Name() string
+}
+
+type contextualizer interface {
+	Context() context.Context
 }
