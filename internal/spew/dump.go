@@ -97,11 +97,12 @@ func (d *dumpState) dumpPtr(v reflect.Value) {
 	cycleFound := false
 	indirects := 0
 	ve := v
-	for ve.Kind() == reflect.Ptr {
+	for ve.Kind() == reflect.Pointer {
 		if ve.IsNil() {
 			nilFound = true
 			break
 		}
+
 		indirects++
 		addr := ve.Pointer()
 		pointerChain = append(pointerChain, addr)
@@ -114,11 +115,27 @@ func (d *dumpState) dumpPtr(v reflect.Value) {
 
 		ve = ve.Elem()
 		if ve.Kind() == reflect.Interface {
-			if ve.IsNil() {
+			if ve.IsNil() { // interface with nil value
 				nilFound = true
 				break
 			}
 			ve = ve.Elem()
+			if ve.Kind() == reflect.Pointer {
+				if ve.IsNil() {
+					nilFound = true
+					break
+				}
+
+				// case of interface containing a pointer that cycles to the same depth level.
+				// If we have a cycle at the same level, we should break the loop now.
+				addr = ve.Pointer()
+				if pd, ok := d.pointers[addr]; ok && pd <= d.depth {
+					cycleFound = true
+					indirects--
+					break
+				}
+				d.pointers[addr] = d.depth
+			}
 		}
 	}
 
@@ -154,6 +171,64 @@ func (d *dumpState) dumpPtr(v reflect.Value) {
 		d.dump(ve)
 	}
 	d.w.Write(closeParenBytes)
+}
+
+func (d *dumpState) dumpMap(v reflect.Value) {
+	// Remove pointers at or below the current depth from map used to detect
+	// circular refs.
+	for k, depth := range d.pointers {
+		if depth >= d.depth {
+			delete(d.pointers, k)
+		}
+	}
+
+	// Keep list of all dereferenced pointers to show later.
+	cycleFound := false
+
+	// nil maps should be indicated as different than empty maps
+	if v.IsNil() {
+		_, _ = d.w.Write(nilAngleBytes)
+		return
+	}
+
+	// maps like pointers may present circular references
+	addr := v.Pointer()
+	if pd, ok := d.pointers[addr]; ok && pd <= d.depth {
+		cycleFound = true
+	}
+	d.pointers[addr] = d.depth
+
+	_, _ = d.w.Write(openBraceNewlineBytes)
+	d.depth++
+
+	switch {
+	case d.cs.MaxDepth != 0 && d.depth > d.cs.MaxDepth:
+		d.indent()
+		_, _ = d.w.Write(maxNewlineBytes)
+	case cycleFound:
+		_, _ = d.w.Write(circularBytes)
+	default:
+		numEntries := v.Len()
+		keys := v.MapKeys()
+		if d.cs.SortKeys {
+			sortValues(keys, d.cs)
+		}
+		for i, key := range keys {
+			d.dump(d.unpackValue(key))
+			_, _ = d.w.Write(colonSpaceBytes)
+			d.ignoreNextIndent = true
+			d.dump(d.unpackValue(v.MapIndex(key)))
+			if i < (numEntries - 1) {
+				_, _ = d.w.Write(commaNewlineBytes)
+			} else {
+				_, _ = d.w.Write(newlineBytes)
+			}
+		}
+	}
+
+	d.depth--
+	d.indent()
+	_, _ = d.w.Write(closeBraceBytes)
 }
 
 // dumpSlice handles formatting of arrays and slices.  Byte (uint8 under
@@ -257,7 +332,7 @@ func (d *dumpState) dump(v reflect.Value) {
 	}
 
 	// Handle pointers specially.
-	if kind == reflect.Ptr {
+	if kind == reflect.Pointer {
 		d.indent()
 		d.dumpPtr(v)
 		return
@@ -367,43 +442,12 @@ func (d *dumpState) dump(v reflect.Value) {
 			d.w.Write(nilAngleBytes)
 		}
 
-	case reflect.Ptr:
+	case reflect.Pointer:
 		// Do nothing.  We should never get here since pointers have already
 		// been handled above.
 
 	case reflect.Map:
-		// nil maps should be indicated as different than empty maps
-		if v.IsNil() {
-			d.w.Write(nilAngleBytes)
-			break
-		}
-
-		d.w.Write(openBraceNewlineBytes)
-		d.depth++
-		if (d.cs.MaxDepth != 0) && (d.depth > d.cs.MaxDepth) {
-			d.indent()
-			d.w.Write(maxNewlineBytes)
-		} else {
-			numEntries := v.Len()
-			keys := v.MapKeys()
-			if d.cs.SortKeys {
-				sortValues(keys, d.cs)
-			}
-			for i, key := range keys {
-				d.dump(d.unpackValue(key))
-				d.w.Write(colonSpaceBytes)
-				d.ignoreNextIndent = true
-				d.dump(d.unpackValue(v.MapIndex(key)))
-				if i < (numEntries - 1) {
-					d.w.Write(commaNewlineBytes)
-				} else {
-					d.w.Write(newlineBytes)
-				}
-			}
-		}
-		d.depth--
-		d.indent()
-		d.w.Write(closeBraceBytes)
+		d.dumpMap(v)
 
 	case reflect.Struct:
 		d.w.Write(openBraceNewlineBytes)
