@@ -4,7 +4,7 @@
 
 | Total Contributors | Total Contributions |
 | --- | --- |
-| 256  | 1101  |
+| 256  | 1117  |
 
 | Username | All Time Contribution Count | All Commits |
 | --- | --- | --- |
@@ -12,7 +12,7 @@
 | @brackendawson | 110 | https://github.com/go-openapi/testify/commits?author=brackendawson |
 | @dolmen | 103 | https://github.com/go-openapi/testify/commits?author=dolmen |
 | @tylerb | 64 | https://github.com/go-openapi/testify/commits?author=tylerb |
-| @fredbi | 43 | https://github.com/go-openapi/testify/commits?author=fredbi |
+| @fredbi | 59 | https://github.com/go-openapi/testify/commits?author=fredbi |
 | @boyan-soubachov | 35 | https://github.com/go-openapi/testify/commits?author=boyan-soubachov |
 | @leighmcculloch | 26 | https://github.com/go-openapi/testify/commits?author=leighmcculloch |
 | @pmezard | 19 | https://github.com/go-openapi/testify/commits?author=pmezard |
@@ -40,45 +40,45 @@
 | @Neokil | 6 | https://github.com/go-openapi/testify/commits?author=Neokil |
 | @torkelrogstad | 6 | https://github.com/go-openapi/testify/commits?author=torkelrogstad |
 | @gohargasparyan | 6 | https://github.com/go-openapi/testify/commits?author=gohargasparyan |
+| @mutaiib | 5 | https://github.com/go-openapi/testify/commits?author=mutaiib |
 | @vkryukov | 5 | https://github.com/go-openapi/testify/commits?author=vkryukov |
 | @posener | 5 | https://github.com/go-openapi/testify/commits?author=posener |
-| @mutaiib | 5 | https://github.com/go-openapi/testify/commits?author=mutaiib |
+| @kevinburkesegment | 5 | https://github.com/go-openapi/testify/commits?author=kevinburkesegment |
 | @hendrywiranto | 5 | https://github.com/go-openapi/testify/commits?author=hendrywiranto |
 | @Saluev | 5 | https://github.com/go-openapi/testify/commits?author=Saluev |
-| @kevinburkesegment | 5 | https://github.com/go-openapi/testify/commits?author=kevinburkesegment |
 | @vyas-git | 4 | https://github.com/go-openapi/testify/commits?author=vyas-git |
 | @tsioftas | 4 | https://github.com/go-openapi/testify/commits?author=tsioftas |
 | @viblo | 4 | https://github.com/go-openapi/testify/commits?author=viblo |
 | @paulbellamy | 4 | https://github.com/go-openapi/testify/commits?author=paulbellamy |
-| @anpez | 4 | https://github.com/go-openapi/testify/commits?author=anpez |
-| @uberbo | 4 | https://github.com/go-openapi/testify/commits?author=uberbo |
-| @bsoubachov | 4 | https://github.com/go-openapi/testify/commits?author=bsoubachov |
-| @jveski | 4 | https://github.com/go-openapi/testify/commits?author=jveski |
 | @palsivertsen | 4 | https://github.com/go-openapi/testify/commits?author=palsivertsen |
 | @olivergondza | 4 | https://github.com/go-openapi/testify/commits?author=olivergondza |
-| @npxcomplete | 4 | https://github.com/go-openapi/testify/commits?author=npxcomplete |
 | @mvrahden | 4 | https://github.com/go-openapi/testify/commits?author=mvrahden |
-| @taichi | 3 | https://github.com/go-openapi/testify/commits?author=taichi |
-| @spirin | 3 | https://github.com/go-openapi/testify/commits?author=spirin |
-| @zjx20 | 3 | https://github.com/go-openapi/testify/commits?author=zjx20 |
+| @npxcomplete | 4 | https://github.com/go-openapi/testify/commits?author=npxcomplete |
+| @jveski | 4 | https://github.com/go-openapi/testify/commits?author=jveski |
+| @anpez | 4 | https://github.com/go-openapi/testify/commits?author=anpez |
+| @bsoubachov | 4 | https://github.com/go-openapi/testify/commits?author=bsoubachov |
+| @uberbo | 4 | https://github.com/go-openapi/testify/commits?author=uberbo |
 | @redachl | 3 | https://github.com/go-openapi/testify/commits?author=redachl |
+| @spirin | 3 | https://github.com/go-openapi/testify/commits?author=spirin |
+| @taichi | 3 | https://github.com/go-openapi/testify/commits?author=taichi |
+| @zjx20 | 3 | https://github.com/go-openapi/testify/commits?author=zjx20 |
 | @senyast4745 | 3 | https://github.com/go-openapi/testify/commits?author=senyast4745 |
-| @reynieroz | 3 | https://github.com/go-openapi/testify/commits?author=reynieroz |
-| @obeattie | 3 | https://github.com/go-openapi/testify/commits?author=obeattie |
-| @nmiyake | 3 | https://github.com/go-openapi/testify/commits?author=nmiyake |
-| @josephholsten | 3 | https://github.com/go-openapi/testify/commits?author=josephholsten |
-| @jonhoo | 3 | https://github.com/go-openapi/testify/commits?author=jonhoo |
-| @hanzei | 3 | https://github.com/go-openapi/testify/commits?author=hanzei |
-| @AngelKitty | 3 | https://github.com/go-openapi/testify/commits?author=AngelKitty |
 | @andreas | 3 | https://github.com/go-openapi/testify/commits?author=andreas |
-| @yiminc-zz | 2 | https://github.com/go-openapi/testify/commits?author=yiminc-zz |
-| @hawkingrei | 2 | https://github.com/go-openapi/testify/commits?author=hawkingrei |
-| @viswajithiii | 2 | https://github.com/go-openapi/testify/commits?author=viswajithiii |
-| @SuperQ | 2 | https://github.com/go-openapi/testify/commits?author=SuperQ |
-| @xsleonard | 2 | https://github.com/go-openapi/testify/commits?author=xsleonard |
-| @srenatus | 2 | https://github.com/go-openapi/testify/commits?author=srenatus |
-| @snirye | 2 | https://github.com/go-openapi/testify/commits?author=snirye |
+| @AngelKitty | 3 | https://github.com/go-openapi/testify/commits?author=AngelKitty |
+| @hanzei | 3 | https://github.com/go-openapi/testify/commits?author=hanzei |
+| @jonhoo | 3 | https://github.com/go-openapi/testify/commits?author=jonhoo |
+| @reynieroz | 3 | https://github.com/go-openapi/testify/commits?author=reynieroz |
+| @josephholsten | 3 | https://github.com/go-openapi/testify/commits?author=josephholsten |
+| @nmiyake | 3 | https://github.com/go-openapi/testify/commits?author=nmiyake |
+| @obeattie | 3 | https://github.com/go-openapi/testify/commits?author=obeattie |
 | @ryu-ton10 | 2 | https://github.com/go-openapi/testify/commits?author=ryu-ton10 |
+| @snirye | 2 | https://github.com/go-openapi/testify/commits?author=snirye |
+| @srenatus | 2 | https://github.com/go-openapi/testify/commits?author=srenatus |
+| @xsleonard | 2 | https://github.com/go-openapi/testify/commits?author=xsleonard |
+| @SuperQ | 2 | https://github.com/go-openapi/testify/commits?author=SuperQ |
+| @viswajithiii | 2 | https://github.com/go-openapi/testify/commits?author=viswajithiii |
+| @hawkingrei | 2 | https://github.com/go-openapi/testify/commits?author=hawkingrei |
+| @yiminc-zz | 2 | https://github.com/go-openapi/testify/commits?author=yiminc-zz |
 | @izaurio | 2 | https://github.com/go-openapi/testify/commits?author=izaurio |
 | @gz-c | 2 | https://github.com/go-openapi/testify/commits?author=gz-c |
 | @techfg | 2 | https://github.com/go-openapi/testify/commits?author=techfg |
