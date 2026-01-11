@@ -2,13 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-11 (version e6b0793) using codegen version v2.1.9-0.20260111152118-e6b0793ba519+dirty [sha: e6b0793ba519fb22dc1887392e1465649a5a95ff]
+// Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
 
 package require
 
 import (
 	"net/http"
 	"net/url"
+	"reflect"
 	"time"
 
 	"github.com/go-openapi/testify/v2/internal/assertions"
@@ -1254,6 +1255,34 @@ func (a *Assertions) JSONEqBytesf(expected []byte, actual []byte, msg string, ar
 	a.t.FailNow()
 }
 
+// Kind is the same as [Kind], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) Kind(expectedKind reflect.Kind, object any, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.Kind(a.t, expectedKind, object, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// Kindf is the same as [Assertions.Kind], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) Kindf(expectedKind reflect.Kind, object any, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.Kind(a.t, expectedKind, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
 // Len is the same as [Len], as a method rather than a package-level function.
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
@@ -1724,6 +1753,34 @@ func (a *Assertions) NotImplementsf(interfaceObject any, object any, msg string,
 		h.Helper()
 	}
 	if assertions.NotImplements(a.t, interfaceObject, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// NotKind is the same as [NotKind], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) NotKind(expectedKind reflect.Kind, object any, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotKind(a.t, expectedKind, object, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// NotKindf is the same as [Assertions.NotKind], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) NotKindf(expectedKind reflect.Kind, object any, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotKind(a.t, expectedKind, object, forwardArgs(msg, args)) {
 		return
 	}
 

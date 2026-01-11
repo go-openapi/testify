@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-11 (version e6b0793) using codegen version v2.1.9-0.20260111152118-e6b0793ba519+dirty [sha: e6b0793ba519fb22dc1887392e1465649a5a95ff]
+// Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
 
 package assert
 
@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/url"
 	"path/filepath"
+	"reflect"
 	"testing"
 	"time"
 )
@@ -1056,6 +1057,30 @@ func TestJSONEqBytes(t *testing.T) {
 	})
 }
 
+func TestKind(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := Kind(t, reflect.String, "hello")
+		if !result {
+			t.Error("Kind should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := Kind(mock, reflect.String, 0)
+		if result {
+			t.Error("Kind should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("Kind should mark test as failed")
+		}
+	})
+}
+
 func TestLen(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1460,6 +1485,30 @@ func TestNotImplements(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("NotImplements should mark test as failed")
+		}
+	})
+}
+
+func TestNotKind(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := NotKind(t, reflect.String, 0)
+		if !result {
+			t.Error("NotKind should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := NotKind(mock, reflect.String, "hello")
+		if result {
+			t.Error("NotKind should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("NotKind should mark test as failed")
 		}
 	})
 }

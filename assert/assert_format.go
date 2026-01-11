@@ -2,13 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-11 (version e6b0793) using codegen version v2.1.9-0.20260111152118-e6b0793ba519+dirty [sha: e6b0793ba519fb22dc1887392e1465649a5a95ff]
+// Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
 
 package assert
 
 import (
 	"net/http"
 	"net/url"
+	"reflect"
 	"time"
 
 	"github.com/go-openapi/testify/v2/internal/assertions"
@@ -454,6 +455,16 @@ func JSONEqBytesf(t T, expected []byte, actual []byte, msg string, args ...any) 
 	return assertions.JSONEqBytes(t, expected, actual, forwardArgs(msg, args))
 }
 
+// Kindf is the same as [Kind], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func Kindf(t T, expectedKind reflect.Kind, object any, msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.Kind(t, expectedKind, object, forwardArgs(msg, args))
+}
+
 // Lenf is the same as [Len], but accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
@@ -622,6 +633,16 @@ func NotImplementsf(t T, interfaceObject any, object any, msg string, args ...an
 		h.Helper()
 	}
 	return assertions.NotImplements(t, interfaceObject, object, forwardArgs(msg, args))
+}
+
+// NotKindf is the same as [NotKind], but accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func NotKindf(t T, expectedKind reflect.Kind, object any, msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.NotKind(t, expectedKind, object, forwardArgs(msg, args))
 }
 
 // NotNilf is the same as [NotNil], but accepts a format msg string to format arguments like [fmt.Printf].

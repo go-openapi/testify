@@ -12,8 +12,12 @@ keywords:
   - "IsNotTypef"
   - "IsType"
   - "IsTypef"
+  - "Kind"
+  - "Kindf"
   - "NotImplements"
   - "NotImplementsf"
+  - "NotKind"
+  - "NotKindf"
   - "NotZero"
   - "NotZerof"
   - "Zero"
@@ -29,7 +33,7 @@ Asserting Types Rather Than Values
 
 _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
-This domain exposes 6 functionalities.
+This domain exposes 8 functionalities.
 
 ### Implements
 
@@ -172,6 +176,56 @@ IsType asserts that the specified objects are of the same type.
 {{% /tab %}}
 {{< /tabs >}}
 
+### Kind
+
+Kind asserts that the [reflect.Kind](https://pkg.go.dev/reflect#Kind) of a given object matches the expected [reflect.Kind](https://pkg.go.dev/reflect#Kind).
+
+Kind reflects the concrete value stored in the object. The nil value (or interface with nil value)
+are comparable to [reflect.Invalid](https://pkg.go.dev/reflect#Invalid). See also [reflect.Value.Kind](https://pkg.go.dev/reflect#Value.Kind).
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.Kind(t, reflect.String, "Hello World")
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	success: reflect.String, "hello"
+	failure: reflect.String, 0
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.Kind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Kind) | package-level function |
+| [`assert.Kindf(t T, expectedKind reflect.Kind, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Kindf) | formatted variant |
+| [`assert.(*Assertions).Kind(expectedKind reflect.Kind, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Kind) | method variant |
+| [`assert.(*Assertions).Kindf(expectedKind reflect.Kind, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Kindf) | method formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.Kind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Kind) | package-level function |
+| [`require.Kindf(t T, expectedKind reflect.Kind, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Kindf) | formatted variant |
+| [`require.(*Assertions).Kind(expectedKind reflect.Kind, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Kind) | method variant |
+| [`require.(*Assertions).Kindf(expectedKind reflect.Kind, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Kindf) | method formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.Kind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Kind) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Kind](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L162)
+{{% /tab %}}
+{{< /tabs >}}
+
 ### NotImplements
 
 NotImplements asserts that an object does not implement the specified interface.
@@ -216,6 +270,56 @@ NotImplements asserts that an object does not implement the specified interface.
 | [`assertions.NotImplements(t T, interfaceObject any, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotImplements) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotImplements](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L48)
+{{% /tab %}}
+{{< /tabs >}}
+
+### NotKind
+
+NotKind asserts that the [reflect.Kind](https://pkg.go.dev/reflect#Kind) of a given object does not match the expected [reflect.Kind](https://pkg.go.dev/reflect#Kind).
+
+Kind reflects the concrete value stored in the object. The nil value (or interface with nil value)
+are comparable to [reflect.Invalid](https://pkg.go.dev/reflect#Invalid). See also [reflect.Value.Kind](https://pkg.go.dev/reflect#Value.Kind).
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.NotKind(t, reflect.Int, "Hello World")
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	success: reflect.String, 0
+	failure: reflect.String, "hello"
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.NotKind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotKind) | package-level function |
+| [`assert.NotKindf(t T, expectedKind reflect.Kind, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotKindf) | formatted variant |
+| [`assert.(*Assertions).NotKind(expectedKind reflect.Kind, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotKind) | method variant |
+| [`assert.(*Assertions).NotKindf(expectedKind reflect.Kind, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotKindf) | method formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.NotKind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotKind) | package-level function |
+| [`require.NotKindf(t T, expectedKind reflect.Kind, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotKindf) | formatted variant |
+| [`require.(*Assertions).NotKind(expectedKind reflect.Kind, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotKind) | method variant |
+| [`require.(*Assertions).NotKindf(expectedKind reflect.Kind, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotKindf) | method formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.NotKind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotKind) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotKind](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L195)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -329,5 +433,5 @@ SPDX-License-Identifier: Apache-2.0
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
 
-Generated on 2026-01-11 (version e6b0793) using codegen version v2.1.9-0.20260111152118-e6b0793ba519+dirty [sha: e6b0793ba519fb22dc1887392e1465649a5a95ff]
+Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
 -->

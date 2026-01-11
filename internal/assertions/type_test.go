@@ -4,7 +4,9 @@
 package assertions
 
 import (
+	"errors"
 	"iter"
+	"reflect"
 	"slices"
 	"testing"
 )
@@ -98,6 +100,39 @@ func TestTypeNotZero(t *testing.T) {
 
 	for test := range typeNonZeros() {
 		True(t, NotZero(mock, test, "%#v is not the %T zero value", test, test))
+	}
+}
+
+func TestTypeKind(t *testing.T) {
+	t.Parallel()
+
+	for tt := range kindCases() {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			mock := new(mockT)
+			result := Kind(mock, tt.expectedKind, tt.value)
+			resultNot := NotKind(mock, tt.expectedKind, tt.value)
+
+			if tt.result {
+				if !result {
+					t.Errorf("expected kind of %T to be %q, but Kind reported %t", tt.value, tt.expectedKind, result)
+				}
+				if resultNot {
+					t.Errorf("expected kind of %T to be %q, but NotKind reported %t", tt.value, tt.expectedKind, resultNot)
+				}
+
+				return
+			}
+
+			// expected: false
+			if result {
+				t.Errorf("expected kind of %T NOT to be %q, but Kind reported %t", tt.value, tt.expectedKind, result)
+			}
+			if !resultNot {
+				t.Errorf("expected kind of %T NOT to be %q, but NotKind reported %t", tt.value, tt.expectedKind, resultNot)
+			}
+		})
 	}
 }
 
@@ -214,5 +249,44 @@ func typeNonZeros() iter.Seq[any] {
 		(make(chan any)),
 		(<-chan any)(make(chan any)),
 		(chan<- any)(make(chan any)),
+	})
+}
+
+type kindCase struct {
+	expectedKind reflect.Kind
+	value        any
+	result       bool
+	name         string
+}
+
+func kindCases() iter.Seq[kindCase] {
+	var iface any = "string"
+
+	return slices.Values([]kindCase{
+		// True cases
+		{reflect.String, "Hello World", true, "is string"},
+		{reflect.Int, 123, true, "is int"},
+		{reflect.Array, [6]int{2, 3, 5, 7, 11, 13}, true, "is array"},
+		{reflect.Func, Kind, true, "is func"},
+		{reflect.Float64, 0.0345, true, "is float64"},
+		{reflect.Map, make(map[string]int), true, "is map"},
+		{reflect.Bool, true, true, "is bool"},
+		{reflect.Ptr, new(int), true, "is pointer"},
+		// False cases
+		{reflect.String, 13, false, "not string"},
+		{reflect.Int, [6]int{2, 3, 5, 7, 11, 13}, false, "not int"},
+		{reflect.Float64, 12, false, "not float64"},
+		{reflect.Bool, make(map[string]int), false, "not bool"},
+		// Edge cases
+		// True
+		{reflect.Invalid, any(nil), true, "legitimate expectation of reflect.Invalid (any)"},
+		{reflect.Ptr, (*any)(nil), true, "legitimate expectation of reflect.Pointer (*any)"},
+		{reflect.Invalid, (error)(nil), true, "legitimate expectation of reflect.Invalid (error)"},
+		{reflect.Invalid, nil, true, "legitimate nil input"},
+		// False
+		{reflect.Interface, iface, false, "interface returns concrete type (any)"},
+		{reflect.Interface, errors.New("stuff"), false, "interface returns concrete type (error)"},
+		{reflect.Invalid, "string", false, "wrong expectation of reflect.Invalid"},
+		{reflect.Ptr, nil, false, "nil input"},
 	})
 }
