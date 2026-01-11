@@ -5,11 +5,23 @@ package assertions
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"regexp"
 	"runtime"
 	"strings"
 	"testing"
+)
+
+var (
+	_ T         = &mockT{}
+	_ T         = &mockFailNowT{}
+	_ failNower = &mockFailNowT{}
+	_ T         = &captureT{}
+	_ T         = &bufferT{}
+	_ T         = &dummyT{}
+	_ T         = &errorsCapturingT{}
+	_ T         = &outputT{}
 )
 
 type mockT struct {
@@ -47,6 +59,59 @@ func (m *mockFailNowT) Errorf(format string, args ...any) {
 
 func (m *mockFailNowT) FailNow() {
 	m.failed = true
+}
+
+type dummyT struct{}
+
+func (dummyT) Errorf(string, ...any) {}
+
+func (dummyT) Context() context.Context {
+	return context.Background()
+}
+
+// errorsCapturingT is a mock implementation of TestingT that captures errors reported with Errorf.
+type errorsCapturingT struct {
+	errors []error
+	ctx    context.Context //nolint:containedctx // this is ok to support context injection tests
+}
+
+// Helper is like [testing.T.Helper] but does nothing.
+func (errorsCapturingT) Helper() {}
+
+func (t errorsCapturingT) Context() context.Context {
+	if t.ctx == nil {
+		return context.Background()
+	}
+
+	return t.ctx
+}
+
+func (t *errorsCapturingT) WithContext(ctx context.Context) *errorsCapturingT {
+	t.ctx = ctx
+
+	return t
+}
+
+func (t *errorsCapturingT) Errorf(format string, args ...any) {
+	t.errors = append(t.errors, fmt.Errorf(format, args...))
+}
+
+type outputT struct {
+	buf     *bytes.Buffer
+	helpers map[string]struct{}
+}
+
+// Implements T.
+func (t *outputT) Errorf(format string, args ...any) {
+	s := fmt.Sprintf(format, args...)
+	t.buf.WriteString(s)
+}
+
+func (t *outputT) Helper() {
+	if t.helpers == nil {
+		t.helpers = make(map[string]struct{})
+	}
+	t.helpers[callerName(1)] = struct{}{}
 }
 
 type captureT struct {

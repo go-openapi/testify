@@ -1,7 +1,7 @@
 ---
 title: "Condition"
 description: "Expressing Assertions Using Conditions"
-modified: 2026-01-02
+modified: 2026-01-11
 weight: 4
 domains:
   - "condition"
@@ -29,7 +29,7 @@ This domain exposes 4 functionalities.
 
 ### Condition
 
-Condition uses a Comparison to assert a complex condition.
+Condition uses a [Comparison] to assert a complex condition.
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -70,20 +70,36 @@ Condition uses a Comparison to assert a complex condition.
 |--|--| 
 | [`assertions.Condition(t T, comp Comparison, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Condition) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Condition](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L22)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Condition](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L26)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### Eventually
 
-Eventually asserts that given condition will be met in waitFor time,
-periodically checking target function each tick.
+Eventually asserts that the given condition will be met in waitFor time,
+periodically checking the target function on each tick.
+
+[Eventually] waits until the condition returns true, for at most waitFor,
+or until the parent context of the test is cancelled.
+
+If the condition takes longer than waitFor to complete, [Eventually] fails
+but waits for the current condition execution to finish before returning.
+
+For long-running conditions to be interrupted early, check [testing.T.Context](https://pkg.go.dev/testing#T.Context)
+which is cancelled on test failure.
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
 {{% tab title="Usage" %}}
 ```go
-	assertions.Eventually(t, func() bool { return true; }, time.Second, 10*time.Millisecond)
+	assertions.Eventually(t, func() bool { return true }, time.Second, 10*time.Millisecond)
+```
+{{< /tab >}}
+{{% tab title="Concurrency" %}}
+```go
+The condition function is never executed in parallel: only one goroutine executes it.
+It may write to variables outside its scope without triggering race conditions.
+A blocking condition will cause [Eventually] to hang until it returns.
 ```
 {{< /tab >}}
 {{% tab title="Examples" %}}
@@ -118,20 +134,25 @@ periodically checking target function each tick.
 |--|--| 
 | [`assertions.Eventually(t T, condition func() bool, waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Eventually) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Eventually](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L45)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Eventually](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L67)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### EventuallyWithT
 
-EventuallyWithT asserts that given condition will be met in waitFor time,
-periodically checking target function each tick. In contrast to Eventually,
-it supplies a CollectT to the condition function, so that the condition
-function can use the CollectT to call other assertions.
+EventuallyWithT asserts that the given condition will be met in waitFor time,
+periodically checking the target function at each tick.
+
+In contrast to [Eventually], the condition function is supplied with a [CollectT]
+to accumulate errors from calling other assertions.
+
 The condition is considered "met" if no errors are raised in a tick.
-The supplied CollectT collects all errors from one tick (if there are any).
-If the condition is not met before waitFor, the collected errors of
-the last tick are copied to t.
+The supplied [CollectT] collects all errors from one tick.
+
+If the condition is not met before waitFor, the collected errors from the
+last tick are copied to t.
+
+Calling [CollectT.FailNow](https://pkg.go.dev/CollectT#FailNow) cancels the condition immediately and fails the assertion.
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -146,6 +167,12 @@ the last tick are copied to t.
 		// add assertions as needed; any assertion failure will fail the current tick
 		assertions.True(c, externalValue, "expected 'externalValue' to be true")
 	}, 10*time.Second, 1*time.Second, "external state has not changed to 'true'; still false")
+```
+{{< /tab >}}
+{{% tab title="Concurrency" %}}
+```go
+The condition function is never executed in parallel: only one goroutine executes it.
+It may write to variables outside its scope without triggering race conditions.
 ```
 {{< /tab >}}
 {{% tab title="Examples" %}}
@@ -186,14 +213,26 @@ the last tick are copied to t.
 
 ### Never
 
-Never asserts that the given condition doesn't satisfy in waitFor time,
-periodically checking the target function each tick.
+Never asserts that the given condition is never satisfied within waitFor time,
+periodically checking the target function at each tick.
+
+[Never] is the opposite of [Eventually]. It succeeds if the waitFor timeout
+is reached without the condition ever returning true.
+
+If the parent context is cancelled before the timeout, [Never] fails.
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
 {{% tab title="Usage" %}}
 ```go
-	assertions.Never(t, func() bool { return false; }, time.Second, 10*time.Millisecond)
+	assertions.Never(t, func() bool { return false }, time.Second, 10*time.Millisecond)
+```
+{{< /tab >}}
+{{% tab title="Concurrency" %}}
+```go
+The condition function is never executed in parallel: only one goroutine executes it.
+It may write to variables outside its scope without triggering race conditions.
+A blocking condition will cause [Never] to hang until it returns.
 ```
 {{< /tab >}}
 {{% tab title="Examples" %}}
@@ -228,7 +267,7 @@ periodically checking the target function each tick.
 |--|--| 
 | [`assertions.Never(t T, condition func() bool, waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Never) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Never](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L204)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Never](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L99)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -236,7 +275,7 @@ periodically checking the target function each tick.
 
 ---
 
-Generated with github.com/go-openapi/testify/v2/codegen
+Generated with github.com/go-openapi/testify/codegen/v2
 
 [godoc-badge]: https://pkg.go.dev/badge/github.com/go-openapi/testify/v2
 [godoc-url]: https://pkg.go.dev/github.com/go-openapi/testify/v2
@@ -246,7 +285,7 @@ SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
 SPDX-License-Identifier: Apache-2.0
 
 
-Document generated by github.com/go-openapi/testify/v2/codegen DO NOT EDIT.
+Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
 
-Generated on 2026-01-02 (version v1.2.2-760-g97c29e3) using codegen version master [sha: 97c29e3dbfc40800a080863ceea81db0cfd6e858]
+Generated on 2026-01-11 (version e6b0793) using codegen version v2.1.9-0.20260111152118-e6b0793ba519+dirty [sha: e6b0793ba519fb22dc1887392e1465649a5a95ff]
 -->

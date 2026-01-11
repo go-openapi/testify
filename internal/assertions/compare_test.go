@@ -5,7 +5,6 @@ package assertions
 
 import (
 	"bytes"
-	"fmt"
 	"iter"
 	"runtime"
 	"slices"
@@ -192,24 +191,6 @@ func TestCompareMsgAndArgsForwarding(t *testing.T) {
 		f(out)
 		Contains(t, out.buf.String(), expectedOutput)
 	}
-}
-
-type outputT struct {
-	buf     *bytes.Buffer
-	helpers map[string]struct{}
-}
-
-// Implements T.
-func (t *outputT) Errorf(format string, args ...any) {
-	s := fmt.Sprintf(format, args...)
-	t.buf.WriteString(s)
-}
-
-func (t *outputT) Helper() {
-	if t.helpers == nil {
-		t.helpers = make(map[string]struct{})
-	}
-	t.helpers[callerName(1)] = struct{}{}
 }
 
 // callerName gives the function name (qualified with a package path)

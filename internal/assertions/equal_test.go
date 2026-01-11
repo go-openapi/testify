@@ -380,6 +380,9 @@ func panicCases() iter.Seq[panicCase] {
 	type structWithUnexportedMapWithArrayKey struct {
 		m any
 	}
+	type s struct {
+		f map[[1]byte]int
+	}
 
 	return slices.Values([]panicCase{
 		{
@@ -442,6 +445,17 @@ func panicCases() iter.Seq[panicCase] {
 					{2}: {},
 				},
 			},
+			expectEqual: false,
+		},
+		{
+			name: "panic behavior on map with array key",
+			value1: s{
+				f: map[[1]byte]int{
+					{0x1}: 0,
+					{0x2}: 0,
+				},
+			},
+			value2:      s{},
 			expectEqual: false,
 		},
 	})
