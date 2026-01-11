@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-11 (version e6b0793) using codegen version v2.1.9-0.20260111152118-e6b0793ba519+dirty [sha: e6b0793ba519fb22dc1887392e1465649a5a95ff]
+// Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
 
 package require
 
@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/url"
 	"path/filepath"
+	"reflect"
 	"testing"
 	"time"
 )
@@ -2140,6 +2141,55 @@ func TestAssertionsJSONEqBytesf(t *testing.T) {
 	})
 }
 
+func TestAssertionsKind(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		a := New(t)
+		a.Kind(reflect.String, "hello")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.Kind(reflect.String, 0)
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("Kind should call FailNow()")
+		}
+	})
+}
+
+func TestAssertionsKindf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		a := New(t)
+		a.Kindf(reflect.String, "hello", "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.Kindf(reflect.String, 0, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("Assertions.Kind should mark test as failed")
+		}
+		if !mock.failed {
+			t.Error("Assertions.Kindf should call FailNow()")
+		}
+	})
+}
+
 func TestAssertionsLen(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -2969,6 +3019,55 @@ func TestAssertionsNotImplementsf(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("Assertions.NotImplementsf should call FailNow()")
+		}
+	})
+}
+
+func TestAssertionsNotKind(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		a := New(t)
+		a.NotKind(reflect.String, 0)
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.NotKind(reflect.String, "hello")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("NotKind should call FailNow()")
+		}
+	})
+}
+
+func TestAssertionsNotKindf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		a := New(t)
+		a.NotKindf(reflect.String, 0, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.NotKindf(reflect.String, "hello", "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("Assertions.NotKind should mark test as failed")
+		}
+		if !mock.failed {
+			t.Error("Assertions.NotKindf should call FailNow()")
 		}
 	})
 }

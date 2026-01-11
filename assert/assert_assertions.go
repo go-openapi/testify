@@ -2,13 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-11 (version e6b0793) using codegen version v2.1.9-0.20260111152118-e6b0793ba519+dirty [sha: e6b0793ba519fb22dc1887392e1465649a5a95ff]
+// Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
 
 package assert
 
 import (
 	"net/http"
 	"net/url"
+	"reflect"
 	"time"
 
 	"github.com/go-openapi/testify/v2/internal/assertions"
@@ -958,6 +959,28 @@ func JSONEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any) bool {
 	return assertions.JSONEqBytes(t, expected, actual, msgAndArgs...)
 }
 
+// Kind asserts that the [reflect.Kind] of a given object matches the expected [reflect.Kind].
+//
+// Kind reflects the concrete value stored in the object. The nil value (or interface with nil value)
+// are comparable to [reflect.Invalid]. See also [reflect.Value.Kind].
+//
+// # Usage
+//
+//	assertions.Kind(t, reflect.String, "Hello World")
+//
+// # Examples
+//
+//	success: reflect.String, "hello"
+//	failure: reflect.String, 0
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func Kind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.Kind(t, expectedKind, object, msgAndArgs...)
+}
+
 // Len asserts that the specified object has specific length.
 //
 // Len also fails if the object has a type that len() does not accept.
@@ -1327,6 +1350,28 @@ func NotImplements(t T, interfaceObject any, object any, msgAndArgs ...any) bool
 		h.Helper()
 	}
 	return assertions.NotImplements(t, interfaceObject, object, msgAndArgs...)
+}
+
+// NotKind asserts that the [reflect.Kind] of a given object does not match the expected [reflect.Kind].
+//
+// Kind reflects the concrete value stored in the object. The nil value (or interface with nil value)
+// are comparable to [reflect.Invalid]. See also [reflect.Value.Kind].
+//
+// # Usage
+//
+//	assertions.NotKind(t, reflect.Int, "Hello World")
+//
+// # Examples
+//
+//	success: reflect.String, 0
+//	failure: reflect.String, "hello"
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func NotKind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.NotKind(t, expectedKind, object, msgAndArgs...)
 }
 
 // NotNil asserts that the specified object is not nil.

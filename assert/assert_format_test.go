@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-11 (version e6b0793) using codegen version v2.1.9-0.20260111152118-e6b0793ba519+dirty [sha: e6b0793ba519fb22dc1887392e1465649a5a95ff]
+// Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
 
 package assert
 
@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/url"
 	"path/filepath"
+	"reflect"
 	"testing"
 	"time"
 )
@@ -1056,6 +1057,30 @@ func TestJSONEqBytesf(t *testing.T) {
 	})
 }
 
+func TestKindf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := Kindf(t, reflect.String, "hello", "test message")
+		if !result {
+			t.Error("Kindf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := Kindf(mock, reflect.String, 0, "test message")
+		if result {
+			t.Error("Kindf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("Kind should mark test as failed")
+		}
+	})
+}
+
 func TestLenf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1460,6 +1485,30 @@ func TestNotImplementsf(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("NotImplements should mark test as failed")
+		}
+	})
+}
+
+func TestNotKindf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := NotKindf(t, reflect.String, 0, "test message")
+		if !result {
+			t.Error("NotKindf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := NotKindf(mock, reflect.String, "hello", "test message")
+		if result {
+			t.Error("NotKindf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("NotKind should mark test as failed")
 		}
 	})
 }

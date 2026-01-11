@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-11 (version e6b0793) using codegen version v2.1.9-0.20260111152118-e6b0793ba519+dirty [sha: e6b0793ba519fb22dc1887392e1465649a5a95ff]
+// Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
 
 package assert_test
 
@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/url"
 	"path/filepath"
+	"reflect"
 	"testing"
 	"time"
 
@@ -368,6 +369,14 @@ func ExampleJSONEqBytes() {
 	// Output: success: true
 }
 
+func ExampleKind() {
+	t := new(testing.T)
+	success := assert.Kind(t, reflect.String, "hello")
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleLen() {
 	t := new(testing.T)
 	success := assert.Len(t, []string{"A", "B"}, 2)
@@ -501,6 +510,14 @@ func ExampleNotErrorIs() {
 func ExampleNotImplements() {
 	t := new(testing.T)
 	success := assert.NotImplements(t, (*error)(nil), new(testing.T))
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleNotKind() {
+	t := new(testing.T)
+	success := assert.NotKind(t, reflect.String, 0)
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
