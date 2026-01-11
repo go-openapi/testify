@@ -44,137 +44,19 @@ func testDiff() func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
 
-		expected := `
+		for tt := range diffCases() {
+			t.Run(tt.name, func(t *testing.T) {
+				t.Parallel()
 
-Diff:
---- Expected
-+++ Actual
-@@ -1,3 +1,3 @@
- (struct { foo string }) {
-- foo: (string) (len=5) "hello"
-+ foo: (string) (len=3) "bar"
- }
-`
-		actual := diff(
-			struct{ foo string }{"hello"},
-			struct{ foo string }{"bar"},
-		)
-		Equal(t, expected, actual)
-
-		expected = `
-
-Diff:
---- Expected
-+++ Actual
-@@ -2,5 +2,5 @@
-  (int) 1,
-- (int) 2,
-  (int) 3,
-- (int) 4
-+ (int) 5,
-+ (int) 7
- }
-`
-		actual = diff(
-			[]int{1, 2, 3, 4},
-			[]int{1, 3, 5, 7},
-		)
-		Equal(t, expected, actual)
-
-		expected = `
-
-Diff:
---- Expected
-+++ Actual
-@@ -2,4 +2,4 @@
-  (int) 1,
-- (int) 2,
-- (int) 3
-+ (int) 3,
-+ (int) 5
- }
-`
-		actual = diff(
-			[]int{1, 2, 3, 4}[0:3],
-			[]int{1, 3, 5, 7}[0:3],
-		)
-		Equal(t, expected, actual)
-
-		expected = `
-
-Diff:
---- Expected
-+++ Actual
-@@ -1,6 +1,6 @@
- (map[string]int) (len=4) {
-- (string) (len=4) "four": (int) 4,
-+ (string) (len=4) "five": (int) 5,
-  (string) (len=3) "one": (int) 1,
-- (string) (len=5) "three": (int) 3,
-- (string) (len=3) "two": (int) 2
-+ (string) (len=5) "seven": (int) 7,
-+ (string) (len=5) "three": (int) 3
- }
-`
-
-		actual = diff(
-			map[string]int{"one": 1, "two": 2, "three": 3, "four": 4},
-			map[string]int{"one": 1, "three": 3, "five": 5, "seven": 7},
-		)
-		Equal(t, expected, actual)
-
-		expected = `
-
-Diff:
---- Expected
-+++ Actual
-@@ -1,3 +1,3 @@
- (*errors.errorString)({
-- s: (string) (len=19) "some expected error"
-+ s: (string) (len=12) "actual error"
- })
-`
-
-		actual = diff(
-			errors.New("some expected error"),
-			errors.New("actual error"),
-		)
-		Equal(t, expected, actual)
-
-		expected = `
-
-Diff:
---- Expected
-+++ Actual
-@@ -2,3 +2,3 @@
-  A: (string) (len=11) "some string",
-- B: (int) 10
-+ B: (int) 15
- }
-`
-
-		actual = diff(
-			diffTestingStruct{A: "some string", B: 10},
-			diffTestingStruct{A: "some string", B: 15},
-		)
-		Equal(t, expected, actual)
-
-		expected = `
-
-Diff:
---- Expected
-+++ Actual
-@@ -1,2 +1,2 @@
--(time.Time) 2020-09-24 00:00:00 +0000 UTC
-+(time.Time) 2020-09-25 00:00:00 +0000 UTC
- 
-`
-
-		actual = diff(
-			time.Date(2020, 9, 24, 0, 0, 0, 0, time.UTC),
-			time.Date(2020, 9, 25, 0, 0, 0, 0, time.UTC),
-		)
-		Equal(t, expected, actual)
+				for range min(1, tt.repeat) { // for tests on maps, need to verify the ordering is stable
+					actual := diff(
+						tt.valueA,
+						tt.valueB,
+					)
+					Equal(t, tt.expected, actual)
+				}
+			})
+		}
 	}
 }
 
@@ -194,6 +76,163 @@ func testDiffList() func(*testing.T) {
 			})
 		}
 	}
+}
+
+type diffCase struct {
+	name     string
+	repeat   int
+	valueA   any
+	valueB   any
+	expected string
+}
+
+func diffCases() iter.Seq[diffCase] {
+	const n = 5
+	type Key struct {
+		x int
+	}
+
+	return slices.Values([]diffCase{
+		{
+			name:   "with diff struct",
+			valueA: struct{ foo string }{"hello"},
+			valueB: struct{ foo string }{"bar"},
+			expected: `
+
+Diff:
+--- Expected
++++ Actual
+@@ -1,3 +1,3 @@
+ (struct { foo string }) {
+- foo: (string) (len=5) "hello"
++ foo: (string) (len=3) "bar"
+ }
+`,
+		},
+		{
+			name:   "with diff slice",
+			valueA: []int{1, 2, 3, 4},
+			valueB: []int{1, 3, 5, 7},
+			expected: `
+
+Diff:
+--- Expected
++++ Actual
+@@ -2,5 +2,5 @@
+  (int) 1,
+- (int) 2,
+  (int) 3,
+- (int) 4
++ (int) 5,
++ (int) 7
+ }
+`,
+		},
+		{
+			name:   "with diff slice (sliced)",
+			valueA: []int{1, 2, 3, 4}[0:3],
+			valueB: []int{1, 3, 5, 7}[0:3],
+			expected: `
+
+Diff:
+--- Expected
++++ Actual
+@@ -2,4 +2,4 @@
+  (int) 1,
+- (int) 2,
+- (int) 3
++ (int) 3,
++ (int) 5
+ }
+`,
+		},
+		{
+			name:   "with string keys map keys should be rendered deterministically in diffs",
+			repeat: n,
+			valueA: map[string]int{"one": 1, "two": 2, "three": 3, "four": 4},
+			valueB: map[string]int{"one": 1, "three": 3, "five": 5, "seven": 7},
+			expected: `
+
+Diff:
+--- Expected
++++ Actual
+@@ -1,6 +1,6 @@
+ (map[string]int) (len=4) {
+- (string) (len=4) "four": (int) 4,
++ (string) (len=4) "five": (int) 5,
+  (string) (len=3) "one": (int) 1,
+- (string) (len=5) "three": (int) 3,
+- (string) (len=3) "two": (int) 2
++ (string) (len=5) "seven": (int) 7,
++ (string) (len=5) "three": (int) 3
+ }
+`,
+		},
+		{
+			name:   "with diff error",
+			valueA: errors.New("some expected error"),
+			valueB: errors.New("actual error"),
+			expected: `
+
+Diff:
+--- Expected
++++ Actual
+@@ -1,3 +1,3 @@
+ (*errors.errorString)({
+- s: (string) (len=19) "some expected error"
++ s: (string) (len=12) "actual error"
+ })
+`,
+		},
+		{
+			name:   "with arbitrary comparable keys map keys should be rendered deterministically in diffs",
+			repeat: n,
+			valueA: map[Key]int{{1}: 1, {2}: 2, {3}: 3, {4}: 4},
+			valueB: map[Key]int{{1}: 1, {2}: 2, {3}: 3, {4}: 999},
+			expected: `
+
+Diff:
+--- Expected
++++ Actual
+@@ -12,3 +12,3 @@
+   x: (int) 4
+- }: (int) 4
++ }: (int) 999
+ }
+`,
+		},
+		{
+			name:   "with diff unexported struct",
+			valueA: diffTestingStruct{A: "some string", B: 10},
+			valueB: diffTestingStruct{A: "some string", B: 15},
+			expected: `
+
+Diff:
+--- Expected
++++ Actual
+@@ -2,3 +2,3 @@
+  A: (string) (len=11) "some string",
+- B: (int) 10
++ B: (int) 15
+ }
+`,
+		},
+		{
+			name:   "with diff date",
+			valueA: time.Date(2020, 9, 24, 0, 0, 0, 0, time.UTC),
+			valueB: time.Date(2020, 9, 25, 0, 0, 0, 0, time.UTC),
+			expected: `
+
+Diff:
+--- Expected
++++ Actual
+@@ -1,2 +1,2 @@
+-(time.Time) 2020-09-24 00:00:00 +0000 UTC
++(time.Time) 2020-09-25 00:00:00 +0000 UTC
+ 
+`,
+		},
+	})
 }
 
 type compareDiffListCase struct {
