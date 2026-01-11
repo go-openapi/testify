@@ -146,6 +146,67 @@ func NotZero(t T, i any, msgAndArgs ...any) bool {
 	return true
 }
 
+// Kind asserts that the [reflect.Kind] of a given object matches the expected [reflect.Kind].
+//
+// Kind reflects the concrete value stored in the object. The nil value (or interface with nil value)
+// are comparable to [reflect.Invalid]. See also [reflect.Value.Kind].
+//
+// # Usage
+//
+//	assertions.Kind(t, reflect.String, "Hello World")
+//
+// # Examples
+//
+//	success: reflect.String, "hello"
+//	failure: reflect.String, 0
+func Kind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool {
+	// Domain: type
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	val := reflect.ValueOf(object)
+	kind := val.Kind()
+	if kind != expectedKind {
+		if kind == reflect.Invalid {
+			// add some explanation when reflect.Invalid does not match the expectation (common gotcha with reflect)
+			return Fail(t, "object has reflect.Invalid kind: this is nil or an interface with nil value", msgAndArgs...)
+		}
+
+		return Fail(t, fmt.Sprintf("object expected to be of kind %v, but was %v", expectedKind, kind), msgAndArgs...)
+	}
+
+	return true
+}
+
+// NotKind asserts that the [reflect.Kind] of a given object does not match the expected [reflect.Kind].
+//
+// Kind reflects the concrete value stored in the object. The nil value (or interface with nil value)
+// are comparable to [reflect.Invalid]. See also [reflect.Value.Kind].
+//
+// # Usage
+//
+//	assertions.NotKind(t, reflect.Int, "Hello World")
+//
+// # Examples
+//
+//	success: reflect.String, 0
+//	failure: reflect.String, "hello"
+func NotKind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool {
+	// Domain: type
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	val := reflect.ValueOf(object)
+	kind := val.Kind()
+	if kind != expectedKind {
+		return true
+	}
+
+	return Fail(t, fmt.Sprintf("object expected not to be of kind %v, but was %v", expectedKind, kind), msgAndArgs...)
+}
+
 func isType(expectedType, object any) bool {
 	return ObjectsAreEqual(reflect.TypeOf(object), reflect.TypeOf(expectedType))
 }
