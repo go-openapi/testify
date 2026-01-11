@@ -14,6 +14,7 @@ var (
 		DisablePointerAddresses: true,
 		DisableCapacities:       true,
 		SortKeys:                true,
+		SpewKeys:                true,
 		DisableMethods:          true,
 		MaxDepth:                spewMaxDepth,
 	}
@@ -23,6 +24,7 @@ var (
 		DisablePointerAddresses: true,
 		DisableCapacities:       true,
 		SortKeys:                true,
+		SpewKeys:                true,
 		MaxDepth:                spewMaxDepth,
 	}
 )
