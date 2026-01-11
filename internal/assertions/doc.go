@@ -8,6 +8,8 @@
 // whereas the publicly exposed API (in packages assert and require)
 // is generated.
 //
+// For convenience, assertion functions are classified by domain.
+// The entire API can be searched by domain at https://go-openapi.github.io/testify/api.
 // # Domains
 //
 // - boolean: asserting boolean values

@@ -30,6 +30,8 @@ linters:
       max-complexity: 22
     gocyclo:
       min-complexity: 22
+    gocognit:
+      min-complexity: 35
     exhaustive:
       default-signifies-exhaustive: true
       default-case-required: true
