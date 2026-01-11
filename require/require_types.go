@@ -1,8 +1,8 @@
 // SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
 // SPDX-License-Identifier: Apache-2.0
 
-// Code generated with github.com/go-openapi/testify/v2/codegen; DO NOT EDIT.
-// Generated on 2026-01-02 (version v1.2.2-760-g97c29e3) using codegen version master [sha: 97c29e3dbfc40800a080863ceea81db0cfd6e858]
+// Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
+// Generated on 2026-01-11 (version e6b0793) using codegen version v2.1.9-0.20260111152118-e6b0793ba519+dirty [sha: e6b0793ba519fb22dc1887392e1465649a5a95ff]
 
 package require
 
@@ -25,6 +25,9 @@ type (
 	BoolAssertionFunc func(T, bool, ...any)
 
 	// CollectT implements the [T] interface and collects all errors.
+	//
+	// [CollectT] is specifically intended to be used with [EventuallyWithT] and
+	// should not be used outside of that context.
 	CollectT = assertions.CollectT
 
 	// Comparison is a custom function that returns true on success and false on failure.

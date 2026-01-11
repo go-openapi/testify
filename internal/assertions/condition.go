@@ -237,6 +237,8 @@ type pollOptions struct {
 
 // pollCondition is the common implementation for eventually, never, and eventuallyWithT.
 // It polls a condition function at regular intervals until success or timeout.
+//
+//nolint:gocognit,gocyclo,cyclop // A refactoring is planned for this complex function.
 func pollCondition(t T, condition func() bool, waitFor, tick time.Duration, opts pollOptions, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
