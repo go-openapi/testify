@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
+// SPDX-License-Identifier: Apache-2.0
+
 // Package yaml is an indirection to handle YAML deserialization.
 //
 // This package allows the builder to override the indirection with an alternative implementation

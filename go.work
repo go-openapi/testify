@@ -1,6 +1,7 @@
 use (
 	.
 	./codegen
+	./enable/colors
 	./enable/yaml
 	./internal/testintegration
 )

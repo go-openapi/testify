@@ -24,7 +24,7 @@ This is the go-openapi fork of the great [testify](https://github.com/stretchr/t
 Main features:
 
 * zero external dependencies
-* opt-in dependencies for extra features (e.g. asserting YAML)
+* opt-in dependencies for extra features (e.g. asserting YAML, colorized output)
 * [searchable documentation][doc-url]
 
 ## Announcements
