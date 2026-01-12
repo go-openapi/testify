@@ -435,6 +435,72 @@ name: Alice
 
 ---
 
+## Colorized Output (Optional)
+
+Testify can colorize test failure output for better readability. This is an opt-in feature.
+
+### Enabling Colors
+
+```go
+import (
+    "testing"
+    "github.com/go-openapi/testify/v2/assert"
+    _ "github.com/go-openapi/testify/enable/colors/v2" // Enable colorized output
+)
+
+func TestExample(t *testing.T) {
+    assert.Equal(t, "expected", "actual") // Failure will be colorized
+}
+```
+
+### Activation
+
+Colors are activated via command line flag or environment variable:
+
+```bash
+# Via flag
+go test -v -testify.colorized ./...
+
+# Via environment variable
+TESTIFY_COLORIZED=true go test -v ./...
+```
+
+### Themes
+
+Two themes are available for different terminal backgrounds:
+
+```bash
+# Dark theme (default) - bright colors for dark terminals
+go test -v -testify.colorized ./...
+
+# Light theme - normal colors for light terminals
+go test -v -testify.colorized -testify.theme=light ./...
+
+# Or via environment
+TESTIFY_COLORIZED=true TESTIFY_THEME=light go test -v ./...
+```
+
+### CI Environments
+
+By default, colorization is disabled when output is not a terminal. To force colors in CI environments that support ANSI codes:
+
+```bash
+TESTIFY_COLORIZED=true TESTIFY_COLORIZED_NOTTY=true go test -v ./...
+```
+
+### What Gets Colorized
+
+- **Expected values** in assertion failures (green)
+- **Actual values** in assertion failures (red)
+- **Diff output**:
+  - Deleted lines (red)
+  - Inserted lines (yellow)
+  - Context lines (green)
+
+**Note:** Without the `enable/colors` import, output remains uncolored (no panic, just no colors).
+
+---
+
 ## Best Practices
 
 1. **Use `require` for preconditions** - Stop test immediately if setup fails

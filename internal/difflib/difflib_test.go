@@ -11,34 +11,6 @@ import (
 	"testing"
 )
 
-/*
-func assertAlmostEqual(t *testing.T, a, b float64, places int) {
-	t.Helper()
-
-	if math.Abs(a-b) > math.Pow10(-places) {
-		t.Errorf("%.7f != %.7f", a, b)
-	}
-}
-*/
-
-func assertEqual(t *testing.T, a, b any) {
-	t.Helper()
-
-	if !reflect.DeepEqual(a, b) {
-		t.Errorf("%v != %v", a, b)
-	}
-}
-
-func splitChars(s string) []string {
-	chars := make([]string, 0, len(s))
-	// Assume ASCII inputs
-	for _, r := range s {
-		chars = append(chars, string(r))
-	}
-
-	return chars
-}
-
 func TestGetOptCodes(t *testing.T) {
 	a := "qabxcd"
 	b := "abycdf"
@@ -65,7 +37,7 @@ func TestGroupedOpCodes(t *testing.T) {
 	for i := 0; i != 39; i++ {
 		a = append(a, fmt.Sprintf("%02d", i))
 	}
-	b := []string{}
+	b := make([]string, 0, len(a)+3)
 	b = append(b, a[:8]...)
 	b = append(b, " i")
 	b = append(b, a[8:19]...)
@@ -248,23 +220,20 @@ func TestSplitLines(t *testing.T) {
 	}
 }
 
-func benchmarkSplitLines(count int) func(*testing.B) {
-	return func(b *testing.B) {
-		str := strings.Repeat("foo\n", count)
+func assertEqual(t *testing.T, a, b any) {
+	t.Helper()
 
-		b.ResetTimer()
-
-		n := 0
-		for b.Loop() {
-			n += len(SplitLines(str))
-		}
+	if !reflect.DeepEqual(a, b) {
+		t.Errorf("%v != %v", a, b)
 	}
 }
 
-func BenchmarkSplitLines100(b *testing.B) {
-	b.Run("splitLines", benchmarkSplitLines(100))
-}
+func splitChars(s string) []string {
+	chars := make([]string, 0, len(s))
+	// Assume ASCII inputs
+	for _, r := range s {
+		chars = append(chars, string(r))
+	}
 
-func BenchmarkSplitLines10000(b *testing.B) {
-	b.Run("splitLines", benchmarkSplitLines(10000))
+	return chars
 }

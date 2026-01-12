@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"reflect"
 	"time"
+
+	"github.com/go-openapi/testify/v2/internal/assertions/enable/colors"
 )
 
 // Equal asserts that two objects are equal.
@@ -37,10 +39,21 @@ func Equal(t T, expected, actual any, msgAndArgs ...any) bool {
 
 	if !ObjectsAreEqual(expected, actual) {
 		diff := diff(expected, actual)
-		expected, actual = formatUnequalValues(expected, actual)
-		return Fail(t, fmt.Sprintf("Not equal: \n"+
-			"expected: %s\n"+
-			"actual  : %s%s", expected, actual, diff), msgAndArgs...)
+		expectedStr, actualStr := formatUnequalValues(expected, actual)
+
+		if colors.Enabled() {
+			expectedStr = colors.ExpectedColorizer()(expectedStr)
+			actualStr = colors.ActualColorizer()(actualStr)
+		}
+
+		return Fail(t,
+			fmt.Sprintf("Not equal: \n"+
+				"expected: %s\n"+
+				"actual  : %s%s",
+				expectedStr,
+				actualStr, diff),
+			msgAndArgs...,
+		)
 	}
 
 	return true
