@@ -17,10 +17,6 @@ func TestBooleanTrue(t *testing.T) {
 	if True(mock, false) {
 		t.Error("True should return false")
 	}
-
-	if !True(mock, true) {
-		t.Error("check error")
-	}
 }
 
 func TestBooleanFalse(t *testing.T) {
@@ -34,4 +30,38 @@ func TestBooleanFalse(t *testing.T) {
 	if False(mock, true) {
 		t.Error("False should return false")
 	}
+}
+
+func TestBooleanTrueTFalseT(t *testing.T) {
+	t.Parallel()
+
+	type X bool
+	var truthy X = true
+	var falsy X = false
+
+	t.Run("with TrueT on redeclared bool type", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+
+		if !TrueT(mock, truthy) {
+			t.Error("TrueT should return true")
+		}
+		if TrueT(mock, falsy) {
+			t.Error("TrueT should return false")
+		}
+	})
+
+	t.Run("with FalseT on redeclared bool type", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+
+		if FalseT(mock, truthy) {
+			t.Error("TrueT should return true")
+		}
+		if !FalseT(mock, falsy) {
+			t.Error("FalseT should return false")
+		}
+	})
 }

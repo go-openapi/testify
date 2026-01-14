@@ -77,16 +77,16 @@ func Error(t T, err error, msgAndArgs ...any) bool {
 //
 //	success: ErrTest, "assert.ErrTest general error for testing"
 //	failure: ErrTest, "wrong error message"
-func EqualError(t T, theError error, errString string, msgAndArgs ...any) bool {
+func EqualError(t T, err error, errString string, msgAndArgs ...any) bool {
 	// Domain: error
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if !Error(t, theError, msgAndArgs...) {
+	if !Error(t, err, msgAndArgs...) {
 		return false
 	}
 	expected := errString
-	actual := theError.Error()
+	actual := err.Error()
 	// don't need to use deep equals here, we know they are both strings
 	if expected != actual {
 		return Fail(t, fmt.Sprintf("Error message not equal:\n"+
@@ -108,16 +108,16 @@ func EqualError(t T, theError error, errString string, msgAndArgs ...any) bool {
 //
 //	success: ErrTest, "general error"
 //	failure: ErrTest, "not in message"
-func ErrorContains(t T, theError error, contains string, msgAndArgs ...any) bool {
+func ErrorContains(t T, err error, contains string, msgAndArgs ...any) bool {
 	// Domain: error
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if !Error(t, theError, msgAndArgs...) {
+	if !Error(t, err, msgAndArgs...) {
 		return false
 	}
 
-	actual := theError.Error()
+	actual := err.Error()
 	if !strings.Contains(actual, contains) {
 		return Fail(t, fmt.Sprintf("Error %s does not contain %#v", truncatingFormat("%#v", actual), contains), msgAndArgs...)
 	}

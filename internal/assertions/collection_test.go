@@ -321,6 +321,14 @@ func TestCollectionElementsMatch(t *testing.T) {
 	}
 }
 
+func TestCollectionElementsMatchT(t *testing.T) {
+	t.Parallel()
+
+	for tc := range elementsMatchTCases() {
+		t.Run(tc.name, tc.test)
+	}
+}
+
 func TestCollectionNotElementsMatch(t *testing.T) {
 	t.Parallel()
 
@@ -335,6 +343,14 @@ func TestCollectionNotElementsMatch(t *testing.T) {
 				t.Errorf("NotElementsMatch(%#v, %#v) should return %v", c.actual, c.expected, c.result)
 			}
 		})
+	}
+}
+
+func TestCollectionNotElementsMatchT(t *testing.T) {
+	t.Parallel()
+
+	for tc := range notElementsMatchTCases() {
+		t.Run(tc.name, tc.test)
 	}
 }
 
@@ -552,4 +568,169 @@ func collectionNotElementsMatchCases() iter.Seq[collectionNotElementsMatch] {
 		{[]string{"hello", "hello", "world"}, []string{"hello", "world", "hello"}, false},
 		{[3]string{"hello", "hello", "world"}, [3]string{"hello", "world", "hello"}, false},
 	})
+}
+
+// elementsMatchTTestPairs builds test cases for both ElementsMatchT and NotElementsMatchT
+// from shared test data, ensuring consistency between the inverse functions.
+func elementsMatchTTestPairs() (matchCases, notMatchCases []genericTestCase) {
+	// addPair adds corresponding test cases for both ElementsMatchT and NotElementsMatchT.
+	addPair := func(name string, matchTest, notMatchTest func(*testing.T)) {
+		matchCases = append(matchCases, genericTestCase{name, matchTest})
+		notMatchCases = append(notMatchCases, genericTestCase{name, notMatchTest})
+	}
+
+	// Numeric types - test data defined once, used for both functions
+	m, n := testElementsMatchTPair[int]([]int{1, 2, 3}, []int{3, 1, 2}, []int{1, 2, 3}, []int{1, 2, 4})
+	addPair("int", m, n)
+	m, n = testElementsMatchTPair[int8]([]int8{1, 2, 3}, []int8{3, 1, 2}, []int8{1, 2, 3}, []int8{1, 2, 4})
+	addPair("int8", m, n)
+	m, n = testElementsMatchTPair[int16]([]int16{1, 2, 3}, []int16{3, 1, 2}, []int16{1, 2, 3}, []int16{1, 2, 4})
+	addPair("int16", m, n)
+	m, n = testElementsMatchTPair[int32]([]int32{1, 2, 3}, []int32{3, 1, 2}, []int32{1, 2, 3}, []int32{1, 2, 4})
+	addPair("int32", m, n)
+	m, n = testElementsMatchTPair[int64]([]int64{1, 2, 3}, []int64{3, 1, 2}, []int64{1, 2, 3}, []int64{1, 2, 4})
+	addPair("int64", m, n)
+	m, n = testElementsMatchTPair[uint]([]uint{1, 2, 3}, []uint{3, 1, 2}, []uint{1, 2, 3}, []uint{1, 2, 4})
+	addPair("uint", m, n)
+	m, n = testElementsMatchTPair[uint8]([]uint8{1, 2, 3}, []uint8{3, 1, 2}, []uint8{1, 2, 3}, []uint8{1, 2, 4})
+	addPair("uint8", m, n)
+	m, n = testElementsMatchTPair[uint16]([]uint16{1, 2, 3}, []uint16{3, 1, 2}, []uint16{1, 2, 3}, []uint16{1, 2, 4})
+	addPair("uint16", m, n)
+	m, n = testElementsMatchTPair[uint32]([]uint32{1, 2, 3}, []uint32{3, 1, 2}, []uint32{1, 2, 3}, []uint32{1, 2, 4})
+	addPair("uint32", m, n)
+	m, n = testElementsMatchTPair[uint64]([]uint64{1, 2, 3}, []uint64{3, 1, 2}, []uint64{1, 2, 3}, []uint64{1, 2, 4})
+	addPair("uint64", m, n)
+	m, n = testElementsMatchTPair[float32]([]float32{1.5, 2.5, 3.5}, []float32{3.5, 1.5, 2.5}, []float32{1.5, 2.5, 3.5}, []float32{1.5, 2.5, 4.5})
+	addPair("float32", m, n)
+	m, n = testElementsMatchTPair[float64]([]float64{1.5, 2.5, 3.5}, []float64{3.5, 1.5, 2.5}, []float64{1.5, 2.5, 3.5}, []float64{1.5, 2.5, 4.5})
+	addPair("float64", m, n)
+	m, n = testElementsMatchTPair[string]([]string{"a", "b", "c"}, []string{"c", "a", "b"}, []string{"a", "b", "c"}, []string{"a", "b", "d"})
+	addPair("string", m, n)
+	m, n = testElementsMatchTPair[bool]([]bool{true, false}, []bool{false, true}, []bool{true, true}, []bool{true, false})
+	addPair("bool", m, n)
+
+	// Special cases
+	m, n = testElementsMatchTEmptyPair()
+	addPair("empty slices", m, n)
+	m, n = testElementsMatchTDuplicatesPair()
+	addPair("with duplicates", m, n)
+	m, n = testElementsMatchTCustomTypePair()
+	addPair("custom type", m, n)
+	m, n = testElementsMatchTStructPair()
+	addPair("struct type", m, n)
+
+	return matchCases, notMatchCases
+}
+
+// elementsMatchTCases returns test cases for ElementsMatchT with various comparable types.
+func elementsMatchTCases() iter.Seq[genericTestCase] {
+	matchCases, _ := elementsMatchTTestPairs()
+	return slices.Values(matchCases)
+}
+
+// notElementsMatchTCases returns test cases for NotElementsMatchT with various comparable types.
+func notElementsMatchTCases() iter.Seq[genericTestCase] {
+	_, notMatchCases := elementsMatchTTestPairs()
+	return slices.Values(notMatchCases)
+}
+
+// testElementsMatchTPair creates test functions for both ElementsMatchT and NotElementsMatchT
+// from the same test data, ensuring consistency between inverse functions.
+// matchA/matchB are slices that should match; noMatchA/noMatchB are slices that should not match.
+//
+//nolint:thelper // linter false positive: these are not helpers
+func testElementsMatchTPair[E comparable](matchA, matchB, noMatchA, noMatchB []E) (matchTest, notMatchTest func(*testing.T)) {
+	matchTest = func(t *testing.T) {
+		t.Parallel()
+		mock := new(mockT)
+		True(t, ElementsMatchT(mock, matchA, matchB))
+		False(t, ElementsMatchT(mock, noMatchA, noMatchB))
+	}
+	notMatchTest = func(t *testing.T) {
+		t.Parallel()
+		mock := new(mockT)
+		True(t, NotElementsMatchT(mock, noMatchA, noMatchB))
+		False(t, NotElementsMatchT(mock, matchA, matchB))
+	}
+	return matchTest, notMatchTest
+}
+
+//nolint:thelper // linter false positive: these are not helpers
+func testElementsMatchTEmptyPair() (matchTest, notMatchTest func(*testing.T)) {
+	matchTest = func(t *testing.T) {
+		t.Parallel()
+		mock := new(mockT)
+		True(t, ElementsMatchT(mock, []int{}, []int{}))
+		True(t, ElementsMatchT(mock, []string(nil), []string(nil)))
+		True(t, ElementsMatchT(mock, []int(nil), []int{}))
+	}
+	notMatchTest = func(t *testing.T) {
+		t.Parallel()
+		mock := new(mockT)
+		// Empty slices match, so NotElementsMatchT should return false
+		False(t, NotElementsMatchT(mock, []int{}, []int{}))
+		False(t, NotElementsMatchT(mock, []string(nil), []string(nil)))
+		// One empty, one not - they don't match
+		True(t, NotElementsMatchT(mock, []int{1}, []int{}))
+		True(t, NotElementsMatchT(mock, []int{}, []int{1}))
+	}
+	return matchTest, notMatchTest
+}
+
+//nolint:thelper // linter false positive: these are not helpers
+func testElementsMatchTDuplicatesPair() (matchTest, notMatchTest func(*testing.T)) {
+	matchTest = func(t *testing.T) {
+		t.Parallel()
+		mock := new(mockT)
+		True(t, ElementsMatchT(mock, []int{1, 1, 2}, []int{2, 1, 1}))
+		False(t, ElementsMatchT(mock, []int{1, 1, 2}, []int{1, 2, 2}))
+		False(t, ElementsMatchT(mock, []int{1, 1, 2}, []int{1, 2}))
+	}
+	notMatchTest = func(t *testing.T) {
+		t.Parallel()
+		mock := new(mockT)
+		// Different duplicate counts - should not match
+		True(t, NotElementsMatchT(mock, []int{1, 1, 2}, []int{1, 2, 2}))
+		True(t, NotElementsMatchT(mock, []int{1, 1, 2}, []int{1, 2}))
+		// Same duplicates, different order - should match (NotElementsMatchT returns false)
+		False(t, NotElementsMatchT(mock, []int{1, 1, 2}, []int{2, 1, 1}))
+	}
+	return matchTest, notMatchTest
+}
+
+//nolint:thelper // linter false positive: these are not helpers
+func testElementsMatchTCustomTypePair() (matchTest, notMatchTest func(*testing.T)) {
+	type myInt int
+	matchTest = func(t *testing.T) {
+		t.Parallel()
+		mock := new(mockT)
+		True(t, ElementsMatchT(mock, []myInt{1, 2, 3}, []myInt{3, 2, 1}))
+		False(t, ElementsMatchT(mock, []myInt{1, 2, 3}, []myInt{1, 2, 4}))
+	}
+	notMatchTest = func(t *testing.T) {
+		t.Parallel()
+		mock := new(mockT)
+		True(t, NotElementsMatchT(mock, []myInt{1, 2, 3}, []myInt{1, 2, 4}))
+		False(t, NotElementsMatchT(mock, []myInt{1, 2, 3}, []myInt{3, 2, 1}))
+	}
+	return matchTest, notMatchTest
+}
+
+//nolint:thelper // linter false positive: these are not helpers
+func testElementsMatchTStructPair() (matchTest, notMatchTest func(*testing.T)) {
+	type point struct{ x, y int }
+	p1, p2, p3 := point{1, 2}, point{3, 4}, point{5, 6}
+	matchTest = func(t *testing.T) {
+		t.Parallel()
+		mock := new(mockT)
+		True(t, ElementsMatchT(mock, []point{p1, p2, p3}, []point{p3, p1, p2}))
+		False(t, ElementsMatchT(mock, []point{p1, p2}, []point{p1, p3}))
+	}
+	notMatchTest = func(t *testing.T) {
+		t.Parallel()
+		mock := new(mockT)
+		True(t, NotElementsMatchT(mock, []point{p1, p2}, []point{p1, p3}))
+		False(t, NotElementsMatchT(mock, []point{p1, p2, p3}, []point{p3, p1, p2}))
+	}
+	return matchTest, notMatchTest
 }

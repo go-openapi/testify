@@ -39,7 +39,7 @@ func InDelta(t T, expected, actual any, delta float64, msgAndArgs ...any) bool {
 	}
 
 	if math.IsNaN(af) {
-		return Fail(t, "Expected must not be NaN", msgAndArgs...)
+		return Fail(t, "Expected must not be NaN", msgAndArgs...) // Proposal for enhancement: wrong message (this is accepted above)
 	}
 
 	if math.IsNaN(bf) {
@@ -49,6 +49,234 @@ func InDelta(t T, expected, actual any, delta float64, msgAndArgs ...any) bool {
 	dt := af - bf
 	if dt < -delta || dt > delta {
 		return Fail(t, fmt.Sprintf("Max difference between %v and %v allowed is %v, but difference was %v", expected, actual, delta, dt), msgAndArgs...)
+	}
+
+	return true
+}
+
+// InDeltaT asserts that the two numerals of the same type numerical type are within delta of each other.
+//
+// [InDeltaT] accepts any go numeric type, including integer types.
+//
+// The main difference with [InDelta] is that the delta is expressed with the same type as the values, not necessarily a float64.
+//
+// Delta must be greater than or equal to zero.
+//
+// # Behavior with IEEE floating point arithmetics
+//
+//   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+//   - expected +Inf is matched only by a +Inf
+//   - expected -Inf is matched only by a -Inf
+//
+// # Usage
+//
+// assertions.InDeltaT(t, math.Pi, 22/7.0, 0.01)
+//
+// # Examples
+//
+//	success: 1.0, 1.01, 0.02
+//	failure: 1.0, 1.1, 0.05
+func InDeltaT[Number Measurable](t T, expected, actual, delta Number, msgAndArgs ...any) bool {
+	// Domain: number
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	if delta < 0 {
+		return Fail(t, "Delta must not be negative", msgAndArgs...) // TODO: add it to the original version
+	}
+
+	// IEEE float edge cases: NaN, +Inf/-Inf
+	if isNaN(delta) || isInf(delta, 0) {
+		return Fail(t, "Delta must not be NaN or Inf", msgAndArgs...) // TODO: add it to the original version
+	}
+
+	expectedInf := isInf(expected, 0)
+	actualInf := isInf(actual, 0)
+	if expectedInf {
+		// expected -Inf/+Inf
+		if !actualInf {
+			return Fail(t, "Expected an Inf value", msgAndArgs...)
+		}
+
+		if isInf(expected, 1) && !isInf(actual, 1) {
+			return Fail(t, "Expected a +Inf value but got -Inf", msgAndArgs...)
+		}
+
+		if isInf(expected, -1) && !isInf(actual, -1) {
+			return Fail(t, "Expected a -Inf value but got +Inf", msgAndArgs...)
+		}
+
+		// Both are Inf and match - success
+		return true
+	}
+
+	if actualInf {
+		return Fail(t, "Actual is Inf", msgAndArgs...)
+	}
+
+	expectedNaN := isNaN(expected)
+	actualNaN := isNaN(actual)
+
+	if expectedNaN && actualNaN {
+		// expected NaN
+		return true
+	}
+
+	if expectedNaN {
+		return Fail(t, "Expected a NaN value but actual is finite", msgAndArgs...)
+	}
+
+	if actualNaN {
+		return Fail(t, fmt.Sprintf("Expected %v with delta %v, but was NaN", expected, delta), msgAndArgs...)
+	}
+
+	var (
+		dt     Number
+		failed bool
+	)
+
+	// check is a little slower than straight delta, but it can handle unsigned numbers without errors
+	if expected > actual {
+		dt = expected - actual
+	} else {
+		dt = actual - expected
+	}
+	failed = dt > delta
+	if failed {
+		return Fail(t, fmt.Sprintf("Max difference between %v and %v allowed is %v, but difference was %v", expected, actual, delta, dt), msgAndArgs...)
+	}
+
+	return true
+}
+
+// InEpsilon asserts that expected and actual have a relative error less than epsilon.
+//
+// # Usage
+//
+//	assertions.InEpsilon(t, 100.0, 101.0, 0.02)
+//
+// # Examples
+//
+//	success: 100.0, 101.0, 0.02
+//	failure: 100.0, 110.0, 0.05
+func InEpsilon(t T, expected, actual any, epsilon float64, msgAndArgs ...any) bool {
+	// Domain: number
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if math.IsNaN(epsilon) {
+		return Fail(t, "epsilon must not be NaN", msgAndArgs...)
+	}
+	actualEpsilon, err := calcRelativeError(expected, actual)
+	if err != nil {
+		return Fail(t, err.Error(), msgAndArgs...)
+	}
+	if math.IsNaN(actualEpsilon) {
+		return Fail(t, "relative error is NaN", msgAndArgs...)
+	}
+	if actualEpsilon > epsilon {
+		return Fail(t, fmt.Sprintf("Relative error is too high: %#v (expected)\n"+
+			"        < %#v (actual)", epsilon, actualEpsilon), msgAndArgs...)
+	}
+
+	return true
+}
+
+// InEpsilonT asserts that expected and actual have a relative error less than epsilon.
+//
+// When expected is zero, epsilon is interpreted as an absolute error threshold,
+// since relative error is mathematically undefined for zero values.
+//
+// Formula:
+//   - If expected == 0: fail if |actual - expected| > epsilon
+//   - If expected != 0: fail if |actual - expected| > epsilon * |expected|
+//
+// This allows InEpsilonT to work naturally across the full numeric range including zero.
+//
+// # Usage
+//
+//	assertions.InEpsilon(t, 100.0, 101.0, 0.02)
+//
+// # Examples
+//
+//	success: 100.0, 101.0, 0.02
+//	failure: 100.0, 110.0, 0.05
+func InEpsilonT[Number Measurable](t T, expected, actual Number, epsilon float64, msgAndArgs ...any) bool {
+	// Domain: number
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	if epsilon < 0 {
+		return Fail(t, "Epsilon must not be negative", msgAndArgs...)
+	}
+
+	// IEEE float edge cases: NaN, +Inf/-Inf
+	if isNaN(epsilon) || isInf(epsilon, 0) {
+		return Fail(t, "Epsilon must not be NaN or Inf", msgAndArgs...)
+	}
+
+	expectedInf := isInf(expected, 0)
+	actualInf := isInf(actual, 0)
+	if expectedInf {
+		// expected -Inf/+Inf
+		if !actualInf {
+			return Fail(t, "Expected an Inf value", msgAndArgs...)
+		}
+
+		if isInf(expected, 1) && !isInf(actual, 1) {
+			return Fail(t, "Expected a +Inf value but got -Inf", msgAndArgs...)
+		}
+
+		if isInf(expected, -1) && !isInf(actual, -1) {
+			return Fail(t, "Expected a -Inf value but got +Inf", msgAndArgs...)
+		}
+
+		// Both are Inf and match - success
+		return true
+	}
+
+	if actualInf {
+		return Fail(t, "Actual is Inf", msgAndArgs...)
+	}
+
+	expectedNaN := isNaN(expected)
+	actualNaN := isNaN(actual)
+
+	if expectedNaN && actualNaN {
+		// expected NaN
+		return true
+	}
+
+	if expectedNaN {
+		return Fail(t, "Expected a NaN value but actual is finite", msgAndArgs...)
+	}
+
+	if actualNaN {
+		return Fail(t, fmt.Sprintf("Expected %v with epsilon %v, but was NaN", expected, epsilon), msgAndArgs...)
+	}
+
+	af := float64(expected)
+	bf := float64(actual)
+
+	delta := math.Abs(af - bf)
+	if delta == 0 {
+		return true
+	}
+	if af == 0 {
+		if delta > epsilon {
+			return Fail(t, fmt.Sprintf(
+				"Expected value is zero, using absolute error comparison.\n"+
+					"Absolute difference is too high: %#v (expected)\n"+
+					"        < %#v (actual)", epsilon, delta), msgAndArgs...)
+		}
+		return true
+	}
+
+	if delta > epsilon*math.Abs(af) {
+		return Fail(t, fmt.Sprintf("Relative error is too high: %#v (expected)\n"+
+			"        < %#v (actual)", epsilon, delta/math.Abs(af)), msgAndArgs...)
 	}
 
 	return true
@@ -137,39 +365,6 @@ func InDeltaMapValues(t T, expected, actual any, delta float64, msgAndArgs ...an
 		) {
 			return false
 		}
-	}
-
-	return true
-}
-
-// InEpsilon asserts that expected and actual have a relative error less than epsilon.
-//
-// # Usage
-//
-//	assertions.InEpsilon(t, 100.0, 101.0, 0.02)
-//
-// # Examples
-//
-//	success: 100.0, 101.0, 0.02
-//	failure: 100.0, 110.0, 0.05
-func InEpsilon(t T, expected, actual any, epsilon float64, msgAndArgs ...any) bool {
-	// Domain: number
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-	if math.IsNaN(epsilon) {
-		return Fail(t, "epsilon must not be NaN", msgAndArgs...)
-	}
-	actualEpsilon, err := calcRelativeError(expected, actual)
-	if err != nil {
-		return Fail(t, err.Error(), msgAndArgs...)
-	}
-	if math.IsNaN(actualEpsilon) {
-		return Fail(t, "relative error is NaN", msgAndArgs...)
-	}
-	if actualEpsilon > epsilon {
-		return Fail(t, fmt.Sprintf("Relative error is too high: %#v (expected)\n"+
-			"        < %#v (actual)", epsilon, actualEpsilon), msgAndArgs...)
 	}
 
 	return true
@@ -274,4 +469,25 @@ func toFloat(x any) (float64, bool) {
 	}
 
 	return xf, xok
+}
+
+func isNaN[Number Measurable](f Number) bool {
+	return f != f //nolint:gocritic // yes this weird property is held by NaN only
+}
+
+func isInf[Number Measurable](f Number, sign int) bool {
+	v := any(f)
+
+	switch ff := v.(type) {
+	case float32:
+		return isInf32(ff, sign)
+	case float64:
+		return math.IsInf(ff, sign)
+	default:
+		return false
+	}
+}
+
+func isInf32(f float32, sign int) bool {
+	return (sign >= 0 && f > math.MaxFloat32) || (sign <= 0 && f < -math.MaxFloat32)
 }

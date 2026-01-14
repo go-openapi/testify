@@ -30,13 +30,12 @@ import (
 //	failure: []string{"A","B"}, 1
 func Len(t T, object any, length int, msgAndArgs ...any) bool {
 	// Domain: collection
-	// Maintainer: The implementation is based on [reflect.Len]. The potential panic is handled with recover.
-	// A better approach could be to check for the [reflect.Type] before calling [reflect.Len].
 	//
 	// Note: (proposals) this does not currently support iterators, or collection objects that have a Len() method.
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
+
 	l, ok := getLen(object)
 	if !ok {
 		return Fail(t, fmt.Sprintf("%q could not be applied builtin len()", truncatingFormat("%v", object)), msgAndArgs...)
@@ -116,10 +115,10 @@ func NotContains(t T, s, contains any, msgAndArgs ...any) bool {
 //
 // # Usage
 //
-//	assertions.Subset(t, [1, 2, 3], [1, 2])
-//	assertions.Subset(t, {"x": 1, "y": 2}, {"x": 1})
-//	assertions.Subset(t, [1, 2, 3], {1: "one", 2: "two"})
-//	assertions.Subset(t, {"x": 1, "y": 2}, ["x"])
+//	assertions.Subset(t, []int{1, 2, 3}, []int{1, 2})
+//	assertions.Subset(t, []string{"x": 1, "y": 2}, []string{"x": 1})
+//	assertions.Subset(t, []int{1, 2, 3}, map[int]string{1: "one", 2: "two"})
+//	assertions.Subset(t, map[string]int{"x": 1, "y": 2}, []string{"x"})
 //
 // # Examples
 //
@@ -268,7 +267,7 @@ func NotSubset(t T, list, subset any, msgAndArgs ...any) (ok bool) {
 //
 // # Usage
 //
-//	assertions.ElementsMatch(t, [1, 3, 2, 3], [1, 3, 3, 2])
+//	assertions.ElementsMatch(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
 //
 // # Examples
 //
@@ -303,9 +302,9 @@ func ElementsMatch(t T, listA, listB any, msgAndArgs ...any) (ok bool) {
 //
 // # Usage
 //
-//	assertions.NotElementsMatch(t, [1, 1, 2, 3], [1, 1, 2, 3]) -> false
-//	assertions.NotElementsMatch(t, [1, 1, 2, 3], [1, 2, 3]) -> true
-//	assertions.NotElementsMatch(t, [1, 2, 3], [1, 2, 4]) -> true
+//	assertions.NotElementsMatch(t, []int{1, 1, 2, 3}, []int{1, 1, 2, 3}) -> false
+//	assertions.NotElementsMatch(t, []int{1, 1, 2, 3}, []int{1, 2, 3}) -> true
+//	assertions.NotElementsMatch(t, []int{1, 2, 3}, []int{1, 2, 4}) -> true
 //
 // # Examples
 //
@@ -328,6 +327,75 @@ func NotElementsMatch(t T, listA, listB any, msgAndArgs ...any) (ok bool) {
 	}
 
 	extraA, extraB := diffLists(listA, listB)
+	if len(extraA) == 0 && len(extraB) == 0 {
+		return Fail(t, "listA and listB contain the same elements", msgAndArgs)
+	}
+
+	return true
+}
+
+// ElementsMatchT asserts that the specified listA(array, slice...) is equal to specified
+// listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
+// the number of appearances of each of them in both lists should match.
+//
+// # Usage
+//
+//	assertions.ElementsMatchT(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
+//
+// # Examples
+//
+//	success: []int{1, 3, 2, 3}, []int{1, 3, 3, 2}
+//	failure: []int{1, 2, 3}, []int{1, 2, 4}
+func ElementsMatchT[E comparable](t T, listA, listB []E, msgAndArgs ...any) bool {
+	// Domain: collection
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	lA := len(listA)
+	lB := len(listB)
+
+	if lA == 0 && lB == 0 {
+		return true
+	}
+
+	extraA, extraB := diffListsT(listA, listB)
+	if len(extraA) == 0 && len(extraB) == 0 {
+		return true
+	}
+
+	return Fail(t, formatListDiff(listA, listB, extraA, extraB), msgAndArgs...)
+}
+
+// NotElementsMatchT asserts that the specified listA(array, slice...) is NOT equal to specified
+// listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
+// the number of appearances of each of them in both lists should not match.
+// This is an inverse of ElementsMatch.
+//
+// # Usage
+//
+//	assertions.NotElementsMatchT(t, []int{1, 1, 2, 3}, []int{1, 1, 2, 3}) -> false
+//	assertions.NotElementsMatchT(t, []int{1, 1, 2, 3}, []int{1, 2, 3}) -> true
+//	assertions.NotElementsMatchT(t, []int{1, 2, 3}, []int{1, 2, 4}) -> true
+//
+// # Examples
+//
+//	success: []int{1, 2, 3}, []int{1, 2, 4}
+//	failure: []int{1, 3, 2, 3}, []int{1, 3, 3, 2}
+func NotElementsMatchT[E comparable](t T, listA, listB []E, msgAndArgs ...any) (ok bool) {
+	// Domain: collection
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	lA := len(listA)
+	lB := len(listB)
+
+	if lA == 0 && lB == 0 {
+		return Fail(t, "listA and listB contain the same elements", msgAndArgs)
+	}
+
+	extraA, extraB := diffListsT(listA, listB)
 	if len(extraA) == 0 && len(extraB) == 0 {
 		return Fail(t, "listA and listB contain the same elements", msgAndArgs)
 	}
@@ -428,6 +496,42 @@ func diffLists(listA, listB any) (extraA, extraB []any) {
 	return extraA, extraB
 }
 
+func diffListsT[E comparable](listA, listB []E) (extraA, extraB []any) {
+	aLen := len(listA)
+	bLen := len(listB)
+
+	extraA = make([]any, 0, aLen)
+	extraB = make([]any, 0, bLen)
+	visited := make([]bool, bLen)
+
+	for i := range aLen {
+		element := listA[i]
+		found := false
+		for j := range bLen {
+			if visited[j] {
+				continue
+			}
+			if element == listB[j] {
+				visited[j] = true
+				found = true
+				break
+			}
+		}
+		if !found {
+			extraA = append(extraA, element)
+		}
+	}
+
+	for j := range bLen {
+		if visited[j] {
+			continue
+		}
+		extraB = append(extraB, listB[j])
+	}
+
+	return extraA, extraB
+}
+
 func formatListDiff(listA, listB any, extraA, extraB []any) string {
 	var msg bytes.Buffer
 
@@ -449,11 +553,20 @@ func formatListDiff(listA, listB any, extraA, extraB []any) string {
 }
 
 // getLen tries to get the length of an object.
+//
 // It returns (0, false) if impossible.
 func getLen(x any) (length int, ok bool) {
 	v := reflect.ValueOf(x)
-	defer func() {
-		ok = recover() == nil
-	}()
-	return v.Len(), true
+	switch v.Kind() {
+	case reflect.Array, reflect.Chan, reflect.Map, reflect.Slice, reflect.String:
+		return v.Len(), true
+	case reflect.Pointer:
+		v = v.Elem()
+		if v.Kind() != reflect.Array {
+			return 0, false
+		}
+		return v.Len(), true
+	default:
+		return 0, false
+	}
 }

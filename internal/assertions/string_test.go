@@ -23,7 +23,7 @@ func TestStringEqual(t *testing.T) {
 	}
 }
 
-func TestSringEqualFormatting(t *testing.T) {
+func TestStringEqualFormatting(t *testing.T) {
 	t.Parallel()
 
 	i := 0
@@ -38,58 +38,228 @@ func TestSringEqualFormatting(t *testing.T) {
 
 func TestStringRegexp(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
 
+	// run test cases with all combinations of supported types
 	for tc := range stringRegexpCases() {
-		True(t, Regexp(mock, tc.rx, tc.str))
-		True(t, Regexp(mock, regexp.MustCompile(tc.rx), tc.str))
-		True(t, Regexp(mock, regexp.MustCompile(tc.rx), []byte(tc.str)))
-
-		False(t, NotRegexp(mock, tc.rx, tc.str))
-		False(t, NotRegexp(mock, tc.rx, []byte(tc.str)))
-		False(t, NotRegexp(mock, regexp.MustCompile(tc.rx), tc.str))
+		t.Run(tc.name, tc.test)
 	}
 
-	for tc := range stringNotRegexpCases() {
-		False(t, Regexp(mock, tc.rx, tc.str), "Expected %q to not match %q", tc.rx, tc.str)
-		False(t, Regexp(mock, regexp.MustCompile(tc.rx), tc.str))
-		False(t, Regexp(mock, regexp.MustCompile(tc.rx), []byte(tc.str)))
+	t.Run("with edge cases", func(t *testing.T) {
+		t.Run("with unsupported regexp type", func(t *testing.T) {
+			t.Parallel()
 
-		True(t, NotRegexp(mock, tc.rx, tc.str))
-		True(t, NotRegexp(mock, tc.rx, []byte(tc.str)))
-		True(t, NotRegexp(mock, regexp.MustCompile(tc.rx), tc.str))
+			const (
+				str = "whatever"
+				msg = "expected this invalid call to fail (regexp=%v)"
+			)
+
+			mock := new(mockT)
+
+			t.Run("should fail (invalid regexp type)", func(t *testing.T) {
+				invalidRex := struct{ a string }{a: "invalid"}
+
+				if Regexp(mock, invalidRex, str) {
+					t.Errorf(msg, invalidRex)
+				}
+				if NotRegexp(mock, invalidRex, str) {
+					t.Errorf(msg, invalidRex)
+				}
+			})
+
+			t.Run("should fail (nil regexp)", func(t *testing.T) {
+				invalidRex := []byte(nil)
+
+				if Regexp(mock, invalidRex, str) {
+					t.Errorf(msg, invalidRex)
+				}
+				if NotRegexp(mock, invalidRex, str) {
+					t.Errorf(msg, invalidRex)
+				}
+			})
+		})
+
+		t.Run("with fmt.Sprint conversion", func(t *testing.T) {
+			t.Parallel()
+
+			const (
+				numeric = 1234
+				msg     = "expected %q to match %q"
+				rex     = "^[0-9]+$"
+			)
+
+			mock := new(mockT)
+
+			t.Run("should match string representation of a number", func(t *testing.T) {
+				if !Regexp(mock, rex, numeric) {
+					t.Errorf(msg, numeric, rex)
+				}
+				if NotRegexp(mock, rex, numeric) {
+					t.Errorf(msg, numeric, rex)
+				}
+			})
+		})
+	})
+}
+
+// test all Regexp variants with the same input (possibly converted).
+//
+//nolint:thelper // linter false positive: this is not a helper
+func testAllRegexpWithTypes(regString, str string, success, valid bool) func(*testing.T) {
+	type (
+		// redefined types to check for ~string and ~[]byte type constraints
+		MyString string
+		MyBytes  []byte
+	)
+
+	return func(t *testing.T) {
+		t.Run("with all type combinations", func(t *testing.T) {
+			// generic version : 5 x 4 combinations of input types
+			t.Run("with [string,string]", testAllRegexp[string, string](regString, str, success, valid))
+			t.Run("with [string,[]byte]", testAllRegexp[string, []byte](regString, []byte(str), success, valid))
+			t.Run("with [string,~string]", testAllRegexp[string, MyString](regString, MyString(str), success, valid))
+			t.Run("with [string,~[]byte]", testAllRegexp[string, MyBytes](regString, MyBytes(str), success, valid))
+			//
+			t.Run("with [[]byte,string]", testAllRegexp[[]byte, string]([]byte(regString), str, success, valid))
+			t.Run("with [[]byte,[]byte]", testAllRegexp[[]byte, []byte]([]byte(regString), []byte(str), success, valid))
+			t.Run("with [[]byte,~string]", testAllRegexp[[]byte, MyString]([]byte(regString), MyString(str), success, valid))
+			t.Run("with [[]byte,~[]byte]", testAllRegexp[[]byte, MyBytes]([]byte(regString), MyBytes(str), success, valid))
+			//
+			t.Run("with [~string,string]", testAllRegexp[MyString, string](MyString(regString), str, success, valid))
+			t.Run("with [~string,[]byte]", testAllRegexp[MyString, []byte](MyString(regString), []byte(str), success, valid))
+			t.Run("with [~string,~string]", testAllRegexp[MyString, MyString](MyString(regString), MyString(str), success, valid))
+			t.Run("with [~string,~[]byte]", testAllRegexp[MyString, MyBytes](MyString(regString), MyBytes(str), success, valid))
+			//
+			t.Run("with [~[]byte,string]", testAllRegexp[MyBytes, string](MyBytes(regString), str, success, valid))
+			t.Run("with [~[]byte,[]byte]", testAllRegexp[MyBytes, []byte](MyBytes(regString), []byte(str), success, valid))
+			t.Run("with [~[]byte,~string]", testAllRegexp[MyBytes, MyString](MyBytes(regString), MyString(str), success, valid))
+			t.Run("with [~[]byte,~[]byte]", testAllRegexp[MyBytes, MyBytes](MyBytes(regString), MyBytes(str), success, valid))
+			//
+			t.Run("with [*regexp.Regexp,string]", testAllRegexp[*regexp.Regexp, string](testRex(regString), str, success, valid))
+			t.Run("with [*regexp.Regexp,[]byte]", testAllRegexp[*regexp.Regexp, []byte](testRex(regString), []byte(str), success, valid))
+			t.Run("with [*regexp.Regexp,~string]", testAllRegexp[*regexp.Regexp, MyString](testRex(regString), MyString(str), success, valid))
+			t.Run("with [*regexp.Regexp,~[]byte]", testAllRegexp[*regexp.Regexp, MyBytes](testRex(regString), MyBytes(str), success, valid))
+		})
 	}
 }
 
-// Verifies that invalid patterns no longer cause a panic when using Regexp/NotRegexp.
-// Instead, the assertion should fail and return false.
-func TestStringRegexp_InvalidPattern(t *testing.T) {
-	t.Parallel()
+//nolint:thelper // linter false positive: this is not a helper
+func testAllRegexp[Rex RegExp, ADoc Text](rx Rex, actual ADoc, success, valid bool) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
 
-	const (
-		invalidPattern = "\\C"
-		msg            = "whatever"
-	)
+		if !valid {
+			// all assertions fail on invalid regexp
+			t.Run("should fail", func(t *testing.T) {
+				t.Run("with Regexp", testRegexp(rx, actual, false))
+				t.Run("with RegexpT", testRegexpT(rx, actual, false))
+				t.Run("with NoRegexp", testNotRegexp(rx, actual, false))
+				t.Run("with NoRegexpT", testNotRegexpT(rx, actual, false))
+			})
 
-	t.Run("Regexp should not panic on invalid patterns", func(t *testing.T) {
-		result := NotPanics(t, func() {
-			mockT := new(testing.T)
-			False(t, Regexp(mockT, invalidPattern, msg))
-		})
-		if !result {
-			t.Failed()
+			return
 		}
-	})
 
-	t.Run("NoRegexp should not panic on invalid patterns", func(t *testing.T) {
-		result := NotPanics(t, func() {
-			mockT := new(testing.T)
-			False(t, NotRegexp(mockT, invalidPattern, msg))
-		})
-		if !result {
-			t.Failed()
+		if success {
+			t.Run("should match", func(t *testing.T) {
+				t.Run("with Regexp", testRegexp(rx, actual, true))
+				t.Run("with RegexpT", testRegexpT(rx, actual, true))
+			})
+
+			t.Run("should fail", func(t *testing.T) {
+				t.Run("with NoRegexp", testNotRegexp(rx, actual, false))
+				t.Run("with NoRegexpT", testNotRegexpT(rx, actual, false))
+			})
+		} else {
+			t.Run("should NOT match", func(t *testing.T) {
+				t.Run("with NoRegexp", testNotRegexp(rx, actual, true))
+				t.Run("with NoRegexpT", testNotRegexpT(rx, actual, true))
+			})
+
+			t.Run("should fail", func(t *testing.T) {
+				t.Run("with Regexp", testRegexp(rx, actual, false))
+				t.Run("with RegexpT", testRegexpT(rx, actual, false))
+			})
 		}
-	})
+	}
+}
+
+func testRegexp[Rex RegExp, ADoc Text](rx Rex, str ADoc, success bool) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(testing.T)
+		res := Regexp(mock, rx, str)
+		if res != success {
+			if success {
+				croakWantMatch(t, rx, str)
+				return
+			}
+			croakWantNotMatch(t, rx, str)
+		}
+	}
+}
+
+func testNotRegexp[Rex RegExp, ADoc Text](rx Rex, str ADoc, success bool) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(testing.T)
+		res := NotRegexp(mock, rx, str)
+		if res != success {
+			if success {
+				croakWantMatch(t, rx, str)
+				return
+			}
+			croakWantNotMatch(t, rx, str)
+		}
+	}
+}
+
+func testRegexpT[Rex RegExp, ADoc Text](rx Rex, str ADoc, success bool) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(testing.T)
+		res := RegexpT(mock, rx, str)
+		if res != success {
+			if success {
+				croakWantMatch(t, rx, str)
+				return
+			}
+			croakWantNotMatch(t, rx, str)
+		}
+	}
+}
+
+func testNotRegexpT[Rex RegExp, ADoc Text](rx Rex, str ADoc, success bool) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(testing.T)
+		res := NotRegexpT(mock, rx, str)
+		if res != success {
+			if success {
+				croakWantMatch(t, rx, str)
+				return
+			}
+			croakWantNotMatch(t, rx, str)
+		}
+	}
+}
+
+func croakWantMatch(t *testing.T, rx any, str any) {
+	t.Helper()
+	t.Errorf("expected %q to match %q", str, rx)
+}
+
+func croakWantNotMatch(t *testing.T, rx, str any) {
+	t.Helper()
+	t.Errorf("expected %q NOT to match %q", str, rx)
+}
+
+func testRex(rex string) *regexp.Regexp {
+	rx, _ := compileRegex(rex)
+	return rx
 }
 
 type stringEqualCase struct {
@@ -189,23 +359,38 @@ func stringEqualFormattingCases() iter.Seq[stringEqualCase] {
 	})
 }
 
-type stringRegexpCase struct {
-	rx, str string
-}
-
-func stringRegexpCases() iter.Seq[stringRegexpCase] {
-	return slices.Values([]stringRegexpCase{
-		{"^start", "start of the line"},
-		{"end$", "in the end"},
-		{"end$", "in the end"},
-		{"[0-9]{3}[.-]?[0-9]{2}[.-]?[0-9]{2}", "My phone number is 650.12.34"},
-	})
-}
-
-func stringNotRegexpCases() iter.Seq[stringRegexpCase] {
-	return slices.Values([]stringRegexpCase{
-		{"^asdfastart", "Not the start of the line"},
-		{"end$", "in the end."},
-		{"[0-9]{3}[.-]?[0-9]{2}[.-]?[0-9]{2}", "My phone number is 650.12a.34"},
+// Values to populate the test harness:
+//
+// - valid and invalid patterns
+// - matching and not matching expressions.
+func stringRegexpCases() iter.Seq[genericTestCase] {
+	return slices.Values([]genericTestCase{
+		// successful matches
+		{"^start (match)", testAllRegexpWithTypes(
+			"^start", "start of the line", true, true,
+		)},
+		{"end$ (match)", testAllRegexpWithTypes(
+			"end$", "in the end", true, true,
+		)},
+		{"end$ (match)", testAllRegexpWithTypes(
+			"end$", "in the end", true, true,
+		)},
+		{"phone number (match)", testAllRegexpWithTypes(
+			"[0-9]{3}[.-]?[0-9]{2}[.-]?[0-9]{2}", "My phone number is 650.12.34", true, true,
+		)},
+		// failed matches
+		{"start (no match)", testAllRegexpWithTypes(
+			"^asdfastart", "Not the start of the line", false, true,
+		)},
+		{"end$ (no match)", testAllRegexpWithTypes(
+			"end$", "in the end.", false, true,
+		)},
+		{"phone number (no match)", testAllRegexpWithTypes(
+			"[0-9]{3}[.-]?[0-9]{2}[.-]?[0-9]{2}", "My phone number is 650.12a.34", false, true,
+		)},
+		// invalid pattern
+		{"invalid regexp", testAllRegexpWithTypes(
+			"\\C", "whatever", false, false,
+		)},
 	})
 }
