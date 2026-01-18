@@ -15,8 +15,6 @@ var refLinkPattern = regexp.MustCompile(`(?m)^\[([^\]]+)\]:\s+(.+)$`)
 //
 //  1. Reference-style markdown links: [text]: url
 //  2. Godoc-style links: [errors.Is], [testing.T], etc.
-//
-//nolint:gocognit,gocognit // this is temporary accepted extra complexity. Should refactor with steps as functions
 func FormatMarkdown(in string) string {
 	const sensiblePrealloc = 20
 

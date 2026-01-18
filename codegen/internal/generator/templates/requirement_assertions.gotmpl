@@ -19,7 +19,7 @@ import (
 {{ comment .DocString }}
 //
 {{ docStringPackage $.Package }}
-func {{ .Name }}({{ params .AllParams }}) {
+func {{ .GenericName }}({{ params .AllParams }}) {
 	if h, ok := t.(H); ok { h.Helper() }
       {{- if or (eq .Name "Fail") (eq .Name "FailNow") }}{{/* special semantics for these two, which can only fail */}}
   _ = {{ .TargetPackage }}.{{ .Name }}({{ forward .AllParams }})

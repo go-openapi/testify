@@ -235,13 +235,13 @@ func extractCommentFromTypeSpec(typedDeclaration *ast.GenDecl, spec ast.Spec, ob
 			return nil
 		}
 
+		if typedSpec.Doc != nil {
+			return typedSpec.Doc
+		}
+
 		// return Doc, checking both GenDecl.Doc and TypeSpec.Doc
 		if typedDeclaration.Doc != nil {
 			return typedDeclaration.Doc
-		}
-
-		if typedSpec.Doc != nil {
-			return typedSpec.Doc
 		}
 	case *ast.ValueSpec:
 		for _, ident := range typedSpec.Names {

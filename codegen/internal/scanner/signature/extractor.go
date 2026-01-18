@@ -36,9 +36,12 @@ func (e *Extractor) ExtractFunctionSignature(signature *types.Signature, name st
 		Name: name,
 	}
 
-	// check if generic
-	isGeneric := signature.TypeParams() != nil
-	function.IsGeneric = isGeneric
+	// check if generic and extract type parameters
+	typeParams := signature.TypeParams()
+	function.IsGeneric = typeParams != nil
+	if typeParams != nil {
+		function.TypeParams = e.extractTypeParams(typeParams)
+	}
 
 	// extract parameters
 	params := signature.Params()
@@ -47,9 +50,10 @@ func (e *Extractor) ExtractFunctionSignature(signature *types.Signature, name st
 
 	for param := range params.Variables() {
 		p := model.Parameter{
-			Name:     param.Name(),
-			GoType:   e.ElidedType(param.Type()),
-			Selector: e.ElidedQualifier(param.Type()),
+			Name:      param.Name(),
+			GoType:    e.ElidedType(param.Type()),
+			Selector:  e.ElidedQualifier(param.Type()),
+			IsGeneric: isTypeParam(param.Type()),
 		}
 		function.AllParams = append(function.AllParams, p)
 
@@ -135,4 +139,23 @@ func (e *Extractor) ElidedQualifier(t types.Type) string {
 	}
 
 	return ""
+}
+
+// isTypeParam checks if a type is a type parameter (generic type variable).
+func isTypeParam(t types.Type) bool {
+	_, ok := t.(*types.TypeParam)
+	return ok
+}
+
+// extractTypeParams extracts type parameter names and constraints from a TypeParamList.
+func (e *Extractor) extractTypeParams(typeParams *types.TypeParamList) []model.TypeParam {
+	result := make([]model.TypeParam, typeParams.Len())
+	for i := range typeParams.Len() {
+		tp := typeParams.At(i)
+		result[i] = model.TypeParam{
+			Name:       tp.Obj().Name(),
+			Constraint: e.ElidedType(tp.Constraint()),
+		}
+	}
+	return result
 }

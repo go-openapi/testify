@@ -8,6 +8,7 @@ import (
 	"go/token"
 	"maps"
 	"slices"
+	"strings"
 )
 
 // AssertionPackage describes the internal/assertions package.
@@ -86,16 +87,49 @@ type Function struct {
 	Params        Parameters
 	AllParams     Parameters
 	Returns       Parameters
+	TypeParams    []TypeParam
 	IsGeneric     bool
 	IsHelper      bool
 	IsDeprecated  bool
 	IsConstructor bool
 	Tests         []Test
-
 	// extraneous information when scanning in collectDoc mode
 	Domain        string
 	SourceLink    *token.Position
 	ExtraComments []ExtraComment
+}
+
+// GenericName renders the function name with one or more suffixes,
+// accounting for any type parameter for generic functions.
+func (f Function) GenericName(suffixes ...string) string {
+	suffix := strings.Join(suffixes, "")
+	if !f.IsGeneric { // means len(f.TypeParams) > 0
+		return f.Name + suffix
+	}
+
+	var w strings.Builder
+	w.WriteString(f.Name)
+	w.WriteString(suffix)
+	w.WriteByte('[')
+	c := f.TypeParams[0]
+	w.WriteString(c.Name)
+	if len(f.TypeParams) <= 1 || f.TypeParams[1].Constraint != c.Constraint {
+		// constraint is elided if next param has the same constraint
+		w.WriteByte(' ')
+		w.WriteString(c.Constraint)
+	}
+
+	for i, p := range f.TypeParams[1:] {
+		w.WriteString(", ")
+		w.WriteString(p.Name)
+		if len(f.TypeParams) <= i+1+1 || f.TypeParams[i+1].Constraint != p.Constraint {
+			w.WriteByte(' ')
+			w.WriteString(p.Constraint)
+		}
+	}
+	w.WriteByte(']')
+
+	return w.String()
 }
 
 func (f Function) HasTest() bool {
@@ -116,6 +150,13 @@ type Parameter struct {
 	GoType     string
 	Selector   string
 	IsVariadic bool
+	IsGeneric  bool
+}
+
+// TypeParam represents a type parameter in a generic function.
+type TypeParam struct {
+	Name       string // type parameter name (e.g., "B")
+	Constraint string // constraint type (e.g., "Boolean", "cmp.Ordered")
 }
 
 // Ident represents an exported identifier (type, constant, or variable) from the source package.

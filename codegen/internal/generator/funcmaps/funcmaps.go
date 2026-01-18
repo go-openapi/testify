@@ -203,7 +203,7 @@ func docStringFor(usage, name string) string {
 	case "format":
 		return comment(
 			fmt.Sprintf(
-				"%sf is the same as [%s], but accepts a format msg string to format arguments like [fmt.Printf].",
+				"%sf is the same as [%s], but it accepts a format msg string to format arguments like [fmt.Printf].",
 				basename,
 				name,
 			),
@@ -300,6 +300,7 @@ func relocate(values []model.TestValue, pkg string) string {
 	return strings.Join(relocated, ", ")
 }
 
+// sourceLink recomposes a github URL to the source code.
 func sourceLink(baseGitHubURL string, pos *token.Position) string {
 	if pos == nil {
 		return ""
@@ -326,6 +327,7 @@ func titleize(in string) string {
 	return caser.String(in)
 }
 
+// godocbadge produces a badge URL from https://pkg.go.dev.
 func godocbadge(pkggodevURL string) (string, error) {
 	u, err := url.Parse(pkggodevURL)
 	if err != nil {

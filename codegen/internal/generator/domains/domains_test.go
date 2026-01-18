@@ -75,7 +75,8 @@ func TestDomainIndexSorting(t *testing.T) {
 			index := MakeDomainIndex(c.docs)
 
 			// Collect domain names in order
-			var domains []string
+			const testDomains = 16
+			domains := make([]string, 0, testDomains)
 			for domain := range index.Entries() {
 				domains = append(domains, domain)
 			}

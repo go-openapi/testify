@@ -558,7 +558,7 @@ func docStringForCases() iter.Seq[docStringForCase] {
 			name:     "format usage",
 			usage:    "format",
 			funcName: "assert.Equal",
-			expected: "// Equalf is the same as [assert.Equal], but accepts a format msg string to format arguments like [fmt.Printf].",
+			expected: "// Equalf is the same as [assert.Equal], but it accepts a format msg string to format arguments like [fmt.Printf].",
 		},
 		{
 			name:     "forward usage",

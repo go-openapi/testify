@@ -33,8 +33,9 @@ _All links point to <{{ $godoc }}>_
 This domain exposes {{ .RefCount }} functionalities.
 
 {{- with .Package }}
+  {{- $enableGenerics := .EnableGenerics }}
   {{- range .Functions }}{{/* functions in internal/assertions annotated with "domain:" */}}
-    {{- if or (not .IsGeneric) ($.EnableGenerics) }}
+    {{- if or (not .IsGeneric) ($enableGenerics) }}
       {{- if and (not .IsHelper) (not .IsConstructor) }}
 
 ### {{ .Name }}
@@ -101,10 +102,11 @@ This domain exposes {{ .RefCount }} functionalities.
 ---
 
 {{- with .Package }}{{ if .HasHelpers }}
+  {{- $enableGenerics := .EnableGenerics }}
 
 ## Other helpers
   {{- range .Functions }}{{/* functions in internal/assertions annotated with "domain:" */}}
-    {{- if or (not .IsGeneric) ($.EnableGenerics) }}
+    {{- if or (not .IsGeneric) ($enableGenerics) }}
       {{- if or .IsHelper .IsConstructor }}
 
 ### {{ .Name }}

@@ -19,7 +19,7 @@ import (
 {{ docStringFor "format" .Name }}
 //
 {{ docStringPackage $.Package }}
-func {{ .Name }}f(t T, {{ params .Params }}, msg string, args ...any) {{ returns .Returns }} {
+func {{ .GenericName "f" }}(t T, {{ params .Params }}, msg string, args ...any) {{ returns .Returns }} {
 	if h, ok := t.(H); ok { h.Helper() }
   return {{ .TargetPackage }}.{{ .Name }}(t, {{ forward .Params }}, forwardArgs(msg, args))
 }

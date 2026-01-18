@@ -20,8 +20,6 @@ import (
 	"github.com/go-openapi/testify/codegen/v2/internal/scanner/signature"
 )
 
-const pkgLoadMode = packages.NeedName | packages.NeedFiles | packages.NeedImports | packages.NeedDeps | packages.NeedTypes | packages.NeedSyntax | packages.NeedTypesInfo
-
 // Scanner scans the internal/assertions package and extracts all functions, types, and metadata.
 type Scanner struct {
 	options
@@ -41,6 +39,9 @@ type Scanner struct {
 // New [Scanner] ready to [Scanner.Scan] code.
 func New(opts ...Option) *Scanner {
 	o := optionsWithDefaults(opts)
+
+	const pkgLoadMode = packages.NeedName | packages.NeedFiles | packages.NeedImports | packages.NeedDeps |
+		packages.NeedTypes | packages.NeedSyntax | packages.NeedTypesInfo
 
 	cfg := &packages.Config{
 		Dir:   o.dir,

@@ -19,7 +19,7 @@ import (
 {{ comment .DocString }}
 //
 {{ docStringPackage $.Package }}
-func {{ .Name }}({{ params .AllParams }}) {{ returns .Returns }} {
+func {{ .GenericName }}({{ params .AllParams }}) {{ returns .Returns }} {
   if h, ok := t.(H); ok {
     h.Helper()
   }
