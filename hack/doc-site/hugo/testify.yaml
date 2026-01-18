@@ -7,10 +7,10 @@ params:
     goVersion: '1.24.0'
 
     # Latest release tag (from git tags)
-    latestRelease: 'v2.0.2'
+    latestRelease: 'v2.1.8'
 
     # Version message for the documentation set
-    versionMessage: 'Documentation for testify v2.0.2'
+    versionMessage: 'Documentation test for latest master'
 
     # Build timestamp
-    buildTime: '2026-01-02T14:19:49Z'
+    buildTime: '2026-01-18T09:58:55Z'

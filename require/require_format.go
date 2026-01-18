@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
+// Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
 
 package require
 
@@ -15,7 +15,7 @@ import (
 	"github.com/go-openapi/testify/v2/internal/assertions"
 )
 
-// Conditionf is the same as [Condition], but accepts a format msg string to format arguments like [fmt.Printf].
+// Conditionf is the same as [Condition], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Conditionf(t T, comp Comparison, msg string, args ...any) {
@@ -29,7 +29,7 @@ func Conditionf(t T, comp Comparison, msg string, args ...any) {
 	t.FailNow()
 }
 
-// Containsf is the same as [Contains], but accepts a format msg string to format arguments like [fmt.Printf].
+// Containsf is the same as [Contains], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Containsf(t T, s any, contains any, msg string, args ...any) {
@@ -43,7 +43,7 @@ func Containsf(t T, s any, contains any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// DirExistsf is the same as [DirExists], but accepts a format msg string to format arguments like [fmt.Printf].
+// DirExistsf is the same as [DirExists], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func DirExistsf(t T, path string, msg string, args ...any) {
@@ -57,7 +57,7 @@ func DirExistsf(t T, path string, msg string, args ...any) {
 	t.FailNow()
 }
 
-// ElementsMatchf is the same as [ElementsMatch], but accepts a format msg string to format arguments like [fmt.Printf].
+// ElementsMatchf is the same as [ElementsMatch], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func ElementsMatchf(t T, listA any, listB any, msg string, args ...any) {
@@ -71,7 +71,21 @@ func ElementsMatchf(t T, listA any, listB any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// Emptyf is the same as [Empty], but accepts a format msg string to format arguments like [fmt.Printf].
+// ElementsMatchTf is the same as [ElementsMatchT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func ElementsMatchTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.ElementsMatchT(t, listA, listB, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// Emptyf is the same as [Empty], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Emptyf(t T, object any, msg string, args ...any) {
@@ -85,7 +99,7 @@ func Emptyf(t T, object any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// Equalf is the same as [Equal], but accepts a format msg string to format arguments like [fmt.Printf].
+// Equalf is the same as [Equal], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Equalf(t T, expected any, actual any, msg string, args ...any) {
@@ -99,21 +113,21 @@ func Equalf(t T, expected any, actual any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// EqualErrorf is the same as [EqualError], but accepts a format msg string to format arguments like [fmt.Printf].
+// EqualErrorf is the same as [EqualError], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func EqualErrorf(t T, theError error, errString string, msg string, args ...any) {
+func EqualErrorf(t T, err error, errString string, msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.EqualError(t, theError, errString, forwardArgs(msg, args)) {
+	if assertions.EqualError(t, err, errString, forwardArgs(msg, args)) {
 		return
 	}
 
 	t.FailNow()
 }
 
-// EqualExportedValuesf is the same as [EqualExportedValues], but accepts a format msg string to format arguments like [fmt.Printf].
+// EqualExportedValuesf is the same as [EqualExportedValues], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func EqualExportedValuesf(t T, expected any, actual any, msg string, args ...any) {
@@ -127,7 +141,7 @@ func EqualExportedValuesf(t T, expected any, actual any, msg string, args ...any
 	t.FailNow()
 }
 
-// EqualValuesf is the same as [EqualValues], but accepts a format msg string to format arguments like [fmt.Printf].
+// EqualValuesf is the same as [EqualValues], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func EqualValuesf(t T, expected any, actual any, msg string, args ...any) {
@@ -141,7 +155,7 @@ func EqualValuesf(t T, expected any, actual any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// Errorf is the same as [Error], but accepts a format msg string to format arguments like [fmt.Printf].
+// Errorf is the same as [Error], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Errorf(t T, err error, msg string, args ...any) {
@@ -155,7 +169,7 @@ func Errorf(t T, err error, msg string, args ...any) {
 	t.FailNow()
 }
 
-// ErrorAsf is the same as [ErrorAs], but accepts a format msg string to format arguments like [fmt.Printf].
+// ErrorAsf is the same as [ErrorAs], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func ErrorAsf(t T, err error, target any, msg string, args ...any) {
@@ -169,21 +183,21 @@ func ErrorAsf(t T, err error, target any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// ErrorContainsf is the same as [ErrorContains], but accepts a format msg string to format arguments like [fmt.Printf].
+// ErrorContainsf is the same as [ErrorContains], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func ErrorContainsf(t T, theError error, contains string, msg string, args ...any) {
+func ErrorContainsf(t T, err error, contains string, msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.ErrorContains(t, theError, contains, forwardArgs(msg, args)) {
+	if assertions.ErrorContains(t, err, contains, forwardArgs(msg, args)) {
 		return
 	}
 
 	t.FailNow()
 }
 
-// ErrorIsf is the same as [ErrorIs], but accepts a format msg string to format arguments like [fmt.Printf].
+// ErrorIsf is the same as [ErrorIs], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func ErrorIsf(t T, err error, target error, msg string, args ...any) {
@@ -197,7 +211,7 @@ func ErrorIsf(t T, err error, target error, msg string, args ...any) {
 	t.FailNow()
 }
 
-// Eventuallyf is the same as [Eventually], but accepts a format msg string to format arguments like [fmt.Printf].
+// Eventuallyf is the same as [Eventually], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Eventuallyf(t T, condition func() bool, waitFor time.Duration, tick time.Duration, msg string, args ...any) {
@@ -211,7 +225,7 @@ func Eventuallyf(t T, condition func() bool, waitFor time.Duration, tick time.Du
 	t.FailNow()
 }
 
-// EventuallyWithTf is the same as [EventuallyWithT], but accepts a format msg string to format arguments like [fmt.Printf].
+// EventuallyWithTf is the same as [EventuallyWithT], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func EventuallyWithTf(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msg string, args ...any) {
@@ -225,7 +239,7 @@ func EventuallyWithTf(t T, condition func(collect *CollectT), waitFor time.Durat
 	t.FailNow()
 }
 
-// Exactlyf is the same as [Exactly], but accepts a format msg string to format arguments like [fmt.Printf].
+// Exactlyf is the same as [Exactly], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Exactlyf(t T, expected any, actual any, msg string, args ...any) {
@@ -239,7 +253,7 @@ func Exactlyf(t T, expected any, actual any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// Failf is the same as [Fail], but accepts a format msg string to format arguments like [fmt.Printf].
+// Failf is the same as [Fail], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Failf(t T, failureMessage string, msg string, args ...any) {
@@ -251,7 +265,7 @@ func Failf(t T, failureMessage string, msg string, args ...any) {
 	t.FailNow()
 }
 
-// FailNowf is the same as [FailNow], but accepts a format msg string to format arguments like [fmt.Printf].
+// FailNowf is the same as [FailNow], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func FailNowf(t T, failureMessage string, msg string, args ...any) {
@@ -263,7 +277,7 @@ func FailNowf(t T, failureMessage string, msg string, args ...any) {
 	t.FailNow()
 }
 
-// Falsef is the same as [False], but accepts a format msg string to format arguments like [fmt.Printf].
+// Falsef is the same as [False], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Falsef(t T, value bool, msg string, args ...any) {
@@ -277,7 +291,21 @@ func Falsef(t T, value bool, msg string, args ...any) {
 	t.FailNow()
 }
 
-// FileEmptyf is the same as [FileEmpty], but accepts a format msg string to format arguments like [fmt.Printf].
+// FalseTf is the same as [FalseT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func FalseTf[B Boolean](t T, value B, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.FalseT(t, value, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// FileEmptyf is the same as [FileEmpty], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func FileEmptyf(t T, path string, msg string, args ...any) {
@@ -291,7 +319,7 @@ func FileEmptyf(t T, path string, msg string, args ...any) {
 	t.FailNow()
 }
 
-// FileExistsf is the same as [FileExists], but accepts a format msg string to format arguments like [fmt.Printf].
+// FileExistsf is the same as [FileExists], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func FileExistsf(t T, path string, msg string, args ...any) {
@@ -305,7 +333,7 @@ func FileExistsf(t T, path string, msg string, args ...any) {
 	t.FailNow()
 }
 
-// FileNotEmptyf is the same as [FileNotEmpty], but accepts a format msg string to format arguments like [fmt.Printf].
+// FileNotEmptyf is the same as [FileNotEmpty], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func FileNotEmptyf(t T, path string, msg string, args ...any) {
@@ -319,7 +347,7 @@ func FileNotEmptyf(t T, path string, msg string, args ...any) {
 	t.FailNow()
 }
 
-// Greaterf is the same as [Greater], but accepts a format msg string to format arguments like [fmt.Printf].
+// Greaterf is the same as [Greater], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Greaterf(t T, e1 any, e2 any, msg string, args ...any) {
@@ -333,7 +361,7 @@ func Greaterf(t T, e1 any, e2 any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// GreaterOrEqualf is the same as [GreaterOrEqual], but accepts a format msg string to format arguments like [fmt.Printf].
+// GreaterOrEqualf is the same as [GreaterOrEqual], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func GreaterOrEqualf(t T, e1 any, e2 any, msg string, args ...any) {
@@ -347,7 +375,35 @@ func GreaterOrEqualf(t T, e1 any, e2 any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// HTTPBodyContainsf is the same as [HTTPBodyContains], but accepts a format msg string to format arguments like [fmt.Printf].
+// GreaterOrEqualTf is the same as [GreaterOrEqualT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func GreaterOrEqualTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.GreaterOrEqualT(t, e1, e2, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// GreaterTf is the same as [GreaterT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func GreaterTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.GreaterT(t, e1, e2, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// HTTPBodyContainsf is the same as [HTTPBodyContains], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func HTTPBodyContainsf(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msg string, args ...any) {
@@ -361,7 +417,7 @@ func HTTPBodyContainsf(t T, handler http.HandlerFunc, method string, url string,
 	t.FailNow()
 }
 
-// HTTPBodyNotContainsf is the same as [HTTPBodyNotContains], but accepts a format msg string to format arguments like [fmt.Printf].
+// HTTPBodyNotContainsf is the same as [HTTPBodyNotContains], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func HTTPBodyNotContainsf(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msg string, args ...any) {
@@ -375,7 +431,7 @@ func HTTPBodyNotContainsf(t T, handler http.HandlerFunc, method string, url stri
 	t.FailNow()
 }
 
-// HTTPErrorf is the same as [HTTPError], but accepts a format msg string to format arguments like [fmt.Printf].
+// HTTPErrorf is the same as [HTTPError], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func HTTPErrorf(t T, handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) {
@@ -389,7 +445,7 @@ func HTTPErrorf(t T, handler http.HandlerFunc, method string, url string, values
 	t.FailNow()
 }
 
-// HTTPRedirectf is the same as [HTTPRedirect], but accepts a format msg string to format arguments like [fmt.Printf].
+// HTTPRedirectf is the same as [HTTPRedirect], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func HTTPRedirectf(t T, handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) {
@@ -403,7 +459,7 @@ func HTTPRedirectf(t T, handler http.HandlerFunc, method string, url string, val
 	t.FailNow()
 }
 
-// HTTPStatusCodef is the same as [HTTPStatusCode], but accepts a format msg string to format arguments like [fmt.Printf].
+// HTTPStatusCodef is the same as [HTTPStatusCode], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func HTTPStatusCodef(t T, handler http.HandlerFunc, method string, url string, values url.Values, statuscode int, msg string, args ...any) {
@@ -417,7 +473,7 @@ func HTTPStatusCodef(t T, handler http.HandlerFunc, method string, url string, v
 	t.FailNow()
 }
 
-// HTTPSuccessf is the same as [HTTPSuccess], but accepts a format msg string to format arguments like [fmt.Printf].
+// HTTPSuccessf is the same as [HTTPSuccess], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func HTTPSuccessf(t T, handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) {
@@ -431,7 +487,7 @@ func HTTPSuccessf(t T, handler http.HandlerFunc, method string, url string, valu
 	t.FailNow()
 }
 
-// Implementsf is the same as [Implements], but accepts a format msg string to format arguments like [fmt.Printf].
+// Implementsf is the same as [Implements], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Implementsf(t T, interfaceObject any, object any, msg string, args ...any) {
@@ -445,7 +501,7 @@ func Implementsf(t T, interfaceObject any, object any, msg string, args ...any) 
 	t.FailNow()
 }
 
-// InDeltaf is the same as [InDelta], but accepts a format msg string to format arguments like [fmt.Printf].
+// InDeltaf is the same as [InDelta], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func InDeltaf(t T, expected any, actual any, delta float64, msg string, args ...any) {
@@ -459,7 +515,7 @@ func InDeltaf(t T, expected any, actual any, delta float64, msg string, args ...
 	t.FailNow()
 }
 
-// InDeltaMapValuesf is the same as [InDeltaMapValues], but accepts a format msg string to format arguments like [fmt.Printf].
+// InDeltaMapValuesf is the same as [InDeltaMapValues], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func InDeltaMapValuesf(t T, expected any, actual any, delta float64, msg string, args ...any) {
@@ -473,7 +529,7 @@ func InDeltaMapValuesf(t T, expected any, actual any, delta float64, msg string,
 	t.FailNow()
 }
 
-// InDeltaSlicef is the same as [InDeltaSlice], but accepts a format msg string to format arguments like [fmt.Printf].
+// InDeltaSlicef is the same as [InDeltaSlice], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func InDeltaSlicef(t T, expected any, actual any, delta float64, msg string, args ...any) {
@@ -487,7 +543,21 @@ func InDeltaSlicef(t T, expected any, actual any, delta float64, msg string, arg
 	t.FailNow()
 }
 
-// InEpsilonf is the same as [InEpsilon], but accepts a format msg string to format arguments like [fmt.Printf].
+// InDeltaTf is the same as [InDeltaT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func InDeltaTf[Number Measurable](t T, expected Number, actual Number, delta Number, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.InDeltaT(t, expected, actual, delta, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// InEpsilonf is the same as [InEpsilon], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func InEpsilonf(t T, expected any, actual any, epsilon float64, msg string, args ...any) {
@@ -501,7 +571,7 @@ func InEpsilonf(t T, expected any, actual any, epsilon float64, msg string, args
 	t.FailNow()
 }
 
-// InEpsilonSlicef is the same as [InEpsilonSlice], but accepts a format msg string to format arguments like [fmt.Printf].
+// InEpsilonSlicef is the same as [InEpsilonSlice], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func InEpsilonSlicef(t T, expected any, actual any, epsilon float64, msg string, args ...any) {
@@ -515,7 +585,21 @@ func InEpsilonSlicef(t T, expected any, actual any, epsilon float64, msg string,
 	t.FailNow()
 }
 
-// IsDecreasingf is the same as [IsDecreasing], but accepts a format msg string to format arguments like [fmt.Printf].
+// InEpsilonTf is the same as [InEpsilonT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func InEpsilonTf[Number Measurable](t T, expected Number, actual Number, epsilon float64, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.InEpsilonT(t, expected, actual, epsilon, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// IsDecreasingf is the same as [IsDecreasing], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func IsDecreasingf(t T, object any, msg string, args ...any) {
@@ -529,7 +613,7 @@ func IsDecreasingf(t T, object any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// IsIncreasingf is the same as [IsIncreasing], but accepts a format msg string to format arguments like [fmt.Printf].
+// IsIncreasingf is the same as [IsIncreasing], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func IsIncreasingf(t T, object any, msg string, args ...any) {
@@ -543,7 +627,7 @@ func IsIncreasingf(t T, object any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// IsNonDecreasingf is the same as [IsNonDecreasing], but accepts a format msg string to format arguments like [fmt.Printf].
+// IsNonDecreasingf is the same as [IsNonDecreasing], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func IsNonDecreasingf(t T, object any, msg string, args ...any) {
@@ -557,7 +641,7 @@ func IsNonDecreasingf(t T, object any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// IsNonIncreasingf is the same as [IsNonIncreasing], but accepts a format msg string to format arguments like [fmt.Printf].
+// IsNonIncreasingf is the same as [IsNonIncreasing], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func IsNonIncreasingf(t T, object any, msg string, args ...any) {
@@ -571,7 +655,7 @@ func IsNonIncreasingf(t T, object any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// IsNotTypef is the same as [IsNotType], but accepts a format msg string to format arguments like [fmt.Printf].
+// IsNotTypef is the same as [IsNotType], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func IsNotTypef(t T, theType any, object any, msg string, args ...any) {
@@ -585,7 +669,7 @@ func IsNotTypef(t T, theType any, object any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// IsTypef is the same as [IsType], but accepts a format msg string to format arguments like [fmt.Printf].
+// IsTypef is the same as [IsType], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func IsTypef(t T, expectedType any, object any, msg string, args ...any) {
@@ -599,7 +683,7 @@ func IsTypef(t T, expectedType any, object any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// JSONEqf is the same as [JSONEq], but accepts a format msg string to format arguments like [fmt.Printf].
+// JSONEqf is the same as [JSONEq], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func JSONEqf(t T, expected string, actual string, msg string, args ...any) {
@@ -613,7 +697,7 @@ func JSONEqf(t T, expected string, actual string, msg string, args ...any) {
 	t.FailNow()
 }
 
-// JSONEqBytesf is the same as [JSONEqBytes], but accepts a format msg string to format arguments like [fmt.Printf].
+// JSONEqBytesf is the same as [JSONEqBytes], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func JSONEqBytesf(t T, expected []byte, actual []byte, msg string, args ...any) {
@@ -627,7 +711,21 @@ func JSONEqBytesf(t T, expected []byte, actual []byte, msg string, args ...any) 
 	t.FailNow()
 }
 
-// Kindf is the same as [Kind], but accepts a format msg string to format arguments like [fmt.Printf].
+// JSONEqTf is the same as [JSONEqT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func JSONEqTf[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.JSONEqT(t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// Kindf is the same as [Kind], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Kindf(t T, expectedKind reflect.Kind, object any, msg string, args ...any) {
@@ -641,7 +739,7 @@ func Kindf(t T, expectedKind reflect.Kind, object any, msg string, args ...any) 
 	t.FailNow()
 }
 
-// Lenf is the same as [Len], but accepts a format msg string to format arguments like [fmt.Printf].
+// Lenf is the same as [Len], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Lenf(t T, object any, length int, msg string, args ...any) {
@@ -655,7 +753,7 @@ func Lenf(t T, object any, length int, msg string, args ...any) {
 	t.FailNow()
 }
 
-// Lessf is the same as [Less], but accepts a format msg string to format arguments like [fmt.Printf].
+// Lessf is the same as [Less], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Lessf(t T, e1 any, e2 any, msg string, args ...any) {
@@ -669,7 +767,7 @@ func Lessf(t T, e1 any, e2 any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// LessOrEqualf is the same as [LessOrEqual], but accepts a format msg string to format arguments like [fmt.Printf].
+// LessOrEqualf is the same as [LessOrEqual], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func LessOrEqualf(t T, e1 any, e2 any, msg string, args ...any) {
@@ -683,7 +781,35 @@ func LessOrEqualf(t T, e1 any, e2 any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// Negativef is the same as [Negative], but accepts a format msg string to format arguments like [fmt.Printf].
+// LessOrEqualTf is the same as [LessOrEqualT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func LessOrEqualTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.LessOrEqualT(t, e1, e2, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// LessTf is the same as [LessT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func LessTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.LessT(t, e1, e2, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// Negativef is the same as [Negative], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Negativef(t T, e any, msg string, args ...any) {
@@ -697,7 +823,21 @@ func Negativef(t T, e any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// Neverf is the same as [Never], but accepts a format msg string to format arguments like [fmt.Printf].
+// NegativeTf is the same as [NegativeT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func NegativeTf[SignedNumber SignedNumeric](t T, e SignedNumber, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NegativeT(t, e, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// Neverf is the same as [Never], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Neverf(t T, condition func() bool, waitFor time.Duration, tick time.Duration, msg string, args ...any) {
@@ -711,7 +851,7 @@ func Neverf(t T, condition func() bool, waitFor time.Duration, tick time.Duratio
 	t.FailNow()
 }
 
-// Nilf is the same as [Nil], but accepts a format msg string to format arguments like [fmt.Printf].
+// Nilf is the same as [Nil], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Nilf(t T, object any, msg string, args ...any) {
@@ -725,7 +865,7 @@ func Nilf(t T, object any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// NoDirExistsf is the same as [NoDirExists], but accepts a format msg string to format arguments like [fmt.Printf].
+// NoDirExistsf is the same as [NoDirExists], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func NoDirExistsf(t T, path string, msg string, args ...any) {
@@ -739,7 +879,7 @@ func NoDirExistsf(t T, path string, msg string, args ...any) {
 	t.FailNow()
 }
 
-// NoErrorf is the same as [NoError], but accepts a format msg string to format arguments like [fmt.Printf].
+// NoErrorf is the same as [NoError], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func NoErrorf(t T, err error, msg string, args ...any) {
@@ -753,7 +893,7 @@ func NoErrorf(t T, err error, msg string, args ...any) {
 	t.FailNow()
 }
 
-// NoFileExistsf is the same as [NoFileExists], but accepts a format msg string to format arguments like [fmt.Printf].
+// NoFileExistsf is the same as [NoFileExists], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func NoFileExistsf(t T, path string, msg string, args ...any) {
@@ -767,7 +907,7 @@ func NoFileExistsf(t T, path string, msg string, args ...any) {
 	t.FailNow()
 }
 
-// NotContainsf is the same as [NotContains], but accepts a format msg string to format arguments like [fmt.Printf].
+// NotContainsf is the same as [NotContains], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func NotContainsf(t T, s any, contains any, msg string, args ...any) {
@@ -781,7 +921,7 @@ func NotContainsf(t T, s any, contains any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// NotElementsMatchf is the same as [NotElementsMatch], but accepts a format msg string to format arguments like [fmt.Printf].
+// NotElementsMatchf is the same as [NotElementsMatch], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func NotElementsMatchf(t T, listA any, listB any, msg string, args ...any) {
@@ -795,7 +935,21 @@ func NotElementsMatchf(t T, listA any, listB any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// NotEmptyf is the same as [NotEmpty], but accepts a format msg string to format arguments like [fmt.Printf].
+// NotElementsMatchTf is the same as [NotElementsMatchT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func NotElementsMatchTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotElementsMatchT(t, listA, listB, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// NotEmptyf is the same as [NotEmpty], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func NotEmptyf(t T, object any, msg string, args ...any) {
@@ -809,7 +963,7 @@ func NotEmptyf(t T, object any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// NotEqualf is the same as [NotEqual], but accepts a format msg string to format arguments like [fmt.Printf].
+// NotEqualf is the same as [NotEqual], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func NotEqualf(t T, expected any, actual any, msg string, args ...any) {
@@ -823,7 +977,7 @@ func NotEqualf(t T, expected any, actual any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// NotEqualValuesf is the same as [NotEqualValues], but accepts a format msg string to format arguments like [fmt.Printf].
+// NotEqualValuesf is the same as [NotEqualValues], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func NotEqualValuesf(t T, expected any, actual any, msg string, args ...any) {
@@ -837,7 +991,7 @@ func NotEqualValuesf(t T, expected any, actual any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// NotErrorAsf is the same as [NotErrorAs], but accepts a format msg string to format arguments like [fmt.Printf].
+// NotErrorAsf is the same as [NotErrorAs], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func NotErrorAsf(t T, err error, target any, msg string, args ...any) {
@@ -851,7 +1005,7 @@ func NotErrorAsf(t T, err error, target any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// NotErrorIsf is the same as [NotErrorIs], but accepts a format msg string to format arguments like [fmt.Printf].
+// NotErrorIsf is the same as [NotErrorIs], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func NotErrorIsf(t T, err error, target error, msg string, args ...any) {
@@ -865,7 +1019,7 @@ func NotErrorIsf(t T, err error, target error, msg string, args ...any) {
 	t.FailNow()
 }
 
-// NotImplementsf is the same as [NotImplements], but accepts a format msg string to format arguments like [fmt.Printf].
+// NotImplementsf is the same as [NotImplements], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func NotImplementsf(t T, interfaceObject any, object any, msg string, args ...any) {
@@ -879,7 +1033,7 @@ func NotImplementsf(t T, interfaceObject any, object any, msg string, args ...an
 	t.FailNow()
 }
 
-// NotKindf is the same as [NotKind], but accepts a format msg string to format arguments like [fmt.Printf].
+// NotKindf is the same as [NotKind], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func NotKindf(t T, expectedKind reflect.Kind, object any, msg string, args ...any) {
@@ -893,7 +1047,7 @@ func NotKindf(t T, expectedKind reflect.Kind, object any, msg string, args ...an
 	t.FailNow()
 }
 
-// NotNilf is the same as [NotNil], but accepts a format msg string to format arguments like [fmt.Printf].
+// NotNilf is the same as [NotNil], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func NotNilf(t T, object any, msg string, args ...any) {
@@ -907,7 +1061,7 @@ func NotNilf(t T, object any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// NotPanicsf is the same as [NotPanics], but accepts a format msg string to format arguments like [fmt.Printf].
+// NotPanicsf is the same as [NotPanics], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func NotPanicsf(t T, f assertions.PanicTestFunc, msg string, args ...any) {
@@ -921,21 +1075,35 @@ func NotPanicsf(t T, f assertions.PanicTestFunc, msg string, args ...any) {
 	t.FailNow()
 }
 
-// NotRegexpf is the same as [NotRegexp], but accepts a format msg string to format arguments like [fmt.Printf].
+// NotRegexpf is the same as [NotRegexp], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func NotRegexpf(t T, rx any, str any, msg string, args ...any) {
+func NotRegexpf(t T, rx any, actual any, msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotRegexp(t, rx, str, forwardArgs(msg, args)) {
+	if assertions.NotRegexp(t, rx, actual, forwardArgs(msg, args)) {
 		return
 	}
 
 	t.FailNow()
 }
 
-// NotSamef is the same as [NotSame], but accepts a format msg string to format arguments like [fmt.Printf].
+// NotRegexpTf is the same as [NotRegexpT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func NotRegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotRegexpT(t, rx, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// NotSamef is the same as [NotSame], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func NotSamef(t T, expected any, actual any, msg string, args ...any) {
@@ -949,7 +1117,7 @@ func NotSamef(t T, expected any, actual any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// NotSubsetf is the same as [NotSubset], but accepts a format msg string to format arguments like [fmt.Printf].
+// NotSubsetf is the same as [NotSubset], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func NotSubsetf(t T, list any, subset any, msg string, args ...any) {
@@ -963,7 +1131,7 @@ func NotSubsetf(t T, list any, subset any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// NotZerof is the same as [NotZero], but accepts a format msg string to format arguments like [fmt.Printf].
+// NotZerof is the same as [NotZero], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func NotZerof(t T, i any, msg string, args ...any) {
@@ -977,7 +1145,7 @@ func NotZerof(t T, i any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// Panicsf is the same as [Panics], but accepts a format msg string to format arguments like [fmt.Printf].
+// Panicsf is the same as [Panics], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Panicsf(t T, f assertions.PanicTestFunc, msg string, args ...any) {
@@ -991,7 +1159,7 @@ func Panicsf(t T, f assertions.PanicTestFunc, msg string, args ...any) {
 	t.FailNow()
 }
 
-// PanicsWithErrorf is the same as [PanicsWithError], but accepts a format msg string to format arguments like [fmt.Printf].
+// PanicsWithErrorf is the same as [PanicsWithError], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func PanicsWithErrorf(t T, errString string, f assertions.PanicTestFunc, msg string, args ...any) {
@@ -1005,7 +1173,7 @@ func PanicsWithErrorf(t T, errString string, f assertions.PanicTestFunc, msg str
 	t.FailNow()
 }
 
-// PanicsWithValuef is the same as [PanicsWithValue], but accepts a format msg string to format arguments like [fmt.Printf].
+// PanicsWithValuef is the same as [PanicsWithValue], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func PanicsWithValuef(t T, expected any, f assertions.PanicTestFunc, msg string, args ...any) {
@@ -1019,7 +1187,7 @@ func PanicsWithValuef(t T, expected any, f assertions.PanicTestFunc, msg string,
 	t.FailNow()
 }
 
-// Positivef is the same as [Positive], but accepts a format msg string to format arguments like [fmt.Printf].
+// Positivef is the same as [Positive], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Positivef(t T, e any, msg string, args ...any) {
@@ -1033,21 +1201,49 @@ func Positivef(t T, e any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// Regexpf is the same as [Regexp], but accepts a format msg string to format arguments like [fmt.Printf].
+// PositiveTf is the same as [PositiveT], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func Regexpf(t T, rx any, str any, msg string, args ...any) {
+func PositiveTf[SignedNumber SignedNumeric](t T, e SignedNumber, msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.Regexp(t, rx, str, forwardArgs(msg, args)) {
+	if assertions.PositiveT(t, e, forwardArgs(msg, args)) {
 		return
 	}
 
 	t.FailNow()
 }
 
-// Samef is the same as [Same], but accepts a format msg string to format arguments like [fmt.Printf].
+// Regexpf is the same as [Regexp], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func Regexpf(t T, rx any, actual any, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.Regexp(t, rx, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// RegexpTf is the same as [RegexpT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func RegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.RegexpT(t, rx, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// Samef is the same as [Same], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Samef(t T, expected any, actual any, msg string, args ...any) {
@@ -1061,7 +1257,7 @@ func Samef(t T, expected any, actual any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// Subsetf is the same as [Subset], but accepts a format msg string to format arguments like [fmt.Printf].
+// Subsetf is the same as [Subset], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Subsetf(t T, list any, subset any, msg string, args ...any) {
@@ -1075,7 +1271,7 @@ func Subsetf(t T, list any, subset any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// Truef is the same as [True], but accepts a format msg string to format arguments like [fmt.Printf].
+// Truef is the same as [True], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Truef(t T, value bool, msg string, args ...any) {
@@ -1089,7 +1285,21 @@ func Truef(t T, value bool, msg string, args ...any) {
 	t.FailNow()
 }
 
-// WithinDurationf is the same as [WithinDuration], but accepts a format msg string to format arguments like [fmt.Printf].
+// TrueTf is the same as [TrueT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func TrueTf[B Boolean](t T, value B, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.TrueT(t, value, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// WithinDurationf is the same as [WithinDuration], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func WithinDurationf(t T, expected time.Time, actual time.Time, delta time.Duration, msg string, args ...any) {
@@ -1103,7 +1313,7 @@ func WithinDurationf(t T, expected time.Time, actual time.Time, delta time.Durat
 	t.FailNow()
 }
 
-// WithinRangef is the same as [WithinRange], but accepts a format msg string to format arguments like [fmt.Printf].
+// WithinRangef is the same as [WithinRange], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func WithinRangef(t T, actual time.Time, start time.Time, end time.Time, msg string, args ...any) {
@@ -1117,7 +1327,7 @@ func WithinRangef(t T, actual time.Time, start time.Time, end time.Time, msg str
 	t.FailNow()
 }
 
-// YAMLEqf is the same as [YAMLEq], but accepts a format msg string to format arguments like [fmt.Printf].
+// YAMLEqf is the same as [YAMLEq], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func YAMLEqf(t T, expected string, actual string, msg string, args ...any) {
@@ -1131,7 +1341,35 @@ func YAMLEqf(t T, expected string, actual string, msg string, args ...any) {
 	t.FailNow()
 }
 
-// Zerof is the same as [Zero], but accepts a format msg string to format arguments like [fmt.Printf].
+// YAMLEqBytesf is the same as [YAMLEqBytes], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func YAMLEqBytesf(t T, expected []byte, actual []byte, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.YAMLEqBytes(t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// YAMLEqTf is the same as [YAMLEqT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func YAMLEqTf[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.YAMLEqT(t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// Zerof is the same as [Zero], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func Zerof(t T, i any, msg string, args ...any) {

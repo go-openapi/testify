@@ -9,17 +9,9 @@ description: |
 weight: 1
 ---
 
-**The testify/v2 we wanted**
+**Go testing assertions for the rest of us**
 
 ## Motivation
-
-From the maintainers of `testify`, it looks like a v2 is coming up, but they'll do it at their own pace.
-
-We like all the principles they put forward to build this v2. [See discussion about v2](https://github.com/stretchr/testify/discussions/1560)
-
-However, at `go-openapi` we would like to address the well-known issues in `testify` with different priorities.
-
----
 
 1. We want first to remove all external dependencies.
 
@@ -63,7 +55,7 @@ This fork targets **go1.24**.
 * [x] **simplified** maintenance
 * [x] can add or remove assertions with ease
 * [x] **mitigated API bloat** with comprehensive domain-indexed documentation
-* [ ] can leverage generics without backward compatibility concerns
+* [x] can leverage generics without backward compatibility concerns
 
 The approach will be **selective and pragmatic** rather than comprehensive:
 
@@ -85,6 +77,7 @@ while maintaining the flexibility that makes testify useful for real-world testi
 ### Other (non-breaking) changes
 
 * added `JSONEqBytes`
+* added `YAMLEqBytes`
 * adapted & merged fixes: see [ROADMAP](./maintainers/ROADMAP.md).
 
 ## Usage at go-openapi
@@ -125,7 +118,6 @@ True,Truef
 YAMLEq,YAMLEqf
 Zero,Zerof
 ```
-
 
 ## [The original README](./maintainers/ORIGINAL.md)
 

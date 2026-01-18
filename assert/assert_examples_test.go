@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
+// Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
 
 package assert_test
 
@@ -48,6 +48,14 @@ func ExampleDirExists() {
 func ExampleElementsMatch() {
 	t := new(testing.T)
 	success := assert.ElementsMatch(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleElementsMatchT() {
+	t := new(testing.T)
+	success := assert.ElementsMatchT(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -169,6 +177,14 @@ func ExampleFalse() {
 	// Output: success: true
 }
 
+func ExampleFalseT() {
+	t := new(testing.T)
+	success := assert.FalseT(t, 1 == 0)
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleFileEmpty() {
 	t := new(testing.T)
 	success := assert.FileEmpty(t, filepath.Join(testDataPath(), "empty_file"))
@@ -204,6 +220,22 @@ func ExampleGreater() {
 func ExampleGreaterOrEqual() {
 	t := new(testing.T)
 	success := assert.GreaterOrEqual(t, 2, 1)
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleGreaterOrEqualT() {
+	t := new(testing.T)
+	success := assert.GreaterOrEqualT(t, 2, 1)
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleGreaterT() {
+	t := new(testing.T)
+	success := assert.GreaterT(t, 2, 1)
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -289,6 +321,14 @@ func ExampleInDeltaSlice() {
 	// Output: success: true
 }
 
+func ExampleInDeltaT() {
+	t := new(testing.T)
+	success := assert.InDeltaT(t, 1.0, 1.01, 0.02)
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleInEpsilon() {
 	t := new(testing.T)
 	success := assert.InEpsilon(t, 100.0, 101.0, 0.02)
@@ -300,6 +340,14 @@ func ExampleInEpsilon() {
 func ExampleInEpsilonSlice() {
 	t := new(testing.T)
 	success := assert.InEpsilonSlice(t, []float64{100.0, 200.0}, []float64{101.0, 202.0}, 0.02)
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleInEpsilonT() {
+	t := new(testing.T)
+	success := assert.InEpsilonT(t, 100.0, 101.0, 0.02)
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -369,6 +417,14 @@ func ExampleJSONEqBytes() {
 	// Output: success: true
 }
 
+func ExampleJSONEqT() {
+	t := new(testing.T)
+	success := assert.JSONEqT(t, `{"hello": "world", "foo": "bar"}`, []byte(`{"foo": "bar", "hello": "world"}`))
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleKind() {
 	t := new(testing.T)
 	success := assert.Kind(t, reflect.String, "hello")
@@ -401,9 +457,33 @@ func ExampleLessOrEqual() {
 	// Output: success: true
 }
 
+func ExampleLessOrEqualT() {
+	t := new(testing.T)
+	success := assert.LessOrEqualT(t, 1, 2)
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleLessT() {
+	t := new(testing.T)
+	success := assert.LessT(t, 1, 2)
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleNegative() {
 	t := new(testing.T)
 	success := assert.Negative(t, -1)
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleNegativeT() {
+	t := new(testing.T)
+	success := assert.NegativeT(t, -1)
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -462,6 +542,14 @@ func ExampleNotContains() {
 func ExampleNotElementsMatch() {
 	t := new(testing.T)
 	success := assert.NotElementsMatch(t, []int{1, 2, 3}, []int{1, 2, 4})
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleNotElementsMatchT() {
+	t := new(testing.T)
+	success := assert.NotElementsMatchT(t, []int{1, 2, 3}, []int{1, 2, 4})
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -548,6 +636,14 @@ func ExampleNotRegexp() {
 	// Output: success: true
 }
 
+func ExampleNotRegexpT() {
+	t := new(testing.T)
+	success := assert.NotRegexpT(t, "^start", "not starting")
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleNotSame() {
 	t := new(testing.T)
 	success := assert.NotSame(t, &staticVar, ptr("static string"))
@@ -610,9 +706,25 @@ func ExamplePositive() {
 	// Output: success: true
 }
 
+func ExamplePositiveT() {
+	t := new(testing.T)
+	success := assert.PositiveT(t, 1)
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleRegexp() {
 	t := new(testing.T)
 	success := assert.Regexp(t, "^start", "starting")
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleRegexpT() {
+	t := new(testing.T)
+	success := assert.RegexpT(t, "^start", "starting")
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -642,6 +754,14 @@ func ExampleTrue() {
 	// Output: success: true
 }
 
+func ExampleTrueT() {
+	t := new(testing.T)
+	success := assert.TrueT(t, 1 == 1)
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleWithinDuration() {
 	t := new(testing.T)
 	success := assert.WithinDuration(t, time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 12, 0, 1, 0, time.UTC), 2*time.Second)
@@ -659,6 +779,14 @@ func ExampleWithinRange() {
 }
 
 // func ExampleYAMLEq() {
+// no success example available. Please add some examples to produce a testable example.
+// }
+
+// func ExampleYAMLEqBytes() {
+// no success example available. Please add some examples to produce a testable example.
+// }
+
+// func ExampleYAMLEqT() {
 // no success example available. Please add some examples to produce a testable example.
 // }
 

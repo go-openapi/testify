@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
+// Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
 
 package require
 
@@ -94,7 +94,7 @@ func DirExists(t T, path string, msgAndArgs ...any) {
 //
 // # Usage
 //
-//	assertions.ElementsMatch(t, [1, 3, 2, 3], [1, 3, 3, 2])
+//	assertions.ElementsMatch(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
 //
 // # Examples
 //
@@ -107,6 +107,31 @@ func ElementsMatch(t T, listA any, listB any, msgAndArgs ...any) {
 		h.Helper()
 	}
 	if assertions.ElementsMatch(t, listA, listB, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// ElementsMatchT asserts that the specified listA(array, slice...) is equal to specified
+// listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
+// the number of appearances of each of them in both lists should match.
+//
+// # Usage
+//
+//	assertions.ElementsMatchT(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
+//
+// # Examples
+//
+//	success: []int{1, 3, 2, 3}, []int{1, 3, 3, 2}
+//	failure: []int{1, 2, 3}, []int{1, 2, 4}
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func ElementsMatchT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.ElementsMatchT(t, listA, listB, msgAndArgs...) {
 		return
 	}
 
@@ -188,11 +213,11 @@ func Equal(t T, expected any, actual any, msgAndArgs ...any) {
 //	failure: ErrTest, "wrong error message"
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func EqualError(t T, theError error, errString string, msgAndArgs ...any) {
+func EqualError(t T, err error, errString string, msgAndArgs ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.EqualError(t, theError, errString, msgAndArgs...) {
+	if assertions.EqualError(t, err, errString, msgAndArgs...) {
 		return
 	}
 
@@ -316,11 +341,11 @@ func ErrorAs(t T, err error, target any, msgAndArgs ...any) {
 //	failure: ErrTest, "not in message"
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func ErrorContains(t T, theError error, contains string, msgAndArgs ...any) {
+func ErrorContains(t T, err error, contains string, msgAndArgs ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.ErrorContains(t, theError, contains, msgAndArgs...) {
+	if assertions.ErrorContains(t, err, contains, msgAndArgs...) {
 		return
 	}
 
@@ -527,6 +552,32 @@ func False(t T, value bool, msgAndArgs ...any) {
 	t.FailNow()
 }
 
+// FalseT asserts that the specified value is false.
+//
+// # Usage
+//
+//	 type B bool
+//	 var b B = true
+//
+//		assertions.FalseT(t, b)
+//
+// # Examples
+//
+//	success: 1 == 0
+//	failure: 1 == 1
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func FalseT[B Boolean](t T, value B, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.FalseT(t, value, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
 // FileEmpty checks whether a file exists in the given path and is empty.
 // It fails if the file is not empty, if the path points to a directory or there is an error when trying to check the file.
 //
@@ -601,6 +652,9 @@ func FileNotEmpty(t T, path string, msgAndArgs ...any) {
 
 // Greater asserts that the first element is strictly greater than the second.
 //
+// Both elements must be of the same type in the [reflect.Kind] sense.
+// To compare values that need a type conversion (e.g. float32 against float64), you need to convert types beforehand.
+//
 // # Usage
 //
 //	assertions.Greater(t, 2, 1)
@@ -626,6 +680,8 @@ func Greater(t T, e1 any, e2 any, msgAndArgs ...any) {
 
 // GreaterOrEqual asserts that the first element is greater than or equal to the second.
 //
+// See also [Greater].
+//
 // # Usage
 //
 //	assertions.GreaterOrEqual(t, 2, 1)
@@ -644,6 +700,79 @@ func GreaterOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) {
 		h.Helper()
 	}
 	if assertions.GreaterOrEqual(t, e1, e2, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// GreaterOrEqualT asserts that for two elements of the same type,
+// the first element is greater than or equal to the second.
+//
+// The [Ordered] type can be any of Go's [cmp.Ordered] (strings, numeric types),
+// []byte (uses [bytes.Compare]) and [time.Time] (uses [time.Time.Compare].
+//
+// Notice that pointers are not [Ordered], but uintptr are. So you can't call [GreaterOrEqualT] with [*time.Time].
+//
+// [GreaterOrEqualT] ensures type safety at build time. If you need to compare values with a dynamically assigned type,
+// use [GreaterOrEqual] instead.
+//
+// To compare values that need a type conversion (e.g. float32 against float64), you need to convert types beforehand.
+//
+// # Usage
+//
+//	assertions.GreaterOrEqualT(t, 2, 1)
+//	assertions.GreaterOrEqualT(t, 2, 2)
+//	assertions.GreaterOrEqualT(t, "b", "a")
+//	assertions.GreaterOrEqualT(t, "b", "b")
+//
+// # Examples
+//
+//	success: 2, 1
+//	failure: 1, 2
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func GreaterOrEqualT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.GreaterOrEqualT(t, e1, e2, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// GreaterT asserts that for two elements of the same type,
+// the first element is strictly greater than the second.
+//
+// The [Ordered] type can be any of Go's [cmp.Ordered] (strings, numeric types),
+// []byte (uses [bytes.Compare]) and [time.Time] (uses [time.Time.Compare].
+//
+// Notice that pointers are not [Ordered], but uintptr are. So you can't call [GreaterT] with [*time.Time].
+//
+// [GreaterT] ensures type safety at build time. If you need to compare values with a dynamically assigned type, use [Greater] instead.
+//
+// To compare values that need a type conversion (e.g. float32 against float64), you need to convert types beforehand.
+//
+// # Usage
+//
+//	assertions.GreaterT(t, 2, 1)
+//	assertions.GreaterT(t, float64(2), float64(1))
+//	assertions.GreaterT(t, "b", "a")
+//	assertions.GreaterT(t, time.Date(2026,1,1,0,0,0,0,nil), time.Now())
+//
+// # Examples
+//
+//	success: 2, 1
+//	failure: 1, 2
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func GreaterT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.GreaterT(t, e1, e2, msgAndArgs...) {
 		return
 	}
 
@@ -826,6 +955,18 @@ func Implements(t T, interfaceObject any, object any, msgAndArgs ...any) {
 
 // InDelta asserts that the two numerals are within delta of each other.
 //
+// Delta must be greater than or equal to zero.
+//
+// Expected and actual values should convert to float64.
+// To compare large integers that can't be represented accurately as float64 (eg. uint64),
+// prefer [InDeltaT] to preserve the original type.
+//
+// # Behavior with IEEE floating point arithmetics
+//
+//   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+//   - expected +Inf is matched only by a +Inf
+//   - expected -Inf is matched only by a -Inf
+//
 // # Usage
 //
 // assertions.InDelta(t, math.Pi, 22/7.0, 0.01)
@@ -847,7 +988,9 @@ func InDelta(t T, expected any, actual any, delta float64, msgAndArgs ...any) {
 	t.FailNow()
 }
 
-// InDeltaMapValues is the same as InDelta, but it compares all values between two maps. Both maps must have exactly the same keys.
+// InDeltaMapValues is the same as [InDelta], but it compares all values between two maps. Both maps must have exactly the same keys.
+//
+// See [InDelta].
 //
 // # Usage
 //
@@ -870,7 +1013,9 @@ func InDeltaMapValues(t T, expected any, actual any, delta float64, msgAndArgs .
 	t.FailNow()
 }
 
-// InDeltaSlice is the same as InDelta, except it compares two slices.
+// InDeltaSlice is the same as [InDelta], except it compares two slices.
+//
+// See [InDelta].
 //
 // # Usage
 //
@@ -893,7 +1038,56 @@ func InDeltaSlice(t T, expected any, actual any, delta float64, msgAndArgs ...an
 	t.FailNow()
 }
 
+// InDeltaT asserts that the two numerals of the same type numerical type are within delta of each other.
+//
+// [InDeltaT] accepts any go numeric type, including integer types.
+//
+// The main difference with [InDelta] is that the delta is expressed with the same type as the values, not necessarily a float64.
+//
+// Delta must be greater than or equal to zero.
+//
+// # Behavior with IEEE floating point arithmetics
+//
+//   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+//   - expected +Inf is matched only by a +Inf
+//   - expected -Inf is matched only by a -Inf
+//
+// # Usage
+//
+// assertions.InDeltaT(t, math.Pi, 22/7.0, 0.01)
+//
+// # Examples
+//
+//	success: 1.0, 1.01, 0.02
+//	failure: 1.0, 1.1, 0.05
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func InDeltaT[Number Measurable](t T, expected Number, actual Number, delta Number, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.InDeltaT(t, expected, actual, delta, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
 // InEpsilon asserts that expected and actual have a relative error less than epsilon.
+//
+// # Behavior with IEEE floating point arithmetics
+//
+//   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+//   - expected +Inf is matched only by a +Inf
+//   - expected -Inf is matched only by a -Inf
+//
+// Edge case: for very large integers that do not convert accurately to a float64 (e.g. uint64), prefer [InDeltaT].
+//
+// Formula:
+//   - If expected == 0: fail if |actual - expected| > epsilon
+//   - If expected != 0: fail if |actual - expected| > epsilon * |expected|
+//
+// This allows [InEpsilonT] to work naturally across the full numeric range including zero.
 //
 // # Usage
 //
@@ -916,7 +1110,9 @@ func InEpsilon(t T, expected any, actual any, epsilon float64, msgAndArgs ...any
 	t.FailNow()
 }
 
-// InEpsilonSlice is the same as InEpsilon, except it compares each value from two slices.
+// InEpsilonSlice is the same as [InEpsilon], except it compares each value from two slices.
+//
+// See [InEpsilon].
 //
 // # Usage
 //
@@ -933,6 +1129,49 @@ func InEpsilonSlice(t T, expected any, actual any, epsilon float64, msgAndArgs .
 		h.Helper()
 	}
 	if assertions.InEpsilonSlice(t, expected, actual, epsilon, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// InEpsilonT asserts that expected and actual have a relative error less than epsilon.
+//
+// When expected is zero, epsilon is interpreted as an absolute error threshold,
+// since relative error is mathematically undefined for zero values.
+//
+// Unlike [InDeltaT], which preserves the original type, [InEpsilonT] converts the expected and actual
+// numbers to float64, since the relative error doesn't make sense as an integer.
+//
+// # Behavior with IEEE floating point arithmetics
+//
+//   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+//   - expected +Inf is matched only by a +Inf
+//   - expected -Inf is matched only by a -Inf
+//
+// Edge case: for very large integers that do not convert accurately to a float64 (e.g. uint64), prefer [InDeltaT].
+//
+// Formula:
+//   - If expected == 0: fail if |actual - expected| > epsilon
+//   - If expected != 0: fail if |actual - expected| > epsilon * |expected|
+//
+// This allows [InEpsilonT] to work naturally across the full numeric range including zero.
+//
+// # Usage
+//
+//	assertions.InEpsilon(t, 100.0, 101.0, 0.02)
+//
+// # Examples
+//
+//	success: 100.0, 101.0, 0.02
+//	failure: 100.0, 110.0, 0.05
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func InEpsilonT[Number Measurable](t T, expected Number, actual Number, epsilon float64, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.InEpsilonT(t, expected, actual, epsilon, msgAndArgs...) {
 		return
 	}
 
@@ -1087,6 +1326,8 @@ func IsType(t T, expectedType any, object any, msgAndArgs ...any) {
 
 // JSONEq asserts that two JSON strings are equivalent.
 //
+// Expected and actual must be valid JSON.
+//
 // # Usage
 //
 //	assertions.JSONEq(t, `{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
@@ -1108,7 +1349,9 @@ func JSONEq(t T, expected string, actual string, msgAndArgs ...any) {
 	t.FailNow()
 }
 
-// JSONEqBytes asserts that two JSON byte slices are equivalent.
+// JSONEqBytes asserts that two JSON slices of bytes are equivalent.
+//
+// Expected and actual must be valid JSON.
 //
 // # Usage
 //
@@ -1125,6 +1368,33 @@ func JSONEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any) {
 		h.Helper()
 	}
 	if assertions.JSONEqBytes(t, expected, actual, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// JSONEqT asserts that two JSON documents are equivalent.
+//
+// The expected and actual arguments may be string or []byte. They do not need to be of the same type.
+//
+// Expected and actual must be valid JSON.
+//
+// # Usage
+//
+//	assertions.JSONEqT(t, `{"hello": "world", "foo": "bar"}`, []byte(`{"foo": "bar", "hello": "world"}`))
+//
+// # Examples
+//
+//	success: `{"hello": "world", "foo": "bar"}`, []byte(`{"foo": "bar", "hello": "world"}`)
+//	failure: `{"hello": "world", "foo": "bar"}`, `[{"foo": "bar"}, {"hello": "world"}]`
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func JSONEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.JSONEqT(t, expected, actual, msgAndArgs...) {
 		return
 	}
 
@@ -1190,6 +1460,9 @@ func Len(t T, object any, length int, msgAndArgs ...any) {
 
 // Less asserts that the first element is strictly less than the second.
 //
+// Both elements must be of the same type in the [reflect.Kind] sense.
+// To compare values that need a type conversion (e.g. float32 against float64), you need to convert types beforehand.
+//
 // # Usage
 //
 //	assertions.Less(t, 1, 2)
@@ -1239,6 +1512,77 @@ func LessOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) {
 	t.FailNow()
 }
 
+// LessOrEqualT asserts that for two elements of the same type, the first element is less than or equal to the second.
+//
+// The [Ordered] type can be any of Go's [cmp.Ordered] (strings, numeric types),
+// []byte (uses [bytes.Compare]) and [time.Time] (uses [time.Time.Compare].
+//
+// Notice that pointers are not [Ordered], but uintptr are. So you can't call [LessOrEqualT] with [*time.Time].
+//
+// [LessOrEqualT] ensures type safety at build time. If you need to compare values with a dynamically assigned type,
+// use [LessOrEqual] instead.
+//
+// To compare values that need a type conversion (e.g. float32 against float64), you should use [LessOrEqual] instead.
+//
+// # Usage
+//
+//	assertions.LessOrEqualT(t, 1, 2)
+//	assertions.LessOrEqualT(t, 2, 2)
+//	assertions.LessOrEqualT(t, "a", "b")
+//	assertions.LessOrEqualT(t, "b", "b")
+//
+// # Examples
+//
+//	success: 1, 2
+//	failure: 2, 1
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func LessOrEqualT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.LessOrEqualT(t, e1, e2, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// LessT asserts that for two elements of the same type, the first element is strictly less than the second.
+//
+// The [Ordered] type can be any of Go's [cmp.Ordered] (strings, numeric types),
+// []byte (uses [bytes.Compare]) and [time.Time] (uses [time.Time.Compare].
+//
+// Notice that pointers are not [Ordered], but uintptr are. So you can't call [LessT] with [*time.Time].
+//
+// [LessT] ensures type safety at build time. If you need to compare values with a dynamically assigned type,
+// use [Less] instead.
+//
+// To compare values that need a type conversion (e.g. float32 against float64), you need to convert types beforehand.
+//
+// # Usage
+//
+//	assertions.LessT(t, 1, 2)
+//	assertions.LessT(t, float64(1), float64(2))
+//	assertions.LessT(t, "a", "b")
+//
+// # Examples
+//
+//	success: 1, 2
+//	failure: 2, 1
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func LessT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.LessT(t, e1, e2, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
 // Negative asserts that the specified element is strictly negative.
 //
 // # Usage
@@ -1257,6 +1601,30 @@ func Negative(t T, e any, msgAndArgs ...any) {
 		h.Helper()
 	}
 	if assertions.Negative(t, e, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// NegativeT asserts that the specified element of a signed numeric type is strictly negative.
+//
+// # Usage
+//
+//	assertions.NegativeT(t, -1)
+//	assertions.NegativeT(t, -1.23)
+//
+// # Examples
+//
+//	success: -1
+//	failure: 1
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func NegativeT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NegativeT(t, e, msgAndArgs...) {
 		return
 	}
 
@@ -1429,9 +1797,9 @@ func NotContains(t T, s any, contains any, msgAndArgs ...any) {
 //
 // # Usage
 //
-//	assertions.NotElementsMatch(t, [1, 1, 2, 3], [1, 1, 2, 3]) -> false
-//	assertions.NotElementsMatch(t, [1, 1, 2, 3], [1, 2, 3]) -> true
-//	assertions.NotElementsMatch(t, [1, 2, 3], [1, 2, 4]) -> true
+//	assertions.NotElementsMatch(t, []int{1, 1, 2, 3}, []int{1, 1, 2, 3}) -> false
+//	assertions.NotElementsMatch(t, []int{1, 1, 2, 3}, []int{1, 2, 3}) -> true
+//	assertions.NotElementsMatch(t, []int{1, 2, 3}, []int{1, 2, 4}) -> true
 //
 // # Examples
 //
@@ -1444,6 +1812,34 @@ func NotElementsMatch(t T, listA any, listB any, msgAndArgs ...any) {
 		h.Helper()
 	}
 	if assertions.NotElementsMatch(t, listA, listB, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// NotElementsMatchT asserts that the specified listA(array, slice...) is NOT equal to specified
+// listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
+// the number of appearances of each of them in both lists should not match.
+// This is an inverse of ElementsMatch.
+//
+// # Usage
+//
+//	assertions.NotElementsMatchT(t, []int{1, 1, 2, 3}, []int{1, 1, 2, 3}) -> false
+//	assertions.NotElementsMatchT(t, []int{1, 1, 2, 3}, []int{1, 2, 3}) -> true
+//	assertions.NotElementsMatchT(t, []int{1, 2, 3}, []int{1, 2, 4}) -> true
+//
+// # Examples
+//
+//	success: []int{1, 2, 3}, []int{1, 2, 4}
+//	failure: []int{1, 3, 2, 3}, []int{1, 3, 3, 2}
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func NotElementsMatchT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotElementsMatchT(t, listA, listB, msgAndArgs...) {
 		return
 	}
 
@@ -1668,7 +2064,9 @@ func NotPanics(t T, f assertions.PanicTestFunc, msgAndArgs ...any) {
 	t.FailNow()
 }
 
-// NotRegexp asserts that a specified regexp does not match a string.
+// NotRegexp asserts that a specified regular expression does not match a string.
+//
+// See [Regexp].
 //
 // # Usage
 //
@@ -1681,11 +2079,37 @@ func NotPanics(t T, f assertions.PanicTestFunc, msgAndArgs ...any) {
 //	failure: "^start", "starting"
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func NotRegexp(t T, rx any, str any, msgAndArgs ...any) {
+func NotRegexp(t T, rx any, actual any, msgAndArgs ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotRegexp(t, rx, str, msgAndArgs...) {
+	if assertions.NotRegexp(t, rx, actual, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// NotRegexpT asserts that a specified regular expression does not match a string.
+//
+// See [RegexpT].
+//
+// # Usage
+//
+//	assertions.NotRegexp(t, regexp.MustCompile("starts"), "it's starting")
+//	assertions.NotRegexp(t, "^start", "it's not starting")
+//
+// # Examples
+//
+//	success: "^start", "not starting"
+//	failure: "^start", "starting"
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func NotRegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotRegexpT(t, rx, actual, msgAndArgs...) {
 		return
 	}
 
@@ -1866,7 +2290,35 @@ func Positive(t T, e any, msgAndArgs ...any) {
 	t.FailNow()
 }
 
-// Regexp asserts that a specified regexp matches a string.
+// PositiveT asserts that the specified element of a signed numeric type is strictly positive.
+//
+// # Usage
+//
+//	assertions.PositiveT(t, 1)
+//	assertions.PositiveT(t, 1.23)
+//
+// # Examples
+//
+//	success: 1
+//	failure: -1
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func PositiveT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.PositiveT(t, e, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// Regexp asserts that a specified regular expression matches a string.
+//
+// The regular expression may be passed as a [regexp.Regexp], a string or a []byte and will be compiled.
+//
+// The actual argument to be matched may be a string, []byte or anything that prints as a string with [fmt.Sprint].
 //
 // # Usage
 //
@@ -1879,11 +2331,34 @@ func Positive(t T, e any, msgAndArgs ...any) {
 //	failure: "^start", "not starting"
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func Regexp(t T, rx any, str any, msgAndArgs ...any) {
+func Regexp(t T, rx any, actual any, msgAndArgs ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.Regexp(t, rx, str, msgAndArgs...) {
+	if assertions.Regexp(t, rx, actual, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// RegexpT asserts that a specified regular expression matches a string.
+//
+// The actual argument to be matched may be a string or []byte.
+//
+// See [Regexp].
+//
+// # Examples
+//
+//	success: "^start", "starting"
+//	failure: "^start", "not starting"
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func RegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.RegexpT(t, rx, actual, msgAndArgs...) {
 		return
 	}
 
@@ -1924,10 +2399,10 @@ func Same(t T, expected any, actual any, msgAndArgs ...any) {
 //
 // # Usage
 //
-//	assertions.Subset(t, [1, 2, 3], [1, 2])
-//	assertions.Subset(t, {"x": 1, "y": 2}, {"x": 1})
-//	assertions.Subset(t, [1, 2, 3], {1: "one", 2: "two"})
-//	assertions.Subset(t, {"x": 1, "y": 2}, ["x"])
+//	assertions.Subset(t, []int{1, 2, 3}, []int{1, 2})
+//	assertions.Subset(t, []string{"x": 1, "y": 2}, []string{"x": 1})
+//	assertions.Subset(t, []int{1, 2, 3}, map[int]string{1: "one", 2: "two"})
+//	assertions.Subset(t, map[string]int{"x": 1, "y": 2}, []string{"x"})
 //
 // # Examples
 //
@@ -1963,6 +2438,32 @@ func True(t T, value bool, msgAndArgs ...any) {
 		h.Helper()
 	}
 	if assertions.True(t, value, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// TrueT asserts that the specified value is true.
+//
+// # Usage
+//
+//	type B bool
+//	var b B = true
+//
+//	assertions.True(t, b)
+//
+// # Examples
+//
+//	success: 1 == 1
+//	failure: 1 == 0
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func TrueT[B Boolean](t T, value B, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.TrueT(t, value, msgAndArgs...) {
 		return
 	}
 
@@ -2015,7 +2516,40 @@ func WithinRange(t T, actual time.Time, start time.Time, end time.Time, msgAndAr
 	t.FailNow()
 }
 
-// YAMLEq asserts that the first documents in the two YAML strings are equivalent.
+// YAMLEq asserts that two YAML strings are equivalent.
+//
+// See [YAMLEqBytes].
+//
+// # Examples
+//
+//	panic: "key: value", "key: value"
+//	should panic without the yaml feature enabled.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func YAMLEq(t T, expected string, actual string, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.YAMLEq(t, expected, actual, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// YAMLEqBytes asserts that two YAML slices of bytes are equivalent.
+//
+// Expected and actual must be valid YAML.
+//
+// # Important
+//
+// By default, this function is disabled and will panic.
+//
+// To enable it, you should add a blank import like so:
+//
+//	import(
+//	  "github.com/go-openapi/testify/enable/yaml/v2"
+//	)
 //
 // # Usage
 //
@@ -2033,15 +2567,38 @@ func WithinRange(t T, actual time.Time, start time.Time, end time.Time, msgAndAr
 //
 // # Examples
 //
+//	panic: []byte("key: value"), []byte("key: value")
+//	should panic without the yaml feature enabled.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func YAMLEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.YAMLEqBytes(t, expected, actual, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// YAMLEqT asserts that two YAML documents are equivalent.
+//
+// The expected and actual arguments may be string or []byte. They do not need to be of the same type.
+//
+// See [YAMLEqBytes].
+//
+// # Examples
+//
 //	panic: "key: value", "key: value"
 //	should panic without the yaml feature enabled.
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func YAMLEq(t T, expected string, actual string, msgAndArgs ...any) {
+func YAMLEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.YAMLEq(t, expected, actual, msgAndArgs...) {
+	if assertions.YAMLEqT(t, expected, actual, msgAndArgs...) {
 		return
 	}
 

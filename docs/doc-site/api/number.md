@@ -1,7 +1,7 @@
 ---
 title: "Number"
 description: "Asserting Numbers"
-modified: 2026-01-11
+modified: 2026-01-18
 weight: 10
 domains:
   - "number"
@@ -12,10 +12,14 @@ keywords:
   - "InDeltaMapValuesf"
   - "InDeltaSlice"
   - "InDeltaSlicef"
+  - "InDeltaT"
+  - "InDeltaTf"
   - "InEpsilon"
   - "InEpsilonf"
   - "InEpsilonSlice"
   - "InEpsilonSlicef"
+  - "InEpsilonT"
+  - "InEpsilonTf"
 ---
 
 Asserting Numbers
@@ -27,14 +31,38 @@ Asserting Numbers
 
 _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
-This domain exposes 5 functionalities.
+This domain exposes 7 functionalities.
+Generic assertions are marked with a {{% icon icon="star" color=orange %}}
 
-### InDelta
+```tree
+- [InDelta](#indelta) | angles-right
+- [InDeltaMapValues](#indeltamapvalues) | angles-right
+- [InDeltaSlice](#indeltaslice) | angles-right
+- [InDeltaT[Number Measurable]](#indeltatnumber-measurable) | star | orange
+- [InEpsilon](#inepsilon) | angles-right
+- [InEpsilonSlice](#inepsilonslice) | angles-right
+- [InEpsilonT[Number Measurable]](#inepsilontnumber-measurable) | star | orange
+```
+
+### InDelta{#indelta}
 
 InDelta asserts that the two numerals are within delta of each other.
 
+Delta must be greater than or equal to zero.
+
+Expected and actual values should convert to float64.
+To compare large integers that can't be represented accurately as float64 (eg. uint64),
+prefer [InDeltaT] to preserve the original type.
+
 {{% expand title="Examples" %}}
 {{< tabs >}}
+{{% tab title="Behavior With IEEE Floating Point Arithmetics" %}}
+```go
+  - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+  - expected +Inf is matched only by a +Inf
+  - expected -Inf is matched only by a -Inf
+```
+{{< /tab >}}
 {{% tab title="Usage" %}}
 ```go
 assertions.InDelta(t, math.Pi, 22/7.0, 0.01)
@@ -72,13 +100,15 @@ assertions.InDelta(t, math.Pi, 22/7.0, 0.01)
 |--|--| 
 | [`assertions.InDelta(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InDelta) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDelta](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L24)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDelta](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L35)
 {{% /tab %}}
 {{< /tabs >}}
 
-### InDeltaMapValues
+### InDeltaMapValues{#indeltamapvalues}
 
-InDeltaMapValues is the same as InDelta, but it compares all values between two maps. Both maps must have exactly the same keys.
+InDeltaMapValues is the same as [InDelta], but it compares all values between two maps. Both maps must have exactly the same keys.
+
+See [InDelta].
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -119,13 +149,15 @@ InDeltaMapValues is the same as InDelta, but it compares all values between two 
 |--|--| 
 | [`assertions.InDeltaMapValues(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InDeltaMapValues) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaMapValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L101)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaMapValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L271)
 {{% /tab %}}
 {{< /tabs >}}
 
-### InDeltaSlice
+### InDeltaSlice{#indeltaslice}
 
-InDeltaSlice is the same as InDelta, except it compares two slices.
+InDeltaSlice is the same as [InDelta], except it compares two slices.
+
+See [InDelta].
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -166,16 +198,84 @@ InDeltaSlice is the same as InDelta, except it compares two slices.
 |--|--| 
 | [`assertions.InDeltaSlice(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InDeltaSlice) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaSlice](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L67)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaSlice](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L235)
 {{% /tab %}}
 {{< /tabs >}}
 
-### InEpsilon
+### InDeltaT[Number Measurable] {{% icon icon="star" color=orange %}}{#indeltatnumber-measurable}
+
+InDeltaT asserts that the two numerals of the same type numerical type are within delta of each other.
+
+[InDeltaT] accepts any go numeric type, including integer types.
+
+The main difference with [InDelta] is that the delta is expressed with the same type as the values, not necessarily a float64.
+
+Delta must be greater than or equal to zero.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Behavior With IEEE Floating Point Arithmetics" %}}
+```go
+  - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+  - expected +Inf is matched only by a +Inf
+  - expected -Inf is matched only by a -Inf
+```
+{{< /tab >}}
+{{% tab title="Usage" %}}
+```go
+assertions.InDeltaT(t, math.Pi, 22/7.0, 0.01)
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	success: 1.0, 1.01, 0.02
+	failure: 1.0, 1.1, 0.05
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.InDeltaT[Number Measurable](t T, expected Number, actual Number, delta Number, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDeltaT) | package-level function |
+| [`assert.InDeltaTf[Number Measurable](t T, expected Number, actual Number, delta Number, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDeltaTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.InDeltaT[Number Measurable](t T, expected Number, actual Number, delta Number, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InDeltaT) | package-level function |
+| [`require.InDeltaTf[Number Measurable](t T, expected Number, actual Number, delta Number, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InDeltaTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.InDeltaT(t T, expected Number, actual Number, delta Number, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InDeltaT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaT](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L85)
+{{% /tab %}}
+{{< /tabs >}}
+
+### InEpsilon{#inepsilon}
 
 InEpsilon asserts that expected and actual have a relative error less than epsilon.
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
+{{% tab title="Behavior With IEEE Floating Point Arithmetics" %}}
+```go
+  - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+  - expected +Inf is matched only by a +Inf
+  - expected -Inf is matched only by a -Inf
+Edge case: for very large integers that do not convert accurately to a float64 (e.g. uint64), prefer [InDeltaT].
+Formula:
+  - If expected == 0: fail if |actual - expected| > epsilon
+  - If expected != 0: fail if |actual - expected| > epsilon * |expected|
+This allows [InEpsilonT] to work naturally across the full numeric range including zero.
+```
+{{< /tab >}}
 {{% tab title="Usage" %}}
 ```go
 	assertions.InEpsilon(t, 100.0, 101.0, 0.02)
@@ -213,13 +313,15 @@ InEpsilon asserts that expected and actual have a relative error less than epsil
 |--|--| 
 | [`assertions.InEpsilon(t T, expected any, actual any, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InEpsilon) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilon](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L155)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilon](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L142)
 {{% /tab %}}
 {{< /tabs >}}
 
-### InEpsilonSlice
+### InEpsilonSlice{#inepsilonslice}
 
-InEpsilonSlice is the same as InEpsilon, except it compares each value from two slices.
+InEpsilonSlice is the same as [InEpsilon], except it compares each value from two slices.
+
+See [InEpsilon].
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -260,7 +362,68 @@ InEpsilonSlice is the same as InEpsilon, except it compares each value from two 
 |--|--| 
 | [`assertions.InEpsilonSlice(t T, expected any, actual any, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InEpsilonSlice) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilonSlice](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L188)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilonSlice](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L326)
+{{% /tab %}}
+{{< /tabs >}}
+
+### InEpsilonT[Number Measurable] {{% icon icon="star" color=orange %}}{#inepsilontnumber-measurable}
+
+InEpsilonT asserts that expected and actual have a relative error less than epsilon.
+
+When expected is zero, epsilon is interpreted as an absolute error threshold,
+since relative error is mathematically undefined for zero values.
+
+Unlike [InDeltaT], which preserves the original type, [InEpsilonT] converts the expected and actual
+numbers to float64, since the relative error doesn't make sense as an integer.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Behavior With IEEE Floating Point Arithmetics" %}}
+```go
+  - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+  - expected +Inf is matched only by a +Inf
+  - expected -Inf is matched only by a -Inf
+Edge case: for very large integers that do not convert accurately to a float64 (e.g. uint64), prefer [InDeltaT].
+Formula:
+  - If expected == 0: fail if |actual - expected| > epsilon
+  - If expected != 0: fail if |actual - expected| > epsilon * |expected|
+This allows [InEpsilonT] to work naturally across the full numeric range including zero.
+```
+{{< /tab >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.InEpsilon(t, 100.0, 101.0, 0.02)
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	success: 100.0, 101.0, 0.02
+	failure: 100.0, 110.0, 0.05
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.InEpsilonT[Number Measurable](t T, expected Number, actual Number, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilonT) | package-level function |
+| [`assert.InEpsilonTf[Number Measurable](t T, expected Number, actual Number, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilonTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.InEpsilonT[Number Measurable](t T, expected Number, actual Number, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonT) | package-level function |
+| [`require.InEpsilonTf[Number Measurable](t T, expected Number, actual Number, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.InEpsilonT(t T, expected Number, actual Number, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InEpsilonT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilonT](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L199)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -280,5 +443,5 @@ SPDX-License-Identifier: Apache-2.0
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
 
-Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
+Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
 -->

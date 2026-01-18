@@ -55,7 +55,7 @@ func registerFlags(cfg *config) {
 	flag.BoolVar(&cfg.includeFmt, "include-format-funcs", true, "include format functions such as Errorf and Equalf")
 	flag.BoolVar(&cfg.includeFwd, "include-forward-funcs", true, "include forward assertions functions as methods of the Assertions object")
 	flag.BoolVar(&cfg.includeTst, "include-tests", true, "generate the tests in the target package(s)")
-	flag.BoolVar(&cfg.includeGen, "include-generics", false, "include generic functions")
+	flag.BoolVar(&cfg.includeGen, "include-generics", true, "include generic functions")
 	flag.BoolVar(&cfg.includeHlp, "include-helpers", true, "include helper functions that are not assertions")
 	flag.BoolVar(&cfg.includeExa, "include-examples", true, "include generated testable examples")
 	flag.BoolVar(&cfg.runExa, "runnable-examples", true, "include Output to generated testable examples, so they are run as tests")

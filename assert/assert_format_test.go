@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
+// Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
 
 package assert
 
@@ -109,6 +109,30 @@ func TestElementsMatchf(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("ElementsMatch should mark test as failed")
+		}
+	})
+}
+
+func TestElementsMatchTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := ElementsMatchTf(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2}, "test message")
+		if !result {
+			t.Error("ElementsMatchTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := ElementsMatchTf(mock, []int{1, 2, 3}, []int{1, 2, 4}, "test message")
+		if result {
+			t.Error("ElementsMatchTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("ElementsMatchT should mark test as failed")
 		}
 	})
 }
@@ -457,6 +481,30 @@ func TestFalsef(t *testing.T) {
 	})
 }
 
+func TestFalseTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := FalseTf(t, 1 == 0, "test message")
+		if !result {
+			t.Error("FalseTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := FalseTf(mock, 1 == 1, "test message")
+		if result {
+			t.Error("FalseTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("FalseT should mark test as failed")
+		}
+	})
+}
+
 func TestFileEmptyf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -573,6 +621,54 @@ func TestGreaterOrEqualf(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("GreaterOrEqual should mark test as failed")
+		}
+	})
+}
+
+func TestGreaterOrEqualTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := GreaterOrEqualTf(t, 2, 1, "test message")
+		if !result {
+			t.Error("GreaterOrEqualTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := GreaterOrEqualTf(mock, 1, 2, "test message")
+		if result {
+			t.Error("GreaterOrEqualTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("GreaterOrEqualT should mark test as failed")
+		}
+	})
+}
+
+func TestGreaterTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := GreaterTf(t, 2, 1, "test message")
+		if !result {
+			t.Error("GreaterTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := GreaterTf(mock, 1, 2, "test message")
+		if result {
+			t.Error("GreaterTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("GreaterT should mark test as failed")
 		}
 	})
 }
@@ -817,6 +913,30 @@ func TestInDeltaSlicef(t *testing.T) {
 	})
 }
 
+func TestInDeltaTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := InDeltaTf(t, 1.0, 1.01, 0.02, "test message")
+		if !result {
+			t.Error("InDeltaTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := InDeltaTf(mock, 1.0, 1.1, 0.05, "test message")
+		if result {
+			t.Error("InDeltaTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("InDeltaT should mark test as failed")
+		}
+	})
+}
+
 func TestInEpsilonf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -861,6 +981,30 @@ func TestInEpsilonSlicef(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("InEpsilonSlice should mark test as failed")
+		}
+	})
+}
+
+func TestInEpsilonTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := InEpsilonTf(t, 100.0, 101.0, 0.02, "test message")
+		if !result {
+			t.Error("InEpsilonTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := InEpsilonTf(mock, 100.0, 110.0, 0.05, "test message")
+		if result {
+			t.Error("InEpsilonTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("InEpsilonT should mark test as failed")
 		}
 	})
 }
@@ -1057,6 +1201,30 @@ func TestJSONEqBytesf(t *testing.T) {
 	})
 }
 
+func TestJSONEqTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := JSONEqTf(t, `{"hello": "world", "foo": "bar"}`, []byte(`{"foo": "bar", "hello": "world"}`), "test message")
+		if !result {
+			t.Error("JSONEqTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := JSONEqTf(mock, `{"hello": "world", "foo": "bar"}`, `[{"foo": "bar"}, {"hello": "world"}]`, "test message")
+		if result {
+			t.Error("JSONEqTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("JSONEqT should mark test as failed")
+		}
+	})
+}
+
 func TestKindf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1153,6 +1321,54 @@ func TestLessOrEqualf(t *testing.T) {
 	})
 }
 
+func TestLessOrEqualTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := LessOrEqualTf(t, 1, 2, "test message")
+		if !result {
+			t.Error("LessOrEqualTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := LessOrEqualTf(mock, 2, 1, "test message")
+		if result {
+			t.Error("LessOrEqualTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("LessOrEqualT should mark test as failed")
+		}
+	})
+}
+
+func TestLessTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := LessTf(t, 1, 2, "test message")
+		if !result {
+			t.Error("LessTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := LessTf(mock, 2, 1, "test message")
+		if result {
+			t.Error("LessTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("LessT should mark test as failed")
+		}
+	})
+}
+
 func TestNegativef(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1173,6 +1389,30 @@ func TestNegativef(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("Negative should mark test as failed")
+		}
+	})
+}
+
+func TestNegativeTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := NegativeTf(t, -1, "test message")
+		if !result {
+			t.Error("NegativeTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := NegativeTf(mock, 1, "test message")
+		if result {
+			t.Error("NegativeTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("NegativeT should mark test as failed")
 		}
 	})
 }
@@ -1341,6 +1581,30 @@ func TestNotElementsMatchf(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("NotElementsMatch should mark test as failed")
+		}
+	})
+}
+
+func TestNotElementsMatchTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := NotElementsMatchTf(t, []int{1, 2, 3}, []int{1, 2, 4}, "test message")
+		if !result {
+			t.Error("NotElementsMatchTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := NotElementsMatchTf(mock, []int{1, 3, 2, 3}, []int{1, 3, 3, 2}, "test message")
+		if result {
+			t.Error("NotElementsMatchTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("NotElementsMatchT should mark test as failed")
 		}
 	})
 }
@@ -1585,6 +1849,30 @@ func TestNotRegexpf(t *testing.T) {
 	})
 }
 
+func TestNotRegexpTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := NotRegexpTf(t, "^start", "not starting", "test message")
+		if !result {
+			t.Error("NotRegexpTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := NotRegexpTf(mock, "^start", "starting", "test message")
+		if result {
+			t.Error("NotRegexpTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("NotRegexpT should mark test as failed")
+		}
+	})
+}
+
 func TestNotSamef(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1753,6 +2041,30 @@ func TestPositivef(t *testing.T) {
 	})
 }
 
+func TestPositiveTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := PositiveTf(t, 1, "test message")
+		if !result {
+			t.Error("PositiveTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := PositiveTf(mock, -1, "test message")
+		if result {
+			t.Error("PositiveTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("PositiveT should mark test as failed")
+		}
+	})
+}
+
 func TestRegexpf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1773,6 +2085,30 @@ func TestRegexpf(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("Regexp should mark test as failed")
+		}
+	})
+}
+
+func TestRegexpTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := RegexpTf(t, "^start", "starting", "test message")
+		if !result {
+			t.Error("RegexpTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := RegexpTf(mock, "^start", "not starting", "test message")
+		if result {
+			t.Error("RegexpTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("RegexpT should mark test as failed")
 		}
 	})
 }
@@ -1849,6 +2185,30 @@ func TestTruef(t *testing.T) {
 	})
 }
 
+func TestTrueTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := TrueTf(t, 1 == 1, "test message")
+		if !result {
+			t.Error("TrueTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := TrueTf(mock, 1 == 0, "test message")
+		if result {
+			t.Error("TrueTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("TrueT should mark test as failed")
+		}
+	})
+}
+
 func TestWithinDurationf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1904,6 +2264,28 @@ func TestYAMLEqf(t *testing.T) {
 
 		Panicsf(t, func() {
 			YAMLEqf(t, "key: value", "key: value", "test message")
+		}, "should panic without the yaml feature enabled.")
+	})
+}
+
+func TestYAMLEqBytesf(t *testing.T) {
+	t.Parallel()
+	t.Run("panic", func(t *testing.T) {
+		t.Parallel()
+
+		Panicsf(t, func() {
+			YAMLEqBytesf(t, []byte("key: value"), []byte("key: value"), "test message")
+		}, "should panic without the yaml feature enabled.")
+	})
+}
+
+func TestYAMLEqTf(t *testing.T) {
+	t.Parallel()
+	t.Run("panic", func(t *testing.T) {
+		t.Parallel()
+
+		Panicsf(t, func() {
+			YAMLEqTf(t, "key: value", "key: value", "test message")
 		}, "should panic without the yaml feature enabled.")
 	})
 }

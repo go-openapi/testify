@@ -5,16 +5,76 @@ package assertions
 
 import "testing"
 
-func TestYAMLEq(t *testing.T) {
-	mock := new(mockT)
-	const yamlDoc = `
+func TestYAML(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should panic", testAllYAMLEq())
+}
+
+func testAllYAMLEq() func(*testing.T) {
+	return func(t *testing.T) {
+		const (
+			actual = `
 ---
 a: 1
 `
+			expected = ""
+			success  = false
+		)
 
-	if !Panics(t, func() {
-		_ = YAMLEq(mock, "", yamlDoc)
-	}) {
-		Fail(t, "expected YAMLEq to panic with default settings")
+		t.Run("with YAMLEq", testYAMLEq(expected, actual, success))
+		t.Run("with YAMLEqBytes", testYAMLEqBytes(expected, actual, success))
+		t.Run("with YAMLEqT[string,string]", testYAMLEqT[string, string](expected, actual, success))
+		t.Run("with YAMLEqT[[]byte,string]", testYAMLEqT[[]byte, string](expected, actual, success))
+		t.Run("with YAMLEqT[string,[]byte]", testYAMLEqT[string, []byte](expected, actual, success))
+		t.Run("with YAMLEqT[[]byte,[]byte]", testYAMLEqT[[]byte, []byte](expected, actual, success))
 	}
+}
+
+func testYAMLEq(expected, actual string, success bool) func(*testing.T) {
+	_ = success
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		if !Panics(t, func() {
+			_ = YAMLEq(mock, expected, actual)
+		}) {
+			croakWantPanic(t, "YAMLEq")
+		}
+	}
+}
+
+func testYAMLEqBytes(expected, actual string, success bool) func(*testing.T) {
+	_ = success
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		if !Panics(t, func() {
+			_ = YAMLEqBytes(mock, []byte(expected), []byte(actual))
+		}) {
+			croakWantPanic(t, "YAMLEqBytes")
+		}
+	}
+}
+
+//nolint:thelper // linter false positive: this is not a helper
+func testYAMLEqT[ADoc, EDoc Text](expected, actual string, success bool) func(*testing.T) {
+	_ = success
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		if !Panics(t, func() {
+			_ = YAMLEqT(mock, EDoc(expected), ADoc(actual))
+		}) {
+			croakWantPanic(t, "YAMLEqT")
+		}
+	}
+}
+
+func croakWantPanic(t *testing.T, fn string) {
+	t.Helper()
+	t.Errorf("expected %q to panic with default settings", fn)
 }

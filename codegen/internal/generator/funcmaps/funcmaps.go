@@ -58,6 +58,7 @@ func FuncMap() template.FuncMap {
 		"returns":          PrintReturns,
 		"sourceLink":       sourceLink,
 		"titleize":         titleize,
+		"slugize":          slugize,
 	}
 }
 
@@ -203,7 +204,7 @@ func docStringFor(usage, name string) string {
 	case "format":
 		return comment(
 			fmt.Sprintf(
-				"%sf is the same as [%s], but accepts a format msg string to format arguments like [fmt.Printf].",
+				"%sf is the same as [%s], but it accepts a format msg string to format arguments like [fmt.Printf].",
 				basename,
 				name,
 			),
@@ -300,6 +301,7 @@ func relocate(values []model.TestValue, pkg string) string {
 	return strings.Join(relocated, ", ")
 }
 
+// sourceLink recomposes a github URL to the source code.
 func sourceLink(baseGitHubURL string, pos *token.Position) string {
 	if pos == nil {
 		return ""
@@ -326,6 +328,7 @@ func titleize(in string) string {
 	return caser.String(in)
 }
 
+// godocbadge produces a badge URL from https://pkg.go.dev.
 func godocbadge(pkggodevURL string) (string, error) {
 	u, err := url.Parse(pkggodevURL)
 	if err != nil {
@@ -342,4 +345,21 @@ func printDebug(in any) string {
 
 func printDate() string {
 	return time.Now().Format(time.DateOnly)
+}
+
+// slugize converts a name into a markdown ref inside a document.
+func slugize(in string) string {
+	return strings.ToLower(
+		strings.Map(func(r rune) rune {
+			switch r {
+			case '.', '_', ' ', '\t', ':':
+				return '-'
+			case '[', ']', ',':
+				return -1
+			default:
+				return r
+			}
+		},
+			in,
+		))
 }

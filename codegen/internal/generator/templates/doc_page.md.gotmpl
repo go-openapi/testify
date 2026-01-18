@@ -31,13 +31,30 @@ keywords:
 _All links point to <{{ $godoc }}>_
 
 This domain exposes {{ .RefCount }} functionalities.
+{{- if .HasGenerics }}
+Generic assertions are marked with a {{ print "{{" }}% icon icon="star" color=orange %{{ print "}}" }}
+{{- end }}
+
+```tree
+{{- with .Package }}
+  {{- $enableGenerics := .EnableGenerics }}
+  {{- range .Functions }}{{/* functions in internal/assertions annotated with "domain:" */}}
+    {{- if or (not .IsGeneric) ($enableGenerics) }}
+      {{- if and (not .IsHelper) (not .IsConstructor) }}
+- [{{ .GenericName }}](#{{ slugize .GenericName }}) | {{ if .IsGeneric}}star | orange{{ else }}angles-right{{ end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+```
 
 {{- with .Package }}
+  {{- $enableGenerics := .EnableGenerics }}
   {{- range .Functions }}{{/* functions in internal/assertions annotated with "domain:" */}}
-    {{- if or (not .IsGeneric) ($.EnableGenerics) }}
+    {{- if or (not .IsGeneric) ($enableGenerics) }}
       {{- if and (not .IsHelper) (not .IsConstructor) }}
 
-### {{ .Name }}
+### {{ .GenericName }}{{ if .IsGeneric }} {{ print "{{" }}% icon icon="star" color=orange %{{ print "}}" }}{{ end }}{#{{ slugize .GenericName }}}
         {{- if .IsDeprecated }}
 
 {{ print "{{" }}% expand title="{{ .Name }} [DEPRECATED]" %{{ print "}}" }}
@@ -54,14 +71,14 @@ This domain exposes {{ .RefCount }} functionalities.
 {{ print "{{" }}% tab title="{{ .Package }}" style="secondary" %{{ print "}}" }}
 | Signature | Usage |
 |--|--|
-| [`{{.Package }}.{{ .Name }}({{ params .AllParams }}) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Name }}) | package-level function |
+| [`{{.Package }}.{{ .GenericName }}({{ params .AllParams }}) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Name }}) | package-level function |
             {{- if .EnableFormat }}
-| [`{{ .Package }}.{{ .Name }}f(t T, {{ params .Params }}, msg string, args ...any) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Name }}f) | formatted variant |
+| [`{{ .Package }}.{{ .GenericName "f" }}(t T, {{ params .Params }}, msg string, args ...any) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Name }}f) | formatted variant |
             {{- end }}
-            {{- if .EnableForward }}
+            {{- if and .EnableForward (not .IsGeneric) }}
 | [`{{ .Package}}.(*{{ .Receiver }}).{{ .Name }}({{ params .Params }}) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Receiver }}.{{ .Name }}) | method variant |
             {{- end }}
-            {{- if and .EnableForward .EnableFormat }}
+            {{- if and .EnableForward .EnableFormat (not .IsGeneric) }}
 | [`{{ .Package }}.(*{{ .Receiver }}).{{ .Name }}f({{ params .Params }}, msg string, args ..any)`]({{ $godoc }}/{{ .Package }}#{{ .Receiver }}.{{ .Name }}f) | method formatted variant |
             {{- end }}
 {{ print "{{" }}% /tab %{{ print "}}" }}
@@ -101,10 +118,11 @@ This domain exposes {{ .RefCount }} functionalities.
 ---
 
 {{- with .Package }}{{ if .HasHelpers }}
+  {{- $enableGenerics := .EnableGenerics }}
 
 ## Other helpers
   {{- range .Functions }}{{/* functions in internal/assertions annotated with "domain:" */}}
-    {{- if or (not .IsGeneric) ($.EnableGenerics) }}
+    {{- if or (not .IsGeneric) ($enableGenerics) }}
       {{- if or .IsHelper .IsConstructor }}
 
 ### {{ .Name }}

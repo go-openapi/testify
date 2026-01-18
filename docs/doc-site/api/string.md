@@ -1,15 +1,19 @@
 ---
 title: "String"
 description: "Asserting Strings"
-modified: 2026-01-11
+modified: 2026-01-18
 weight: 13
 domains:
   - "string"
 keywords:
   - "NotRegexp"
   - "NotRegexpf"
+  - "NotRegexpT"
+  - "NotRegexpTf"
   - "Regexp"
   - "Regexpf"
+  - "RegexpT"
+  - "RegexpTf"
 ---
 
 Asserting Strings
@@ -21,11 +25,21 @@ Asserting Strings
 
 _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
-This domain exposes 2 functionalities.
+This domain exposes 4 functionalities.
+Generic assertions are marked with a {{% icon icon="star" color=orange %}}
 
-### NotRegexp
+```tree
+- [NotRegexp](#notregexp) | angles-right
+- [NotRegexpT[Rex RegExp, ADoc Text]](#notregexptrex-regexp-adoc-text) | star | orange
+- [Regexp](#regexp) | angles-right
+- [RegexpT[Rex RegExp, ADoc Text]](#regexptrex-regexp-adoc-text) | star | orange
+```
 
-NotRegexp asserts that a specified regexp does not match a string.
+### NotRegexp{#notregexp}
+
+NotRegexp asserts that a specified regular expression does not match a string.
+
+See [Regexp].
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -48,32 +62,82 @@ NotRegexp asserts that a specified regexp does not match a string.
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`assert.NotRegexp(t T, rx any, str any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotRegexp) | package-level function |
-| [`assert.NotRegexpf(t T, rx any, str any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotRegexpf) | formatted variant |
-| [`assert.(*Assertions).NotRegexp(rx any, str any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotRegexp) | method variant |
-| [`assert.(*Assertions).NotRegexpf(rx any, str any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotRegexpf) | method formatted variant |
+| [`assert.NotRegexp(t T, rx any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotRegexp) | package-level function |
+| [`assert.NotRegexpf(t T, rx any, actual any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotRegexpf) | formatted variant |
+| [`assert.(*Assertions).NotRegexp(rx any, actual any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotRegexp) | method variant |
+| [`assert.(*Assertions).NotRegexpf(rx any, actual any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotRegexpf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NotRegexp(t T, rx any, str any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotRegexp) | package-level function |
-| [`require.NotRegexpf(t T, rx any, str any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotRegexpf) | formatted variant |
-| [`require.(*Assertions).NotRegexp(rx any, str any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotRegexp) | method variant |
-| [`require.(*Assertions).NotRegexpf(rx any, str any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotRegexpf) | method formatted variant |
+| [`require.NotRegexp(t T, rx any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotRegexp) | package-level function |
+| [`require.NotRegexpf(t T, rx any, actual any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotRegexpf) | formatted variant |
+| [`require.(*Assertions).NotRegexp(rx any, actual any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotRegexp) | method variant |
+| [`require.(*Assertions).NotRegexpf(rx any, actual any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotRegexpf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.NotRegexp(t T, rx any, str any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotRegexp) | internal implementation |
+| [`assertions.NotRegexp(t T, rx any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotRegexp) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotRegexp](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L53)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotRegexp](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L90)
 {{% /tab %}}
 {{< /tabs >}}
 
-### Regexp
+### NotRegexpT[Rex RegExp, ADoc Text] {{% icon icon="star" color=orange %}}{#notregexptrex-regexp-adoc-text}
 
-Regexp asserts that a specified regexp matches a string.
+NotRegexpT asserts that a specified regular expression does not match a string.
+
+See [RegexpT].
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.NotRegexp(t, regexp.MustCompile("starts"), "it's starting")
+	assertions.NotRegexp(t, "^start", "it's not starting")
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	success: "^start", "not starting"
+	failure: "^start", "starting"
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.NotRegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotRegexpT) | package-level function |
+| [`assert.NotRegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotRegexpTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.NotRegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotRegexpT) | package-level function |
+| [`require.NotRegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotRegexpTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.NotRegexpT(t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotRegexpT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotRegexpT](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L131)
+{{% /tab %}}
+{{< /tabs >}}
+
+### Regexp{#regexp}
+
+Regexp asserts that a specified regular expression matches a string.
+
+The regular expression may be passed as a [regexp.Regexp](https://pkg.go.dev/regexp#Regexp), a string or a []byte and will be compiled.
+
+The actual argument to be matched may be a string, []byte or anything that prints as a string with [fmt.Sprint](https://pkg.go.dev/fmt#Sprint).
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -96,26 +160,68 @@ Regexp asserts that a specified regexp matches a string.
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`assert.Regexp(t T, rx any, str any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Regexp) | package-level function |
-| [`assert.Regexpf(t T, rx any, str any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Regexpf) | formatted variant |
-| [`assert.(*Assertions).Regexp(rx any, str any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Regexp) | method variant |
-| [`assert.(*Assertions).Regexpf(rx any, str any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Regexpf) | method formatted variant |
+| [`assert.Regexp(t T, rx any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Regexp) | package-level function |
+| [`assert.Regexpf(t T, rx any, actual any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Regexpf) | formatted variant |
+| [`assert.(*Assertions).Regexp(rx any, actual any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Regexp) | method variant |
+| [`assert.(*Assertions).Regexpf(rx any, actual any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Regexpf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Regexp(t T, rx any, str any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Regexp) | package-level function |
-| [`require.Regexpf(t T, rx any, str any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Regexpf) | formatted variant |
-| [`require.(*Assertions).Regexp(rx any, str any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Regexp) | method variant |
-| [`require.(*Assertions).Regexpf(rx any, str any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Regexpf) | method formatted variant |
+| [`require.Regexp(t T, rx any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Regexp) | package-level function |
+| [`require.Regexpf(t T, rx any, actual any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Regexpf) | formatted variant |
+| [`require.(*Assertions).Regexp(rx any, actual any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Regexp) | method variant |
+| [`require.(*Assertions).Regexpf(rx any, actual any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Regexpf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.Regexp(t T, rx any, str any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Regexp) | internal implementation |
+| [`assertions.Regexp(t T, rx any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Regexp) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Regexp](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L22)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Regexp](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L27)
+{{% /tab %}}
+{{< /tabs >}}
+
+### RegexpT[Rex RegExp, ADoc Text] {{% icon icon="star" color=orange %}}{#regexptrex-regexp-adoc-text}
+
+RegexpT asserts that a specified regular expression matches a string.
+
+The actual argument to be matched may be a string or []byte.
+
+See [Regexp].
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Examples" %}}
+```go
+	success: "^start", "starting"
+	failure: "^start", "not starting"
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.RegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#RegexpT) | package-level function |
+| [`assert.RegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#RegexpTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.RegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#RegexpT) | package-level function |
+| [`require.RegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#RegexpTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.RegexpT(t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#RegexpT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#RegexpT](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L63)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -135,5 +241,5 @@ SPDX-License-Identifier: Apache-2.0
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
 
-Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
+Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
 -->

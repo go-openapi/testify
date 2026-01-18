@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
+// Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
 
 package require
 
@@ -24,6 +24,9 @@ type (
 	// for table driven tests.
 	BoolAssertionFunc func(T, bool, ...any)
 
+	// Boolean is a bool or any type that can be converted to a bool.
+	Boolean = assertions.Boolean
+
 	// CollectT implements the [T] interface and collects all errors.
 	//
 	// [CollectT] is specifically intended to be used with [EventuallyWithT] and
@@ -42,8 +45,22 @@ type (
 	ErrorAssertionFunc func(T, error, ...any)
 
 	// H is an interface for types that implement the Helper method.
-	// This allows marking functions as test helpers.
+	// This allows marking functions as test helpers, e.g. [testing.T.Helper].
 	H = assertions.H
+
+	// Measurable is any number for which we can compute a delta (floats or integers).
+	//
+	// This is used by [InDeltaT] and [InEpsilonT].
+	//
+	// NOTE: unfortunately complex64 and complex128 are not supported.
+	Measurable = assertions.Measurable
+
+	// Ordered is a standard ordered type (i.e. types that support "<": [cmp.Ordered]) plus []byte and [time.Time].
+	//
+	// This is used by [GreaterT], [GreaterOrEqualT], [LessT], and [LessOrEqualT].
+	//
+	// NOTE: since [time.Time] is a struct, custom types which redeclare [time.Time] are not supported.
+	Ordered = assertions.Ordered
 
 	// PanicAssertionFunc is a common function prototype when validating a panic value.  Can be useful
 	// for table driven tests.
@@ -53,11 +70,31 @@ type (
 	// methods, and represents a simple func that takes no arguments, and returns nothing.
 	PanicTestFunc = assertions.PanicTestFunc
 
+	// RegExp is either a text containing a regular expression to compile (string or []byte), or directly the compiled regexp.
+	//
+	// This is used by [RegexpT] and [NotRegexpT].
+	RegExp = assertions.RegExp
+
+	// SignedNumeric is a signed integer or a floating point number or any type that can be converted to one of these.
+	SignedNumeric = assertions.SignedNumeric
+
 	// T is an interface wrapper around [testing.T].
 	T interface {
 		assertions.T
 		FailNow()
 	}
+
+	// Text is any type of underlying type string or []byte.
+	//
+	// This is used by [RegexpT], [NotRegexpT], [JSONEqT], and [YAMLEqT].
+	//
+	// NOTE: unfortunately, []rune is not supported.
+	Text = assertions.Text
+
+	// UnsignedNumeric is an unsigned integer.
+	//
+	// NOTE: there are no unsigned floating point numbers.
+	UnsignedNumeric = assertions.UnsignedNumeric
 
 	// ValueAssertionFunc is a common function prototype when validating a single value.  Can be useful
 	// for table driven tests.

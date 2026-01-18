@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
+// Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
 
 package require
 
@@ -93,6 +93,26 @@ func TestElementsMatchf(t *testing.T) {
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("ElementsMatch should call FailNow()")
+		}
+	})
+}
+
+func TestElementsMatchTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		ElementsMatchTf(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2}, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		ElementsMatchTf(mock, []int{1, 2, 3}, []int{1, 2, 4}, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("ElementsMatchT should call FailNow()")
 		}
 	})
 }
@@ -385,6 +405,26 @@ func TestFalsef(t *testing.T) {
 	})
 }
 
+func TestFalseTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		FalseTf(t, 1 == 0, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		FalseTf(mock, 1 == 1, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("FalseT should call FailNow()")
+		}
+	})
+}
+
 func TestFileEmptyf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -481,6 +521,46 @@ func TestGreaterOrEqualf(t *testing.T) {
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("GreaterOrEqual should call FailNow()")
+		}
+	})
+}
+
+func TestGreaterOrEqualTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		GreaterOrEqualTf(t, 2, 1, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		GreaterOrEqualTf(mock, 1, 2, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("GreaterOrEqualT should call FailNow()")
+		}
+	})
+}
+
+func TestGreaterTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		GreaterTf(t, 2, 1, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		GreaterTf(mock, 1, 2, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("GreaterT should call FailNow()")
 		}
 	})
 }
@@ -685,6 +765,26 @@ func TestInDeltaSlicef(t *testing.T) {
 	})
 }
 
+func TestInDeltaTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		InDeltaTf(t, 1.0, 1.01, 0.02, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		InDeltaTf(mock, 1.0, 1.1, 0.05, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("InDeltaT should call FailNow()")
+		}
+	})
+}
+
 func TestInEpsilonf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -721,6 +821,26 @@ func TestInEpsilonSlicef(t *testing.T) {
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("InEpsilonSlice should call FailNow()")
+		}
+	})
+}
+
+func TestInEpsilonTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		InEpsilonTf(t, 100.0, 101.0, 0.02, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		InEpsilonTf(mock, 100.0, 110.0, 0.05, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("InEpsilonT should call FailNow()")
 		}
 	})
 }
@@ -885,6 +1005,26 @@ func TestJSONEqBytesf(t *testing.T) {
 	})
 }
 
+func TestJSONEqTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		JSONEqTf(t, `{"hello": "world", "foo": "bar"}`, []byte(`{"foo": "bar", "hello": "world"}`), "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		JSONEqTf(mock, `{"hello": "world", "foo": "bar"}`, `[{"foo": "bar"}, {"hello": "world"}]`, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("JSONEqT should call FailNow()")
+		}
+	})
+}
+
 func TestKindf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -965,6 +1105,46 @@ func TestLessOrEqualf(t *testing.T) {
 	})
 }
 
+func TestLessOrEqualTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		LessOrEqualTf(t, 1, 2, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		LessOrEqualTf(mock, 2, 1, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("LessOrEqualT should call FailNow()")
+		}
+	})
+}
+
+func TestLessTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		LessTf(t, 1, 2, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		LessTf(mock, 2, 1, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("LessT should call FailNow()")
+		}
+	})
+}
+
 func TestNegativef(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -981,6 +1161,26 @@ func TestNegativef(t *testing.T) {
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("Negative should call FailNow()")
+		}
+	})
+}
+
+func TestNegativeTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		NegativeTf(t, -1, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NegativeTf(mock, 1, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("NegativeT should call FailNow()")
 		}
 	})
 }
@@ -1121,6 +1321,26 @@ func TestNotElementsMatchf(t *testing.T) {
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("NotElementsMatch should call FailNow()")
+		}
+	})
+}
+
+func TestNotElementsMatchTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		NotElementsMatchTf(t, []int{1, 2, 3}, []int{1, 2, 4}, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NotElementsMatchTf(mock, []int{1, 3, 2, 3}, []int{1, 3, 3, 2}, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("NotElementsMatchT should call FailNow()")
 		}
 	})
 }
@@ -1325,6 +1545,26 @@ func TestNotRegexpf(t *testing.T) {
 	})
 }
 
+func TestNotRegexpTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		NotRegexpTf(t, "^start", "not starting", "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NotRegexpTf(mock, "^start", "starting", "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("NotRegexpT should call FailNow()")
+		}
+	})
+}
+
 func TestNotSamef(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1465,6 +1705,26 @@ func TestPositivef(t *testing.T) {
 	})
 }
 
+func TestPositiveTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		PositiveTf(t, 1, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		PositiveTf(mock, -1, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("PositiveT should call FailNow()")
+		}
+	})
+}
+
 func TestRegexpf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1481,6 +1741,26 @@ func TestRegexpf(t *testing.T) {
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("Regexp should call FailNow()")
+		}
+	})
+}
+
+func TestRegexpTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		RegexpTf(t, "^start", "starting", "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		RegexpTf(mock, "^start", "not starting", "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("RegexpT should call FailNow()")
 		}
 	})
 }
@@ -1545,6 +1825,26 @@ func TestTruef(t *testing.T) {
 	})
 }
 
+func TestTrueTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		TrueTf(t, 1 == 1, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		TrueTf(mock, 1 == 0, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("TrueT should call FailNow()")
+		}
+	})
+}
+
 func TestWithinDurationf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1592,6 +1892,28 @@ func TestYAMLEqf(t *testing.T) {
 
 		Panicsf(t, func() {
 			YAMLEqf(t, "key: value", "key: value", "test message")
+		}, "should panic without the yaml feature enabled.")
+	})
+}
+
+func TestYAMLEqBytesf(t *testing.T) {
+	t.Parallel()
+	t.Run("panic", func(t *testing.T) {
+		t.Parallel()
+
+		Panicsf(t, func() {
+			YAMLEqBytesf(t, []byte("key: value"), []byte("key: value"), "test message")
+		}, "should panic without the yaml feature enabled.")
+	})
+}
+
+func TestYAMLEqTf(t *testing.T) {
+	t.Parallel()
+	t.Run("panic", func(t *testing.T) {
+		t.Parallel()
+
+		Panicsf(t, func() {
+			YAMLEqTf(t, "key: value", "key: value", "test message")
 		}, "should panic without the yaml feature enabled.")
 	})
 }

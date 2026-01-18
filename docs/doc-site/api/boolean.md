@@ -1,15 +1,19 @@
 ---
 title: "Boolean"
 description: "Asserting Boolean Values"
-modified: 2026-01-11
+modified: 2026-01-18
 weight: 1
 domains:
   - "boolean"
 keywords:
   - "False"
   - "Falsef"
+  - "FalseT"
+  - "FalseTf"
   - "True"
   - "Truef"
+  - "TrueT"
+  - "TrueTf"
 ---
 
 Asserting Boolean Values
@@ -21,9 +25,17 @@ Asserting Boolean Values
 
 _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
-This domain exposes 2 functionalities.
+This domain exposes 4 functionalities.
+Generic assertions are marked with a {{% icon icon="star" color=orange %}}
 
-### False
+```tree
+- [False](#false) | angles-right
+- [FalseT[B Boolean]](#falsetb-boolean) | star | orange
+- [True](#true) | angles-right
+- [TrueT[B Boolean]](#truetb-boolean) | star | orange
+```
+
+### False{#false}
 
 False asserts that the specified value is false.
 
@@ -66,11 +78,56 @@ False asserts that the specified value is false.
 |--|--| 
 | [`assertions.False(t T, value bool, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#False) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#False](https://github.com/go-openapi/testify/blob/master/internal/assertions/boolean.go#L38)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#False](https://github.com/go-openapi/testify/blob/master/internal/assertions/boolean.go#L63)
 {{% /tab %}}
 {{< /tabs >}}
 
-### True
+### FalseT[B Boolean] {{% icon icon="star" color=orange %}}{#falsetb-boolean}
+
+FalseT asserts that the specified value is false.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	 type B bool
+	 var b B = true
+		assertions.FalseT(t, b)
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	success: 1 == 0
+	failure: 1 == 1
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.FalseT[B Boolean](t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#FalseT) | package-level function |
+| [`assert.FalseTf[B Boolean](t T, value B, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#FalseTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.FalseT[B Boolean](t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FalseT) | package-level function |
+| [`require.FalseTf[B Boolean](t T, value B, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FalseTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.FalseT(t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FalseT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FalseT](https://github.com/go-openapi/testify/blob/master/internal/assertions/boolean.go#L88)
+{{% /tab %}}
+{{< /tabs >}}
+
+### True{#true}
 
 True asserts that the specified value is true.
 
@@ -117,6 +174,51 @@ True asserts that the specified value is true.
 {{% /tab %}}
 {{< /tabs >}}
 
+### TrueT[B Boolean] {{% icon icon="star" color=orange %}}{#truetb-boolean}
+
+TrueT asserts that the specified value is true.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	type B bool
+	var b B = true
+	assertions.True(t, b)
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	success: 1 == 1
+	failure: 1 == 0
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.TrueT[B Boolean](t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#TrueT) | package-level function |
+| [`assert.TrueTf[B Boolean](t T, value B, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#TrueTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.TrueT[B Boolean](t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#TrueT) | package-level function |
+| [`require.TrueTf[B Boolean](t T, value B, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#TrueTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.TrueT(t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#TrueT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#TrueT](https://github.com/go-openapi/testify/blob/master/internal/assertions/boolean.go#L41)
+{{% /tab %}}
+{{< /tabs >}}
+
 ---
 
 ---
@@ -133,5 +235,5 @@ SPDX-License-Identifier: Apache-2.0
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
 
-Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
+Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
 -->
