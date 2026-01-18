@@ -1,7 +1,7 @@
 ---
 title: "Equality"
 description: "Asserting Two Things Are Equal"
-modified: 2026-01-11
+modified: 2026-01-18
 weight: 5
 domains:
   - "equality"
@@ -43,7 +43,22 @@ _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
 This domain exposes 12 functionalities.
 
-### Empty
+```tree
+- [Empty](#empty) | angles-right
+- [Equal](#equal) | angles-right
+- [EqualExportedValues](#equalexportedvalues) | angles-right
+- [EqualValues](#equalvalues) | angles-right
+- [Exactly](#exactly) | angles-right
+- [Nil](#nil) | angles-right
+- [NotEmpty](#notempty) | angles-right
+- [NotEqual](#notequal) | angles-right
+- [NotEqualValues](#notequalvalues) | angles-right
+- [NotNil](#notnil) | angles-right
+- [NotSame](#notsame) | angles-right
+- [Same](#same) | angles-right
+```
+
+### Empty{#empty}
 
 Empty asserts that the given value is "empty".
 
@@ -96,11 +111,11 @@ Pointer values are "empty" if the pointer is nil or if the pointed value is "emp
 |--|--| 
 | [`assertions.Empty(t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Empty) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Empty](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L276)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Empty](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L289)
 {{% /tab %}}
 {{< /tabs >}}
 
-### Equal
+### Equal{#equal}
 
 Equal asserts that two objects are equal.
 
@@ -148,11 +163,11 @@ Function equality cannot be determined and will always fail.
 |--|--| 
 | [`assertions.Equal(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Equal) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Equal](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L28)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Equal](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L30)
 {{% /tab %}}
 {{< /tabs >}}
 
-### EqualExportedValues
+### EqualExportedValues{#equalexportedvalues}
 
 EqualExportedValues asserts that the types of two objects are equal and their public
 fields are also equal. This is useful for comparing structs that have private fields
@@ -202,11 +217,11 @@ that could potentially differ.
 |--|--| 
 | [`assertions.EqualExportedValues(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EqualExportedValues) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualExportedValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L161)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualExportedValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L174)
 {{% /tab %}}
 {{< /tabs >}}
 
-### EqualValues
+### EqualValues{#equalvalues}
 
 EqualValues asserts that two objects are equal or convertible to the larger
 type and equal.
@@ -250,11 +265,11 @@ type and equal.
 |--|--| 
 | [`assertions.EqualValues(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EqualValues) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L127)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L140)
 {{% /tab %}}
 {{< /tabs >}}
 
-### Exactly
+### Exactly{#exactly}
 
 Exactly asserts that two objects are equal in value and type.
 
@@ -297,11 +312,11 @@ Exactly asserts that two objects are equal in value and type.
 |--|--| 
 | [`assertions.Exactly(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Exactly) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Exactly](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L198)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Exactly](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L211)
 {{% /tab %}}
 {{< /tabs >}}
 
-### Nil
+### Nil{#nil}
 
 Nil asserts that the specified object is nil.
 
@@ -344,11 +359,11 @@ Nil asserts that the specified object is nil.
 |--|--| 
 | [`assertions.Nil(t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Nil) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Nil](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L245)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Nil](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L258)
 {{% /tab %}}
 {{< /tabs >}}
 
-### NotEmpty
+### NotEmpty{#notempty}
 
 NotEmpty asserts that the specified object is NOT [Empty].
 
@@ -393,11 +408,11 @@ NotEmpty asserts that the specified object is NOT [Empty].
 |--|--| 
 | [`assertions.NotEmpty(t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotEmpty) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L301)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L314)
 {{% /tab %}}
 {{< /tabs >}}
 
-### NotEqual
+### NotEqual{#notequal}
 
 NotEqual asserts that the specified values are NOT equal.
 
@@ -442,11 +457,11 @@ referenced values (as opposed to the memory addresses).
 |--|--| 
 | [`assertions.NotEqual(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotEqual) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEqual](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L327)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEqual](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L340)
 {{% /tab %}}
 {{< /tabs >}}
 
-### NotEqualValues
+### NotEqualValues{#notequalvalues}
 
 NotEqualValues asserts that two objects are not equal even when converted to the same type.
 
@@ -489,11 +504,11 @@ NotEqualValues asserts that two objects are not equal even when converted to the
 |--|--| 
 | [`assertions.NotEqualValues(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotEqualValues) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEqualValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L354)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEqualValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L367)
 {{% /tab %}}
 {{< /tabs >}}
 
-### NotNil
+### NotNil{#notnil}
 
 NotNil asserts that the specified object is not nil.
 
@@ -536,11 +551,11 @@ assertions.NotNil(t, err)
 |--|--| 
 | [`assertions.NotNil(t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotNil) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotNil](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L224)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotNil](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L237)
 {{% /tab %}}
 {{< /tabs >}}
 
-### NotSame
+### NotSame{#notsame}
 
 NotSame asserts that two pointers do not reference the same object.
 
@@ -586,11 +601,11 @@ determined based on the equality of both type and value.
 |--|--| 
 | [`assertions.NotSame(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotSame) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSame](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L96)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSame](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L109)
 {{% /tab %}}
 {{< /tabs >}}
 
-### Same
+### Same{#same}
 
 Same asserts that two pointers reference the same object.
 
@@ -636,7 +651,7 @@ determined based on the equality of both type and value.
 |--|--| 
 | [`assertions.Same(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Same) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Same](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L62)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Same](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L75)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -656,5 +671,5 @@ SPDX-License-Identifier: Apache-2.0
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
 
-Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
+Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
 -->

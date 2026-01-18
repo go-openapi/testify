@@ -1,7 +1,7 @@
 ---
 title: "Error"
 description: "Asserting Errors"
-modified: 2026-01-11
+modified: 2026-01-18
 weight: 6
 domains:
   - "error"
@@ -35,7 +35,18 @@ _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
 This domain exposes 8 functionalities.
 
-### EqualError
+```tree
+- [EqualError](#equalerror) | angles-right
+- [Error](#error) | angles-right
+- [ErrorAs](#erroras) | angles-right
+- [ErrorContains](#errorcontains) | angles-right
+- [ErrorIs](#erroris) | angles-right
+- [NoError](#noerror) | angles-right
+- [NotErrorAs](#noterroras) | angles-right
+- [NotErrorIs](#noterroris) | angles-right
+```
+
+### EqualError{#equalerror}
 
 EqualError asserts that a function returned a non-nil error (i.e. an error)
 and that it is equal to the provided error.
@@ -61,30 +72,30 @@ and that it is equal to the provided error.
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`assert.EqualError(t T, theError error, errString string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualError) | package-level function |
-| [`assert.EqualErrorf(t T, theError error, errString string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualErrorf) | formatted variant |
-| [`assert.(*Assertions).EqualError(theError error, errString string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.EqualError) | method variant |
-| [`assert.(*Assertions).EqualErrorf(theError error, errString string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.EqualErrorf) | method formatted variant |
+| [`assert.EqualError(t T, err error, errString string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualError) | package-level function |
+| [`assert.EqualErrorf(t T, err error, errString string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualErrorf) | formatted variant |
+| [`assert.(*Assertions).EqualError(err error, errString string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.EqualError) | method variant |
+| [`assert.(*Assertions).EqualErrorf(err error, errString string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.EqualErrorf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.EqualError(t T, theError error, errString string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EqualError) | package-level function |
-| [`require.EqualErrorf(t T, theError error, errString string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EqualErrorf) | formatted variant |
-| [`require.(*Assertions).EqualError(theError error, errString string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.EqualError) | method variant |
-| [`require.(*Assertions).EqualErrorf(theError error, errString string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.EqualErrorf) | method formatted variant |
+| [`require.EqualError(t T, err error, errString string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EqualError) | package-level function |
+| [`require.EqualErrorf(t T, err error, errString string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EqualErrorf) | formatted variant |
+| [`require.(*Assertions).EqualError(err error, errString string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.EqualError) | method variant |
+| [`require.(*Assertions).EqualErrorf(err error, errString string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.EqualErrorf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.EqualError(t T, theError error, errString string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EqualError) | internal implementation |
+| [`assertions.EqualError(t T, err error, errString string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EqualError) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualError](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L80)
 {{% /tab %}}
 {{< /tabs >}}
 
-### Error
+### Error{#error}
 
 Error asserts that a function returned a non-nil error (ie. an error).
 
@@ -132,7 +143,7 @@ Error asserts that a function returned a non-nil error (ie. an error).
 {{% /tab %}}
 {{< /tabs >}}
 
-### ErrorAs
+### ErrorAs{#erroras}
 
 ErrorAs asserts that at least one of the errors in err's chain matches target, and if so, sets target to that error value.
 
@@ -181,7 +192,7 @@ This is a wrapper for [errors.As](https://pkg.go.dev/errors#As).
 {{% /tab %}}
 {{< /tabs >}}
 
-### ErrorContains
+### ErrorContains{#errorcontains}
 
 ErrorContains asserts that a function returned a non-nil error (i.e. an
 error) and that the error contains the specified substring.
@@ -207,30 +218,30 @@ error) and that the error contains the specified substring.
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`assert.ErrorContains(t T, theError error, contains string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorContains) | package-level function |
-| [`assert.ErrorContainsf(t T, theError error, contains string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorContainsf) | formatted variant |
-| [`assert.(*Assertions).ErrorContains(theError error, contains string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorContains) | method variant |
-| [`assert.(*Assertions).ErrorContainsf(theError error, contains string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorContainsf) | method formatted variant |
+| [`assert.ErrorContains(t T, err error, contains string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorContains) | package-level function |
+| [`assert.ErrorContainsf(t T, err error, contains string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorContainsf) | formatted variant |
+| [`assert.(*Assertions).ErrorContains(err error, contains string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorContains) | method variant |
+| [`assert.(*Assertions).ErrorContainsf(err error, contains string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorContainsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.ErrorContains(t T, theError error, contains string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorContains) | package-level function |
-| [`require.ErrorContainsf(t T, theError error, contains string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorContainsf) | formatted variant |
-| [`require.(*Assertions).ErrorContains(theError error, contains string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorContains) | method variant |
-| [`require.(*Assertions).ErrorContainsf(theError error, contains string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorContainsf) | method formatted variant |
+| [`require.ErrorContains(t T, err error, contains string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorContains) | package-level function |
+| [`require.ErrorContainsf(t T, err error, contains string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorContainsf) | formatted variant |
+| [`require.(*Assertions).ErrorContains(err error, contains string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorContains) | method variant |
+| [`require.(*Assertions).ErrorContainsf(err error, contains string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorContainsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.ErrorContains(t T, theError error, contains string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ErrorContains) | internal implementation |
+| [`assertions.ErrorContains(t T, err error, contains string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ErrorContains) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L111)
 {{% /tab %}}
 {{< /tabs >}}
 
-### ErrorIs
+### ErrorIs{#erroris}
 
 ErrorIs asserts that at least one of the errors in err's chain matches target.
 
@@ -279,7 +290,7 @@ This is a wrapper for [errors.Is](https://pkg.go.dev/errors#Is).
 {{% /tab %}}
 {{< /tabs >}}
 
-### NoError
+### NoError{#noerror}
 
 NoError asserts that a function returned a nil error (ie. no error).
 
@@ -329,7 +340,7 @@ NoError asserts that a function returned a nil error (ie. no error).
 {{% /tab %}}
 {{< /tabs >}}
 
-### NotErrorAs
+### NotErrorAs{#noterroras}
 
 NotErrorAs asserts that none of the errors in err's chain matches target,
 but if so, sets target to that error value.
@@ -377,7 +388,7 @@ but if so, sets target to that error value.
 {{% /tab %}}
 {{< /tabs >}}
 
-### NotErrorIs
+### NotErrorIs{#noterroris}
 
 NotErrorIs asserts that none of the errors in err's chain matches target.
 
@@ -442,5 +453,5 @@ SPDX-License-Identifier: Apache-2.0
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
 
-Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
+Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
 -->

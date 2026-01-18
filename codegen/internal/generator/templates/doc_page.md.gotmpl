@@ -41,7 +41,7 @@ Generic assertions are marked with a {{ print "{{" }}% icon icon="star" color=or
   {{- range .Functions }}{{/* functions in internal/assertions annotated with "domain:" */}}
     {{- if or (not .IsGeneric) ($enableGenerics) }}
       {{- if and (not .IsHelper) (not .IsConstructor) }}
-- [{{ .GenericName }}](#{{ slugize .GenericName }}) | {{ if .IsGeneric}}star | orange {{ else }}angles-right{{ end }}
+- [{{ .GenericName }}](#{{ slugize .GenericName }}) | {{ if .IsGeneric}}star | orange{{ else }}angles-right{{ end }}
       {{- end }}
     {{- end }}
   {{- end }}

@@ -25,6 +25,7 @@ Main features:
 
 * zero external dependencies
 * opt-in dependencies for extra features (e.g. asserting YAML, colorized output)
+* assertions using generic types (see [a basic example][example-with-generics-url])
 * [searchable documentation][doc-url]
 
 ## Announcements
@@ -43,8 +44,15 @@ Design and exploration phase. Contributions and proposals are welcome.
 
 > **Recent news**
 > Fully refactored how assertions are generated and documented.
+> Fixed hangs & panics when using `spew`. Fuzzed `spew`.
+> Fixed go routine leaks with `EventuallyWithT` and co.
+> Added `Kind` & `NotKind`
+> Fix deterministic order of keys in diff
+> Fixed edge cases with `InDelta`, `InEpsilon`
+> Added opt-in support for colorized output
+> Introduced generics (round 1): 16 new type-safe assertions with generic types (added benchmark)
 >
-> Now on our way to apply more fixes, features and adopt generics. See [ROADMAP][roadmap].
+> See our [ROADMAP][roadmap].
 
 ## Import this library in your project
 
@@ -93,7 +101,7 @@ Becomes:
 
 ## Usage at go-openapi and go-swagger
 
-This fork now full replaces the original project for all go-openapi projects,
+This fork now fully replaces the original project for all go-openapi projects,
 thus reducing their dependencies footprint.
 
 Go-swagger will be adapted over Q1 2026.
@@ -161,6 +169,7 @@ Maintainers can cut a new release by either:
 <!-- Badges: documentation & support -->
 [doc-badge]: https://img.shields.io/badge/doc-site-blue?link=https%3A%2F%2Fgo-openapi.github.io%2Ftestify%2F
 [doc-url]: https://go-openapi.github.io/testify
+[example-with-generics-url]: https://go-openapi.github.io/testify#usage-with-generics
 [godoc-badge]: https://pkg.go.dev/badge/github.com/go-openapi/testify
 [godoc-url]: http://pkg.go.dev/github.com/go-openapi/testify
 [slack-logo]: https://a.slack-edge.com/e6a93c1/img/icons/favicon-32.png

@@ -1,11 +1,9 @@
 ---
 title: "Testify v2"
 type: home
-description: 'Go testing assertions for the rest of us'
+description: 'The v2 our test wanted'
 weight: 1
 ---
-
-**Go testing assertions for the rest of us**
 
 {{% notice info %}}
 This is the home of `github.com/go-openapi/testify/v2`, an active, opinionated fork of `github.com/stretchr/testify`.
@@ -13,7 +11,7 @@ This is the home of `github.com/go-openapi/testify/v2`, an active, opinionated f
 
 ## Testify v2 - The v2 our tests wanted
 
-A set of `go` packages that provide tools for testifying that your code behaves as you intended.
+A set of `go` packages that provide tools for _testifying_ (verifying) that your code behaves as you intended.
 
 This is the go-openapi fork of the great [testify](https://github.com/stretchr/testify) package.
 
@@ -44,7 +42,9 @@ APIs that became bloated over a decade or so, uncontrolled dependencies, difficu
 breaking changes, conflicting demands from users etc.
 {{% /notice %}}
 
-More about our motivations in the project's [README](README.md).
+More about our motivations in the project's [README](README.md#motivation).
+
+You might also be curious about our [ROADMAP](project/maintainers/ROADMAP.md).
 
 ### Getting started
 
@@ -86,6 +86,7 @@ To use this package in your projects:
 ```go
     import (
         "testing"
+
         "github.com/go-openapi/testify/v2/require"
     )
     ...
@@ -100,6 +101,33 @@ To use this package in your projects:
 ```
 {{% /card %}}
 {{< /cards >}}
+
+### Usage with generics
+
+Assertion functions that support go generic types are suffixed with `T` (for "Type safety").
+A formatted variant suffixed with `Tf` is also exposed.
+
+Obviously, the `Assertion` type cannot be extended with generic methods, as of `go1.25`.
+
+{{% card title="InDeltaT" %}}
+```go
+    import (
+        "testing"
+
+        "github.com/go-openapi/testify/v2/require"
+    )
+    ...
+    
+    const (
+        expected = 1.00
+        delta = 1E-6
+    )
+    var input = 1.01
+
+	result := someComplexComputation(input)
+    require.InDeltaT(t, expected, input, delta)
+```
+{{% /card %}}
 
 ## Licensing
 

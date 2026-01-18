@@ -1,7 +1,7 @@
 ---
 title: "Collection"
 description: "Asserting Slices And Maps"
-modified: 2026-01-11
+modified: 2026-01-18
 weight: 2
 domains:
   - "collection"
@@ -10,12 +10,16 @@ keywords:
   - "Containsf"
   - "ElementsMatch"
   - "ElementsMatchf"
+  - "ElementsMatchT"
+  - "ElementsMatchTf"
   - "Len"
   - "Lenf"
   - "NotContains"
   - "NotContainsf"
   - "NotElementsMatch"
   - "NotElementsMatchf"
+  - "NotElementsMatchT"
+  - "NotElementsMatchTf"
   - "NotSubset"
   - "NotSubsetf"
   - "Subset"
@@ -31,9 +35,22 @@ Asserting Slices And Maps
 
 _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
-This domain exposes 7 functionalities.
+This domain exposes 9 functionalities.
+Generic assertions are marked with a {{% icon icon="star" color=orange %}}
 
-### Contains
+```tree
+- [Contains](#contains) | angles-right
+- [ElementsMatch](#elementsmatch) | angles-right
+- [ElementsMatchT[E comparable]](#elementsmatchte-comparable) | star | orange
+- [Len](#len) | angles-right
+- [NotContains](#notcontains) | angles-right
+- [NotElementsMatch](#notelementsmatch) | angles-right
+- [NotElementsMatchT[E comparable]](#notelementsmatchte-comparable) | star | orange
+- [NotSubset](#notsubset) | angles-right
+- [Subset](#subset) | angles-right
+```
+
+### Contains{#contains}
 
 Contains asserts that the specified string, list(array, slice...) or map contains the
 specified substring or element.
@@ -79,11 +96,11 @@ specified substring or element.
 |--|--| 
 | [`assertions.Contains(t T, s any, contains any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Contains) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Contains](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L64)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Contains](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L63)
 {{% /tab %}}
 {{< /tabs >}}
 
-### ElementsMatch
+### ElementsMatch{#elementsmatch}
 
 ElementsMatch asserts that the specified listA(array, slice...) is equal to specified
 listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
@@ -93,7 +110,7 @@ the number of appearances of each of them in both lists should match.
 {{< tabs >}}
 {{% tab title="Usage" %}}
 ```go
-	assertions.ElementsMatch(t, [1, 3, 2, 3], [1, 3, 3, 2])
+	assertions.ElementsMatch(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
 ```
 {{< /tab >}}
 {{% tab title="Examples" %}}
@@ -128,11 +145,56 @@ the number of appearances of each of them in both lists should match.
 |--|--| 
 | [`assertions.ElementsMatch(t T, listA any, listB any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ElementsMatch) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ElementsMatch](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L277)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ElementsMatch](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L276)
 {{% /tab %}}
 {{< /tabs >}}
 
-### Len
+### ElementsMatchT[E comparable] {{% icon icon="star" color=orange %}}{#elementsmatchte-comparable}
+
+ElementsMatchT asserts that the specified listA(array, slice...) is equal to specified
+listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
+the number of appearances of each of them in both lists should match.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.ElementsMatchT(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	success: []int{1, 3, 2, 3}, []int{1, 3, 3, 2}
+	failure: []int{1, 2, 3}, []int{1, 2, 4}
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.ElementsMatchT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ElementsMatchT) | package-level function |
+| [`assert.ElementsMatchTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ElementsMatchTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.ElementsMatchT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ElementsMatchT) | package-level function |
+| [`require.ElementsMatchTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ElementsMatchTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.ElementsMatchT(t T, listA []E, listB []E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ElementsMatchT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ElementsMatchT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L349)
+{{% /tab %}}
+{{< /tabs >}}
+
+### Len{#len}
 
 Len asserts that the specified object has specific length.
 
@@ -185,16 +247,12 @@ See also [reflect.Len](https://pkg.go.dev/reflect#Len).
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Len](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L31)
 
-> **Maintainer Note**
-> The implementation is based on [reflect.Len]. The potential panic is handled with recover.
-A better approach could be to check for the [reflect.Type] before calling [reflect.Len].
-
 > **Note**
 > (proposals) this does not currently support iterators, or collection objects that have a Len() method.
 {{% /tab %}}
 {{< /tabs >}}
 
-### NotContains
+### NotContains{#notcontains}
 
 NotContains asserts that the specified string, list(array, slice...) or map does NOT contain the
 specified substring or element.
@@ -240,11 +298,11 @@ specified substring or element.
 |--|--| 
 | [`assertions.NotContains(t T, s any, contains any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotContains) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L94)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L93)
 {{% /tab %}}
 {{< /tabs >}}
 
-### NotElementsMatch
+### NotElementsMatch{#notelementsmatch}
 
 NotElementsMatch asserts that the specified listA(array, slice...) is NOT equal to specified
 listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
@@ -255,9 +313,9 @@ This is an inverse of ElementsMatch.
 {{< tabs >}}
 {{% tab title="Usage" %}}
 ```go
-	assertions.NotElementsMatch(t, [1, 1, 2, 3], [1, 1, 2, 3]) -> false
-	assertions.NotElementsMatch(t, [1, 1, 2, 3], [1, 2, 3]) -> true
-	assertions.NotElementsMatch(t, [1, 2, 3], [1, 2, 4]) -> true
+	assertions.NotElementsMatch(t, []int{1, 1, 2, 3}, []int{1, 1, 2, 3}) -> false
+	assertions.NotElementsMatch(t, []int{1, 1, 2, 3}, []int{1, 2, 3}) -> true
+	assertions.NotElementsMatch(t, []int{1, 2, 3}, []int{1, 2, 4}) -> true
 ```
 {{< /tab >}}
 {{% tab title="Examples" %}}
@@ -292,11 +350,59 @@ This is an inverse of ElementsMatch.
 |--|--| 
 | [`assertions.NotElementsMatch(t T, listA any, listB any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatch) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatch](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L314)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatch](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L313)
 {{% /tab %}}
 {{< /tabs >}}
 
-### NotSubset
+### NotElementsMatchT[E comparable] {{% icon icon="star" color=orange %}}{#notelementsmatchte-comparable}
+
+NotElementsMatchT asserts that the specified listA(array, slice...) is NOT equal to specified
+listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
+the number of appearances of each of them in both lists should not match.
+This is an inverse of ElementsMatch.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.NotElementsMatchT(t, []int{1, 1, 2, 3}, []int{1, 1, 2, 3}) -> false
+	assertions.NotElementsMatchT(t, []int{1, 1, 2, 3}, []int{1, 2, 3}) -> true
+	assertions.NotElementsMatchT(t, []int{1, 2, 3}, []int{1, 2, 4}) -> true
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	success: []int{1, 2, 3}, []int{1, 2, 4}
+	failure: []int{1, 3, 2, 3}, []int{1, 3, 3, 2}
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.NotElementsMatchT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotElementsMatchT) | package-level function |
+| [`assert.NotElementsMatchTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotElementsMatchTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.NotElementsMatchT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotElementsMatchT) | package-level function |
+| [`require.NotElementsMatchTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotElementsMatchTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.NotElementsMatchT(t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatchT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatchT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L385)
+{{% /tab %}}
+{{< /tabs >}}
+
+### NotSubset{#notsubset}
 
 NotSubset asserts that the list (array, slice, or map) does NOT contain all
 elements given in the subset (array, slice, or map).
@@ -345,11 +451,11 @@ only the map key is evaluated.
 |--|--| 
 | [`assertions.NotSubset(t T, list any, subset any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotSubset) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSubset](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L205)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSubset](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L204)
 {{% /tab %}}
 {{< /tabs >}}
 
-### Subset
+### Subset{#subset}
 
 Subset asserts that the list (array, slice, or map) contains all elements
 given in the subset (array, slice, or map).
@@ -361,10 +467,10 @@ only the map key is evaluated.
 {{< tabs >}}
 {{% tab title="Usage" %}}
 ```go
-	assertions.Subset(t, [1, 2, 3], [1, 2])
-	assertions.Subset(t, {"x": 1, "y": 2}, {"x": 1})
-	assertions.Subset(t, [1, 2, 3], {1: "one", 2: "two"})
-	assertions.Subset(t, {"x": 1, "y": 2}, ["x"])
+	assertions.Subset(t, []int{1, 2, 3}, []int{1, 2})
+	assertions.Subset(t, []string{"x": 1, "y": 2}, []string{"x": 1})
+	assertions.Subset(t, []int{1, 2, 3}, map[int]string{1: "one", 2: "two"})
+	assertions.Subset(t, map[string]int{"x": 1, "y": 2}, []string{"x"})
 ```
 {{< /tab >}}
 {{% tab title="Examples" %}}
@@ -399,7 +505,7 @@ only the map key is evaluated.
 |--|--| 
 | [`assertions.Subset(t T, list any, subset any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Subset) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Subset](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L128)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Subset](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L127)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -419,5 +525,5 @@ SPDX-License-Identifier: Apache-2.0
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
 
-Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
+Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
 -->
