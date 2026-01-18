@@ -4,7 +4,6 @@
 package assertions
 
 import (
-	"errors"
 	"fmt"
 	"math"
 	"reflect"
@@ -12,6 +11,18 @@ import (
 )
 
 // InDelta asserts that the two numerals are within delta of each other.
+//
+// Delta must be greater than or equal to zero.
+//
+// Expected and actual values should convert to float64.
+// To compare large integers that can't be represented accurately as float64 (eg. uint64),
+// prefer [InDeltaT] to preserve the original type.
+//
+// # Behavior with IEEE floating point arithmetics
+//
+//   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+//   - expected +Inf is matched only by a +Inf
+//   - expected -Inf is matched only by a -Inf
 //
 // # Usage
 //
@@ -29,21 +40,16 @@ func InDelta(t T, expected, actual any, delta float64, msgAndArgs ...any) bool {
 
 	af, aok := toFloat(expected)
 	bf, bok := toFloat(actual)
-
 	if !aok || !bok {
 		return Fail(t, "Parameters must be numerical", msgAndArgs...)
 	}
 
-	if math.IsNaN(af) && math.IsNaN(bf) {
+	msg, skip, ok := checkDeltaEdgeCases(af, bf, delta)
+	if !ok {
+		return Fail(t, msg, msgAndArgs...)
+	}
+	if skip {
 		return true
-	}
-
-	if math.IsNaN(af) {
-		return Fail(t, "Expected must not be NaN", msgAndArgs...) // Proposal for enhancement: wrong message (this is accepted above)
-	}
-
-	if math.IsNaN(bf) {
-		return Fail(t, fmt.Sprintf("Expected %v with delta %v, but was NaN", expected, delta), msgAndArgs...)
 	}
 
 	dt := af - bf
@@ -82,53 +88,12 @@ func InDeltaT[Number Measurable](t T, expected, actual, delta Number, msgAndArgs
 		h.Helper()
 	}
 
-	if delta < 0 {
-		return Fail(t, "Delta must not be negative", msgAndArgs...) // TODO: add it to the original version
+	msg, skip, ok := checkDeltaEdgeCases(expected, actual, delta)
+	if !ok {
+		return Fail(t, msg, msgAndArgs...)
 	}
-
-	// IEEE float edge cases: NaN, +Inf/-Inf
-	if isNaN(delta) || isInf(delta, 0) {
-		return Fail(t, "Delta must not be NaN or Inf", msgAndArgs...) // TODO: add it to the original version
-	}
-
-	expectedInf := isInf(expected, 0)
-	actualInf := isInf(actual, 0)
-	if expectedInf {
-		// expected -Inf/+Inf
-		if !actualInf {
-			return Fail(t, "Expected an Inf value", msgAndArgs...)
-		}
-
-		if isInf(expected, 1) && !isInf(actual, 1) {
-			return Fail(t, "Expected a +Inf value but got -Inf", msgAndArgs...)
-		}
-
-		if isInf(expected, -1) && !isInf(actual, -1) {
-			return Fail(t, "Expected a -Inf value but got +Inf", msgAndArgs...)
-		}
-
-		// Both are Inf and match - success
+	if skip {
 		return true
-	}
-
-	if actualInf {
-		return Fail(t, "Actual is Inf", msgAndArgs...)
-	}
-
-	expectedNaN := isNaN(expected)
-	actualNaN := isNaN(actual)
-
-	if expectedNaN && actualNaN {
-		// expected NaN
-		return true
-	}
-
-	if expectedNaN {
-		return Fail(t, "Expected a NaN value but actual is finite", msgAndArgs...)
-	}
-
-	if actualNaN {
-		return Fail(t, fmt.Sprintf("Expected %v with delta %v, but was NaN", expected, delta), msgAndArgs...)
 	}
 
 	var (
@@ -152,6 +117,20 @@ func InDeltaT[Number Measurable](t T, expected, actual, delta Number, msgAndArgs
 
 // InEpsilon asserts that expected and actual have a relative error less than epsilon.
 //
+// # Behavior with IEEE floating point arithmetics
+//
+//   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+//   - expected +Inf is matched only by a +Inf
+//   - expected -Inf is matched only by a -Inf
+//
+// Edge case: for very large integers that do not convert accurately to a float64 (e.g. uint64), prefer [InDeltaT].
+//
+// Formula:
+//   - If expected == 0: fail if |actual - expected| > epsilon
+//   - If expected != 0: fail if |actual - expected| > epsilon * |expected|
+//
+// This allows [InEpsilonT] to work naturally across the full numeric range including zero.
+//
 // # Usage
 //
 //	assertions.InEpsilon(t, 100.0, 101.0, 0.02)
@@ -165,19 +144,23 @@ func InEpsilon(t T, expected, actual any, epsilon float64, msgAndArgs ...any) bo
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if math.IsNaN(epsilon) {
-		return Fail(t, "epsilon must not be NaN", msgAndArgs...)
+	af, aok := toFloat(expected)
+	bf, bok := toFloat(actual)
+	if !aok || !bok {
+		return Fail(t, "Parameters must be numerical", msgAndArgs...)
 	}
-	actualEpsilon, err := calcRelativeError(expected, actual)
-	if err != nil {
-		return Fail(t, err.Error(), msgAndArgs...)
+
+	msg, skip, ok := checkDeltaEdgeCases(af, bf, epsilon)
+	if !ok {
+		return Fail(t, msg, msgAndArgs...)
 	}
-	if math.IsNaN(actualEpsilon) {
-		return Fail(t, "relative error is NaN", msgAndArgs...)
+	if skip {
+		return true
 	}
-	if actualEpsilon > epsilon {
-		return Fail(t, fmt.Sprintf("Relative error is too high: %#v (expected)\n"+
-			"        < %#v (actual)", epsilon, actualEpsilon), msgAndArgs...)
+
+	msg, ok = compareRelativeError(af, bf, epsilon)
+	if !ok {
+		return Fail(t, msg, msgAndArgs...)
 	}
 
 	return true
@@ -188,11 +171,22 @@ func InEpsilon(t T, expected, actual any, epsilon float64, msgAndArgs ...any) bo
 // When expected is zero, epsilon is interpreted as an absolute error threshold,
 // since relative error is mathematically undefined for zero values.
 //
+// Unlike [InDeltaT], which preserves the original type, [InEpsilonT] converts the expected and actual
+// numbers to float64, since the relative error doesn't make sense as an integer.
+//
+// # Behavior with IEEE floating point arithmetics
+//
+//   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+//   - expected +Inf is matched only by a +Inf
+//   - expected -Inf is matched only by a -Inf
+//
+// Edge case: for very large integers that do not convert accurately to a float64 (e.g. uint64), prefer [InDeltaT].
+//
 // Formula:
 //   - If expected == 0: fail if |actual - expected| > epsilon
 //   - If expected != 0: fail if |actual - expected| > epsilon * |expected|
 //
-// This allows InEpsilonT to work naturally across the full numeric range including zero.
+// This allows [InEpsilonT] to work naturally across the full numeric range including zero.
 //
 // # Usage
 //
@@ -208,81 +202,27 @@ func InEpsilonT[Number Measurable](t T, expected, actual Number, epsilon float64
 		h.Helper()
 	}
 
-	if epsilon < 0 {
-		return Fail(t, "Epsilon must not be negative", msgAndArgs...)
-	}
-
-	// IEEE float edge cases: NaN, +Inf/-Inf
-	if isNaN(epsilon) || isInf(epsilon, 0) {
-		return Fail(t, "Epsilon must not be NaN or Inf", msgAndArgs...)
-	}
-
-	expectedInf := isInf(expected, 0)
-	actualInf := isInf(actual, 0)
-	if expectedInf {
-		// expected -Inf/+Inf
-		if !actualInf {
-			return Fail(t, "Expected an Inf value", msgAndArgs...)
-		}
-
-		if isInf(expected, 1) && !isInf(actual, 1) {
-			return Fail(t, "Expected a +Inf value but got -Inf", msgAndArgs...)
-		}
-
-		if isInf(expected, -1) && !isInf(actual, -1) {
-			return Fail(t, "Expected a -Inf value but got +Inf", msgAndArgs...)
-		}
-
-		// Both are Inf and match - success
-		return true
-	}
-
-	if actualInf {
-		return Fail(t, "Actual is Inf", msgAndArgs...)
-	}
-
-	expectedNaN := isNaN(expected)
-	actualNaN := isNaN(actual)
-
-	if expectedNaN && actualNaN {
-		// expected NaN
-		return true
-	}
-
-	if expectedNaN {
-		return Fail(t, "Expected a NaN value but actual is finite", msgAndArgs...)
-	}
-
-	if actualNaN {
-		return Fail(t, fmt.Sprintf("Expected %v with epsilon %v, but was NaN", expected, epsilon), msgAndArgs...)
-	}
-
 	af := float64(expected)
 	bf := float64(actual)
-
-	delta := math.Abs(af - bf)
-	if delta == 0 {
-		return true
+	msg, skip, ok := checkDeltaEdgeCases(af, bf, epsilon)
+	if !ok {
+		return Fail(t, msg, msgAndArgs...)
 	}
-	if af == 0 {
-		if delta > epsilon {
-			return Fail(t, fmt.Sprintf(
-				"Expected value is zero, using absolute error comparison.\n"+
-					"Absolute difference is too high: %#v (expected)\n"+
-					"        < %#v (actual)", epsilon, delta), msgAndArgs...)
-		}
+	if skip {
 		return true
 	}
 
-	if delta > epsilon*math.Abs(af) {
-		return Fail(t, fmt.Sprintf("Relative error is too high: %#v (expected)\n"+
-			"        < %#v (actual)", epsilon, delta/math.Abs(af)), msgAndArgs...)
+	msg, ok = compareRelativeError(af, bf, epsilon)
+	if !ok {
+		return Fail(t, msg, msgAndArgs...)
 	}
 
 	return true
 }
 
-// InDeltaSlice is the same as InDelta, except it compares two slices.
+// InDeltaSlice is the same as [InDelta], except it compares two slices.
+//
+// See [InDelta].
 //
 // # Usage
 //
@@ -316,7 +256,9 @@ func InDeltaSlice(t T, expected, actual any, delta float64, msgAndArgs ...any) b
 	return true
 }
 
-// InDeltaMapValues is the same as InDelta, but it compares all values between two maps. Both maps must have exactly the same keys.
+// InDeltaMapValues is the same as [InDelta], but it compares all values between two maps. Both maps must have exactly the same keys.
+//
+// See [InDelta].
 //
 // # Usage
 //
@@ -348,10 +290,9 @@ func InDeltaMapValues(t T, expected, actual any, delta float64, msgAndArgs ...an
 		ev := expectedMap.MapIndex(k)
 		av := actualMap.MapIndex(k)
 
-		if !ev.IsValid() {
-			return Fail(t, fmt.Sprintf("missing key %q in expected map", k), msgAndArgs...)
-		}
-
+		// from [reflect.MapIndex] contract, ev is always a valid [reflect.Value] here
+		// because we know that the key has been found.
+		// On the other hand, av may not be there.
 		if !av.IsValid() {
 			return Fail(t, fmt.Sprintf("missing key %q in actual map", k), msgAndArgs...)
 		}
@@ -370,7 +311,9 @@ func InDeltaMapValues(t T, expected, actual any, delta float64, msgAndArgs ...an
 	return true
 }
 
-// InEpsilonSlice is the same as InEpsilon, except it compares each value from two slices.
+// InEpsilonSlice is the same as [InEpsilon], except it compares each value from two slices.
+//
+// See [InEpsilon].
 //
 // # Usage
 //
@@ -411,26 +354,82 @@ func InEpsilonSlice(t T, expected, actual any, epsilon float64, msgAndArgs ...an
 	return true
 }
 
-func calcRelativeError(expected, actual any) (float64, error) {
-	af, aok := toFloat(expected)
-	bf, bok := toFloat(actual)
-	if !aok || !bok {
-		return 0, errors.New("parameters must be numerical")
-	}
-	if math.IsNaN(af) && math.IsNaN(bf) {
-		return 0, nil
-	}
-	if math.IsNaN(af) {
-		return 0, errors.New("expected value must not be NaN")
-	}
-	if af == 0 {
-		return 0, errors.New("expected value must have a value other than zero to calculate the relative error")
-	}
-	if math.IsNaN(bf) {
-		return 0, errors.New("actual value must not be NaN")
+func checkDeltaEdgeCases[Number Measurable](expected, actual, delta Number) (msg string, skip bool, ok bool) {
+	if delta < 0 {
+		return "Delta must not be negative", true, false
 	}
 
-	return math.Abs(af-bf) / math.Abs(af), nil
+	// IEEE float edge cases: NaN, +Inf/-Inf
+	if isNaN(delta) || isInf(delta, 0) {
+		return "Delta must not be NaN or Inf", true, false
+	}
+
+	expectedInf := isInf(expected, 0)
+	actualInf := isInf(actual, 0)
+	if expectedInf {
+		// expected -Inf/+Inf
+		if !actualInf {
+			return "Expected an Inf value", true, false
+		}
+
+		if isInf(expected, 1) && !isInf(actual, 1) {
+			return "Expected a +Inf value but got -Inf", true, false
+		}
+
+		if isInf(expected, -1) && !isInf(actual, -1) {
+			return "Expected a -Inf value but got +Inf", true, false
+		}
+
+		// Both are Inf and match - success
+		return "", true, true
+	}
+
+	if actualInf {
+		return "Actual is Inf", true, false
+	}
+
+	expectedNaN := isNaN(expected)
+	actualNaN := isNaN(actual)
+
+	if expectedNaN && actualNaN {
+		// expected NaN
+		return "", true, true
+	}
+
+	if expectedNaN {
+		return "Expected a NaN value but actual is finite", true, false
+	}
+
+	if actualNaN {
+		return fmt.Sprintf("Expected %v with delta %v, but was NaN", expected, delta), true, false
+	}
+
+	return "", false, true
+}
+
+func compareRelativeError(expected, actual, epsilon float64) (msg string, ok bool) {
+	delta := math.Abs(expected - actual)
+	if delta == 0 {
+		return "", true
+	}
+
+	if expected == 0 {
+		if delta > epsilon {
+			return fmt.Sprintf(
+				"Expected value is zero, using absolute error comparison.\n"+
+					"Absolute difference is too high: %#v (expected)\n"+
+					"        < %#v (actual)", epsilon, delta), false
+		}
+
+		return "", true
+	}
+
+	if delta > epsilon*math.Abs(expected) {
+		return fmt.Sprintf("Relative error is too high: %#v (expected)\n"+
+			"        < %#v (actual)", epsilon, delta/math.Abs(expected)), false
+	}
+
+	return "", true
 }
 
 func toFloat(x any) (float64, bool) {
@@ -465,6 +464,14 @@ func toFloat(x any) (float64, bool) {
 	case time.Duration:
 		xf = float64(xn)
 	default:
+		// try reflect conversion
+		val := reflect.ValueOf(xn)
+		typ := reflect.TypeFor[float64]()
+		if val.IsValid() && val.CanConvert(typ) {
+			rxf := val.Convert(typ)
+			xf = rxf.Float()
+			break
+		}
 		xok = false
 	}
 

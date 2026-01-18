@@ -41,7 +41,7 @@ import (
 //
 // # Examples
 //
-//	panic: "key: value", "key: value"
+//	panic: []byte("key: value"), []byte("key: value")
 //	should panic without the yaml feature enabled.
 func YAMLEqBytes(t T, expected, actual []byte, msgAndArgs ...any) bool {
 	// Domain: yaml

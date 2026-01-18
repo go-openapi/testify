@@ -8,7 +8,7 @@ import (
 
 // Type constraint definitions for generic variants of assertions.
 type (
-	// Boolean is a bool or any type that can convert to a bool.
+	// Boolean is a bool or any type that can be converted to a bool.
 	Boolean interface {
 		~bool
 	}
@@ -22,7 +22,7 @@ type (
 		~string | ~[]byte
 	}
 
-	// Ordered is a standard ordered type (i.e. types which support "<") plus [time.Time].
+	// Ordered is a standard ordered type (i.e. types that support "<": [cmp.Ordered]) plus []byte and [time.Time].
 	//
 	// This is used by [GreaterT], [GreaterOrEqualT], [LessT], and [LessOrEqualT].
 	//
@@ -31,7 +31,7 @@ type (
 		cmp.Ordered | []byte | time.Time
 	}
 
-	// SignedNumeric is an signed integer or a floating point number.
+	// SignedNumeric is a signed integer or a floating point number or any type that can be converted to one of these.
 	SignedNumeric interface {
 		~int | ~int8 | ~int16 | ~int32 | ~int64 |
 			~float32 | ~float64
@@ -39,12 +39,12 @@ type (
 
 	// UnsignedNumeric is an unsigned integer.
 	//
-	// There a no unsigned floating point numbers.
+	// NOTE: there are no unsigned floating point numbers.
 	UnsignedNumeric interface {
 		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64
 	}
 
-	// Measurable is any number for which we can compute a delta.
+	// Measurable is any number for which we can compute a delta (floats or integers).
 	//
 	// This is used by [InDeltaT] and [InEpsilonT].
 	//
@@ -53,7 +53,7 @@ type (
 		SignedNumeric | UnsignedNumeric | ~float32 | ~float64
 	}
 
-	// RegExp is either a text containing a regular expression to compile, or directly the compiled regexp.
+	// RegExp is either a text containing a regular expression to compile (string or []byte), or directly the compiled regexp.
 	//
 	// This is used by [RegexpT] and [NotRegexpT].
 	RegExp interface {

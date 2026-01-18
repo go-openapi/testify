@@ -11,7 +11,7 @@ type T interface {
 }
 
 // H is an interface for types that implement the Helper method.
-// This allows marking functions as test helpers.
+// This allows marking functions as test helpers, e.g. [testing.T.Helper].
 type H interface {
 	Helper()
 }

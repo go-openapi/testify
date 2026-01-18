@@ -15,6 +15,7 @@ import (
 // Greater asserts that the first element is strictly greater than the second.
 //
 // Both elements must be of the same type in the [reflect.Kind] sense.
+// To compare values that need a type conversion (e.g. float32 against float64), you need to convert types beforehand.
 //
 // # Usage
 //
@@ -45,7 +46,7 @@ func Greater(t T, e1 any, e2 any, msgAndArgs ...any) bool {
 //
 // [GreaterT] ensures type safety at build time. If you need to compare values with a dynamically assigned type, use [Greater] instead.
 //
-// To compare values that need a type conversion (e.g. float32 against float64), you should use [Greater] instead.
+// To compare values that need a type conversion (e.g. float32 against float64), you need to convert types beforehand.
 //
 // # Usage
 //
@@ -73,6 +74,8 @@ func GreaterT[Orderable Ordered](t T, e1, e2 Orderable, msgAndArgs ...any) bool 
 }
 
 // GreaterOrEqual asserts that the first element is greater than or equal to the second.
+//
+// See also [Greater].
 //
 // # Usage
 //
@@ -105,7 +108,7 @@ func GreaterOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) bool {
 // [GreaterOrEqualT] ensures type safety at build time. If you need to compare values with a dynamically assigned type,
 // use [GreaterOrEqual] instead.
 //
-// To compare values that need a type conversion (e.g. float32 against float64), you should use [GreaterOrEqual] instead.
+// To compare values that need a type conversion (e.g. float32 against float64), you need to convert types beforehand.
 //
 // # Usage
 //
@@ -133,6 +136,9 @@ func GreaterOrEqualT[Orderable Ordered](t T, e1, e2 Orderable, msgAndArgs ...any
 }
 
 // Less asserts that the first element is strictly less than the second.
+//
+// Both elements must be of the same type in the [reflect.Kind] sense.
+// To compare values that need a type conversion (e.g. float32 against float64), you need to convert types beforehand.
 //
 // # Usage
 //
@@ -163,7 +169,7 @@ func Less(t T, e1 any, e2 any, msgAndArgs ...any) bool {
 // [LessT] ensures type safety at build time. If you need to compare values with a dynamically assigned type,
 // use [Less] instead.
 //
-// To compare values that need a type conversion (e.g. float32 against float64), you should use [Less] instead.
+// To compare values that need a type conversion (e.g. float32 against float64), you need to convert types beforehand.
 //
 // # Usage
 //

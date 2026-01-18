@@ -160,7 +160,12 @@ func TestNumberInEpsilonSlice(t *testing.T) {
 		[]float64{2.1, 2.1},
 		0.04), "{2.2, 2.0} is not element-wise close to {2.1, 2.1} in epsilon=0.04")
 
-	False(t, InEpsilonSlice(mock, "", nil, 1), "Expected non numeral slices to fail")
+	False(t, InEpsilonSlice(mock, "", nil, 1), "Expected expected non-slices to fail (nil)")
+	False(t, InEpsilonSlice(mock, nil, "", 1), "Expected actual non-slices to fail (nil)")
+	False(t, InEpsilonSlice(mock, 1, []int{}, 1), "Expected expected non-slices to fail")
+	False(t, InEpsilonSlice(mock, []int{}, 1, 1), "Expected actual non-slices to fail")
+	False(t, InEpsilonSlice(mock, []string{}, []int{}, 1), "Expected expected non-numeral slices to fail")
+	False(t, InEpsilonSlice(mock, []int{}, []string{}, 1), "Expected actual non-numeral slices to fail")
 }
 
 type numberInDeltaCase struct {
@@ -169,6 +174,8 @@ type numberInDeltaCase struct {
 }
 
 func numberInDeltaCases() iter.Seq[numberInDeltaCase] {
+	type myFloat float32
+
 	return slices.Values([]numberInDeltaCase{
 		{uint(2), uint(1), 1},
 		{uint8(2), uint8(1), 1},
@@ -182,6 +189,7 @@ func numberInDeltaCases() iter.Seq[numberInDeltaCase] {
 		{int64(2), int64(1), 1},
 		{float32(2), float32(1), 1},
 		{float64(2), float64(1), 1},
+		{myFloat(2), myFloat(1), 1},
 	})
 }
 
@@ -336,6 +344,9 @@ type numberInDeltaMapCase struct {
 }
 
 func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
+	keyA := "a"
+	var iface any
+
 	return slices.Values([]numberInDeltaMapCase{
 		{
 			title: "Within delta",
@@ -400,6 +411,46 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 			},
 			f: False,
 		},
+		{
+			title:  "With nil maps",
+			expect: map[string]float64(nil),
+			actual: map[string]float64(nil),
+			f:      True,
+		},
+		{
+			title:  "With nil values (not a map)",
+			expect: map[string]float64(nil),
+			actual: []float64(nil),
+			f:      False,
+		},
+		{
+			title:  "With nil values (not a map)",
+			expect: []float64(nil),
+			actual: map[string]float64(nil),
+			f:      False,
+		},
+		{
+			title: "With expected nil keys",
+			expect: map[*string]float64{
+				&keyA:          1.00,
+				(*string)(nil): 2.00,
+			},
+			actual: map[*string]float64{
+				&keyA:          1.00,
+				(*string)(nil): 2.00,
+			},
+			f: True,
+		},
+		{
+			title: "With expected invalid value",
+			expect: map[string]any{
+				keyA: &iface,
+			},
+			actual: map[string]any{
+				keyA: &iface,
+			},
+			f: False,
+		},
 	})
 }
 
@@ -419,7 +470,10 @@ func numberInEpsilonTrueCases() iter.Seq[numberInEpsilonCase] {
 		{0.1, -0.1, 2},
 		{0.1, 0, 2},
 		{math.NaN(), math.NaN(), 1},
+		{math.Inf(1), math.Inf(1), 1},
+		{math.Inf(-1), math.Inf(-1), 1},
 		{time.Second, time.Second + time.Millisecond, 0.002},
+		{0, 0.1, 2}, // works: fall back to absolute error
 	})
 }
 
@@ -432,7 +486,7 @@ func numberInEpsilonFalseCases() iter.Seq[numberInEpsilonCase] {
 		{2.1, -2.2, 1},
 		{2.1, "bla-bla", 0},
 		{0.1, -0.1, 1.99},
-		{0, 0.1, 2}, // expected must be different to zero
+		{0, 0.1, 0.01}, // works (and fails): fall back to absolute error
 		{time.Second, time.Second + 10*time.Millisecond, 0.002},
 		{math.NaN(), 0, 1},
 		{0, math.NaN(), 1},
@@ -441,10 +495,8 @@ func numberInEpsilonFalseCases() iter.Seq[numberInEpsilonCase] {
 		{math.Inf(-1), 1, 1},
 		{1, math.Inf(1), 1},
 		{1, math.Inf(-1), 1},
-		{math.Inf(1), math.Inf(1), 1},
 		{math.Inf(1), math.Inf(-1), 1},
 		{math.Inf(-1), math.Inf(1), 1},
-		{math.Inf(-1), math.Inf(-1), 1},
 	})
 }
 
