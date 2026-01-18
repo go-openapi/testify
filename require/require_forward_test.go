@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
+// Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
 
 package require
 
@@ -3876,6 +3876,30 @@ func TestAssertionsYAMLEqf(t *testing.T) {
 		a := New(t)
 		a.Panics(func() {
 			a.YAMLEqf("key: value", "key: value", "test message")
+		}, "should panic without the yaml feature enabled.")
+	})
+}
+
+func TestAssertionsYAMLEqBytes(t *testing.T) {
+	t.Parallel()
+	t.Run("panic", func(t *testing.T) {
+		t.Parallel()
+
+		a := New(t)
+		a.Panics(func() {
+			a.YAMLEqBytes([]byte("key: value"), []byte("key: value"))
+		}, "should panic without the yaml feature enabled.")
+	})
+}
+
+func TestAssertionsYAMLEqBytesf(t *testing.T) {
+	t.Parallel()
+	t.Run("panic", func(t *testing.T) {
+		t.Parallel()
+
+		a := New(t)
+		a.Panics(func() {
+			a.YAMLEqBytesf([]byte("key: value"), []byte("key: value"), "test message")
 		}, "should panic without the yaml feature enabled.")
 	})
 }

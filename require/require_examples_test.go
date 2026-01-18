@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-11 (version ca82e58) using codegen version v2.1.9-0.20260111184010-ca82e58db12c+dirty [sha: ca82e58db12cbb61bfcae58c3684b3add9599d10]
+// Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
 
 package require_test
 
@@ -49,6 +49,14 @@ func ExampleDirExists() {
 func ExampleElementsMatch() {
 	t := new(testing.T)
 	require.ElementsMatch(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleElementsMatchT() {
+	t := new(testing.T)
+	require.ElementsMatchT(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
 	fmt.Println("passed")
 
 	// Output: passed
@@ -170,6 +178,14 @@ func ExampleFalse() {
 	// Output: passed
 }
 
+func ExampleFalseT() {
+	t := new(testing.T)
+	require.FalseT(t, 1 == 0)
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleFileEmpty() {
 	t := new(testing.T)
 	require.FileEmpty(t, filepath.Join(testDataPath(), "empty_file"))
@@ -205,6 +221,22 @@ func ExampleGreater() {
 func ExampleGreaterOrEqual() {
 	t := new(testing.T)
 	require.GreaterOrEqual(t, 2, 1)
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleGreaterOrEqualT() {
+	t := new(testing.T)
+	require.GreaterOrEqualT(t, 2, 1)
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleGreaterT() {
+	t := new(testing.T)
+	require.GreaterT(t, 2, 1)
 	fmt.Println("passed")
 
 	// Output: passed
@@ -290,6 +322,14 @@ func ExampleInDeltaSlice() {
 	// Output: passed
 }
 
+func ExampleInDeltaT() {
+	t := new(testing.T)
+	require.InDeltaT(t, 1.0, 1.01, 0.02)
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleInEpsilon() {
 	t := new(testing.T)
 	require.InEpsilon(t, 100.0, 101.0, 0.02)
@@ -301,6 +341,14 @@ func ExampleInEpsilon() {
 func ExampleInEpsilonSlice() {
 	t := new(testing.T)
 	require.InEpsilonSlice(t, []float64{100.0, 200.0}, []float64{101.0, 202.0}, 0.02)
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleInEpsilonT() {
+	t := new(testing.T)
+	require.InEpsilonT(t, 100.0, 101.0, 0.02)
 	fmt.Println("passed")
 
 	// Output: passed
@@ -370,6 +418,14 @@ func ExampleJSONEqBytes() {
 	// Output: passed
 }
 
+func ExampleJSONEqT() {
+	t := new(testing.T)
+	require.JSONEqT(t, `{"hello": "world", "foo": "bar"}`, []byte(`{"foo": "bar", "hello": "world"}`))
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleKind() {
 	t := new(testing.T)
 	require.Kind(t, reflect.String, "hello")
@@ -402,9 +458,33 @@ func ExampleLessOrEqual() {
 	// Output: passed
 }
 
+func ExampleLessOrEqualT() {
+	t := new(testing.T)
+	require.LessOrEqualT(t, 1, 2)
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleLessT() {
+	t := new(testing.T)
+	require.LessT(t, 1, 2)
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleNegative() {
 	t := new(testing.T)
 	require.Negative(t, -1)
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleNegativeT() {
+	t := new(testing.T)
+	require.NegativeT(t, -1)
 	fmt.Println("passed")
 
 	// Output: passed
@@ -463,6 +543,14 @@ func ExampleNotContains() {
 func ExampleNotElementsMatch() {
 	t := new(testing.T)
 	require.NotElementsMatch(t, []int{1, 2, 3}, []int{1, 2, 4})
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleNotElementsMatchT() {
+	t := new(testing.T)
+	require.NotElementsMatchT(t, []int{1, 2, 3}, []int{1, 2, 4})
 	fmt.Println("passed")
 
 	// Output: passed
@@ -549,6 +637,14 @@ func ExampleNotRegexp() {
 	// Output: passed
 }
 
+func ExampleNotRegexpT() {
+	t := new(testing.T)
+	require.NotRegexpT(t, "^start", "not starting")
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleNotSame() {
 	t := new(testing.T)
 	require.NotSame(t, &staticVar, ptr("static string"))
@@ -611,9 +707,25 @@ func ExamplePositive() {
 	// Output: passed
 }
 
+func ExamplePositiveT() {
+	t := new(testing.T)
+	require.PositiveT(t, 1)
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleRegexp() {
 	t := new(testing.T)
 	require.Regexp(t, "^start", "starting")
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleRegexpT() {
+	t := new(testing.T)
+	require.RegexpT(t, "^start", "starting")
 	fmt.Println("passed")
 
 	// Output: passed
@@ -643,6 +755,14 @@ func ExampleTrue() {
 	// Output: passed
 }
 
+func ExampleTrueT() {
+	t := new(testing.T)
+	require.TrueT(t, 1 == 1)
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleWithinDuration() {
 	t := new(testing.T)
 	require.WithinDuration(t, time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 12, 0, 1, 0, time.UTC), 2*time.Second)
@@ -660,6 +780,14 @@ func ExampleWithinRange() {
 }
 
 // func ExampleYAMLEq() {
+// no success example available. Please add some examples to produce a testable example.
+// }
+
+// func ExampleYAMLEqBytes() {
+// no success example available. Please add some examples to produce a testable example.
+// }
+
+// func ExampleYAMLEqT() {
 // no success example available. Please add some examples to produce a testable example.
 // }
 
