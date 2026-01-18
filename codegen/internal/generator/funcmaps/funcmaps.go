@@ -58,6 +58,7 @@ func FuncMap() template.FuncMap {
 		"returns":          PrintReturns,
 		"sourceLink":       sourceLink,
 		"titleize":         titleize,
+		"slugize":          slugize,
 	}
 }
 
@@ -344,4 +345,21 @@ func printDebug(in any) string {
 
 func printDate() string {
 	return time.Now().Format(time.DateOnly)
+}
+
+// slugize converts a name into a markdown ref inside a document.
+func slugize(in string) string {
+	return strings.ToLower(
+		strings.Map(func(r rune) rune {
+			switch r {
+			case '.', '_', ' ', '\t', ':':
+				return '-'
+			case '[', ']', ',':
+				return -1
+			default:
+				return r
+			}
+		},
+			in,
+		))
 }

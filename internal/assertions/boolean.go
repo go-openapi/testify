@@ -29,16 +29,17 @@ func True(t T, value bool, msgAndArgs ...any) bool {
 //
 // # Usage
 //
-//	 type B bool
-//	 var b B = true
+//	type B bool
+//	var b B = true
 //
-//		assertions.True(t, b)
+//	assertions.True(t, b)
 //
 // # Examples
 //
 //	success: 1 == 1
 //	failure: 1 == 0
 func TrueT[B Boolean](t T, value B, msgAndArgs ...any) bool {
+	// Domain: boolean
 	if !bool(value) {
 		if h, ok := t.(H); ok {
 			h.Helper()

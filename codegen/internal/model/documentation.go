@@ -84,6 +84,20 @@ type Document struct {
 	Weight        int
 }
 
+func (d Document) HasGenerics() bool {
+	if d.Package == nil {
+		return false
+	}
+
+	for _, fn := range d.Package.Functions {
+		if fn.IsGeneric {
+			return true
+		}
+	}
+
+	return false
+}
+
 type ExtraPackages []*AssertionPackage
 
 func (pkgs ExtraPackages) LookupFunction(name string) []FunctionWithContext {
