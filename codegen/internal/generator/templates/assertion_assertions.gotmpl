@@ -23,7 +23,7 @@ func {{ .GenericName }}({{ params .AllParams }}) {{ returns .Returns }} {
   if h, ok := t.(H); ok {
     h.Helper()
   }
-  return {{ .TargetPackage }}.{{ .Name }}({{ forward .AllParams }})
+  return {{ .TargetPackage }}.{{ .GenericCallName }}({{ forward .AllParams }})
 }
     {{- end }}
   {{- end }}

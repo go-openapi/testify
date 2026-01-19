@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-19 (version fbbb078) using codegen version v2.1.9-0.20260119215714-fbbb0787fd81+dirty [sha: fbbb0787fd8131d63f280f85b14e47f7c0dc8ee0]
+// Generated on 2026-01-20 (version ff38347) using codegen version v2.1.9-0.20260119220113-ff3834752ffb+dirty [sha: ff3834752ffbc6e4e938c8a0293cc8363f861398]
 
 package require
 
@@ -1065,6 +1065,26 @@ func TestIsNonIncreasingTf(t *testing.T) {
 	})
 }
 
+func TestIsNotOfTypeTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		IsNotOfTypeTf[myType](t, 123.123, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		IsNotOfTypeTf[myType](mock, myType(123.123), "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("IsNotOfTypeT should call FailNow()")
+		}
+	})
+}
+
 func TestIsNotTypef(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1081,6 +1101,26 @@ func TestIsNotTypef(t *testing.T) {
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("IsNotType should call FailNow()")
+		}
+	})
+}
+
+func TestIsOfTypeTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		IsOfTypeTf[myType](t, myType(123.123), "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		IsOfTypeTf[myType](mock, 123.123, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("IsOfTypeT should call FailNow()")
 		}
 	})
 }

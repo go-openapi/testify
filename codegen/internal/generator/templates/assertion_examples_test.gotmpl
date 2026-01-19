@@ -35,14 +35,14 @@ func Example{{ .Name }}() {
             {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
     t := new(testing.T)
             {{- if $isRequire }}
-    {{ $pkg }}.{{ $fn.Name }}(t, {{ relocate .TestedValues $pkg }})
+    {{ $pkg }}.{{ $fn.Name }}{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(t, {{ relocate .TestedValues $pkg }})
     fmt.Println("passed")
               {{- if $runnable }}
 
     // Output: passed
               {{- end }}
             {{- else }}
-    success := {{ $pkg }}.{{ $fn.Name }}(t, {{ relocate .TestedValues $pkg }})
+    success := {{ $pkg }}.{{ $fn.Name }}{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(t, {{ relocate .TestedValues $pkg }})
     fmt.Printf("success: %t\n", success)
               {{- if $runnable }}
 
@@ -107,3 +107,5 @@ type dummyError struct {
 func (d *dummyError) Error() string {
   return "dummy error"
 }
+
+type myType float64

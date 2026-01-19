@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-19 (version fbbb078) using codegen version v2.1.9-0.20260119215714-fbbb0787fd81+dirty [sha: fbbb0787fd8131d63f280f85b14e47f7c0dc8ee0]
+// Generated on 2026-01-20 (version ff38347) using codegen version v2.1.9-0.20260119220113-ff3834752ffb+dirty [sha: ff3834752ffbc6e4e938c8a0293cc8363f861398]
 
 package assert
 
@@ -1273,6 +1273,30 @@ func TestIsNonIncreasingT(t *testing.T) {
 	})
 }
 
+func TestIsNotOfTypeT(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := IsNotOfTypeT[myType](t, 123.123)
+		if !result {
+			t.Error("IsNotOfTypeT should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := IsNotOfTypeT[myType](mock, myType(123.123))
+		if result {
+			t.Error("IsNotOfTypeT should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("IsNotOfTypeT should mark test as failed")
+		}
+	})
+}
+
 func TestIsNotType(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1293,6 +1317,30 @@ func TestIsNotType(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("IsNotType should mark test as failed")
+		}
+	})
+}
+
+func TestIsOfTypeT(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := IsOfTypeT[myType](t, myType(123.123))
+		if !result {
+			t.Error("IsOfTypeT should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := IsOfTypeT[myType](mock, 123.123)
+		if result {
+			t.Error("IsOfTypeT should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("IsOfTypeT should mark test as failed")
 		}
 	})
 }
@@ -2818,3 +2866,5 @@ type dummyError struct {
 func (d *dummyError) Error() string {
 	return "dummy error"
 }
+
+type myType float64

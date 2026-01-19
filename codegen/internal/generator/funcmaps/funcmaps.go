@@ -48,6 +48,7 @@ func FuncMap() template.FuncMap {
 		"docStringPackage": docStringPackage,
 		"forward":          forward,
 		"godocbadge":       godocbadge,
+		"hasPrefix":        strings.HasPrefix,
 		"hasSuffix":        strings.HasSuffix,
 		"imports":          printImports,
 		"mdformat":         FormatMarkdown, // From markdown.go

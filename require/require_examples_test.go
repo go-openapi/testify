@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-19 (version fbbb078) using codegen version v2.1.9-0.20260119215714-fbbb0787fd81+dirty [sha: fbbb0787fd8131d63f280f85b14e47f7c0dc8ee0]
+// Generated on 2026-01-20 (version ff38347) using codegen version v2.1.9-0.20260119220113-ff3834752ffb+dirty [sha: ff3834752ffbc6e4e938c8a0293cc8363f861398]
 
 package require_test
 
@@ -442,9 +442,25 @@ func ExampleIsNonIncreasingT() {
 	// Output: passed
 }
 
+func ExampleIsNotOfTypeT() {
+	t := new(testing.T)
+	require.IsNotOfTypeT[myType](t, 123.123)
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleIsNotType() {
 	t := new(testing.T)
 	require.IsNotType(t, int32(123), int64(456))
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleIsOfTypeT() {
+	t := new(testing.T)
+	require.IsOfTypeT[myType](t, myType(123.123))
 	fmt.Println("passed")
 
 	// Output: passed
@@ -992,3 +1008,5 @@ type dummyError struct {
 func (d *dummyError) Error() string {
 	return "dummy error"
 }
+
+type myType float64

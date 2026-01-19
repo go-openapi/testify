@@ -65,6 +65,20 @@ func TestTypeNotIsType(t *testing.T) {
 	}
 }
 
+func TestTypeIsOfTypeT(t *testing.T) {
+	t.Parallel()
+
+	mock := new(mockT)
+	type myType float64
+	var myVar myType = 1.2
+	f := 1.2
+
+	True(t, IsOfTypeT[myType](mock, myVar), "expected myVar to be of type %T", myVar)
+	False(t, IsNotOfTypeT[myType](mock, myVar), "expected myVar to be of type %T", myVar)
+	False(t, IsOfTypeT[myType](mock, f), "expected f (%T) not to be of type %T", f, myVar)
+	True(t, IsNotOfTypeT[myType](mock, f), "expected f (%T) not to be of type %T", f, myVar)
+}
+
 func TestTypeZeroWithSliceTooLongToPrint(t *testing.T) {
 	t.Parallel()
 	mock := new(mockT)

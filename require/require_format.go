@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-19 (version fbbb078) using codegen version v2.1.9-0.20260119215714-fbbb0787fd81+dirty [sha: fbbb0787fd8131d63f280f85b14e47f7c0dc8ee0]
+// Generated on 2026-01-20 (version ff38347) using codegen version v2.1.9-0.20260119220113-ff3834752ffb+dirty [sha: ff3834752ffbc6e4e938c8a0293cc8363f861398]
 
 package require
 
@@ -92,7 +92,7 @@ func ElementsMatchTf[E comparable](t T, listA []E, listB []E, msg string, args .
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.ElementsMatchT(t, listA, listB, forwardArgs(msg, args)) {
+	if assertions.ElementsMatchT[E](t, listA, listB, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -162,7 +162,7 @@ func EqualTf[V comparable](t T, expected V, actual V, msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.EqualT(t, expected, actual, forwardArgs(msg, args)) {
+	if assertions.EqualT[V](t, expected, actual, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -326,7 +326,7 @@ func FalseTf[B Boolean](t T, value B, msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.FalseT(t, value, forwardArgs(msg, args)) {
+	if assertions.FalseT[B](t, value, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -424,7 +424,7 @@ func GreaterOrEqualTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg st
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.GreaterOrEqualT(t, e1, e2, forwardArgs(msg, args)) {
+	if assertions.GreaterOrEqualT[Orderable](t, e1, e2, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -438,7 +438,7 @@ func GreaterTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, a
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.GreaterT(t, e1, e2, forwardArgs(msg, args)) {
+	if assertions.GreaterT[Orderable](t, e1, e2, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -592,7 +592,7 @@ func InDeltaTf[Number Measurable](t T, expected Number, actual Number, delta Num
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.InDeltaT(t, expected, actual, delta, forwardArgs(msg, args)) {
+	if assertions.InDeltaT[Number](t, expected, actual, delta, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -634,7 +634,7 @@ func InEpsilonTf[Number Measurable](t T, expected Number, actual Number, epsilon
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.InEpsilonT(t, expected, actual, epsilon, forwardArgs(msg, args)) {
+	if assertions.InEpsilonT[Number](t, expected, actual, epsilon, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -662,7 +662,7 @@ func IsDecreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, 
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.IsDecreasingT(t, collection, forwardArgs(msg, args)) {
+	if assertions.IsDecreasingT[OrderedSlice, E](t, collection, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -690,7 +690,7 @@ func IsIncreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, 
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.IsIncreasingT(t, collection, forwardArgs(msg, args)) {
+	if assertions.IsIncreasingT[OrderedSlice, E](t, collection, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -718,7 +718,7 @@ func IsNonDecreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlic
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.IsNonDecreasingT(t, collection, forwardArgs(msg, args)) {
+	if assertions.IsNonDecreasingT[OrderedSlice, E](t, collection, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -746,7 +746,21 @@ func IsNonIncreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlic
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.IsNonIncreasingT(t, collection, forwardArgs(msg, args)) {
+	if assertions.IsNonIncreasingT[OrderedSlice, E](t, collection, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// IsNotOfTypeTf is the same as [IsNotOfTypeT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func IsNotOfTypeTf[EType any](t T, object any, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.IsNotOfTypeT[EType](t, object, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -761,6 +775,20 @@ func IsNotTypef(t T, theType any, object any, msg string, args ...any) {
 		h.Helper()
 	}
 	if assertions.IsNotType(t, theType, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// IsOfTypeTf is the same as [IsOfTypeT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func IsOfTypeTf[EType any](t T, object any, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.IsOfTypeT[EType](t, object, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -816,7 +844,7 @@ func JSONEqTf[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msg string, args
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.JSONEqT(t, expected, actual, forwardArgs(msg, args)) {
+	if assertions.JSONEqT[EDoc, ADoc](t, expected, actual, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -886,7 +914,7 @@ func LessOrEqualTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg strin
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.LessOrEqualT(t, e1, e2, forwardArgs(msg, args)) {
+	if assertions.LessOrEqualT[Orderable](t, e1, e2, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -900,7 +928,7 @@ func LessTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, args
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.LessT(t, e1, e2, forwardArgs(msg, args)) {
+	if assertions.LessT[Orderable](t, e1, e2, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -914,7 +942,7 @@ func MapContainsTf[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msg str
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.MapContainsT(t, m, key, forwardArgs(msg, args)) {
+	if assertions.MapContainsT[Map, K, V](t, m, key, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -928,7 +956,7 @@ func MapNotContainsTf[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msg 
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.MapNotContainsT(t, m, key, forwardArgs(msg, args)) {
+	if assertions.MapNotContainsT[Map, K, V](t, m, key, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -956,7 +984,7 @@ func NegativeTf[SignedNumber SignedNumeric](t T, e SignedNumber, msg string, arg
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.NegativeT(t, e, forwardArgs(msg, args)) {
+	if assertions.NegativeT[SignedNumber](t, e, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1040,7 +1068,7 @@ func NotElementsMatchTf[E comparable](t T, listA []E, listB []E, msg string, arg
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotElementsMatchT(t, listA, listB, forwardArgs(msg, args)) {
+	if assertions.NotElementsMatchT[E](t, listA, listB, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1082,7 +1110,7 @@ func NotEqualTf[V comparable](t T, expected V, actual V, msg string, args ...any
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotEqualT(t, expected, actual, forwardArgs(msg, args)) {
+	if assertions.NotEqualT[V](t, expected, actual, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1208,7 +1236,7 @@ func NotRegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, ar
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotRegexpT(t, rx, actual, forwardArgs(msg, args)) {
+	if assertions.NotRegexpT[Rex, ADoc](t, rx, actual, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1236,7 +1264,7 @@ func NotSameTf[P any](t T, expected *P, actual *P, msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotSameT(t, expected, actual, forwardArgs(msg, args)) {
+	if assertions.NotSameT[P](t, expected, actual, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1250,7 +1278,7 @@ func NotSortedTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotSortedT(t, collection, forwardArgs(msg, args)) {
+	if assertions.NotSortedT[OrderedSlice, E](t, collection, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1348,7 +1376,7 @@ func PositiveTf[SignedNumber SignedNumeric](t T, e SignedNumber, msg string, arg
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.PositiveT(t, e, forwardArgs(msg, args)) {
+	if assertions.PositiveT[SignedNumber](t, e, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1376,7 +1404,7 @@ func RegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, args 
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.RegexpT(t, rx, actual, forwardArgs(msg, args)) {
+	if assertions.RegexpT[Rex, ADoc](t, rx, actual, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1404,7 +1432,7 @@ func SameTf[P any](t T, expected *P, actual *P, msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.SameT(t, expected, actual, forwardArgs(msg, args)) {
+	if assertions.SameT[P](t, expected, actual, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1418,7 +1446,7 @@ func SliceContainsTf[Slice ~[]E, E comparable](t T, s Slice, element E, msg stri
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.SliceContainsT(t, s, element, forwardArgs(msg, args)) {
+	if assertions.SliceContainsT[Slice, E](t, s, element, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1432,7 +1460,7 @@ func SliceNotContainsTf[Slice ~[]E, E comparable](t T, s Slice, element E, msg s
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.SliceNotContainsT(t, s, element, forwardArgs(msg, args)) {
+	if assertions.SliceNotContainsT[Slice, E](t, s, element, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1446,7 +1474,7 @@ func SliceNotSubsetTf[Slice ~[]E, E comparable](t T, list Slice, subset Slice, m
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.SliceNotSubsetT(t, list, subset, forwardArgs(msg, args)) {
+	if assertions.SliceNotSubsetT[Slice, E](t, list, subset, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1460,7 +1488,7 @@ func SliceSubsetTf[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msg 
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.SliceSubsetT(t, list, subset, forwardArgs(msg, args)) {
+	if assertions.SliceSubsetT[Slice, E](t, list, subset, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1474,7 +1502,7 @@ func SortedTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg st
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.SortedT(t, collection, forwardArgs(msg, args)) {
+	if assertions.SortedT[OrderedSlice, E](t, collection, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1488,7 +1516,7 @@ func StringContainsTf[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msg string
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.StringContainsT(t, str, substring, forwardArgs(msg, args)) {
+	if assertions.StringContainsT[ADoc, EDoc](t, str, substring, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1502,7 +1530,7 @@ func StringNotContainsTf[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msg str
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.StringNotContainsT(t, str, substring, forwardArgs(msg, args)) {
+	if assertions.StringNotContainsT[ADoc, EDoc](t, str, substring, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1544,7 +1572,7 @@ func TrueTf[B Boolean](t T, value B, msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.TrueT(t, value, forwardArgs(msg, args)) {
+	if assertions.TrueT[B](t, value, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1614,7 +1642,7 @@ func YAMLEqTf[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msg string, args
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.YAMLEqT(t, expected, actual, forwardArgs(msg, args)) {
+	if assertions.YAMLEqT[EDoc, ADoc](t, expected, actual, forwardArgs(msg, args)) {
 		return
 	}
 

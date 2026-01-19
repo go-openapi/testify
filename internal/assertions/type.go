@@ -83,6 +83,30 @@ func IsType(t T, expectedType, object any, msgAndArgs ...any) bool {
 	return Fail(t, fmt.Sprintf("Object expected to be of type %T, but was %T", expectedType, object), msgAndArgs...)
 }
 
+// IsOfTypeT asserts that an object is of a given type.
+//
+// # Usage
+//
+//	assertions.IsOfTypeT[MyType](t,myVar)
+//
+// # Examples
+//
+//	success: myType(123.123)
+//	failure: 123.123
+func IsOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool {
+	// Domain: type
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	_, ok := object.(EType)
+	if ok {
+		return true
+	}
+
+	return Fail(t, fmt.Sprintf("Object expected to be of type %v, but was %T", reflect.TypeFor[EType](), object), msgAndArgs...)
+}
+
 // IsNotType asserts that the specified objects are not of the same type.
 //
 // # Usage
@@ -102,6 +126,30 @@ func IsNotType(t T, theType, object any, msgAndArgs ...any) bool {
 		h.Helper()
 	}
 	return Fail(t, fmt.Sprintf("Object type expected to be different than %T", theType), msgAndArgs...)
+}
+
+// IsNotOfTypeT asserts that an object is of a given type.
+//
+// # Usage
+//
+//	assertions.IsOfType[MyType](t,myVar)
+//
+// # Examples
+//
+//	success: 123.123
+//	failure: myType(123.123)
+func IsNotOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool {
+	// Domain: type
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	_, ok := object.(EType)
+	if !ok {
+		return true
+	}
+
+	return Fail(t, fmt.Sprintf("Object type expected to be different than %T", reflect.TypeFor[EType]()), msgAndArgs...)
 }
 
 // Zero asserts that i is the zero value for its type.
