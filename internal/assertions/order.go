@@ -55,6 +55,60 @@ func IsIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, m
 	return true
 }
 
+// SortedT asserts that the slice of [Ordered] is sorted (i.e. non-strictly increasing).
+//
+// Unlike [IsIncreasingT], it accepts elements to be equal.
+//
+// # Usage
+//
+//	assertions.SortedT(t, []int{1, 2, 3})
+//	assertions.SortedT(t, []float{1, 2})
+//	assertions.SortedT(t, []string{"a", "b"})
+//
+// # Examples
+//
+//	success: []int{1, 1, 3}
+//	failure: []int{1, 4, 2}
+func SortedT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool {
+	// Domain: ordering
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	isSorted := slices.IsSortedFunc(collection, compareOrdered)
+	if !isSorted {
+		return Fail(t, "should be sorted", msgAndArgs...)
+	}
+
+	return true
+}
+
+// NotSortedT asserts that the slice of [Ordered] is NOT sorted (i.e. non-strictly increasing).
+//
+// Unlike [IsDecreasingT], it accepts slices that are neither increasing nor decreasing.
+//
+// # Usage
+//
+//	assertions.NotSortedT(t, []int{3, 2, 3})
+//	assertions.NotSortedT(t, []float{2, 1})
+//	assertions.NotSortedT(t, []string{"b", "a"})
+//
+// # Examples
+//
+//	success: []int{3, 1, 3}
+//	failure: []int{1, 4, 8}
+func NotSortedT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool {
+	// Domain: ordering
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	isSorted := slices.IsSortedFunc(collection, compareOrdered)
+	if isSorted {
+		return Fail(t, "should not be sorted", msgAndArgs...)
+	}
+
+	return true
+}
+
 // IsNonIncreasing asserts that the collection is not increasing.
 //
 // # Usage
@@ -241,10 +295,16 @@ func compareStrictOrdered[E Ordered](a, b E) int {
 	return v
 }
 
+func compareOrdered[E Ordered](a, b E) int {
+	v := compareOrderedWithAny[E](a, b)
+
+	return v
+}
+
 func reverseCompareStrictOrdered[E Ordered](a, b E) int {
 	v := compareOrderedWithAny[E](b, a)
 	if v == 0 {
-		return 1
+		return -1
 	}
 
 	return v

@@ -369,6 +369,22 @@ func TestEqualValuePanics(t *testing.T) {
 	}
 }
 
+func TestEqualT(t *testing.T) {
+	t.Parallel()
+
+	for tc := range equalTCases() {
+		t.Run(tc.name, testAllEqualT(tc))
+	}
+}
+
+func TestNotEqualT(t *testing.T) {
+	t.Parallel()
+
+	for tc := range equalTCases() {
+		t.Run(tc.name, testAllNotEqualT(tc))
+	}
+}
+
 type panicCase struct {
 	name        string
 	value1      any
@@ -744,7 +760,6 @@ func equalEmptyCases() iter.Seq[equalEmptyCase] {
 				"foo\t\n" +
 				"\t\n",
 		},
-
 		{
 			name:           "non-printable character is not empty",
 			value:          "\u00a0", // NO-BREAK SPACE UNICODE CHARACTER
@@ -752,7 +767,6 @@ func equalEmptyCases() iter.Seq[equalEmptyCase] {
 			// Proposal for enhancement: here you cannot figure out what is expected
 			expectedErrMsg: "Should be empty, but was \u00a0\n",
 		},
-
 		// Here we are testing there is no error message on success
 		{
 			name:           "Empty string is empty",
@@ -859,4 +873,416 @@ func equalBytesCases() iter.Seq[equalBytesCase] {
 		{make([]byte, 2), make([]byte, 2, 3)},
 		{nil, make([]byte, 0)},
 	})
+}
+
+// Generic Equal function tests
+
+type equalTTestCase struct {
+	name       string
+	expected   any
+	actual     any
+	shouldPass bool
+}
+
+func equalTCases() iter.Seq[equalTTestCase] {
+	return slices.Values([]equalTTestCase{
+		// Success cases - equal values
+		{name: "int/equal", expected: 42, actual: 42, shouldPass: true},
+		{name: "int8/equal", expected: int8(10), actual: int8(10), shouldPass: true},
+		{name: "int16/equal", expected: int16(100), actual: int16(100), shouldPass: true},
+		{name: "int32/equal", expected: int32(1000), actual: int32(1000), shouldPass: true},
+		{name: "int64/equal", expected: int64(10000), actual: int64(10000), shouldPass: true},
+		{name: "uint/equal", expected: uint(42), actual: uint(42), shouldPass: true},
+		{name: "uint8/equal", expected: uint8(10), actual: uint8(10), shouldPass: true},
+		{name: "uint16/equal", expected: uint16(100), actual: uint16(100), shouldPass: true},
+		{name: "uint32/equal", expected: uint32(1000), actual: uint32(1000), shouldPass: true},
+		{name: "uint64/equal", expected: uint64(10000), actual: uint64(10000), shouldPass: true},
+		{name: "string/equal", expected: "hello", actual: "hello", shouldPass: true},
+		{name: "float32/equal", expected: float32(3.14), actual: float32(3.14), shouldPass: true},
+		{name: "float64/equal", expected: 3.14, actual: 3.14, shouldPass: true},
+		{name: "bool/true", expected: true, actual: true, shouldPass: true},
+		{name: "bool/false", expected: false, actual: false, shouldPass: true},
+
+		// Failure cases - not equal
+		{name: "int/not-equal", expected: 42, actual: 43, shouldPass: false},
+		{name: "string/not-equal", expected: "hello", actual: "world", shouldPass: false},
+		{name: "bool/not-equal", expected: true, actual: false, shouldPass: false},
+		{name: "float64/not-equal", expected: 3.14, actual: 2.71, shouldPass: false},
+	})
+}
+
+func testAllEqualT(tc equalTTestCase) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		// Type dispatch
+		switch expected := tc.expected.(type) {
+		case int:
+			actual, ok := tc.actual.(int)
+			if !ok {
+				t.Fatalf("invalid test case: requires int but got %T", tc.actual)
+			}
+			testEqualT(EqualT[int], expected, actual, tc.shouldPass)(t)
+		case int8:
+			actual, ok := tc.actual.(int8)
+			if !ok {
+				t.Fatalf("invalid test case: requires int8 but got %T", tc.actual)
+			}
+			testEqualT(EqualT[int8], expected, actual, tc.shouldPass)(t)
+		case int16:
+			actual, ok := tc.actual.(int16)
+			if !ok {
+				t.Fatalf("invalid test case: requires int16 but got %T", tc.actual)
+			}
+			testEqualT(EqualT[int16], expected, actual, tc.shouldPass)(t)
+		case int32:
+			actual, ok := tc.actual.(int32)
+			if !ok {
+				t.Fatalf("invalid test case: requires int32 but got %T", tc.actual)
+			}
+			testEqualT(EqualT[int32], expected, actual, tc.shouldPass)(t)
+		case int64:
+			actual, ok := tc.actual.(int64)
+			if !ok {
+				t.Fatalf("invalid test case: requires int64 but got %T", tc.actual)
+			}
+			testEqualT(EqualT[int64], expected, actual, tc.shouldPass)(t)
+		case uint:
+			actual, ok := tc.actual.(uint)
+			if !ok {
+				t.Fatalf("invalid test case: requires uint but got %T", tc.actual)
+			}
+			testEqualT(EqualT[uint], expected, actual, tc.shouldPass)(t)
+		case uint8:
+			actual, ok := tc.actual.(uint8)
+			if !ok {
+				t.Fatalf("invalid test case: requires uint8 but got %T", tc.actual)
+			}
+			testEqualT(EqualT[uint8], expected, actual, tc.shouldPass)(t)
+		case uint16:
+			actual, ok := tc.actual.(uint16)
+			if !ok {
+				t.Fatalf("invalid test case: requires uint16 but got %T", tc.actual)
+			}
+			testEqualT(EqualT[uint16], expected, actual, tc.shouldPass)(t)
+		case uint32:
+			actual, ok := tc.actual.(uint32)
+			if !ok {
+				t.Fatalf("invalid test case: requires uint32 but got %T", tc.actual)
+			}
+			testEqualT(EqualT[uint32], expected, actual, tc.shouldPass)(t)
+		case uint64:
+			actual, ok := tc.actual.(uint64)
+			if !ok {
+				t.Fatalf("invalid test case: requires uint64 but got %T", tc.actual)
+			}
+			testEqualT(EqualT[uint64], expected, actual, tc.shouldPass)(t)
+		case string:
+			actual, ok := tc.actual.(string)
+			if !ok {
+				t.Fatalf("invalid test case: requires string but got %T", tc.actual)
+			}
+			testEqualT(EqualT[string], expected, actual, tc.shouldPass)(t)
+		case float32:
+			actual, ok := tc.actual.(float32)
+			if !ok {
+				t.Fatalf("invalid test case: requires float32 but got %T", tc.actual)
+			}
+			testEqualT(EqualT[float32], expected, actual, tc.shouldPass)(t)
+		case float64:
+			actual, ok := tc.actual.(float64)
+			if !ok {
+				t.Fatalf("invalid test case: requires float64 but got %T", tc.actual)
+			}
+			testEqualT(EqualT[float64], expected, actual, tc.shouldPass)(t)
+		case bool:
+			actual, ok := tc.actual.(bool)
+			if !ok {
+				t.Fatalf("invalid test case: requires bool but got %T", tc.actual)
+			}
+			testEqualT(EqualT[bool], expected, actual, tc.shouldPass)(t)
+		default:
+			t.Fatalf("unexpected type: %T", expected)
+		}
+	}
+}
+
+func testAllNotEqualT(tc equalTTestCase) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		// Invert shouldPass for NotEqual
+		shouldPass := !tc.shouldPass
+
+		// Type dispatch
+		switch expected := tc.expected.(type) {
+		case int:
+			actual, ok := tc.actual.(int)
+			if !ok {
+				t.Fatalf("invalid test case: requires int but got %T", tc.actual)
+			}
+			testEqualT(NotEqualT[int], expected, actual, shouldPass)(t)
+		case int8:
+			actual, ok := tc.actual.(int8)
+			if !ok {
+				t.Fatalf("invalid test case: requires int8 but got %T", tc.actual)
+			}
+			testEqualT(NotEqualT[int8], expected, actual, shouldPass)(t)
+		case int16:
+			actual, ok := tc.actual.(int16)
+			if !ok {
+				t.Fatalf("invalid test case: requires int16 but got %T", tc.actual)
+			}
+			testEqualT(NotEqualT[int16], expected, actual, shouldPass)(t)
+		case int32:
+			actual, ok := tc.actual.(int32)
+			if !ok {
+				t.Fatalf("invalid test case: requires int32 but got %T", tc.actual)
+			}
+			testEqualT(NotEqualT[int32], expected, actual, shouldPass)(t)
+		case int64:
+			actual, ok := tc.actual.(int64)
+			if !ok {
+				t.Fatalf("invalid test case: requires int64 but got %T", tc.actual)
+			}
+			testEqualT(NotEqualT[int64], expected, actual, shouldPass)(t)
+		case uint:
+			actual, ok := tc.actual.(uint)
+			if !ok {
+				t.Fatalf("invalid test case: requires uint but got %T", tc.actual)
+			}
+			testEqualT(NotEqualT[uint], expected, actual, shouldPass)(t)
+		case uint8:
+			actual, ok := tc.actual.(uint8)
+			if !ok {
+				t.Fatalf("invalid test case: requires uint8 but got %T", tc.actual)
+			}
+			testEqualT(NotEqualT[uint8], expected, actual, shouldPass)(t)
+		case uint16:
+			actual, ok := tc.actual.(uint16)
+			if !ok {
+				t.Fatalf("invalid test case: requires uint16 but got %T", tc.actual)
+			}
+			testEqualT(NotEqualT[uint16], expected, actual, shouldPass)(t)
+		case uint32:
+			actual, ok := tc.actual.(uint32)
+			if !ok {
+				t.Fatalf("invalid test case: requires uint32 but got %T", tc.actual)
+			}
+			testEqualT(NotEqualT[uint32], expected, actual, shouldPass)(t)
+		case uint64:
+			actual, ok := tc.actual.(uint64)
+			if !ok {
+				t.Fatalf("invalid test case: requires uint64 but got %T", tc.actual)
+			}
+			testEqualT(NotEqualT[uint64], expected, actual, shouldPass)(t)
+		case string:
+			actual, ok := tc.actual.(string)
+			if !ok {
+				t.Fatalf("invalid test case: requires string but got %T", tc.actual)
+			}
+			testEqualT(NotEqualT[string], expected, actual, shouldPass)(t)
+		case float32:
+			actual, ok := tc.actual.(float32)
+			if !ok {
+				t.Fatalf("invalid test case: requires float32 but got %T", tc.actual)
+			}
+			testEqualT(NotEqualT[float32], expected, actual, shouldPass)(t)
+		case float64:
+			actual, ok := tc.actual.(float64)
+			if !ok {
+				t.Fatalf("invalid test case: requires float64 but got %T", tc.actual)
+			}
+			testEqualT(NotEqualT[float64], expected, actual, shouldPass)(t)
+		case bool:
+			actual, ok := tc.actual.(bool)
+			if !ok {
+				t.Fatalf("invalid test case: requires bool but got %T", tc.actual)
+			}
+			testEqualT(NotEqualT[bool], expected, actual, shouldPass)(t)
+		default:
+			t.Fatalf("unexpected type: %T", expected)
+		}
+	}
+}
+
+//nolint:thelper // linter false positive: these are not helpers
+func testEqualT[V comparable](
+	fn func(T, V, V, ...any) bool,
+	expected, actual V,
+	shouldPass bool,
+) func(*testing.T) {
+	return func(t *testing.T) {
+		mock := new(mockT)
+		result := fn(mock, expected, actual)
+
+		if shouldPass {
+			True(t, result)
+			False(t, mock.Failed())
+			return
+		}
+
+		False(t, result)
+		True(t, mock.Failed())
+	}
+}
+
+// Generic Same function tests
+
+type sameTTestCase struct {
+	name       string
+	makeValues func() (expected, actual any) // Function to create fresh pointers
+	shouldPass bool
+}
+
+func sameTCases() iter.Seq[sameTTestCase] {
+	return slices.Values([]sameTTestCase{
+		// Success cases - same pointer
+		{
+			name: "int/same-pointer",
+			makeValues: func() (any, any) {
+				x := 42
+				return &x, &x
+			},
+			shouldPass: true,
+		},
+		{
+			name: "string/same-pointer",
+			makeValues: func() (any, any) {
+				s := "hello"
+				return &s, &s
+			},
+			shouldPass: true,
+		},
+		{
+			name: "float64/same-pointer",
+			makeValues: func() (any, any) {
+				f := 3.14
+				return &f, &f
+			},
+			shouldPass: true,
+		},
+
+		// Failure cases - different pointers (even with same value)
+		{
+			name: "int/different-pointers-same-value",
+			makeValues: func() (any, any) {
+				x, y := 42, 42
+				return &x, &y
+			},
+			shouldPass: false,
+		},
+		{
+			name: "string/different-pointers",
+			makeValues: func() (any, any) {
+				s1, s2 := "hello", "world"
+				return &s1, &s2
+			},
+			shouldPass: false,
+		},
+		{
+			name: "float64/different-pointers-same-value",
+			makeValues: func() (any, any) {
+				f1, f2 := 3.14, 3.14
+				return &f1, &f2
+			},
+			shouldPass: false,
+		},
+	})
+}
+
+func TestSameT(t *testing.T) {
+	t.Parallel()
+
+	for tc := range sameTCases() {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			expected, actual := tc.makeValues()
+
+			// Type dispatch based on pointer type
+			switch exp := expected.(type) {
+			case *int:
+				act, ok := actual.(*int)
+				if !ok {
+					t.Fatalf("invalid test case: requires *int but got %T", actual)
+				}
+				testSameT(SameT[int], exp, act, tc.shouldPass)(t)
+			case *string:
+				act, ok := actual.(*string)
+				if !ok {
+					t.Fatalf("invalid test case: requires *string but got %T", actual)
+				}
+				testSameT(SameT[string], exp, act, tc.shouldPass)(t)
+			case *float64:
+				act, ok := actual.(*float64)
+				if !ok {
+					t.Fatalf("invalid test case: requires *float64 but got %T", actual)
+				}
+				testSameT(SameT[float64], exp, act, tc.shouldPass)(t)
+			default:
+				t.Fatalf("unexpected type: %T", exp)
+			}
+		})
+	}
+}
+
+func TestNotSameT(t *testing.T) {
+	t.Parallel()
+
+	for tc := range sameTCases() {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			// Invert shouldPass for NotSame
+			shouldPass := !tc.shouldPass
+
+			expected, actual := tc.makeValues()
+
+			// Type dispatch based on pointer type
+			switch exp := expected.(type) {
+			case *int:
+				act, ok := actual.(*int)
+				if !ok {
+					t.Fatalf("invalid test case: requires *int but got %T", actual)
+				}
+				testSameT(NotSameT[int], exp, act, shouldPass)(t)
+			case *string:
+				act, ok := actual.(*string)
+				if !ok {
+					t.Fatalf("invalid test case: requires *string but got %T", actual)
+				}
+				testSameT(NotSameT[string], exp, act, shouldPass)(t)
+			case *float64:
+				act, ok := actual.(*float64)
+				if !ok {
+					t.Fatalf("invalid test case: requires *float64 but got %T", actual)
+				}
+				testSameT(NotSameT[float64], exp, act, shouldPass)(t)
+			default:
+				t.Fatalf("unexpected type: %T", exp)
+			}
+		})
+	}
+}
+
+//nolint:thelper // linter false positive: these are not helpers
+func testSameT[P any](
+	fn func(T, *P, *P, ...any) bool,
+	expected, actual *P,
+	shouldPass bool,
+) func(*testing.T) {
+	return func(t *testing.T) {
+		mock := new(mockT)
+		result := fn(mock, expected, actual)
+
+		if shouldPass {
+			True(t, result)
+			False(t, mock.Failed())
+			return
+		}
+
+		False(t, result)
+		True(t, mock.Failed())
+	}
 }
