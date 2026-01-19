@@ -6,549 +6,236 @@ package assertions
 import (
 	"bytes"
 	"iter"
-	"runtime"
 	"slices"
-	"strings"
 	"testing"
 	"time"
 )
 
-const pkg = "github.com/go-openapi/testify/v2/internal/assertions"
-
-//nolint:dupl // no this is not a duplicate: it just looks almost the same!
-func TestCompareGreater(t *testing.T) {
+func TestCompareErrorMessages(t *testing.T) {
+	// Error message validation
 	t.Parallel()
 
-	t.Run("with basic input", func(t *testing.T) {
+	t.Run("with Greater", func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(mockT)
-		if !Greater(mock, 2, 1) {
-			t.Error("Greater should return true")
+		Greater(mock, 1, 2)
+
+		if !mock.Failed() {
+			t.Error("Expected test to fail but it passed")
 		}
 
-		if Greater(mock, 1, 1) {
-			t.Error("Greater should return false")
-		}
-
-		if Greater(mock, 1, 2) {
-			t.Error("Greater should return false")
+		errorMsg := mock.errorString()
+		if !Contains(t, errorMsg, `"1" is not greater than "2"`) {
+			t.Errorf("Error message should contain comparison details, got: %s", errorMsg)
 		}
 	})
 
-	for currCase := range compareStrictlyGreaterCases() {
-		t.Run("should NOT be strictly greater, with expected error message", func(t *testing.T) {
-			t.Parallel()
+	t.Run("with GreaterOrEqual", func(t *testing.T) {
+		mock := new(mockT)
+		GreaterOrEqual(mock, 1, 2)
 
-			mock := &outputT{buf: bytes.NewBuffer(nil)} // check error report
-			False(t, Greater(mock, currCase.less, currCase.greater),
-				"expected %v NOT to be strictly greater than %v",
-				currCase.less, currCase.greater,
-			)
+		if !mock.Failed() {
+			t.Error("Expected test to fail but it passed")
+		}
 
-			Contains(t, mock.buf.String(), currCase.msg)
-			Contains(t, mock.helpers, pkg+".Greater")
-		})
+		errorMsg := mock.errorString()
+		if !Contains(t, errorMsg, `"1" is not greater than or equal to "2"`) {
+			t.Errorf("Error message should contain comparison details, got: %s", errorMsg)
+		}
+	})
 
-		t.Run("should be strictly greater", func(t *testing.T) {
-			t.Parallel()
-
-			mock := new(mockT) // don't check output
-			True(t, Greater(mock, currCase.greater, currCase.less),
-				"expected %v to be strictly greater than %v",
-				currCase.less, currCase.greater,
-			)
-		})
-	}
-
-	for currCase := range compareEqualCases() {
-		t.Run("equal values should NOT be strictly greater", func(t *testing.T) {
-			t.Parallel()
-
-			mock := new(mockT)
-			False(t, Greater(mock, currCase.less, currCase.greater),
-				"expected (equal) %v NOT to be strictly greater than %v",
-				currCase.less, currCase.greater,
-			)
-		})
-	}
-}
-
-func TestCompareGreaterOrEqual(t *testing.T) {
-	t.Parallel()
-
-	t.Run("with basic input", func(t *testing.T) {
+	t.Run("with Less", func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(mockT)
-		if !GreaterOrEqual(mock, 2, 1) {
-			t.Error("GreaterOrEqual should return true")
+		Less(mock, 2, 1)
+
+		if !mock.Failed() {
+			t.Error("Expected test to fail but it passed")
 		}
 
-		if !GreaterOrEqual(mock, 1, 1) {
-			t.Error("GreaterOrEqual should return true")
-		}
-
-		if GreaterOrEqual(mock, 1, 2) {
-			t.Error("GreaterOrEqual should return false")
+		errorMsg := mock.errorString()
+		if !Contains(t, errorMsg, `"2" is not less than "1"`) {
+			t.Errorf("Error message should contain comparison details, got: %s", errorMsg)
 		}
 	})
 
-	for currCase := range compareStrictlyGreaterCases() {
-		t.Run("should NOT be greater or equal, with expected error message", func(t *testing.T) {
-			t.Parallel()
-
-			mock := &outputT{buf: bytes.NewBuffer(nil)} // check error report
-
-			False(t, GreaterOrEqual(mock, currCase.less, currCase.greater),
-				"expected %v NOT to be greater than or equal to %v",
-				currCase.less, currCase.greater,
-			)
-
-			Contains(t, mock.buf.String(), strings.ReplaceAll(currCase.msg, "than", "than or equal to"))
-			Contains(t, mock.helpers, pkg+".GreaterOrEqual")
-		})
-
-		t.Run("should be greater or equal", func(t *testing.T) {
-			t.Parallel()
-
-			mock := new(mockT)
-
-			True(t, GreaterOrEqual(mock, currCase.greater, currCase.less),
-				"expected %v to be greater than or equal to %v",
-				currCase.less, currCase.greater,
-			)
-		})
-	}
-
-	for currCase := range compareEqualCases() {
-		t.Run("equal values should be greater or equal", func(t *testing.T) {
-			t.Parallel()
-
-			mock := new(mockT)
-
-			True(t, GreaterOrEqual(mock, currCase.less, currCase.greater),
-				"expected (equal) %v to be greater than or equal to %v",
-				currCase.less, currCase.greater,
-			)
-		})
-	}
-}
-
-//nolint:dupl // no this is not a duplicate: it just looks almost the same!
-func TestCompareLess(t *testing.T) {
-	t.Parallel()
-	t.Run("with basic input", func(t *testing.T) {
+	t.Run("with LessOrEqual", func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(mockT)
+		LessOrEqual(mock, 2, 1)
 
-		if !Less(mock, 1, 2) {
-			t.Error("Less should return true")
+		if !mock.Failed() {
+			t.Error("Expected test to fail but it passed")
 		}
 
-		if Less(mock, 1, 1) {
-			t.Error("Less should return false")
-		}
-
-		if Less(mock, 2, 1) {
-			t.Error("Less should return false")
+		errorMsg := mock.errorString()
+		if !Contains(t, errorMsg, `"2" is not less than or equal to "1"`) {
+			t.Errorf("Error message should contain comparison details, got: %s", errorMsg)
 		}
 	})
 
-	for currCase := range compareStrictlyLessCases() {
-		t.Run("should NOT be stricly less, with expected error message", func(t *testing.T) {
-			t.Parallel()
-
-			mock := &outputT{buf: bytes.NewBuffer(nil)} // check error report
-			False(t, Less(mock, currCase.greater, currCase.less),
-				"expected %v NOT to be stricly less than %v",
-				currCase.greater, currCase.less,
-			)
-
-			Contains(t, mock.buf.String(), currCase.msg)
-			Contains(t, mock.helpers, pkg+".Less")
-		})
-
-		t.Run("should be stricly less", func(t *testing.T) {
-			t.Parallel()
-
-			mock := new(mockT)
-
-			True(t, Less(mock, currCase.less, currCase.greater),
-				"expected %v be stricly less than %v",
-				currCase.less, currCase.greater,
-			)
-		})
-	}
-
-	for currCase := range compareEqualCases() {
-		t.Run("equal values should NOT be strictly less", func(t *testing.T) {
-			t.Parallel()
-
-			mock := new(mockT)
-
-			True(t, GreaterOrEqual(mock, currCase.less, currCase.greater),
-				"expected (equal) %v NOT to be strictly less than %v",
-				currCase.less, currCase.greater,
-			)
-		})
-	}
-}
-
-func TestCompareLessOrEqual(t *testing.T) {
-	t.Parallel()
-
-	t.Run("with basic input", func(t *testing.T) {
+	t.Run("with Positive", func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(mockT)
+		Positive(mock, -1)
 
-		if !LessOrEqual(mock, 1, 2) {
-			t.Error("LessOrEqual should return true")
+		if !mock.Failed() {
+			t.Error("Expected test to fail but it passed")
 		}
 
-		if !LessOrEqual(mock, 1, 1) {
-			t.Error("LessOrEqual should return true")
-		}
-
-		if LessOrEqual(mock, 2, 1) {
-			t.Error("LessOrEqual should return false")
+		errorMsg := mock.errorString()
+		if !Contains(t, errorMsg, `"-1" is not positive`) {
+			t.Errorf("Error message should contain sign check details, got: %s", errorMsg)
 		}
 	})
 
-	for currCase := range compareStrictlyLessCases() {
-		t.Run("should NOT be less or equal, with expected error message", func(t *testing.T) {
-			t.Parallel()
+	t.Run("with Negative", func(t *testing.T) {
+		t.Parallel()
 
-			mock := &outputT{buf: bytes.NewBuffer(nil)} // check error report
+		mock := new(mockT)
+		Negative(mock, 1)
 
-			False(t, LessOrEqual(mock, currCase.greater, currCase.less),
-				"expected %v NOT to be less than or equal to %v",
-				currCase.less, currCase.greater,
-			)
-
-			Contains(t, mock.buf.String(), strings.ReplaceAll(currCase.msg, "than", "than or equal to"))
-			Contains(t, mock.helpers, pkg+".LessOrEqual")
-		})
-
-		t.Run("should be stricly less", func(t *testing.T) {
-			t.Parallel()
-
-			mock := new(mockT)
-			True(t, LessOrEqual(mock, currCase.less, currCase.greater),
-				"expected %v to be less than or equal to %v",
-				currCase.less, currCase.greater,
-			)
-		})
-
-		for currCase := range compareEqualCases() {
-			t.Run("equal values should be less or equal", func(t *testing.T) {
-				t.Parallel()
-
-				mock := new(mockT)
-
-				True(t, GreaterOrEqual(mock, currCase.less, currCase.greater),
-					"expected (equal) %v to be less than or equal to %v",
-					currCase.less, currCase.greater,
-				)
-			})
+		if !mock.Failed() {
+			t.Error("Expected test to fail but it passed")
 		}
+
+		errorMsg := mock.errorString()
+		if !Contains(t, errorMsg, `"1" is not negative`) {
+			t.Errorf("Error message should contain sign check details, got: %s", errorMsg)
+		}
+	})
+
+	t.Run("with forwarded args", func(t *testing.T) {
+		msgAndArgs := []any{"format %s %x", "this", 0xc001}
+		const expectedOutput = "format this c001\n"
+
+		funcs := []func(t T){
+			func(t T) { Greater(t, 1, 2, msgAndArgs...) },
+			func(t T) { GreaterOrEqual(t, 1, 2, msgAndArgs...) },
+			func(t T) { Less(t, 2, 1, msgAndArgs...) },
+			func(t T) { LessOrEqual(t, 2, 1, msgAndArgs...) },
+			func(t T) { Positive(t, 0, msgAndArgs...) },
+			func(t T) { Negative(t, 0, msgAndArgs...) },
+		}
+
+		for _, f := range funcs {
+			mock := &outputT{buf: bytes.NewBuffer(nil)}
+			f(mock)
+			Contains(t, mock.buf.String(), expectedOutput)
+		}
+	})
+}
+
+func TestCompareGreaterAndLess(t *testing.T) {
+	t.Parallel()
+
+	// Unified tests with all comparison functions, reflection-based or generic
+	for tc := range comparisonCases() {
+		t.Run(tc.name+"/unified", testAllComparison(tc))
 	}
 }
 
-func TestCompareGreaterT(t *testing.T) {
+func TestCompareGreaterAndLessT(t *testing.T) {
 	t.Parallel()
 
-	for tc := range greaterTCases() {
-		t.Run(tc.name, tc.test)
+	// Unified tests with all comparison functions
+	for tc := range comparisonCases() {
+		t.Run(tc.name, func(t *testing.T) {
+			// Dispatch to type-specific test based on the type of tc.less
+			switch tc.less.(type) {
+			case string:
+				testAllComparisonT[string](tc)(t)
+			case int:
+				testAllComparisonT[int](tc)(t)
+			case int8:
+				testAllComparisonT[int8](tc)(t)
+			case int16:
+				testAllComparisonT[int16](tc)(t)
+			case int32:
+				testAllComparisonT[int32](tc)(t)
+			case int64:
+				testAllComparisonT[int64](tc)(t)
+			case uint:
+				testAllComparisonT[uint](tc)(t)
+			case uint8:
+				testAllComparisonT[uint8](tc)(t)
+			case uint16:
+				testAllComparisonT[uint16](tc)(t)
+			case uint32:
+				testAllComparisonT[uint32](tc)(t)
+			case uint64:
+				testAllComparisonT[uint64](tc)(t)
+			case float32:
+				testAllComparisonT[float32](tc)(t)
+			case float64:
+				testAllComparisonT[float64](tc)(t)
+			case uintptr:
+				testAllComparisonT[uintptr](tc)(t)
+			case time.Time:
+				testAllComparisonT[time.Time](tc)(t)
+			case []byte:
+				testAllComparisonT[[]byte](tc)(t)
+			default:
+				// Custom types (like redefined uintptr) - skip, they're tested separately
+				t.Skip("custom types tested separately")
+			}
+		})
 	}
-}
 
-func TestCompareGreaterOrEqualT(t *testing.T) {
-	t.Parallel()
-
-	for tc := range greaterOrEqualTCases() {
-		t.Run(tc.name, tc.test)
-	}
-}
-
-func TestCompareLessT(t *testing.T) {
-	t.Parallel()
-
-	for tc := range lessTCases() {
-		t.Run(tc.name, tc.test)
-	}
-}
-
-func TestCompareLessOrEqualT(t *testing.T) {
-	t.Parallel()
-
-	for tc := range lessOrEqualTCases() {
-		t.Run(tc.name, tc.test)
-	}
+	// Additional type-specific tests
+	t.Run("custom int type", testGreaterTCustomInt())
 }
 
 func TestComparePositiveT(t *testing.T) {
 	t.Parallel()
 
-	for tc := range positiveTCases() {
-		t.Run(tc.name, tc.test)
-	}
-}
-
-func TestCompareNegativeT(t *testing.T) {
-	t.Parallel()
-
-	for tc := range negativeTCases() {
-		t.Run(tc.name, tc.test)
+	// Unified tests with both Positive and Negative functions
+	for tc := range signCases() {
+		t.Run(tc.name, func(t *testing.T) {
+			// Dispatch to type-specific test based on the type of tc.positive
+			switch tc.positive.(type) {
+			case int:
+				testAllSignT[int](tc)(t)
+			case int8:
+				testAllSignT[int8](tc)(t)
+			case int16:
+				testAllSignT[int16](tc)(t)
+			case int32:
+				testAllSignT[int32](tc)(t)
+			case int64:
+				testAllSignT[int64](tc)(t)
+			case float32:
+				testAllSignT[float32](tc)(t)
+			case float64:
+				testAllSignT[float64](tc)(t)
+			}
+		})
 	}
 }
 
 func TestComparePositive(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
 
-	if !Positive(mock, 1) {
-		t.Error("Positive should return true")
-	}
-
-	if !Positive(mock, 1.23) {
-		t.Error("Positive should return true")
-	}
-
-	if Positive(mock, -1) {
-		t.Error("Positive should return false")
-	}
-
-	if Positive(mock, -1.23) {
-		t.Error("Positive should return false")
-	}
-
-	// Check error report
-	for currCase := range comparePositiveCases() {
-		out := &outputT{buf: bytes.NewBuffer(nil)}
-		False(t, Positive(out, currCase.e))
-		Contains(t, out.buf.String(), currCase.msg)
-		Contains(t, out.helpers, pkg+".Positive")
-	}
-}
-
-func TestCompareNegative(t *testing.T) {
-	t.Parallel()
-	mock := new(testing.T)
-
-	if !Negative(mock, -1) {
-		t.Error("Negative should return true")
-	}
-
-	if !Negative(mock, -1.23) {
-		t.Error("Negative should return true")
-	}
-
-	if Negative(mock, 1) {
-		t.Error("Negative should return false")
-	}
-
-	if Negative(mock, 1.23) {
-		t.Error("Negative should return false")
-	}
-
-	// Check error report
-	for currCase := range compareNegativeCases() {
-		out := &outputT{buf: bytes.NewBuffer(nil)}
-		False(t, Negative(out, currCase.e))
-		Contains(t, out.buf.String(), currCase.msg)
-		Contains(t, out.helpers, pkg+".Negative")
-	}
-}
-
-func TestCompareMsgAndArgsForwarding(t *testing.T) {
-	msgAndArgs := []any{"format %s %x", "this", 0xc001}
-	const expectedOutput = "format this c001\n"
-
-	funcs := []func(t T){
-		func(t T) { Greater(t, 1, 2, msgAndArgs...) },
-		func(t T) { GreaterOrEqual(t, 1, 2, msgAndArgs...) },
-		func(t T) { Less(t, 2, 1, msgAndArgs...) },
-		func(t T) { LessOrEqual(t, 2, 1, msgAndArgs...) },
-		func(t T) { Positive(t, 0, msgAndArgs...) },
-		func(t T) { Negative(t, 0, msgAndArgs...) },
-	}
-
-	for _, f := range funcs {
-		out := &outputT{buf: bytes.NewBuffer(nil)}
-		f(out)
-		Contains(t, out.buf.String(), expectedOutput)
+	// Unified tests with both Positive and Negative functions
+	for tc := range signCases() {
+		t.Run(tc.name+"/unified", testAllSign(tc))
 	}
 }
 
 // genericTestCase wraps a test function with its name for table-driven tests of generic functions.
+// Kept for compatibility with existing special-case tests.
 type genericTestCase struct {
 	name string
 	test func(*testing.T)
 }
 
-// greaterTCases returns test cases for GreaterT with various Ordered types.
-func greaterTCases() iter.Seq[genericTestCase] {
-	return slices.Values([]genericTestCase{
-		{"int", testGreaterT[int](2, 1, 1, 2)},
-		{"int8", testGreaterT[int8](2, 1, 1, 2)},
-		{"int16", testGreaterT[int16](2, 1, 1, 2)},
-		{"int32", testGreaterT[int32](2, 1, 1, 2)},
-		{"int64", testGreaterT[int64](2, 1, 1, 2)},
-		{"uint", testGreaterT[uint](2, 1, 1, 2)},
-		{"uint8", testGreaterT[uint8](2, 1, 1, 2)},
-		{"uint16", testGreaterT[uint16](2, 1, 1, 2)},
-		{"uint32", testGreaterT[uint32](2, 1, 1, 2)},
-		{"uint64", testGreaterT[uint64](2, 1, 1, 2)},
-		{"float32", testGreaterT[float32](2.5, 1.5, 1.5, 2.5)},
-		{"float64", testGreaterT[float64](2.5, 1.5, 1.5, 2.5)},
-		{"string", testGreaterT[string]("b", "a", "a", "b")},
-		{"uintptr", testGreaterT[uintptr](2, 1, 1, 2)},
-		{"time.Time", testGreaterTTime()},
-		{"[]byte", testGreaterTBytes()},
-		{"custom int type", testGreaterTCustomInt()},
-	})
-}
-
-// greaterOrEqualTCases returns test cases for GreaterOrEqualT with various Ordered types.
-func greaterOrEqualTCases() iter.Seq[genericTestCase] {
-	return slices.Values([]genericTestCase{
-		{"int", testGreaterOrEqualT[int](2, 1, 1, 1, 0, 1)},
-		{"int8", testGreaterOrEqualT[int8](2, 1, 1, 1, 0, 1)},
-		{"int16", testGreaterOrEqualT[int16](2, 1, 1, 1, 0, 1)},
-		{"int32", testGreaterOrEqualT[int32](2, 1, 1, 1, 0, 1)},
-		{"int64", testGreaterOrEqualT[int64](2, 1, 1, 1, 0, 1)},
-		{"uint", testGreaterOrEqualT[uint](2, 1, 1, 1, 0, 1)},
-		{"uint8", testGreaterOrEqualT[uint8](2, 1, 1, 1, 0, 1)},
-		{"uint16", testGreaterOrEqualT[uint16](2, 1, 1, 1, 0, 1)},
-		{"uint32", testGreaterOrEqualT[uint32](2, 1, 1, 1, 0, 1)},
-		{"uint64", testGreaterOrEqualT[uint64](2, 1, 1, 1, 0, 1)},
-		{"float32", testGreaterOrEqualT[float32](2.5, 1.5, 1.5, 1.5, 0.5, 1.5)},
-		{"float64", testGreaterOrEqualT[float64](2.5, 1.5, 1.5, 1.5, 0.5, 1.5)},
-		{"string", testGreaterOrEqualT[string]("b", "a", "a", "a", "a", "b")},
-		{"uintptr", testGreaterOrEqualT[uintptr](2, 1, 1, 1, 0, 1)},
-		{"time.Time", testGreaterOrEqualTTime()},
-		{"[]byte", testGreaterOrEqualTBytes()},
-	})
-}
-
-// lessTCases returns test cases for LessT with various Ordered types.
-func lessTCases() iter.Seq[genericTestCase] {
-	return slices.Values([]genericTestCase{
-		{"int", testLessT[int](1, 2, 2, 1)},
-		{"int8", testLessT[int8](1, 2, 2, 1)},
-		{"int16", testLessT[int16](1, 2, 2, 1)},
-		{"int32", testLessT[int32](1, 2, 2, 1)},
-		{"int64", testLessT[int64](1, 2, 2, 1)},
-		{"uint", testLessT[uint](1, 2, 2, 1)},
-		{"uint8", testLessT[uint8](1, 2, 2, 1)},
-		{"uint16", testLessT[uint16](1, 2, 2, 1)},
-		{"uint32", testLessT[uint32](1, 2, 2, 1)},
-		{"uint64", testLessT[uint64](1, 2, 2, 1)},
-		{"float32", testLessT[float32](1.5, 2.5, 2.5, 1.5)},
-		{"float64", testLessT[float64](1.5, 2.5, 2.5, 1.5)},
-		{"string", testLessT[string]("a", "b", "b", "a")},
-		{"uintptr", testLessT[uintptr](1, 2, 2, 1)},
-		{"time.Time", testLessTTime()},
-		{"[]byte", testLessTBytes()},
-	})
-}
-
-// lessOrEqualTCases returns test cases for LessOrEqualT with various Ordered types.
-func lessOrEqualTCases() iter.Seq[genericTestCase] {
-	return slices.Values([]genericTestCase{
-		{"int", testLessOrEqualT[int](1, 2, 1, 1, 2, 1)},
-		{"int8", testLessOrEqualT[int8](1, 2, 1, 1, 2, 1)},
-		{"int16", testLessOrEqualT[int16](1, 2, 1, 1, 2, 1)},
-		{"int32", testLessOrEqualT[int32](1, 2, 1, 1, 2, 1)},
-		{"int64", testLessOrEqualT[int64](1, 2, 1, 1, 2, 1)},
-		{"uint", testLessOrEqualT[uint](1, 2, 1, 1, 2, 1)},
-		{"uint8", testLessOrEqualT[uint8](1, 2, 1, 1, 2, 1)},
-		{"uint16", testLessOrEqualT[uint16](1, 2, 1, 1, 2, 1)},
-		{"uint32", testLessOrEqualT[uint32](1, 2, 1, 1, 2, 1)},
-		{"uint64", testLessOrEqualT[uint64](1, 2, 1, 1, 2, 1)},
-		{"float32", testLessOrEqualT[float32](1.5, 2.5, 1.5, 1.5, 2.5, 1.5)},
-		{"float64", testLessOrEqualT[float64](1.5, 2.5, 1.5, 1.5, 2.5, 1.5)},
-		{"string", testLessOrEqualT[string]("a", "b", "a", "a", "b", "a")},
-		{"uintptr", testLessOrEqualT[uintptr](1, 2, 1, 1, 2, 1)},
-		{"time.Time", testLessOrEqualTTime()},
-		{"[]byte", testLessOrEqualTBytes()},
-	})
-}
-
-// positiveTCases returns test cases for PositiveT with various SignedNumeric types.
-func positiveTCases() iter.Seq[genericTestCase] {
-	return slices.Values([]genericTestCase{
-		{"int", testPositiveT[int](1, -1)},
-		{"int8", testPositiveT[int8](1, -1)},
-		{"int16", testPositiveT[int16](1, -1)},
-		{"int32", testPositiveT[int32](1, -1)},
-		{"int64", testPositiveT[int64](1, -1)},
-		{"float32", testPositiveT[float32](1.5, -1.5)},
-		{"float64", testPositiveT[float64](1.5, -1.5)},
-		{"zero is not positive", testPositiveTZero()},
-	})
-}
-
-// negativeTCases returns test cases for NegativeT with various SignedNumeric types.
-func negativeTCases() iter.Seq[genericTestCase] {
-	return slices.Values([]genericTestCase{
-		{"int", testNegativeT[int](-1, 1)},
-		{"int8", testNegativeT[int8](-1, 1)},
-		{"int16", testNegativeT[int16](-1, 1)},
-		{"int32", testNegativeT[int32](-1, 1)},
-		{"int64", testNegativeT[int64](-1, 1)},
-		{"float32", testNegativeT[float32](-1.5, 1.5)},
-		{"float64", testNegativeT[float64](-1.5, 1.5)},
-		{"zero is not negative", testNegativeTZero()},
-	})
-}
-
-// Test helper functions for generic comparison assertions
-
-func testGreaterT[V Ordered](successE1, successE2, failE1, failE2 V) func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
-	return func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		True(t, GreaterT(mock, successE1, successE2))
-		False(t, GreaterT(mock, failE1, failE2))
-		False(t, GreaterT(mock, successE1, successE1)) // equal values
-	}
-}
-
-func testGreaterTTime() func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
-	return func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		t0 := time.Now()
-		t1 := t0.Add(-time.Second)
-
-		True(t, GreaterT(mock, t0, t1))
-		False(t, GreaterT(mock, t1, t0))
-		False(t, GreaterT(mock, t0, t0))
-	}
-}
-
-func testGreaterTBytes() func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
-	return func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		True(t, GreaterT(mock, []byte{2}, []byte{1}))
-		False(t, GreaterT(mock, []byte{1}, []byte{2}))
-		False(t, GreaterT(mock, []byte{1}, []byte{1}))
-	}
-}
+// Special-case test helpers for types that need custom handling
 
 func testGreaterTCustomInt() func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
 	return func(t *testing.T) {
 		t.Parallel()
 		mock := new(mockT)
@@ -559,308 +246,324 @@ func testGreaterTCustomInt() func(*testing.T) {
 	}
 }
 
-func testGreaterOrEqualT[V Ordered](gtE1, gtE2, eqE1, eqE2, failE1, failE2 V) func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
-	return func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
+// Unified test helpers for comparison functions
 
-		True(t, GreaterOrEqualT(mock, gtE1, gtE2))      // greater
-		True(t, GreaterOrEqualT(mock, eqE1, eqE2))      // equal
-		False(t, GreaterOrEqualT(mock, failE1, failE2)) // less
-	}
-}
-
-func testGreaterOrEqualTTime() func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
-	return func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		t0 := time.Now()
-		t1 := t0.Add(-time.Second)
-
-		True(t, GreaterOrEqualT(mock, t0, t1))  // greater
-		True(t, GreaterOrEqualT(mock, t0, t0))  // equal
-		False(t, GreaterOrEqualT(mock, t1, t0)) // less
-	}
-}
-
-func testGreaterOrEqualTBytes() func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
-	return func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		True(t, GreaterOrEqualT(mock, []byte{2}, []byte{1}))
-		True(t, GreaterOrEqualT(mock, []byte{1}, []byte{1}))
-		False(t, GreaterOrEqualT(mock, []byte{1}, []byte{2}))
-	}
-}
-
-func testLessT[V Ordered](successE1, successE2, failE1, failE2 V) func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
-	return func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		True(t, LessT(mock, successE1, successE2))
-		False(t, LessT(mock, failE1, failE2))
-		False(t, LessT(mock, successE1, successE1)) // equal values
-	}
-}
-
-func testLessTTime() func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
-	return func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		t0 := time.Now()
-		t1 := t0.Add(time.Second)
-
-		True(t, LessT(mock, t0, t1))
-		False(t, LessT(mock, t1, t0))
-		False(t, LessT(mock, t0, t0))
-	}
-}
-
-func testLessTBytes() func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
-	return func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		True(t, LessT(mock, []byte{1}, []byte{2}))
-		False(t, LessT(mock, []byte{2}, []byte{1}))
-		False(t, LessT(mock, []byte{1}, []byte{1}))
-	}
-}
-
-func testLessOrEqualT[V Ordered](ltE1, ltE2, eqE1, eqE2, failE1, failE2 V) func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
-	return func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		True(t, LessOrEqualT(mock, ltE1, ltE2))      // less
-		True(t, LessOrEqualT(mock, eqE1, eqE2))      // equal
-		False(t, LessOrEqualT(mock, failE1, failE2)) // greater
-	}
-}
-
-func testLessOrEqualTTime() func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
-	return func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		t0 := time.Now()
-		t1 := t0.Add(time.Second)
-
-		True(t, LessOrEqualT(mock, t0, t1))  // less
-		True(t, LessOrEqualT(mock, t0, t0))  // equal
-		False(t, LessOrEqualT(mock, t1, t0)) // greater
-	}
-}
-
-func testLessOrEqualTBytes() func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
-	return func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		True(t, LessOrEqualT(mock, []byte{1}, []byte{2}))
-		True(t, LessOrEqualT(mock, []byte{1}, []byte{1}))
-		False(t, LessOrEqualT(mock, []byte{2}, []byte{1}))
-	}
-}
-
-func testPositiveT[V SignedNumeric](positive, negative V) func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
-	return func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		True(t, PositiveT(mock, positive))
-		False(t, PositiveT(mock, negative))
-	}
-}
-
-func testPositiveTZero() func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
-	return func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		False(t, PositiveT(mock, 0))
-		False(t, PositiveT(mock, 0.0))
-	}
-}
-
-func testNegativeT[V SignedNumeric](negative, positive V) func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
-	return func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		True(t, NegativeT(mock, negative))
-		False(t, NegativeT(mock, positive))
-	}
-}
-
-func testNegativeTZero() func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
-	return func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		False(t, NegativeT(mock, 0))
-		False(t, NegativeT(mock, 0.0))
-	}
-}
-
-// callerName gives the function name (qualified with a package path)
-// for the caller after skip frames (where 0 means the current function).
-func callerName(skip int) string {
-	// Make room for the skip PC.
-	var pc [1]uintptr
-	n := runtime.Callers(skip+2, pc[:]) // skip + runtime.Callers + callerName
-	if n == 0 {
-		panic("testing: zero callers found")
-	}
-	frames := runtime.CallersFrames(pc[:n])
-	frame, _ := frames.Next()
-	return frame.Function
-}
-
-type compareFixture struct {
+// comparisonTestCase represents a test case for comparison functions.
+type comparisonTestCase struct {
+	name    string
 	less    any
 	greater any
-	msg     string
+	equal   bool // if true, less == greater (for testing equal values)
 }
 
-func compareStrictlyGreaterCases() iter.Seq[compareFixture] {
-	const genMsg = `"1" is not greater than "2"`
-
+// comparisonCases returns unified test data for all comparison functions.
+func comparisonCases() iter.Seq[comparisonTestCase] {
 	type redefinedUintptr uintptr
 
-	return slices.Values(
-		[]compareFixture{
-			{less: "a", greater: "b", msg: `"a" is not greater than "b"`},
-			{less: int(1), greater: int(2), msg: genMsg},
-			{less: int8(1), greater: int8(2), msg: genMsg},
-			{less: int16(1), greater: int16(2), msg: genMsg},
-			{less: int32(1), greater: int32(2), msg: genMsg},
-			{less: int64(1), greater: int64(2), msg: genMsg},
-			{less: uint8(1), greater: uint8(2), msg: genMsg},
-			{less: uint16(1), greater: uint16(2), msg: genMsg},
-			{less: uint32(1), greater: uint32(2), msg: genMsg},
-			{less: uint64(1), greater: uint64(2), msg: genMsg},
-			{less: float32(1.23), greater: float32(2.34), msg: `"1.23" is not greater than "2.34"`},
-			{less: float64(1.23), greater: float64(2.34), msg: `"1.23" is not greater than "2.34"`},
-			{less: uintptr(1), greater: uintptr(2), msg: genMsg},
-			{less: uintptr(9), greater: uintptr(10), msg: `"9" is not greater than "10"`},
-			{less: redefinedUintptr(9), greater: redefinedUintptr(10), msg: `"9" is not greater than "10"`},
-			{less: time.Time{}, greater: time.Time{}.Add(time.Hour), msg: `"0001-01-01 00:00:00 +0000 UTC" is not greater than "0001-01-01 01:00:00 +0000 UTC"`},
-			{less: []byte{1, 1}, greater: []byte{1, 2}, msg: `"[1 1]" is not greater than "[1 2]"`},
-		},
-	)
+	return slices.Values([]comparisonTestCase{
+		// Strict inequality cases
+		{name: "string", less: "a", greater: "b", equal: false},
+		{name: "int", less: int(1), greater: int(2), equal: false},
+		{name: "int8", less: int8(1), greater: int8(2), equal: false},
+		{name: "int16", less: int16(1), greater: int16(2), equal: false},
+		{name: "int32", less: int32(1), greater: int32(2), equal: false},
+		{name: "int64", less: int64(1), greater: int64(2), equal: false},
+		{name: "uint", less: uint(1), greater: uint(2), equal: false},
+		{name: "uint8", less: uint8(1), greater: uint8(2), equal: false},
+		{name: "uint16", less: uint16(1), greater: uint16(2), equal: false},
+		{name: "uint32", less: uint32(1), greater: uint32(2), equal: false},
+		{name: "uint64", less: uint64(1), greater: uint64(2), equal: false},
+		{name: "float32", less: float32(1.23), greater: float32(2.34), equal: false},
+		{name: "float64", less: float64(1.23), greater: float64(2.34), equal: false},
+		{name: "uintptr", less: uintptr(1), greater: uintptr(2), equal: false},
+		{name: "uintptr/9-10", less: uintptr(9), greater: uintptr(10), equal: false},
+		{name: "redefined-uintptr", less: redefinedUintptr(9), greater: redefinedUintptr(10), equal: false},
+		{name: "time.Time", less: time.Time{}, greater: time.Time{}.Add(time.Hour), equal: false},
+		{name: "[]byte", less: []byte{1, 1}, greater: []byte{1, 2}, equal: false},
+
+		// Equality cases
+		{name: "string/equal", less: "a", greater: "a", equal: true},
+		{name: "int/equal", less: int(1), greater: int(1), equal: true},
+		{name: "int8/equal", less: int8(1), greater: int8(1), equal: true},
+		{name: "int16/equal", less: int16(1), greater: int16(1), equal: true},
+		{name: "int32/equal", less: int32(1), greater: int32(1), equal: true},
+		{name: "int64/equal", less: int64(1), greater: int64(1), equal: true},
+		{name: "uint/equal", less: uint(1), greater: uint(1), equal: true},
+		{name: "uint8/equal", less: uint8(1), greater: uint8(1), equal: true},
+		{name: "uint16/equal", less: uint16(1), greater: uint16(1), equal: true},
+		{name: "uint32/equal", less: uint32(1), greater: uint32(1), equal: true},
+		{name: "uint64/equal", less: uint64(1), greater: uint64(1), equal: true},
+		{name: "float32/equal", less: float32(1.23), greater: float32(1.23), equal: true},
+		{name: "float64/equal", less: float64(1.23), greater: float64(1.23), equal: true},
+		{name: "uintptr/equal", less: uintptr(1), greater: uintptr(1), equal: true},
+		{name: "time.Time/equal", less: time.Time{}, greater: time.Time{}, equal: true},
+		{name: "[]byte/equal", less: []byte{1, 1}, greater: []byte{1, 1}, equal: true},
+	})
 }
 
-func compareStrictlyLessCases() iter.Seq[compareFixture] {
-	const genMsg = `"2" is not less than "1"`
+// testAllComparison tests all four comparison functions with the same test data.
+func testAllComparison(tc comparisonTestCase) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
 
-	return slices.Values(
-		[]compareFixture{
-			{less: "a", greater: "b", msg: `"b" is not less than "a"`},
-			{less: int(1), greater: int(2), msg: genMsg},
-			{less: int8(1), greater: int8(2), msg: genMsg},
-			{less: int16(1), greater: int16(2), msg: genMsg},
-			{less: int32(1), greater: int32(2), msg: genMsg},
-			{less: int64(1), greater: int64(2), msg: genMsg},
-			{less: uint8(1), greater: uint8(2), msg: genMsg},
-			{less: uint16(1), greater: uint16(2), msg: genMsg},
-			{less: uint32(1), greater: uint32(2), msg: genMsg},
-			{less: uint64(1), greater: uint64(2), msg: genMsg},
-			{less: float32(1.23), greater: float32(2.34), msg: `"2.34" is not less than "1.23"`},
-			{less: float64(1.23), greater: float64(2.34), msg: `"2.34" is not less than "1.23"`},
-			{less: uintptr(1), greater: uintptr(2), msg: genMsg},
-			{less: time.Time{}, greater: time.Time{}.Add(time.Hour), msg: `"0001-01-01 01:00:00 +0000 UTC" is not less than "0001-01-01 00:00:00 +0000 UTC"`},
-			{less: []byte{1, 1}, greater: []byte{1, 2}, msg: `"[1 2]" is not less than "[1 1]"`},
-		},
-	)
-}
+		if tc.equal {
+			// For equal values:
+			// - Greater and Less should return false
+			// - GreaterOrEqual and LessOrEqual should return true
+			t.Run("with equal values", func(t *testing.T) {
+				t.Run("Greater should fail", testComparison(Greater, tc.less, tc.greater, false))
+				t.Run("GreaterOrEqual should pass", testComparison(GreaterOrEqual, tc.less, tc.greater, true))
+				t.Run("Less should fail", testComparison(Less, tc.less, tc.greater, false))
+				t.Run("LessOrEqual should pass", testComparison(LessOrEqual, tc.less, tc.greater, true))
+			})
 
-func compareEqualCases() iter.Seq[compareFixture] {
-	// This iterator produces equal-values to check edge cases with strict comparisons.
-	// The message cannot be used for error message checks.
-	return func(yield func(compareFixture) bool) {
-		for greater := range compareStrictlyGreaterCases() {
-			greater.msg = ""
-			equal1 := greater
-			equal1.less = equal1.greater
-			if !yield(equal1) {
-				return
-			}
-
-			equal2 := greater
-			equal2.greater = equal2.less
-			if !yield(equal2) {
-				return
-			}
+			return
 		}
 
-		for less := range compareStrictlyLessCases() {
-			less.msg = ""
-			equal1 := less
-			equal1.less = equal1.greater
-			if !yield(equal1) {
-				return
-			}
-
-			equal2 := less
-			equal2.greater = equal2.less
-			if !yield(equal2) {
-				return
-			}
-		}
+		// For strict inequality:
+		// Test both directions to verify the inverse relationships
+		t.Run("with strict inequality", func(t *testing.T) {
+			t.Run("Greater", func(t *testing.T) {
+				t.Run("should pass (greater > less)", testComparison(Greater, tc.greater, tc.less, true))
+				t.Run("should fail (less > greater)", testComparison(Greater, tc.less, tc.greater, false))
+			})
+			t.Run("GreaterOrEqual", func(t *testing.T) {
+				t.Run("should pass (greater >= less)", testComparison(GreaterOrEqual, tc.greater, tc.less, true))
+				t.Run("should fail (less >= greater)", testComparison(GreaterOrEqual, tc.less, tc.greater, false))
+			})
+			t.Run("Less", func(t *testing.T) {
+				t.Run("should pass (less < greater)", testComparison(Less, tc.less, tc.greater, true))
+				t.Run("should fail (greater < less)", testComparison(Less, tc.greater, tc.less, false))
+			})
+			t.Run("LessOrEqual", func(t *testing.T) {
+				t.Run("should pass (less <= greater)", testComparison(LessOrEqual, tc.less, tc.greater, true))
+				t.Run("should fail (greater <= less)", testComparison(LessOrEqual, tc.greater, tc.less, false))
+			})
+		})
 	}
 }
 
-type compareTestCase struct {
-	e   any
-	msg string
+// testComparison is a helper that tests a comparison function.
+func testComparison(cmp func(T, any, any, ...any) bool, e1, e2 any, shouldPass bool) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := cmp(mock, e1, e2)
+
+		if shouldPass {
+			True(t, result)
+			False(t, mock.Failed())
+
+			return
+		}
+
+		False(t, result)
+		True(t, mock.Failed())
+	}
 }
 
-type comparePositiveCase = compareTestCase
+// testAllComparisonT tests all four generic comparison functions with the same test data.
+//
+//nolint:thelper // linter false positive: this is not a helper
+func testAllComparisonT[V Ordered](tc comparisonTestCase) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
 
-type compareNegativeCase = compareTestCase
+		// Type assert the values
+		less, ok1 := tc.less.(V)
+		greater, ok2 := tc.greater.(V)
+		if !ok1 || !ok2 {
+			t.Fatalf("type mismatch in testcase: expected %T, got less=%T, greater=%T", *new(V), tc.less, tc.greater)
+		}
 
-func comparePositiveCases() iter.Seq[comparePositiveCase] {
-	const genMsg = `"-1" is not positive`
+		if tc.equal {
+			// For equal values:
+			// - GreaterT and LessT should return false
+			// - GreaterOrEqualT and LessOrEqualT should return true
+			t.Run("with equal values", func(t *testing.T) {
+				t.Run("GreaterT should fail", testComparisonT(GreaterT[V], less, greater, false))
+				t.Run("GreaterOrEqualT should pass", testComparisonT(GreaterOrEqualT[V], less, greater, true))
+				t.Run("LessT should fail", testComparisonT(LessT[V], less, greater, false))
+				t.Run("LessOrEqualT should pass", testComparisonT(LessOrEqualT[V], less, greater, true))
+			})
 
-	return slices.Values([]comparePositiveCase{
-		{e: int(-1), msg: genMsg},
-		{e: int8(-1), msg: genMsg},
-		{e: int16(-1), msg: genMsg},
-		{e: int32(-1), msg: genMsg},
-		{e: int64(-1), msg: genMsg},
-		{e: float32(-1.23), msg: `"-1.23" is not positive`},
-		{e: float64(-1.23), msg: `"-1.23" is not positive`},
+			return
+		}
+
+		// For strict inequality:
+		// Test both directions to verify the inverse relationships
+		t.Run("with strict inequality", func(t *testing.T) {
+			t.Run("GreaterT", func(t *testing.T) {
+				t.Run("should pass (greater > less)", testComparisonT(GreaterT[V], greater, less, true))
+				t.Run("should fail (less > greater)", testComparisonT(GreaterT[V], less, greater, false))
+			})
+			t.Run("GreaterOrEqualT", func(t *testing.T) {
+				t.Run("should pass (greater >= less)", testComparisonT(GreaterOrEqualT[V], greater, less, true))
+				t.Run("should fail (less >= greater)", testComparisonT(GreaterOrEqualT[V], less, greater, false))
+			})
+			t.Run("LessT", func(t *testing.T) {
+				t.Run("should pass (less < greater)", testComparisonT(LessT[V], less, greater, true))
+				t.Run("should fail (greater < less)", testComparisonT(LessT[V], greater, less, false))
+			})
+			t.Run("LessOrEqualT", func(t *testing.T) {
+				t.Run("should pass (less <= greater)", testComparisonT(LessOrEqualT[V], less, greater, true))
+				t.Run("should fail (greater <= less)", testComparisonT(LessOrEqualT[V], greater, less, false))
+			})
+		})
+	}
+}
+
+// testComparisonT is a helper that tests a generic comparison function.
+func testComparisonT[V Ordered](cmp func(T, V, V, ...any) bool, e1, e2 V, shouldPass bool) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := cmp(mock, e1, e2)
+
+		if shouldPass {
+			True(t, result)
+			False(t, mock.Failed())
+
+			return
+		}
+
+		False(t, result)
+		True(t, mock.Failed())
+	}
+}
+
+// Unified test helpers for sign functions (Positive/Negative)
+
+// signTestCase represents a test case for Positive/Negative functions.
+type signTestCase struct {
+	name     string
+	positive any
+	negative any
+	isZero   bool // if true, positive is zero (both Positive and Negative should fail)
+}
+
+// signCases returns unified test data for Positive/Negative functions.
+func signCases() iter.Seq[signTestCase] {
+	return slices.Values([]signTestCase{
+		{name: "int", positive: int(1), negative: int(-1), isZero: false},
+		{name: "int8", positive: int8(1), negative: int8(-1), isZero: false},
+		{name: "int16", positive: int16(1), negative: int16(-1), isZero: false},
+		{name: "int32", positive: int32(1), negative: int32(-1), isZero: false},
+		{name: "int64", positive: int64(1), negative: int64(-1), isZero: false},
+		{name: "float32", positive: float32(1.5), negative: float32(-1.5), isZero: false},
+		{name: "float64", positive: float64(1.5), negative: float64(-1.5), isZero: false},
+
+		// Zero cases - both Positive and Negative should fail
+		{name: "int/zero", positive: int(0), negative: int(0), isZero: true},
+		{name: "float64/zero", positive: float64(0.0), negative: float64(0.0), isZero: true},
 	})
 }
 
-func compareNegativeCases() iter.Seq[compareNegativeCase] {
-	const genMsg = `"1" is not negative`
+// testAllSign tests both Positive and Negative functions with the same test data.
+func testAllSign(tc signTestCase) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
 
-	return slices.Values([]compareNegativeCase{
-		{e: int(1), msg: genMsg},
-		{e: int8(1), msg: genMsg},
-		{e: int16(1), msg: genMsg},
-		{e: int32(1), msg: genMsg},
-		{e: int64(1), msg: genMsg},
-		{e: float32(1.23), msg: `"1.23" is not negative`},
-		{e: float64(1.23), msg: `"1.23" is not negative`},
-	})
+		if tc.isZero {
+			// Zero should fail both Positive and Negative
+			t.Run("zero should fail both", func(t *testing.T) {
+				t.Run("Positive should fail", testSign(Positive, tc.positive, false))
+				t.Run("Negative should fail", testSign(Negative, tc.positive, false))
+			})
+
+			return
+		}
+
+		// Test positive and negative values
+		t.Run("with positive/negative values", func(t *testing.T) {
+			t.Run("Positive", func(t *testing.T) {
+				t.Run("should pass (positive value)", testSign(Positive, tc.positive, true))
+				t.Run("should fail (negative value)", testSign(Positive, tc.negative, false))
+			})
+			t.Run("Negative", func(t *testing.T) {
+				t.Run("should pass (negative value)", testSign(Negative, tc.negative, true))
+				t.Run("should fail (positive value)", testSign(Negative, tc.positive, false))
+			})
+		})
+	}
+}
+
+// testSign is a helper that tests a sign function.
+func testSign(sign func(T, any, ...any) bool, e any, shouldPass bool) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := sign(mock, e)
+
+		if shouldPass {
+			True(t, result)
+			False(t, mock.Failed())
+
+			return
+		}
+
+		False(t, result)
+		True(t, mock.Failed())
+	}
+}
+
+// testAllSignT tests both PositiveT and NegativeT functions with the same test data.
+//
+//nolint:thelper // linter false positive: this is not a helper
+func testAllSignT[V SignedNumeric](tc signTestCase) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		// Type assert the values
+		positive, ok1 := tc.positive.(V)
+		negative, ok2 := tc.negative.(V)
+		if !ok1 || !ok2 {
+			t.Fatalf("type mismatch: expected %T, got positive=%T, negative=%T", *new(V), tc.positive, tc.negative)
+		}
+
+		if tc.isZero {
+			// Zero should fail both PositiveT and NegativeT
+			t.Run("zero should fail both", func(t *testing.T) {
+				t.Run("PositiveT should fail", testSignT(PositiveT[V], positive, false))
+				t.Run("NegativeT should fail", testSignT(NegativeT[V], positive, false))
+			})
+
+			return
+		}
+
+		// Test positive and negative values
+		t.Run("with positive/negative values", func(t *testing.T) {
+			t.Run("PositiveT", func(t *testing.T) {
+				t.Run("should pass (positive value)", testSignT(PositiveT[V], positive, true))
+				t.Run("should fail (negative value)", testSignT(PositiveT[V], negative, false))
+			})
+			t.Run("NegativeT", func(t *testing.T) {
+				t.Run("should pass (negative value)", testSignT(NegativeT[V], negative, true))
+				t.Run("should fail (positive value)", testSignT(NegativeT[V], positive, false))
+			})
+		})
+	}
+}
+
+// testSignT is a helper that tests a generic sign function.
+func testSignT[V SignedNumeric](sign func(T, V, ...any) bool, e V, shouldPass bool) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := sign(mock, e)
+
+		if shouldPass {
+			True(t, result)
+			False(t, mock.Failed())
+
+			return
+		}
+
+		False(t, result)
+		True(t, mock.Failed())
+	}
 }

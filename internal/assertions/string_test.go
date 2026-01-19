@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestStringEqual(t *testing.T) {
+func TestStringEqualAndRegexp(t *testing.T) {
 	t.Parallel()
 
 	i := 0
@@ -23,7 +23,7 @@ func TestStringEqual(t *testing.T) {
 	}
 }
 
-func TestStringEqualFormatting(t *testing.T) {
+func TestStringEqualAndRegexpFormatting(t *testing.T) {
 	t.Parallel()
 
 	i := 0
@@ -78,7 +78,7 @@ func TestStringRegexp(t *testing.T) {
 			})
 		})
 
-		t.Run("with fmt.Sprint conversion", func(t *testing.T) {
+		t.Run("with fmt.Sprint conversion (edge case)", func(t *testing.T) {
 			t.Parallel()
 
 			const (

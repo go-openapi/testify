@@ -241,6 +241,20 @@ func parseLabeledOutput(output string) []labeledContent {
 	return contents
 }
 
+// callerName gives the function name (qualified with a package path)
+// for the caller after skip frames (where 0 means the current function).
+func callerName(skip int) string {
+	// Make room for the skip PC.
+	var pc [1]uintptr
+	n := runtime.Callers(skip+2, pc[:]) // skip + runtime.Callers + callerName
+	if n == 0 {
+		panic("testing: zero callers found")
+	}
+	frames := runtime.CallersFrames(pc[:n])
+	frame, _ := frames.Next()
+	return frame.Function
+}
+
 type testCase struct {
 	expected any
 	actual   any
