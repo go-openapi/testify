@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
+// Generated on 2026-01-19 (version fbbb078) using codegen version v2.1.9-0.20260119215714-fbbb0787fd81+dirty [sha: fbbb0787fd8131d63f280f85b14e47f7c0dc8ee0]
 
 package assert
 
@@ -85,6 +85,30 @@ func TestDirExistsf(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("DirExists should mark test as failed")
+		}
+	})
+}
+
+func TestDirNotExistsf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := DirNotExistsf(t, filepath.Join(testDataPath(), "non_existing_dir"), "test message")
+		if !result {
+			t.Error("DirNotExistsf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := DirNotExistsf(mock, filepath.Join(testDataPath(), "existing_dir"), "test message")
+		if result {
+			t.Error("DirNotExistsf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("DirNotExists should mark test as failed")
 		}
 	})
 }
@@ -229,6 +253,30 @@ func TestEqualExportedValuesf(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("EqualExportedValues should mark test as failed")
+		}
+	})
+}
+
+func TestEqualTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := EqualTf(t, 123, 123, "test message")
+		if !result {
+			t.Error("EqualTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := EqualTf(mock, 123, 456, "test message")
+		if result {
+			t.Error("EqualTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("EqualT should mark test as failed")
 		}
 	})
 }
@@ -573,6 +621,30 @@ func TestFileNotEmptyf(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("FileNotEmpty should mark test as failed")
+		}
+	})
+}
+
+func TestFileNotExistsf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := FileNotExistsf(t, filepath.Join(testDataPath(), "non_existing_file"), "test message")
+		if !result {
+			t.Error("FileNotExistsf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := FileNotExistsf(mock, filepath.Join(testDataPath(), "existing_file"), "test message")
+		if result {
+			t.Error("FileNotExistsf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("FileNotExists should mark test as failed")
 		}
 	})
 }
@@ -1033,6 +1105,30 @@ func TestIsDecreasingf(t *testing.T) {
 	})
 }
 
+func TestIsDecreasingTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := IsDecreasingTf(t, []int{3, 2, 1}, "test message")
+		if !result {
+			t.Error("IsDecreasingTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := IsDecreasingTf(mock, []int{1, 2, 3}, "test message")
+		if result {
+			t.Error("IsDecreasingTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("IsDecreasingT should mark test as failed")
+		}
+	})
+}
+
 func TestIsIncreasingf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1057,6 +1153,30 @@ func TestIsIncreasingf(t *testing.T) {
 	})
 }
 
+func TestIsIncreasingTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := IsIncreasingTf(t, []int{1, 2, 3}, "test message")
+		if !result {
+			t.Error("IsIncreasingTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := IsIncreasingTf(mock, []int{1, 1, 2}, "test message")
+		if result {
+			t.Error("IsIncreasingTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("IsIncreasingT should mark test as failed")
+		}
+	})
+}
+
 func TestIsNonDecreasingf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1071,12 +1191,36 @@ func TestIsNonDecreasingf(t *testing.T) {
 		t.Parallel()
 
 		mock := new(mockT)
-		result := IsNonDecreasingf(mock, []int{2, 1, 1}, "test message")
+		result := IsNonDecreasingf(mock, []int{2, 1, 0}, "test message")
 		if result {
 			t.Error("IsNonDecreasingf should return false on failure")
 		}
 		if !mock.failed {
 			t.Error("IsNonDecreasing should mark test as failed")
+		}
+	})
+}
+
+func TestIsNonDecreasingTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := IsNonDecreasingTf(t, []int{1, 1, 2}, "test message")
+		if !result {
+			t.Error("IsNonDecreasingTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := IsNonDecreasingTf(mock, []int{2, 1, 0}, "test message")
+		if result {
+			t.Error("IsNonDecreasingTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("IsNonDecreasingT should mark test as failed")
 		}
 	})
 }
@@ -1101,6 +1245,30 @@ func TestIsNonIncreasingf(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("IsNonIncreasing should mark test as failed")
+		}
+	})
+}
+
+func TestIsNonIncreasingTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := IsNonIncreasingTf(t, []int{2, 1, 1}, "test message")
+		if !result {
+			t.Error("IsNonIncreasingTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := IsNonIncreasingTf(mock, []int{1, 2, 3}, "test message")
+		if result {
+			t.Error("IsNonIncreasingTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("IsNonIncreasingT should mark test as failed")
 		}
 	})
 }
@@ -1369,6 +1537,54 @@ func TestLessTf(t *testing.T) {
 	})
 }
 
+func TestMapContainsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := MapContainsTf(t, map[string]string{"A": "B"}, "A", "test message")
+		if !result {
+			t.Error("MapContainsTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := MapContainsTf(mock, map[string]string{"A": "B"}, "C", "test message")
+		if result {
+			t.Error("MapContainsTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("MapContainsT should mark test as failed")
+		}
+	})
+}
+
+func TestMapNotContainsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := MapNotContainsTf(t, map[string]string{"A": "B"}, "C", "test message")
+		if !result {
+			t.Error("MapNotContainsTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := MapNotContainsTf(mock, map[string]string{"A": "B"}, "A", "test message")
+		if result {
+			t.Error("MapNotContainsTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("MapNotContainsT should mark test as failed")
+		}
+	})
+}
+
 func TestNegativef(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1465,30 +1681,6 @@ func TestNilf(t *testing.T) {
 	})
 }
 
-func TestNoDirExistsf(t *testing.T) {
-	t.Parallel()
-	t.Run("success", func(t *testing.T) {
-		t.Parallel()
-		result := NoDirExistsf(t, filepath.Join(testDataPath(), "non_existing_dir"), "test message")
-		if !result {
-			t.Error("NoDirExistsf should return true on success")
-		}
-	})
-
-	t.Run("failure", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		result := NoDirExistsf(mock, filepath.Join(testDataPath(), "existing_dir"), "test message")
-		if result {
-			t.Error("NoDirExistsf should return false on failure")
-		}
-		if !mock.failed {
-			t.Error("NoDirExists should mark test as failed")
-		}
-	})
-}
-
 func TestNoErrorf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1509,30 +1701,6 @@ func TestNoErrorf(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("NoError should mark test as failed")
-		}
-	})
-}
-
-func TestNoFileExistsf(t *testing.T) {
-	t.Parallel()
-	t.Run("success", func(t *testing.T) {
-		t.Parallel()
-		result := NoFileExistsf(t, filepath.Join(testDataPath(), "non_existing_file"), "test message")
-		if !result {
-			t.Error("NoFileExistsf should return true on success")
-		}
-	})
-
-	t.Run("failure", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		result := NoFileExistsf(mock, filepath.Join(testDataPath(), "existing_file"), "test message")
-		if result {
-			t.Error("NoFileExistsf should return false on failure")
-		}
-		if !mock.failed {
-			t.Error("NoFileExists should mark test as failed")
 		}
 	})
 }
@@ -1653,6 +1821,30 @@ func TestNotEqualf(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("NotEqual should mark test as failed")
+		}
+	})
+}
+
+func TestNotEqualTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := NotEqualTf(t, 123, 456, "test message")
+		if !result {
+			t.Error("NotEqualTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := NotEqualTf(mock, 123, 123, "test message")
+		if result {
+			t.Error("NotEqualTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("NotEqualT should mark test as failed")
 		}
 	})
 }
@@ -1897,6 +2089,54 @@ func TestNotSamef(t *testing.T) {
 	})
 }
 
+func TestNotSameTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := NotSameTf(t, &staticVar, ptr("static string"), "test message")
+		if !result {
+			t.Error("NotSameTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := NotSameTf(mock, &staticVar, staticVarPtr, "test message")
+		if result {
+			t.Error("NotSameTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("NotSameT should mark test as failed")
+		}
+	})
+}
+
+func TestNotSortedTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := NotSortedTf(t, []int{3, 1, 3}, "test message")
+		if !result {
+			t.Error("NotSortedTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := NotSortedTf(mock, []int{1, 4, 8}, "test message")
+		if result {
+			t.Error("NotSortedTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("NotSortedT should mark test as failed")
+		}
+	})
+}
+
 func TestNotSubsetf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -2133,6 +2373,198 @@ func TestSamef(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("Same should mark test as failed")
+		}
+	})
+}
+
+func TestSameTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := SameTf(t, &staticVar, staticVarPtr, "test message")
+		if !result {
+			t.Error("SameTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := SameTf(mock, &staticVar, ptr("static string"), "test message")
+		if result {
+			t.Error("SameTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("SameT should mark test as failed")
+		}
+	})
+}
+
+func TestSliceContainsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := SliceContainsTf(t, []string{"A", "B"}, "A", "test message")
+		if !result {
+			t.Error("SliceContainsTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := SliceContainsTf(mock, []string{"A", "B"}, "C", "test message")
+		if result {
+			t.Error("SliceContainsTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("SliceContainsT should mark test as failed")
+		}
+	})
+}
+
+func TestSliceNotContainsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := SliceNotContainsTf(t, []string{"A", "B"}, "C", "test message")
+		if !result {
+			t.Error("SliceNotContainsTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := SliceNotContainsTf(mock, []string{"A", "B"}, "A", "test message")
+		if result {
+			t.Error("SliceNotContainsTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("SliceNotContainsT should mark test as failed")
+		}
+	})
+}
+
+func TestSliceNotSubsetTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := SliceNotSubsetTf(t, []int{1, 2, 3}, []int{4, 5}, "test message")
+		if !result {
+			t.Error("SliceNotSubsetTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := SliceNotSubsetTf(mock, []int{1, 2, 3}, []int{1, 2}, "test message")
+		if result {
+			t.Error("SliceNotSubsetTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("SliceNotSubsetT should mark test as failed")
+		}
+	})
+}
+
+func TestSliceSubsetTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := SliceSubsetTf(t, []int{1, 2, 3}, []int{1, 2}, "test message")
+		if !result {
+			t.Error("SliceSubsetTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := SliceSubsetTf(mock, []int{1, 2, 3}, []int{4, 5}, "test message")
+		if result {
+			t.Error("SliceSubsetTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("SliceSubsetT should mark test as failed")
+		}
+	})
+}
+
+func TestSortedTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := SortedTf(t, []int{1, 1, 3}, "test message")
+		if !result {
+			t.Error("SortedTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := SortedTf(mock, []int{1, 4, 2}, "test message")
+		if result {
+			t.Error("SortedTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("SortedT should mark test as failed")
+		}
+	})
+}
+
+func TestStringContainsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := StringContainsTf(t, "AB", "A", "test message")
+		if !result {
+			t.Error("StringContainsTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := StringContainsTf(mock, "AB", "C", "test message")
+		if result {
+			t.Error("StringContainsTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("StringContainsT should mark test as failed")
+		}
+	})
+}
+
+func TestStringNotContainsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := StringNotContainsTf(t, "AB", "C", "test message")
+		if !result {
+			t.Error("StringNotContainsTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := StringNotContainsTf(mock, "AB", "A", "test message")
+		if result {
+			t.Error("StringNotContainsTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("StringNotContainsT should mark test as failed")
 		}
 	})
 }

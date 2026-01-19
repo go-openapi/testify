@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
+// Generated on 2026-01-19 (version fbbb078) using codegen version v2.1.9-0.20260119215714-fbbb0787fd81+dirty [sha: fbbb0787fd8131d63f280f85b14e47f7c0dc8ee0]
 
 package require_test
 
@@ -41,6 +41,14 @@ func ExampleContains() {
 func ExampleDirExists() {
 	t := new(testing.T)
 	require.DirExists(t, filepath.Join(testDataPath(), "existing_dir"))
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleDirNotExists() {
+	t := new(testing.T)
+	require.DirNotExists(t, filepath.Join(testDataPath(), "non_existing_dir"))
 	fmt.Println("passed")
 
 	// Output: passed
@@ -89,6 +97,14 @@ func ExampleEqualError() {
 func ExampleEqualExportedValues() {
 	t := new(testing.T)
 	require.EqualExportedValues(t, &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "a", b: 2})
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleEqualT() {
+	t := new(testing.T)
+	require.EqualT(t, 123, 123)
 	fmt.Println("passed")
 
 	// Output: passed
@@ -205,6 +221,14 @@ func ExampleFileExists() {
 func ExampleFileNotEmpty() {
 	t := new(testing.T)
 	require.FileNotEmpty(t, filepath.Join(testDataPath(), "existing_file"))
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleFileNotExists() {
+	t := new(testing.T)
+	require.FileNotExists(t, filepath.Join(testDataPath(), "non_existing_file"))
 	fmt.Println("passed")
 
 	// Output: passed
@@ -362,9 +386,25 @@ func ExampleIsDecreasing() {
 	// Output: passed
 }
 
+func ExampleIsDecreasingT() {
+	t := new(testing.T)
+	require.IsDecreasingT(t, []int{3, 2, 1})
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleIsIncreasing() {
 	t := new(testing.T)
 	require.IsIncreasing(t, []int{1, 2, 3})
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleIsIncreasingT() {
+	t := new(testing.T)
+	require.IsIncreasingT(t, []int{1, 2, 3})
 	fmt.Println("passed")
 
 	// Output: passed
@@ -378,9 +418,25 @@ func ExampleIsNonDecreasing() {
 	// Output: passed
 }
 
+func ExampleIsNonDecreasingT() {
+	t := new(testing.T)
+	require.IsNonDecreasingT(t, []int{1, 1, 2})
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleIsNonIncreasing() {
 	t := new(testing.T)
 	require.IsNonIncreasing(t, []int{2, 1, 1})
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleIsNonIncreasingT() {
+	t := new(testing.T)
+	require.IsNonIncreasingT(t, []int{2, 1, 1})
 	fmt.Println("passed")
 
 	// Output: passed
@@ -474,6 +530,22 @@ func ExampleLessT() {
 	// Output: passed
 }
 
+func ExampleMapContainsT() {
+	t := new(testing.T)
+	require.MapContainsT(t, map[string]string{"A": "B"}, "A")
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleMapNotContainsT() {
+	t := new(testing.T)
+	require.MapNotContainsT(t, map[string]string{"A": "B"}, "C")
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleNegative() {
 	t := new(testing.T)
 	require.Negative(t, -1)
@@ -508,25 +580,9 @@ func ExampleNil() {
 	// Output: passed
 }
 
-func ExampleNoDirExists() {
-	t := new(testing.T)
-	require.NoDirExists(t, filepath.Join(testDataPath(), "non_existing_dir"))
-	fmt.Println("passed")
-
-	// Output: passed
-}
-
 func ExampleNoError() {
 	t := new(testing.T)
 	require.NoError(t, nil)
-	fmt.Println("passed")
-
-	// Output: passed
-}
-
-func ExampleNoFileExists() {
-	t := new(testing.T)
-	require.NoFileExists(t, filepath.Join(testDataPath(), "non_existing_file"))
 	fmt.Println("passed")
 
 	// Output: passed
@@ -567,6 +623,14 @@ func ExampleNotEmpty() {
 func ExampleNotEqual() {
 	t := new(testing.T)
 	require.NotEqual(t, 123, 456)
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleNotEqualT() {
+	t := new(testing.T)
+	require.NotEqualT(t, 123, 456)
 	fmt.Println("passed")
 
 	// Output: passed
@@ -653,6 +717,22 @@ func ExampleNotSame() {
 	// Output: passed
 }
 
+func ExampleNotSameT() {
+	t := new(testing.T)
+	require.NotSameT(t, &staticVar, ptr("static string"))
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleNotSortedT() {
+	t := new(testing.T)
+	require.NotSortedT(t, []int{3, 1, 3})
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleNotSubset() {
 	t := new(testing.T)
 	require.NotSubset(t, []int{1, 2, 3}, []int{4, 5})
@@ -734,6 +814,70 @@ func ExampleRegexpT() {
 func ExampleSame() {
 	t := new(testing.T)
 	require.Same(t, &staticVar, staticVarPtr)
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleSameT() {
+	t := new(testing.T)
+	require.SameT(t, &staticVar, staticVarPtr)
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleSliceContainsT() {
+	t := new(testing.T)
+	require.SliceContainsT(t, []string{"A", "B"}, "A")
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleSliceNotContainsT() {
+	t := new(testing.T)
+	require.SliceNotContainsT(t, []string{"A", "B"}, "C")
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleSliceNotSubsetT() {
+	t := new(testing.T)
+	require.SliceNotSubsetT(t, []int{1, 2, 3}, []int{4, 5})
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleSliceSubsetT() {
+	t := new(testing.T)
+	require.SliceSubsetT(t, []int{1, 2, 3}, []int{1, 2})
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleSortedT() {
+	t := new(testing.T)
+	require.SortedT(t, []int{1, 1, 3})
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleStringContainsT() {
+	t := new(testing.T)
+	require.StringContainsT(t, "AB", "A")
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleStringNotContainsT() {
+	t := new(testing.T)
+	require.StringNotContainsT(t, "AB", "C")
 	fmt.Println("passed")
 
 	// Output: passed

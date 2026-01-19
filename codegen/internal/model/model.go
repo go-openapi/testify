@@ -122,7 +122,7 @@ func (f Function) GenericName(suffixes ...string) string {
 	for i, p := range f.TypeParams[1:] {
 		w.WriteString(", ")
 		w.WriteString(p.Name)
-		if len(f.TypeParams) <= i+1+1 || f.TypeParams[i+1].Constraint != p.Constraint {
+		if len(f.TypeParams) <= i+1+1 || f.TypeParams[i+1+1].Constraint != p.Constraint {
 			w.WriteByte(' ')
 			w.WriteString(p.Constraint)
 		}

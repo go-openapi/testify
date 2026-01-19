@@ -212,7 +212,7 @@ func IsDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, m
 // # Examples
 //
 //	success: []int{1, 1, 2}
-//	failure: []int{2, 1, 1}
+//	failure: []int{2, 1, 0}
 func IsNonDecreasing(t T, object any, msgAndArgs ...any) bool {
 	// Domain: ordering
 	if h, ok := t.(H); ok {
@@ -232,7 +232,7 @@ func IsNonDecreasing(t T, object any, msgAndArgs ...any) bool {
 // # Examples
 //
 //	success: []int{1, 1, 2}
-//	failure: []int{2, 1, 1}
+//	failure: []int{2, 1, 0}
 func IsNonDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool {
 	// Domain: ordering
 	if h, ok := t.(H); ok {

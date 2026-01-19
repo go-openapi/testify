@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
+// Generated on 2026-01-19 (version fbbb078) using codegen version v2.1.9-0.20260119215714-fbbb0787fd81+dirty [sha: fbbb0787fd8131d63f280f85b14e47f7c0dc8ee0]
 
 package require
 
@@ -160,6 +160,55 @@ func TestAssertionsDirExistsf(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("Assertions.DirExistsf should call FailNow()")
+		}
+	})
+}
+
+func TestAssertionsDirNotExists(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		a := New(t)
+		a.DirNotExists(filepath.Join(testDataPath(), "non_existing_dir"))
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.DirNotExists(filepath.Join(testDataPath(), "existing_dir"))
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("DirNotExists should call FailNow()")
+		}
+	})
+}
+
+func TestAssertionsDirNotExistsf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		a := New(t)
+		a.DirNotExistsf(filepath.Join(testDataPath(), "non_existing_dir"), "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.DirNotExistsf(filepath.Join(testDataPath(), "existing_dir"), "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("Assertions.DirNotExists should mark test as failed")
+		}
+		if !mock.failed {
+			t.Error("Assertions.DirNotExistsf should call FailNow()")
 		}
 	})
 }
@@ -1063,6 +1112,55 @@ func TestAssertionsFileNotEmptyf(t *testing.T) {
 	})
 }
 
+func TestAssertionsFileNotExists(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		a := New(t)
+		a.FileNotExists(filepath.Join(testDataPath(), "non_existing_file"))
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.FileNotExists(filepath.Join(testDataPath(), "existing_file"))
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("FileNotExists should call FailNow()")
+		}
+	})
+}
+
+func TestAssertionsFileNotExistsf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		a := New(t)
+		a.FileNotExistsf(filepath.Join(testDataPath(), "non_existing_file"), "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.FileNotExistsf(filepath.Join(testDataPath(), "existing_file"), "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("Assertions.FileNotExists should mark test as failed")
+		}
+		if !mock.failed {
+			t.Error("Assertions.FileNotExistsf should call FailNow()")
+		}
+	})
+}
+
 func TestAssertionsGreater(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1862,7 +1960,7 @@ func TestAssertionsIsNonDecreasing(t *testing.T) {
 
 		mock := new(mockFailNowT)
 		a := New(mock)
-		a.IsNonDecreasing([]int{2, 1, 1})
+		a.IsNonDecreasing([]int{2, 1, 0})
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("IsNonDecreasing should call FailNow()")
@@ -1885,7 +1983,7 @@ func TestAssertionsIsNonDecreasingf(t *testing.T) {
 
 		mock := new(mockFailNowT)
 		a := New(mock)
-		a.IsNonDecreasingf([]int{2, 1, 1}, "test message")
+		a.IsNonDecreasingf([]int{2, 1, 0}, "test message")
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("Assertions.IsNonDecreasing should mark test as failed")
@@ -2484,55 +2582,6 @@ func TestAssertionsNilf(t *testing.T) {
 	})
 }
 
-func TestAssertionsNoDirExists(t *testing.T) {
-	t.Parallel()
-	t.Run("success", func(t *testing.T) {
-		t.Parallel()
-
-		a := New(t)
-		a.NoDirExists(filepath.Join(testDataPath(), "non_existing_dir"))
-		// require functions don't return a value
-	})
-
-	t.Run("failure", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockFailNowT)
-		a := New(mock)
-		a.NoDirExists(filepath.Join(testDataPath(), "existing_dir"))
-		// require functions don't return a value
-		if !mock.failed {
-			t.Error("NoDirExists should call FailNow()")
-		}
-	})
-}
-
-func TestAssertionsNoDirExistsf(t *testing.T) {
-	t.Parallel()
-	t.Run("success", func(t *testing.T) {
-		t.Parallel()
-
-		a := New(t)
-		a.NoDirExistsf(filepath.Join(testDataPath(), "non_existing_dir"), "test message")
-		// require functions don't return a value
-	})
-
-	t.Run("failure", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockFailNowT)
-		a := New(mock)
-		a.NoDirExistsf(filepath.Join(testDataPath(), "existing_dir"), "test message")
-		// require functions don't return a value
-		if !mock.failed {
-			t.Error("Assertions.NoDirExists should mark test as failed")
-		}
-		if !mock.failed {
-			t.Error("Assertions.NoDirExistsf should call FailNow()")
-		}
-	})
-}
-
 func TestAssertionsNoError(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -2578,55 +2627,6 @@ func TestAssertionsNoErrorf(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("Assertions.NoErrorf should call FailNow()")
-		}
-	})
-}
-
-func TestAssertionsNoFileExists(t *testing.T) {
-	t.Parallel()
-	t.Run("success", func(t *testing.T) {
-		t.Parallel()
-
-		a := New(t)
-		a.NoFileExists(filepath.Join(testDataPath(), "non_existing_file"))
-		// require functions don't return a value
-	})
-
-	t.Run("failure", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockFailNowT)
-		a := New(mock)
-		a.NoFileExists(filepath.Join(testDataPath(), "existing_file"))
-		// require functions don't return a value
-		if !mock.failed {
-			t.Error("NoFileExists should call FailNow()")
-		}
-	})
-}
-
-func TestAssertionsNoFileExistsf(t *testing.T) {
-	t.Parallel()
-	t.Run("success", func(t *testing.T) {
-		t.Parallel()
-
-		a := New(t)
-		a.NoFileExistsf(filepath.Join(testDataPath(), "non_existing_file"), "test message")
-		// require functions don't return a value
-	})
-
-	t.Run("failure", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockFailNowT)
-		a := New(mock)
-		a.NoFileExistsf(filepath.Join(testDataPath(), "existing_file"), "test message")
-		// require functions don't return a value
-		if !mock.failed {
-			t.Error("Assertions.NoFileExists should mark test as failed")
-		}
-		if !mock.failed {
-			t.Error("Assertions.NoFileExistsf should call FailNow()")
 		}
 	})
 }

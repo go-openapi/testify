@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
+// Generated on 2026-01-19 (version fbbb078) using codegen version v2.1.9-0.20260119215714-fbbb0787fd81+dirty [sha: fbbb0787fd8131d63f280f85b14e47f7c0dc8ee0]
 
 package require
 
@@ -82,6 +82,30 @@ func DirExists(t T, path string, msgAndArgs ...any) {
 		h.Helper()
 	}
 	if assertions.DirExists(t, path, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// DirNotExists checks whether a directory does not exist in the given path.
+// It fails if the path points to an existing _directory_ only.
+//
+// # Usage
+//
+//	assertions.DirNotExists(t, "path/to/directory")
+//
+// # Examples
+//
+//	success: filepath.Join(testDataPath(),"non_existing_dir")
+//	failure: filepath.Join(testDataPath(),"existing_dir")
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func DirNotExists(t T, path string, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.DirNotExists(t, path, msgAndArgs...) {
 		return
 	}
 
@@ -248,6 +272,38 @@ func EqualExportedValues(t T, expected any, actual any, msgAndArgs ...any) {
 		h.Helper()
 	}
 	if assertions.EqualExportedValues(t, expected, actual, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// EqualT asserts that two objects of the same comparable type are equal.
+//
+// Pointer variable equality is determined based on the equality of the memory addresses (unlike [Equal], but like [Same]).
+//
+// Functions, slices and maps are not comparable. See also [ComparisonOperators].
+//
+// If you need to compare values of non-comparable types, or compare pointers by the value they point to,
+// use [Equal] instead.
+//
+// # Usage
+//
+//	assertions.EqualT(t, 123, 123)
+//
+// # Examples
+//
+//	success: 123, 123
+//	failure: 123, 456
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+//
+// [ComparisonOperators]: https://go.dev/ref/spec#Comparison_operators.
+func EqualT[V comparable](t T, expected V, actual V, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.EqualT(t, expected, actual, msgAndArgs...) {
 		return
 	}
 
@@ -644,6 +700,30 @@ func FileNotEmpty(t T, path string, msgAndArgs ...any) {
 		h.Helper()
 	}
 	if assertions.FileNotEmpty(t, path, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// FileNotExists checks whether a file does not exist in a given path. It fails
+// if the path points to an existing _file_ only.
+//
+// # Usage
+//
+//	assertions.FileNotExists(t, "path/to/file")
+//
+// # Examples
+//
+//	success: filepath.Join(testDataPath(),"non_existing_file")
+//	failure: filepath.Join(testDataPath(),"existing_file")
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func FileNotExists(t T, path string, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.FileNotExists(t, path, msgAndArgs...) {
 		return
 	}
 
@@ -1178,7 +1258,7 @@ func InEpsilonT[Number Measurable](t T, expected Number, actual Number, epsilon 
 	t.FailNow()
 }
 
-// IsDecreasing asserts that the collection is decreasing.
+// IsDecreasing asserts that the collection is strictly decreasing.
 //
 // # Usage
 //
@@ -1203,7 +1283,32 @@ func IsDecreasing(t T, object any, msgAndArgs ...any) {
 	t.FailNow()
 }
 
-// IsIncreasing asserts that the collection is increasing.
+// IsDecreasingT asserts that a slice of [Ordered] is strictly decreasing.
+//
+// # Usage
+//
+//	assertions.IsDecreasingT(t, []int{2, 1, 0})
+//	assertions.IsDecreasingT(t, []float{2, 1})
+//	assertions.IsDecreasingT(t, []string{"b", "a"})
+//
+// # Examples
+//
+//	success: []int{3, 2, 1}
+//	failure: []int{1, 2, 3}
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func IsDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.IsDecreasingT(t, collection, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// IsIncreasing asserts that the collection is strictly increasing.
 //
 // # Usage
 //
@@ -1228,7 +1333,32 @@ func IsIncreasing(t T, object any, msgAndArgs ...any) {
 	t.FailNow()
 }
 
-// IsNonDecreasing asserts that the collection is not decreasing.
+// IsIncreasingT asserts that a slice of [Ordered] is strictly increasing.
+//
+// # Usage
+//
+//	assertions.IsIncreasingT(t, []int{1, 2, 3})
+//	assertions.IsIncreasingT(t, []float{1, 2})
+//	assertions.IsIncreasingT(t, []string{"a", "b"})
+//
+// # Examples
+//
+//	success: []int{1, 2, 3}
+//	failure: []int{1, 1, 2}
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func IsIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.IsIncreasingT(t, collection, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// IsNonDecreasing asserts that the collection is not strictly decreasing.
 //
 // # Usage
 //
@@ -1239,7 +1369,7 @@ func IsIncreasing(t T, object any, msgAndArgs ...any) {
 // # Examples
 //
 //	success: []int{1, 1, 2}
-//	failure: []int{2, 1, 1}
+//	failure: []int{2, 1, 0}
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func IsNonDecreasing(t T, object any, msgAndArgs ...any) {
@@ -1247,6 +1377,31 @@ func IsNonDecreasing(t T, object any, msgAndArgs ...any) {
 		h.Helper()
 	}
 	if assertions.IsNonDecreasing(t, object, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// IsNonDecreasingT asserts that a slice of [Ordered] is not decreasing.
+//
+// # Usage
+//
+//	assertions.IsNonDecreasingT(t, []int{1, 1, 2})
+//	assertions.IsNonDecreasingT(t, []float{1, 2})
+//	assertions.IsNonDecreasingT(t, []string{"a", "b"})
+//
+// # Examples
+//
+//	success: []int{1, 1, 2}
+//	failure: []int{2, 1, 0}
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func IsNonDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.IsNonDecreasingT(t, collection, msgAndArgs...) {
 		return
 	}
 
@@ -1272,6 +1427,31 @@ func IsNonIncreasing(t T, object any, msgAndArgs ...any) {
 		h.Helper()
 	}
 	if assertions.IsNonIncreasing(t, object, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// IsNonIncreasingT asserts that a slice of [Ordered] is NOT strictly increasing.
+//
+// # Usage
+//
+//	assertions.IsNonIncreasing(t, []int{2, 1, 1})
+//	assertions.IsNonIncreasing(t, []float{2, 1})
+//	assertions.IsNonIncreasing(t, []string{"b", "a"})
+//
+// # Examples
+//
+//	success: []int{2, 1, 1}
+//	failure: []int{1, 2, 3}
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func IsNonIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.IsNonIncreasingT(t, collection, msgAndArgs...) {
 		return
 	}
 
@@ -1583,6 +1763,52 @@ func LessT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any
 	t.FailNow()
 }
 
+// MapContainsT asserts that the specified map contains a key.
+//
+// # Usage
+//
+//	assertions.MapContainsT(t, map[string]string{"Hello": "x","World": "y"}, "World")
+//
+// # Examples
+//
+//	success: map[string]string{"A": "B"}, "A"
+//	failure: map[string]string{"A": "B"}, "C"
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func MapContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.MapContainsT(t, m, key, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// MapNotContainsT asserts that the specified map does not contain a key.
+//
+// # Usage
+//
+//	assertions.MapNotContainsT(t, map[string]string{"Hello": "x","World": "y"}, "hi")
+//
+// # Examples
+//
+//	success: map[string]string{"A": "B"}, "C"
+//	failure: map[string]string{"A": "B"}, "A"
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func MapNotContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.MapNotContainsT(t, m, key, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
 // Negative asserts that the specified element is strictly negative.
 //
 // # Usage
@@ -1690,30 +1916,6 @@ func Nil(t T, object any, msgAndArgs ...any) {
 	t.FailNow()
 }
 
-// NoDirExists checks whether a directory does not exist in the given path.
-// It fails if the path points to an existing _directory_ only.
-//
-// # Usage
-//
-//	assertions.NoDirExists(t, "path/to/directory")
-//
-// # Examples
-//
-//	success: filepath.Join(testDataPath(),"non_existing_dir")
-//	failure: filepath.Join(testDataPath(),"existing_dir")
-//
-// Upon failure, the test [T] is marked as failed and stops execution.
-func NoDirExists(t T, path string, msgAndArgs ...any) {
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-	if assertions.NoDirExists(t, path, msgAndArgs...) {
-		return
-	}
-
-	t.FailNow()
-}
-
 // NoError asserts that a function returned a nil error (ie. no error).
 //
 // # Usage
@@ -1734,30 +1936,6 @@ func NoError(t T, err error, msgAndArgs ...any) {
 		h.Helper()
 	}
 	if assertions.NoError(t, err, msgAndArgs...) {
-		return
-	}
-
-	t.FailNow()
-}
-
-// NoFileExists checks whether a file does not exist in a given path. It fails
-// if the path points to an existing _file_ only.
-//
-// # Usage
-//
-//	assertions.NoFileExists(t, "path/to/file")
-//
-// # Examples
-//
-//	success: filepath.Join(testDataPath(),"non_existing_file")
-//	failure: filepath.Join(testDataPath(),"existing_file")
-//
-// Upon failure, the test [T] is marked as failed and stops execution.
-func NoFileExists(t T, path string, msgAndArgs ...any) {
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-	if assertions.NoFileExists(t, path, msgAndArgs...) {
 		return
 	}
 
@@ -1891,6 +2069,31 @@ func NotEqual(t T, expected any, actual any, msgAndArgs ...any) {
 		h.Helper()
 	}
 	if assertions.NotEqual(t, expected, actual, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// NotEqualT asserts that the specified values of the same comparable type are NOT equal.
+//
+// See [EqualT].
+//
+// # Usage
+//
+//	assertions.NotEqualT(t, obj1, obj2)
+//
+// # Examples
+//
+//	success: 123, 456
+//	failure: 123, 123
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func NotEqualT[V comparable](t T, expected V, actual V, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotEqualT(t, expected, actual, msgAndArgs...) {
 		return
 	}
 
@@ -2142,6 +2345,58 @@ func NotSame(t T, expected any, actual any, msgAndArgs ...any) {
 	t.FailNow()
 }
 
+// NotSameT asserts that two pointers do not reference the same object.
+//
+// See [SameT]
+//
+// # Usage
+//
+//	assertions.NotSameT(t, ptr1, ptr2)
+//
+// # Examples
+//
+//	success: &staticVar, ptr("static string")
+//	failure: &staticVar, staticVarPtr
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func NotSameT[P any](t T, expected *P, actual *P, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotSameT(t, expected, actual, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// NotSortedT asserts that the slice of [Ordered] is NOT sorted (i.e. non-strictly increasing).
+//
+// Unlike [IsDecreasingT], it accepts slices that are neither increasing nor decreasing.
+//
+// # Usage
+//
+//	assertions.NotSortedT(t, []int{3, 2, 3})
+//	assertions.NotSortedT(t, []float{2, 1})
+//	assertions.NotSortedT(t, []string{"b", "a"})
+//
+// # Examples
+//
+//	success: []int{3, 1, 3}
+//	failure: []int{1, 4, 8}
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func NotSortedT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotSortedT(t, collection, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
 // NotSubset asserts that the list (array, slice, or map) does NOT contain all
 // elements given in the subset (array, slice, or map).
 // Map elements are key-value pairs unless compared with an array or slice where
@@ -2385,6 +2640,198 @@ func Same(t T, expected any, actual any, msgAndArgs ...any) {
 		h.Helper()
 	}
 	if assertions.Same(t, expected, actual, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// SameT asserts that two pointers of the same type reference the same object.
+//
+// # Usage
+//
+//	assertions.SameT(t, ptr1, ptr2)
+//
+// # Examples
+//
+//	success: &staticVar, staticVarPtr
+//	failure: &staticVar, ptr("static string")
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func SameT[P any](t T, expected *P, actual *P, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.SameT(t, expected, actual, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// SliceContainsT asserts that the specified slice contains a comparable element.
+//
+// # Usage
+//
+//	assertions.SliceContainsT(t, []{"Hello","World"}, "World")
+//
+// # Examples
+//
+//	success: []string{"A","B"}, "A"
+//	failure: []string{"A","B"}, "C"
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func SliceContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.SliceContainsT(t, s, element, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// SliceNotContainsT asserts that the specified slice does not contain a comparable element.
+//
+// # Usage
+//
+//	assertions.SliceNotContainsT(t, []{"Hello","World"}, "hi")
+//
+// # Examples
+//
+//	success: []string{"A","B"}, "C"
+//	failure: []string{"A","B"}, "A"
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func SliceNotContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.SliceNotContainsT(t, s, element, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// SliceNotSubsetT asserts that a slice of comparable elements does not contain all the elements given in the subset.
+//
+// # Usage
+//
+//	assertions.SliceNotSubsetT(t, []int{1, 2, 3}, []int{1, 4})
+//
+// # Examples
+//
+//	success: []int{1, 2, 3}, []int{4, 5}
+//	failure: []int{1, 2, 3}, []int{1, 2}
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func SliceNotSubsetT[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.SliceNotSubsetT(t, list, subset, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// SliceSubsetT asserts that a slice of comparable elements contains all the elements given in the subset.
+//
+// # Usage
+//
+//	assertions.SliceSubsetT(t, []int{1, 2, 3}, []int{1, 2})
+//
+// # Examples
+//
+//	success: []int{1, 2, 3}, []int{1, 2}
+//	failure: []int{1, 2, 3}, []int{4, 5}
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func SliceSubsetT[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.SliceSubsetT(t, list, subset, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// SortedT asserts that the slice of [Ordered] is sorted (i.e. non-strictly increasing).
+//
+// Unlike [IsIncreasingT], it accepts elements to be equal.
+//
+// # Usage
+//
+//	assertions.SortedT(t, []int{1, 2, 3})
+//	assertions.SortedT(t, []float{1, 2})
+//	assertions.SortedT(t, []string{"a", "b"})
+//
+// # Examples
+//
+//	success: []int{1, 1, 3}
+//	failure: []int{1, 4, 2}
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func SortedT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.SortedT(t, collection, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// StringContainsT asserts that a string contains the specified substring.
+//
+// Strings may be go strings or []byte.
+//
+// # Usage
+//
+//	assertions.StringContainsT(t, "Hello World", "World")
+//
+// # Examples
+//
+//	success: "AB", "A"
+//	failure: "AB", "C"
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func StringContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.StringContainsT(t, str, substring, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// StringNotContainsT asserts that a string does not contain the specified substring.
+//
+// Strings may be go strings or []byte.
+//
+// # Usage
+//
+//	assertions.StringNotContainsT(t, "Hello World", "hi")
+//
+// # Examples
+//
+//	success: "AB", "C"
+//	failure: "AB", "A"
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func StringNotContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.StringNotContainsT(t, str, substring, msgAndArgs...) {
 		return
 	}
 

@@ -1,23 +1,23 @@
 ---
 title: "File"
 description: "Asserting OS Files"
-modified: 2026-01-18
+modified: 2026-01-19
 weight: 7
 domains:
   - "file"
 keywords:
   - "DirExists"
   - "DirExistsf"
+  - "DirNotExists"
+  - "DirNotExistsf"
   - "FileEmpty"
   - "FileEmptyf"
   - "FileExists"
   - "FileExistsf"
   - "FileNotEmpty"
   - "FileNotEmptyf"
-  - "NoDirExists"
-  - "NoDirExistsf"
-  - "NoFileExists"
-  - "NoFileExistsf"
+  - "FileNotExists"
+  - "FileNotExistsf"
 ---
 
 Asserting OS Files
@@ -33,11 +33,11 @@ This domain exposes 6 functionalities.
 
 ```tree
 - [DirExists](#direxists) | angles-right
+- [DirNotExists](#dirnotexists) | angles-right
 - [FileEmpty](#fileempty) | angles-right
 - [FileExists](#fileexists) | angles-right
 - [FileNotEmpty](#filenotempty) | angles-right
-- [NoDirExists](#nodirexists) | angles-right
-- [NoFileExists](#nofileexists) | angles-right
+- [FileNotExists](#filenotexists) | angles-right
 ```
 
 ### DirExists{#direxists}
@@ -85,6 +85,54 @@ if the path is a file rather a directory or there is an error checking whether i
 | [`assertions.DirExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#DirExists) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#DirExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L78)
+{{% /tab %}}
+{{< /tabs >}}
+
+### DirNotExists{#dirnotexists}
+
+DirNotExists checks whether a directory does not exist in the given path.
+It fails if the path points to an existing _directory_ only.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.DirNotExists(t, "path/to/directory")
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	success: filepath.Join(testDataPath(),"non_existing_dir")
+	failure: filepath.Join(testDataPath(),"existing_dir")
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.DirNotExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#DirNotExists) | package-level function |
+| [`assert.DirNotExistsf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#DirNotExistsf) | formatted variant |
+| [`assert.(*Assertions).DirNotExists(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.DirNotExists) | method variant |
+| [`assert.(*Assertions).DirNotExistsf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.DirNotExistsf) | method formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.DirNotExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#DirNotExists) | package-level function |
+| [`require.DirNotExistsf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#DirNotExistsf) | formatted variant |
+| [`require.(*Assertions).DirNotExists(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.DirNotExists) | method variant |
+| [`require.(*Assertions).DirNotExistsf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.DirNotExistsf) | method formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.DirNotExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#DirNotExists) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#DirNotExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L107)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -232,64 +280,16 @@ It fails if the file is empty, if the path points to a directory or there is an 
 {{% /tab %}}
 {{< /tabs >}}
 
-### NoDirExists{#nodirexists}
+### FileNotExists{#filenotexists}
 
-NoDirExists checks whether a directory does not exist in the given path.
-It fails if the path points to an existing _directory_ only.
-
-{{% expand title="Examples" %}}
-{{< tabs >}}
-{{% tab title="Usage" %}}
-```go
-	assertions.NoDirExists(t, "path/to/directory")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
-	success: filepath.Join(testDataPath(),"non_existing_dir")
-	failure: filepath.Join(testDataPath(),"existing_dir")
-```
-{{< /tab >}}
-{{< /tabs >}}
-{{% /expand %}}
-
-{{< tabs >}}
-{{% tab title="assert" style="secondary" %}}
-| Signature | Usage |
-|--|--|
-| [`assert.NoDirExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoDirExists) | package-level function |
-| [`assert.NoDirExistsf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoDirExistsf) | formatted variant |
-| [`assert.(*Assertions).NoDirExists(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoDirExists) | method variant |
-| [`assert.(*Assertions).NoDirExistsf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoDirExistsf) | method formatted variant |
-{{% /tab %}}
-{{% tab title="require" style="secondary" %}}
-| Signature | Usage |
-|--|--|
-| [`require.NoDirExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoDirExists) | package-level function |
-| [`require.NoDirExistsf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoDirExistsf) | formatted variant |
-| [`require.(*Assertions).NoDirExists(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoDirExists) | method variant |
-| [`require.(*Assertions).NoDirExistsf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoDirExistsf) | method formatted variant |
-{{% /tab %}}
-
-{{% tab title="internal" style="accent" icon="wrench" %}}
-| Signature | Usage |
-|--|--| 
-| [`assertions.NoDirExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NoDirExists) | internal implementation |
-
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoDirExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L107)
-{{% /tab %}}
-{{< /tabs >}}
-
-### NoFileExists{#nofileexists}
-
-NoFileExists checks whether a file does not exist in a given path. It fails
+FileNotExists checks whether a file does not exist in a given path. It fails
 if the path points to an existing _file_ only.
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
 {{% tab title="Usage" %}}
 ```go
-	assertions.NoFileExists(t, "path/to/file")
+	assertions.FileNotExists(t, "path/to/file")
 ```
 {{< /tab >}}
 {{% tab title="Examples" %}}
@@ -305,26 +305,26 @@ if the path points to an existing _file_ only.
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`assert.NoFileExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoFileExists) | package-level function |
-| [`assert.NoFileExistsf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoFileExistsf) | formatted variant |
-| [`assert.(*Assertions).NoFileExists(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoFileExists) | method variant |
-| [`assert.(*Assertions).NoFileExistsf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoFileExistsf) | method formatted variant |
+| [`assert.FileNotExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#FileNotExists) | package-level function |
+| [`assert.FileNotExistsf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#FileNotExistsf) | formatted variant |
+| [`assert.(*Assertions).FileNotExists(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FileNotExists) | method variant |
+| [`assert.(*Assertions).FileNotExistsf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FileNotExistsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NoFileExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoFileExists) | package-level function |
-| [`require.NoFileExistsf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoFileExistsf) | formatted variant |
-| [`require.(*Assertions).NoFileExists(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoFileExists) | method variant |
-| [`require.(*Assertions).NoFileExistsf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoFileExistsf) | method formatted variant |
+| [`require.FileNotExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FileNotExists) | package-level function |
+| [`require.FileNotExistsf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FileNotExistsf) | formatted variant |
+| [`require.(*Assertions).FileNotExists(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FileNotExists) | method variant |
+| [`require.(*Assertions).FileNotExistsf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FileNotExistsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.NoFileExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NoFileExists) | internal implementation |
+| [`assertions.FileNotExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FileNotExists) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoFileExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L52)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileNotExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L52)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -344,5 +344,5 @@ SPDX-License-Identifier: Apache-2.0
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
 
-Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
+Generated on 2026-01-19 (version fbbb078) using codegen version v2.1.9-0.20260119215714-fbbb0787fd81+dirty [sha: fbbb0787fd8131d63f280f85b14e47f7c0dc8ee0]
 -->
