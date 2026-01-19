@@ -38,18 +38,18 @@ func FileExists(t T, path string, msgAndArgs ...any) bool {
 	return true
 }
 
-// NoFileExists checks whether a file does not exist in a given path. It fails
+// FileNotExists checks whether a file does not exist in a given path. It fails
 // if the path points to an existing _file_ only.
 //
 // # Usage
 //
-//	assertions.NoFileExists(t, "path/to/file")
+//	assertions.FileNotExists(t, "path/to/file")
 //
 // # Examples
 //
 //	success: filepath.Join(testDataPath(),"non_existing_file")
 //	failure: filepath.Join(testDataPath(),"existing_file")
-func NoFileExists(t T, path string, msgAndArgs ...any) bool {
+func FileNotExists(t T, path string, msgAndArgs ...any) bool {
 	// Domain: file
 	if h, ok := t.(H); ok {
 		h.Helper()
@@ -93,18 +93,18 @@ func DirExists(t T, path string, msgAndArgs ...any) bool {
 	return true
 }
 
-// NoDirExists checks whether a directory does not exist in the given path.
+// DirNotExists checks whether a directory does not exist in the given path.
 // It fails if the path points to an existing _directory_ only.
 //
 // # Usage
 //
-//	assertions.NoDirExists(t, "path/to/directory")
+//	assertions.DirNotExists(t, "path/to/directory")
 //
 // # Examples
 //
 //	success: filepath.Join(testDataPath(),"non_existing_dir")
 //	failure: filepath.Join(testDataPath(),"existing_dir")
-func NoDirExists(t T, path string, msgAndArgs ...any) bool {
+func DirNotExists(t T, path string, msgAndArgs ...any) bool {
 	// Domain: file
 	if h, ok := t.(H); ok {
 		h.Helper()

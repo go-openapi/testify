@@ -32,28 +32,93 @@ func Equal(t T, expected, actual any, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
+
 	if err := validateEqualArgs(expected, actual); err != nil {
 		return Fail(t, fmt.Sprintf("Invalid operation: %#v == %#v (%s)",
 			expected, actual, err), msgAndArgs...)
 	}
 
 	if !ObjectsAreEqual(expected, actual) {
-		diff := diff(expected, actual)
-		expectedStr, actualStr := formatUnequalValues(expected, actual)
+		return failWithDiff(t, expected, actual, msgAndArgs...)
+	}
 
-		if colors.Enabled() {
-			expectedStr = colors.ExpectedColorizer()(expectedStr)
-			actualStr = colors.ActualColorizer()(actualStr)
-		}
+	return true
+}
 
-		return Fail(t,
-			fmt.Sprintf("Not equal: \n"+
-				"expected: %s\n"+
-				"actual  : %s%s",
-				expectedStr,
-				actualStr, diff),
-			msgAndArgs...,
-		)
+// EqualT asserts that two objects of the same comparable type are equal.
+//
+// Pointer variable equality is determined based on the equality of the memory addresses (unlike [Equal], but like [Same]).
+//
+// Functions, slices and maps are not comparable. See also [ComparisonOperators].
+//
+// If you need to compare values of non-comparable types, or compare pointers by the value they point to,
+// use [Equal] instead.
+//
+// # Usage
+//
+//	assertions.EqualT(t, 123, 123)
+//
+// # Examples
+//
+//	success: 123, 123
+//	failure: 123, 456
+//
+// [ComparisonOperators]: https://go.dev/ref/spec#Comparison_operators.
+func EqualT[V comparable](t T, expected, actual V, msgAndArgs ...any) bool {
+	// Domain: equality
+	if expected != actual {
+		return failWithDiff(t, expected, actual, msgAndArgs...)
+	}
+
+	return true
+}
+
+// NotEqual asserts that the specified values are NOT equal.
+//
+// # Usage
+//
+//	assertions.NotEqual(t, obj1, obj2)
+//
+// Pointer variable equality is determined based on the equality of the
+// referenced values (as opposed to the memory addresses).
+//
+// # Examples
+//
+//	success: 123, 456
+//	failure: 123, 123
+func NotEqual(t T, expected, actual any, msgAndArgs ...any) bool {
+	// Domain: equality
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if err := validateEqualArgs(expected, actual); err != nil {
+		return Fail(t, fmt.Sprintf("Invalid operation: %#v != %#v (%s)",
+			expected, actual, err), msgAndArgs...)
+	}
+
+	if ObjectsAreEqual(expected, actual) {
+		return Fail(t, fmt.Sprintf("Should not be: %s\n", truncatingFormat("%#v", actual)), msgAndArgs...)
+	}
+
+	return true
+}
+
+// NotEqualT asserts that the specified values of the same comparable type are NOT equal.
+//
+// See [EqualT].
+//
+// # Usage
+//
+//	assertions.NotEqualT(t, obj1, obj2)
+//
+// # Examples
+//
+//	success: 123, 456
+//	failure: 123, 123
+func NotEqualT[V comparable](t T, expected, actual V, msgAndArgs ...any) bool {
+	// Domain: equality
+	if expected == actual {
+		return Fail(t, fmt.Sprintf("Should not be: %s\n", truncatingFormat("%#v", actual)), msgAndArgs...)
 	}
 
 	return true
@@ -93,6 +158,31 @@ func Same(t T, expected, actual any, msgAndArgs ...any) bool {
 	return true
 }
 
+// SameT asserts that two pointers of the same type reference the same object.
+//
+// # Usage
+//
+//	assertions.SameT(t, ptr1, ptr2)
+//
+// # Examples
+//
+//	success: &staticVar, staticVarPtr
+//	failure: &staticVar, ptr("static string")
+func SameT[P any](t T, expected, actual *P, msgAndArgs ...any) bool {
+	// Domain: equality
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	if expected != actual {
+		return Fail(t, fmt.Sprintf("Not same: \n"+
+			"expected: %[2]s (%[1]T)(%[1]p)\n"+
+			"actual  : %[4]s (%[3]T)(%[3]p)", expected, truncatingFormat("%#v", expected), actual, truncatingFormat("%#v", actual)), msgAndArgs...)
+	}
+
+	return true
+}
+
 // NotSame asserts that two pointers do not reference the same object.
 //
 // Both arguments must be pointer variables. Pointer variable sameness is
@@ -123,6 +213,33 @@ func NotSame(t T, expected, actual any, msgAndArgs ...any) bool {
 			"Expected and actual point to the same object: %p %s",
 			expected, truncatingFormat("%#v", expected)), msgAndArgs...)
 	}
+	return true
+}
+
+// NotSameT asserts that two pointers do not reference the same object.
+//
+// See [SameT]
+//
+// # Usage
+//
+//	assertions.NotSameT(t, ptr1, ptr2)
+//
+// # Examples
+//
+//	success: &staticVar, ptr("static string")
+//	failure: &staticVar, staticVarPtr
+func NotSameT[P any](t T, expected, actual *P, msgAndArgs ...any) bool {
+	// Domain: equality
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	if expected == actual {
+		return Fail(t, fmt.Sprintf(
+			"Expected and actual point to the same object: %p %s",
+			expected, truncatingFormat("%#v", expected)), msgAndArgs...)
+	}
+
 	return true
 }
 
@@ -324,36 +441,6 @@ func NotEmpty(t T, object any, msgAndArgs ...any) bool {
 	return pass
 }
 
-// NotEqual asserts that the specified values are NOT equal.
-//
-// # Usage
-//
-//	assertions.NotEqual(t, obj1, obj2)
-//
-// Pointer variable equality is determined based on the equality of the
-// referenced values (as opposed to the memory addresses).
-//
-// # Examples
-//
-//	success: 123, 456
-//	failure: 123, 123
-func NotEqual(t T, expected, actual any, msgAndArgs ...any) bool {
-	// Domain: equality
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-	if err := validateEqualArgs(expected, actual); err != nil {
-		return Fail(t, fmt.Sprintf("Invalid operation: %#v != %#v (%s)",
-			expected, actual, err), msgAndArgs...)
-	}
-
-	if ObjectsAreEqual(expected, actual) {
-		return Fail(t, fmt.Sprintf("Should not be: %s\n", truncatingFormat("%#v", actual)), msgAndArgs...)
-	}
-
-	return true
-}
-
 // NotEqualValues asserts that two objects are not equal even when converted to the same type.
 //
 // # Usage
@@ -375,6 +462,29 @@ func NotEqualValues(t T, expected, actual any, msgAndArgs ...any) bool {
 	}
 
 	return true
+}
+
+func failWithDiff(t T, expected, actual any, msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	diff := diff(expected, actual)
+	expectedStr, actualStr := formatUnequalValues(expected, actual)
+
+	if colors.Enabled() {
+		expectedStr = colors.ExpectedColorizer()(expectedStr)
+		actualStr = colors.ActualColorizer()(actualStr)
+	}
+
+	return Fail(t,
+		fmt.Sprintf("Not equal: \n"+
+			"expected: %s\n"+
+			"actual  : %s%s",
+			expectedStr,
+			actualStr, diff),
+		msgAndArgs...,
+	)
 }
 
 // isNil checks if a specified object is nil or not, without Failing.
@@ -409,7 +519,7 @@ func validateEqualArgs(expected, actual any) error {
 	return nil
 }
 
-// samePointers checks if two generic interface objects are pointers of the same
+// samePointers checks if two arbitrary interface objects are pointers of the same
 // type pointing to the same object.
 //
 // It returns two values: same indicating if they are the same type and point to the same object,

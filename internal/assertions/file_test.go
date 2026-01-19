@@ -30,25 +30,25 @@ func TestFileExists(t *testing.T) {
 	True(t, FileExists(mock, link))
 }
 
-func TestFileNoFileExists(t *testing.T) {
+func TestFileFileNotExists(t *testing.T) {
 	t.Parallel()
 
 	mock := new(testing.T)
-	False(t, NoFileExists(mock, filepath.Join("testdata", "existing_file")))
+	False(t, FileNotExists(mock, filepath.Join("testdata", "existing_file")))
 
 	mock = new(testing.T)
-	True(t, NoFileExists(mock, "non_existent_file"))
+	True(t, FileNotExists(mock, "non_existent_file"))
 
 	mock = new(testing.T)
-	True(t, NoFileExists(mock, filepath.Join("testdata", "existing_dir")))
+	True(t, FileNotExists(mock, filepath.Join("testdata", "existing_dir")))
 
 	link := getTempSymlinkPath(t, filepath.Join("testdata", "existing_file"))
 	mock = new(testing.T)
-	False(t, NoFileExists(mock, link))
+	False(t, FileNotExists(mock, link))
 
 	link = getTempSymlinkPath(t, "non_existent_file")
 	mock = new(testing.T)
-	False(t, NoFileExists(mock, link))
+	False(t, FileNotExists(mock, link))
 }
 
 func TestFileDirExists(t *testing.T) {
@@ -72,25 +72,25 @@ func TestFileDirExists(t *testing.T) {
 	False(t, DirExists(mock, link))
 }
 
-func TestFileNoDirExists(t *testing.T) {
+func TestFileDirNotExists(t *testing.T) {
 	t.Parallel()
 
 	mock := new(testing.T)
-	True(t, NoDirExists(mock, filepath.Join("testdata", "existing_file")))
+	True(t, DirNotExists(mock, filepath.Join("testdata", "existing_file")))
 
 	mock = new(testing.T)
-	True(t, NoDirExists(mock, "non_existent_dir"))
+	True(t, DirNotExists(mock, "non_existent_dir"))
 
 	mock = new(testing.T)
-	False(t, NoDirExists(mock, filepath.Join("testdata", "existing_dir")))
+	False(t, DirNotExists(mock, filepath.Join("testdata", "existing_dir")))
 
 	link := getTempSymlinkPath(t, filepath.Join("testdata", "existing_file"))
 	mock = new(testing.T)
-	True(t, NoDirExists(mock, link))
+	True(t, DirNotExists(mock, link))
 
 	link = getTempSymlinkPath(t, "non_existent_dir")
 	mock = new(testing.T)
-	True(t, NoDirExists(mock, link))
+	True(t, DirNotExists(mock, link))
 }
 
 func TestFileEmpty(t *testing.T) {
@@ -146,7 +146,7 @@ func TestFileNotEmpty(t *testing.T) {
 
 	link = getTempSymlinkPath(t, "non_existent_file")
 	mock = new(testing.T)
-	False(t, NoFileExists(mock, link))
+	False(t, FileNotExists(mock, link))
 }
 
 func getTempSymlinkPath(t *testing.T, file string) string {

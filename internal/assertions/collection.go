@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"fmt"
 	"reflect"
+	"slices"
 	"strings"
 )
 
@@ -77,6 +78,78 @@ func Contains(t T, s, contains any, msgAndArgs ...any) bool {
 	return true
 }
 
+// StringContainsT asserts that a string contains the specified substring.
+//
+// Strings may be go strings or []byte.
+//
+// # Usage
+//
+//	assertions.StringContainsT(t, "Hello World", "World")
+//
+// # Examples
+//
+//	success: "AB", "A"
+//	failure: "AB", "C"
+func StringContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs ...any) bool {
+	// Domain: collection
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	if !strings.Contains(string(str), string(substring)) {
+		return Fail(t, fmt.Sprintf("%s does not contain %#v", truncatingFormat("%#v", str), substring), msgAndArgs...)
+	}
+
+	return true
+}
+
+// SliceContainsT asserts that the specified slice contains a comparable element.
+//
+// # Usage
+//
+//	assertions.SliceContainsT(t, []{"Hello","World"}, "World")
+//
+// # Examples
+//
+//	success: []string{"A","B"}, "A"
+//	failure: []string{"A","B"}, "C"
+func SliceContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArgs ...any) bool {
+	// Domain: collection
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	if !slices.Contains(s, element) {
+		return Fail(t, fmt.Sprintf("%s does not contain %#v", truncatingFormat("%#v", s), element), msgAndArgs...)
+	}
+
+	return true
+}
+
+// MapContainsT asserts that the specified map contains a key.
+//
+// # Usage
+//
+//	assertions.MapContainsT(t, map[string]string{"Hello": "x","World": "y"}, "World")
+//
+// # Examples
+//
+//	success: map[string]string{"A": "B"}, "A"
+//	failure: map[string]string{"A": "B"}, "C"
+func MapContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndArgs ...any) bool {
+	// Domain: collection
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	_, ok := m[key]
+	if !ok {
+		return Fail(t, fmt.Sprintf("%s does not contain %#v", truncatingFormat("%#v", m), key), msgAndArgs...)
+	}
+
+	return true
+}
+
 // NotContains asserts that the specified string, list(array, slice...) or map does NOT contain the
 // specified substring or element.
 //
@@ -107,6 +180,78 @@ func NotContains(t T, s, contains any, msgAndArgs ...any) bool {
 	return true
 }
 
+// StringNotContainsT asserts that a string does not contain the specified substring.
+//
+// Strings may be go strings or []byte.
+//
+// # Usage
+//
+//	assertions.StringNotContainsT(t, "Hello World", "hi")
+//
+// # Examples
+//
+//	success: "AB", "C"
+//	failure: "AB", "A"
+func StringNotContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs ...any) bool {
+	// Domain: collection
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	if strings.Contains(string(str), string(substring)) {
+		return Fail(t, fmt.Sprintf("%s should not contain %#v", truncatingFormat("%#v", str), substring), msgAndArgs...)
+	}
+
+	return true
+}
+
+// SliceNotContainsT asserts that the specified slice does not contain a comparable element.
+//
+// # Usage
+//
+//	assertions.SliceNotContainsT(t, []{"Hello","World"}, "hi")
+//
+// # Examples
+//
+//	success: []string{"A","B"}, "C"
+//	failure: []string{"A","B"}, "A"
+func SliceNotContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArgs ...any) bool {
+	// Domain: collection
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	if slices.Contains(s, element) {
+		return Fail(t, fmt.Sprintf("%s should not contain %#v", truncatingFormat("%#v", s), element), msgAndArgs...)
+	}
+
+	return true
+}
+
+// MapNotContainsT asserts that the specified map does not contain a key.
+//
+// # Usage
+//
+//	assertions.MapNotContainsT(t, map[string]string{"Hello": "x","World": "y"}, "hi")
+//
+// # Examples
+//
+//	success: map[string]string{"A": "B"}, "C"
+//	failure: map[string]string{"A": "B"}, "A"
+func MapNotContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndArgs ...any) bool {
+	// Domain: collection
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	_, ok := m[key]
+	if ok {
+		return Fail(t, fmt.Sprintf("%s should not contain %#v", truncatingFormat("%#v", m), key), msgAndArgs...)
+	}
+
+	return true
+}
+
 // Subset asserts that the list (array, slice, or map) contains all elements
 // given in the subset (array, slice, or map).
 //
@@ -129,6 +274,7 @@ func Subset(t T, list, subset any, msgAndArgs ...any) (ok bool) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
+
 	if subset == nil {
 		return true // we consider nil to be equal to the nil set
 	}
@@ -178,6 +324,31 @@ func Subset(t T, list, subset any, msgAndArgs ...any) (ok bool) {
 			return Fail(t, fmt.Sprintf("%#v could not be applied builtin len()", list), msgAndArgs...)
 		}
 		if !found {
+			return Fail(t, fmt.Sprintf("%s does not contain %#v", truncatingFormat("%#v", list), element), msgAndArgs...)
+		}
+	}
+
+	return true
+}
+
+// SliceSubsetT asserts that a slice of comparable elements contains all the elements given in the subset.
+//
+// # Usage
+//
+//	assertions.SliceSubsetT(t, []int{1, 2, 3}, []int{1, 2})
+//
+// # Examples
+//
+//	success: []int{1, 2, 3}, []int{1, 2}
+//	failure: []int{1, 2, 3}, []int{4, 5}
+func SliceSubsetT[Slice ~[]E, E comparable](t T, list, subset Slice, msgAndArgs ...any) (ok bool) {
+	// Domain: collection
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	for _, element := range subset {
+		if !slices.Contains(list, element) {
 			return Fail(t, fmt.Sprintf("%s does not contain %#v", truncatingFormat("%#v", list), element), msgAndArgs...)
 		}
 	}
@@ -247,6 +418,7 @@ func NotSubset(t T, list, subset any, msgAndArgs ...any) (ok bool) {
 		}
 		subsetList = reflect.ValueOf(keys)
 	}
+
 	for i := range subsetList.Len() {
 		element := subsetList.Index(i).Interface()
 		ok, found := containsElement(list, element)
@@ -254,6 +426,31 @@ func NotSubset(t T, list, subset any, msgAndArgs ...any) (ok bool) {
 			return Fail(t, fmt.Sprintf("%q could not be applied builtin len()", list), msgAndArgs...)
 		}
 		if !found {
+			return true
+		}
+	}
+
+	return Fail(t, fmt.Sprintf("%s is a subset of %s", truncatingFormat("%q", subset), truncatingFormat("%q", list)), msgAndArgs...)
+}
+
+// SliceNotSubsetT asserts that a slice of comparable elements does not contain all the elements given in the subset.
+//
+// # Usage
+//
+//	assertions.SliceNotSubsetT(t, []int{1, 2, 3}, []int{1, 4})
+//
+// # Examples
+//
+//	success: []int{1, 2, 3}, []int{4, 5}
+//	failure: []int{1, 2, 3}, []int{1, 2}
+func SliceNotSubsetT[Slice ~[]E, E comparable](t T, list, subset Slice, msgAndArgs ...any) (ok bool) {
+	// Domain: collection
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	for _, element := range subset {
+		if !slices.Contains(list, element) {
 			return true
 		}
 	}
