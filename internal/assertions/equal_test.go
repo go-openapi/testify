@@ -17,6 +17,7 @@ import (
 
 const shortpkg = "assertions"
 
+// TODO: apply table-driven pattern.
 func TestEqualNotNil(t *testing.T) {
 	t.Parallel()
 	mock := new(testing.T)
@@ -34,8 +35,10 @@ func TestEqualNotNil(t *testing.T) {
 	}
 }
 
+// TODO: apply table-driven pattern, factorize with Nil tests.
 func TestEqualNil(t *testing.T) {
 	t.Parallel()
+
 	mock := new(testing.T)
 
 	if !Nil(mock, nil) {
@@ -51,46 +54,51 @@ func TestEqualNil(t *testing.T) {
 	}
 }
 
-func TestEqualSameWithSliceTooLongToPrint(t *testing.T) {
+func TestEqualErrorMessages(t *testing.T) {
 	t.Parallel()
-	mock := new(mockT)
 
-	longSlice := make([]int, 1_000_000)
-	Same(mock, &[]int{}, &longSlice)
-	Contains(t, mock.errorString(), `&[]int{0, 0, 0,`)
-}
+	t.Run("same, with slice too long to print", func(t *testing.T) {
+		t.Parallel()
+		mock := new(mockT)
 
-func TestEqualNotSameWithSliceTooLongToPrint(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
+		longSlice := make([]int, 1_000_000)
+		Same(mock, &[]int{}, &longSlice)
+		Contains(t, mock.errorString(), `&[]int{0, 0, 0,`)
+	})
 
-	longSlice := make([]int, 1_000_000)
-	NotSame(mock, &longSlice, &longSlice)
-	Contains(t, mock.errorString(), `&[]int{0, 0, 0,`)
-}
+	t.Run("not same, with slice too long to print", func(t *testing.T) {
+		t.Parallel()
 
-func TestEqualNotEqualWithSliceTooLongToPrint(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
+		mock := new(mockT)
 
-	longSlice := make([]int, 1_000_000)
-	NotEqual(mock, longSlice, longSlice)
-	Contains(t, mock.errorString(), `
+		longSlice := make([]int, 1_000_000)
+		NotSame(mock, &longSlice, &longSlice)
+		Contains(t, mock.errorString(), `&[]int{0, 0, 0,`)
+	})
+
+	t.Run("not equal, with slice too long to print", func(t *testing.T) {
+		t.Parallel()
+		mock := new(mockT)
+
+		longSlice := make([]int, 1_000_000)
+		NotEqual(mock, longSlice, longSlice)
+		Contains(t, mock.errorString(), `
 	Error Trace:	
 	Error:      	Should not be: []int{0, 0, 0,`)
-	Contains(t, mock.errorString(), `<... truncated>`)
-}
+		Contains(t, mock.errorString(), `<... truncated>`)
+	})
 
-func TestEqualNotEqualValuesWithSliceTooLongToPrint(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
+	t.Run("not equal values, with slice too long to print", func(t *testing.T) {
+		t.Parallel()
+		mock := new(mockT)
 
-	longSlice := make([]int, 1_000_000)
-	NotEqualValues(mock, longSlice, longSlice)
-	Contains(t, mock.errorString(), `
+		longSlice := make([]int, 1_000_000)
+		NotEqualValues(mock, longSlice, longSlice)
+		Contains(t, mock.errorString(), `
 	Error Trace:	
 	Error:      	Should not be: []int{0, 0, 0,`)
-	Contains(t, mock.errorString(), `<... truncated>`)
+		Contains(t, mock.errorString(), `<... truncated>`)
+	})
 }
 
 func TestEqual(t *testing.T) {
@@ -377,12 +385,135 @@ func TestEqualT(t *testing.T) {
 	}
 }
 
-func TestNotEqualT(t *testing.T) {
+func TestEqualNotEqualT(t *testing.T) {
 	t.Parallel()
 
 	for tc := range equalTCases() {
 		t.Run(tc.name, testAllNotEqualT(tc))
 	}
+}
+
+func TestEqualStringErrorMessage(t *testing.T) {
+	// checking error messsages on Equal with a regexp. The object of the test is Equal, not Regexp
+	t.Parallel()
+
+	t.Run("error message should match Regexp", func(t *testing.T) {
+		for tc := range stringEqualFormattingCases() {
+			t.Run(tc.name, func(t *testing.T) {
+				mock := &bufferT{}
+
+				isEqual := Equal(mock, tc.equalWant, tc.equalGot, tc.msgAndArgs...)
+				if isEqual {
+					t.Errorf("expected %q to be different than %q", tc.equalGot, tc.equalWant)
+
+					return
+				}
+				rex := regexp.MustCompile(tc.want)
+				match := rex.MatchString(mock.buf.String())
+				if !match {
+					t.Errorf("expected message to match %q, but got:\n%s", tc.want, mock.buf.String())
+				}
+			})
+		}
+	})
+}
+
+type equalStringCase struct {
+	name       string
+	equalWant  string
+	equalGot   string
+	msgAndArgs []any
+	want       string
+}
+
+func stringEqualFormattingCases() iter.Seq[equalStringCase] {
+	return slices.Values([]equalStringCase{
+		{
+			name:      "multiline diff message",
+			equalWant: "hi, \nmy name is",
+			equalGot:  "what,\nmy name is",
+			want: "\t[a-z]+.go:\\d+: \n" + // NOTE: the exact file name reported should be asserted in integration tests
+				"\t+Error Trace:\t\n+" +
+				"\t+Error:\\s+Not equal:\\s+\n" +
+				"\\s+expected: \"hi, \\\\nmy name is\"\n" +
+				"\\s+actual\\s+: " + "\"what,\\\\nmy name is\"\n" +
+				"\\s+Diff:\n" +
+				"\\s+-+ Expected\n\\s+\\++ " +
+				"Actual\n" +
+				"\\s+@@ -1,2 \\+1,2 @@\n" +
+				"\\s+-hi, \n\\s+\\+what,\n" +
+				"\\s+my name is",
+		},
+		{
+			name:      "single line diff message",
+			equalWant: "want",
+			equalGot:  "got",
+			want: "\t[a-z]+.go:\\d+: \n" +
+				"\t+Error Trace:\t\n" +
+				"\t+Error:\\s+Not equal:\\s+\n" +
+				"\\s+expected: \"want\"\n" +
+				"\\s+actual\\s+: \"got\"\n" +
+				"\\s+Diff:\n\\s+-+ Expected\n\\s+\\++ " +
+				"Actual\n" +
+				"\\s+@@ -1 \\+1 @@\n" +
+				"\\s+-want\n" +
+				"\\s+\\+got\n",
+		},
+		{
+			name:       "diff message with args",
+			equalWant:  "want",
+			equalGot:   "got",
+			msgAndArgs: []any{"hello, %v!", "world"},
+			want: "\t[a-z]+.go:[0-9]+: \n" +
+				"\t+Error Trace:\t\n" +
+				"\t+Error:\\s+Not equal:\\s+\n" +
+				"\\s+expected: \"want\"\n" +
+				"\\s+actual\\s+: \"got\"\n" +
+				"\\s+Diff:\n" +
+				"\\s+-+ Expected\n" +
+				"\\s+\\++ Actual\n" +
+				"\\s+@@ -1 \\+1 @@\n" +
+				"\\s+-want\n" +
+				"\\s+\\+got\n" +
+				"\\s+Messages:\\s+hello, world!\n",
+		},
+		{
+			name:       "diff message with integer arg",
+			equalWant:  "want",
+			equalGot:   "got",
+			msgAndArgs: []any{123},
+			want: "\t[a-z]+.go:[0-9]+: \n" +
+				"\t+Error Trace:\t\n" +
+				"\t+Error:\\s+Not equal:\\s+\n" +
+				"\\s+expected: \"want\"\n" +
+				"\\s+actual\\s+: \"got\"\n" +
+				"\\s+Diff:\n" +
+				"\\s+-+ Expected\n" +
+				"\\s+\\++ Actual\n" +
+				"\\s+@@ -1 \\+1 @@\n" +
+				"\\s+-want\n" +
+				"\\s+\\+got\n" +
+				"\\s+Messages:\\s+123\n",
+		},
+		{
+			name:       "diff message with struct arg",
+			equalWant:  "want",
+			equalGot:   "got",
+			msgAndArgs: []any{struct{ a string }{"hello"}},
+			want: "\t[a-z]+.go:[0-9]+: \n" +
+				"\t+Error Trace:\t\n" +
+				"\t+Error:\\s+Not equal:\\s+\n" +
+				"\\s+expected: \"want\"\n" +
+				"\\s+actual\\s+: \"got\"\n" +
+				"\\s+Diff:\n" +
+				"\\s+-+ Expected\n" +
+				"\\s+\\++ Actual\n" +
+				"\\s+@@ -1 \\+1 @@\n" +
+				"\\s+-want\n" +
+				"\\s+\\+got\n" +
+				"\\s+Messages:\\s+{a:hello}\n",
+		},
+	})
 }
 
 type panicCase struct {

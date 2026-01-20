@@ -7,19 +7,102 @@ import (
 	"iter"
 	"math"
 	"slices"
+	"strings"
 	"testing"
 )
 
-func TestNumberInDelta(t *testing.T) {
+func TestNumberInDeltaTErrorMessage(t *testing.T) {
+	t.Parallel()
+
+	mock := new(mockT)
+
+	// Test that error message shows correct difference
+	result := InDeltaT(mock, 10, 1, 5)
+	if result || !mock.Failed() {
+		t.Error("Expected test to fail but it passed")
+	}
+
+	// Verify the error message contains the actual difference (9)
+	errorMsg := mock.errorString()
+	if !strings.Contains(errorMsg, "difference was 9") {
+		t.Errorf("Error message should contain 'difference was 9', got: %s", errorMsg)
+	}
+}
+
+func TestNumberInEpsilonTErrorMessage(t *testing.T) {
+	t.Parallel()
+
+	t.Run("relative error message", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+
+		// Test relative error: 100 vs 110 has 10% error, exceeds 5% epsilon
+		result := InEpsilonT(mock, 100.0, 110.0, 0.05)
+		if result || !mock.Failed() {
+			t.Error("Expected test to fail but it passed")
+		}
+
+		// Verify the error message contains relative error
+		errorMsg := mock.errorString()
+		if !strings.Contains(errorMsg, "Relative error is too high") {
+			t.Errorf("Error message should contain 'Relative error is too high', got: %s", errorMsg)
+		}
+
+		// Should show actual relative error of 0.1 (10%)
+		if !Contains(t, errorMsg, "0.1") {
+			t.Errorf("Error message should contain '0.1' (10%% relative error), got: %s", errorMsg)
+		}
+	})
+
+	t.Run("absolute error message for zero expected", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+
+		// Test absolute error: expected=0, actual=0.5, epsilon=0.1
+		result := InEpsilonT(mock, 0.0, 0.5, 0.1)
+		if result || !mock.Failed() {
+			t.Error("Expected test to fail but it passed")
+		}
+
+		// Verify the error message mentions absolute error
+		errorMsg := mock.errorString()
+		if !strings.Contains(errorMsg, "Expected value is zero, using absolute error comparison") {
+			t.Errorf("Error message should mention absolute error comparison, got: %s", errorMsg)
+		}
+		// Should show actual absolute difference of 0.5
+		if !strings.Contains(errorMsg, "0.5") {
+			t.Errorf("Error message should contain '0.5' (absolute difference), got: %s", errorMsg)
+		}
+	})
+}
+
+func TestNumberInDeltaEdgeCases(t *testing.T) {
 	t.Parallel()
 
 	t.Run("InDelta specific (type conversion)", func(t *testing.T) {
 		t.Parallel()
+
 		mock := new(testing.T)
-		False(t, InDelta(mock, "", nil, 1), "Expected non numerals to fail")
+		result := InDelta(mock, "", nil, 1)
+		if result {
+			t.Errorf("Expected non numerals to fail")
+		}
 	})
+}
+
+func TestNumberInDelta(t *testing.T) {
+	t.Parallel()
 
 	// run all test cases with both InDelta and InDeltaT
+	//
+	// NOTE: testing pattern, focused on the expected result (true/false) and _NOT_ the content of the returned message.
+	// - deltaCases: loop over generic test cases AND type combinations (reason: not all types are compatible, e.g. uint64 may overflow float64)
+	//    - testAllDelta: dispatch over the assertion variants (reflection-based, generic, X vs NotX semantics)
+	//      Single assertion test functions:
+	//      - testDelta
+	//      - testDeltaT
 	for tc := range deltaCases() {
 		t.Run(tc.name, tc.test)
 	}
@@ -28,6 +111,7 @@ func TestNumberInDelta(t *testing.T) {
 func TestNumberInDeltaSlice(t *testing.T) {
 	t.Parallel()
 
+	// only have a reflection-based assertion here
 	for tc := range deltaSliceCases() {
 		t.Run(tc.name, tc.test)
 	}
@@ -37,8 +121,9 @@ func TestNumberInDeltaMapValues(t *testing.T) {
 	t.Parallel()
 	mock := new(testing.T)
 
+	// only have a reflection-based assertion here
 	for tc := range numberInDeltaMapCases() {
-		tc.f(t, InDeltaMapValues(mock, tc.expect, tc.actual, tc.delta), tc.title+"\n"+diff(tc.expect, tc.actual))
+		tc.f(t, InDeltaMapValues(mock, tc.expect, tc.actual, tc.delta), tc.name+"\n"+diff(tc.expect, tc.actual))
 	}
 }
 
@@ -57,75 +142,6 @@ func TestNumberInEpsilonSlice(t *testing.T) {
 	for tc := range epsilonSliceCases() {
 		t.Run(tc.name, tc.test)
 	}
-}
-
-func TestInDeltaTErrorMessage(t *testing.T) {
-	t.Parallel()
-
-	mock := new(mockT)
-
-	// Test that error message shows correct difference
-	InDeltaT(mock, 10, 1, 5)
-
-	if !mock.Failed() {
-		t.Error("Expected test to fail but it passed")
-	}
-
-	// Verify the error message contains the actual difference (9)
-	errorMsg := mock.errorString()
-	if !Contains(t, errorMsg, "difference was 9") {
-		t.Errorf("Error message should contain 'difference was 9', got: %s", errorMsg)
-	}
-}
-
-func TestInEpsilonTErrorMessage(t *testing.T) {
-	t.Parallel()
-
-	t.Run("relative error message", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-
-		// Test relative error: 100 vs 110 has 10% error, exceeds 5% epsilon
-		InEpsilonT(mock, 100.0, 110.0, 0.05)
-
-		if !mock.Failed() {
-			t.Error("Expected test to fail but it passed")
-		}
-
-		// Verify the error message contains relative error
-		errorMsg := mock.errorString()
-		if !Contains(t, errorMsg, "Relative error is too high") {
-			t.Errorf("Error message should contain 'Relative error is too high', got: %s", errorMsg)
-		}
-		// Should show actual relative error of 0.1 (10%)
-		if !Contains(t, errorMsg, "0.1") {
-			t.Errorf("Error message should contain '0.1' (10%% relative error), got: %s", errorMsg)
-		}
-	})
-
-	t.Run("absolute error message for zero expected", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-
-		// Test absolute error: expected=0, actual=0.5, epsilon=0.1
-		InEpsilonT(mock, 0.0, 0.5, 0.1)
-
-		if !mock.Failed() {
-			t.Error("Expected test to fail but it passed")
-		}
-
-		// Verify the error message mentions absolute error
-		errorMsg := mock.errorString()
-		if !Contains(t, errorMsg, "Expected value is zero, using absolute error comparison") {
-			t.Errorf("Error message should mention absolute error comparison, got: %s", errorMsg)
-		}
-		// Should show actual absolute difference of 0.5
-		if !Contains(t, errorMsg, "0.5") {
-			t.Errorf("Error message should contain '0.5' (absolute difference), got: %s", errorMsg)
-		}
-	})
 }
 
 // Helper functions and test data for InDelta/InDeltaT
@@ -327,7 +343,7 @@ func testDeltaT[Number Measurable](expected, actual, delta Number, shouldPass bo
 // Helper functions and test data for InDeltaMapValues
 
 type numberInDeltaMapCase struct {
-	title  string
+	name   string
 	expect any
 	actual any
 	f      func(T, bool, ...any) bool
@@ -340,7 +356,7 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 
 	return slices.Values([]numberInDeltaMapCase{
 		{
-			title: "Within delta",
+			name: "Within delta",
 			expect: map[string]float64{
 				"foo": 1.0,
 				"bar": 2.0,
@@ -355,7 +371,7 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 			f:     True,
 		},
 		{
-			title: "Within delta",
+			name: "Within delta",
 			expect: map[int]float64{
 				1: 1.0,
 				2: 2.0,
@@ -368,7 +384,7 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 			f:     True,
 		},
 		{
-			title: "Different number of keys",
+			name: "Different number of keys",
 			expect: map[int]float64{
 				1: 1.0,
 				2: 2.0,
@@ -380,7 +396,7 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 			f:     False,
 		},
 		{
-			title: "Within delta with zero value",
+			name: "Within delta with zero value",
 			expect: map[string]float64{
 				"zero": 0,
 			},
@@ -391,7 +407,7 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 			f:     True,
 		},
 		{
-			title: "With missing key with zero value",
+			name: "With missing key with zero value",
 			expect: map[string]float64{
 				"zero": 0,
 				"foo":  0,
@@ -403,25 +419,25 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 			f: False,
 		},
 		{
-			title:  "With nil maps",
+			name:   "With nil maps",
 			expect: map[string]float64(nil),
 			actual: map[string]float64(nil),
 			f:      True,
 		},
 		{
-			title:  "With nil values (not a map)",
+			name:   "With nil values (not a map)",
 			expect: map[string]float64(nil),
 			actual: []float64(nil),
 			f:      False,
 		},
 		{
-			title:  "With nil values (not a map)",
+			name:   "With nil values (not a map)",
 			expect: []float64(nil),
 			actual: map[string]float64(nil),
 			f:      False,
 		},
 		{
-			title: "With expected nil keys",
+			name: "With expected nil keys",
 			expect: map[*string]float64{
 				&keyA:          1.00,
 				(*string)(nil): 2.00,
@@ -433,7 +449,7 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 			f: True,
 		},
 		{
-			title: "With expected invalid value",
+			name: "With expected invalid value",
 			expect: map[string]any{
 				keyA: &iface,
 			},
