@@ -33,10 +33,10 @@ func Test{{ .Name }}f(t *testing.T) {
     t.Parallel()
 
 {{- if $isRequire }}
-		{{ $fn.Name }}f(t, {{ .TestedValue }}, "test message")
+		{{ $fn.Name }}f{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(t, {{ .TestedValue }}, "test message")
 		// require functions don't return a value
 {{- else }}
-		result := {{ $fn.Name }}f(t, {{ .TestedValue }}, "test message")
+		result := {{ $fn.Name }}f{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(t, {{ .TestedValue }}, "test message")
 		if !result {
 			t.Error("{{ $fn.Name }}f should return true on success")
 		}
@@ -49,10 +49,10 @@ func Test{{ .Name }}f(t *testing.T) {
 
 		mock := new({{ $fn.UseMock }})
             {{- if $isRequire }}
-		{{ $fn.Name }}f(mock, {{ .TestedValue }}, "test message")
+		{{ $fn.Name }}f{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(mock, {{ .TestedValue }}, "test message")
 		// require functions don't return a value
             {{- else }}
-		result := {{ $fn.Name }}f(mock, {{ .TestedValue }}, "test message")
+		result := {{ $fn.Name }}f{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(mock, {{ .TestedValue }}, "test message")
 		if result {
 			t.Error("{{ $fn.Name }}f should return false on failure")
 		}
@@ -67,7 +67,7 @@ func Test{{ .Name }}f(t *testing.T) {
     t.Parallel()
 
 		Panicsf(t, func() {
-			{{ $fn.Name }}f(t, {{ .TestedValue }}, "test message")
+			{{ $fn.Name }}f{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(t, {{ .TestedValue }}, "test message")
 		}, "{{ .AssertionMessage }}")
 	})
           {{- end }}

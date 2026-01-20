@@ -101,6 +101,10 @@ type outputT struct {
 	helpers map[string]struct{}
 }
 
+func newOutputMock() *outputT {
+	return &outputT{buf: bytes.NewBuffer(nil)}
+}
+
 // Implements T.
 func (t *outputT) Errorf(format string, args ...any) {
 	s := fmt.Sprintf(format, args...)
@@ -241,8 +245,46 @@ func parseLabeledOutput(output string) []labeledContent {
 	return contents
 }
 
+// callerName gives the function name (qualified with a package path)
+// for the caller after skip frames (where 0 means the current function).
+func callerName(skip int) string {
+	// Make room for the skip PC.
+	var pc [1]uintptr
+	n := runtime.Callers(skip+2, pc[:]) // skip + runtime.Callers + callerName
+	if n == 0 {
+		panic("testing: zero callers found")
+	}
+	frames := runtime.CallersFrames(pc[:n])
+	frame, _ := frames.Next()
+	return frame.Function
+}
+
 type testCase struct {
 	expected any
 	actual   any
 	result   bool
+}
+
+func shouldPassOrFail(t *testing.T, mock *mockT, result, shouldPass bool) {
+	t.Helper()
+
+	if shouldPass {
+		t.Run("should pass", func(t *testing.T) {
+			if !result || mock.Failed() {
+				t.Errorf("expected to pass")
+			}
+		})
+
+		return
+	}
+
+	t.Run("should fail", func(t *testing.T) {
+		if result || !mock.Failed() {
+			t.Errorf("expected to fail")
+		}
+	})
+}
+
+func ptr(i int) *int {
+	return &i
 }

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
+// Generated on 2026-01-20 (version 74d5686) using codegen version v2.1.9-0.20260119232631-74d5686313f0+dirty [sha: 74d5686313f0820ae0e2758b95d598f646cd7ad5]
 
 package assert_test
 
@@ -13,6 +13,7 @@ import (
 	"net/url"
 	"path/filepath"
 	"reflect"
+	"slices"
 	"testing"
 	"time"
 
@@ -40,6 +41,14 @@ func ExampleContains() {
 func ExampleDirExists() {
 	t := new(testing.T)
 	success := assert.DirExists(t, filepath.Join(testDataPath(), "existing_dir"))
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleDirNotExists() {
+	t := new(testing.T)
+	success := assert.DirNotExists(t, filepath.Join(testDataPath(), "non_existing_dir"))
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -88,6 +97,14 @@ func ExampleEqualError() {
 func ExampleEqualExportedValues() {
 	t := new(testing.T)
 	success := assert.EqualExportedValues(t, &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "a", b: 2})
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleEqualT() {
+	t := new(testing.T)
+	success := assert.EqualT(t, 123, 123)
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -204,6 +221,14 @@ func ExampleFileExists() {
 func ExampleFileNotEmpty() {
 	t := new(testing.T)
 	success := assert.FileNotEmpty(t, filepath.Join(testDataPath(), "existing_file"))
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleFileNotExists() {
+	t := new(testing.T)
+	success := assert.FileNotExists(t, filepath.Join(testDataPath(), "non_existing_file"))
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -361,9 +386,25 @@ func ExampleIsDecreasing() {
 	// Output: success: true
 }
 
+func ExampleIsDecreasingT() {
+	t := new(testing.T)
+	success := assert.IsDecreasingT(t, []int{3, 2, 1})
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleIsIncreasing() {
 	t := new(testing.T)
 	success := assert.IsIncreasing(t, []int{1, 2, 3})
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleIsIncreasingT() {
+	t := new(testing.T)
+	success := assert.IsIncreasingT(t, []int{1, 2, 3})
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -377,6 +418,14 @@ func ExampleIsNonDecreasing() {
 	// Output: success: true
 }
 
+func ExampleIsNonDecreasingT() {
+	t := new(testing.T)
+	success := assert.IsNonDecreasingT(t, []int{1, 1, 2})
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleIsNonIncreasing() {
 	t := new(testing.T)
 	success := assert.IsNonIncreasing(t, []int{2, 1, 1})
@@ -385,9 +434,33 @@ func ExampleIsNonIncreasing() {
 	// Output: success: true
 }
 
+func ExampleIsNonIncreasingT() {
+	t := new(testing.T)
+	success := assert.IsNonIncreasingT(t, []int{2, 1, 1})
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleIsNotOfTypeT() {
+	t := new(testing.T)
+	success := assert.IsNotOfTypeT[myType](t, 123.123)
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleIsNotType() {
 	t := new(testing.T)
 	success := assert.IsNotType(t, int32(123), int64(456))
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleIsOfTypeT() {
+	t := new(testing.T)
+	success := assert.IsOfTypeT[myType](t, myType(123.123))
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -473,6 +546,22 @@ func ExampleLessT() {
 	// Output: success: true
 }
 
+func ExampleMapContainsT() {
+	t := new(testing.T)
+	success := assert.MapContainsT(t, map[string]string{"A": "B"}, "A")
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleMapNotContainsT() {
+	t := new(testing.T)
+	success := assert.MapNotContainsT(t, map[string]string{"A": "B"}, "C")
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleNegative() {
 	t := new(testing.T)
 	success := assert.Negative(t, -1)
@@ -507,25 +596,9 @@ func ExampleNil() {
 	// Output: success: true
 }
 
-func ExampleNoDirExists() {
-	t := new(testing.T)
-	success := assert.NoDirExists(t, filepath.Join(testDataPath(), "non_existing_dir"))
-	fmt.Printf("success: %t\n", success)
-
-	// Output: success: true
-}
-
 func ExampleNoError() {
 	t := new(testing.T)
 	success := assert.NoError(t, nil)
-	fmt.Printf("success: %t\n", success)
-
-	// Output: success: true
-}
-
-func ExampleNoFileExists() {
-	t := new(testing.T)
-	success := assert.NoFileExists(t, filepath.Join(testDataPath(), "non_existing_file"))
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -566,6 +639,14 @@ func ExampleNotEmpty() {
 func ExampleNotEqual() {
 	t := new(testing.T)
 	success := assert.NotEqual(t, 123, 456)
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleNotEqualT() {
+	t := new(testing.T)
+	success := assert.NotEqualT(t, 123, 456)
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -652,6 +733,22 @@ func ExampleNotSame() {
 	// Output: success: true
 }
 
+func ExampleNotSameT() {
+	t := new(testing.T)
+	success := assert.NotSameT(t, &staticVar, ptr("static string"))
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleNotSortedT() {
+	t := new(testing.T)
+	success := assert.NotSortedT(t, []int{3, 1, 3})
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleNotSubset() {
 	t := new(testing.T)
 	success := assert.NotSubset(t, []int{1, 2, 3}, []int{4, 5})
@@ -733,6 +830,86 @@ func ExampleRegexpT() {
 func ExampleSame() {
 	t := new(testing.T)
 	success := assert.Same(t, &staticVar, staticVarPtr)
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleSameT() {
+	t := new(testing.T)
+	success := assert.SameT(t, &staticVar, staticVarPtr)
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleSeqContainsT() {
+	t := new(testing.T)
+	success := assert.SeqContainsT(t, slices.Values([]string{"A", "B"}), "A")
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleSeqNotContainsT() {
+	t := new(testing.T)
+	success := assert.SeqNotContainsT(t, slices.Values([]string{"A", "B"}), "C")
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleSliceContainsT() {
+	t := new(testing.T)
+	success := assert.SliceContainsT(t, []string{"A", "B"}, "A")
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleSliceNotContainsT() {
+	t := new(testing.T)
+	success := assert.SliceNotContainsT(t, []string{"A", "B"}, "C")
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleSliceNotSubsetT() {
+	t := new(testing.T)
+	success := assert.SliceNotSubsetT(t, []int{1, 2, 3}, []int{4, 5})
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleSliceSubsetT() {
+	t := new(testing.T)
+	success := assert.SliceSubsetT(t, []int{1, 2, 3}, []int{1, 2})
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleSortedT() {
+	t := new(testing.T)
+	success := assert.SortedT(t, []int{1, 1, 3})
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleStringContainsT() {
+	t := new(testing.T)
+	success := assert.StringContainsT(t, "AB", "A")
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleStringNotContainsT() {
+	t := new(testing.T)
+	success := assert.StringNotContainsT(t, "AB", "C")
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -847,3 +1024,5 @@ type dummyError struct {
 func (d *dummyError) Error() string {
 	return "dummy error"
 }
+
+type myType float64

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
+// Generated on 2026-01-20 (version 74d5686) using codegen version v2.1.9-0.20260119232631-74d5686313f0+dirty [sha: 74d5686313f0820ae0e2758b95d598f646cd7ad5]
 
 package require
 
@@ -13,6 +13,7 @@ import (
 	"net/url"
 	"path/filepath"
 	"reflect"
+	"slices"
 	"testing"
 	"time"
 )
@@ -73,6 +74,26 @@ func TestDirExistsf(t *testing.T) {
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("DirExists should call FailNow()")
+		}
+	})
+}
+
+func TestDirNotExistsf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		DirNotExistsf(t, filepath.Join(testDataPath(), "non_existing_dir"), "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		DirNotExistsf(mock, filepath.Join(testDataPath(), "existing_dir"), "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("DirNotExists should call FailNow()")
 		}
 	})
 }
@@ -193,6 +214,26 @@ func TestEqualExportedValuesf(t *testing.T) {
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("EqualExportedValues should call FailNow()")
+		}
+	})
+}
+
+func TestEqualTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		EqualTf(t, 123, 123, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		EqualTf(mock, 123, 456, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("EqualT should call FailNow()")
 		}
 	})
 }
@@ -481,6 +522,26 @@ func TestFileNotEmptyf(t *testing.T) {
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("FileNotEmpty should call FailNow()")
+		}
+	})
+}
+
+func TestFileNotExistsf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		FileNotExistsf(t, filepath.Join(testDataPath(), "non_existing_file"), "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		FileNotExistsf(mock, filepath.Join(testDataPath(), "existing_file"), "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("FileNotExists should call FailNow()")
 		}
 	})
 }
@@ -865,6 +926,26 @@ func TestIsDecreasingf(t *testing.T) {
 	})
 }
 
+func TestIsDecreasingTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		IsDecreasingTf(t, []int{3, 2, 1}, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		IsDecreasingTf(mock, []int{1, 2, 3}, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("IsDecreasingT should call FailNow()")
+		}
+	})
+}
+
 func TestIsIncreasingf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -885,6 +966,26 @@ func TestIsIncreasingf(t *testing.T) {
 	})
 }
 
+func TestIsIncreasingTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		IsIncreasingTf(t, []int{1, 2, 3}, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		IsIncreasingTf(mock, []int{1, 1, 2}, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("IsIncreasingT should call FailNow()")
+		}
+	})
+}
+
 func TestIsNonDecreasingf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -897,10 +998,30 @@ func TestIsNonDecreasingf(t *testing.T) {
 		t.Parallel()
 
 		mock := new(mockFailNowT)
-		IsNonDecreasingf(mock, []int{2, 1, 1}, "test message")
+		IsNonDecreasingf(mock, []int{2, 1, 0}, "test message")
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("IsNonDecreasing should call FailNow()")
+		}
+	})
+}
+
+func TestIsNonDecreasingTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		IsNonDecreasingTf(t, []int{1, 1, 2}, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		IsNonDecreasingTf(mock, []int{2, 1, 0}, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("IsNonDecreasingT should call FailNow()")
 		}
 	})
 }
@@ -925,6 +1046,46 @@ func TestIsNonIncreasingf(t *testing.T) {
 	})
 }
 
+func TestIsNonIncreasingTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		IsNonIncreasingTf(t, []int{2, 1, 1}, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		IsNonIncreasingTf(mock, []int{1, 2, 3}, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("IsNonIncreasingT should call FailNow()")
+		}
+	})
+}
+
+func TestIsNotOfTypeTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		IsNotOfTypeTf[myType](t, 123.123, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		IsNotOfTypeTf[myType](mock, myType(123.123), "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("IsNotOfTypeT should call FailNow()")
+		}
+	})
+}
+
 func TestIsNotTypef(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -941,6 +1102,26 @@ func TestIsNotTypef(t *testing.T) {
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("IsNotType should call FailNow()")
+		}
+	})
+}
+
+func TestIsOfTypeTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		IsOfTypeTf[myType](t, myType(123.123), "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		IsOfTypeTf[myType](mock, 123.123, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("IsOfTypeT should call FailNow()")
 		}
 	})
 }
@@ -1145,6 +1326,46 @@ func TestLessTf(t *testing.T) {
 	})
 }
 
+func TestMapContainsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		MapContainsTf(t, map[string]string{"A": "B"}, "A", "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		MapContainsTf(mock, map[string]string{"A": "B"}, "C", "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("MapContainsT should call FailNow()")
+		}
+	})
+}
+
+func TestMapNotContainsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		MapNotContainsTf(t, map[string]string{"A": "B"}, "C", "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		MapNotContainsTf(mock, map[string]string{"A": "B"}, "A", "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("MapNotContainsT should call FailNow()")
+		}
+	})
+}
+
 func TestNegativef(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1225,26 +1446,6 @@ func TestNilf(t *testing.T) {
 	})
 }
 
-func TestNoDirExistsf(t *testing.T) {
-	t.Parallel()
-	t.Run("success", func(t *testing.T) {
-		t.Parallel()
-		NoDirExistsf(t, filepath.Join(testDataPath(), "non_existing_dir"), "test message")
-		// require functions don't return a value
-	})
-
-	t.Run("failure", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockFailNowT)
-		NoDirExistsf(mock, filepath.Join(testDataPath(), "existing_dir"), "test message")
-		// require functions don't return a value
-		if !mock.failed {
-			t.Error("NoDirExists should call FailNow()")
-		}
-	})
-}
-
 func TestNoErrorf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1261,26 +1462,6 @@ func TestNoErrorf(t *testing.T) {
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("NoError should call FailNow()")
-		}
-	})
-}
-
-func TestNoFileExistsf(t *testing.T) {
-	t.Parallel()
-	t.Run("success", func(t *testing.T) {
-		t.Parallel()
-		NoFileExistsf(t, filepath.Join(testDataPath(), "non_existing_file"), "test message")
-		// require functions don't return a value
-	})
-
-	t.Run("failure", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockFailNowT)
-		NoFileExistsf(mock, filepath.Join(testDataPath(), "existing_file"), "test message")
-		// require functions don't return a value
-		if !mock.failed {
-			t.Error("NoFileExists should call FailNow()")
 		}
 	})
 }
@@ -1381,6 +1562,26 @@ func TestNotEqualf(t *testing.T) {
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("NotEqual should call FailNow()")
+		}
+	})
+}
+
+func TestNotEqualTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		NotEqualTf(t, 123, 456, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NotEqualTf(mock, 123, 123, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("NotEqualT should call FailNow()")
 		}
 	})
 }
@@ -1585,6 +1786,46 @@ func TestNotSamef(t *testing.T) {
 	})
 }
 
+func TestNotSameTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		NotSameTf(t, &staticVar, ptr("static string"), "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NotSameTf(mock, &staticVar, staticVarPtr, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("NotSameT should call FailNow()")
+		}
+	})
+}
+
+func TestNotSortedTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		NotSortedTf(t, []int{3, 1, 3}, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NotSortedTf(mock, []int{1, 4, 8}, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("NotSortedT should call FailNow()")
+		}
+	})
+}
+
 func TestNotSubsetf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1781,6 +2022,206 @@ func TestSamef(t *testing.T) {
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("Same should call FailNow()")
+		}
+	})
+}
+
+func TestSameTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		SameTf(t, &staticVar, staticVarPtr, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		SameTf(mock, &staticVar, ptr("static string"), "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("SameT should call FailNow()")
+		}
+	})
+}
+
+func TestSeqContainsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		SeqContainsTf(t, slices.Values([]string{"A", "B"}), "A", "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		SeqContainsTf(mock, slices.Values([]string{"A", "B"}), "C", "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("SeqContainsT should call FailNow()")
+		}
+	})
+}
+
+func TestSeqNotContainsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		SeqNotContainsTf(t, slices.Values([]string{"A", "B"}), "C", "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		SeqNotContainsTf(mock, slices.Values([]string{"A", "B"}), "A", "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("SeqNotContainsT should call FailNow()")
+		}
+	})
+}
+
+func TestSliceContainsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		SliceContainsTf(t, []string{"A", "B"}, "A", "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		SliceContainsTf(mock, []string{"A", "B"}, "C", "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("SliceContainsT should call FailNow()")
+		}
+	})
+}
+
+func TestSliceNotContainsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		SliceNotContainsTf(t, []string{"A", "B"}, "C", "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		SliceNotContainsTf(mock, []string{"A", "B"}, "A", "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("SliceNotContainsT should call FailNow()")
+		}
+	})
+}
+
+func TestSliceNotSubsetTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		SliceNotSubsetTf(t, []int{1, 2, 3}, []int{4, 5}, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		SliceNotSubsetTf(mock, []int{1, 2, 3}, []int{1, 2}, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("SliceNotSubsetT should call FailNow()")
+		}
+	})
+}
+
+func TestSliceSubsetTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		SliceSubsetTf(t, []int{1, 2, 3}, []int{1, 2}, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		SliceSubsetTf(mock, []int{1, 2, 3}, []int{4, 5}, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("SliceSubsetT should call FailNow()")
+		}
+	})
+}
+
+func TestSortedTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		SortedTf(t, []int{1, 1, 3}, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		SortedTf(mock, []int{1, 4, 2}, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("SortedT should call FailNow()")
+		}
+	})
+}
+
+func TestStringContainsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		StringContainsTf(t, "AB", "A", "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		StringContainsTf(mock, "AB", "C", "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("StringContainsT should call FailNow()")
+		}
+	})
+}
+
+func TestStringNotContainsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		StringNotContainsTf(t, "AB", "C", "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		StringNotContainsTf(mock, "AB", "A", "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("StringNotContainsT should call FailNow()")
 		}
 	})
 }

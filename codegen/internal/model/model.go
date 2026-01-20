@@ -103,7 +103,7 @@ type Function struct {
 // accounting for any type parameter for generic functions.
 func (f Function) GenericName(suffixes ...string) string {
 	suffix := strings.Join(suffixes, "")
-	if !f.IsGeneric { // means len(f.TypeParams) > 0
+	if !f.IsGeneric { // means len(f.TypeParams) == 0
 		return f.Name + suffix
 	}
 
@@ -122,10 +122,34 @@ func (f Function) GenericName(suffixes ...string) string {
 	for i, p := range f.TypeParams[1:] {
 		w.WriteString(", ")
 		w.WriteString(p.Name)
-		if len(f.TypeParams) <= i+1+1 || f.TypeParams[i+1].Constraint != p.Constraint {
+		if len(f.TypeParams) <= i+1+1 || f.TypeParams[i+1+1].Constraint != p.Constraint {
 			w.WriteByte(' ')
 			w.WriteString(p.Constraint)
 		}
+	}
+	w.WriteByte(']')
+
+	return w.String()
+}
+
+// GenericCallName renders the function name with explicit type parameters.
+// This is used when forwarding type parameters, as all type parameters may not be always infered from the arguments.
+func (f Function) GenericCallName(suffixes ...string) string {
+	suffix := strings.Join(suffixes, "")
+	if !f.IsGeneric { // means len(f.TypeParams) == 0
+		return f.Name + suffix
+	}
+
+	var w strings.Builder
+	w.WriteString(f.Name)
+	w.WriteString(suffix)
+	w.WriteByte('[')
+	c := f.TypeParams[0]
+	w.WriteString(c.Name)
+
+	for _, p := range f.TypeParams[1:] {
+		w.WriteString(", ")
+		w.WriteString(p.Name)
 	}
 	w.WriteByte(']')
 

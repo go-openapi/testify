@@ -32,102 +32,104 @@ func Equal(t T, expected, actual any, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
+
 	if err := validateEqualArgs(expected, actual); err != nil {
 		return Fail(t, fmt.Sprintf("Invalid operation: %#v == %#v (%s)",
 			expected, actual, err), msgAndArgs...)
 	}
 
 	if !ObjectsAreEqual(expected, actual) {
-		diff := diff(expected, actual)
-		expectedStr, actualStr := formatUnequalValues(expected, actual)
-
-		if colors.Enabled() {
-			expectedStr = colors.ExpectedColorizer()(expectedStr)
-			actualStr = colors.ActualColorizer()(actualStr)
-		}
-
-		return Fail(t,
-			fmt.Sprintf("Not equal: \n"+
-				"expected: %s\n"+
-				"actual  : %s%s",
-				expectedStr,
-				actualStr, diff),
-			msgAndArgs...,
-		)
+		return failWithDiff(t, expected, actual, msgAndArgs...)
 	}
 
 	return true
 }
 
-// Same asserts that two pointers reference the same object.
+// EqualT asserts that two objects of the same comparable type are equal.
 //
-// Both arguments must be pointer variables. Pointer variable sameness is
-// determined based on the equality of both type and value.
+// Pointer variable equality is determined based on the equality of the memory addresses (unlike [Equal], but like [Same]).
+//
+// Functions, slices and maps are not comparable. See also [ComparisonOperators].
+//
+// If you need to compare values of non-comparable types, or compare pointers by the value they point to,
+// use [Equal] instead.
 //
 // # Usage
 //
-//	assertions.Same(t, ptr1, ptr2)
+//	assertions.EqualT(t, 123, 123)
 //
 // # Examples
 //
-//	success: &staticVar, staticVarPtr
-//	failure: &staticVar, ptr("static string")
-func Same(t T, expected, actual any, msgAndArgs ...any) bool {
+//	success: 123, 123
+//	failure: 123, 456
+//
+// [ComparisonOperators]: https://go.dev/ref/spec#Comparison_operators.
+func EqualT[V comparable](t T, expected, actual V, msgAndArgs ...any) bool {
 	// Domain: equality
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-
-	same, ok := samePointers(expected, actual)
-	if !ok {
-		return Fail(t, "Both arguments must be pointers", msgAndArgs...)
-	}
-
-	if !same {
-		// both are pointers but not the same type & pointing to the same address
-		return Fail(t, fmt.Sprintf("Not same: \n"+
-			"expected: %[2]s (%[1]T)(%[1]p)\n"+
-			"actual  : %[4]s (%[3]T)(%[3]p)", expected, truncatingFormat("%#v", expected), actual, truncatingFormat("%#v", actual)), msgAndArgs...)
+	if expected != actual {
+		return failWithDiff(t, expected, actual, msgAndArgs...)
 	}
 
 	return true
 }
 
-// NotSame asserts that two pointers do not reference the same object.
-//
-// Both arguments must be pointer variables. Pointer variable sameness is
-// determined based on the equality of both type and value.
+// NotEqual asserts that the specified values are NOT equal.
 //
 // # Usage
 //
-//	assertions.NotSame(t, ptr1, ptr2)
+//	assertions.NotEqual(t, obj1, obj2)
+//
+// Pointer variable equality is determined based on the equality of the
+// referenced values (as opposed to the memory addresses).
+//
+// Function equality cannot be determined and will always fail.
 //
 // # Examples
 //
-//	success: &staticVar, ptr("static string")
-//	failure: &staticVar, staticVarPtr
-func NotSame(t T, expected, actual any, msgAndArgs ...any) bool {
+//	success: 123, 456
+//	failure: 123, 123
+func NotEqual(t T, expected, actual any, msgAndArgs ...any) bool {
 	// Domain: equality
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-
-	same, ok := samePointers(expected, actual)
-	if !ok {
-		// fails when the arguments are not pointers
-		return !(Fail(t, "Both arguments must be pointers", msgAndArgs...))
+	if err := validateEqualArgs(expected, actual); err != nil {
+		return Fail(t, fmt.Sprintf("Invalid operation: %#v != %#v (%s)",
+			expected, actual, err), msgAndArgs...)
 	}
 
-	if same {
-		return Fail(t, fmt.Sprintf(
-			"Expected and actual point to the same object: %p %s",
-			expected, truncatingFormat("%#v", expected)), msgAndArgs...)
+	if ObjectsAreEqual(expected, actual) {
+		return Fail(t, fmt.Sprintf("Should not be: %s\n", truncatingFormat("%#v", actual)), msgAndArgs...)
 	}
+
+	return true
+}
+
+// NotEqualT asserts that the specified values of the same comparable type are NOT equal.
+//
+// See [EqualT].
+//
+// # Usage
+//
+//	assertions.NotEqualT(t, obj1, obj2)
+//
+// # Examples
+//
+//	success: 123, 456
+//	failure: 123, 123
+func NotEqualT[V comparable](t T, expected, actual V, msgAndArgs ...any) bool {
+	// Domain: equality
+	if expected == actual {
+		return Fail(t, fmt.Sprintf("Should not be: %s\n", truncatingFormat("%#v", actual)), msgAndArgs...)
+	}
+
 	return true
 }
 
 // EqualValues asserts that two objects are equal or convertible to the larger
 // type and equal.
+//
+// Function equality cannot be determined and will always fail.
 //
 // # Usage
 //
@@ -143,6 +145,11 @@ func EqualValues(t T, expected, actual any, msgAndArgs ...any) bool {
 		h.Helper()
 	}
 
+	if err := validateEqualArgs(expected, actual); err != nil {
+		return Fail(t, fmt.Sprintf("Invalid operation: %#v == %#v (%s)",
+			expected, actual, err), msgAndArgs...)
+	}
+
 	if !ObjectsAreEqualValues(expected, actual) {
 		diff := diff(expected, actual)
 		expected, actual = formatUnequalValues(expected, actual)
@@ -154,9 +161,42 @@ func EqualValues(t T, expected, actual any, msgAndArgs ...any) bool {
 	return true
 }
 
+// NotEqualValues asserts that two objects are not equal even when converted to the same type.
+//
+// Function equality cannot be determined and will always fail.
+//
+// # Usage
+//
+//	assertions.NotEqualValues(t, obj1, obj2)
+//
+// # Examples
+//
+//	success: uint32(123), int32(456)
+//	failure: uint32(123), int32(123)
+func NotEqualValues(t T, expected, actual any, msgAndArgs ...any) bool {
+	// Domain: equality
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	if err := validateEqualArgs(expected, actual); err != nil {
+		return Fail(t, fmt.Sprintf("Invalid operation: %#v == %#v (%s)",
+			expected, actual, err), msgAndArgs...)
+	}
+
+	if ObjectsAreEqualValues(expected, actual) {
+		return Fail(t, fmt.Sprintf("Should not be: %s\n", truncatingFormat("%#v", actual)), msgAndArgs...)
+	}
+
+	return true
+}
+
 // EqualExportedValues asserts that the types of two objects are equal and their public
-// fields are also equal. This is useful for comparing structs that have private fields
-// that could potentially differ.
+// fields are also equal.
+//
+// This is useful for comparing structs that have private fields that could potentially differ.
+//
+// Function equality cannot be determined and will always fail.
 //
 // # Usage
 //
@@ -175,6 +215,11 @@ func EqualExportedValues(t T, expected, actual any, msgAndArgs ...any) bool {
 	// Domain: equality
 	if h, ok := t.(H); ok {
 		h.Helper()
+	}
+
+	if err := validateEqualArgs(expected, actual); err != nil {
+		return Fail(t, fmt.Sprintf("Invalid operation: %#v == %#v (%s)",
+			expected, actual, err), msgAndArgs...)
 	}
 
 	aType := reflect.TypeOf(expected)
@@ -224,180 +269,31 @@ func Exactly(t T, expected, actual any, msgAndArgs ...any) bool {
 	return Equal(t, expected, actual, msgAndArgs...)
 }
 
-// NotNil asserts that the specified object is not nil.
-//
-// # Usage
-//
-// assertions.NotNil(t, err)
-//
-// # Examples
-//
-//	success: "not nil"
-//	failure: nil
-func NotNil(t T, object any, msgAndArgs ...any) bool {
-	// Domain: equality
-	if !isNil(object) {
-		return true
-	}
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-	return Fail(t, "Expected value not to be nil.", msgAndArgs...)
-}
-
-// Nil asserts that the specified object is nil.
-//
-// # Usage
-//
-//	assertions.Nil(t, err)
-//
-// # Examples
-//
-//	success: nil
-//	failure: "not nil"
-func Nil(t T, object any, msgAndArgs ...any) bool {
-	// Domain: equality
-	if isNil(object) {
-		return true
-	}
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-	return Fail(t, "Expected nil, but got: "+truncatingFormat("%#v", object), msgAndArgs...)
-}
-
-// Empty asserts that the given value is "empty".
-//
-// Zero values are "empty".
-//
-// Arrays are "empty" if every element is the zero value of the type (stricter than "empty").
-//
-// Slices, maps and channels with zero length are "empty".
-//
-// Pointer values are "empty" if the pointer is nil or if the pointed value is "empty".
-//
-// # Usage
-//
-//	assertions.Empty(t, obj)
-//
-// # Examples
-//
-//	success: ""
-//	failure: "not empty"
-//
-// [Zero values]: https://go.dev/ref/spec#The_zero_value
-func Empty(t T, object any, msgAndArgs ...any) bool {
-	// Domain: equality
-	pass := isEmpty(object)
-	if !pass {
-		if h, ok := t.(H); ok {
-			h.Helper()
-		}
-		Fail(t, "Should be empty, but was "+truncatingFormat("%v", object), msgAndArgs...)
-	}
-
-	return pass
-}
-
-// NotEmpty asserts that the specified object is NOT [Empty].
-//
-// # Usage
-//
-//	if assert.NotEmpty(t, obj) {
-//		assertions.Equal(t, "two", obj[1])
-//	}
-//
-// # Examples
-//
-//	success: "not empty"
-//	failure: ""
-func NotEmpty(t T, object any, msgAndArgs ...any) bool {
-	// Domain: equality
-	pass := !isEmpty(object)
-	if !pass {
-		if h, ok := t.(H); ok {
-			h.Helper()
-		}
-		Fail(t, fmt.Sprintf("Should NOT be empty, but was %v", object), msgAndArgs...)
-	}
-
-	return pass
-}
-
-// NotEqual asserts that the specified values are NOT equal.
-//
-// # Usage
-//
-//	assertions.NotEqual(t, obj1, obj2)
-//
-// Pointer variable equality is determined based on the equality of the
-// referenced values (as opposed to the memory addresses).
-//
-// # Examples
-//
-//	success: 123, 456
-//	failure: 123, 123
-func NotEqual(t T, expected, actual any, msgAndArgs ...any) bool {
-	// Domain: equality
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-	if err := validateEqualArgs(expected, actual); err != nil {
-		return Fail(t, fmt.Sprintf("Invalid operation: %#v != %#v (%s)",
-			expected, actual, err), msgAndArgs...)
-	}
-
-	if ObjectsAreEqual(expected, actual) {
-		return Fail(t, fmt.Sprintf("Should not be: %s\n", truncatingFormat("%#v", actual)), msgAndArgs...)
-	}
-
-	return true
-}
-
-// NotEqualValues asserts that two objects are not equal even when converted to the same type.
-//
-// # Usage
-//
-//	assertions.NotEqualValues(t, obj1, obj2)
-//
-// # Examples
-//
-//	success: uint32(123), int32(456)
-//	failure: uint32(123), int32(123)
-func NotEqualValues(t T, expected, actual any, msgAndArgs ...any) bool {
-	// Domain: equality
+func failWithDiff(t T, expected, actual any, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 
-	if ObjectsAreEqualValues(expected, actual) {
-		return Fail(t, fmt.Sprintf("Should not be: %s\n", truncatingFormat("%#v", actual)), msgAndArgs...)
+	diff := diff(expected, actual)
+	expectedStr, actualStr := formatUnequalValues(expected, actual)
+
+	if colors.Enabled() {
+		expectedStr = colors.ExpectedColorizer()(expectedStr)
+		actualStr = colors.ActualColorizer()(actualStr)
 	}
 
-	return true
-}
-
-// isNil checks if a specified object is nil or not, without Failing.
-func isNil(object any) bool {
-	if object == nil {
-		return true
-	}
-
-	value := reflect.ValueOf(object)
-	switch value.Kind() {
-	case
-		reflect.Chan, reflect.Func,
-		reflect.Interface, reflect.Map,
-		reflect.Ptr, reflect.Slice, reflect.UnsafePointer:
-
-		return value.IsNil()
-	default:
-		return false
-	}
+	return Fail(t,
+		fmt.Sprintf("Not equal: \n"+
+			"expected: %s\n"+
+			"actual  : %s%s",
+			expectedStr,
+			actualStr, diff),
+		msgAndArgs...,
+	)
 }
 
 // validateEqualArgs checks whether provided arguments can be safely used in the
-// Equal/NotEqual functions.
+// Equal/NotEqual/EqualValues/NotEqualValues functions.
 func validateEqualArgs(expected, actual any) error {
 	if expected == nil && actual == nil {
 		return nil
@@ -409,7 +305,7 @@ func validateEqualArgs(expected, actual any) error {
 	return nil
 }
 
-// samePointers checks if two generic interface objects are pointers of the same
+// samePointers checks if two arbitrary interface objects are pointers of the same
 // type pointing to the same object.
 //
 // It returns two values: same indicating if they are the same type and point to the same object,
@@ -445,35 +341,6 @@ func formatUnequalValues(expected, actual any) (e string, a string) {
 		return fmt.Sprint(expected), fmt.Sprint(actual)
 	default:
 		return truncatingFormat("%#v", expected), truncatingFormat("%#v", actual)
-	}
-}
-
-// isEmpty gets whether the specified object is considered empty or not.
-func isEmpty(object any) bool {
-	// get nil case out of the way
-	if object == nil {
-		return true
-	}
-
-	return isEmptyValue(reflect.ValueOf(object))
-}
-
-// isEmptyValue gets whether the specified reflect.Value is considered empty or not.
-func isEmptyValue(objValue reflect.Value) bool {
-	if objValue.IsZero() {
-		return true
-	}
-	// Special cases of non-zero values that we consider empty
-	switch objValue.Kind() {
-	// collection types are empty when they have no element
-	// Note: array types are empty when they match their zero-initialized state.
-	case reflect.Chan, reflect.Map, reflect.Slice:
-		return objValue.Len() == 0
-	// non-nil pointers are empty if the value they point to is empty
-	case reflect.Ptr:
-		return isEmptyValue(objValue.Elem())
-	default:
-		return false
 	}
 }
 
@@ -520,8 +387,9 @@ func copyExportedFields(expected any) any {
 		}
 		for i := range expectedValue.Len() {
 			index := expectedValue.Index(i)
-			if isNil(index) {
-				continue
+			if !index.CanInterface() {
+				// this should not be possible with current reflect, since values are retrieved from an array or slice, not a struct
+				panic(fmt.Errorf("internal error: can't resolve Interface() for value %v", index))
 			}
 			unexportedRemoved := copyExportedFields(index.Interface())
 			result.Index(i).Set(reflect.ValueOf(unexportedRemoved))
@@ -532,6 +400,10 @@ func copyExportedFields(expected any) any {
 		result := reflect.MakeMap(expectedType)
 		for _, k := range expectedValue.MapKeys() {
 			index := expectedValue.MapIndex(k)
+			if !index.CanInterface() {
+				// this should not be possible with current reflect, since values are retrieved from a map, not a struct
+				panic(fmt.Errorf("internal error: can't resolve Interface() for value %v", index))
+			}
 			unexportedRemoved := copyExportedFields(index.Interface())
 			result.SetMapIndex(k, reflect.ValueOf(unexportedRemoved))
 		}

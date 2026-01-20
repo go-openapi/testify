@@ -10,94 +10,117 @@ import (
 	"testing"
 )
 
-func TestStringEqual(t *testing.T) {
-	t.Parallel()
+func TestStringRegexpEdgeCases(t *testing.T) {
+	// check edge cases for reflection-based Regexp, such as unsupported types or nil input or when the input
+	// is converted using fmt.Sprint.
 
-	i := 0
-	for currCase := range stringEqualCases() {
-		mock := &bufferT{}
+	t.Run("with unsupported regexp type", func(t *testing.T) {
+		t.Parallel()
 
-		Equal(mock, currCase.equalWant, currCase.equalGot, currCase.msgAndArgs...)
-		Regexp(t, regexp.MustCompile(currCase.want), mock.buf.String(), "Case %d", i)
-		i++
-	}
-}
+		const (
+			str = "whatever"
+			msg = "expected this invalid call to fail (regexp=%v)"
+		)
 
-func TestStringEqualFormatting(t *testing.T) {
-	t.Parallel()
+		mock := new(mockT)
 
-	i := 0
-	for currCase := range stringEqualFormattingCases() {
-		mock := &bufferT{}
+		t.Run("should fail (invalid regexp type)", func(t *testing.T) {
+			invalidRex := struct{ a string }{a: "invalid"}
 
-		Equal(mock, currCase.equalWant, currCase.equalGot, currCase.msgAndArgs...)
-		Regexp(t, regexp.MustCompile(currCase.want), mock.buf.String(), "Case %d", i)
-		i++
-	}
+			if Regexp(mock, invalidRex, str) {
+				t.Errorf(msg, invalidRex)
+			}
+			if NotRegexp(mock, invalidRex, str) {
+				t.Errorf(msg, invalidRex)
+			}
+		})
+
+		t.Run("should fail (nil regexp)", func(t *testing.T) {
+			invalidRex := []byte(nil)
+
+			if Regexp(mock, invalidRex, str) {
+				t.Errorf(msg, invalidRex)
+			}
+			if NotRegexp(mock, invalidRex, str) {
+				t.Errorf(msg, invalidRex)
+			}
+		})
+	})
+
+	t.Run("with fmt.Sprint conversion (edge case)", func(t *testing.T) {
+		t.Parallel()
+
+		const (
+			numeric = 1234
+			msg     = "expected %q to match %q"
+			rex     = "^[0-9]+$"
+		)
+
+		mock := new(mockT)
+
+		t.Run("should match string representation of a number", func(t *testing.T) {
+			if !Regexp(mock, rex, numeric) {
+				t.Errorf(msg, numeric, rex)
+			}
+			if NotRegexp(mock, rex, numeric) {
+				t.Errorf(msg, numeric, rex)
+			}
+		})
+	})
 }
 
 func TestStringRegexp(t *testing.T) {
 	t.Parallel()
 
 	// run test cases with all combinations of supported types
+	//
+	// NOTE: testing pattern, focused on the expected result (true/false) and _NOT_ the content of the returned message.
+	// - stringRegexpCases: loop over generic test cases
+	//    - testAllRegexpWithTypes: dispatch over type combinations of values
+	//      - testAllRegexp: dispatch over the assertion variants (reflection-based, generic, X vs NotX semantics)
+	//        Single assertion test functions:
+	//        - testRegexp
+	//        - testRegexpT
+	//        - testNotRegexp
+	//        - testNotRegexpT
 	for tc := range stringRegexpCases() {
 		t.Run(tc.name, tc.test)
 	}
+}
 
-	t.Run("with edge cases", func(t *testing.T) {
-		t.Run("with unsupported regexp type", func(t *testing.T) {
-			t.Parallel()
-
-			const (
-				str = "whatever"
-				msg = "expected this invalid call to fail (regexp=%v)"
-			)
-
-			mock := new(mockT)
-
-			t.Run("should fail (invalid regexp type)", func(t *testing.T) {
-				invalidRex := struct{ a string }{a: "invalid"}
-
-				if Regexp(mock, invalidRex, str) {
-					t.Errorf(msg, invalidRex)
-				}
-				if NotRegexp(mock, invalidRex, str) {
-					t.Errorf(msg, invalidRex)
-				}
-			})
-
-			t.Run("should fail (nil regexp)", func(t *testing.T) {
-				invalidRex := []byte(nil)
-
-				if Regexp(mock, invalidRex, str) {
-					t.Errorf(msg, invalidRex)
-				}
-				if NotRegexp(mock, invalidRex, str) {
-					t.Errorf(msg, invalidRex)
-				}
-			})
-		})
-
-		t.Run("with fmt.Sprint conversion", func(t *testing.T) {
-			t.Parallel()
-
-			const (
-				numeric = 1234
-				msg     = "expected %q to match %q"
-				rex     = "^[0-9]+$"
-			)
-
-			mock := new(mockT)
-
-			t.Run("should match string representation of a number", func(t *testing.T) {
-				if !Regexp(mock, rex, numeric) {
-					t.Errorf(msg, numeric, rex)
-				}
-				if NotRegexp(mock, rex, numeric) {
-					t.Errorf(msg, numeric, rex)
-				}
-			})
-		})
+// Values to populate the test harness:
+//
+// - valid and invalid patterns
+// - matching and not matching expressions.
+func stringRegexpCases() iter.Seq[genericTestCase] {
+	return slices.Values([]genericTestCase{
+		// successful matches
+		{"^start (match)", testAllRegexpWithTypes(
+			"^start", "start of the line", true, true,
+		)},
+		{"end$ (match)", testAllRegexpWithTypes(
+			"end$", "in the end", true, true,
+		)},
+		{"end$ (match)", testAllRegexpWithTypes(
+			"end$", "in the end", true, true,
+		)},
+		{"phone number (match)", testAllRegexpWithTypes(
+			"[0-9]{3}[.-]?[0-9]{2}[.-]?[0-9]{2}", "My phone number is 650.12.34", true, true,
+		)},
+		// failed matches
+		{"start (no match)", testAllRegexpWithTypes(
+			"^asdfastart", "Not the start of the line", false, true,
+		)},
+		{"end$ (no match)", testAllRegexpWithTypes(
+			"end$", "in the end.", false, true,
+		)},
+		{"phone number (no match)", testAllRegexpWithTypes(
+			"[0-9]{3}[.-]?[0-9]{2}[.-]?[0-9]{2}", "My phone number is 650.12a.34", false, true,
+		)},
+		// invalid pattern
+		{"invalid regexp", testAllRegexpWithTypes(
+			"\\C", "whatever", false, false,
+		)},
 	})
 }
 
@@ -260,137 +283,4 @@ func croakWantNotMatch(t *testing.T, rx, str any) {
 func testRex(rex string) *regexp.Regexp {
 	rx, _ := compileRegex(rex)
 	return rx
-}
-
-type stringEqualCase struct {
-	equalWant  string
-	equalGot   string
-	msgAndArgs []any
-	want       string
-}
-
-func stringEqualCases() iter.Seq[stringEqualCase] {
-	return slices.Values([]stringEqualCase{
-		{
-			equalWant: "hi, \nmy name is",
-			equalGot:  "what,\nmy name is",
-			want: "\t[a-z]+.go:\\d+: \n" + // NOTE: the exact file name reported should be asserted in integration tests
-				"\t+Error Trace:\t\n+" +
-				"\t+Error:\\s+Not equal:\\s+\n" +
-				"\\s+expected: \"hi, \\\\nmy name is\"\n" +
-				"\\s+actual\\s+: " + "\"what,\\\\nmy name is\"\n" +
-				"\\s+Diff:\n" +
-				"\\s+-+ Expected\n\\s+\\++ " +
-				"Actual\n" +
-				"\\s+@@ -1,2 \\+1,2 @@\n" +
-				"\\s+-hi, \n\\s+\\+what,\n" +
-				"\\s+my name is",
-		},
-	})
-}
-
-func stringEqualFormattingCases() iter.Seq[stringEqualCase] {
-	return slices.Values([]stringEqualCase{
-		{
-			equalWant: "want",
-			equalGot:  "got",
-			want: "\t[a-z]+.go:\\d+: \n" +
-				"\t+Error Trace:\t\n" +
-				"\t+Error:\\s+Not equal:\\s+\n" +
-				"\\s+expected: \"want\"\n" +
-				"\\s+actual\\s+: \"got\"\n" +
-				"\\s+Diff:\n\\s+-+ Expected\n\\s+\\++ " +
-				"Actual\n" +
-				"\\s+@@ -1 \\+1 @@\n" +
-				"\\s+-want\n" +
-				"\\s+\\+got\n",
-		},
-		{
-			equalWant:  "want",
-			equalGot:   "got",
-			msgAndArgs: []any{"hello, %v!", "world"},
-			want: "\t[a-z]+.go:[0-9]+: \n" +
-				"\t+Error Trace:\t\n" +
-				"\t+Error:\\s+Not equal:\\s+\n" +
-				"\\s+expected: \"want\"\n" +
-				"\\s+actual\\s+: \"got\"\n" +
-				"\\s+Diff:\n" +
-				"\\s+-+ Expected\n" +
-				"\\s+\\++ Actual\n" +
-				"\\s+@@ -1 \\+1 @@\n" +
-				"\\s+-want\n" +
-				"\\s+\\+got\n" +
-				"\\s+Messages:\\s+hello, world!\n",
-		},
-		{
-			equalWant:  "want",
-			equalGot:   "got",
-			msgAndArgs: []any{123},
-			want: "\t[a-z]+.go:[0-9]+: \n" +
-				"\t+Error Trace:\t\n" +
-				"\t+Error:\\s+Not equal:\\s+\n" +
-				"\\s+expected: \"want\"\n" +
-				"\\s+actual\\s+: \"got\"\n" +
-				"\\s+Diff:\n" +
-				"\\s+-+ Expected\n" +
-				"\\s+\\++ Actual\n" +
-				"\\s+@@ -1 \\+1 @@\n" +
-				"\\s+-want\n" +
-				"\\s+\\+got\n" +
-				"\\s+Messages:\\s+123\n",
-		},
-		{
-			equalWant:  "want",
-			equalGot:   "got",
-			msgAndArgs: []any{struct{ a string }{"hello"}},
-			want: "\t[a-z]+.go:[0-9]+: \n" +
-				"\t+Error Trace:\t\n" +
-				"\t+Error:\\s+Not equal:\\s+\n" +
-				"\\s+expected: \"want\"\n" +
-				"\\s+actual\\s+: \"got\"\n" +
-				"\\s+Diff:\n" +
-				"\\s+-+ Expected\n" +
-				"\\s+\\++ Actual\n" +
-				"\\s+@@ -1 \\+1 @@\n" +
-				"\\s+-want\n" +
-				"\\s+\\+got\n" +
-				"\\s+Messages:\\s+{a:hello}\n",
-		},
-	})
-}
-
-// Values to populate the test harness:
-//
-// - valid and invalid patterns
-// - matching and not matching expressions.
-func stringRegexpCases() iter.Seq[genericTestCase] {
-	return slices.Values([]genericTestCase{
-		// successful matches
-		{"^start (match)", testAllRegexpWithTypes(
-			"^start", "start of the line", true, true,
-		)},
-		{"end$ (match)", testAllRegexpWithTypes(
-			"end$", "in the end", true, true,
-		)},
-		{"end$ (match)", testAllRegexpWithTypes(
-			"end$", "in the end", true, true,
-		)},
-		{"phone number (match)", testAllRegexpWithTypes(
-			"[0-9]{3}[.-]?[0-9]{2}[.-]?[0-9]{2}", "My phone number is 650.12.34", true, true,
-		)},
-		// failed matches
-		{"start (no match)", testAllRegexpWithTypes(
-			"^asdfastart", "Not the start of the line", false, true,
-		)},
-		{"end$ (no match)", testAllRegexpWithTypes(
-			"end$", "in the end.", false, true,
-		)},
-		{"phone number (no match)", testAllRegexpWithTypes(
-			"[0-9]{3}[.-]?[0-9]{2}[.-]?[0-9]{2}", "My phone number is 650.12a.34", false, true,
-		)},
-		// invalid pattern
-		{"invalid regexp", testAllRegexpWithTypes(
-			"\\C", "whatever", false, false,
-		)},
-	})
 }

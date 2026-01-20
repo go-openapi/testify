@@ -86,6 +86,15 @@ type diffCase struct {
 	expected string
 }
 
+type diffTestingStruct struct {
+	A string
+	B int
+}
+
+func (d *diffTestingStruct) String() string {
+	return d.A
+}
+
 func diffCases() iter.Seq[diffCase] {
 	const n = 5
 	type Key struct {

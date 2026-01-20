@@ -1,15 +1,19 @@
 ---
 title: "Type"
 description: "Asserting Types Rather Than Values"
-modified: 2026-01-18
+modified: 2026-01-20
 weight: 16
 domains:
   - "type"
 keywords:
   - "Implements"
   - "Implementsf"
+  - "IsNotOfTypeT"
+  - "IsNotOfTypeTf"
   - "IsNotType"
   - "IsNotTypef"
+  - "IsOfTypeT"
+  - "IsOfTypeTf"
   - "IsType"
   - "IsTypef"
   - "Kind"
@@ -33,11 +37,14 @@ Asserting Types Rather Than Values
 
 _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
-This domain exposes 8 functionalities.
+This domain exposes 10 functionalities.
+Generic assertions are marked with a {{% icon icon="star" color=orange %}}
 
 ```tree
 - [Implements](#implements) | angles-right
+- [IsNotOfTypeT[EType any]](#isnotoftypetetype-any) | star | orange
 - [IsNotType](#isnottype) | angles-right
+- [IsOfTypeT[EType any]](#isoftypetetype-any) | star | orange
 - [IsType](#istype) | angles-right
 - [Kind](#kind) | angles-right
 - [NotImplements](#notimplements) | angles-right
@@ -93,6 +100,49 @@ Implements asserts that an object is implemented by the specified interface.
 {{% /tab %}}
 {{< /tabs >}}
 
+### IsNotOfTypeT[EType any] {{% icon icon="star" color=orange %}}{#isnotoftypetetype-any}
+
+IsNotOfTypeT asserts that an object is of a given type.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.IsOfType[MyType](t,myVar)
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	success: 123.123
+	failure: myType(123.123)
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.IsNotOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsNotOfTypeT) | package-level function |
+| [`assert.IsNotOfTypeTf[EType any](t T, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsNotOfTypeTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.IsNotOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNotOfTypeT) | package-level function |
+| [`require.IsNotOfTypeTf[EType any](t T, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNotOfTypeTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.IsNotOfTypeT(t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNotOfTypeT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNotOfTypeT](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L141)
+{{% /tab %}}
+{{< /tabs >}}
+
 ### IsNotType{#isnottype}
 
 IsNotType asserts that the specified objects are not of the same type.
@@ -136,7 +186,50 @@ IsNotType asserts that the specified objects are not of the same type.
 |--|--| 
 | [`assertions.IsNotType(t T, theType any, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNotType) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNotType](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L96)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNotType](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L120)
+{{% /tab %}}
+{{< /tabs >}}
+
+### IsOfTypeT[EType any] {{% icon icon="star" color=orange %}}{#isoftypetetype-any}
+
+IsOfTypeT asserts that an object is of a given type.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.IsOfTypeT[MyType](t,myVar)
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	success: myType(123.123)
+	failure: 123.123
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.IsOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsOfTypeT) | package-level function |
+| [`assert.IsOfTypeTf[EType any](t T, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsOfTypeTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.IsOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsOfTypeT) | package-level function |
+| [`require.IsOfTypeTf[EType any](t T, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsOfTypeTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.IsOfTypeT(t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsOfTypeT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsOfTypeT](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L96)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -233,7 +326,7 @@ are comparable to [reflect.Invalid](https://pkg.go.dev/reflect#Invalid). See als
 |--|--| 
 | [`assertions.Kind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Kind) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Kind](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L162)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Kind](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L210)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -330,7 +423,7 @@ are comparable to [reflect.Invalid](https://pkg.go.dev/reflect#Invalid). See als
 |--|--| 
 | [`assertions.NotKind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotKind) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotKind](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L195)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotKind](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L243)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -377,7 +470,7 @@ NotZero asserts that i is not the zero value for its type.
 |--|--| 
 | [`assertions.NotZero(t T, i any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotZero) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotZero](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L138)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotZero](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L186)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -424,7 +517,7 @@ Zero asserts that i is the zero value for its type.
 |--|--| 
 | [`assertions.Zero(t T, i any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Zero) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Zero](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L117)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Zero](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L165)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -444,5 +537,5 @@ SPDX-License-Identifier: Apache-2.0
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
 
-Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
+Generated on 2026-01-20 (version 74d5686) using codegen version v2.1.9-0.20260119232631-74d5686313f0+dirty [sha: 74d5686313f0820ae0e2758b95d598f646cd7ad5]
 -->

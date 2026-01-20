@@ -500,6 +500,7 @@ func convertReflectValue[V any](obj any, value reflect.Value) V { //nolint:iretu
 	if !ok {
 		converted, ok = value.Convert(reflect.TypeFor[V]()).Interface().(V)
 		if !ok {
+			// should never get there
 			panic("internal error: expected that reflect.Value.Convert yields its target type")
 		}
 	}

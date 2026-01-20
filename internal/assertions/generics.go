@@ -24,7 +24,7 @@ type (
 
 	// Ordered is a standard ordered type (i.e. types that support "<": [cmp.Ordered]) plus []byte and [time.Time].
 	//
-	// This is used by [GreaterT], [GreaterOrEqualT], [LessT], and [LessOrEqualT].
+	// This is used by [GreaterT], [GreaterOrEqualT], [LessT], [LessOrEqualT], [IsIncreasingT], [IsDecreasingT].
 	//
 	// NOTE: since [time.Time] is a struct, custom types which redeclare [time.Time] are not supported.
 	Ordered interface {

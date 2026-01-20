@@ -32,10 +32,10 @@ func Test{{ .Name }}(t *testing.T) {
     t.Parallel()
 
             {{- if $isRequire }}
-		{{ $fn.Name }}(t, {{ .TestedValue }})
+    {{ $fn.Name }}{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(t, {{ .TestedValue }})
 		// require functions don't return a value
             {{- else }}
-		result := {{ $fn.Name }}(t, {{ .TestedValue }})
+		result := {{ $fn.Name }}{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(t, {{ .TestedValue }})
 		if !result {
 			t.Error("{{ $fn.Name }} should return true on success")
 		}
@@ -48,10 +48,10 @@ func Test{{ .Name }}(t *testing.T) {
 
 		mock := new({{ $fn.UseMock }})
             {{- if $isRequire }}
-		{{ $fn.Name }}(mock, {{ .TestedValue }})
+		{{ $fn.Name }}{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(mock, {{ .TestedValue }})
 		// require functions don't return a value
             {{- else }}
-		result := {{ $fn.Name }}(mock, {{ .TestedValue }})
+		result := {{ $fn.Name }}{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(mock, {{ .TestedValue }})
 		if result {
 			t.Error("{{ $fn.Name }} should return false on failure")
 		}
@@ -66,7 +66,7 @@ func Test{{ .Name }}(t *testing.T) {
     t.Parallel()
 
 		Panics(t, func() {
-      {{ $fn.Name }}(t, {{ .TestedValue }})
+      {{ $fn.Name }}{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(t, {{ .TestedValue }})
 		}, "{{ .AssertionMessage }}")
 	})
           {{- end }}
@@ -149,3 +149,5 @@ type dummyError struct {
 func (d *dummyError) Error() string {
   return "dummy error"
 }
+
+type myType float64

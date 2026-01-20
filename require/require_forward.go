@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
+// Generated on 2026-01-20 (version 74d5686) using codegen version v2.1.9-0.20260119232631-74d5686313f0+dirty [sha: 74d5686313f0820ae0e2758b95d598f646cd7ad5]
 
 package require
 
@@ -109,6 +109,34 @@ func (a *Assertions) DirExistsf(path string, msg string, args ...any) {
 		h.Helper()
 	}
 	if assertions.DirExists(a.t, path, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// DirNotExists is the same as [DirNotExists], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) DirNotExists(path string, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.DirNotExists(a.t, path, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// DirNotExistsf is the same as [Assertions.DirNotExists], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) DirNotExistsf(path string, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.DirNotExists(a.t, path, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -633,6 +661,34 @@ func (a *Assertions) FileNotEmptyf(path string, msg string, args ...any) {
 		h.Helper()
 	}
 	if assertions.FileNotEmpty(a.t, path, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// FileNotExists is the same as [FileNotExists], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) FileNotExists(path string, msgAndArgs ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.FileNotExists(a.t, path, msgAndArgs...) {
+		return
+	}
+
+	a.t.FailNow()
+}
+
+// FileNotExistsf is the same as [Assertions.FileNotExists], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) FileNotExistsf(path string, msg string, args ...any) {
+	if h, ok := a.t.(H); ok {
+		h.Helper()
+	}
+	if assertions.FileNotExists(a.t, path, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1451,34 +1507,6 @@ func (a *Assertions) Nilf(object any, msg string, args ...any) {
 	a.t.FailNow()
 }
 
-// NoDirExists is the same as [NoDirExists], as a method rather than a package-level function.
-//
-// Upon failure, the test [T] is marked as failed and stops execution.
-func (a *Assertions) NoDirExists(path string, msgAndArgs ...any) {
-	if h, ok := a.t.(H); ok {
-		h.Helper()
-	}
-	if assertions.NoDirExists(a.t, path, msgAndArgs...) {
-		return
-	}
-
-	a.t.FailNow()
-}
-
-// NoDirExistsf is the same as [Assertions.NoDirExists], but it accepts a format msg string to format arguments like [fmt.Printf].
-//
-// Upon failure, the test [T] is marked as failed and stops execution.
-func (a *Assertions) NoDirExistsf(path string, msg string, args ...any) {
-	if h, ok := a.t.(H); ok {
-		h.Helper()
-	}
-	if assertions.NoDirExists(a.t, path, forwardArgs(msg, args)) {
-		return
-	}
-
-	a.t.FailNow()
-}
-
 // NoError is the same as [NoError], as a method rather than a package-level function.
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
@@ -1501,34 +1529,6 @@ func (a *Assertions) NoErrorf(err error, msg string, args ...any) {
 		h.Helper()
 	}
 	if assertions.NoError(a.t, err, forwardArgs(msg, args)) {
-		return
-	}
-
-	a.t.FailNow()
-}
-
-// NoFileExists is the same as [NoFileExists], as a method rather than a package-level function.
-//
-// Upon failure, the test [T] is marked as failed and stops execution.
-func (a *Assertions) NoFileExists(path string, msgAndArgs ...any) {
-	if h, ok := a.t.(H); ok {
-		h.Helper()
-	}
-	if assertions.NoFileExists(a.t, path, msgAndArgs...) {
-		return
-	}
-
-	a.t.FailNow()
-}
-
-// NoFileExistsf is the same as [Assertions.NoFileExists], but it accepts a format msg string to format arguments like [fmt.Printf].
-//
-// Upon failure, the test [T] is marked as failed and stops execution.
-func (a *Assertions) NoFileExistsf(path string, msg string, args ...any) {
-	if h, ok := a.t.(H); ok {
-		h.Helper()
-	}
-	if assertions.NoFileExists(a.t, path, forwardArgs(msg, args)) {
 		return
 	}
 

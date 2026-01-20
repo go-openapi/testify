@@ -48,6 +48,7 @@ func FuncMap() template.FuncMap {
 		"docStringPackage": docStringPackage,
 		"forward":          forward,
 		"godocbadge":       godocbadge,
+		"hasPrefix":        strings.HasPrefix,
 		"hasSuffix":        strings.HasSuffix,
 		"imports":          printImports,
 		"mdformat":         FormatMarkdown, // From markdown.go
@@ -354,7 +355,7 @@ func slugize(in string) string {
 			switch r {
 			case '.', '_', ' ', '\t', ':':
 				return '-'
-			case '[', ']', ',':
+			case '[', ']', ',', '~':
 				return -1
 			default:
 				return r

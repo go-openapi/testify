@@ -8,7 +8,6 @@ import (
 	"iter"
 	"math"
 	"slices"
-	"strings"
 	"testing"
 	"time"
 )
@@ -26,6 +25,30 @@ func TestObjectsAreEqual(t *testing.T) {
 		})
 	}
 }
+
+/* redundant with Equal
+func TestEqualBytes(t *testing.T) {
+	t.Parallel()
+
+	i := 0
+	for c := range equalBytesCases() {
+		Equal(t, reflect.DeepEqual(c.a, c.b), ObjectsAreEqual(c.a, c.b), "case %d failed", i)
+		i++
+	}
+}
+
+type equalBytesCase struct {
+	a, b []byte
+}
+
+func equalBytesCases() iter.Seq[equalBytesCase] {
+	return slices.Values([]equalBytesCase{
+		{make([]byte, 2), make([]byte, 2)},
+		{make([]byte, 2), make([]byte, 2, 3)},
+		{nil, make([]byte, 0)},
+	})
+}
+*/
 
 func TestObjectsAreEqualValues(t *testing.T) {
 	t.Parallel()
@@ -49,26 +72,6 @@ func TestObjectsCopyExportedFields(t *testing.T) {
 			output := copyExportedFields(c.input)
 			if !ObjectsAreEqualValues(c.expected, output) {
 				t.Errorf("%#v, %#v should be equal", c.expected, output)
-			}
-		})
-	}
-}
-
-func TestObjectsEqualExportedValues(t *testing.T) {
-	t.Parallel()
-
-	for c := range objectEqualExportedValuesCases() {
-		t.Run("", func(t *testing.T) {
-			mockT := new(mockT)
-
-			actual := EqualExportedValues(mockT, c.value1, c.value2)
-			if actual != c.expectedEqual {
-				t.Errorf("Expected EqualExportedValues to be %t, but was %t", c.expectedEqual, actual)
-			}
-
-			actualFail := mockT.errorString()
-			if !strings.Contains(actualFail, c.expectedFail) {
-				t.Errorf("Contains failure should include %q but was %q", c.expectedFail, actualFail)
 			}
 		})
 	}
@@ -231,150 +234,6 @@ func objectCopyExportedFieldsCases() iter.Seq[objectCopyFieldsCase] {
 		{
 			input:    S6{"a", "b"},
 			expected: S6{"a", ""},
-		},
-	})
-}
-
-type objectEqualExportedValuesCase struct {
-	value1        any
-	value2        any
-	expectedEqual bool
-	expectedFail  string
-}
-
-func objectEqualExportedValuesCases() iter.Seq[objectEqualExportedValuesCase] {
-	return slices.Values([]objectEqualExportedValuesCase{
-		{
-			value1:        S{1, Nested{2, 3}, 4, Nested{5, 6}},
-			value2:        S{1, Nested{2, nil}, nil, Nested{}},
-			expectedEqual: true,
-		},
-		{
-			value1:        S{1, Nested{2, 3}, 4, Nested{5, 6}},
-			value2:        S{1, Nested{1, nil}, nil, Nested{}},
-			expectedEqual: false,
-			expectedFail: fmt.Sprintf(`
-	            	Diff:
-	            	--- Expected
-	            	+++ Actual
-	            	@@ -3,3 +3,3 @@
-	            	  Exported2: (%s.Nested) {
-	            	-  Exported: (int) 2,
-	            	+  Exported: (int) 1,
-	            	   notExported: (interface {}) <nil>`,
-				shortpkg),
-		},
-		{
-			value1:        S3{&Nested{1, 2}, &Nested{3, 4}},
-			value2:        S3{&Nested{"a", 2}, &Nested{3, 4}},
-			expectedEqual: false,
-			expectedFail: fmt.Sprintf(`
-	            	Diff:
-	            	--- Expected
-	            	+++ Actual
-	            	@@ -2,3 +2,3 @@
-	            	  Exported1: (*%s.Nested)({
-	            	-  Exported: (int) 1,
-	            	+  Exported: (string) (len=1) "a",
-	            	   notExported: (interface {}) <nil>`,
-				shortpkg),
-		},
-		{
-			value1: S4{[]*Nested{
-				{1, 2},
-				{3, 4},
-			}},
-			value2: S4{[]*Nested{
-				{1, "a"},
-				{2, "b"},
-			}},
-			expectedEqual: false,
-			expectedFail: fmt.Sprintf(`
-	            	Diff:
-	            	--- Expected
-	            	+++ Actual
-	            	@@ -7,3 +7,3 @@
-	            	   (*%s.Nested)({
-	            	-   Exported: (int) 3,
-	            	+   Exported: (int) 2,
-	            	    notExported: (interface {}) <nil>`,
-				shortpkg),
-		},
-		{
-			value1:        S{[2]int{1, 2}, Nested{2, 3}, 4, Nested{5, 6}},
-			value2:        S{[2]int{1, 2}, Nested{2, nil}, nil, Nested{}},
-			expectedEqual: true,
-		},
-		{
-			value1:        &S{1, Nested{2, 3}, 4, Nested{5, 6}},
-			value2:        &S{1, Nested{2, nil}, nil, Nested{}},
-			expectedEqual: true,
-		},
-		{
-			value1:        &S{1, Nested{2, 3}, 4, Nested{5, 6}},
-			value2:        &S{1, Nested{1, nil}, nil, Nested{}},
-			expectedEqual: false,
-			expectedFail: fmt.Sprintf(`
-	            	Diff:
-	            	--- Expected
-	            	+++ Actual
-	            	@@ -3,3 +3,3 @@
-	            	  Exported2: (%s.Nested) {
-	            	-  Exported: (int) 2,
-	            	+  Exported: (int) 1,
-	            	   notExported: (interface {}) <nil>`,
-				shortpkg),
-		},
-		{
-			value1:        []int{1, 2},
-			value2:        []int{1, 2},
-			expectedEqual: true,
-		},
-		{
-			value1:        []int{1, 2},
-			value2:        []int{1, 3},
-			expectedEqual: false,
-			expectedFail: `
-	            	Diff:
-	            	--- Expected
-	            	+++ Actual
-	            	@@ -2,3 +2,3 @@
-	            	  (int) 1,
-	            	- (int) 2
-	            	+ (int) 3
-	            	 }`,
-		},
-		{
-			value1: []*Nested{
-				{1, 2},
-				{3, 4},
-			},
-			value2: []*Nested{
-				{1, "a"},
-				{3, "b"},
-			},
-			expectedEqual: true,
-		},
-		{
-			value1: []*Nested{
-				{1, 2},
-				{3, 4},
-			},
-			value2: []*Nested{
-				{1, "a"},
-				{2, "b"},
-			},
-			expectedEqual: false,
-			expectedFail: fmt.Sprintf(`
-	            	Diff:
-	            	--- Expected
-	            	+++ Actual
-	            	@@ -6,3 +6,3 @@
-	            	  (*%s.Nested)({
-	            	-  Exported: (int) 3,
-	            	+  Exported: (int) 2,
-	            	   notExported: (interface {}) <nil>`,
-				shortpkg),
 		},
 	})
 }

@@ -2,11 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
+// Generated on 2026-01-20 (version 74d5686) using codegen version v2.1.9-0.20260119232631-74d5686313f0+dirty [sha: 74d5686313f0820ae0e2758b95d598f646cd7ad5]
 
 package require
 
 import (
+	"iter"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -57,6 +58,20 @@ func DirExistsf(t T, path string, msg string, args ...any) {
 	t.FailNow()
 }
 
+// DirNotExistsf is the same as [DirNotExists], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func DirNotExistsf(t T, path string, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.DirNotExists(t, path, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
 // ElementsMatchf is the same as [ElementsMatch], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
@@ -78,7 +93,7 @@ func ElementsMatchTf[E comparable](t T, listA []E, listB []E, msg string, args .
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.ElementsMatchT(t, listA, listB, forwardArgs(msg, args)) {
+	if assertions.ElementsMatchT[E](t, listA, listB, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -135,6 +150,20 @@ func EqualExportedValuesf(t T, expected any, actual any, msg string, args ...any
 		h.Helper()
 	}
 	if assertions.EqualExportedValues(t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// EqualTf is the same as [EqualT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func EqualTf[V comparable](t T, expected V, actual V, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.EqualT[V](t, expected, actual, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -298,7 +327,7 @@ func FalseTf[B Boolean](t T, value B, msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.FalseT(t, value, forwardArgs(msg, args)) {
+	if assertions.FalseT[B](t, value, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -347,6 +376,20 @@ func FileNotEmptyf(t T, path string, msg string, args ...any) {
 	t.FailNow()
 }
 
+// FileNotExistsf is the same as [FileNotExists], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func FileNotExistsf(t T, path string, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.FileNotExists(t, path, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
 // Greaterf is the same as [Greater], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
@@ -382,7 +425,7 @@ func GreaterOrEqualTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg st
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.GreaterOrEqualT(t, e1, e2, forwardArgs(msg, args)) {
+	if assertions.GreaterOrEqualT[Orderable](t, e1, e2, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -396,7 +439,7 @@ func GreaterTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, a
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.GreaterT(t, e1, e2, forwardArgs(msg, args)) {
+	if assertions.GreaterT[Orderable](t, e1, e2, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -550,7 +593,7 @@ func InDeltaTf[Number Measurable](t T, expected Number, actual Number, delta Num
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.InDeltaT(t, expected, actual, delta, forwardArgs(msg, args)) {
+	if assertions.InDeltaT[Number](t, expected, actual, delta, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -592,7 +635,7 @@ func InEpsilonTf[Number Measurable](t T, expected Number, actual Number, epsilon
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.InEpsilonT(t, expected, actual, epsilon, forwardArgs(msg, args)) {
+	if assertions.InEpsilonT[Number](t, expected, actual, epsilon, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -613,6 +656,20 @@ func IsDecreasingf(t T, object any, msg string, args ...any) {
 	t.FailNow()
 }
 
+// IsDecreasingTf is the same as [IsDecreasingT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func IsDecreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.IsDecreasingT[OrderedSlice, E](t, collection, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
 // IsIncreasingf is the same as [IsIncreasing], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
@@ -621,6 +678,20 @@ func IsIncreasingf(t T, object any, msg string, args ...any) {
 		h.Helper()
 	}
 	if assertions.IsIncreasing(t, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// IsIncreasingTf is the same as [IsIncreasingT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func IsIncreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.IsIncreasingT[OrderedSlice, E](t, collection, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -641,6 +712,20 @@ func IsNonDecreasingf(t T, object any, msg string, args ...any) {
 	t.FailNow()
 }
 
+// IsNonDecreasingTf is the same as [IsNonDecreasingT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func IsNonDecreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.IsNonDecreasingT[OrderedSlice, E](t, collection, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
 // IsNonIncreasingf is the same as [IsNonIncreasing], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
@@ -655,6 +740,34 @@ func IsNonIncreasingf(t T, object any, msg string, args ...any) {
 	t.FailNow()
 }
 
+// IsNonIncreasingTf is the same as [IsNonIncreasingT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func IsNonIncreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.IsNonIncreasingT[OrderedSlice, E](t, collection, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// IsNotOfTypeTf is the same as [IsNotOfTypeT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func IsNotOfTypeTf[EType any](t T, object any, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.IsNotOfTypeT[EType](t, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
 // IsNotTypef is the same as [IsNotType], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
@@ -663,6 +776,20 @@ func IsNotTypef(t T, theType any, object any, msg string, args ...any) {
 		h.Helper()
 	}
 	if assertions.IsNotType(t, theType, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// IsOfTypeTf is the same as [IsOfTypeT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func IsOfTypeTf[EType any](t T, object any, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.IsOfTypeT[EType](t, object, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -718,7 +845,7 @@ func JSONEqTf[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msg string, args
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.JSONEqT(t, expected, actual, forwardArgs(msg, args)) {
+	if assertions.JSONEqT[EDoc, ADoc](t, expected, actual, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -788,7 +915,7 @@ func LessOrEqualTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg strin
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.LessOrEqualT(t, e1, e2, forwardArgs(msg, args)) {
+	if assertions.LessOrEqualT[Orderable](t, e1, e2, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -802,7 +929,35 @@ func LessTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, args
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.LessT(t, e1, e2, forwardArgs(msg, args)) {
+	if assertions.LessT[Orderable](t, e1, e2, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// MapContainsTf is the same as [MapContainsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func MapContainsTf[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.MapContainsT[Map, K, V](t, m, key, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// MapNotContainsTf is the same as [MapNotContainsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func MapNotContainsTf[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.MapNotContainsT[Map, K, V](t, m, key, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -830,7 +985,7 @@ func NegativeTf[SignedNumber SignedNumeric](t T, e SignedNumber, msg string, arg
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.NegativeT(t, e, forwardArgs(msg, args)) {
+	if assertions.NegativeT[SignedNumber](t, e, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -865,20 +1020,6 @@ func Nilf(t T, object any, msg string, args ...any) {
 	t.FailNow()
 }
 
-// NoDirExistsf is the same as [NoDirExists], but it accepts a format msg string to format arguments like [fmt.Printf].
-//
-// Upon failure, the test [T] is marked as failed and stops execution.
-func NoDirExistsf(t T, path string, msg string, args ...any) {
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-	if assertions.NoDirExists(t, path, forwardArgs(msg, args)) {
-		return
-	}
-
-	t.FailNow()
-}
-
 // NoErrorf is the same as [NoError], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
@@ -887,20 +1028,6 @@ func NoErrorf(t T, err error, msg string, args ...any) {
 		h.Helper()
 	}
 	if assertions.NoError(t, err, forwardArgs(msg, args)) {
-		return
-	}
-
-	t.FailNow()
-}
-
-// NoFileExistsf is the same as [NoFileExists], but it accepts a format msg string to format arguments like [fmt.Printf].
-//
-// Upon failure, the test [T] is marked as failed and stops execution.
-func NoFileExistsf(t T, path string, msg string, args ...any) {
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-	if assertions.NoFileExists(t, path, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -942,7 +1069,7 @@ func NotElementsMatchTf[E comparable](t T, listA []E, listB []E, msg string, arg
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotElementsMatchT(t, listA, listB, forwardArgs(msg, args)) {
+	if assertions.NotElementsMatchT[E](t, listA, listB, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -971,6 +1098,20 @@ func NotEqualf(t T, expected any, actual any, msg string, args ...any) {
 		h.Helper()
 	}
 	if assertions.NotEqual(t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// NotEqualTf is the same as [NotEqualT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func NotEqualTf[V comparable](t T, expected V, actual V, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotEqualT[V](t, expected, actual, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1096,7 +1237,7 @@ func NotRegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, ar
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotRegexpT(t, rx, actual, forwardArgs(msg, args)) {
+	if assertions.NotRegexpT[Rex, ADoc](t, rx, actual, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1111,6 +1252,34 @@ func NotSamef(t T, expected any, actual any, msg string, args ...any) {
 		h.Helper()
 	}
 	if assertions.NotSame(t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// NotSameTf is the same as [NotSameT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func NotSameTf[P any](t T, expected *P, actual *P, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotSameT[P](t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// NotSortedTf is the same as [NotSortedT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func NotSortedTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotSortedT[OrderedSlice, E](t, collection, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1208,7 +1377,7 @@ func PositiveTf[SignedNumber SignedNumeric](t T, e SignedNumber, msg string, arg
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.PositiveT(t, e, forwardArgs(msg, args)) {
+	if assertions.PositiveT[SignedNumber](t, e, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1236,7 +1405,7 @@ func RegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, args 
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.RegexpT(t, rx, actual, forwardArgs(msg, args)) {
+	if assertions.RegexpT[Rex, ADoc](t, rx, actual, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1251,6 +1420,146 @@ func Samef(t T, expected any, actual any, msg string, args ...any) {
 		h.Helper()
 	}
 	if assertions.Same(t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// SameTf is the same as [SameT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func SameTf[P any](t T, expected *P, actual *P, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.SameT[P](t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// SeqContainsTf is the same as [SeqContainsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func SeqContainsTf[E comparable](t T, iter iter.Seq[E], element E, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.SeqContainsT[E](t, iter, element, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// SeqNotContainsTf is the same as [SeqNotContainsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func SeqNotContainsTf[E comparable](t T, iter iter.Seq[E], element E, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.SeqNotContainsT[E](t, iter, element, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// SliceContainsTf is the same as [SliceContainsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func SliceContainsTf[Slice ~[]E, E comparable](t T, s Slice, element E, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.SliceContainsT[Slice, E](t, s, element, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// SliceNotContainsTf is the same as [SliceNotContainsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func SliceNotContainsTf[Slice ~[]E, E comparable](t T, s Slice, element E, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.SliceNotContainsT[Slice, E](t, s, element, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// SliceNotSubsetTf is the same as [SliceNotSubsetT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func SliceNotSubsetTf[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.SliceNotSubsetT[Slice, E](t, list, subset, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// SliceSubsetTf is the same as [SliceSubsetT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func SliceSubsetTf[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.SliceSubsetT[Slice, E](t, list, subset, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// SortedTf is the same as [SortedT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func SortedTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.SortedT[OrderedSlice, E](t, collection, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// StringContainsTf is the same as [StringContainsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func StringContainsTf[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.StringContainsT[ADoc, EDoc](t, str, substring, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// StringNotContainsTf is the same as [StringNotContainsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func StringNotContainsTf[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.StringNotContainsT[ADoc, EDoc](t, str, substring, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1292,7 +1601,7 @@ func TrueTf[B Boolean](t T, value B, msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.TrueT(t, value, forwardArgs(msg, args)) {
+	if assertions.TrueT[B](t, value, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1362,7 +1671,7 @@ func YAMLEqTf[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msg string, args
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.YAMLEqT(t, expected, actual, forwardArgs(msg, args)) {
+	if assertions.YAMLEqT[EDoc, ADoc](t, expected, actual, forwardArgs(msg, args)) {
 		return
 	}
 

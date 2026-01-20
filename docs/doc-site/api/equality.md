@@ -1,7 +1,7 @@
 ---
 title: "Equality"
 description: "Asserting Two Things Are Equal"
-modified: 2026-01-18
+modified: 2026-01-20
 weight: 5
 domains:
   - "equality"
@@ -12,6 +12,8 @@ keywords:
   - "Equalf"
   - "EqualExportedValues"
   - "EqualExportedValuesf"
+  - "EqualT"
+  - "EqualTf"
   - "EqualValues"
   - "EqualValuesf"
   - "Exactly"
@@ -22,14 +24,20 @@ keywords:
   - "NotEmptyf"
   - "NotEqual"
   - "NotEqualf"
+  - "NotEqualT"
+  - "NotEqualTf"
   - "NotEqualValues"
   - "NotEqualValuesf"
   - "NotNil"
   - "NotNilf"
   - "NotSame"
   - "NotSamef"
+  - "NotSameT"
+  - "NotSameTf"
   - "Same"
   - "Samef"
+  - "SameT"
+  - "SameTf"
 ---
 
 Asserting Two Things Are Equal
@@ -41,21 +49,26 @@ Asserting Two Things Are Equal
 
 _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
-This domain exposes 12 functionalities.
+This domain exposes 16 functionalities.
+Generic assertions are marked with a {{% icon icon="star" color=orange %}}
 
 ```tree
 - [Empty](#empty) | angles-right
 - [Equal](#equal) | angles-right
 - [EqualExportedValues](#equalexportedvalues) | angles-right
+- [EqualT[V comparable]](#equaltv-comparable) | star | orange
 - [EqualValues](#equalvalues) | angles-right
 - [Exactly](#exactly) | angles-right
 - [Nil](#nil) | angles-right
 - [NotEmpty](#notempty) | angles-right
 - [NotEqual](#notequal) | angles-right
+- [NotEqualT[V comparable]](#notequaltv-comparable) | star | orange
 - [NotEqualValues](#notequalvalues) | angles-right
 - [NotNil](#notnil) | angles-right
 - [NotSame](#notsame) | angles-right
+- [NotSameT[P any]](#notsametp-any) | star | orange
 - [Same](#same) | angles-right
+- [SameT[P any]](#sametp-any) | star | orange
 ```
 
 ### Empty{#empty}
@@ -111,7 +124,7 @@ Pointer values are "empty" if the pointer is nil or if the pointed value is "emp
 |--|--| 
 | [`assertions.Empty(t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Empty) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Empty](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L289)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Empty](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L406)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -217,7 +230,57 @@ that could potentially differ.
 |--|--| 
 | [`assertions.EqualExportedValues(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EqualExportedValues) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualExportedValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L174)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualExportedValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L291)
+{{% /tab %}}
+{{< /tabs >}}
+
+### EqualT[V comparable] {{% icon icon="star" color=orange %}}{#equaltv-comparable}
+
+EqualT asserts that two objects of the same comparable type are equal.
+
+Pointer variable equality is determined based on the equality of the memory addresses (unlike [Equal], but like [Same]).
+
+Functions, slices and maps are not comparable. See also [ComparisonOperators](https://go.dev/ref/spec#Comparison_operators.).
+
+If you need to compare values of non-comparable types, or compare pointers by the value they point to,
+use [Equal] instead.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.EqualT(t, 123, 123)
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	success: 123, 123
+	failure: 123, 456
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.EqualT[V comparable](t T, expected V, actual V, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualT) | package-level function |
+| [`assert.EqualTf[V comparable](t T, expected V, actual V, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.EqualT[V comparable](t T, expected V, actual V, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EqualT) | package-level function |
+| [`require.EqualTf[V comparable](t T, expected V, actual V, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EqualTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.EqualT(t T, expected V, actual V, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EqualT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L67)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -265,7 +328,7 @@ type and equal.
 |--|--| 
 | [`assertions.EqualValues(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EqualValues) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L140)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L257)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -312,7 +375,7 @@ Exactly asserts that two objects are equal in value and type.
 |--|--| 
 | [`assertions.Exactly(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Exactly) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Exactly](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L211)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Exactly](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L328)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -359,7 +422,7 @@ Nil asserts that the specified object is nil.
 |--|--| 
 | [`assertions.Nil(t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Nil) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Nil](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L258)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Nil](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L375)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -408,7 +471,7 @@ NotEmpty asserts that the specified object is NOT [Empty].
 |--|--| 
 | [`assertions.NotEmpty(t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotEmpty) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L314)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L431)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -457,7 +520,52 @@ referenced values (as opposed to the memory addresses).
 |--|--| 
 | [`assertions.NotEqual(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotEqual) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEqual](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L340)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEqual](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L89)
+{{% /tab %}}
+{{< /tabs >}}
+
+### NotEqualT[V comparable] {{% icon icon="star" color=orange %}}{#notequaltv-comparable}
+
+NotEqualT asserts that the specified values of the same comparable type are NOT equal.
+
+See [EqualT].
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.NotEqualT(t, obj1, obj2)
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	success: 123, 456
+	failure: 123, 123
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.NotEqualT[V comparable](t T, expected V, actual V, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotEqualT) | package-level function |
+| [`assert.NotEqualTf[V comparable](t T, expected V, actual V, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotEqualTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.NotEqualT[V comparable](t T, expected V, actual V, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotEqualT) | package-level function |
+| [`require.NotEqualTf[V comparable](t T, expected V, actual V, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotEqualTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.NotEqualT(t T, expected V, actual V, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotEqualT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L118)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -504,7 +612,7 @@ NotEqualValues asserts that two objects are not equal even when converted to the
 |--|--| 
 | [`assertions.NotEqualValues(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotEqualValues) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEqualValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L367)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEqualValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L454)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -551,7 +659,7 @@ assertions.NotNil(t, err)
 |--|--| 
 | [`assertions.NotNil(t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotNil) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotNil](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L237)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotNil](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L354)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -601,7 +709,52 @@ determined based on the equality of both type and value.
 |--|--| 
 | [`assertions.NotSame(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotSame) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSame](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L109)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSame](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L199)
+{{% /tab %}}
+{{< /tabs >}}
+
+### NotSameT[P any] {{% icon icon="star" color=orange %}}{#notsametp-any}
+
+NotSameT asserts that two pointers do not reference the same object.
+
+See [SameT]
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.NotSameT(t, ptr1, ptr2)
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	success: &staticVar, ptr("static string")
+	failure: &staticVar, staticVarPtr
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.NotSameT[P any](t T, expected *P, actual *P, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotSameT) | package-level function |
+| [`assert.NotSameTf[P any](t T, expected *P, actual *P, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotSameTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.NotSameT[P any](t T, expected *P, actual *P, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotSameT) | package-level function |
+| [`require.NotSameTf[P any](t T, expected *P, actual *P, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotSameTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.NotSameT(t T, expected *P, actual *P, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotSameT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSameT](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L231)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -651,7 +804,50 @@ determined based on the equality of both type and value.
 |--|--| 
 | [`assertions.Same(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Same) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Same](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L75)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Same](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L140)
+{{% /tab %}}
+{{< /tabs >}}
+
+### SameT[P any] {{% icon icon="star" color=orange %}}{#sametp-any}
+
+SameT asserts that two pointers of the same type reference the same object.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.SameT(t, ptr1, ptr2)
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	success: &staticVar, staticVarPtr
+	failure: &staticVar, ptr("static string")
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.SameT[P any](t T, expected *P, actual *P, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SameT) | package-level function |
+| [`assert.SameTf[P any](t T, expected *P, actual *P, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SameTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.SameT[P any](t T, expected *P, actual *P, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SameT) | package-level function |
+| [`require.SameTf[P any](t T, expected *P, actual *P, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SameTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.SameT(t T, expected *P, actual *P, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SameT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SameT](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L171)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -671,5 +867,5 @@ SPDX-License-Identifier: Apache-2.0
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
 
-Generated on 2026-01-18 (version e12affe) using codegen version v2.1.9-0.20260118112101-e12affef2419+dirty [sha: e12affef24198e72ee13eb6d25018d2c3232629f]
+Generated on 2026-01-20 (version 74d5686) using codegen version v2.1.9-0.20260119232631-74d5686313f0+dirty [sha: 74d5686313f0820ae0e2758b95d598f646cd7ad5]
 -->
