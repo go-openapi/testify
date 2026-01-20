@@ -101,6 +101,10 @@ type outputT struct {
 	helpers map[string]struct{}
 }
 
+func newOutputMock() *outputT {
+	return &outputT{buf: bytes.NewBuffer(nil)}
+}
+
 // Implements T.
 func (t *outputT) Errorf(format string, args ...any) {
 	s := fmt.Sprintf(format, args...)

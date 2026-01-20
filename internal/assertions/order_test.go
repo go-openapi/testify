@@ -4,7 +4,6 @@
 package assertions
 
 import (
-	"bytes"
 	"fmt"
 	"iter"
 	"slices"
@@ -14,103 +13,25 @@ import (
 )
 
 func TestOrderErrorMessages(t *testing.T) {
-	// Test reflection-based assertions
+	t.Parallel()
 
-	t.Run("with error messages", func(t *testing.T) {
-		t.Parallel()
+	for tc := range orderErrorMessageCases() {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 
-		const (
-			format         = "format %s %x"
-			arg1           = "this"
-			arg2           = 0xc001
-			expectedOutput = "format this c001\n"
-		)
+			mock := newOutputMock()
+			result := tc.fn(mock, tc.collection, tc.msgAndArgs...)
+			if result {
+				t.Errorf("expected ordering assertion %q to fail on %v", tc.name, tc.collection)
 
-		msgAndArgs := []any{format, arg1, arg2}
-		collection := []int{1, 2, 1} // is neither increasing nor decreasing
-		increasingCollection := []int{1, 2, 3}
-		decreasingCollection := []int{3, 2, 1}
+				return
+			}
 
-		funcs := []struct {
-			name       string
-			fn         func(T, any, ...any) bool
-			collection []int
-		}{
-			{"IsIncreasing", IsIncreasing, collection},
-			{"IsNonIncreasing", IsNonIncreasing, increasingCollection},
-			{"IsDecreasing", IsDecreasing, collection},
-			{"IsNonDecreasing", IsNonDecreasing, decreasingCollection},
-		}
-
-		for _, fn := range funcs {
-			t.Run(fn.name, func(t *testing.T) {
-				t.Parallel()
-
-				mock := &outputT{buf: bytes.NewBuffer(nil)}
-				result := fn.fn(mock, fn.collection, msgAndArgs...)
-				if result {
-					t.Errorf("expected ordering assertion %q to fail on %v", fn.name, fn.collection)
-
-					return
-				}
-
-				if !strings.Contains(mock.buf.String(), expectedOutput) {
-					t.Errorf("expected error message to contain: %s but got %q", expectedOutput, mock.buf.String())
-				}
-			})
-		}
-	})
-
-	t.Run("with detailed error messages", func(t *testing.T) {
-		// Test specific error messages for reflection-based assertions
-		t.Parallel()
-
-		testCases := []struct {
-			name       string
-			fn         func(T, any, ...any) bool
-			collection any
-			expected   string
-		}{
-			// IsIncreasing errors
-			{"IsIncreasing/string", IsIncreasing, []string{"b", "a"}, `"b" is not less than "a"`},
-			{"IsIncreasing/int", IsIncreasing, []int{2, 1}, `"2" is not less than "1"`},
-			{"IsIncreasing/int8", IsIncreasing, []int8{2, 1}, `"2" is not less than "1"`},
-			{"IsIncreasing/float32", IsIncreasing, []float32{2.34, 1.23}, `"2.34" is not less than "1.23"`},
-			{"IsIncreasing/invalid-type", IsIncreasing, struct{}{}, `object struct {} is not an ordered collection`},
-
-			// IsNonIncreasing errors
-			{"IsNonIncreasing/string", IsNonIncreasing, []string{"a", "b"}, `should not be increasing`},
-			{"IsNonIncreasing/int", IsNonIncreasing, []int{1, 2}, `should not be increasing`},
-			{"IsNonIncreasing/float64", IsNonIncreasing, []float64{1.23, 2.34}, `should not be increasing`},
-
-			// IsDecreasing errors
-			{"IsDecreasing/string", IsDecreasing, []string{"a", "b"}, `"a" is not greater than "b"`},
-			{"IsDecreasing/int", IsDecreasing, []int{1, 2}, `"1" is not greater than "2"`},
-			{"IsDecreasing/uint64", IsDecreasing, []uint64{1, 2}, `"1" is not greater than "2"`},
-
-			// IsNonDecreasing errors
-			{"IsNonDecreasing/string", IsNonDecreasing, []string{"b", "a"}, `should not be decreasing`},
-			{"IsNonDecreasing/int", IsNonDecreasing, []int{2, 1}, `should not be decreasing`},
-			{"IsNonDecreasing/float32", IsNonDecreasing, []float32{2.34, 1.23}, `should not be decreasing`},
-		}
-
-		for _, tc := range testCases {
-			t.Run(tc.name, func(t *testing.T) {
-				t.Parallel()
-
-				out := &outputT{buf: bytes.NewBuffer(nil)}
-				result := tc.fn(out, tc.collection)
-				if result {
-					t.Errorf("expected ordering assertion %q to fail on %v", tc.name, tc.collection)
-
-					return
-				}
-				if !strings.Contains(out.buf.String(), tc.expected) {
-					t.Errorf("expected error message to contain: %s but got %q", tc.expected, out.buf.String())
-				}
-			})
-		}
-	})
+			if !strings.Contains(mock.buf.String(), tc.expectedInMsg) {
+				t.Errorf("expected error message to contain: %s but got %q", tc.expectedInMsg, mock.buf.String())
+			}
+		})
+	}
 }
 
 // Test functions for reflection-based and generic assertions
@@ -486,4 +407,50 @@ func testGenericAssertion[Collection ~[]E, E Ordered](mock T, assertionKind orde
 	default:
 		panic(fmt.Errorf("test case configuration error: invalid orderAssertionKind: %d", assertionKind))
 	}
+}
+
+type errorMessageTestCase struct {
+	name          string
+	fn            func(T, any, ...any) bool
+	collection    any
+	msgAndArgs    []any
+	expectedInMsg string
+}
+
+func orderErrorMessageCases() iter.Seq[errorMessageTestCase] {
+	const (
+		format         = "format %s %x"
+		arg1           = "this"
+		arg2           = 0xc001
+		expectedOutput = "format this c001\n"
+	)
+
+	msgAndArgs := []any{format, arg1, arg2}
+
+	return slices.Values([]errorMessageTestCase{
+		// Test msgAndArgs formatting
+		{"IsIncreasing/with-msgAndArgs", IsIncreasing, []int{1, 2, 1}, msgAndArgs, expectedOutput},
+		{"IsNonIncreasing/with-msgAndArgs", IsNonIncreasing, []int{1, 2, 3}, msgAndArgs, expectedOutput},
+		{"IsDecreasing/with-msgAndArgs", IsDecreasing, []int{1, 2, 1}, msgAndArgs, expectedOutput},
+		{"IsNonDecreasing/with-msgAndArgs", IsNonDecreasing, []int{3, 2, 1}, msgAndArgs, expectedOutput},
+
+		// Test specific error messages
+		{"IsIncreasing/string", IsIncreasing, []string{"b", "a"}, nil, `"b" is not less than "a"`},
+		{"IsIncreasing/int", IsIncreasing, []int{2, 1}, nil, `"2" is not less than "1"`},
+		{"IsIncreasing/int8", IsIncreasing, []int8{2, 1}, nil, `"2" is not less than "1"`},
+		{"IsIncreasing/float32", IsIncreasing, []float32{2.34, 1.23}, nil, `"2.34" is not less than "1.23"`},
+		{"IsIncreasing/invalid-type", IsIncreasing, struct{}{}, nil, `object struct {} is not an ordered collection`},
+
+		{"IsNonIncreasing/string", IsNonIncreasing, []string{"a", "b"}, nil, `should not be increasing`},
+		{"IsNonIncreasing/int", IsNonIncreasing, []int{1, 2}, nil, `should not be increasing`},
+		{"IsNonIncreasing/float64", IsNonIncreasing, []float64{1.23, 2.34}, nil, `should not be increasing`},
+
+		{"IsDecreasing/string", IsDecreasing, []string{"a", "b"}, nil, `"a" is not greater than "b"`},
+		{"IsDecreasing/int", IsDecreasing, []int{1, 2}, nil, `"1" is not greater than "2"`},
+		{"IsDecreasing/uint64", IsDecreasing, []uint64{1, 2}, nil, `"1" is not greater than "2"`},
+
+		{"IsNonDecreasing/string", IsNonDecreasing, []string{"b", "a"}, nil, `should not be decreasing`},
+		{"IsNonDecreasing/int", IsNonDecreasing, []int{2, 1}, nil, `should not be decreasing`},
+		{"IsNonDecreasing/float32", IsNonDecreasing, []float32{2.34, 1.23}, nil, `should not be decreasing`},
+	})
 }
