@@ -919,6 +919,76 @@ func TestSliceNotContainsT(t *testing.T) {
 	}
 }
 
+func TestSeqContainsT(t *testing.T) {
+	t.Parallel()
+
+	for tc := range sliceContainsTCases() {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			// Type dispatch
+			switch container := tc.container.(type) {
+			case []int:
+				element, ok := tc.element.(int)
+				if !ok {
+					t.Fatalf("invalid test case: requires int element but got %T", tc.element)
+				}
+				testSeqContainsT(SeqContainsT[int], container, element, tc.shouldPass)(t)
+			case []string:
+				element, ok := tc.element.(string)
+				if !ok {
+					t.Fatalf("invalid test case: requires string element but got %T", tc.element)
+				}
+				testSeqContainsT(SeqContainsT[string], container, element, tc.shouldPass)(t)
+			case []float64:
+				element, ok := tc.element.(float64)
+				if !ok {
+					t.Fatalf("invalid test case: requires float64 element but got %T", tc.element)
+				}
+				testSeqContainsT(SeqContainsT[float64], container, element, tc.shouldPass)(t)
+			default:
+				t.Fatalf("unexpected type: %T", container)
+			}
+		})
+	}
+}
+
+func TestSeqNotContainsT(t *testing.T) {
+	t.Parallel()
+
+	for tc := range sliceContainsTCases() {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			// Invert shouldPass for NotContains
+			shouldPass := !tc.shouldPass
+
+			// Type dispatch
+			switch container := tc.container.(type) {
+			case []int:
+				element, ok := tc.element.(int)
+				if !ok {
+					t.Fatalf("invalid test case: requires int element but got %T", tc.element)
+				}
+				testSeqContainsT(SeqNotContainsT[int], container, element, shouldPass)(t)
+			case []string:
+				element, ok := tc.element.(string)
+				if !ok {
+					t.Fatalf("invalid test case: requires string element but got %T", tc.element)
+				}
+				testSeqContainsT(SeqNotContainsT[string], container, element, shouldPass)(t)
+			case []float64:
+				element, ok := tc.element.(float64)
+				if !ok {
+					t.Fatalf("invalid test case: requires float64 element but got %T", tc.element)
+				}
+				testSeqContainsT(SeqNotContainsT[float64], container, element, shouldPass)(t)
+			default:
+				t.Fatalf("unexpected type: %T", container)
+			}
+		})
+	}
+}
+
 func TestMapContainsT(t *testing.T) {
 	t.Parallel()
 
@@ -1022,6 +1092,28 @@ func testSliceContainsT[Slice ~[]E, E comparable](
 	return func(t *testing.T) {
 		mock := new(mockT)
 		result := fn(mock, slice, element)
+
+		if shouldPass {
+			True(t, result)
+			False(t, mock.Failed())
+			return
+		}
+
+		False(t, result)
+		True(t, mock.Failed())
+	}
+}
+
+//nolint:thelper // linter false positive: these are not helpers
+func testSeqContainsT[Slice ~[]E, E comparable](
+	fn func(T, iter.Seq[E], E, ...any) bool,
+	slice Slice,
+	element E,
+	shouldPass bool,
+) func(*testing.T) {
+	return func(t *testing.T) {
+		mock := new(mockT)
+		result := fn(mock, slices.Values(slice), element)
 
 		if shouldPass {
 			True(t, result)

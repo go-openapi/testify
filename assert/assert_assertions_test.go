@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-20 (version ff38347) using codegen version v2.1.9-0.20260119220113-ff3834752ffb+dirty [sha: ff3834752ffbc6e4e938c8a0293cc8363f861398]
+// Generated on 2026-01-20 (version 74d5686) using codegen version v2.1.9-0.20260119232631-74d5686313f0+dirty [sha: 74d5686313f0820ae0e2758b95d598f646cd7ad5]
 
 package assert
 
@@ -13,6 +13,7 @@ import (
 	"net/url"
 	"path/filepath"
 	"reflect"
+	"slices"
 	"testing"
 	"time"
 )
@@ -2445,6 +2446,54 @@ func TestSameT(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("SameT should mark test as failed")
+		}
+	})
+}
+
+func TestSeqContainsT(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := SeqContainsT(t, slices.Values([]string{"A", "B"}), "A")
+		if !result {
+			t.Error("SeqContainsT should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := SeqContainsT(mock, slices.Values([]string{"A", "B"}), "C")
+		if result {
+			t.Error("SeqContainsT should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("SeqContainsT should mark test as failed")
+		}
+	})
+}
+
+func TestSeqNotContainsT(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := SeqNotContainsT(t, slices.Values([]string{"A", "B"}), "C")
+		if !result {
+			t.Error("SeqNotContainsT should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := SeqNotContainsT(mock, slices.Values([]string{"A", "B"}), "A")
+		if result {
+			t.Error("SeqNotContainsT should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("SeqNotContainsT should mark test as failed")
 		}
 	})
 }

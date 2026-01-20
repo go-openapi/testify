@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-20 (version ff38347) using codegen version v2.1.9-0.20260119220113-ff3834752ffb+dirty [sha: ff3834752ffbc6e4e938c8a0293cc8363f861398]
+// Generated on 2026-01-20 (version 74d5686) using codegen version v2.1.9-0.20260119232631-74d5686313f0+dirty [sha: 74d5686313f0820ae0e2758b95d598f646cd7ad5]
 
 package require
 
@@ -13,6 +13,7 @@ import (
 	"net/url"
 	"path/filepath"
 	"reflect"
+	"slices"
 	"testing"
 	"time"
 )
@@ -2041,6 +2042,46 @@ func TestSameT(t *testing.T) {
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("SameT should call FailNow()")
+		}
+	})
+}
+
+func TestSeqContainsT(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		SeqContainsT(t, slices.Values([]string{"A", "B"}), "A")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		SeqContainsT(mock, slices.Values([]string{"A", "B"}), "C")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("SeqContainsT should call FailNow()")
+		}
+	})
+}
+
+func TestSeqNotContainsT(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		SeqNotContainsT(t, slices.Values([]string{"A", "B"}), "C")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		SeqNotContainsT(mock, slices.Values([]string{"A", "B"}), "A")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("SeqNotContainsT should call FailNow()")
 		}
 	})
 }

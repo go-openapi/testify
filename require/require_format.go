@@ -2,11 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-20 (version ff38347) using codegen version v2.1.9-0.20260119220113-ff3834752ffb+dirty [sha: ff3834752ffbc6e4e938c8a0293cc8363f861398]
+// Generated on 2026-01-20 (version 74d5686) using codegen version v2.1.9-0.20260119232631-74d5686313f0+dirty [sha: 74d5686313f0820ae0e2758b95d598f646cd7ad5]
 
 package require
 
 import (
+	"iter"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -1433,6 +1434,34 @@ func SameTf[P any](t T, expected *P, actual *P, msg string, args ...any) {
 		h.Helper()
 	}
 	if assertions.SameT[P](t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// SeqContainsTf is the same as [SeqContainsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func SeqContainsTf[E comparable](t T, iter iter.Seq[E], element E, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.SeqContainsT[E](t, iter, element, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// SeqNotContainsTf is the same as [SeqNotContainsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func SeqNotContainsTf[E comparable](t T, iter iter.Seq[E], element E, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.SeqNotContainsT[E](t, iter, element, forwardArgs(msg, args)) {
 		return
 	}
 

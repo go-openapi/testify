@@ -6,6 +6,7 @@ package assertions
 import (
 	"bytes"
 	"fmt"
+	"iter"
 	"reflect"
 	"slices"
 	"strings"
@@ -126,6 +127,30 @@ func SliceContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArg
 	return true
 }
 
+// SeqContainsT asserts that the specified iterator contains a comparable element.
+//
+// # Usage
+//
+//	assertions.SeqContainsT(t, slices.Values([]{"Hello","World"}), "World")
+//
+// # Examples
+//
+//	success: slices.Values([]string{"A","B"}), "A"
+//	failure: slices.Values([]string{"A","B"}), "C"
+func SeqContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool {
+	// Domain: collection
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	s := slices.Collect(iter)
+	if !slices.Contains(s, element) {
+		return Fail(t, fmt.Sprintf("%s does not contain %#v", truncatingFormat("%#v", s), element), msgAndArgs...)
+	}
+
+	return true
+}
+
 // MapContainsT asserts that the specified map contains a key.
 //
 // # Usage
@@ -223,6 +248,30 @@ func SliceNotContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAnd
 
 	if slices.Contains(s, element) {
 		return Fail(t, fmt.Sprintf("%s should not contain %#v", truncatingFormat("%#v", s), element), msgAndArgs...)
+	}
+
+	return true
+}
+
+// SeqNotContainsT asserts that the specified iterator does not contain a comparable element.
+//
+// # Usage
+//
+//	assertions.SeqContainsT(t, slices.Values([]{"Hello","World"}), "World")
+//
+// # Examples
+//
+//	success: slices.Values([]string{"A","B"}), "C"
+//	failure: slices.Values([]string{"A","B"}), "A"
+func SeqNotContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool {
+	// Domain: collection
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	s := slices.Collect(iter)
+	if slices.Contains(s, element) {
+		return Fail(t, fmt.Sprintf("%s does not contain %#v", truncatingFormat("%#v", s), element), msgAndArgs...)
 	}
 
 	return true

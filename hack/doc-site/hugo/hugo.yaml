@@ -14,9 +14,9 @@ contentDir: content
 # Output formats
 outputs:
   home:
-    - HTML
-    - RSS
-    - SEARCH
+    - html
+    - rss
+    - print
 
 # Markup configuration
 markup:

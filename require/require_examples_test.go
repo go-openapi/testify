@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-20 (version ff38347) using codegen version v2.1.9-0.20260119220113-ff3834752ffb+dirty [sha: ff3834752ffbc6e4e938c8a0293cc8363f861398]
+// Generated on 2026-01-20 (version 74d5686) using codegen version v2.1.9-0.20260119232631-74d5686313f0+dirty [sha: 74d5686313f0820ae0e2758b95d598f646cd7ad5]
 
 package require_test
 
@@ -13,6 +13,7 @@ import (
 	"net/url"
 	"path/filepath"
 	"reflect"
+	"slices"
 	"testing"
 	"time"
 
@@ -838,6 +839,22 @@ func ExampleSame() {
 func ExampleSameT() {
 	t := new(testing.T)
 	require.SameT(t, &staticVar, staticVarPtr)
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleSeqContainsT() {
+	t := new(testing.T)
+	require.SeqContainsT(t, slices.Values([]string{"A", "B"}), "A")
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleSeqNotContainsT() {
+	t := new(testing.T)
+	require.SeqNotContainsT(t, slices.Values([]string{"A", "B"}), "C")
 	fmt.Println("passed")
 
 	// Output: passed

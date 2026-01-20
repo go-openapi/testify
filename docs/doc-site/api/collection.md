@@ -26,6 +26,10 @@ keywords:
   - "NotElementsMatchTf"
   - "NotSubset"
   - "NotSubsetf"
+  - "SeqContainsT"
+  - "SeqContainsTf"
+  - "SeqNotContainsT"
+  - "SeqNotContainsTf"
   - "SliceContainsT"
   - "SliceContainsTf"
   - "SliceNotContainsT"
@@ -51,7 +55,7 @@ Asserting Slices And Maps
 
 _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
-This domain exposes 17 functionalities.
+This domain exposes 19 functionalities.
 Generic assertions are marked with a {{% icon icon="star" color=orange %}}
 
 ```tree
@@ -59,16 +63,18 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}
 - [ElementsMatch](#elementsmatch) | angles-right
 - [ElementsMatchT[E comparable]](#elementsmatchte-comparable) | star | orange
 - [Len](#len) | angles-right
-- [MapContainsT[Map ~map[K]V, K comparable, V any]](#mapcontainstmap-~mapkv-k-comparable-v-any) | star | orange
-- [MapNotContainsT[Map ~map[K]V, K comparable, V any]](#mapnotcontainstmap-~mapkv-k-comparable-v-any) | star | orange
+- [MapContainsT[Map ~map[K]V, K comparable, V any]](#mapcontainstmap-mapkv-k-comparable-v-any) | star | orange
+- [MapNotContainsT[Map ~map[K]V, K comparable, V any]](#mapnotcontainstmap-mapkv-k-comparable-v-any) | star | orange
 - [NotContains](#notcontains) | angles-right
 - [NotElementsMatch](#notelementsmatch) | angles-right
 - [NotElementsMatchT[E comparable]](#notelementsmatchte-comparable) | star | orange
 - [NotSubset](#notsubset) | angles-right
-- [SliceContainsT[Slice ~[]E, E comparable]](#slicecontainstslice-~e-e-comparable) | star | orange
-- [SliceNotContainsT[Slice ~[]E, E comparable]](#slicenotcontainstslice-~e-e-comparable) | star | orange
-- [SliceNotSubsetT[Slice ~[]E, E comparable]](#slicenotsubsettslice-~e-e-comparable) | star | orange
-- [SliceSubsetT[Slice ~[]E, E comparable]](#slicesubsettslice-~e-e-comparable) | star | orange
+- [SeqContainsT[E comparable]](#seqcontainste-comparable) | star | orange
+- [SeqNotContainsT[E comparable]](#seqnotcontainste-comparable) | star | orange
+- [SliceContainsT[Slice ~[]E, E comparable]](#slicecontainstslice-e-e-comparable) | star | orange
+- [SliceNotContainsT[Slice ~[]E, E comparable]](#slicenotcontainstslice-e-e-comparable) | star | orange
+- [SliceNotSubsetT[Slice ~[]E, E comparable]](#slicenotsubsettslice-e-e-comparable) | star | orange
+- [SliceSubsetT[Slice ~[]E, E comparable]](#slicesubsettslice-e-e-comparable) | star | orange
 - [StringContainsT[ADoc, EDoc Text]](#stringcontainstadoc-edoc-text) | star | orange
 - [StringNotContainsT[ADoc, EDoc Text]](#stringnotcontainstadoc-edoc-text) | star | orange
 - [Subset](#subset) | angles-right
@@ -120,7 +126,7 @@ specified substring or element.
 |--|--| 
 | [`assertions.Contains(t T, s any, contains any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Contains) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Contains](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L64)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Contains](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L65)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -169,7 +175,7 @@ the number of appearances of each of them in both lists should match.
 |--|--| 
 | [`assertions.ElementsMatch(t T, listA any, listB any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ElementsMatch) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ElementsMatch](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L473)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ElementsMatch](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L522)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -214,7 +220,7 @@ the number of appearances of each of them in both lists should match.
 |--|--| 
 | [`assertions.ElementsMatchT(t T, listA []E, listB []E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ElementsMatchT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ElementsMatchT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L546)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ElementsMatchT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L595)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -269,14 +275,14 @@ See also [reflect.Len](https://pkg.go.dev/reflect#Len).
 |--|--| 
 | [`assertions.Len(t T, object any, length int, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Len) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Len](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L32)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Len](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L33)
 
 > **Note**
 > (proposals) this does not currently support iterators, or collection objects that have a Len() method.
 {{% /tab %}}
 {{< /tabs >}}
 
-### MapContainsT[Map ~map[K]V, K comparable, V any] {{% icon icon="star" color=orange %}}{#mapcontainstmap-~mapkv-k-comparable-v-any}
+### MapContainsT[Map ~map[K]V, K comparable, V any] {{% icon icon="star" color=orange %}}{#mapcontainstmap-mapkv-k-comparable-v-any}
 
 MapContainsT asserts that the specified map contains a key.
 
@@ -315,11 +321,11 @@ MapContainsT asserts that the specified map contains a key.
 |--|--| 
 | [`assertions.MapContainsT(t T, m Map, key K, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#MapContainsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#MapContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L139)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#MapContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L164)
 {{% /tab %}}
 {{< /tabs >}}
 
-### MapNotContainsT[Map ~map[K]V, K comparable, V any] {{% icon icon="star" color=orange %}}{#mapnotcontainstmap-~mapkv-k-comparable-v-any}
+### MapNotContainsT[Map ~map[K]V, K comparable, V any] {{% icon icon="star" color=orange %}}{#mapnotcontainstmap-mapkv-k-comparable-v-any}
 
 MapNotContainsT asserts that the specified map does not contain a key.
 
@@ -358,7 +364,7 @@ MapNotContainsT asserts that the specified map does not contain a key.
 |--|--| 
 | [`assertions.MapNotContainsT(t T, m Map, key K, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#MapNotContainsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#MapNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L241)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#MapNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L290)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -408,7 +414,7 @@ specified substring or element.
 |--|--| 
 | [`assertions.NotContains(t T, s any, contains any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotContains) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L166)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L191)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -460,7 +466,7 @@ This is an inverse of ElementsMatch.
 |--|--| 
 | [`assertions.NotElementsMatch(t T, listA any, listB any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatch) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatch](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L510)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatch](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L559)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -508,7 +514,7 @@ This is an inverse of ElementsMatch.
 |--|--| 
 | [`assertions.NotElementsMatchT(t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatchT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatchT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L582)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatchT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L631)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -561,11 +567,97 @@ only the map key is evaluated.
 |--|--| 
 | [`assertions.NotSubset(t T, list any, subset any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotSubset) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSubset](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L375)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSubset](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L424)
 {{% /tab %}}
 {{< /tabs >}}
 
-### SliceContainsT[Slice ~[]E, E comparable] {{% icon icon="star" color=orange %}}{#slicecontainstslice-~e-e-comparable}
+### SeqContainsT[E comparable] {{% icon icon="star" color=orange %}}{#seqcontainste-comparable}
+
+SeqContainsT asserts that the specified iterator contains a comparable element.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.SeqContainsT(t, slices.Values([]{"Hello","World"}), "World")
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	success: slices.Values([]string{"A","B"}), "A"
+	failure: slices.Values([]string{"A","B"}), "C"
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.SeqContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SeqContainsT) | package-level function |
+| [`assert.SeqContainsTf[E comparable](t T, iter iter.Seq[E], element E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SeqContainsTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.SeqContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SeqContainsT) | package-level function |
+| [`require.SeqContainsTf[E comparable](t T, iter iter.Seq[E], element E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SeqContainsTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.SeqContainsT(t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SeqContainsT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SeqContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L140)
+{{% /tab %}}
+{{< /tabs >}}
+
+### SeqNotContainsT[E comparable] {{% icon icon="star" color=orange %}}{#seqnotcontainste-comparable}
+
+SeqNotContainsT asserts that the specified iterator does not contain a comparable element.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.SeqContainsT(t, slices.Values([]{"Hello","World"}), "World")
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	success: slices.Values([]string{"A","B"}), "C"
+	failure: slices.Values([]string{"A","B"}), "A"
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.SeqNotContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SeqNotContainsT) | package-level function |
+| [`assert.SeqNotContainsTf[E comparable](t T, iter iter.Seq[E], element E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SeqNotContainsTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.SeqNotContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SeqNotContainsT) | package-level function |
+| [`require.SeqNotContainsTf[E comparable](t T, iter iter.Seq[E], element E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SeqNotContainsTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.SeqNotContainsT(t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SeqNotContainsT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SeqNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L266)
+{{% /tab %}}
+{{< /tabs >}}
+
+### SliceContainsT[Slice ~[]E, E comparable] {{% icon icon="star" color=orange %}}{#slicecontainstslice-e-e-comparable}
 
 SliceContainsT asserts that the specified slice contains a comparable element.
 
@@ -604,11 +696,11 @@ SliceContainsT asserts that the specified slice contains a comparable element.
 |--|--| 
 | [`assertions.SliceContainsT(t T, s Slice, element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SliceContainsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L116)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L117)
 {{% /tab %}}
 {{< /tabs >}}
 
-### SliceNotContainsT[Slice ~[]E, E comparable] {{% icon icon="star" color=orange %}}{#slicenotcontainstslice-~e-e-comparable}
+### SliceNotContainsT[Slice ~[]E, E comparable] {{% icon icon="star" color=orange %}}{#slicenotcontainstslice-e-e-comparable}
 
 SliceNotContainsT asserts that the specified slice does not contain a comparable element.
 
@@ -647,11 +739,11 @@ SliceNotContainsT asserts that the specified slice does not contain a comparable
 |--|--| 
 | [`assertions.SliceNotContainsT(t T, s Slice, element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SliceNotContainsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L218)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L243)
 {{% /tab %}}
 {{< /tabs >}}
 
-### SliceNotSubsetT[Slice ~[]E, E comparable] {{% icon icon="star" color=orange %}}{#slicenotsubsettslice-~e-e-comparable}
+### SliceNotSubsetT[Slice ~[]E, E comparable] {{% icon icon="star" color=orange %}}{#slicenotsubsettslice-e-e-comparable}
 
 SliceNotSubsetT asserts that a slice of comparable elements does not contain all the elements given in the subset.
 
@@ -690,11 +782,11 @@ SliceNotSubsetT asserts that a slice of comparable elements does not contain all
 |--|--| 
 | [`assertions.SliceNotSubsetT(t T, list Slice, subset Slice, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SliceNotSubsetT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceNotSubsetT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L446)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceNotSubsetT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L495)
 {{% /tab %}}
 {{< /tabs >}}
 
-### SliceSubsetT[Slice ~[]E, E comparable] {{% icon icon="star" color=orange %}}{#slicesubsettslice-~e-e-comparable}
+### SliceSubsetT[Slice ~[]E, E comparable] {{% icon icon="star" color=orange %}}{#slicesubsettslice-e-e-comparable}
 
 SliceSubsetT asserts that a slice of comparable elements contains all the elements given in the subset.
 
@@ -733,7 +825,7 @@ SliceSubsetT asserts that a slice of comparable elements contains all the elemen
 |--|--| 
 | [`assertions.SliceSubsetT(t T, list Slice, subset Slice, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SliceSubsetT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceSubsetT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L344)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceSubsetT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L393)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -778,7 +870,7 @@ Strings may be go strings or []byte.
 |--|--| 
 | [`assertions.StringContainsT(t T, str ADoc, substring EDoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#StringContainsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#StringContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L93)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#StringContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L94)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -823,7 +915,7 @@ Strings may be go strings or []byte.
 |--|--| 
 | [`assertions.StringNotContainsT(t T, str ADoc, substring EDoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#StringNotContainsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#StringNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L195)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#StringNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L220)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -877,7 +969,7 @@ only the map key is evaluated.
 |--|--| 
 | [`assertions.Subset(t T, list any, subset any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Subset) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Subset](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L272)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Subset](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L321)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -897,5 +989,5 @@ SPDX-License-Identifier: Apache-2.0
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
 
-Generated on 2026-01-20 (version ff38347) using codegen version v2.1.9-0.20260119220113-ff3834752ffb+dirty [sha: ff3834752ffbc6e4e938c8a0293cc8363f861398]
+Generated on 2026-01-20 (version 74d5686) using codegen version v2.1.9-0.20260119232631-74d5686313f0+dirty [sha: 74d5686313f0820ae0e2758b95d598f646cd7ad5]
 -->

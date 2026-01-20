@@ -355,7 +355,7 @@ func slugize(in string) string {
 			switch r {
 			case '.', '_', ' ', '\t', ':':
 				return '-'
-			case '[', ']', ',':
+			case '[', ']', ',', '~':
 				return -1
 			default:
 				return r
