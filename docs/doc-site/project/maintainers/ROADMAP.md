@@ -22,10 +22,10 @@ timeline
                     : removed deprecated
                     : optional dependencies (colorized)
                     : upstream PRs: Kind/NotKind
-                    : generics
-    v2.2 (Fev 2026) : generics (cont.)
+    v2.2 (Fev 2026) : : generics
+                    : SortedT, NotSortedT
                     : JSON assertions. JSONMarshalsAs...
-                    : IsSorted, IsSortedFunc
+                    : complete test refactoring
                     : more benchmarks. Perf improvements
     v2.3 (Mar 2026) : other extensions (TBD)
                     : more documentation and examples

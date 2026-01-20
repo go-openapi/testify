@@ -12,6 +12,8 @@ import (
 	"time"
 )
 
+const shortpkg = "assertions"
+
 func TestEqualUnexportedImplementationDetails(t *testing.T) {
 	t.Parallel()
 
@@ -226,5 +228,65 @@ func formatUnequalCases() iter.Seq[formatUnequalCase] {
 		{uint16(123), uint16(124), `123`, `124`, "uint16 should print clean"},
 		{uint32(123), uint32(124), `123`, `124`, "uint32 should print clean"},
 		{uint64(123), uint64(124), `123`, `124`, "uint64 should print clean"},
+	})
+}
+
+type samePointersCase struct {
+	name string
+	args args
+	same BoolAssertionFunc
+	ok   BoolAssertionFunc
+}
+
+type args struct {
+	first  any
+	second any
+}
+
+func equalSamePointersCases() iter.Seq[samePointersCase] {
+	p := ptr(2)
+	return slices.Values([]samePointersCase{
+		{
+			name: "1 != 2",
+			args: args{first: 1, second: 2},
+			same: False,
+			ok:   False,
+		},
+		{
+			name: "1 != 1 (not same ptr)",
+			args: args{first: 1, second: 1},
+			same: False,
+			ok:   False,
+		},
+		{
+			name: "ptr(1) == ptr(1)",
+			args: args{first: p, second: p},
+			same: True,
+			ok:   True,
+		},
+		{
+			name: "int(1) != float32(1)",
+			args: args{first: int(1), second: float32(1)},
+			same: False,
+			ok:   False,
+		},
+		{
+			name: "array != slice",
+			args: args{first: [2]int{1, 2}, second: []int{1, 2}},
+			same: False,
+			ok:   False,
+		},
+		{
+			name: "non-pointer vs pointer (1 != ptr(2))",
+			args: args{first: 1, second: p},
+			same: False,
+			ok:   False,
+		},
+		{
+			name: "pointer vs non-pointer (ptr(2) != 1)",
+			args: args{first: p, second: 1},
+			same: False,
+			ok:   False,
+		},
 	})
 }

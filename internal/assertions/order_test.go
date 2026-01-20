@@ -299,22 +299,7 @@ func testOrderReflectBased(orderAssertion func(T, any, ...any) bool, collection 
 
 		mock := new(mockT)
 		result := orderAssertion(mock, collection)
-
-		if shouldPass {
-			t.Run("should pass", func(t *testing.T) {
-				if !result || mock.Failed() {
-					t.Errorf("expected to pass")
-				}
-			})
-
-			return
-		}
-
-		t.Run("should fail", func(t *testing.T) {
-			if result || !mock.Failed() {
-				t.Errorf("expected to fail")
-			}
-		})
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 
@@ -324,22 +309,7 @@ func testOrderGeneric(assertionKind orderAssertionKind, collection any, shouldPa
 
 		mock := new(mockT)
 		result := testOrderAssertionResult(mock, assertionKind, collection)
-
-		if shouldPass {
-			t.Run("should pass", func(t *testing.T) {
-				if !result || mock.Failed() {
-					t.Errorf("expected to pass")
-				}
-			})
-
-			return
-		}
-
-		t.Run("should fail", func(t *testing.T) {
-			if result || !mock.Failed() {
-				t.Errorf("expected to fail")
-			}
-		})
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 

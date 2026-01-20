@@ -264,3 +264,27 @@ type testCase struct {
 	actual   any
 	result   bool
 }
+
+func shouldPassOrFail(t *testing.T, mock *mockT, result, shouldPass bool) {
+	t.Helper()
+
+	if shouldPass {
+		t.Run("should pass", func(t *testing.T) {
+			if !result || mock.Failed() {
+				t.Errorf("expected to pass")
+			}
+		})
+
+		return
+	}
+
+	t.Run("should fail", func(t *testing.T) {
+		if result || !mock.Failed() {
+			t.Errorf("expected to fail")
+		}
+	})
+}
+
+func ptr(i int) *int {
+	return &i
+}

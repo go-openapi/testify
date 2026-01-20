@@ -305,7 +305,7 @@ func isStrictlyOrdered(object any, reverseOrder bool) ([]any, bool, error) {
 
 	value := objValue.Index(0)
 	if !value.CanInterface() {
-		// this should not be possible with current relect, since values are retrieved from an array or slice, not a struct
+		// this should not be possible with current reflect, since values are retrieved from an array or slice, not a struct
 		panic(fmt.Errorf("internal error: can't resolve Interface() for value %v", value))
 	}
 	valueInterface := value.Interface()
