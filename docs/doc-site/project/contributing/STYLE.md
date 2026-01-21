@@ -27,8 +27,12 @@ You should run `golangci-lint run` before committing your changes.
 Many editors have plugins that do that automatically.
 
 > We use the `golangci-lint` meta-linter. The configuration lies in
-> [`.golangci.yml`]([golangci.yml]).
+> [`.golangci.yml`][golangci-yml].
 > You may read [the linter's configuration reference][golangci-doc] for additional reference.
+
+This configuration is essentially the same across all `go-openapi` projects.
+
+Some projects may require slightly different settings.
 
 ## Linting rules posture
 
@@ -92,5 +96,5 @@ When this is possible, we enable linters with relaxed constraints.
 Final note: since we have switched to a forked version of `stretchr/testify`,
 we no longer benefit from the great `testifylint` linter for tests.
 
-[golangci.yml]: https://github.com/go-openapi/testify/blob/master/.golangci.yml
+[golangci-yml]: https://github.com/go-openapi/testify/blob/master/.golangci.yml
 [golangci-doc]: https://golangci-lint.run/docs/linters/configuration/

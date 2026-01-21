@@ -1,24 +1,24 @@
 ---
-title: Maintainer's guide
-description: Guidelines for maintainers
+title: Maintainer's Guide
+description: General guidelines for maintainers
 weight: 1
 ---
 
 ## Repo structure
 
-Monorepo with multiple go modules.
+This project is organized as a monorepo with multiple go modules.
 
 ## Repo configuration
 
-* default branch: master
-* protected branches: master
-* branch protection rules:
+* Default branch: master
+* Protected branches: master
+* Branch protection rules:
   * require pull requests and approval
   * required status checks: 
     - DCO (simple email sign-off)
     - Lint
-    - tests completed
-* auto-merge enabled (used for dependabot updates)
+    - All tests completed
+* Auto-merge enabled (used for dependabot updates and other auto-merged PR's, e.g. contributors update)
 
 ## Continuous Integration
 
@@ -90,6 +90,10 @@ This allows for minimal test dependencies.
   * `go.mod` should be updated (manually) whenever there is a new go minor release
     (e.g. every 6 months).
 
+  > This means that our projects always have a 6 months lag to enforce new features from the go compiler.
+  >
+  > However, new features may be used with a "go:build" tag
+
 * contributors
   * a [`CONTRIBUTORS.md`][contributors-doc] file is updated weekly, with all-time contributors to the repository
   * the `github-actions[bot]` posts a pull request to do that automatically
@@ -123,7 +127,10 @@ The release process is minimalist:
 * the CI handles this to generate a github release with release notes
 
 * release notes generator: git-cliff <https://git-cliff.org/docs/>
-* configuration: [`cliff.toml`][cliff-config]
+* configuration: the `.cliff.toml` is defined as a share configuration on
+  remote repo [ci-worflows/.cliff.toml][remote-cliff-config]
+
+Commits from maintainers are preferably PGP-signed.
 
 Tags are preferably PGP-signed.
 
@@ -138,8 +145,10 @@ before pushing a tag.
 
 A bump release workflow (mono-repo) can be triggered from the github actions UI to cut a release with a few clicks.
 
-It works the same as the one for single module repos, and first creates a PR (auto-merged)
-that updates the different go.mod files.
+It works with the same input as the one for single module repos, and first creates a PR (auto-merged)
+that updates the different go.mod files _before_ pushing the desired git tag.
+
+Commits and tags pushed by the workflow bot are PGP-signed ("go-openapi[bot]").
 
 ## Other files
 
@@ -160,16 +169,17 @@ Reference documentation (released):
 
 A few things remain ahead to ease a bit a maintainer's job:
 
-* [ ] reuse CI workflows (e.g. in <https://github.com/go-openapi/ci-workflows>)
-* [ ] reusable actions with custom tools pinned  (e.g. in <https://github.com/go-openapi/gh-actions>)
-* open-source license checks
-* [ ] auto-merge for CONTRIBUTORS.md (requires a github app to produce tokens)
+* [x] reuse CI workflows (e.g. in <https://github.com/go-openapi/ci-workflows>)
+* [x] reusable actions with custom tools pinned  (e.g. in <https://github.com/go-openapi/gh-actions>)
+* [x] auto-merge for CONTRIBUTORS.md (requires a github app to produce tokens)
 * [x] more automated code renovation / relinting work
 * organization-level documentation web site
+* open-source license checks
 * ...
 
 [linter-config]: https://github.com/go-openapi/testify/blob/master/.golangci.yml
-[cliff-config]: https://github.com/go-openapi/testify/blob/master/.cliff.toml
+[local-cliff-config]: https://github.com/go-openapi/testify/blob/master/.cliff.toml
+[remote-cliff-config]: https://github.com/go-openapi/ci-workflows/blob/master/.cliff.toml
 [dependabot-config]: https://github.com/go-openapi/testify/blob/master/.github/dependabot.yaml
 [gocard-url]: https://goreportcard.com/report/github.com/go-openapi/testify
 [codefactor-url]: https://www.codefactor.io/repository/github/go-openapi/testify

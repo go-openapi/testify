@@ -1,7 +1,7 @@
 ---
 title: "Tutorial"
-description: "How to write great tests with go"
-weight: 10
+description: "How to write great tests with go and testify"
+weight: 3
 ---
 
 ## What makes a good test?

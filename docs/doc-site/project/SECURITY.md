@@ -23,7 +23,7 @@ We use:
 * [`trivy`][trivy-url]
 * [`govulncheck`][govulncheck-url]
 
-Reports are centralized in github security reports and visible to the maintainers.
+Reports are centralized in github security reports and visible only to the maintainers.
 
 ## Reporting a vulnerability
 

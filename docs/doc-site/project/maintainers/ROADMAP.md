@@ -10,24 +10,24 @@ weight: 4
 timeline
     title Planned releases
     section Q4 2025
-    v2.0 (Nov 2025) : zero dependencies
+    ✅ v2.0 (Nov 2025) : zero dependencies
                     : optional dependencies (YAML)
                     : modernized code (relint)
                     : JSONEqBytes
     section Q1 2026
-    v2.1 (Jan 2026) : generated assertions
+    ✅ v2.1 (Jan 2026) : generated assertions
                     : complete refactoring
                     : documentation site
                     : panic handling fixes
                     : removed deprecated
-                    : optional dependencies (colorized)
-                    : upstream PRs: Kind/NotKind
-    v2.2 (Fev 2026) : : generics
+    📝 v2.2 (Fev 2026) : generics
+                    : Kind/NotKind
                     : SortedT, NotSortedT
-                    : JSON assertions. JSONMarshalsAs...
                     : complete test refactoring
                     : more benchmarks. Perf improvements
-    v2.3 (Mar 2026) : other extensions (TBD)
+                    : optional dependencies (colorized)
+    ⏳ v2.3 (Mar 2026) : other extensions
+                    : JSON assertions. JSONMarshalsAs...
                     : more documentation and examples
                     : export internal tools (spew, difflib, benchviz)
     section Q2 2026
@@ -42,61 +42,24 @@ timeline
 5. [x] More testing and bug fixes (from upstream or detected during our testing)
 6. [x] Introduces colorization (opt-in)
 7. [x] Introduces generics
-8. [ ] New features following test simplification effort in go-openapi repos (e.g. JSONMarshalsAs ...)
-9. [ ] Unclear assertions may be provided an alternative verb (e.g. `InDelta`)
-10. [ ] Inject this test dependency into the `go-swagger` tool
+8. [x] Realign behavior re quirks, bugs, unexpected logics ... (e.g. IsNonDecreasing, EventuallyWithT...)
+9. [ ] New features following test simplification effort in go-openapi repos (e.g. JSONMarshalsAs ...)
+10. [ ] Unclear assertions might be provided an alternative verb (e.g. `InDelta`)
+11. [ ] Inject this test dependency into the `go-swagger` tool
 
 ### What won't come anytime soon
 
-* mocks: we use [mockery](https://github.com/vektra/mockery) and prefer the simpler `matryer` mocking-style.
+* mocks: we use [mockery](https://https://github.com/vektra/mockery) and prefer the simpler `matryer` mocking-style.
   testify-style mocks are thus not going to be supported anytime soon.
 * extra convoluted stuff in the like of `InDeltaSlice` (more likely to be removed)
 
-## PRs and issues from the original repo
+## Upstream Tracking
 
-We monitor github.com/stretchr/testify (upstream) for updates, new issues and proposals.
+We actively monitor [github.com/stretchr/testify](https://github.com/stretchr/testify) for updates, new issues, and proposals.
 
-### Already merged or incorporated / adapted
+**Review frequency**: Quarterly (next review: April 2026)
 
-The following proposed contributions to the original repo have been merged or incorporated with
-some adaptations into this fork:
+**Processed items**: 28 upstream PRs and issues have been reviewed, with 21 implemented/merged, 3 superseded by our implementation, and 2 currently under consideration.
 
-* [x] github.com/stretchr/testify#1147 - General discussion about generics adoption (marked "Not Planned")
-* [x] github.com/stretchr/testify#1223 - Display uint values in decimal instead of hex in diffs [merged]
-* [x] github.com/stretchr/testify#1232 - Colorized output for expected/actual/errors
-* [x] github.com/stretchr/testify#1308 - Comprehensive refactor replacing `interface{}` with generic type parameters across assertions (Draft, v2.0.0 milestone)
-* [x] github.com/stretchr/testify#1356 - panic(nil) handling for Go 1.21+
-* [x] github.com/stretchr/testify#1467 - Colorized output with terminal detection (most mature implementation)
-* [x] github.com/stretchr/testify#1480 - Colorized diffs via TESTIFY_COLORED_DIFF env var
-* [x] github.com/stretchr/testify#1513 - JSONEqBytes for byte slice JSON comparison
-* [x] github.com/stretchr/testify#1772 - YAML library migration to maintained fork (go.yaml.in/yaml)
-* [x] github.com/stretchr/testify#1797 - Codegen package consolidation and licensing
-* [x] github.com/stretchr/testify#1816 - Fix panic on unexported struct key in map (internalized go-spew - may need deeper fix)
-* [x] github.com/stretchr/testify#1818 - Fix panic on invalid regex in Regexp/NotRegexp assertions [merged]
-* [x] github.com/stretchr/testify#1822 - Deterministic map ordering in diffs (internalized go-spew)
-* [x] github.com/stretchr/testify#1825 - Fix panic when using EqualValues with uncomparable types [merged]
-* [x] github.com/stretchr/testify#1829 - Fix time.Time rendering in diffs (internalized go-spew)
-* [x] github.com/stretchr/testify#994 - Colorize expected vs actual values
-* [x] github.com/stretchr/testify/issues/1611 - Go routine leak
-* [x] github.com/stretchr/testify/issues/1813
-* [x] github.com/stretchr/testify/issues/1826 - type safety with spew
-* ⛔ https://github.com/stretchr/testify/pull/1824 - No longer relevant in our context
+For a complete catalog of all upstream PRs and issues we've processed (implemented, adapted, superseded, or monitoring), see the [Upstream Tracking](../../usage/TRACKING.md).
 
-### Merges from upstream under consideration
-
-* [ ] **github.com/stretchr/testify#1685** - Iterator support (`iter.Seq`) for Contains/ElementsMatch assertions (Go 1.23+)
-* [ ] **github.com/stretchr/testify#1805** - Proposal for generic `IsOfType[T]()` to avoid dummy value instantiation in type checks
-
-## Generics adoption
-
-The original repository's exploration of generics revealed several design challenges:
-
-1. **Type inference limitations**: Go's type inference struggles with complex generic signatures, often requiring explicit type parameters that burden the API (e.g., `Contains[int, int](arr1, arr2)`)
-
-2. **Overly broad type constraints**: PR #1308's approach used constraints like `ConvertibleToFloat64` that accepted more types than intended, weakening type safety
-
-3. **Loss of flexibility**: Testify currently compares non-comparable types (slices, maps) via `reflect.DeepEqual`. Generic constraints would eliminate this capability, as Go generics require comparable or explicitly constrained types
-
-4. **Breaking changes**: Any comprehensive generics adoption requires a major version bump and Go 1.18+ minimum version
-
-5. **Inconsistent design patterns**: Different assertions would need different constraint strategies, making a uniform approach difficult

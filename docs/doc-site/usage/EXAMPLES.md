@@ -1,12 +1,14 @@
 ---
 title: "Examples"
 description: "Practical examples for using testify v2"
-weight: 1
+weight: 2
 ---
 
 {{% notice primary "TL;DR" "meteor" %}}
 > If you've already used `github.com/stretchr/testify`, adopting v2 will be straightforward.
 {{% /notice %}}
+
+More examples to showcase generic assertions specifically may be found [here](./GENERICS.md).
 
 ## Quick Start
 
@@ -545,3 +547,4 @@ func TestNew(t *testing.T) {
 - Better error messages - shows expected vs actual automatically
 - Less boilerplate - no manual formatting
 - More assertions - Contains, ElementsMatch, JSONEq, etc.
+
