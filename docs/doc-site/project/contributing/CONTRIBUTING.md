@@ -30,12 +30,12 @@ You'll find more detailed (or repo-specific) instructions in the [maintainer's d
 {{% tab title="There are many ways to contribute" %}}
 There are many ways in which you can contribute, not just code. Here are a few ideas:
 
- * Reporting Issues / Bugs
- * Suggesting Improvements
+ * Reporting issues or bugs
+ * Suggesting improvements
  * Documentation
  * Art work that makes the project look great
  * Code
-   * bug fixes and new features that are within the main project scope
+   * proposing bug fixes and new features that are within the main project scope
    * improving test coverage
    * addressing code quality issues
 {{< /tab >}}
@@ -96,10 +96,12 @@ If there's a problem with the implementation, hopefully you've received feedback
 
 If you have a lot of ideas or a lot of issues to solve, try to refrain a bit and post focused
 pull requests.
-Think that they must be reviewed by a maintainer and it is easy to lost track of things on big PRs.
+Think that they must be reviewed by a maintainer and it is easy to lose track of things on big PRs.
 
 We're trying very hard to keep the go-openapi packages lean and focused.
-Together, these packages constitute a toolkit: it won't do everything for everybody out of the box,
+
+Together, these packages constitute a toolkit for go developers:
+it won't do everything for everybody out of the box,
 but everybody can use it to do just about everything related to OpenAPI.
 
 This means that we might decide against incorporating a new feature.
@@ -141,7 +143,7 @@ github will propose to open a pull request on the original repository.
 
 Typically you'd follow some common naming conventions:
 
-- if it's a bugfix branch, name it `fix/XXX-something`where XXX is the number of the
+- if it's a bug fixing branch, name it `fix/XXX-something` where XXX is the number of the
   issue on github
 - if it's a feature branch, create an enhancement issue to announce your
   intentions, and name it `feature/XXX-something` where XXX is the number of the issue.
@@ -179,7 +181,7 @@ Don't forget to update the documentation when creating or modifying a feature.
 
 Most documentation for this library is directly found in code as comments for godoc.
 
-The documentation for the go-openapi packages is published on [the public go docs site][go-doc].
+The documentation for this go-openapi package is published on [the public go docs site][go-doc].
 
 ---
 
@@ -211,7 +213,7 @@ reference to all the issues that they address.
 Pull requests must not contain commits from other users or branches.
 
 Commit messages are not required to follow the "conventional commit" rule, but it's certainly a good
-thing to follow this guideline (e.g. "fix: blah blah", "ci: did this", "feat: did that" ...).
+thing to follow that convention (e.g. "fix: fixed panic in XYZ", "ci: did this", "feat: did that" ...).
 
 The title in your commit message is used directly to produce our release notes: try to keep them neat.
 
@@ -235,7 +237,7 @@ Be sure to post a comment after pushing. The new commits will show up in the pul
 request automatically, but the reviewers will not be notified unless you comment.
 
 Before the pull request is merged,
-**make sure that you've squasheq your commits into logical units of work**
+**make sure that you've squashed your commits into logical units of work**
 using `git rebase -i` and `git push -f`.
 
 After every commit the test suite should be passing.

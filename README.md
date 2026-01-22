@@ -14,7 +14,7 @@
 
 **The v2 our tests wanted**
 
-A set of `go` packages that provide tools for testifying that your code behaves as you intended.
+A set of `go` packages that provide tools for testifying (verifying) that your code behaves as you intended.
 
 This is the go-openapi fork of the great [testify](https://github.com/stretchr/testify) package.
 
@@ -25,7 +25,7 @@ Main features:
 
 * zero external dependencies
 * opt-in dependencies for extra features (e.g. asserting YAML, colorized output)
-* assertions using generic types (see [a basic example][example-with-generics-url])
+* assertions using generic types (see [a basic example][example-with-generics-url]). [Read the fully story with generics][doc-generics]
 * [searchable documentation][doc-url]
 
 ## Announcements
@@ -40,25 +40,41 @@ Or join our Slack channel: [![Slack Channel][slack-logo]![slack-badge]][slack-ur
 
 ### Status
 
-Design and exploration phase. Contributions and proposals are welcome.
+Design and exploration phase. Feedback, contributions and proposals are welcome.
 
 > **Recent news**
-> Fully refactored how assertions are generated and documented.
-> Fixed hangs & panics when using `spew`. Fuzzed `spew`.
-> Fixed go routine leaks with `EventuallyWithT` and co.
-> Added `Kind` & `NotKind`
-> Fix deterministic order of keys in diff
-> Fixed edge cases with `InDelta`, `InEpsilon`
-> Added opt-in support for colorized output
-> Introduced generics (round 1): 16 new type-safe assertions with generic types (added benchmark)
 >
-> See our [ROADMAP][roadmap].
+> ✅ Fully refactored how assertions are generated and documented.
+>
+> ✅ Fixed hangs & panics when using `spew`. Fuzzed `spew`.
+>
+> ✅  Fixed go routine leaks with `EventuallyWithT` and co.
+>
+> ✅ Added `Kind` & `NotKind`
+>
+> ✅ Fix deterministic order of keys in diff
+>
+> ✅ Fixed edge cases with `InDelta`, `InEpsilon`
+>
+> ✅ Fixed edge cases with `EqualValues`
+>
+> ✅ Fixed wrong logic with `IsNonIncreasing`, `InNonDecreasing`
+>
+> ✅ Added opt-in support for colorized output
+>
+> ✅ Introduced generics: 38 new type-safe assertions with generic types (doc: added usage guide, examples and benchmark)
+>
+> See also our [ROADMAP][doc-roadmap].
 
-## Import this library in your project
+## Getting started
+
+Import this library in your project like so.
 
 ```cmd
 go get github.com/go-openapi/testify/v2
 ```
+
+... and start writing tests. Look at our [examples][doc-examples].
 
 ## Basic usage
 
@@ -123,9 +139,10 @@ distributed with this fork, including internalized libraries.
 
 ## Other documentation
 
-* [Getting started](https://go-openapi.github.io/testify/examples/)
+* [Getting started][doc-examples]
+* [Usage](https://go-openapi.github.io/testify/usage/)
 * [Motivations](https://go-openapi.github.io/testify/project/readme)
-* [Roadmap][roadmap]
+* [Roadmap][doc-roadmap]
 * [Internal architecture](https://go-openapi.github.io/testify/project/maintainers/architecture)
 
 * [All-time contributors](./CONTRIBUTORS.md)
@@ -138,7 +155,7 @@ distributed with this fork, including internalized libraries.
 
 Maintainers can cut a new release by either:
 
-* running [this workflow](https://github.com/go-openapi/testify/actions/workflows/bump-release.yml) (recommended)
+* running [this workflow][ci-release-workflow] (recommended)
 * or :
   1. preparing go.mod files with the next tag, merge
   2. pushing a semver tag
@@ -146,7 +163,7 @@ Maintainers can cut a new release by either:
   * The tag message is prepended to release notes
 
 <!-- Doc links -->
-[roadmap]: https://go-openapi.github.io/testify/project/maintainers/roadmap
+[doc-roadmap]: https://go-openapi.github.io/testify/project/maintainers/roadmap
 <!-- Badges: status  -->
 [test-badge]: https://github.com/go-openapi/testify/actions/workflows/go-test.yml/badge.svg
 [test-url]: https://github.com/go-openapi/testify/actions/workflows/go-test.yml
@@ -169,6 +186,8 @@ Maintainers can cut a new release by either:
 <!-- Badges: documentation & support -->
 [doc-badge]: https://img.shields.io/badge/doc-site-blue?link=https%3A%2F%2Fgo-openapi.github.io%2Ftestify%2F
 [doc-url]: https://go-openapi.github.io/testify
+[doc-examples]: https://go-openapi.github.io/testify/usage/examples
+[doc-generics]: https://go-openapi.github.io/testify/usage/generics
 [example-with-generics-url]: https://go-openapi.github.io/testify#usage-with-generics
 [godoc-badge]: https://pkg.go.dev/badge/github.com/go-openapi/testify
 [godoc-url]: http://pkg.go.dev/github.com/go-openapi/testify
@@ -186,3 +205,4 @@ Maintainers can cut a new release by either:
 [goversion-url]: https://github.com/go-openapi/testify/blob/master/go.mod
 [top-badge]: https://img.shields.io/github/languages/top/go-openapi/testify
 [commits-badge]: https://img.shields.io/github/commits-since/go-openapi/testify/latest
+[ci-release-workflow]: https://github.com/go-openapi/testify/actions/workflows/bump-release.yml
