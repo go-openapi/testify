@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-20 (version 74d5686) using codegen version v2.1.9-0.20260119232631-74d5686313f0+dirty [sha: 74d5686313f0820ae0e2758b95d598f646cd7ad5]
+// Generated on 2026-01-24 (version 178304f) using codegen version v2.1.9-0.20260123222731-178304f36678+dirty [sha: 178304f366789315d4db6b11c89786c43d916247]
 
 package assert
 
@@ -214,8 +214,11 @@ func EqualError(t T, err error, errString string, msgAndArgs ...any) bool {
 }
 
 // EqualExportedValues asserts that the types of two objects are equal and their public
-// fields are also equal. This is useful for comparing structs that have private fields
-// that could potentially differ.
+// fields are also equal.
+//
+// This is useful for comparing structs that have private fields that could potentially differ.
+//
+// Function equality cannot be determined and will always fail.
 //
 // # Usage
 //
@@ -269,6 +272,8 @@ func EqualT[V comparable](t T, expected V, actual V, msgAndArgs ...any) bool {
 
 // EqualValues asserts that two objects are equal or convertible to the larger
 // type and equal.
+//
+// Function equality cannot be determined and will always fail.
 //
 // # Usage
 //
@@ -1097,11 +1102,11 @@ func InEpsilonT[Number Measurable](t T, expected Number, actual Number, epsilon 
 //	failure: []int{1, 2, 3}
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func IsDecreasing(t T, object any, msgAndArgs ...any) bool {
+func IsDecreasing(t T, collection any, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsDecreasing(t, object, msgAndArgs...)
+	return assertions.IsDecreasing(t, collection, msgAndArgs...)
 }
 
 // IsDecreasingT asserts that a slice of [Ordered] is strictly decreasing.
@@ -1139,11 +1144,11 @@ func IsDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, m
 //	failure: []int{1, 1, 2}
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func IsIncreasing(t T, object any, msgAndArgs ...any) bool {
+func IsIncreasing(t T, collection any, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsIncreasing(t, object, msgAndArgs...)
+	return assertions.IsIncreasing(t, collection, msgAndArgs...)
 }
 
 // IsIncreasingT asserts that a slice of [Ordered] is strictly increasing.
@@ -1181,11 +1186,11 @@ func IsIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, m
 //	failure: []int{2, 1, 0}
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func IsNonDecreasing(t T, object any, msgAndArgs ...any) bool {
+func IsNonDecreasing(t T, collection any, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsNonDecreasing(t, object, msgAndArgs...)
+	return assertions.IsNonDecreasing(t, collection, msgAndArgs...)
 }
 
 // IsNonDecreasingT asserts that a slice of [Ordered] is not decreasing.
@@ -1223,11 +1228,11 @@ func IsNonDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice
 //	failure: []int{1, 2, 3}
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func IsNonIncreasing(t T, object any, msgAndArgs ...any) bool {
+func IsNonIncreasing(t T, collection any, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsNonIncreasing(t, object, msgAndArgs...)
+	return assertions.IsNonIncreasing(t, collection, msgAndArgs...)
 }
 
 // IsNonIncreasingT asserts that a slice of [Ordered] is NOT strictly increasing.
@@ -1801,6 +1806,8 @@ func NotEmpty(t T, object any, msgAndArgs ...any) bool {
 // Pointer variable equality is determined based on the equality of the
 // referenced values (as opposed to the memory addresses).
 //
+// Function equality cannot be determined and will always fail.
+//
 // # Examples
 //
 //	success: 123, 456
@@ -1836,6 +1843,8 @@ func NotEqualT[V comparable](t T, expected V, actual V, msgAndArgs ...any) bool 
 }
 
 // NotEqualValues asserts that two objects are not equal even when converted to the same type.
+//
+// Function equality cannot be determined and will always fail.
 //
 // # Usage
 //
@@ -2020,8 +2029,7 @@ func NotRegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...a
 
 // NotSame asserts that two pointers do not reference the same object.
 //
-// Both arguments must be pointer variables. Pointer variable sameness is
-// determined based on the equality of both type and value.
+// See [Same].
 //
 // # Usage
 //
@@ -2042,7 +2050,7 @@ func NotSame(t T, expected any, actual any, msgAndArgs ...any) bool {
 
 // NotSameT asserts that two pointers do not reference the same object.
 //
-// See [SameT]
+// See [SameT].
 //
 // # Usage
 //
@@ -2273,8 +2281,11 @@ func RegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any)
 
 // Same asserts that two pointers reference the same object.
 //
-// Both arguments must be pointer variables. Pointer variable sameness is
-// determined based on the equality of both type and value.
+// Both arguments must be pointer variables.
+//
+// Pointer variable sameness is determined based on the equality of both type and value.
+//
+// Unlike [Equal] pointers, [Same] pointers point to the same memory address.
 //
 // # Usage
 //
@@ -2294,6 +2305,8 @@ func Same(t T, expected any, actual any, msgAndArgs ...any) bool {
 }
 
 // SameT asserts that two pointers of the same type reference the same object.
+//
+// See [Same].
 //
 // # Usage
 //

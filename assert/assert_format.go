@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-20 (version 74d5686) using codegen version v2.1.9-0.20260119232631-74d5686313f0+dirty [sha: 74d5686313f0820ae0e2758b95d598f646cd7ad5]
+// Generated on 2026-01-24 (version 178304f) using codegen version v2.1.9-0.20260123222731-178304f36678+dirty [sha: 178304f366789315d4db6b11c89786c43d916247]
 
 package assert
 
@@ -469,11 +469,11 @@ func InEpsilonTf[Number Measurable](t T, expected Number, actual Number, epsilon
 // IsDecreasingf is the same as [IsDecreasing], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func IsDecreasingf(t T, object any, msg string, args ...any) bool {
+func IsDecreasingf(t T, collection any, msg string, args ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsDecreasing(t, object, forwardArgs(msg, args))
+	return assertions.IsDecreasing(t, collection, forwardArgs(msg, args))
 }
 
 // IsDecreasingTf is the same as [IsDecreasingT], but it accepts a format msg string to format arguments like [fmt.Printf].
@@ -489,11 +489,11 @@ func IsDecreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, 
 // IsIncreasingf is the same as [IsIncreasing], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func IsIncreasingf(t T, object any, msg string, args ...any) bool {
+func IsIncreasingf(t T, collection any, msg string, args ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsIncreasing(t, object, forwardArgs(msg, args))
+	return assertions.IsIncreasing(t, collection, forwardArgs(msg, args))
 }
 
 // IsIncreasingTf is the same as [IsIncreasingT], but it accepts a format msg string to format arguments like [fmt.Printf].
@@ -509,11 +509,11 @@ func IsIncreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, 
 // IsNonDecreasingf is the same as [IsNonDecreasing], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func IsNonDecreasingf(t T, object any, msg string, args ...any) bool {
+func IsNonDecreasingf(t T, collection any, msg string, args ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsNonDecreasing(t, object, forwardArgs(msg, args))
+	return assertions.IsNonDecreasing(t, collection, forwardArgs(msg, args))
 }
 
 // IsNonDecreasingTf is the same as [IsNonDecreasingT], but it accepts a format msg string to format arguments like [fmt.Printf].
@@ -529,11 +529,11 @@ func IsNonDecreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlic
 // IsNonIncreasingf is the same as [IsNonIncreasing], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func IsNonIncreasingf(t T, object any, msg string, args ...any) bool {
+func IsNonIncreasingf(t T, collection any, msg string, args ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsNonIncreasing(t, object, forwardArgs(msg, args))
+	return assertions.IsNonIncreasing(t, collection, forwardArgs(msg, args))
 }
 
 // IsNonIncreasingTf is the same as [IsNonIncreasingT], but it accepts a format msg string to format arguments like [fmt.Printf].

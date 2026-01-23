@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-20 (version 74d5686) using codegen version v2.1.9-0.20260119232631-74d5686313f0+dirty [sha: 74d5686313f0820ae0e2758b95d598f646cd7ad5]
+// Generated on 2026-01-24 (version 178304f) using codegen version v2.1.9-0.20260123222731-178304f36678+dirty [sha: 178304f366789315d4db6b11c89786c43d916247]
 
 package assert
 
@@ -794,81 +794,81 @@ func (a *Assertions) InEpsilonSlicef(expected any, actual any, epsilon float64, 
 // IsDecreasing is the same as [IsDecreasing], as a method rather than a package-level function.
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func (a *Assertions) IsDecreasing(object any, msgAndArgs ...any) bool {
+func (a *Assertions) IsDecreasing(collection any, msgAndArgs ...any) bool {
 	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsDecreasing(a.t, object, msgAndArgs...)
+	return assertions.IsDecreasing(a.t, collection, msgAndArgs...)
 }
 
 // IsDecreasingf is the same as [Assertions.IsDecreasing], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func (a *Assertions) IsDecreasingf(object any, msg string, args ...any) bool {
+func (a *Assertions) IsDecreasingf(collection any, msg string, args ...any) bool {
 	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsDecreasing(a.t, object, forwardArgs(msg, args))
+	return assertions.IsDecreasing(a.t, collection, forwardArgs(msg, args))
 }
 
 // IsIncreasing is the same as [IsIncreasing], as a method rather than a package-level function.
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func (a *Assertions) IsIncreasing(object any, msgAndArgs ...any) bool {
+func (a *Assertions) IsIncreasing(collection any, msgAndArgs ...any) bool {
 	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsIncreasing(a.t, object, msgAndArgs...)
+	return assertions.IsIncreasing(a.t, collection, msgAndArgs...)
 }
 
 // IsIncreasingf is the same as [Assertions.IsIncreasing], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func (a *Assertions) IsIncreasingf(object any, msg string, args ...any) bool {
+func (a *Assertions) IsIncreasingf(collection any, msg string, args ...any) bool {
 	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsIncreasing(a.t, object, forwardArgs(msg, args))
+	return assertions.IsIncreasing(a.t, collection, forwardArgs(msg, args))
 }
 
 // IsNonDecreasing is the same as [IsNonDecreasing], as a method rather than a package-level function.
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func (a *Assertions) IsNonDecreasing(object any, msgAndArgs ...any) bool {
+func (a *Assertions) IsNonDecreasing(collection any, msgAndArgs ...any) bool {
 	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsNonDecreasing(a.t, object, msgAndArgs...)
+	return assertions.IsNonDecreasing(a.t, collection, msgAndArgs...)
 }
 
 // IsNonDecreasingf is the same as [Assertions.IsNonDecreasing], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func (a *Assertions) IsNonDecreasingf(object any, msg string, args ...any) bool {
+func (a *Assertions) IsNonDecreasingf(collection any, msg string, args ...any) bool {
 	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsNonDecreasing(a.t, object, forwardArgs(msg, args))
+	return assertions.IsNonDecreasing(a.t, collection, forwardArgs(msg, args))
 }
 
 // IsNonIncreasing is the same as [IsNonIncreasing], as a method rather than a package-level function.
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func (a *Assertions) IsNonIncreasing(object any, msgAndArgs ...any) bool {
+func (a *Assertions) IsNonIncreasing(collection any, msgAndArgs ...any) bool {
 	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsNonIncreasing(a.t, object, msgAndArgs...)
+	return assertions.IsNonIncreasing(a.t, collection, msgAndArgs...)
 }
 
 // IsNonIncreasingf is the same as [Assertions.IsNonIncreasing], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func (a *Assertions) IsNonIncreasingf(object any, msg string, args ...any) bool {
+func (a *Assertions) IsNonIncreasingf(collection any, msg string, args ...any) bool {
 	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsNonIncreasing(a.t, object, forwardArgs(msg, args))
+	return assertions.IsNonIncreasing(a.t, collection, forwardArgs(msg, args))
 }
 
 // IsNotType is the same as [IsNotType], as a method rather than a package-level function.
