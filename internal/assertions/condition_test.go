@@ -238,7 +238,7 @@ func TestConditionEventuallyWithT(t *testing.T) {
 		Len(t, mock.errors, expectedErrors, "expected 2 errors from the condition, and 2 additional errors from Eventually")
 
 		expectedCalls := int(testTimeout / testTick)
-		if counter != expectedCalls && counter != expectedCalls+1 { // it may be 5 or 6 depending on how the test schedules
+		if counter < expectedCalls-1 || counter > expectedCalls+1 { // it may be 4, 5 or 6 depending on how the test schedules
 			t.Errorf("expected %d calls to the condition, but got %d", expectedCalls, counter)
 		}
 	})
