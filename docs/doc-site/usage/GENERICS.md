@@ -4,8 +4,6 @@ description: Using generic assertions.
 weight: 10
 ---
 
-# Using Generic Assertions
-
 Testify v2 provides **38 generic assertion functions** that offer compile-time type safety alongside the traditional reflection-based assertions. Generic variants are identified by the `T` suffix (e.g., `EqualT`, `GreaterT`, `ElementsMatchT`).
 
 {{% notice style="success" title="Type Safety First" icon="check" %}}
@@ -230,7 +228,7 @@ Testify v2 provides generic variants across all major domains:
 - `YAMLEqT[S Text]` - YAML strings are semantically equal
 
 {{% notice style="info" title="See Complete API" icon="book" %}}
-For detailed documentation of all generic functions, see the [API Reference](../../api/_index.md) organized by domain.
+For a detailed documentation of all generic functions, see the [API Reference](../../api/_index.md) organized by domain.
 {{% /notice %}}
 
 ## Practical Examples
@@ -565,3 +563,14 @@ Generic assertions use custom type constraints defined in `internal/assertions/g
 - **When not to**: Keep reflection for dynamic types and cross-type comparisons
 - **Performance**: See [benchmarks](../../project/maintainers/BENCHMARKS.md) for dramatic speedups
 {{% /notice %}}
+
+---
+
+## See Also
+
+- [Examples](./EXAMPLES.md) - Practical examples including generic assertion usage
+- [Tutorial](./TUTORIAL.md) - Best practices for writing tests with testify
+- [Usage Guide](./USAGE.md) - API conventions and naming patterns
+- [Performance Benchmarks](../../project/maintainers/BENCHMARKS.md) - Detailed performance analysis of generic vs reflection
+- [Changes from v1](./CHANGES.md) - Complete list of new generic functions and improvements
+- [API Reference](../api/_index.md) - Complete assertion catalog with all generic variants

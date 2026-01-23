@@ -34,6 +34,18 @@ We continue to monitor and selectively adopt changes from upstream:
 **Review frequency**: Quarterly (next review: April 2026)
 
 ---
+[#1223]: https://github.com/stretchr/testify/pull/1223
+[#1513]: https://github.com/stretchr/testify/pull/1513
+[#1611]: https://github.com/stretchr/testify/issues/1611
+[#1685]: https://github.com/stretchr/testify/pull/1685
+[#1803]: https://github.com/stretchr/testify/pull/1803
+[#1805]: https://github.com/stretchr/testify/issues/1805
+[#1813]: https://github.com/stretchr/testify/issues/1813
+[#1818]: https://github.com/stretchr/testify/pull/1818
+[#1822]: https://github.com/stretchr/testify/issues/1822
+[#1825]: https://github.com/stretchr/testify/pull/1825
+[#1828]: https://github.com/stretchr/testify/pull/1828
+[1829]: https://github.com/stretchr/testify/issues/1829
 
 ## Appendix: Upstream References
 
@@ -66,11 +78,15 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | [#1813] | Issue | Panic with unexported fields | ✅ Fixed via #1828 in internalized spew |
 
 [#994]: https://github.com/stretchr/testify/pull/994
+[#1232]: https://github.com/stretchr/testify/pull/1232
 [#1356]: https://github.com/stretchr/testify/pull/1356
+[#1467]: https://github.com/stretchr/testify/pull/1467
+[#1480]: https://github.com/stretchr/testify/pull/1480
 [#1772]: https://github.com/stretchr/testify/pull/1772
 [#1797]: https://github.com/stretchr/testify/pull/1797
 [#1816]: https://github.com/stretchr/testify/issues/1816
 [#1826]: https://github.com/stretchr/testify/issues/1826
+[#1829]: https://github.com/stretchr/testify/issues/1829
 
 ### Superseded by Our Implementation
 
@@ -110,5 +126,14 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | **Total Processed** | 28 |
 
 **Note**: This fork maintains an active relationship with upstream, regularly reviewing new PRs and issues. The quarterly review process ensures we stay informed about upstream developments while maintaining our architectural independence.
+
+---
+
+## See Also
+
+- [Changes from v1](./CHANGES.md) - Complete list of all implemented changes and new features
+- [Roadmap](../project/maintainers/ROADMAP.md) - Future plans and development priorities
+- [Architecture](../project/maintainers/ARCHITECTURE.md) - Technical architecture and design decisions
+- [Original Project](../project/maintainers/ORIGINAL.md) - History and acknowledgments
 
 ---

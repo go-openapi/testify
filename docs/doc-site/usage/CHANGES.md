@@ -49,6 +49,8 @@ See also a quick [migration guide](./MIGRATION.md).
 | **Colorized output** | [#1467], [#1480], [#1232], [#994] | Optional colorization via `enable/color` module with themes |
 | **Enhanced diff output** | [#1829] | Improved time.Time rendering, deterministic map ordering |
 
+[#1829]: https://github.com/stretchr/testify/issues/1829
+
 #### Maintenability
 
 | Change | Origin | Description |
@@ -57,11 +59,11 @@ See also a quick [migration guide](./MIGRATION.md).
 | **Code modernization** | Design goal | Relinted, refactored and modernized the code base, including internalized difflib and go-spew|
 | **Refactored tests** | Design goal | Full refactoring of tests on assertion functions, with unified test scenarios for reflection-based/generic assertions |
 
+[#1232]: https://github.com/stretchr/testify/pull/1232
 [#1467]: https://github.com/stretchr/testify/pull/1467
 [#1480]: https://github.com/stretchr/testify/pull/1480
-[#1232]: https://github.com/stretchr/testify/pull/1232
-[#994]: https://github.com/stretchr/testify/pull/994
 [#1829]: https://github.com/stretchr/testify/issues/1829
+[#994]: https://github.com/stretchr/testify/pull/994
 {{% /tab %}}
 {{% tab title="Removals" style=warning %}}
 
@@ -197,7 +199,7 @@ See also a quick [migration guide](./MIGRATION.md).
 
 **Origin**: Generics initiative
 
-**Performance**: 10-22x faster than reflection-based variants
+**Performance**: 10-22x faster than reflection-based variants. See [Benchmarks](../project/maintainers/BENCHMARKS.md)
 {{% /expand %}}
 
 **Behavior changes**: None
@@ -396,7 +398,7 @@ See also a quick [migration guide](./MIGRATION.md).
 |--------|--------|-------------|
 | Fix time.Time rendering in diffs | [#1829] | Improved time display in failure messages |
 
-[1829]: https://github.com/stretchr/testify/issues/
+[1829]: https://github.com/stretchr/testify/issues/1829
 
 ### Type
 
@@ -532,4 +534,15 @@ github.com/go-openapi/testify/v2           # Core (zero deps) [go.mod]
 | **Dependencies** | 0 external (was 2 requiredl) |
 | **Test coverage** | 96% overall, 100% on public APIs |
 | **Documentation domains** | 18 logical categories |
+
+---
+
+## See Also
+
+- [Migration Guide](./MIGRATION.md) - Step-by-step guide to migrating from testify v1
+- [Generics Guide](./GENERICS.md) - Detailed documentation of all 38 generic assertions
+- [Performance Benchmarks](../../project/maintainers/BENCHMARKS.md) - Comprehensive performance analysis
+- [Examples](./EXAMPLES.md) - Practical usage examples showing new features
+- [Tutorial](./TUTORIAL.md) - Best practices for writing tests with testify v2
+- [API Reference](../api/_index.md) - Complete assertion catalog organized by domain
 

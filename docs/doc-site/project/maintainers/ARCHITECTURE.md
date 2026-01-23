@@ -41,6 +41,8 @@ The generator scans `internal/assertions/` and produces:
 
 **Generated Packages: `assert/` and `require/`**
 
+**Generated Documentation: `docs/doc-site/api/`**
+
 Everything in these packages is generated. Never edit generated files directly.
 
 Exceptions:

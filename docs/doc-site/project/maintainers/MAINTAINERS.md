@@ -4,6 +4,11 @@ description: General guidelines for maintainers
 weight: 1
 ---
 
+{{% notice primary "TL;DR" "meteor" %}}
+> Comprehensive guide for maintainers covering repository structure, CI/CD workflows, release procedures, and development practices.
+> Essential reading for anyone contributing to or maintaining this project.
+{{% /notice %}}
+
 ## Repo structure
 
 This project is organized as a monorepo with multiple go modules.
@@ -92,7 +97,9 @@ This allows for minimal test dependencies.
 
   > This means that our projects always have a 6 months lag to enforce new features from the go compiler.
   >
-  > However, new features may be used with a "go:build" tag
+  > However, new features of go may be used with a "go:build" tag: this allows users of the newer
+  > version to benefit the new feature while users still running with `oldstable` use another version
+  > that still builds.
 
 * contributors
   * a [`CONTRIBUTORS.md`][contributors-doc] file is updated weekly, with all-time contributors to the repository
@@ -134,6 +141,8 @@ Commits from maintainers are preferably PGP-signed.
 
 Tags are preferably PGP-signed.
 
+> We want our released to show as "verified" on github.
+
 The tag message introduces the release notes (e.g. a summary of this release).
 
 The release notes generator does not assume that commits are necessarily "conventional commits".
@@ -162,21 +171,9 @@ Standard documentation:
 * [NOTICE][notice-doc] on supplementary license terms (original authors, copied code etc)
 
 Reference documentation (released):
-
 * [pkg.go.dev (fka godoc)][godoc-url]
 
-## TODOs & other ideas
-
-A few things remain ahead to ease a bit a maintainer's job:
-
-* [x] reuse CI workflows (e.g. in <https://github.com/go-openapi/ci-workflows>)
-* [x] reusable actions with custom tools pinned  (e.g. in <https://github.com/go-openapi/gh-actions>)
-* [x] auto-merge for CONTRIBUTORS.md (requires a github app to produce tokens)
-* [x] more automated code renovation / relinting work
-* organization-level documentation web site
-* open-source license checks
-* ...
-
+<!-- links to references -->
 [linter-config]: https://github.com/go-openapi/testify/blob/master/.golangci.yml
 [local-cliff-config]: https://github.com/go-openapi/testify/blob/master/.cliff.toml
 [remote-cliff-config]: https://github.com/go-openapi/ci-workflows/blob/master/.cliff.toml

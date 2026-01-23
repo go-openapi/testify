@@ -4,6 +4,11 @@ description: "Introduction Guide"
 weight: 1
 ---
 
+{{% notice primary "TL;DR" "meteor" %}}
+> Learn testify's naming conventions (assert vs require, format variants, generic `T` suffix), argument order patterns, and how to navigate
+> 76+ assertions organized into 18 domains. Start here to understand the API structure.
+{{% /notice %}}
+
 Testify v2 provides **over 40 core assertion types** (76+ functions including inverse variants and all naming styles) organized into clear domains. This guide explains how to navigate the API and use the naming conventions effectively.
 
 ## API Conventions
@@ -421,3 +426,13 @@ func TestTypeSafety(t *testing.T) {
 - Read the [Generics Guide](../GENERICS.md) for type-safe testing
 - Check [pkg.go.dev](https://pkg.go.dev/github.com/go-openapi/testify/v2) for complete reference
 {{% /notice %}}
+
+---
+
+## See Also
+
+- [Examples](./EXAMPLES.md) - Practical code examples for common testing scenarios
+- [Tutorial](./TUTORIAL.md) - Comprehensive guide to writing great tests with testify patterns
+- [Generics Guide](./GENERICS.md) - Type-safe assertions with compile-time checking
+- [Migration Guide](./MIGRATION.md) - Migrating from stretchr/testify v1
+- [API Reference](../api/_index.md) - Complete assertion catalog organized by domain

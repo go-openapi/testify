@@ -44,7 +44,7 @@ timeline
 7. [x] Introduces generics
 8. [x] Realign behavior re quirks, bugs, unexpected logics ... (e.g. IsNonDecreasing, EventuallyWithT...)
 9. [ ] New features following test simplification effort in go-openapi repos (e.g. JSONMarshalsAs ...)
-10. [ ] Unclear assertions might be provided an alternative verb (e.g. `InDelta`)
+10. [ ] Unclear assertions might be provided an alternative verb (e.g. `EventuallyWithT`)
 11. [ ] Inject this test dependency into the `go-swagger` tool
 
 ### What won't come anytime soon
@@ -59,7 +59,7 @@ We actively monitor [github.com/stretchr/testify](https://github.com/stretchr/te
 
 **Review frequency**: Quarterly (next review: April 2026)
 
-**Processed items**: 28 upstream PRs and issues have been reviewed, with 21 implemented/merged, 3 superseded by our implementation, and 2 currently under consideration.
+**Processed items**: 28 upstream PRs and issues have been reviewed, with 21 implemented/merged, 5 superseded by our implementation or merely marked as informational, and 2 currently under consideration. See also [Tracking](../../usage/TRACKING.md).
 
 For a complete catalog of all upstream PRs and issues we've processed (implemented, adapted, superseded, or monitoring), see the [Upstream Tracking](../../usage/TRACKING.md).
 

@@ -4,6 +4,11 @@ description: Code generation workflow and maintenance.
 weight: 3
 ---
 
+{{% notice primary "TL;DR" "meteor" %}}
+> The entire assert/require API (600+ functions) is generated from 76 source assertions in `internal/assertions/`.
+> Run `go generate ./...` to regenerate everything. Add new assertions by editing source files and adding examples.
+{{% /notice %}}
+
 ## Maintaining Generated Code
 
 This repository uses code generation extensively to maintain consistency across assertion packages.

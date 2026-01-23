@@ -1,313 +1,158 @@
 ---
 title: 'Benchmarks'
-description: 'Performance measurement of assertions'
+description: 'Performance Benchmarks: Generic vs Reflection'
 weight: 10
 ---
 
-# Performance Benchmarks: Generic vs Reflection
-
 **Last Updated**: 2026-01-20
 
-## Quick Summary
+## Overview
 
-We added **38 generic assertion functions** to testify v2, providing type-safe alternatives to reflection-based assertions. While the primary goal was **compile-time type safety**, comprehensive benchmarking revealed an unexpected bonus: **dramatic performance improvements**.
+While the primary motivation for adding **38 generic assertion functions** to testify v2 was **compile-time type safety** (see [Generics Guide](../../usage/GENERICS.md) for details), comprehensive benchmarking revealed an unexpected bonus: **dramatic performance improvements** ranging from 1.2x to 81x faster, with up to 99% reduction in memory allocations for collection operations.
 
-**Key Results:**
-- **Type Safety**: Catch errors when writing tests, not when running them
-- **Performance**: 1.2x to 81x faster depending on the operation
-- **Memory**: Up to 99% reduction in allocations for collection operations
-- **Zero Downside**: Generic variants are always as fast or faster
+This document focuses on the performance measurements and explains why these improvements occur.
 
-## The Type Safety Story
+## Type Safety First, Performance Second
 
-The main reason for adding generics wasn't performance—it was catching bugs earlier.
-
-### Before: Runtime Surprises
+Generic assertions catch type errors when writing tests, not when running them. For example:
 
 ```go
-// Compiles fine, fails mysteriously at runtime
-assert.Equal(t, []int{1, 2}, []string{"a", "b"})
-assert.ElementsMatch(t, userIDs, orderIDs)  // Wrong comparison!
+// Reflection: Compiles, fails at runtime
+assert.ElementsMatch(t, []int{1, 2}, []string{"a", "b"})
+
+// Generic: Compiler catches the error immediately
+assert.ElementsMatchT(t, []int{1, 2}, []string{"a", "b"})  // ❌ Compile error!
 ```
 
-### After: Compile-Time Safety
+See the [Generics Guide](../../usage/GENERICS.md) for comprehensive coverage of type safety benefits, refactoring safety, and when to use generic vs reflection variants.
 
-```go
-// Compiler catches the error immediately
-assert.EqualT(t, []int{1, 2}, []string{"a", "b"})  // ❌ Compile error!
-assert.ElementsMatchT(t, userIDs, orderIDs)        // ❌ Type mismatch!
-```
+## Performance Results by Category
 
-**Real-world benefit**: When refactoring changes a type from `[]int` to `[]string`, generic assertions immediately flag all broken tests. Reflection-based assertions compile but fail during test runs—or worse, pass with wrong comparisons.
+### 🏆 Collection Operations: Exceptional Gains
 
-## Performance Highlights
+Collection operations see the most dramatic improvements due to elimination of per-element reflection overhead:
 
-While type safety was the goal, benchmarking revealed impressive performance gains across all domains.
+| Function | Speedup | Memory Impact | Why It Matters |
+|----------|---------|---------------|----------------|
+| **ElementsMatch (10 items)** | **21x faster** | 568 B → 320 B (44% reduction) | Common test operation |
+| **ElementsMatch (100 items)** | **39x faster** | 41 KB → 3.6 KB (91% reduction) | Scales superlinearly |
+| **ElementsMatch (1000 items)** | **81x faster** | 4 MB → 33 KB (99% reduction) | Large collection testing |
+| **SliceContains** | **16x faster** | 4 allocs → 0 | Membership testing |
+| **SeqContains (iter.Seq)** | **25x faster** | 55 allocs → 9 | Go 1.23+ iterators |
+| **SliceSubset** | **43x faster** | 17 allocs → 0 | Subset verification |
 
-### 🏆 Collection Operations: The Big Winner
+**Key insight**: ElementsMatch's O(n²) complexity amplifies the benefits—the speedup **increases** with collection size (21x → 39x → 81x).
 
-| Function | Speedup | Memory Savings |
-|----------|---------|----------------|
-| **ElementsMatch (10 items)** | **21x faster** | 568 B → 320 B (44% reduction) |
-| **ElementsMatch (100 items)** | **39x faster** | 41 KB → 3.6 KB (91% reduction) |
-| **ElementsMatch (1000 items)** | **81x faster** | 4 MB → 33 KB (99% reduction) |
-| **SliceContains** | **16x faster** | 4 allocs → 0 |
-| **SeqContains (iter.Seq)** | **25x faster** | 55 allocs → 9 |
-| **SliceSubset** | **43x faster** | 17 allocs → 0 |
+### ⚡ Comparison Operations: Zero-Allocation Wins
 
-**Why it matters**: Collection operations are common in tests. ElementsMatchT is up to **81x faster** and uses **99% less memory** for large slices.
+Direct operator usage (`>`, `<`, `==`) eliminates reflection overhead and boxing entirely:
 
-### ⚡ Comparison Operations
+| Function | Speedup | Allocations | Benchmark Data |
+|----------|---------|-------------|----------------|
+| **Greater/Less** | **10-15x faster** | 1 → 0 allocs | 139.1ns → 17.9ns |
+| **Positive/Negative** | **16-22x faster** | 1 → 0 allocs | 121.5ns → 7.6ns |
+| **GreaterOrEqual/LessOrEqual** | **10-11x faster** | 1 → 0 allocs | Similar pattern |
+| **Equal** | **10-13x faster** | 0 allocs (both) | 44.8ns → 3.5ns |
+| **NotEqual** | **11x faster** | 0 allocs (both) | Comparable to Equal |
 
-| Function | Speedup | Benefit |
-|----------|---------|---------|
-| **Greater/Less** | **10-15x faster** | Zero allocations |
-| **Positive/Negative** | **16-22x faster** | Zero allocations |
-| **GreaterOrEqual/LessOrEqual** | **10-11x faster** | Zero allocations |
+**Key insight**: Comparison operations are frequently used in tests. 10-15x speedup on common assertions accumulates quickly across large test suites.
 
-**Why it matters**: Direct operator usage (`>`, `<`) eliminates reflection overhead and boxing.
+### 📊 Ordering Operations: Eliminating Per-Element Overhead
 
-### ✓ Equality Checks
+Ordering checks iterate over collections, so eliminating per-element reflection creates significant gains:
 
-| Function | Speedup | Notes |
-|----------|---------|-------|
-| **Equal** | **10-13x faster** | All numeric types, strings |
-| **NotEqual** | **11x faster** | Zero allocations |
-| **IsOfType** | **9-11x faster** | Type checks without reflection |
-
-**Why it matters**: Equality checks are the most common assertion. 10x speedup adds up quickly.
-
-### 📊 Ordering Operations
-
-| Function | Speedup | Notes |
-|----------|---------|-------|
+| Function | Speedup | Allocation Impact |
+|----------|---------|-------------------|
 | **IsIncreasing** | **7.4x faster** | 11 allocs → 0 |
 | **IsDecreasing** | **9.5x faster** | 11 allocs → 0 |
-| **IsNonIncreasing** | **6.5x faster** | 4 allocs → 0 |
 | **IsNonDecreasing** | **8x faster** | 4 allocs → 0 |
+| **IsNonIncreasing** | **6.5x faster** | 4 allocs → 0 |
 
-**Why it matters**: Ordering checks iterate over collections. Generics eliminate per-element reflection overhead.
+### 🔍 Type Checks: Cleaner API, Better Performance
 
-## What This Means for You
+Generic type checks eliminate reflection and provide a cleaner API:
 
-### Always Prefer Generic Variants
+| Function | Speedup | Notes |
+|----------|---------|-------|
+| **IsOfType** | **9-11x faster** | No dummy value needed with generics |
+| **IsNotOfType** | **Similar gains** | Type parameter makes intent explicit |
 
-When a generic variant is available (functions ending in `T`), use it:
+### ⚖️ Modest Gains: Where Processing Dominates
 
-```go
-// OLD: Reflection-based
-assert.Equal(t, 42, result)
-assert.Greater(t, count, 0)
-assert.ElementsMatch(t, expected, actual)
+Some operations see smaller improvements because expensive processing dominates:
 
-// NEW: Type-safe + faster
-assert.EqualT(t, 42, result)           // 13x faster + compile-time safety
-assert.GreaterT(t, count, 0)           // 16x faster + compile-time safety
-assert.ElementsMatchT(t, expected, actual)  // 21-81x faster + compile-time safety
-```
+| Category | Speedup | Why Gains Are Limited |
+|----------|---------|----------------------|
+| **Same/NotSame** | **1.5-2x** | Pointer comparison already fast |
+| **Boolean checks** | **~2x** | Simple bool comparison |
+| **JSONEq** | **Marginal** | JSON parsing/unmarshaling dominates |
+| **Regexp** | **Marginal** | Regex compilation dominates |
 
-### Type Safety Catches Real Bugs
+**Key insight**: Even modest performance gains come with the benefit of compile-time type safety.
 
-**Example 1: Refactoring Safety**
+## Understanding the Performance Gains
 
-```go
-// Your test
-assert.ElementsMatchT(t, userIDs, orderIDs)
+### Allocation Elimination
 
-// Someone changes OrderID type
-type OrderID string  // Was: int
-
-// Generic version: Compiler catches the error
-assert.ElementsMatchT(t, userIDs, orderIDs)  // ❌ Compile error!
-
-// Reflection version: Test compiles, fails mysteriously
-assert.ElementsMatch(t, userIDs, orderIDs)   // ✓ Compiles, ✗ Wrong at runtime
-```
-
-**Example 2: IDE Assistance**
-
-Generic variants enable IDE autocomplete to suggest only correctly-typed variables, preventing copy-paste errors.
-
-### When to Use Reflection Variants
-
-Keep reflection-based assertions for:
-- **Intentional cross-type comparisons** (e.g., `int` vs `int64` with EqualValues)
-- **Heterogeneous collections** (`[]any`)
-- **Dynamic type scenarios** where compile-time type is unknown
-- **Backward compatibility** with existing tests
-
-## Performance Tiers
-
-### Tier 1: Dramatic Improvements (10x+)
-These operations see the biggest speedups because reflection overhead dominates:
-- ElementsMatch: **21-81x** (scales with collection size)
-- Equal/NotEqual: **10-13x**
-- Comparison operators: **10-22x**
-- Type checks: **9-11x**
-
-### Tier 2: Significant Improvements (3-10x)
-Solid gains from eliminating reflection:
-- Ordering checks: **6.5-9.5x**
-- Collection operations: **7.5-43x**
-
-### Tier 3: Modest Improvements (1.2-3x)
-Operations already optimized see smaller gains:
-- Same/NotSame: **1.5-2x**
-- Numeric comparisons: **1.2-1.5x**
-- Boolean checks: **2x**
-
-### Tier 4: Comparable Performance
-Operations where expensive processing dominates:
-- JSONEq: JSON parsing dominates (marginal difference)
-- Regexp: Regex compilation dominates (marginal difference)
-
-**Key insight**: Even when performance gains are modest, type safety alone justifies using generic variants.
-
-## Real Benchmark Results
-
-### ElementsMatch: The Star Performer
-
-```
-BenchmarkElementsMatch/reflect/10-16     3259 ns/op     568 B/op      67 allocs/op
-BenchmarkElementsMatch/generic/10-16      154 ns/op     320 B/op       2 allocs/op
-                                          ↑ 21x faster
-
-BenchmarkElementsMatch/reflect/100-16   291692 ns/op   41360 B/op    5153 allocs/op
-BenchmarkElementsMatch/generic/100-16     7429 ns/op    3696 B/op       3 allocs/op
-                                          ↑ 39x faster
-
-BenchmarkElementsMatch/reflect/1000-16  25.5 ms/op     4.0 MB/op    501503 allocs/op
-BenchmarkElementsMatch/generic/1000-16   316 µs/op     33 KB/op         3 allocs/op
-                                          ↑ 81x faster   ↑ 99% less memory
-```
-
-### Comparison Operations
-
-```
-BenchmarkGreater/reflect/int-16         139.1 ns/op      34 B/op       1 allocs/op
-BenchmarkGreater/generic/int-16          17.9 ns/op       0 B/op       0 allocs/op
-                                         ↑ 7.8x faster
-
-BenchmarkPositive/reflect/int-16        121.5 ns/op      26 B/op       1 allocs/op
-BenchmarkPositive/generic/int-16          7.6 ns/op       0 B/op       0 allocs/op
-                                         ↑ 16x faster
-```
-
-### Equality Checks
-
-```
-BenchmarkEqual/reflect/int-16            44.8 ns/op       0 B/op       0 allocs/op
-BenchmarkEqual/generic/int-16             3.5 ns/op       0 B/op       0 allocs/op
-                                         ↑ 13x faster
-
-BenchmarkEqual/reflect/string-16         34.8 ns/op       0 B/op       0 allocs/op
-BenchmarkEqual/generic/string-16          4.1 ns/op       0 B/op       0 allocs/op
-                                         ↑ 8.5x faster
-```
-
-## Why These Numbers Matter
-
-### 1. Allocation Elimination
 The most dramatic speedups come from eliminating allocations entirely:
-- **ElementsMatch**: 501,503 → 3 allocations (1000 elements)
-- **All comparisons**: 1 → 0 allocations
+
+- **ElementsMatch (1000 elements)**: 501,503 → 3 allocations (99.999% reduction)
+- **All comparison operations**: 1 → 0 allocations
 - **Ordering checks**: 4-11 → 0 allocations
 
-Less allocation pressure means faster execution and reduced GC overhead.
+Less allocation pressure means faster execution and reduced GC overhead, especially impactful in large test suites.
 
-### 2. Superlinear Scaling
-ElementsMatch's O(n²) complexity amplifies the benefits:
-- 10 elements: 21x faster
-- 100 elements: 39x faster
-- 1000 elements: 81x faster
+### Superlinear Scaling
 
-The speedup **increases** with collection size.
+For operations with O(n²) or O(n) complexity, eliminating per-element reflection overhead creates superlinear gains:
 
-### 3. Cumulative Impact
-If your test suite uses assertions thousands of times:
-- 10x speedup per assertion = significantly faster test runs
-- Especially impactful in CI/CD pipelines
+- **ElementsMatch**: 21x (10 items) → 39x (100 items) → 81x (1000 items)
+- The speedup **increases** with collection size
 
-## Migration Guide
+### Cumulative Impact
 
-### Step 1: Identify Generic-Capable Assertions
+Test suites typically run thousands of assertions:
 
-Look for these common assertions in your tests:
-- Equal, NotEqual → EqualT, NotEqualT
-- Greater, Less, Positive, Negative → GreaterT, LessT, PositiveT, NegativeT
-- Contains, ElementsMatch, Subset → ContainsT, ElementsMatchT, SubsetT
-- IsIncreasing, IsDecreasing → IsIncreasingT, IsDecreasingT
-- IsOfType → IsOfTypeT (eliminates need for dummy values!)
+- **Small test suite** (1,000 assertions): 10x average speedup = significantly faster CI runs
+- **Large test suite** (10,000+ assertions): Cumulative savings become substantial
+- **Particularly valuable** in CI/CD pipelines where test execution time directly affects deployment velocity
 
-### Step 2: Add Type Parameters
+## Sample Benchmark Data
 
-```go
-// Before
-assert.Equal(t, expected, actual)
+Representative results from `go test -bench=. ./internal/assertions`:
 
-// After: Add T suffix, compiler checks types
-assert.EqualT(t, expected, actual)
+```
+# Collection operations
+BenchmarkElementsMatch/reflect/1000-16   25.5 ms/op     4.0 MB/op   501503 allocs/op
+BenchmarkElementsMatch/generic/1000-16    316 µs/op      33 KB/op        3 allocs/op
+                                          ↑ 81x faster   ↑ 99% less memory
+
+# Comparison operations
+BenchmarkGreater/reflect/int-16          139.1 ns/op      34 B/op        1 allocs/op
+BenchmarkGreater/generic/int-16           17.9 ns/op       0 B/op        0 allocs/op
+                                          ↑ 7.8x faster
+
+# Equality checks
+BenchmarkEqual/reflect/int-16             44.8 ns/op       0 B/op        0 allocs/op
+BenchmarkEqual/generic/int-16              3.5 ns/op       0 B/op        0 allocs/op
+                                          ↑ 13x faster
 ```
 
-### Step 3: Fix Type Mismatches
+## Adopting Generic Assertions
 
-The compiler will now catch type errors:
-
-```go
-// This will now fail to compile
-assert.EqualT(t, int64(42), int32(42))
-
-// Fix by using the same type
-assert.EqualT(t, int64(42), int64(actual))
-
-// Or use reflection-based Equal for intentional cross-type comparison
-assert.Equal(t, int64(42), int32(42))  // Uses reflection, still works
-```
-
-## Conclusion
-
-**Generic assertions deliver two major benefits:**
-
-1. **Type Safety (Primary Goal)**: Catch errors when writing tests
-   - Compiler catches type mismatches immediately
-   - IDE autocomplete guides to correct types
-   - Refactoring safety: broken tests identified at compile time
-
-2. **Performance (Unexpected Bonus)**: 1.2-81x faster
-   - Zero allocation overhead for most operations
-   - Dramatic gains for collection operations
-   - Cumulative benefits across large test suites
-
-**Recommendation**: Prefer generic variants (`*T` functions) wherever available. The type safety alone justifies the switch; the performance improvement is a bonus.
-
-### The Bottom Line
-
-```go
-// What we wanted: Catch this when writing tests
-assert.ElementsMatchT(t, []int{1,2}, []string{"a","b"})  // ❌ Compiler error
-
-// What we got as bonus: 81x faster when types match
-assert.ElementsMatchT(t, []int{1,2}, []int{2,1})  // ✓ Type safe AND blazing fast
-```
-
-The performance improvements validate the design choice, but **type safety was always the goal**.
+See the [Migration Guide](../../usage/MIGRATION.md) for step-by-step instructions on migrating to generic assertions, and the [Generics Guide](../../usage/GENERICS.md) for comprehensive coverage of type safety benefits and usage patterns.
 
 ---
 
-## Running Your Own Benchmarks
+## Running Benchmarks
+
+To run the benchmarks yourself:
 
 ```bash
-# Run all benchmarks
 go test -run=^$ -bench=. -benchmem ./internal/assertions
-
-# Specific domain (equality, comparison, collection, etc.)
-go test -run=^$ -bench='Benchmark(Equal|Same)' -benchmem ./internal/assertions
-
-# Compare specific function
-go test -run=^$ -bench='BenchmarkElementsMatch' -benchmem ./internal/assertions
 ```
 
-## Coverage
+## Benchmark Coverage
 
 **38 generic functions benchmarked across 10 domains:**
 - Boolean (2): TrueT, FalseT

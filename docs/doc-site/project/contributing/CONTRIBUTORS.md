@@ -4,6 +4,11 @@ description: Acknowledgements to all-time contributors
 weight: 10
 ---
 
+{{% notice primary "TL;DR" "meteor" %}}
+> Recognition and thanks to all 256 contributors who have helped build testify from its origins to this fork.
+> Complete list of contributors with commit counts and links to their contributions.
+{{% /notice %}}
+
 ## Emeritus
 
 We thank these members for their service to this community.
