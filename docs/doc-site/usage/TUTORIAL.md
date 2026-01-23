@@ -4,6 +4,11 @@ description: "How to write great tests with go and testify"
 weight: 3
 ---
 
+{{% notice primary "TL;DR" "meteor" %}}
+> Master the iterator pattern for table-driven tests, understand when to use `require` vs `assert`, and learn testify best practices.
+> Essential patterns and anti-patterns for writing maintainable, effective Go tests.
+{{% /notice %}}
+
 ## What makes a good test?
 
 A good test is:
@@ -643,3 +648,13 @@ See real-world usage of these patterns:
 - **Comprehensive Coverage**: `codegen/internal/scanner/comments-parser/` (all test files)
 
 **Study these to see the patterns in action!**
+
+---
+
+## See Also
+
+- [Examples](./EXAMPLES.md) - Practical code examples covering common testing scenarios
+- [Usage Guide](./USAGE.md) - API conventions and how to navigate the documentation
+- [Generics Guide](./GENERICS.md) - Type-safe assertions with compile-time checking
+- [Migration Guide](./MIGRATION.md) - Migrating from stretchr/testify v1
+- [API Reference](../api/_index.md) - Complete assertion catalog organized by domain

@@ -71,15 +71,15 @@ Import this library in your project like so.
     
     const expected = "expected result"
 
-	result := printImports(input)
-	if result != expected {
-		t.Errorf(
-            "Expected: %s. Got: %s",
-            expected, result, 
-        )
+	  result := printImports(input)
+	  if result != expected {
+		  t.Errorf(
+        "Expected: %s. Got: %s",
+        expected, result, 
+      )
 
-        return
-	}
+      return
+	  }
 ```
 {{% /card %}}
 
@@ -94,10 +94,9 @@ Import this library in your project like so.
 
     const expected = "expected result"
 
-	require.Equalf(t,
-        expected, printImports(input),
-        "Expected: %s. Got: %s",
-        expected, result, 
+	  result := printImports(input)
+	  require.Equalf(t, expected, result,
+        "Expected: %s. Got: %s", expected, result, 
     )
 ```
 {{% /card %}}
@@ -166,6 +165,23 @@ Code generation is used. Run `go generate ./...` to update generated files.
 {{% /notice %}}
 
 See also our [CONTRIBUTING guidelines](./project/contributing/CONTRIBUTING.md).
+
+---
+
+## See Also
+
+**Getting Started:**
+- [Usage Guide](./usage/USAGE.md) - API conventions and how to navigate the documentation
+- [Tutorial](./usage/TUTORIAL.md) - Best practices and patterns for writing great tests
+- [Examples](./usage/EXAMPLES.md) - Practical code examples for common testing scenarios
+
+**Advanced Topics:**
+- [Generics Guide](./usage/GENERICS.md) - Type-safe assertions with 38 generic functions
+- [Migration Guide](./usage/MIGRATION.md) - Migrating from stretchr/testify v1
+- [Changes from v1](./usage/CHANGES.md) - All changes and improvements in v2
+
+**Reference:**
+- [API Reference](./api/_index.md) - Complete assertion catalog organized by domain
 
 ---
 

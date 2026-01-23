@@ -217,7 +217,7 @@ The idiomatic Go pattern for testing multiple cases should be:
 
 ```go
 func TestAdd(t *testing.T) {
-    tests := []struct {
+    tests := slices.Values([]struct {
         name     string
         a, b     int
         expected int
@@ -226,9 +226,9 @@ func TestAdd(t *testing.T) {
         {"negative numbers", -2, -3, -5},
         {"mixed signs", -2, 3, 1},
         {"with zero", 0, 5, 5},
-    }
+    })
 
-    for _, tt := range tests {
+    for tt := range tests {
         t.Run(tt.name, func(t *testing.T) {
             result := Add(tt.a, tt.b)
             assert.Equal(t, tt.expected, result)
@@ -239,18 +239,18 @@ func TestAdd(t *testing.T) {
 
 With forward methods for cleaner syntax:
 
-```go
+```gon
 func TestAdd(t *testing.T) {
-    tests := []struct {
+    tests := slices.Values([]struct {
         name     string
         a, b     int
         expected int
     }{
         {"positive numbers", 2, 3, 5},
         {"negative numbers", -2, -3, -5},
-    }
+    })
 
-    for _, tt := range tests {
+    for tt := range tests {
         t.Run(tt.name, func(t *testing.T) {
             a := assert.New(t)
 
@@ -415,7 +415,7 @@ YAML assertions require explicit opt-in:
 import (
     "testing"
     "github.com/go-openapi/testify/v2/assert"
-    _ "github.com/go-openapi/testify/v2/enable/yaml" // Enable YAML support
+    _ "github.com/go-openapi/testify/enable/yaml/v2" // Enable YAML support
 )
 
 func TestYAML(t *testing.T) {
@@ -547,4 +547,14 @@ func TestNew(t *testing.T) {
 - Better error messages - shows expected vs actual automatically
 - Less boilerplate - no manual formatting
 - More assertions - Contains, ElementsMatch, JSONEq, etc.
+
+---
+
+## See Also
+
+- [Tutorial](./TUTORIAL.md) - Comprehensive guide to writing great tests with testify patterns
+- [Usage Guide](./USAGE.md) - API conventions, naming patterns, and how to navigate the documentation
+- [Generics Guide](./GENERICS.md) - Type-safe assertions for better compile-time checking
+- [Migration Guide](./MIGRATION.md) - Migrating from stretchr/testify v1 to this fork
+- [API Reference](../api/_index.md) - Complete assertion catalog organized by domain
 

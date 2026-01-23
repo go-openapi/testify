@@ -20,8 +20,8 @@ weight: 1
 > occasions.
 >
 > In this fork, all external stuff is either internalized (`go-spew`, `difflib`),
-> removed (`mocks`, `suite`, `http`) or specifically enabled by importing a specific module
-> (`github.com/go-openapi/testify/v2/enable/yaml`).
+> removed (`mocks`, `suite`, `http`) or specifically enabled by importing this module
+> (`github.com/go-openapi/testify/enable/yaml/v2`).
 
 2. Make it easy to maintain and extend.
 
@@ -74,52 +74,30 @@ while maintaining the flexibility that makes testify useful for real-world testi
 * removed the `suite`, `mocks` and `http` packages
 * replaced internal utility package `_codegen` by `codegen`
 
-### Other (non-breaking) changes
+See [all changes from v1](../usage/CHANGES.md) and check out our [ROADMAP](./maintainers/ROADMAP.md).
 
-* added `JSONEqBytes`
-* added `YAMLEqBytes`
-* adapted & merged fixes: see [ROADMAP](./maintainers/ROADMAP.md).
+## API Stability Guarantee
 
-## Usage at go-openapi
+The assertions currently used by go-openapi projects constitute our **stable API**.
+These entry points will remain backward compatible. Other assertions may evolve as we refine the v2 API.
 
-At this moment, we have identified the following usage in our tools. This API shall remain stable.
-Currently, there are no guarantees about the entry points not in this list.
+---
 
-```
-Condition
-Contains,Containsf
-Empty,Emptyf
-Equal,Equalf
-EqualError,EqualErrorf
-EqualValues,EqualValuesf
-Error,Errorf
-ErrorContains
-ErrorIs
-Fail,Failf
-FailNow
-False,Falsef
-Greater
-Implements
-InDelta,InDeltaf
-IsType,IsTypef
-JSONEq,JSONEqf
-Len,Lenf
-Nil,Nilf
-NoError,NoErrorf
-NotContains,NotContainsf
-NotEmpty,NotEmptyf
-NotEqual
-NotNil,NotNilf
-NotPanics
-NotZeroG
-Panics,PanicsWithValue
-Subset
-True,Truef
-YAMLEq,YAMLEqf
-Zero,Zerof
-```
+## See Also
 
-## [The original README](./maintainers/ORIGINAL.md)
+**Getting Started:**
+- [Examples](../usage/EXAMPLES.md) - Practical code examples for using testify v2
+- [Usage Guide](../usage/USAGE.md) - API conventions and navigation guide
+- [Migration Guide](../usage/MIGRATION.md) - Migrating from stretchr/testify v1
+
+**Project Documentation:**
+- [Changes from v1](../usage/CHANGES.md) - Complete list of changes and new features
+- [Roadmap](./maintainers/ROADMAP.md) - Future development plans
+- [Architecture](./maintainers/ARCHITECTURE.md) - Technical architecture and design decisions
+- [Contributing](./contributing/CONTRIBUTING.md) - How to contribute to this project
+- [The original README](./maintainers/ORIGINAL.md)
+
+---
 
 <!-- Badges: status  -->
 [test-badge]: https://github.com/go-openapi/testify/actions/workflows/go-test.yml/badge.svg
