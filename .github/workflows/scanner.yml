@@ -3,9 +3,9 @@ name: Vulnerability scans
 on:
   branch_protection_rule:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   schedule:
-    - cron: '18 4 * * 3'
+    - cron: "18 4 * * 3"
 
 permissions:
   contents: read
@@ -15,5 +15,5 @@ jobs:
     permissions:
       contents: read
       security-events: write
-    uses: go-openapi/ci-workflows/.github/workflows/scanner.yml@5f5b9242e003304b5e633eafd8e7270cde87028e # V0.1.1
+    uses: go-openapi/ci-workflows/.github/workflows/scanner.yml@50a35d7a3dec2ab631ddc39b1307a8394fcc44c7 # V0.2.4
     secrets: inherit
