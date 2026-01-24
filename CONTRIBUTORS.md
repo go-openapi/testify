@@ -4,14 +4,14 @@
 
 | Total Contributors | Total Contributions |
 | --- | --- |
-| 256  | 1124  |
+| 256  | 1147  |
 
 | Username | All Time Contribution Count | All Commits |
 | --- | --- | --- |
 | @ernesto-jimenez | 129 | https://github.com/go-openapi/testify/commits?author=ernesto-jimenez |
 | @brackendawson | 110 | https://github.com/go-openapi/testify/commits?author=brackendawson |
 | @dolmen | 103 | https://github.com/go-openapi/testify/commits?author=dolmen |
-| @fredbi | 66 | https://github.com/go-openapi/testify/commits?author=fredbi |
+| @fredbi | 89 | https://github.com/go-openapi/testify/commits?author=fredbi |
 | @tylerb | 64 | https://github.com/go-openapi/testify/commits?author=tylerb |
 | @boyan-soubachov | 35 | https://github.com/go-openapi/testify/commits?author=boyan-soubachov |
 | @leighmcculloch | 26 | https://github.com/go-openapi/testify/commits?author=leighmcculloch |
