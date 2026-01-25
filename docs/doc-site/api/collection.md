@@ -1,7 +1,7 @@
 ---
 title: "Collection"
 description: "Asserting Slices And Maps"
-modified: 2026-01-24
+modified: 2026-01-25
 weight: 2
 domains:
   - "collection"
@@ -175,7 +175,7 @@ the number of appearances of each of them in both lists should match.
 |--|--| 
 | [`assertions.ElementsMatch(t T, listA any, listB any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ElementsMatch) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ElementsMatch](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L522)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ElementsMatch](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L520)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -220,7 +220,7 @@ the number of appearances of each of them in both lists should match.
 |--|--| 
 | [`assertions.ElementsMatchT(t T, listA []E, listB []E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ElementsMatchT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ElementsMatchT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L595)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ElementsMatchT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L593)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -230,7 +230,7 @@ Len asserts that the specified object has specific length.
 
 Len also fails if the object has a type that len() does not accept.
 
-The asserted object can be a string, a slice, a map, an array or a channel.
+The asserted object can be a string, a slice, a map, an array, pointer to array or a channel.
 
 See also [reflect.Len](https://pkg.go.dev/reflect#Len).
 
@@ -466,7 +466,7 @@ This is an inverse of ElementsMatch.
 |--|--| 
 | [`assertions.NotElementsMatch(t T, listA any, listB any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatch) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatch](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L559)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatch](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L557)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -514,7 +514,7 @@ This is an inverse of ElementsMatch.
 |--|--| 
 | [`assertions.NotElementsMatchT(t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatchT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatchT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L631)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatchT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L629)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -567,7 +567,7 @@ only the map key is evaluated.
 |--|--| 
 | [`assertions.NotSubset(t T, list any, subset any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotSubset) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSubset](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L424)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSubset](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L426)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -782,7 +782,7 @@ SliceNotSubsetT asserts that a slice of comparable elements does not contain all
 |--|--| 
 | [`assertions.SliceNotSubsetT(t T, list Slice, subset Slice, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SliceNotSubsetT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceNotSubsetT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L495)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceNotSubsetT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L493)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -825,7 +825,7 @@ SliceSubsetT asserts that a slice of comparable elements contains all the elemen
 |--|--| 
 | [`assertions.SliceSubsetT(t T, list Slice, subset Slice, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SliceSubsetT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceSubsetT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L393)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceSubsetT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L395)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -927,6 +927,8 @@ given in the subset (array, slice, or map).
 Map elements are key-value pairs unless compared with an array or slice where
 only the map key is evaluated.
 
+nil values are considered as empty sets.
+
 {{% expand title="Examples" %}}
 {{< tabs >}}
 {{% tab title="Usage" %}}
@@ -969,7 +971,7 @@ only the map key is evaluated.
 |--|--| 
 | [`assertions.Subset(t T, list any, subset any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Subset) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Subset](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L321)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Subset](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L325)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -989,5 +991,5 @@ SPDX-License-Identifier: Apache-2.0
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
 
-Generated on 2026-01-24 (version 178304f) using codegen version v2.1.9-0.20260123222731-178304f36678+dirty [sha: 178304f366789315d4db6b11c89786c43d916247]
+Generated on 2026-01-25 (version f9aee45) using codegen version v2.1.9-0.20260125223317-f9aee45df796+dirty [sha: f9aee45df7969f1ad686953c5695ffe353eaa13a]
 -->

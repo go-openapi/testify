@@ -8,15 +8,11 @@ import (
 	"runtime/debug"
 )
 
-// PanicTestFunc defines a func that should be passed to the assert.Panics and assert.NotPanics
-// methods, and represents a simple func that takes no arguments, and returns nothing.
-type PanicTestFunc func()
-
 // PanicAssertionFunc is a common function prototype when validating a panic value.  Can be useful
 // for table driven tests.
-type PanicAssertionFunc func(t T, f PanicTestFunc, msgAndArgs ...any) bool
+type PanicAssertionFunc func(t T, f func(), msgAndArgs ...any) bool
 
-// Panics asserts that the code inside the specified PanicTestFunc panics.
+// Panics asserts that the code inside the specified function panics.
 //
 // # Usage
 //
@@ -26,21 +22,21 @@ type PanicAssertionFunc func(t T, f PanicTestFunc, msgAndArgs ...any) bool
 //
 //	success: func() { panic("panicking") }
 //	failure: func() { }
-func Panics(t T, f PanicTestFunc, msgAndArgs ...any) bool {
+func Panics(t T, f func(), msgAndArgs ...any) bool {
 	// Domain: panic
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 
 	if funcDidPanic, panicValue, _ := didPanic(f); !funcDidPanic {
-		return Fail(t, fmt.Sprintf("func %#v should panic\n\tPanic value:\t%#v", f, panicValue), msgAndArgs...)
+		return Fail(t, fmt.Sprintf("func should panic\n\tPanic value:\t%#v", panicValue), msgAndArgs...)
 	}
 
 	return true
 }
 
-// PanicsWithValue asserts that the code inside the specified PanicTestFunc panics, and that
-// the recovered panic value equals the expected panic value.
+// PanicsWithValue asserts that the code inside the specified function panics,
+// and that the recovered panic value equals the expected panic value.
 //
 // # Usage
 //
@@ -50,7 +46,7 @@ func Panics(t T, f PanicTestFunc, msgAndArgs ...any) bool {
 //
 //	success: "panicking", func() { panic("panicking") }
 //	failure: "panicking", func() { }
-func PanicsWithValue(t T, expected any, f PanicTestFunc, msgAndArgs ...any) bool {
+func PanicsWithValue(t T, expected any, f func(), msgAndArgs ...any) bool {
 	// Domain: panic
 	if h, ok := t.(H); ok {
 		h.Helper()
@@ -58,18 +54,17 @@ func PanicsWithValue(t T, expected any, f PanicTestFunc, msgAndArgs ...any) bool
 
 	funcDidPanic, panicValue, panickedStack := didPanic(f)
 	if !funcDidPanic {
-		return Fail(t, fmt.Sprintf("func %#v should panic\n\tPanic value:\t%#v", f, panicValue), msgAndArgs...)
+		return Fail(t, fmt.Sprintf("func should panic\n\tPanic value:\t%#v", panicValue), msgAndArgs...)
 	}
 	if panicValue != expected {
-		return Fail(t, fmt.Sprintf("func %#v should panic with value:\t%#v\n\tPanic value:\t%#v\n\tPanic stack:\t%s", f, expected, panicValue, panickedStack), msgAndArgs...)
+		return Fail(t, fmt.Sprintf("func should panic with value:\t%#v\n\tPanic value:\t%#v\n\tPanic stack:\t%s", expected, panicValue, panickedStack), msgAndArgs...)
 	}
 
 	return true
 }
 
-// PanicsWithError asserts that the code inside the specified PanicTestFunc
-// panics, and that the recovered panic value is an error that satisfies the
-// EqualError comparison.
+// PanicsWithError asserts that the code inside the specified function panics,
+// and that the recovered panic value is an error that satisfies the EqualError comparison.
 //
 // # Usage
 //
@@ -79,7 +74,7 @@ func PanicsWithValue(t T, expected any, f PanicTestFunc, msgAndArgs ...any) bool
 //
 //	success: ErrTest.Error(), func() { panic(ErrTest) }
 //	failure: ErrTest.Error(), func() { }
-func PanicsWithError(t T, errString string, f PanicTestFunc, msgAndArgs ...any) bool {
+func PanicsWithError(t T, errString string, f func(), msgAndArgs ...any) bool {
 	// Domain: panic
 	if h, ok := t.(H); ok {
 		h.Helper()
@@ -87,11 +82,11 @@ func PanicsWithError(t T, errString string, f PanicTestFunc, msgAndArgs ...any) 
 
 	funcDidPanic, panicValue, panickedStack := didPanic(f)
 	if !funcDidPanic {
-		return Fail(t, fmt.Sprintf("func %#v should panic\n\tPanic value:\t%#v", f, panicValue), msgAndArgs...)
+		return Fail(t, fmt.Sprintf("func should panic\n\tPanic value:\t%#v", panicValue), msgAndArgs...)
 	}
 	panicErr, isError := panicValue.(error)
 	if !isError || panicErr.Error() != errString {
-		msg := fmt.Sprintf("func %#v should panic with error message:\t%#v\n", f, errString)
+		msg := fmt.Sprintf("func should panic with error message:\t%#v\n", errString)
 		if isError {
 			msg += fmt.Sprintf("\tError message:\t%#v\n", panicErr.Error())
 		}
@@ -103,7 +98,7 @@ func PanicsWithError(t T, errString string, f PanicTestFunc, msgAndArgs ...any) 
 	return true
 }
 
-// NotPanics asserts that the code inside the specified PanicTestFunc does NOT panic.
+// NotPanics asserts that the code inside the specified function does NOT panic.
 //
 // # Usage
 //
@@ -113,21 +108,21 @@ func PanicsWithError(t T, errString string, f PanicTestFunc, msgAndArgs ...any) 
 //
 //	success: func() { }
 //	failure: func() { panic("panicking") }
-func NotPanics(t T, f PanicTestFunc, msgAndArgs ...any) bool {
+func NotPanics(t T, f func(), msgAndArgs ...any) bool {
 	// Domain: panic
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 
 	if funcDidPanic, panicValue, panickedStack := didPanic(f); funcDidPanic {
-		return Fail(t, fmt.Sprintf("func %#v should not panic\n\tPanic value:\t%v\n\tPanic stack:\t%s", f, panicValue, panickedStack), msgAndArgs...)
+		return Fail(t, fmt.Sprintf("func should not panic\n\tPanic value:\t%v\n\tPanic stack:\t%s", panicValue, panickedStack), msgAndArgs...)
 	}
 
 	return true
 }
 
 // didPanic returns true if the function passed to it panics. Otherwise, it returns false.
-func didPanic(f PanicTestFunc) (didPanic bool, message any, stack string) {
+func didPanic(f func()) (didPanic bool, message any, stack string) {
 	didPanic = true
 
 	defer func() {

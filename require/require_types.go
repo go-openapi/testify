@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-24 (version 178304f) using codegen version v2.1.9-0.20260123222731-178304f36678+dirty [sha: 178304f366789315d4db6b11c89786c43d916247]
+// Generated on 2026-01-25 (version f9aee45) using codegen version v2.1.9-0.20260125223317-f9aee45df796+dirty [sha: f9aee45df7969f1ad686953c5695ffe353eaa13a]
 
 package require
 
@@ -64,11 +64,7 @@ type (
 
 	// PanicAssertionFunc is a common function prototype when validating a panic value.  Can be useful
 	// for table driven tests.
-	PanicAssertionFunc func(t T, f assertions.PanicTestFunc, msgAndArgs ...any)
-
-	// PanicTestFunc defines a func that should be passed to the assert.Panics and assert.NotPanics
-	// methods, and represents a simple func that takes no arguments, and returns nothing.
-	PanicTestFunc = assertions.PanicTestFunc
+	PanicAssertionFunc func(t T, f func(), msgAndArgs ...any)
 
 	// RegExp is either a text containing a regular expression to compile (string or []byte), or directly the compiled regexp.
 	//

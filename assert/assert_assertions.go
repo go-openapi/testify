@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-24 (version 178304f) using codegen version v2.1.9-0.20260123222731-178304f36678+dirty [sha: 178304f366789315d4db6b11c89786c43d916247]
+// Generated on 2026-01-25 (version f9aee45) using codegen version v2.1.9-0.20260125223317-f9aee45df796+dirty [sha: f9aee45df7969f1ad686953c5695ffe353eaa13a]
 
 package assert
 
@@ -1423,7 +1423,7 @@ func Kind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool {
 //
 // Len also fails if the object has a type that len() does not accept.
 //
-// The asserted object can be a string, a slice, a map, an array or a channel.
+// The asserted object can be a string, a slice, a map, an array, pointer to array or a channel.
 //
 // See also [reflect.Len].
 //
@@ -1964,7 +1964,7 @@ func NotNil(t T, object any, msgAndArgs ...any) bool {
 	return assertions.NotNil(t, object, msgAndArgs...)
 }
 
-// NotPanics asserts that the code inside the specified PanicTestFunc does NOT panic.
+// NotPanics asserts that the code inside the specified function does NOT panic.
 //
 // # Usage
 //
@@ -1976,7 +1976,7 @@ func NotNil(t T, object any, msgAndArgs ...any) bool {
 //	failure: func() { panic("panicking") }
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func NotPanics(t T, f assertions.PanicTestFunc, msgAndArgs ...any) bool {
+func NotPanics(t T, f func(), msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -2136,7 +2136,7 @@ func NotZero(t T, i any, msgAndArgs ...any) bool {
 	return assertions.NotZero(t, i, msgAndArgs...)
 }
 
-// Panics asserts that the code inside the specified PanicTestFunc panics.
+// Panics asserts that the code inside the specified function panics.
 //
 // # Usage
 //
@@ -2148,16 +2148,15 @@ func NotZero(t T, i any, msgAndArgs ...any) bool {
 //	failure: func() { }
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func Panics(t T, f assertions.PanicTestFunc, msgAndArgs ...any) bool {
+func Panics(t T, f func(), msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 	return assertions.Panics(t, f, msgAndArgs...)
 }
 
-// PanicsWithError asserts that the code inside the specified PanicTestFunc
-// panics, and that the recovered panic value is an error that satisfies the
-// EqualError comparison.
+// PanicsWithError asserts that the code inside the specified function panics,
+// and that the recovered panic value is an error that satisfies the EqualError comparison.
 //
 // # Usage
 //
@@ -2169,15 +2168,15 @@ func Panics(t T, f assertions.PanicTestFunc, msgAndArgs ...any) bool {
 //	failure: ErrTest.Error(), func() { }
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func PanicsWithError(t T, errString string, f assertions.PanicTestFunc, msgAndArgs ...any) bool {
+func PanicsWithError(t T, errString string, f func(), msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 	return assertions.PanicsWithError(t, errString, f, msgAndArgs...)
 }
 
-// PanicsWithValue asserts that the code inside the specified PanicTestFunc panics, and that
-// the recovered panic value equals the expected panic value.
+// PanicsWithValue asserts that the code inside the specified function panics,
+// and that the recovered panic value equals the expected panic value.
 //
 // # Usage
 //
@@ -2189,7 +2188,7 @@ func PanicsWithError(t T, errString string, f assertions.PanicTestFunc, msgAndAr
 //	failure: "panicking", func() { }
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func PanicsWithValue(t T, expected any, f assertions.PanicTestFunc, msgAndArgs ...any) bool {
+func PanicsWithValue(t T, expected any, f func(), msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -2509,6 +2508,8 @@ func StringNotContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndAr
 //
 // Map elements are key-value pairs unless compared with an array or slice where
 // only the map key is evaluated.
+//
+// nil values are considered as empty sets.
 //
 // # Usage
 //

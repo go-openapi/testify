@@ -26,7 +26,7 @@ func ExamplePanicAssertionFunc() {
 
 type panicAssertionCase struct {
 	name      string
-	panicFn   assert.PanicTestFunc
+	panicFn   func()
 	assertion assert.PanicAssertionFunc
 }
 
