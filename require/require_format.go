@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-24 (version 178304f) using codegen version v2.1.9-0.20260123222731-178304f36678+dirty [sha: 178304f366789315d4db6b11c89786c43d916247]
+// Generated on 2026-01-25 (version f9aee45) using codegen version v2.1.9-0.20260125223317-f9aee45df796+dirty [sha: f9aee45df7969f1ad686953c5695ffe353eaa13a]
 
 package require
 
@@ -1205,7 +1205,7 @@ func NotNilf(t T, object any, msg string, args ...any) {
 // NotPanicsf is the same as [NotPanics], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func NotPanicsf(t T, f assertions.PanicTestFunc, msg string, args ...any) {
+func NotPanicsf(t T, f func(), msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -1317,7 +1317,7 @@ func NotZerof(t T, i any, msg string, args ...any) {
 // Panicsf is the same as [Panics], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func Panicsf(t T, f assertions.PanicTestFunc, msg string, args ...any) {
+func Panicsf(t T, f func(), msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -1331,7 +1331,7 @@ func Panicsf(t T, f assertions.PanicTestFunc, msg string, args ...any) {
 // PanicsWithErrorf is the same as [PanicsWithError], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func PanicsWithErrorf(t T, errString string, f assertions.PanicTestFunc, msg string, args ...any) {
+func PanicsWithErrorf(t T, errString string, f func(), msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -1345,7 +1345,7 @@ func PanicsWithErrorf(t T, errString string, f assertions.PanicTestFunc, msg str
 // PanicsWithValuef is the same as [PanicsWithValue], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func PanicsWithValuef(t T, expected any, f assertions.PanicTestFunc, msg string, args ...any) {
+func PanicsWithValuef(t T, expected any, f func(), msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
