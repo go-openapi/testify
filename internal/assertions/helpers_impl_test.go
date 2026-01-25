@@ -4,7 +4,6 @@
 package assertions
 
 import (
-	"bufio"
 	"errors"
 	"fmt"
 	"iter"
@@ -26,17 +25,22 @@ func testTruncatingFormat() func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
 
-		original := strings.Repeat("a", bufio.MaxScanTokenSize/2-102)
-		result := truncatingFormat("%#v", original)
-		Equal(t, fmt.Sprintf("%#v", original), result, "string should not be truncated")
+		original := strings.Repeat("a", maxMessageSize-100)
 
-		original += "x"
-		result = truncatingFormat("%#v", original)
-		NotEqual(t, fmt.Sprintf("%#v", original), result, "string should have been truncated.")
+		t.Run("should not truncate rendered value", func(t *testing.T) {
+			result := truncatingFormat("%#v", original)
+			Equal(t, fmt.Sprintf("%#v", original), result, "string should not be truncated")
+		})
 
-		if !strings.HasSuffix(result, "<... truncated>") {
-			t.Error("truncated string should have <... truncated> suffix")
-		}
+		t.Run("should truncate rendered value", func(t *testing.T) {
+			original += strings.Repeat("x", 100)
+			result := truncatingFormat("%#v", original)
+			NotEqual(t, fmt.Sprintf("%#v", original), result, "string should have been truncated.")
+
+			if !strings.HasSuffix(result, "<... truncated>") {
+				t.Error("truncated string should have <... truncated> suffix")
+			}
+		})
 	}
 }
 

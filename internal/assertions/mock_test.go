@@ -259,12 +259,6 @@ func callerName(skip int) string {
 	return frame.Function
 }
 
-type testCase struct {
-	expected any
-	actual   any
-	result   bool
-}
-
 func shouldPassOrFail(t *testing.T, mock *mockT, result, shouldPass bool) {
 	t.Helper()
 

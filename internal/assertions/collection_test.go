@@ -15,1252 +15,1058 @@ import (
 	"testing"
 )
 
-func TestCollectionLen(t *testing.T) {
+// TestCollectionErrorMessages tests error message formatting for collection assertions.
+func TestCollectionErrorMessages(t *testing.T) {
 	t.Parallel()
 
-	t.Run("with invalid types", func(t *testing.T) {
+	t.Run("should render when value is too long to print", testCollectionTooLongToPrint())
+
+	// Test specific error messages for Contains/NotContains failures
+	t.Run("should fail with error message", func(t *testing.T) {
 		t.Parallel()
-		mock := new(testing.T)
 
-		False(t, Len(mock, nil, 0), "nil does not have length")
-		False(t, Len(mock, 0, 0), "int does not have length")
-		False(t, Len(mock, true, 0), "true does not have length")
-		False(t, Len(mock, false, 0), "false does not have length")
-		False(t, Len(mock, 'A', 0), "Rune does not have length")
-		False(t, Len(mock, struct{}{}, 0), "Struct does not have length")
-	})
+		for c := range containsFailMessageCases() {
+			name := filepath.Base(runtime.FuncForPC(reflect.ValueOf(c.assertion).Pointer()).Name())
+			t.Run(fmt.Sprintf("%v(%T, %T)", name, c.container, c.instance), func(t *testing.T) {
+				t.Parallel()
+				mock := new(mockT)
 
-	t.Run("with valid types", func(t *testing.T) {
-		t.Parallel()
-		mock := new(testing.T)
-
-		for c := range collectionValidLenCases() {
-			True(t, Len(mock, c.v, c.l), "%#v have %d items", c.v, c.l)
-			False(t, Len(mock, c.v, c.l+1), "%#v have %d items", c.v, c.l)
-
-			if c.expected1234567 != "" {
-				msgMock := new(mockT)
-				Len(msgMock, c.v, 1234567)
-				Contains(t, msgMock.errorString(), c.expected1234567)
-			}
+				c.assertion(mock, c.container, c.instance)
+				actualFail := mock.errorString()
+				if !strings.Contains(actualFail, c.expected) {
+					t.Errorf("failure should include %q but was %q", c.expected, actualFail)
+				}
+			})
 		}
 	})
 
-	t.Run("with slice too long to print", func(t *testing.T) {
+	// Test nil container error message
+	t.Run("with Contains on nil value", func(t *testing.T) {
 		t.Parallel()
 		mock := new(mockT)
 
-		longSlice := make([]int, 1_000_000)
-		Len(mock, longSlice, 1)
-		Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	"[0 0 0`)
-		Contains(t, mock.errorString(), `<... truncated>" should have 1 item(s), but has 1000000`)
+		Contains(mock, nil, "key")
+		expectedFail := "<nil> could not be applied builtin len()"
+		actualFail := mock.errorString()
+		if !strings.Contains(actualFail, expectedFail) {
+			t.Errorf("Contains failure should include %q but was %q", expectedFail, actualFail)
+		}
+
+		NotContains(mock, nil, "key")
+		if !strings.Contains(actualFail, expectedFail) {
+			t.Errorf("NotContains failure should include %q but was %q", expectedFail, actualFail)
+		}
 	})
 }
 
+// TestCollectionLen tests the Len assertion.
+func TestCollectionLen(t *testing.T) {
+	t.Parallel()
+
+	for tc := range collectionLenCases() {
+		t.Run(tc.name, testLen(tc))
+	}
+}
+
+// TestCollectionContains tests both Contains and NotContains with reflection-based
+// and generic variants using unified test cases.
+//
+// For slices, also tests SeqContains
+// and SeqNotContains since slices can be converted to iter.Seq via slices.Values.
 func TestCollectionContains(t *testing.T) {
 	t.Parallel()
 
-	t.Run("nil with slice too long to print", func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
+	for tc := range unifiedContainsCases() {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			container, element := tc.makeValues()
 
-		longSlice := make([]int, 1_000_000)
-		Nil(mock, &longSlice)
-		Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	Expected nil, but got: &[]int{0, 0, 0,`)
-		Contains(t, mock.errorString(), `<... truncated>`)
-	})
+			if !tc.reflectionOnly {
+				// Test reflection-based variants
+				t.Run("with Contains", testContainsAssertion(tc, containsKind, Contains, container, element))
+				t.Run("with NotContains", testContainsAssertion(tc, notContainsKind, NotContains, container, element))
 
-	t.Run("empty with slice too long to print", func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
+				// Test generic variants (type dispatch)
+				t.Run("with generic Contains", testContainsAssertionT(tc, containsTKind, container, element))
+				t.Run("with generic NotContains", testContainsAssertionT(tc, notContainsTKind, container, element))
 
-		longSlice := make([]int, 1_000_000)
-		Empty(mock, longSlice)
-		Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	Should be empty, but was [0 0 0`)
-		Contains(t, mock.errorString(), `<... truncated>`)
-	})
+				// For slices, also test Seq variants (slices can be converted to iter.Seq via slices.Values)
+				if isSliceType(container) {
+					t.Run("with generic SeqContains", testContainsAssertionT(tc, seqContainsTKind, container, element))
+					t.Run("with generic SeqNotContains", testContainsAssertionT(tc, seqNotContainsTKind, container, element))
+				}
 
-	t.Run("with slice too long to print", func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
+				return
+			}
 
-		longSlice := make([]int, 1_000_000)
-		Contains(mock, longSlice, 1)
-		Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	[]int{0, 0, 0,`)
-		Contains(t, mock.errorString(), `<... truncated> does not contain 1`)
-	})
+			// Reflection-only cases
+			t.Run("with Contains (reflection)", testContainsAssertion(tc, containsKind, Contains, container, element))
+			t.Run("with NotContains (reflection)", testContainsAssertion(tc, notContainsKind, NotContains, container, element))
+		})
+	}
 }
 
-func TestCollectionNotContains(t *testing.T) {
-	t.Parallel()
-
-	t.Run("with slice too long to print", func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		longSlice := make([]int, 1_000_000)
-		NotContains(mock, longSlice, 0)
-		Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	[]int{0, 0, 0,`)
-		Contains(t, mock.errorString(), `<... truncated> should not contain 0`)
-	})
-}
-
+// TestCollectionSubset tests both Subset and NotSubset with reflection-based
+// and generic variants using unified test cases.
 func TestCollectionSubset(t *testing.T) {
 	t.Parallel()
 
-	t.Run("with slice too long to print", func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		longSlice := make([]int, 1_000_000)
-		Subset(mock, longSlice, []int{1})
-		Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	[]int{0, 0, 0,`)
-		Contains(t, mock.errorString(), `<... truncated> does not contain 1`)
-	})
-
-	t.Run("with map too long to print", func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		longSlice := make([]int, 1_000_000)
-		Subset(mock, map[bool][]int{true: longSlice}, map[bool][]int{false: longSlice})
-		Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	map[bool][]int{true:[]int{0, 0, 0,`)
-		Contains(t, mock.errorString(), `<... truncated> does not contain map[bool][]int{false:[]int{0, 0, 0,`)
-	})
-}
-
-func TestCollectionNotSubset(t *testing.T) {
-	t.Parallel()
-
-	t.Run("with slice too long to print", func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		longSlice := make([]int, 1_000_000)
-		NotSubset(mock, longSlice, longSlice)
-		Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	['\x00' '\x00' '\x00'`)
-		Contains(t, mock.errorString(), `<... truncated> is a subset of ['\x00' '\x00' '\x00'`)
-	})
-
-	t.Run("with map too long to print", func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		longSlice := make([]int, 1_000_000)
-		NotSubset(mock, map[int][]int{1: longSlice}, map[int][]int{1: longSlice})
-		Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	map['\x01':['\x00' '\x00' '\x00'`)
-		Contains(t, mock.errorString(), `<... truncated> is a subset of map['\x01':['\x00' '\x00' '\x00'`)
-	})
-}
-
-func TestCollectionContainsNotContains(t *testing.T) {
-	t.Parallel()
-
-	for c := range collectionContainsCases() {
-		t.Run(fmt.Sprintf("Contains(%#v, %#v)", c.expected, c.actual), func(t *testing.T) {
+	for tc := range unifiedSubsetCases() {
+		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			mock := new(testing.T)
+			list, subset := tc.makeValues()
 
-			res := Contains(mock, c.expected, c.actual)
+			if !tc.reflectionOnly {
+				// Test reflection-based variants
+				t.Run("with Subset", testSubsetAssertion(tc, subsetKind, Subset, list, subset))
+				t.Run("with NotSubset", testSubsetAssertion(tc, notSubsetKind, NotSubset, list, subset))
 
-			if res != c.result {
-				if res {
-					t.Errorf("Contains(%#v, %#v) should return true:\n\t%#v contains %#v", c.expected, c.actual, c.expected, c.actual)
-				} else {
-					t.Errorf("Contains(%#v, %#v) should return false:\n\t%#v does not contain %#v", c.expected, c.actual, c.expected, c.actual)
-				}
-			}
-		})
-	}
-
-	for c := range collectionContainsCases() {
-		t.Run(fmt.Sprintf("NotContains(%#v, %#v)", c.expected, c.actual), func(t *testing.T) {
-			t.Parallel()
-			mock := new(testing.T)
-
-			res := NotContains(mock, c.expected, c.actual)
-
-			// NotContains should be inverse of Contains. If it's not, something is wrong
-			if res == Contains(mock, c.expected, c.actual) {
-				if res {
-					t.Errorf("NotContains(%#v, %#v) should return true:\n\t%#v does not contains %#v", c.expected, c.actual, c.expected, c.actual)
-				} else {
-					t.Errorf("NotContains(%#v, %#v) should return false:\n\t%#v contains %#v", c.expected, c.actual, c.expected, c.actual)
-				}
+				// Test generic variants (type dispatch)
+				t.Run("with generic Subset", testSubsetAssertionT(tc, subsetTKind, list, subset))
+				t.Run("with generic NotSubset", testSubsetAssertionT(tc, notSubsetTKind, list, subset))
+			} else {
+				// Reflection-only cases
+				t.Run("with Subset (reflection)", testSubsetAssertion(tc, subsetKind, Subset, list, subset))
+				t.Run("with NotSubset (reflection)", testSubsetAssertion(tc, notSubsetKind, NotSubset, list, subset))
 			}
 		})
 	}
 }
 
-func TestCollectionContainsNotContainsFailMessage(t *testing.T) {
-	t.Parallel()
-
-	for c := range collectionContainsFailCases() {
-		name := filepath.Base(runtime.FuncForPC(reflect.ValueOf(c.assertion).Pointer()).Name())
-		t.Run(fmt.Sprintf("%v(%T, %T)", name, c.container, c.instance), func(t *testing.T) {
-			t.Parallel()
-			mock := new(mockT)
-
-			c.assertion(mock, c.container, c.instance)
-			actualFail := mock.errorString()
-			if !strings.Contains(actualFail, c.expected) {
-				t.Errorf("Contains failure should include %q but was %q", c.expected, actualFail)
-			}
-		})
-	}
-}
-
-func TestCollectionContainsNotContainsOnNilValue(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
-
-	Contains(mock, nil, "key")
-	expectedFail := "<nil> could not be applied builtin len()"
-	actualFail := mock.errorString()
-	if !strings.Contains(actualFail, expectedFail) {
-		t.Errorf("Contains failure should include %q but was %q", expectedFail, actualFail)
-	}
-
-	NotContains(mock, nil, "key")
-	if !strings.Contains(actualFail, expectedFail) {
-		t.Errorf("Contains failure should include %q but was %q", expectedFail, actualFail)
-	}
-}
-
-func TestCollectionSubsetNotSubset(t *testing.T) {
-	t.Parallel()
-
-	for c := range collectionSubsetCases() {
-		t.Run("SubSet: "+c.message, func(t *testing.T) {
-			t.Parallel()
-			mock := new(mockT)
-
-			res := Subset(mock, c.list, c.subset)
-
-			if res != c.result {
-				t.Errorf("Subset should return %t: %s", c.result, c.message)
-			}
-
-			if !c.result {
-				expectedFail := c.message
-				actualFail := mock.errorString()
-				if !strings.Contains(actualFail, expectedFail) {
-					t.Log(actualFail)
-					t.Errorf("Subset failure should contain %q but was %q", expectedFail, actualFail)
-				}
-			}
-		})
-	}
-
-	for c := range collectionSubsetCases() {
-		t.Run("NotSubSet: "+c.message, func(t *testing.T) {
-			t.Parallel()
-			mock := new(mockT)
-
-			res := NotSubset(mock, c.list, c.subset)
-
-			// NotSubset should match the inverse of Subset. If it doesn't, something is wrong
-			if res == Subset(mock, c.list, c.subset) {
-				t.Errorf("NotSubset should return %t: %s", !c.result, c.message)
-			}
-
-			if c.result {
-				expectedFail := c.message
-				actualFail := mock.errorString()
-				if !strings.Contains(actualFail, expectedFail) {
-					t.Log(actualFail)
-					t.Errorf("NotSubset failure should contain %q but was %q", expectedFail, actualFail)
-				}
-			}
-		})
-	}
-}
-
-func TestCollectionNotSubsetNil(t *testing.T) {
-	t.Parallel()
-	mock := new(testing.T)
-
-	NotSubset(mock, []string{"foo"}, nil)
-	if !mock.Failed() {
-		t.Error("NotSubset on nil set should have failed the test")
-	}
-}
-
+// TestCollectionElementsMatch tests both ElementsMatch and NotElementsMatch
+// with reflection-based and generic variants using unified test cases.
 func TestCollectionElementsMatch(t *testing.T) {
 	t.Parallel()
 
-	for c := range collectionElementsMatchCases() {
-		t.Run(fmt.Sprintf("ElementsMatch(%#v, %#v)", c.expected, c.actual), func(t *testing.T) {
+	for tc := range unifiedElementsMatchCases() {
+		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			mock := new(testing.T)
+			actual, expected := tc.makeValues()
 
-			res := ElementsMatch(mock, c.actual, c.expected)
+			if !tc.reflectionOnly {
+				// Test reflection-based variants
+				t.Run("with ElementsMatch", testElementsMatchAssertion(tc, elementsMatchKind, ElementsMatch, actual, expected))
+				t.Run("with NotElementsMatch", testElementsMatchAssertion(tc, notElementsMatchKind, NotElementsMatch, actual, expected))
 
-			if res != c.result {
-				t.Errorf("ElementsMatch(%#v, %#v) should return %v", c.actual, c.expected, c.result)
+				// Test generic variants (type dispatch)
+				t.Run("with generic ElementsMatch", testElementsMatchAssertionT(tc, elementsMatchTKind, actual, expected))
+				t.Run("with generic NotElementsMatch", testElementsMatchAssertionT(tc, notElementsMatchTKind, actual, expected))
+			} else {
+				// Reflection-only cases
+				t.Run("with ElementsMatch (reflection)", testElementsMatchAssertion(tc, elementsMatchKind, ElementsMatch, actual, expected))
+				t.Run("with NotElementsMatch (reflection)", testElementsMatchAssertion(tc, notElementsMatchKind, NotElementsMatch, actual, expected))
 			}
 		})
 	}
 }
 
-func TestCollectionElementsMatchT(t *testing.T) {
-	t.Parallel()
+// ============================================================================
+// TestCollectionLen
+// ============================================================================
 
-	for tc := range elementsMatchTCases() {
-		t.Run(tc.name, tc.test)
+func testLen(tc collectionLenCase) func(*testing.T) {
+	if !tc.valid {
+		return func(t *testing.T) {
+			t.Run("with invalid type", func(t *testing.T) {
+				t.Run(tc.name, func(t *testing.T) {
+					t.Parallel()
+
+					mock := new(mockT)
+					res := Len(mock, tc.v, tc.len)
+					if res {
+						t.Errorf("Len should not work for type %T", tc.v)
+
+						return
+					}
+
+					if tc.expectedMsg == "" {
+						return // skip error message check
+					}
+
+					// check error message
+					if !strings.Contains(mock.errorString(), tc.expectedMsg) {
+						t.Errorf("expected error message to contain %q but got: %q", tc.expectedMsg, mock.errorString())
+					}
+				})
+			})
+		}
 	}
-}
 
-func TestCollectionNotElementsMatch(t *testing.T) {
-	t.Parallel()
+	return func(t *testing.T) {
+		t.Run("with expected length", func(t *testing.T) {
+			t.Run(tc.name, func(t *testing.T) {
+				t.Parallel()
 
-	for c := range collectionNotElementsMatchCases() {
-		t.Run(fmt.Sprintf("NotElementsMatch(%#v, %#v)", c.expected, c.actual), func(t *testing.T) {
-			t.Parallel()
-			mock := new(testing.T)
+				mock := new(mockT)
+				res := Len(mock, tc.v, tc.len)
+				if !res {
+					t.Errorf("%#v should have %d items", tc.v, tc.len)
+				}
+			})
+		})
 
-			res := NotElementsMatch(mock, c.actual, c.expected)
+		t.Run("with unexpected length", func(t *testing.T) {
+			t.Run(tc.name, func(t *testing.T) {
+				t.Parallel()
 
-			if res != c.result {
-				t.Errorf("NotElementsMatch(%#v, %#v) should return %v", c.actual, c.expected, c.result)
-			}
+				mock := new(mockT)
+				res := Len(mock, tc.v, tc.len+1)
+				if res {
+					t.Errorf("%#v should not have %d items", tc.v, tc.len+1)
+					return
+				}
+
+				if tc.expectedMsg == "" {
+					return // skip error message check
+				}
+
+				// check error message
+				if !strings.Contains(mock.errorString(), tc.expectedMsg) {
+					t.Errorf("expected error message to contain %q but got: %q", tc.expectedMsg, mock.errorString())
+				}
+			})
 		})
 	}
 }
 
-func TestCollectionNotElementsMatchT(t *testing.T) {
-	t.Parallel()
-
-	for tc := range notElementsMatchTCases() {
-		t.Run(tc.name, tc.test)
-	}
+type collectionLenCase struct {
+	name        string
+	v           any
+	len         int
+	expectedMsg string // message when expecting len+1 items
+	valid       bool
 }
 
-/* iterators for test cases */
-
-type collectionValidLenCase struct {
-	v               any
-	l               int
-	expected1234567 string // message when expecting 1234567 items
-}
-
-func collectionValidLenCases() iter.Seq[collectionValidLenCase] {
+func collectionLenCases() iter.Seq[collectionLenCase] {
 	ch := make(chan int, 5)
 	ch <- 1
 	ch <- 2
 	ch <- 3
+	longSlice := make([]int, 1_000_000)
+	arr := [3]int{1, 2, 3}
 
-	return slices.Values([]collectionValidLenCase{
-		{[]int{1, 2, 3}, 3, `"[1 2 3]" should have 1234567 item(s), but has 3`},
-		{[...]int{1, 2, 3}, 3, `"[1 2 3]" should have 1234567 item(s), but has 3`},
-		{"ABC", 3, `"ABC" should have 1234567 item(s), but has 3`},
-		{map[int]int{1: 2, 2: 4, 3: 6}, 3, `"map[1:2 2:4 3:6]" should have 1234567 item(s), but has 3`},
-		{ch, 3, ""},
+	return slices.Values([]collectionLenCase{
+		{"slice/int", []int{1, 2, 3}, 3, `"[1 2 3]" should have 4 item(s), but has 3`, true},
+		{"array/int", [...]int{1, 2, 3}, 3, `"[1 2 3]" should have 4 item(s), but has 3`, true},
+		{"ptr-to-array/int", &arr, 3, `"&[1 2 3]" should have 4 item(s), but has 3`, true},
+		{"string", "ABC", 3, `"ABC" should have 4 item(s), but has 3`, true},
+		{"map/int", map[int]int{1: 2, 2: 4, 3: 6}, 3, `"map[1:2 2:4 3:6]" should have 4 item(s), but has 3`, true},
+		{"channel", ch, 3, "", true},
+		{"empty slice", []int{}, 0, `"[]" should have 1 item(s), but has 0`, true},
+		{"empty map", map[int]int{}, 0, `"map[]" should have 1 item(s), but has 0`, true},
+		{"empty channel", make(chan int), 0, "", true},
+		{"nil slice", []int(nil), 0, `"[]" should have 1 item(s), but has 0`, true},
+		{"nil map", map[int]int(nil), 0, `"map[]" should have 1 item(s), but has 0`, true},
+		{"nil chan", (chan int)(nil), 0, `"<nil>" should have 1 item(s), but has 0`, true},
 
-		{[]int{}, 0, `"[]" should have 1234567 item(s), but has 0`},
-		{map[int]int{}, 0, `"map[]" should have 1234567 item(s), but has 0`},
-		{make(chan int), 0, ""},
+		// Unsupported types
+		{"invalid type/nil", nil, 0, `"<nil>" could not be applied builtin len()`, false},
+		{"invalid type/int", 0, 0, "", false},
+		{"invalid type/bool", true, 0, "", false},
+		{"invalid type/rune", 'A', 0, "", false},
+		{"invalid type/struct", struct{}{}, 0, "", false},
+		{"invalid type/ptr-not-array", &longSlice, 1_000_000, `<... truncated>" could not be applied builtin len()`, false},
+		{"invalid type/ptr-anything", ptr(1), 0, `" could not be applied builtin len()`, false},
 
-		{[]int(nil), 0, `"[]" should have 1234567 item(s), but has 0`},
-		{map[int]int(nil), 0, `"map[]" should have 1234567 item(s), but has 0`},
-		{(chan int)(nil), 0, `"<nil>" should have 1234567 item(s), but has 0`},
+		// Truncated message
+		{"truncated message/long slice", longSlice, 1_000_000, `<... truncated>" should have 1000001 item(s), but has 1000000`, true},
 	})
 }
 
-type collectionContainsCase = testCase
+// ============================================================================
+// TestCollectionContains
+// ============================================================================
 
-func collectionContainsCases() iter.Seq[collectionContainsCase] {
-	type A struct {
-		Name, Value string
+// containsRelationship describes the relationship between a container and an element.
+type containsRelationship int
+
+const (
+	crContains containsRelationship = iota
+	crNotContains
+	crInvalidContainer // container type doesn't support Contains
+)
+
+type containsAssertionKind int
+
+const (
+	containsKind containsAssertionKind = iota
+	notContainsKind
+	containsTKind       // generic string/slice/map variants
+	notContainsTKind    // generic not-contains variants
+	seqContainsTKind    // generic seq contains
+	seqNotContainsTKind // generic seq not-contains
+)
+
+func testContainsAssertion(tc containsTestCase, kind containsAssertionKind, assertion func(T, any, any, ...any) bool, container, element any) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := assertion(mock, container, element)
+		shouldPass := expectedStatusForContainsAssertion(kind, tc.relationship)
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
+}
 
-	list := []string{"Foo", "Bar"}
-	complexList := []*A{
+//nolint:gocognit,gocyclo,cyclop // type dispatch requires large switch statement
+func testContainsAssertionT(tc containsTestCase, kind containsAssertionKind, container, element any) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		stop := func(expected string, actual any) {
+			t.Fatalf("test case error: expected container=%s, actual=%T", expected, actual)
+		}
+
+		var result bool
+		// Type switch based on container type
+		switch cont := container.(type) {
+		case string:
+			elem, ok := element.(string)
+			if !ok {
+				t.Fatalf("test case error: string container requires string element, got %T", element)
+			}
+			result = testStringContainsGeneric(mock, kind, cont, elem)
+		case []byte:
+			elem, ok := element.([]byte)
+			if !ok {
+				t.Fatalf("test case error: []byte container requires []byte element, got %T", element)
+			}
+			result = testStringContainsGeneric(mock, kind, cont, elem)
+		case []int:
+			elem, ok := element.(int)
+			if !ok {
+				t.Fatalf("test case error: []int container requires int element, got %T", element)
+			}
+			if kind == seqContainsTKind || kind == seqNotContainsTKind {
+				result = testSeqContainsGeneric(mock, kind, cont, elem)
+			} else {
+				result = testSliceContainsGeneric(mock, kind, cont, elem)
+			}
+		case []string:
+			elem, ok := element.(string)
+			if !ok {
+				t.Fatalf("test case error: []string container requires string element, got %T", element)
+			}
+			if kind == seqContainsTKind || kind == seqNotContainsTKind {
+				result = testSeqContainsGeneric(mock, kind, cont, elem)
+			} else {
+				result = testSliceContainsGeneric(mock, kind, cont, elem)
+			}
+		case []float64:
+			elem, ok := element.(float64)
+			if !ok {
+				t.Fatalf("test case error: []float64 container requires float64 element, got %T", element)
+			}
+			if kind == seqContainsTKind || kind == seqNotContainsTKind {
+				result = testSeqContainsGeneric(mock, kind, cont, elem)
+			} else {
+				result = testSliceContainsGeneric(mock, kind, cont, elem)
+			}
+		case []*containsStruct:
+			elem, ok := element.(*containsStruct)
+			if !ok {
+				t.Fatalf("test case error: []*containsStruct container requires *containsStruct element, got %T", element)
+			}
+			if kind == seqContainsTKind || kind == seqNotContainsTKind {
+				result = testSeqContainsGeneric(mock, kind, cont, elem)
+			} else {
+				result = testSliceContainsGeneric(mock, kind, cont, elem)
+			}
+
+		case map[string]int:
+			elem, ok := element.(string)
+			if !ok {
+				t.Fatalf("test case error: map[string]int container requires string element, got %T", element)
+			}
+			result = testMapContainsGeneric(mock, kind, cont, elem)
+		case map[int]string:
+			elem, ok := element.(int)
+			if !ok {
+				t.Fatalf("test case error: map[int]string container requires int element, got %T", element)
+			}
+			result = testMapContainsGeneric(mock, kind, cont, elem)
+		case map[any]any:
+			result = testMapContainsGeneric(mock, kind, cont, element)
+		default:
+			stop(fmt.Sprintf("%T", container), container)
+		}
+
+		shouldPass := expectedStatusForContainsAssertion(kind, tc.relationship)
+		shouldPassOrFail(t, mock, result, shouldPass)
+	}
+}
+
+func testStringContainsGeneric[S, E Text](mock T, kind containsAssertionKind, container S, element E) bool {
+	switch kind {
+	case containsTKind:
+		return StringContainsT(mock, container, element)
+	case notContainsTKind:
+		return StringNotContainsT(mock, container, element)
+	default:
+		panic(fmt.Errorf("test case configuration error: invalid containsAssertionKind for string generic: %d", kind))
+	}
+}
+
+func testSliceContainsGeneric[Slice ~[]E, E comparable](mock T, kind containsAssertionKind, container Slice, element E) bool {
+	switch kind {
+	case containsTKind:
+		return SliceContainsT(mock, container, element)
+	case notContainsTKind:
+		return SliceNotContainsT(mock, container, element)
+	default:
+		panic(fmt.Errorf("test case configuration error: invalid containsAssertionKind for slice generic: %d", kind))
+	}
+}
+
+func testMapContainsGeneric[Map ~map[K]V, K comparable, V any](mock T, kind containsAssertionKind, container Map, element K) bool {
+	switch kind {
+	case containsTKind:
+		return MapContainsT(mock, container, element)
+	case notContainsTKind:
+		return MapNotContainsT(mock, container, element)
+	default:
+		panic(fmt.Errorf("test case configuration error: invalid containsAssertionKind for map generic: %d", kind))
+	}
+}
+
+func testSeqContainsGeneric[Slice ~[]E, E comparable](mock T, kind containsAssertionKind, container Slice, element E) bool {
+	seq := slices.Values(container)
+	switch kind {
+	case seqContainsTKind:
+		return SeqContainsT(mock, seq, element)
+	case seqNotContainsTKind:
+		return SeqNotContainsT(mock, seq, element)
+	default:
+		panic(fmt.Errorf("test case configuration error: invalid containsAssertionKind for seq generic: %d", kind))
+	}
+}
+
+func expectedStatusForContainsAssertion(kind containsAssertionKind, relationship containsRelationship) bool {
+	positive := kind == containsKind || kind == containsTKind || kind == seqContainsTKind
+
+	switch relationship {
+	case crContains:
+		return positive
+	case crNotContains:
+		return !positive
+	case crInvalidContainer:
+		return false
+	default:
+		panic(fmt.Errorf("test case configuration error: invalid containsRelationship: %d", relationship))
+	}
+}
+
+func isSliceType(v any) bool {
+	return reflect.TypeOf(v).Kind() == reflect.Slice
+}
+
+type containsTestCase struct {
+	name           string
+	makeValues     func() (container, element any)
+	relationship   containsRelationship
+	reflectionOnly bool
+}
+
+type containsStruct struct {
+	Name, Value string
+}
+
+const (
+	testStringBar = "Bar"
+	testStringFoo = "Foo"
+)
+
+func unifiedContainsCases() iter.Seq[containsTestCase] {
+	list := []string{testStringFoo, testStringBar}
+	complexList := []*containsStruct{
 		{"b", "c"},
 		{"d", "e"},
 		{"g", "h"},
 		{"j", "k"},
 	}
-	simpleMap := map[any]any{"Foo": "Bar"}
+	simpleMap := map[any]any{testStringFoo: testStringBar}
 	var zeroMap map[any]any
 
-	return slices.Values([]collectionContainsCase{
-		{"Hello World", "Hello", true},
-		{"Hello World", "Salut", false},
-		{list, "Bar", true},
-		{list, "Salut", false},
-		{complexList, &A{"g", "h"}, true},
-		{complexList, &A{"g", "e"}, false},
-		{simpleMap, "Foo", true},
-		{simpleMap, "Bar", false},
-		{zeroMap, "Bar", false},
+	return slices.Values([]containsTestCase{
+		// String contains
+		{"string/contains", func() (any, any) { return "Hello World", "Hello" }, crContains, false},
+		{"string/not-contains", func() (any, any) { return "Hello World", "Salut" }, crNotContains, false},
+
+		// Slice contains
+		{"slice-string/contains", func() (any, any) { return list, testStringBar }, crContains, false},
+		{"slice-string/not-contains", func() (any, any) { return list, "Salut" }, crNotContains, false},
+		// Struct pointers use reflection-only since generic uses pointer equality, not deep equality
+		{"slice-struct/contains", func() (any, any) { return complexList, &containsStruct{"g", "h"} }, crContains, true},
+		{"slice-struct/not-contains", func() (any, any) { return complexList, &containsStruct{"g", "e"} }, crNotContains, true},
+
+		// Map contains (key lookup)
+		{"map/contains-key", func() (any, any) { return simpleMap, testStringFoo }, crContains, false},
+		{"map/not-contains-key", func() (any, any) { return simpleMap, testStringBar }, crNotContains, false},
+		{"map-zero/not-contains", func() (any, any) { return zeroMap, testStringBar }, crNotContains, false},
+
+		// Invalid container (reflection only)
+		{
+			"invalid/non-container-struct",
+			func() (any, any) {
+				type nonContainer struct{ Value string }
+				return nonContainer{Value: "Hello"}, "Hello"
+			},
+			crInvalidContainer,
+			true,
+		},
+		{
+			"invalid/nil",
+			func() (any, any) { return nil, "key" },
+			crInvalidContainer,
+			true,
+		},
 	})
 }
 
-type collectionContainsFailCase struct {
+// ============================================================================
+// TestCollectionSubset
+// ============================================================================
+
+// subsetRelationship describes the relationship between a list and a subset.
+type subsetRelationship int
+
+const (
+	srSubset subsetRelationship = iota
+	srNotSubset
+	srInvalidType // types don't support subset comparison
+)
+
+type subsetAssertionKind int
+
+const (
+	subsetKind subsetAssertionKind = iota
+	notSubsetKind
+	subsetTKind    // generic slice variant
+	notSubsetTKind // generic not-subset variant
+)
+
+func testSubsetAssertion(tc subsetTestCase, kind subsetAssertionKind, assertion func(T, any, any, ...any) bool, list, subset any) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := assertion(mock, list, subset)
+		shouldPass := expectedStatusForSubsetAssertion(kind, tc.relationship)
+		shouldPassOrFail(t, mock, result, shouldPass)
+	}
+}
+
+func testSubsetAssertionT(tc subsetTestCase, kind subsetAssertionKind, list, subset any) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+
+		var result bool
+		// Type switch based on list type
+		switch lst := list.(type) {
+		case []int:
+			sub, ok := subset.([]int)
+			if !ok {
+				t.Fatalf("test case error: []int list requires []int subset, got %T", subset)
+			}
+			result = testSliceSubsetGeneric(mock, kind, lst, sub)
+		case []string:
+			sub, ok := subset.([]string)
+			if !ok {
+				t.Fatalf("test case error: []string list requires []string subset, got %T", subset)
+			}
+			result = testSliceSubsetGeneric(mock, kind, lst, sub)
+		case []float64:
+			sub, ok := subset.([]float64)
+			if !ok {
+				t.Fatalf("test case error: []float64 list requires []float64 subset, got %T", subset)
+			}
+			result = testSliceSubsetGeneric(mock, kind, lst, sub)
+		default:
+			t.Fatalf("unsupported type for generic subset: %T", list)
+		}
+
+		shouldPass := expectedStatusForSubsetAssertion(kind, tc.relationship)
+		shouldPassOrFail(t, mock, result, shouldPass)
+	}
+}
+
+func testSliceSubsetGeneric[Slice ~[]E, E comparable](mock T, kind subsetAssertionKind, list, subset Slice) bool {
+	switch kind {
+	case subsetTKind:
+		return SliceSubsetT(mock, list, subset)
+	case notSubsetTKind:
+		return SliceNotSubsetT(mock, list, subset)
+	default:
+		panic(fmt.Errorf("test case configuration error: invalid subsetAssertionKind for generic: %d", kind))
+	}
+}
+
+func expectedStatusForSubsetAssertion(kind subsetAssertionKind, relationship subsetRelationship) bool {
+	positive := kind == subsetKind || kind == subsetTKind
+
+	switch relationship {
+	case srSubset:
+		return positive
+	case srNotSubset:
+		return !positive
+	case srInvalidType:
+		return false
+	default:
+		panic(fmt.Errorf("test case configuration error: invalid subsetRelationship: %d", relationship))
+	}
+}
+
+type subsetTestCase struct {
+	name           string
+	makeValues     func() (list, subset any)
+	relationship   subsetRelationship
+	reflectionOnly bool
+}
+
+func unifiedSubsetCases() iter.Seq[subsetTestCase] {
+	return slices.Values([]subsetTestCase{
+		// Subset cases
+		{"int/nil-subset", func() (any, any) { return []int{1, 2, 3}, ([]int)(nil) }, srSubset, false},
+		{"int/empty-subset", func() (any, any) { return []int{1, 2, 3}, []int{} }, srSubset, false},
+		{"int/proper-subset", func() (any, any) { return []int{1, 2, 3}, []int{1, 2} }, srSubset, false},
+		{"int/equal-sets", func() (any, any) { return []int{1, 2, 3}, []int{1, 2, 3} }, srSubset, false},
+		{"string/subset", func() (any, any) { return []string{"hello", "world"}, []string{"hello"} }, srSubset, false},
+		{"float64/subset", func() (any, any) { return []float64{1.1, 2.2, 3.3}, []float64{2.2} }, srSubset, false},
+		{
+			"map-string/subset",
+			func() (any, any) {
+				return map[string]string{"a": "x", "b": "y", "c": "z"},
+					map[string]string{"a": "x", "b": "y"}
+			},
+			srSubset,
+			true,
+		},
+		{
+			"slice-map-mixed/subset",
+			func() (any, any) {
+				return []string{"a", "b", "c"}, map[string]int{"a": 1, "c": 3}
+			},
+			srSubset,
+			true,
+		},
+
+		// Not subset cases
+		{
+			"string/not-subset",
+			func() (any, any) {
+				return []string{"hello", "world"}, []string{"hello", "testify"}
+			},
+			srNotSubset,
+			false,
+		},
+		{"int/not-subset", func() (any, any) { return []int{1, 2, 3}, []int{4, 5} }, srNotSubset, false},
+		{"int/partial-not-subset", func() (any, any) { return []int{1, 2, 3}, []int{1, 5} }, srNotSubset, false},
+		{
+			"map-string/not-subset",
+			func() (any, any) {
+				return map[string]string{"a": "x", "b": "y", "c": "z"},
+					map[string]string{"a": "x", "b": "z"}
+			},
+			srNotSubset,
+			true,
+		},
+		{
+			"map-string/superset-not-subset",
+			func() (any, any) {
+				return map[string]string{"a": "x", "b": "y"},
+					map[string]string{"a": "x", "b": "y", "c": "z"}
+			},
+			srNotSubset,
+			true,
+		},
+		{
+			"slice-map-mixed/not-subset",
+			func() (any, any) {
+				return []string{"a", "b", "c"}, map[string]int{"c": 3, "d": 4}
+			},
+			srNotSubset,
+			true,
+		},
+		{
+			"subset/nil",
+			func() (any, any) {
+				return []string{"a", "b", "c"}, nil
+			},
+			srSubset,
+			true,
+		},
+		{
+			"subset/empty",
+			func() (any, any) {
+				return []string{"a", "b", "c"}, []string{}
+			},
+			srSubset,
+			true,
+		},
+		{
+			"not-subset/nil",
+			func() (any, any) {
+				return nil, []string{"a", "b", "c"}
+			},
+			srNotSubset,
+			true,
+		},
+		{
+			"not-subset/empty",
+			func() (any, any) {
+				return []string{}, []string{"a", "b", "c"}
+			},
+			srNotSubset,
+			true,
+		},
+		{
+			"subset/nil-nil",
+			func() (any, any) {
+				return nil, nil
+			},
+			srSubset,
+			true,
+		},
+		{
+			"subset/empty-nil",
+			func() (any, any) {
+				return []int{}, nil
+			},
+			srSubset,
+			true,
+		},
+		{
+			"subset/nil-empty",
+			func() (any, any) {
+				return nil, []int{}
+			},
+			srSubset,
+			true,
+		},
+		{
+			"subset/empty-empty",
+			func() (any, any) {
+				return []int{}, []int{}
+			},
+			srSubset,
+			true,
+		},
+		{
+			"invalid-type/[]int-invalid",
+			func() (any, any) {
+				return []int{}, 1
+			},
+			srInvalidType,
+			true,
+		},
+		{
+			"invalid-type/invalid-[]int",
+			func() (any, any) {
+				return 1, []int{}
+			},
+			srInvalidType,
+			true,
+		},
+		{
+			"invalid-type/invalid-nil",
+			func() (any, any) {
+				return 1, nil
+			},
+			srInvalidType,
+			true,
+		},
+		{
+			"invalid-type/nil-invalid",
+			func() (any, any) {
+				return nil, 1
+			},
+			srInvalidType,
+			true,
+		},
+	})
+}
+
+// ============================================================================
+// TestCollectionElementsMatch
+// ============================================================================
+
+// elementsMatchRelationship describes the relationship between two collections.
+type elementsMatchRelationship int
+
+const (
+	emMatch elementsMatchRelationship = iota
+	emNotMatch
+	emInvalidType // types don't support elements matching
+)
+
+type elementsMatchAssertionKind int
+
+const (
+	elementsMatchKind elementsMatchAssertionKind = iota
+	notElementsMatchKind
+	elementsMatchTKind    // generic variant
+	notElementsMatchTKind // generic not-match variant
+)
+
+func testElementsMatchAssertion(tc elementsMatchTestCase, kind elementsMatchAssertionKind, assertion func(T, any, any, ...any) bool, actual, expected any) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := assertion(mock, actual, expected)
+		shouldPass := expectedStatusForElementsMatchAssertion(kind, tc.relationship)
+		shouldPassOrFail(t, mock, result, shouldPass)
+	}
+}
+
+func testElementsMatchAssertionT(tc elementsMatchTestCase, kind elementsMatchAssertionKind, actual, expected any) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+
+		var result bool
+		// Type switch based on actual type
+		switch act := actual.(type) {
+		case []int:
+			exp, ok := expected.([]int)
+			if !ok {
+				t.Fatalf("test case error: []int actual requires []int expected, got %T", expected)
+			}
+			result = testElementsMatchGeneric(mock, kind, act, exp)
+		case [2]int:
+			exp, ok := expected.([2]int)
+			if !ok {
+				t.Fatalf("test case error: [2]int actual requires [2]int expected, got %T", expected)
+			}
+			result = testElementsMatchGeneric(mock, kind, act[:], exp[:])
+		case []string:
+			exp, ok := expected.([]string)
+			if !ok {
+				t.Fatalf("test case error: []string actual requires []string expected, got %T", expected)
+			}
+			result = testElementsMatchGeneric(mock, kind, act, exp)
+		case [3]string:
+			exp, ok := expected.([3]string)
+			if !ok {
+				t.Fatalf("test case error: [3]string actual requires [3]string expected, got %T", expected)
+			}
+			result = testElementsMatchGeneric(mock, kind, act[:], exp[:])
+		case nil:
+			if expected != nil {
+				t.Fatalf("test case error: nil actual requires nil expected, got %T", expected)
+			}
+			result = testElementsMatchGeneric(mock, kind, ([]int)(nil), ([]int)(nil))
+		default:
+			t.Fatalf("unsupported type for generic ElementsMatch: %T", actual)
+		}
+
+		shouldPass := expectedStatusForElementsMatchAssertion(kind, tc.relationship)
+		shouldPassOrFail(t, mock, result, shouldPass)
+	}
+}
+
+func testElementsMatchGeneric[E comparable](mock T, kind elementsMatchAssertionKind, actual, expected []E) bool {
+	switch kind {
+	case elementsMatchTKind:
+		return ElementsMatchT(mock, actual, expected)
+	case notElementsMatchTKind:
+		return NotElementsMatchT(mock, actual, expected)
+	default:
+		panic(fmt.Errorf("test case configuration error: invalid elementsMatchAssertionKind for generic: %d", kind))
+	}
+}
+
+func expectedStatusForElementsMatchAssertion(kind elementsMatchAssertionKind, relationship elementsMatchRelationship) bool {
+	positive := kind == elementsMatchKind || kind == elementsMatchTKind
+
+	switch relationship {
+	case emMatch:
+		return positive
+	case emNotMatch:
+		return !positive
+	case emInvalidType:
+		return false
+	default:
+		panic(fmt.Errorf("test case configuration error: invalid elementsMatchRelationship: %d", relationship))
+	}
+}
+
+type elementsMatchTestCase struct {
+	name           string
+	makeValues     func() (actual, expected any)
+	relationship   elementsMatchRelationship
+	reflectionOnly bool
+}
+
+func unifiedElementsMatchCases() iter.Seq[elementsMatchTestCase] {
+	return slices.Values([]elementsMatchTestCase{
+		// Matching cases
+		{"nil-nil", func() (any, any) { return nil, nil }, emMatch, true}, // reflection only - generic can't infer type from nil
+		{"empty-empty", func() (any, any) { return []int{}, []int{} }, emMatch, false},
+		{"single-element", func() (any, any) { return []int{1}, []int{1} }, emMatch, false},
+		{"duplicates-same", func() (any, any) { return []int{1, 1}, []int{1, 1} }, emMatch, false},
+		{"reordered", func() (any, any) { return []int{1, 2}, []int{2, 1} }, emMatch, false},
+		{"array-reordered", func() (any, any) { return [2]int{1, 2}, [2]int{2, 1} }, emMatch, false},
+		{"string-reordered", func() (any, any) { return []string{"hello", "world"}, []string{"world", "hello"} }, emMatch, false},
+		{"string-duplicates", func() (any, any) { return []string{"hello", "hello"}, []string{"hello", "hello"} }, emMatch, false},
+		{
+			"string-complex-reordered",
+			func() (any, any) {
+				return []string{"hello", "hello", "world"}, []string{"hello", "world", "hello"}
+			},
+			emMatch,
+			false,
+		},
+		{
+			"array-string-reordered",
+			func() (any, any) {
+				return [3]string{"hello", "hello", "world"}, [3]string{"hello", "world", "hello"}
+			},
+			emMatch,
+			false,
+		},
+		{"empty-nil", func() (any, any) { return []int{}, nil }, emMatch, true}, // reflection only - nil type inference
+
+		// Not matching cases
+		{"different-count", func() (any, any) { return []int{1}, []int{1, 1} }, emNotMatch, false},
+		{"different-values", func() (any, any) { return []int{1, 2}, []int{2, 2} }, emNotMatch, false},
+		{"string-different", func() (any, any) { return []string{"hello", "hello"}, []string{"hello"} }, emNotMatch, false},
+
+		// Invalid types (reflection only)
+		{"invalid type/[]int-invalid", func() (any, any) { return []int{}, 1 }, emInvalidType, true},
+		{"invalid type/invalid-[]int", func() (any, any) { return 1, []int{} }, emInvalidType, true},
+	})
+}
+
+// ============================================================================
+// TestCollectionErrorMessages
+// ============================================================================
+
+func testCollectionTooLongToPrint() func(*testing.T) {
+	longSlice := make([]int, 1_000_000)
+
+	return func(t *testing.T) {
+		t.Run("with Nil", func(t *testing.T) {
+			t.Parallel()
+			mock := new(mockT)
+
+			Nil(mock, &longSlice)
+			Contains(t, mock.errorString(), `Expected nil, but got: &[]int{0, 0, 0,`)
+			Contains(t, mock.errorString(), `<... truncated>`)
+		})
+
+		t.Run("with Empty", func(t *testing.T) {
+			t.Parallel()
+			mock := new(mockT)
+
+			Empty(mock, longSlice)
+			Contains(t, mock.errorString(), `Should be empty, but was [0 0 0`)
+			Contains(t, mock.errorString(), `<... truncated>`)
+		})
+
+		t.Run("with Contains", func(t *testing.T) {
+			t.Parallel()
+			mock := new(mockT)
+
+			Contains(mock, longSlice, 1)
+			Contains(t, mock.errorString(), `[]int{0, 0, 0,`)
+			Contains(t, mock.errorString(), `<... truncated> does not contain 1`)
+		})
+
+		t.Run("with NotContains", func(t *testing.T) {
+			t.Parallel()
+			mock := new(mockT)
+
+			NotContains(mock, longSlice, 0)
+			Contains(t, mock.errorString(), `[]int{0, 0, 0,`)
+			Contains(t, mock.errorString(), `<... truncated> should not contain 0`)
+		})
+
+		t.Run("with Subset/slice", func(t *testing.T) {
+			t.Parallel()
+			mock := new(mockT)
+
+			Subset(mock, longSlice, []int{1})
+			Contains(t, mock.errorString(), `[]int{0, 0, 0,`)
+			Contains(t, mock.errorString(), `<... truncated> does not contain 1`)
+		})
+
+		t.Run("with Subset/map", func(t *testing.T) {
+			t.Parallel()
+			mock := new(mockT)
+
+			Subset(mock, map[bool][]int{true: longSlice}, map[bool][]int{false: longSlice})
+			Contains(t, mock.errorString(), `map[bool][]int{true:[]int{0, 0, 0,`)
+			Contains(t, mock.errorString(), `<... truncated> does not contain map[bool][]int{false:[]int{0, 0, 0,`)
+		})
+
+		t.Run("with NotSubset/slice", func(t *testing.T) {
+			t.Parallel()
+			mock := new(mockT)
+
+			NotSubset(mock, longSlice, longSlice)
+			Contains(t, mock.errorString(), `['\x00' '\x00' '\x00'`)
+			Contains(t, mock.errorString(), `<... truncated> is a subset of ['\x00' '\x00' '\x00'`)
+		})
+
+		t.Run("with NotSubset/map", func(t *testing.T) {
+			t.Parallel()
+			mock := new(mockT)
+
+			NotSubset(mock, map[int][]int{1: longSlice}, map[int][]int{1: longSlice})
+			Contains(t, mock.errorString(), `map['\x01':['\x00' '\x00' '\x00'`)
+			Contains(t, mock.errorString(), `<... truncated> is a subset of map['\x01':['\x00' '\x00' '\x00'`)
+		})
+	}
+}
+
+type containsFailMessageCase struct {
 	assertion func(t T, s, contains any, msgAndArgs ...any) bool
 	container any
 	instance  any
 	expected  string
 }
 
-func collectionContainsFailCases() iter.Seq[collectionContainsFailCase] {
+func containsFailMessageCases() iter.Seq[containsFailMessageCase] {
 	const pkg = "assertions"
 	type nonContainer struct {
 		Value string
 	}
 
-	return slices.Values([]collectionContainsFailCase{
+	return slices.Values([]containsFailMessageCase{
 		{
 			assertion: Contains,
 			container: "Hello World",
 			instance:  errors.New("Hello"),
-			expected:  "\"Hello World\" does not contain &errors.errorString{s:\"Hello\"}",
+			expected:  `"Hello World" does not contain &errors.errorString{s:"Hello"}`,
 		},
 		{
 			assertion: Contains,
 			container: map[string]int{"one": 1},
 			instance:  "two",
-			expected:  "map[string]int{\"one\":1} does not contain \"two\"\n",
+			expected:  `map[string]int{"one":1} does not contain "two"` + "\n",
 		},
 		{
 			assertion: NotContains,
 			container: map[string]int{"one": 1},
 			instance:  "one",
-			expected:  "map[string]int{\"one\":1} should not contain \"one\"",
+			expected:  `map[string]int{"one":1} should not contain "one"`,
 		},
 		{
 			assertion: Contains,
 			container: nonContainer{Value: "Hello"},
 			instance:  "Hello",
-			expected:  pkg + ".nonContainer{Value:\"Hello\"} could not be applied builtin len()\n",
+			expected:  pkg + `.nonContainer{Value:"Hello"} could not be applied builtin len()` + "\n",
 		},
 		{
 			assertion: NotContains,
 			container: nonContainer{Value: "Hello"},
 			instance:  "Hello",
-			expected:  pkg + ".nonContainer{Value:\"Hello\"} could not be applied builtin len()\n",
+			expected:  pkg + `.nonContainer{Value:"Hello"} could not be applied builtin len()` + "\n",
 		},
 	})
-}
-
-type collectionSubsetCase struct {
-	list    any
-	subset  any
-	result  bool
-	message string
-}
-
-func collectionSubsetCases() iter.Seq[collectionSubsetCase] {
-	return slices.Values([]collectionSubsetCase{
-		// cases that are expected to contain
-		{[]int{1, 2, 3}, nil, true, `nil is the empty set which is a subset of every set`},
-		{[]int{1, 2, 3}, []int{}, true, `[] is a subset of ['\x01' '\x02' '\x03']`},
-		{[]int{1, 2, 3}, []int{1, 2}, true, `['\x01' '\x02'] is a subset of ['\x01' '\x02' '\x03']`},
-		{[]int{1, 2, 3}, []int{1, 2, 3}, true, `['\x01' '\x02' '\x03'] is a subset of ['\x01' '\x02' '\x03']`},
-		{[]string{"hello", "world"}, []string{"hello"}, true, `["hello"] is a subset of ["hello" "world"]`},
-		{map[string]string{
-			"a": "x",
-			"c": "z",
-			"b": "y",
-		}, map[string]string{
-			"a": "x",
-			"b": "y",
-		}, true, `map["a":"x" "b":"y"] is a subset of map["a":"x" "b":"y" "c":"z"]`},
-		{[]string{"a", "b", "c"}, map[string]int{"a": 1, "c": 3}, true, `map["a":'\x01' "c":'\x03'] is a subset of ["a" "b" "c"]`},
-
-		// cases that are expected not to contain
-		{[]string{"hello", "world"}, []string{"hello", "testify"}, false, `[]string{"hello", "world"} does not contain "testify"`},
-		{[]int{1, 2, 3}, []int{4, 5}, false, `[]int{1, 2, 3} does not contain 4`},
-		{[]int{1, 2, 3}, []int{1, 5}, false, `[]int{1, 2, 3} does not contain 5`},
-		{map[string]string{
-			"a": "x",
-			"c": "z",
-			"b": "y",
-		}, map[string]string{
-			"a": "x",
-			"b": "z",
-		}, false, `map[string]string{"a":"x", "b":"y", "c":"z"} does not contain map[string]string{"a":"x", "b":"z"}`},
-		{map[string]string{
-			"a": "x",
-			"b": "y",
-		}, map[string]string{
-			"a": "x",
-			"b": "y",
-			"c": "z",
-		}, false, `map[string]string{"a":"x", "b":"y"} does not contain map[string]string{"a":"x", "b":"y", "c":"z"}`},
-		{[]string{"a", "b", "c"}, map[string]int{"c": 3, "d": 4}, false, `[]string{"a", "b", "c"} does not contain "d"`},
-	})
-}
-
-type collectionElementsMatchCase = testCase
-
-func collectionElementsMatchCases() iter.Seq[collectionElementsMatchCase] {
-	return slices.Values([]collectionElementsMatchCase{
-		// matching
-		{nil, nil, true},
-
-		{nil, nil, true},
-		{[]int{}, []int{}, true},
-		{[]int{1}, []int{1}, true},
-		{[]int{1, 1}, []int{1, 1}, true},
-		{[]int{1, 2}, []int{1, 2}, true},
-		{[]int{1, 2}, []int{2, 1}, true},
-		{[2]int{1, 2}, [2]int{2, 1}, true},
-		{[]string{"hello", "world"}, []string{"world", "hello"}, true},
-		{[]string{"hello", "hello"}, []string{"hello", "hello"}, true},
-		{[]string{"hello", "hello", "world"}, []string{"hello", "world", "hello"}, true},
-		{[3]string{"hello", "hello", "world"}, [3]string{"hello", "world", "hello"}, true},
-		{[]int{}, nil, true},
-
-		// not matching
-		{[]int{1}, []int{1, 1}, false},
-		{[]int{1, 2}, []int{2, 2}, false},
-		{[]string{"hello", "hello"}, []string{"hello"}, false},
-	})
-}
-
-type collectionNotElementsMatch = testCase
-
-func collectionNotElementsMatchCases() iter.Seq[collectionNotElementsMatch] {
-	return slices.Values([]collectionNotElementsMatch{
-		// not matching
-		{[]int{1}, []int{}, true},
-		{[]int{}, []int{2}, true},
-		{[]int{1}, []int{2}, true},
-		{[]int{1}, []int{1, 1}, true},
-		{[]int{1, 2}, []int{3, 4}, true},
-		{[]int{3, 4}, []int{1, 2}, true},
-		{[]int{1, 1, 2, 3}, []int{1, 2, 3}, true},
-		{[]string{"hello"}, []string{"world"}, true},
-		{[]string{"hello", "hello"}, []string{"world", "world"}, true},
-		{[3]string{"hello", "hello", "hello"}, [3]string{"world", "world", "world"}, true},
-
-		// matching
-		{nil, nil, false},
-		{[]int{}, nil, false},
-		{[]int{}, []int{}, false},
-		{[]int{1}, []int{1}, false},
-		{[]int{1, 1}, []int{1, 1}, false},
-		{[]int{1, 2}, []int{2, 1}, false},
-		{[2]int{1, 2}, [2]int{2, 1}, false},
-		{[]int{1, 1, 2}, []int{1, 2, 1}, false},
-		{[]string{"hello", "world"}, []string{"world", "hello"}, false},
-		{[]string{"hello", "hello"}, []string{"hello", "hello"}, false},
-		{[]string{"hello", "hello", "world"}, []string{"hello", "world", "hello"}, false},
-		{[3]string{"hello", "hello", "world"}, [3]string{"hello", "world", "hello"}, false},
-	})
-}
-
-// elementsMatchTTestPairs builds test cases for both ElementsMatchT and NotElementsMatchT
-// from shared test data, ensuring consistency between the inverse functions.
-func elementsMatchTTestPairs() (matchCases, notMatchCases []genericTestCase) {
-	// addPair adds corresponding test cases for both ElementsMatchT and NotElementsMatchT.
-	addPair := func(name string, matchTest, notMatchTest func(*testing.T)) {
-		matchCases = append(matchCases, genericTestCase{name, matchTest})
-		notMatchCases = append(notMatchCases, genericTestCase{name, notMatchTest})
-	}
-
-	// Numeric types - test data defined once, used for both functions
-	m, n := testElementsMatchTPair[int]([]int{1, 2, 3}, []int{3, 1, 2}, []int{1, 2, 3}, []int{1, 2, 4})
-	addPair("int", m, n)
-	m, n = testElementsMatchTPair[int8]([]int8{1, 2, 3}, []int8{3, 1, 2}, []int8{1, 2, 3}, []int8{1, 2, 4})
-	addPair("int8", m, n)
-	m, n = testElementsMatchTPair[int16]([]int16{1, 2, 3}, []int16{3, 1, 2}, []int16{1, 2, 3}, []int16{1, 2, 4})
-	addPair("int16", m, n)
-	m, n = testElementsMatchTPair[int32]([]int32{1, 2, 3}, []int32{3, 1, 2}, []int32{1, 2, 3}, []int32{1, 2, 4})
-	addPair("int32", m, n)
-	m, n = testElementsMatchTPair[int64]([]int64{1, 2, 3}, []int64{3, 1, 2}, []int64{1, 2, 3}, []int64{1, 2, 4})
-	addPair("int64", m, n)
-	m, n = testElementsMatchTPair[uint]([]uint{1, 2, 3}, []uint{3, 1, 2}, []uint{1, 2, 3}, []uint{1, 2, 4})
-	addPair("uint", m, n)
-	m, n = testElementsMatchTPair[uint8]([]uint8{1, 2, 3}, []uint8{3, 1, 2}, []uint8{1, 2, 3}, []uint8{1, 2, 4})
-	addPair("uint8", m, n)
-	m, n = testElementsMatchTPair[uint16]([]uint16{1, 2, 3}, []uint16{3, 1, 2}, []uint16{1, 2, 3}, []uint16{1, 2, 4})
-	addPair("uint16", m, n)
-	m, n = testElementsMatchTPair[uint32]([]uint32{1, 2, 3}, []uint32{3, 1, 2}, []uint32{1, 2, 3}, []uint32{1, 2, 4})
-	addPair("uint32", m, n)
-	m, n = testElementsMatchTPair[uint64]([]uint64{1, 2, 3}, []uint64{3, 1, 2}, []uint64{1, 2, 3}, []uint64{1, 2, 4})
-	addPair("uint64", m, n)
-	m, n = testElementsMatchTPair[float32]([]float32{1.5, 2.5, 3.5}, []float32{3.5, 1.5, 2.5}, []float32{1.5, 2.5, 3.5}, []float32{1.5, 2.5, 4.5})
-	addPair("float32", m, n)
-	m, n = testElementsMatchTPair[float64]([]float64{1.5, 2.5, 3.5}, []float64{3.5, 1.5, 2.5}, []float64{1.5, 2.5, 3.5}, []float64{1.5, 2.5, 4.5})
-	addPair("float64", m, n)
-	m, n = testElementsMatchTPair[string]([]string{"a", "b", "c"}, []string{"c", "a", "b"}, []string{"a", "b", "c"}, []string{"a", "b", "d"})
-	addPair("string", m, n)
-	m, n = testElementsMatchTPair[bool]([]bool{true, false}, []bool{false, true}, []bool{true, true}, []bool{true, false})
-	addPair("bool", m, n)
-
-	// Special cases
-	m, n = testElementsMatchTEmptyPair()
-	addPair("empty slices", m, n)
-	m, n = testElementsMatchTDuplicatesPair()
-	addPair("with duplicates", m, n)
-	m, n = testElementsMatchTCustomTypePair()
-	addPair("custom type", m, n)
-	m, n = testElementsMatchTStructPair()
-	addPair("struct type", m, n)
-
-	return matchCases, notMatchCases
-}
-
-// elementsMatchTCases returns test cases for ElementsMatchT with various comparable types.
-func elementsMatchTCases() iter.Seq[genericTestCase] {
-	matchCases, _ := elementsMatchTTestPairs()
-	return slices.Values(matchCases)
-}
-
-// notElementsMatchTCases returns test cases for NotElementsMatchT with various comparable types.
-func notElementsMatchTCases() iter.Seq[genericTestCase] {
-	_, notMatchCases := elementsMatchTTestPairs()
-	return slices.Values(notMatchCases)
-}
-
-// testElementsMatchTPair creates test functions for both ElementsMatchT and NotElementsMatchT
-// from the same test data, ensuring consistency between inverse functions.
-// matchA/matchB are slices that should match; noMatchA/noMatchB are slices that should not match.
-//
-//nolint:thelper // linter false positive: these are not helpers
-func testElementsMatchTPair[E comparable](matchA, matchB, noMatchA, noMatchB []E) (matchTest, notMatchTest func(*testing.T)) {
-	matchTest = func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-		True(t, ElementsMatchT(mock, matchA, matchB))
-		False(t, ElementsMatchT(mock, noMatchA, noMatchB))
-	}
-	notMatchTest = func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-		True(t, NotElementsMatchT(mock, noMatchA, noMatchB))
-		False(t, NotElementsMatchT(mock, matchA, matchB))
-	}
-	return matchTest, notMatchTest
-}
-
-//nolint:thelper // linter false positive: these are not helpers
-func testElementsMatchTEmptyPair() (matchTest, notMatchTest func(*testing.T)) {
-	matchTest = func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-		True(t, ElementsMatchT(mock, []int{}, []int{}))
-		True(t, ElementsMatchT(mock, []string(nil), []string(nil)))
-		True(t, ElementsMatchT(mock, []int(nil), []int{}))
-	}
-	notMatchTest = func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-		// Empty slices match, so NotElementsMatchT should return false
-		False(t, NotElementsMatchT(mock, []int{}, []int{}))
-		False(t, NotElementsMatchT(mock, []string(nil), []string(nil)))
-		// One empty, one not - they don't match
-		True(t, NotElementsMatchT(mock, []int{1}, []int{}))
-		True(t, NotElementsMatchT(mock, []int{}, []int{1}))
-	}
-	return matchTest, notMatchTest
-}
-
-//nolint:thelper // linter false positive: these are not helpers
-func testElementsMatchTDuplicatesPair() (matchTest, notMatchTest func(*testing.T)) {
-	matchTest = func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-		True(t, ElementsMatchT(mock, []int{1, 1, 2}, []int{2, 1, 1}))
-		False(t, ElementsMatchT(mock, []int{1, 1, 2}, []int{1, 2, 2}))
-		False(t, ElementsMatchT(mock, []int{1, 1, 2}, []int{1, 2}))
-	}
-	notMatchTest = func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-		// Different duplicate counts - should not match
-		True(t, NotElementsMatchT(mock, []int{1, 1, 2}, []int{1, 2, 2}))
-		True(t, NotElementsMatchT(mock, []int{1, 1, 2}, []int{1, 2}))
-		// Same duplicates, different order - should match (NotElementsMatchT returns false)
-		False(t, NotElementsMatchT(mock, []int{1, 1, 2}, []int{2, 1, 1}))
-	}
-	return matchTest, notMatchTest
-}
-
-//nolint:thelper // linter false positive: these are not helpers
-func testElementsMatchTCustomTypePair() (matchTest, notMatchTest func(*testing.T)) {
-	type myInt int
-	matchTest = func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-		True(t, ElementsMatchT(mock, []myInt{1, 2, 3}, []myInt{3, 2, 1}))
-		False(t, ElementsMatchT(mock, []myInt{1, 2, 3}, []myInt{1, 2, 4}))
-	}
-	notMatchTest = func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-		True(t, NotElementsMatchT(mock, []myInt{1, 2, 3}, []myInt{1, 2, 4}))
-		False(t, NotElementsMatchT(mock, []myInt{1, 2, 3}, []myInt{3, 2, 1}))
-	}
-	return matchTest, notMatchTest
-}
-
-//nolint:thelper // linter false positive: these are not helpers
-func testElementsMatchTStructPair() (matchTest, notMatchTest func(*testing.T)) {
-	type point struct{ x, y int }
-	p1, p2, p3 := point{1, 2}, point{3, 4}, point{5, 6}
-	matchTest = func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-		True(t, ElementsMatchT(mock, []point{p1, p2, p3}, []point{p3, p1, p2}))
-		False(t, ElementsMatchT(mock, []point{p1, p2}, []point{p1, p3}))
-	}
-	notMatchTest = func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-		True(t, NotElementsMatchT(mock, []point{p1, p2}, []point{p1, p3}))
-		False(t, NotElementsMatchT(mock, []point{p1, p2, p3}, []point{p3, p1, p2}))
-	}
-	return matchTest, notMatchTest
-}
-
-// Generic Contains function tests
-
-type containsTestCase struct {
-	name       string
-	container  any
-	element    any
-	shouldPass bool
-}
-
-func stringContainsTCases() iter.Seq[containsTestCase] {
-	return slices.Values([]containsTestCase{
-		// Success cases
-		{name: "string/contains", container: "hello world", element: "world", shouldPass: true},
-		{name: "string/contains-start", container: "hello world", element: "hello", shouldPass: true},
-		{name: "string/contains-middle", container: "hello world", element: "lo wo", shouldPass: true},
-		{name: "[]byte/contains", container: []byte("hello"), element: []byte("ell"), shouldPass: true},
-
-		// Failure cases
-		{name: "string/not-contains", container: "hello world", element: "xyz", shouldPass: false},
-		{name: "string/case-sensitive", container: "hello world", element: "WORLD", shouldPass: false},
-		{name: "[]byte/not-contains", container: []byte("hello"), element: []byte("xyz"), shouldPass: false},
-	})
-}
-
-func sliceContainsTCases() iter.Seq[containsTestCase] {
-	return slices.Values([]containsTestCase{
-		// Success cases
-		{name: "int/contains", container: []int{1, 2, 3}, element: 2, shouldPass: true},
-		{name: "int/contains-first", container: []int{1, 2, 3}, element: 1, shouldPass: true},
-		{name: "int/contains-last", container: []int{1, 2, 3}, element: 3, shouldPass: true},
-		{name: "string/contains", container: []string{"a", "b", "c"}, element: "b", shouldPass: true},
-		{name: "float64/contains", container: []float64{1.1, 2.2, 3.3}, element: 2.2, shouldPass: true},
-
-		// Failure cases
-		{name: "int/not-contains", container: []int{1, 2, 3}, element: 5, shouldPass: false},
-		{name: "string/not-contains", container: []string{"a", "b", "c"}, element: "d", shouldPass: false},
-		{name: "empty-slice", container: []int{}, element: 1, shouldPass: false},
-	})
-}
-
-func mapContainsTCases() iter.Seq[containsTestCase] {
-	return slices.Values([]containsTestCase{
-		// Success cases
-		{name: "string-int/has-key", container: map[string]int{"a": 1, "b": 2}, element: "a", shouldPass: true},
-		{name: "int-string/has-key", container: map[int]string{1: "one", 2: "two"}, element: 1, shouldPass: true},
-		{name: "string-string/has-key", container: map[string]string{"x": "y"}, element: "x", shouldPass: true},
-
-		// Failure cases
-		{name: "string-int/no-key", container: map[string]int{"a": 1, "b": 2}, element: "c", shouldPass: false},
-		{name: "int-string/no-key", container: map[int]string{1: "one", 2: "two"}, element: 3, shouldPass: false},
-		{name: "empty-map", container: map[string]int{}, element: "a", shouldPass: false},
-	})
-}
-
-func TestStringContainsT(t *testing.T) {
-	t.Parallel()
-
-	for tc := range stringContainsTCases() {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
-			// Type dispatch for string or []byte
-			switch container := tc.container.(type) {
-			case string:
-				element, ok := tc.element.(string)
-				if !ok {
-					t.Fatalf("invalid test case: requires string element but got %T", tc.element)
-				}
-				testStringContainsT(StringContainsT[string, string], container, element, tc.shouldPass)(t)
-			case []byte:
-				element, ok := tc.element.([]byte)
-				if !ok {
-					t.Fatalf("invalid test case: requires []byte element but got %T", tc.element)
-				}
-				testStringContainsT(StringContainsT[[]byte, []byte], container, element, tc.shouldPass)(t)
-			default:
-				t.Fatalf("unexpected type: %T", container)
-			}
-		})
-	}
-}
-
-func TestStringNotContainsT(t *testing.T) {
-	t.Parallel()
-
-	for tc := range stringContainsTCases() {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
-			// Invert shouldPass for NotContains
-			shouldPass := !tc.shouldPass
-
-			// Type dispatch for string or []byte
-			switch container := tc.container.(type) {
-			case string:
-				element, ok := tc.element.(string)
-				if !ok {
-					t.Fatalf("invalid test case: requires string element but got %T", tc.element)
-				}
-				testStringContainsT(StringNotContainsT[string, string], container, element, shouldPass)(t)
-			case []byte:
-				element, ok := tc.element.([]byte)
-				if !ok {
-					t.Fatalf("invalid test case: requires []byte element but got %T", tc.element)
-				}
-				testStringContainsT(StringNotContainsT[[]byte, []byte], container, element, shouldPass)(t)
-			default:
-				t.Fatalf("unexpected type: %T", container)
-			}
-		})
-	}
-}
-
-func TestSliceContainsT(t *testing.T) {
-	t.Parallel()
-
-	for tc := range sliceContainsTCases() {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
-			// Type dispatch
-			switch container := tc.container.(type) {
-			case []int:
-				element, ok := tc.element.(int)
-				if !ok {
-					t.Fatalf("invalid test case: requires int element but got %T", tc.element)
-				}
-				testSliceContainsT(SliceContainsT[[]int, int], container, element, tc.shouldPass)(t)
-			case []string:
-				element, ok := tc.element.(string)
-				if !ok {
-					t.Fatalf("invalid test case: requires string element but got %T", tc.element)
-				}
-				testSliceContainsT(SliceContainsT[[]string, string], container, element, tc.shouldPass)(t)
-			case []float64:
-				element, ok := tc.element.(float64)
-				if !ok {
-					t.Fatalf("invalid test case: requires float64 element but got %T", tc.element)
-				}
-				testSliceContainsT(SliceContainsT[[]float64, float64], container, element, tc.shouldPass)(t)
-			default:
-				t.Fatalf("unexpected type: %T", container)
-			}
-		})
-	}
-}
-
-func TestSliceNotContainsT(t *testing.T) {
-	t.Parallel()
-
-	for tc := range sliceContainsTCases() {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
-			// Invert shouldPass for NotContains
-			shouldPass := !tc.shouldPass
-
-			// Type dispatch
-			switch container := tc.container.(type) {
-			case []int:
-				element, ok := tc.element.(int)
-				if !ok {
-					t.Fatalf("invalid test case: requires int element but got %T", tc.element)
-				}
-				testSliceContainsT(SliceNotContainsT[[]int, int], container, element, shouldPass)(t)
-			case []string:
-				element, ok := tc.element.(string)
-				if !ok {
-					t.Fatalf("invalid test case: requires string element but got %T", tc.element)
-				}
-				testSliceContainsT(SliceNotContainsT[[]string, string], container, element, shouldPass)(t)
-			case []float64:
-				element, ok := tc.element.(float64)
-				if !ok {
-					t.Fatalf("invalid test case: requires float64 element but got %T", tc.element)
-				}
-				testSliceContainsT(SliceNotContainsT[[]float64, float64], container, element, shouldPass)(t)
-			default:
-				t.Fatalf("unexpected type: %T", container)
-			}
-		})
-	}
-}
-
-func TestSeqContainsT(t *testing.T) {
-	t.Parallel()
-
-	for tc := range sliceContainsTCases() {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
-			// Type dispatch
-			switch container := tc.container.(type) {
-			case []int:
-				element, ok := tc.element.(int)
-				if !ok {
-					t.Fatalf("invalid test case: requires int element but got %T", tc.element)
-				}
-				testSeqContainsT(SeqContainsT[int], container, element, tc.shouldPass)(t)
-			case []string:
-				element, ok := tc.element.(string)
-				if !ok {
-					t.Fatalf("invalid test case: requires string element but got %T", tc.element)
-				}
-				testSeqContainsT(SeqContainsT[string], container, element, tc.shouldPass)(t)
-			case []float64:
-				element, ok := tc.element.(float64)
-				if !ok {
-					t.Fatalf("invalid test case: requires float64 element but got %T", tc.element)
-				}
-				testSeqContainsT(SeqContainsT[float64], container, element, tc.shouldPass)(t)
-			default:
-				t.Fatalf("unexpected type: %T", container)
-			}
-		})
-	}
-}
-
-func TestSeqNotContainsT(t *testing.T) {
-	t.Parallel()
-
-	for tc := range sliceContainsTCases() {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-			// Invert shouldPass for NotContains
-			shouldPass := !tc.shouldPass
-
-			// Type dispatch
-			switch container := tc.container.(type) {
-			case []int:
-				element, ok := tc.element.(int)
-				if !ok {
-					t.Fatalf("invalid test case: requires int element but got %T", tc.element)
-				}
-				testSeqContainsT(SeqNotContainsT[int], container, element, shouldPass)(t)
-			case []string:
-				element, ok := tc.element.(string)
-				if !ok {
-					t.Fatalf("invalid test case: requires string element but got %T", tc.element)
-				}
-				testSeqContainsT(SeqNotContainsT[string], container, element, shouldPass)(t)
-			case []float64:
-				element, ok := tc.element.(float64)
-				if !ok {
-					t.Fatalf("invalid test case: requires float64 element but got %T", tc.element)
-				}
-				testSeqContainsT(SeqNotContainsT[float64], container, element, shouldPass)(t)
-			default:
-				t.Fatalf("unexpected type: %T", container)
-			}
-		})
-	}
-}
-
-func TestMapContainsT(t *testing.T) {
-	t.Parallel()
-
-	for tc := range mapContainsTCases() {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
-			// Type dispatch for different map types
-			switch container := tc.container.(type) {
-			case map[string]int:
-				key, ok := tc.element.(string)
-				if !ok {
-					t.Fatalf("invalid test case: requires string key but got %T", tc.element)
-				}
-				testMapContainsT(MapContainsT[map[string]int, string, int], container, key, tc.shouldPass)(t)
-			case map[int]string:
-				key, ok := tc.element.(int)
-				if !ok {
-					t.Fatalf("invalid test case: requires int key but got %T", tc.element)
-				}
-				testMapContainsT(MapContainsT[map[int]string, int, string], container, key, tc.shouldPass)(t)
-			case map[string]string:
-				key, ok := tc.element.(string)
-				if !ok {
-					t.Fatalf("invalid test case: requires string key but got %T", tc.element)
-				}
-				testMapContainsT(MapContainsT[map[string]string, string, string], container, key, tc.shouldPass)(t)
-			default:
-				t.Fatalf("unexpected type: %T", container)
-			}
-		})
-	}
-}
-
-func TestMapNotContainsT(t *testing.T) {
-	t.Parallel()
-
-	for tc := range mapContainsTCases() {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
-			// Invert shouldPass for NotContains
-			shouldPass := !tc.shouldPass
-
-			// Type dispatch for different map types
-			switch container := tc.container.(type) {
-			case map[string]int:
-				key, ok := tc.element.(string)
-				if !ok {
-					t.Fatalf("invalid test case: requires string key but got %T", tc.element)
-				}
-				testMapContainsT(MapNotContainsT[map[string]int, string, int], container, key, shouldPass)(t)
-			case map[int]string:
-				key, ok := tc.element.(int)
-				if !ok {
-					t.Fatalf("invalid test case: requires int key but got %T", tc.element)
-				}
-				testMapContainsT(MapNotContainsT[map[int]string, int, string], container, key, shouldPass)(t)
-			case map[string]string:
-				key, ok := tc.element.(string)
-				if !ok {
-					t.Fatalf("invalid test case: requires string key but got %T", tc.element)
-				}
-				testMapContainsT(MapNotContainsT[map[string]string, string, string], container, key, shouldPass)(t)
-			default:
-				t.Fatalf("unexpected type: %T", container)
-			}
-		})
-	}
-}
-
-//nolint:thelper // linter false positive: these are not helpers
-func testStringContainsT[ADoc, EDoc Text](
-	fn func(T, ADoc, EDoc, ...any) bool,
-	container ADoc,
-	element EDoc,
-	shouldPass bool,
-) func(*testing.T) {
-	return func(t *testing.T) {
-		mock := new(mockT)
-		result := fn(mock, container, element)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-			return
-		}
-
-		False(t, result)
-		True(t, mock.Failed())
-	}
-}
-
-//nolint:thelper // linter false positive: these are not helpers
-func testSliceContainsT[Slice ~[]E, E comparable](
-	fn func(T, Slice, E, ...any) bool,
-	slice Slice,
-	element E,
-	shouldPass bool,
-) func(*testing.T) {
-	return func(t *testing.T) {
-		mock := new(mockT)
-		result := fn(mock, slice, element)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-			return
-		}
-
-		False(t, result)
-		True(t, mock.Failed())
-	}
-}
-
-//nolint:thelper // linter false positive: these are not helpers
-func testSeqContainsT[Slice ~[]E, E comparable](
-	fn func(T, iter.Seq[E], E, ...any) bool,
-	slice Slice,
-	element E,
-	shouldPass bool,
-) func(*testing.T) {
-	return func(t *testing.T) {
-		mock := new(mockT)
-		result := fn(mock, slices.Values(slice), element)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-			return
-		}
-
-		False(t, result)
-		True(t, mock.Failed())
-	}
-}
-
-//nolint:thelper // linter false positive: these are not helpers
-func testMapContainsT[Map ~map[K]V, K comparable, V any](
-	fn func(T, Map, K, ...any) bool,
-	m Map,
-	key K,
-	shouldPass bool,
-) func(*testing.T) {
-	return func(t *testing.T) {
-		mock := new(mockT)
-		result := fn(mock, m, key)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-			return
-		}
-
-		False(t, result)
-		True(t, mock.Failed())
-	}
-}
-
-// Generic Subset function tests
-
-type subsetTestCase struct {
-	name       string
-	list       any
-	subset     any
-	shouldPass bool
-}
-
-func sliceSubsetTCases() iter.Seq[subsetTestCase] {
-	return slices.Values([]subsetTestCase{
-		// Success cases
-		{name: "int/proper-subset", list: []int{1, 2, 3, 4, 5}, subset: []int{2, 4}, shouldPass: true},
-		{name: "int/equal-sets", list: []int{1, 2, 3}, subset: []int{1, 2, 3}, shouldPass: true},
-		{name: "int/empty-subset", list: []int{1, 2, 3}, subset: []int{}, shouldPass: true},
-		{name: "string/subset", list: []string{"a", "b", "c", "d"}, subset: []string{"b", "d"}, shouldPass: true},
-		{name: "float64/subset", list: []float64{1.1, 2.2, 3.3}, subset: []float64{2.2}, shouldPass: true},
-
-		// Failure cases
-		{name: "int/not-subset", list: []int{1, 2, 3}, subset: []int{4, 5}, shouldPass: false},
-		{name: "int/partial-subset", list: []int{1, 2, 3}, subset: []int{2, 4}, shouldPass: false},
-		{name: "string/not-subset", list: []string{"a", "b"}, subset: []string{"c"}, shouldPass: false},
-	})
-}
-
-func TestSliceSubsetT(t *testing.T) {
-	t.Parallel()
-
-	for tc := range sliceSubsetTCases() {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
-			// Type dispatch
-			switch list := tc.list.(type) {
-			case []int:
-				subset, ok := tc.subset.([]int)
-				if !ok {
-					t.Fatalf("invalid test case: requires []int subset but got %T", tc.subset)
-				}
-				testSubsetT(SliceSubsetT[[]int, int], list, subset, tc.shouldPass)(t)
-			case []string:
-				subset, ok := tc.subset.([]string)
-				if !ok {
-					t.Fatalf("invalid test case: requires []string subset but got %T", tc.subset)
-				}
-				testSubsetT(SliceSubsetT[[]string, string], list, subset, tc.shouldPass)(t)
-			case []float64:
-				subset, ok := tc.subset.([]float64)
-				if !ok {
-					t.Fatalf("invalid test case: requires []float64 subset but got %T", tc.subset)
-				}
-				testSubsetT(SliceSubsetT[[]float64, float64], list, subset, tc.shouldPass)(t)
-			default:
-				t.Fatalf("unexpected type: %T", list)
-			}
-		})
-	}
-}
-
-func TestSliceNotSubsetT(t *testing.T) {
-	t.Parallel()
-
-	for tc := range sliceSubsetTCases() {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
-			// Invert shouldPass for NotSubset
-			shouldPass := !tc.shouldPass
-
-			// Type dispatch
-			switch list := tc.list.(type) {
-			case []int:
-				subset, ok := tc.subset.([]int)
-				if !ok {
-					t.Fatalf("invalid test case: requires []int subset but got %T", tc.subset)
-				}
-				testSubsetT(SliceNotSubsetT[[]int, int], list, subset, shouldPass)(t)
-			case []string:
-				subset, ok := tc.subset.([]string)
-				if !ok {
-					t.Fatalf("invalid test case: requires []string subset but got %T", tc.subset)
-				}
-				testSubsetT(SliceNotSubsetT[[]string, string], list, subset, shouldPass)(t)
-			case []float64:
-				subset, ok := tc.subset.([]float64)
-				if !ok {
-					t.Fatalf("invalid test case: requires []float64 subset but got %T", tc.subset)
-				}
-				testSubsetT(SliceNotSubsetT[[]float64, float64], list, subset, shouldPass)(t)
-			default:
-				t.Fatalf("unexpected type: %T", list)
-			}
-		})
-	}
-}
-
-//nolint:thelper // linter false positive: these are not helpers
-func testSubsetT[Slice ~[]E, E comparable](
-	fn func(T, Slice, Slice, ...any) bool,
-	list, subset Slice,
-	shouldPass bool,
-) func(*testing.T) {
-	return func(t *testing.T) {
-		mock := new(mockT)
-		result := fn(mock, list, subset)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-			return
-		}
-
-		False(t, result)
-		True(t, mock.Failed())
-	}
 }
