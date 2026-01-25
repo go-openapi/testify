@@ -4,25 +4,21 @@
 package assertions
 
 import (
-	"bufio"
 	"fmt"
 )
 
-/*
-	Helper functions
-*/
+const maxMessageSize = 1024
 
 // truncatingFormat formats the data and truncates it if it's too long.
 //
 // This helps keep formatted error messages lines from exceeding the
 // bufio.MaxScanTokenSize max line length that the go testing framework imposes.
 func truncatingFormat(format string, data any) string {
-	const maxMessageSize = bufio.MaxScanTokenSize/2 - 100
-
 	value := fmt.Sprintf(format, data)
 	// Give us space for two truncated objects and the surrounding sentence.
 	if len(value) > maxMessageSize {
 		value = value[0:maxMessageSize] + "<... truncated>"
 	}
+
 	return value
 }

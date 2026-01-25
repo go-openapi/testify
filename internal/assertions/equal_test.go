@@ -15,7 +15,8 @@ import (
 func TestEqualErrorMessages(t *testing.T) {
 	t.Parallel()
 
-	t.Run("should render when slice too long to print", testTooLongToPrint())
+	t.Run("should render when value is too long to print", testEqualTooLongToPrint())
+
 	t.Run("error message should match expression", func(t *testing.T) {
 		// checking error messsages on Equal with a regexp. The object of the test is Equal, not Regexp
 		for tc := range stringEqualFormattingCases() {
@@ -39,14 +40,17 @@ func TestEqualErrorMessages(t *testing.T) {
 	})
 }
 
-// Test NotEqualValues.
-func TestEqualValuesAndNotEqualValues(t *testing.T) {
+// Test EqualValues and NotEqualValues.
+func TestEqualValues(t *testing.T) {
 	t.Parallel()
 
 	for tc := range equalValuesCases() {
-		mock := new(testing.T)
 
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			mock := new(testing.T)
+
 			res := NotEqualValues(mock, tc.expected, tc.actual)
 			if res != tc.notEqualValue {
 				t.Errorf("NotEqualValues(%#v, %#v) should return %t", tc.expected, tc.actual, tc.notEqualValue)
@@ -55,6 +59,10 @@ func TestEqualValuesAndNotEqualValues(t *testing.T) {
 
 		// Test EqualValues (inverse of NotEqualValues)
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			mock := new(testing.T)
+
 			res := EqualValues(mock, tc.expected, tc.actual)
 			if res != tc.equalValue {
 				t.Errorf("EqualValues(%#v, %#v) should return %t", tc.expected, tc.actual, tc.equalValue)
@@ -70,7 +78,6 @@ func TestEqualExportedValues(t *testing.T) {
 	for tc := range objectEqualExportedValuesCases() {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-
 			mockT := new(mockT)
 
 			actual := EqualExportedValues(mockT, tc.expected, tc.actual)
@@ -117,6 +124,10 @@ func TestEqualDeepEqual(t *testing.T) {
 		})
 	}
 }
+
+// ============================================================================
+// TestEqualDeepEqual
+// ============================================================================
 
 type equalityRelationship int
 
@@ -498,7 +509,12 @@ func testEqualityGenericAssertion[V comparable](mock T, kind equalityAssertionKi
 	}
 }
 
-func testTooLongToPrint() func(*testing.T) {
+// ============================================================================
+// TestEqualErrorMessages: too long to print checks that error
+// messages are properly truncated when the values to display are too large.
+// ============================================================================
+
+func testEqualTooLongToPrint() func(*testing.T) {
 	const (
 		expected = `&[]int{0, 0, 0,`
 		message  = `
@@ -683,6 +699,10 @@ func stringEqualFormattingCases() iter.Seq[equalStringCase] {
 	})
 }
 
+// ============================================================================
+// TestEqualValues
+// ============================================================================
+
 type equalValuesCase struct {
 	name          string
 	expected      any
@@ -716,6 +736,10 @@ func equalValuesCases() iter.Seq[equalValuesCase] {
 		{"always-fail/func", func() int { return 23 }, func() int { return 24 }, false, false},
 	})
 }
+
+// ============================================================================
+// TestEqualExportedValues
+// ============================================================================
 
 type objectEqualExportedValuesCase struct {
 	name            string
