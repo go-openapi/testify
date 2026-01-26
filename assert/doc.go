@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
+// SPDX-License-Identifier: Apache-2.0
+
 // Package assert provides a set of testing tools for use with the standard Go testing system.
 //
 // # Note

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
+// SPDX-License-Identifier: Apache-2.0
+
 // Package require implements the same assertions as the assert package but
 // stops test execution when a test fails.
 //
