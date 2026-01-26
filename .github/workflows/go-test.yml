@@ -13,5 +13,7 @@ on:
 
 jobs:
   test:
-    uses: go-openapi/ci-workflows/.github/workflows/go-test-monorepo.yml@50a35d7a3dec2ab631ddc39b1307a8394fcc44c7 # v0.2.4
+    uses: go-openapi/ci-workflows/.github/workflows/go-test-monorepo.yml@fc0b7d51fa6128079b88acdfe597a8e04495a607 # v0.2.4
+    with:
+      extra-flags: '-tags testcgo' # this is to trigger extra tests in spew
     secrets: inherit
