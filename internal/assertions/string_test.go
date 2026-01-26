@@ -10,65 +10,6 @@ import (
 	"testing"
 )
 
-func TestStringRegexpEdgeCases(t *testing.T) {
-	// check edge cases for reflection-based Regexp, such as unsupported types or nil input or when the input
-	// is converted using fmt.Sprint.
-
-	t.Run("with unsupported regexp type", func(t *testing.T) {
-		t.Parallel()
-
-		const (
-			str = "whatever"
-			msg = "expected this invalid call to fail (regexp=%v)"
-		)
-
-		mock := new(mockT)
-
-		t.Run("should fail (invalid regexp type)", func(t *testing.T) {
-			invalidRex := struct{ a string }{a: "invalid"}
-
-			if Regexp(mock, invalidRex, str) {
-				t.Errorf(msg, invalidRex)
-			}
-			if NotRegexp(mock, invalidRex, str) {
-				t.Errorf(msg, invalidRex)
-			}
-		})
-
-		t.Run("should fail (nil regexp)", func(t *testing.T) {
-			invalidRex := []byte(nil)
-
-			if Regexp(mock, invalidRex, str) {
-				t.Errorf(msg, invalidRex)
-			}
-			if NotRegexp(mock, invalidRex, str) {
-				t.Errorf(msg, invalidRex)
-			}
-		})
-	})
-
-	t.Run("with fmt.Sprint conversion (edge case)", func(t *testing.T) {
-		t.Parallel()
-
-		const (
-			numeric = 1234
-			msg     = "expected %q to match %q"
-			rex     = "^[0-9]+$"
-		)
-
-		mock := new(mockT)
-
-		t.Run("should match string representation of a number", func(t *testing.T) {
-			if !Regexp(mock, rex, numeric) {
-				t.Errorf(msg, numeric, rex)
-			}
-			if NotRegexp(mock, rex, numeric) {
-				t.Errorf(msg, numeric, rex)
-			}
-		})
-	})
-}
-
 func TestStringRegexp(t *testing.T) {
 	t.Parallel()
 
@@ -93,6 +34,13 @@ func TestStringRegexp(t *testing.T) {
 // - valid and invalid patterns
 // - matching and not matching expressions.
 func stringRegexpCases() iter.Seq[genericTestCase] {
+	const (
+		numeric = 1234
+		numRex  = "^[0-9]+$"
+	)
+	invalidRex := struct{ a string }{a: "invalid"}
+	nilRex := []byte(nil)
+
 	return slices.Values([]genericTestCase{
 		// successful matches
 		{"^start (match)", testAllRegexpWithTypes(
@@ -120,6 +68,26 @@ func stringRegexpCases() iter.Seq[genericTestCase] {
 		// invalid pattern
 		{"invalid regexp", testAllRegexpWithTypes(
 			"\\C", "whatever", false, false,
+		)},
+		// invalid type
+		{"invalid regexp type/struct", testRegexpWithAny(
+			invalidRex, "whatever", false, false,
+		)},
+		{"invalid regexp type/nil", testRegexpWithAny(
+			nilRex, "whatever", false, false,
+		)},
+		{"invalid regexp type/slice-int", testRegexpWithAny(
+			[]int{1, 2}, "whatever", false, false,
+		)},
+		// types that uses fmt.Print
+		{"use-fmt-print/slice-int", testRegexpWithAny(
+			"^\\[1", []int{1, 2}, true, true,
+		)},
+		{"use-fmt-print/slice-rune", testRegexpWithAny(
+			"^\\[65", []rune{'A', 'B'}, true, true,
+		)},
+		{"use-fmt-print/numeric", testRegexpWithAny(
+			numRex, numeric, true, true,
 		)},
 	})
 }
@@ -165,6 +133,42 @@ func testAllRegexpWithTypes(regString, str string, success, valid bool) func(*te
 	}
 }
 
+// testRegexpWithAny tests edge cases that are specific to the reflection-based variants.
+//
+//nolint:thelper // linter false positive: this is not a helper
+func testRegexpWithAny(rx any, actual any, success, valid bool) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		if !valid {
+			t.Run("should fail", func(t *testing.T) {
+				t.Run("with Regexp", testRegexp(rx, actual, false))
+				t.Run("with NoRegexp", testNotRegexp(rx, actual, false))
+			})
+
+			return
+		}
+
+		if success {
+			t.Run("should match", func(t *testing.T) {
+				t.Run("with Regexp", testRegexp(rx, actual, true))
+			})
+			t.Run("should fail", func(t *testing.T) {
+				t.Run("with NoRegexp", testNotRegexp(rx, actual, false))
+			})
+			return
+		}
+
+		t.Run("should NOT match", func(t *testing.T) {
+			t.Run("with NoRegexp", testNotRegexp(rx, actual, true))
+		})
+
+		t.Run("should fail", func(t *testing.T) {
+			t.Run("with Regexp", testRegexp(rx, actual, false))
+		})
+	}
+}
+
 //nolint:thelper // linter false positive: this is not a helper
 func testAllRegexp[Rex RegExp, ADoc Text](rx Rex, actual ADoc, success, valid bool) func(*testing.T) {
 	return func(t *testing.T) {
@@ -174,8 +178,9 @@ func testAllRegexp[Rex RegExp, ADoc Text](rx Rex, actual ADoc, success, valid bo
 			// all assertions fail on invalid regexp
 			t.Run("should fail", func(t *testing.T) {
 				t.Run("with Regexp", testRegexp(rx, actual, false))
-				t.Run("with RegexpT", testRegexpT(rx, actual, false))
 				t.Run("with NoRegexp", testNotRegexp(rx, actual, false))
+
+				t.Run("with RegexpT", testRegexpT(rx, actual, false))
 				t.Run("with NoRegexpT", testNotRegexpT(rx, actual, false))
 			})
 
@@ -192,21 +197,23 @@ func testAllRegexp[Rex RegExp, ADoc Text](rx Rex, actual ADoc, success, valid bo
 				t.Run("with NoRegexp", testNotRegexp(rx, actual, false))
 				t.Run("with NoRegexpT", testNotRegexpT(rx, actual, false))
 			})
-		} else {
-			t.Run("should NOT match", func(t *testing.T) {
-				t.Run("with NoRegexp", testNotRegexp(rx, actual, true))
-				t.Run("with NoRegexpT", testNotRegexpT(rx, actual, true))
-			})
 
-			t.Run("should fail", func(t *testing.T) {
-				t.Run("with Regexp", testRegexp(rx, actual, false))
-				t.Run("with RegexpT", testRegexpT(rx, actual, false))
-			})
+			return
 		}
+
+		t.Run("should NOT match", func(t *testing.T) {
+			t.Run("with NoRegexp", testNotRegexp(rx, actual, true))
+			t.Run("with NoRegexpT", testNotRegexpT(rx, actual, true))
+		})
+
+		t.Run("should fail", func(t *testing.T) {
+			t.Run("with Regexp", testRegexp(rx, actual, false))
+			t.Run("with RegexpT", testRegexpT(rx, actual, false))
+		})
 	}
 }
 
-func testRegexp[Rex RegExp, ADoc Text](rx Rex, str ADoc, success bool) func(*testing.T) {
+func testRegexp(rx any, str any, success bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
 
@@ -222,7 +229,7 @@ func testRegexp[Rex RegExp, ADoc Text](rx Rex, str ADoc, success bool) func(*tes
 	}
 }
 
-func testNotRegexp[Rex RegExp, ADoc Text](rx Rex, str ADoc, success bool) func(*testing.T) {
+func testNotRegexp(rx any, str any, success bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
 

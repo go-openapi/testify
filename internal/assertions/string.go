@@ -228,7 +228,7 @@ func asString(v any) (string, bool) {
 			return "", false
 		}
 
-		if typ.Elem().Kind() != reflect.Uint8 {
+		if typ.Elem().Kind() != reflect.Uint8 && typ.Elem().Kind() != reflect.Uint32 {
 			return "", false
 		}
 	}
