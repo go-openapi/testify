@@ -133,6 +133,7 @@ func (ctt *captureT) Errorf(format string, args ...any) {
 
 func (ctt *captureT) checkResultAndErrMsg(t *testing.T, expectedRes, res bool, expectedErrMsg string) {
 	t.Helper()
+
 	if res != expectedRes {
 		t.Errorf("Should return %t", expectedRes)
 		return
@@ -152,6 +153,7 @@ func (ctt *captureT) checkResultAndErrMsg(t *testing.T, expectedRes, res bool, e
 		t.Errorf("Should log an error. Log output: %q", ctt.msg)
 		return
 	}
+
 	for _, content := range contents {
 		if content.label == "Error" {
 			if expectedErrMsg == content.content {
@@ -160,6 +162,7 @@ func (ctt *captureT) checkResultAndErrMsg(t *testing.T, expectedRes, res bool, e
 			t.Errorf("Recorded Error: %q", content.content)
 		}
 	}
+
 	t.Errorf("Expected Error: %q", expectedErrMsg)
 }
 

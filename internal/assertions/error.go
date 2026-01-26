@@ -10,12 +10,19 @@ import (
 	"strings"
 )
 
+// TestExampleError is a sentinel error type that may be used for testing.
+type TestExampleError string
+
+func (e TestExampleError) Error() string {
+	return string(e)
+}
+
 // ErrTest is an error instance useful for testing.
 //
 // If the code does not care about error specifics, and only needs
-// to return the error for example, this error should be used to make
+// to return the error as an example, this error may be used to make
 // the test code more readable.
-var ErrTest = errors.New("assert.ErrTest general error for testing") // Proposal for enhancement: make a type and a const.
+const ErrTest TestExampleError = "ErrTest example error for testing"
 
 // NoError asserts that a function returned a nil error (ie. no error).
 //

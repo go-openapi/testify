@@ -163,6 +163,12 @@ type equalEmptyCase struct {
 	expectedErrMsg string
 }
 
+// Proposal for enhancement: should improve the overall readability and maintainability of the error message
+// checks. Expectations are too specific to maintain, down to the tab/CR character.
+// The line feeds and tab are not helping to spot what is expected.
+//
+// See [captureT] to figure
+// a test refactoring plan.
 func equalEmptyCases() iter.Seq[equalEmptyCase] {
 	chWithValue := make(chan struct{}, 1)
 	chWithValue <- struct{}{}
@@ -246,20 +252,18 @@ func equalEmptyCases() iter.Seq[equalEmptyCase] {
 			name:           "string with only spaces is not empty",
 			value:          "   ",
 			expectedResult: false,
-			expectedErrMsg: "Should be empty, but was    \n", // Proposal for enhancement: FIX THIS strange error message
+			expectedErrMsg: "Should be empty, but was    \n",
 		},
 		{
 			name:           "string with a line feed is not empty",
 			value:          "\n",
 			expectedResult: false,
-			// Proposal for enhancement: This is the exact same error message as for an empty string
-			expectedErrMsg: "Should be empty, but was \n", // Proposal for enhancement: FIX THIS strange error message
+			expectedErrMsg: "Should be empty, but was \n",
 		},
 		{
 			name:           "string with only tabulation and lines feed is not empty",
 			value:          "\n\t\n",
 			expectedResult: false,
-			// Proposal for enhancement: The line feeds and tab are not helping to spot what is expected
 			expectedErrMsg: "" + // this syntax is used to show how errors are reported.
 				"Should be empty, but was \n" +
 				"\t\n",
@@ -268,14 +272,12 @@ func equalEmptyCases() iter.Seq[equalEmptyCase] {
 			name:           "string with trailing lines feed is not empty",
 			value:          "foo\n\n",
 			expectedResult: false,
-			// Proposal for enhancement: it's not clear if one or two lines feed are expected
 			expectedErrMsg: "Should be empty, but was foo\n\n",
 		},
 		{
 			name:           "string with leading and trailing tabulation and lines feed is not empty",
 			value:          "\n\nfoo\t\n\t\n",
 			expectedResult: false,
-			// Proposal for enhancement: The line feeds and tab are not helping to figure what is expected
 			expectedErrMsg: "" +
 				"Should be empty, but was \n" +
 				"\n" +
@@ -286,11 +288,10 @@ func equalEmptyCases() iter.Seq[equalEmptyCase] {
 			name:           "non-printable character is not empty",
 			value:          "\u00a0", // NO-BREAK SPACE UNICODE CHARACTER
 			expectedResult: false,
-			// Proposal for enhancement: here you cannot figure out what is expected
 			expectedErrMsg: "Should be empty, but was \u00a0\n",
 		},
-		// Here we are testing there is no error message on success
 		{
+			// check that there is no error message on success
 			name:           "Empty string is empty",
 			value:          "",
 			expectedResult: true,

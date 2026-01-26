@@ -5,5 +5,5 @@ package assertions
 
 // Assertions provides assertion methods around the [T] interface.
 type Assertions struct {
-	t T
+	t T //nolint:unused // the internal version of this type doesn't use this field, but generated copies do.
 }

@@ -143,7 +143,7 @@ func NotRegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...a
 }
 
 func buildRegex(re any) (*regexp.Regexp, error) {
-	// Maintainer: proposal for enhancement(perf): cache regexp
+	// Maintainer: we decided that we won't cache regexp (too complex for very little value).
 	switch v := re.(type) {
 	case *regexp.Regexp:
 		if v == nil {
