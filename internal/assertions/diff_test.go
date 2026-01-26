@@ -4,6 +4,7 @@
 package assertions
 
 import (
+	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -52,5 +53,34 @@ func TestDiff(t *testing.T) {
 		}
 
 		t.Errorf("unexpected diff time output, got: %q", diffResult)
+	})
+
+	t.Run("diff on nil/nil interface types should render empty", func(t *testing.T) {
+		var a, b error
+
+		diffResult := diff(a, &b)
+		if diffResult != "" {
+			t.Errorf("expected an empty string to render the diff")
+		}
+
+		diffResult = diff((*error)(nil), (*error)(nil))
+		if diffResult != "" {
+			t.Errorf("expected an empty string to render the diff")
+		}
+	})
+}
+
+func TestDiffTypeAndKind(t *testing.T) {
+	t.Run("should return nil and Invalid for nil interface", func(t *testing.T) {
+		var v any // nil interface value
+
+		typ, kind := typeAndKind(v)
+
+		if typ != nil {
+			t.Errorf("expected nil type, got %v", typ)
+		}
+		if kind != reflect.Invalid {
+			t.Errorf("expected Invalid kind, got %v", kind)
+		}
 	})
 }
