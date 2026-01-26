@@ -51,10 +51,14 @@ func unifiedUnaryCases() iter.Seq[unaryTestCase] {
 	xP := &x
 	z := 0
 	zP := &z
+	var arr [1]int
 
 	type TString string
 	type TStruct struct {
 		x int
+	}
+	type FStruct struct {
+		x func()
 	}
 
 	return slices.Values([]unaryTestCase{
@@ -74,9 +78,16 @@ func unifiedUnaryCases() iter.Seq[unaryTestCase] {
 		{"empty/aliased-string", TString(""), emptyNonNil},
 		{"empty/zero-array", [1]int{}, emptyNonNil},
 		{"empty/zero-ptr", zP, emptyNonNil},
+		{"empty/zero-struct-ptr", &TStruct{}, emptyNonNil},
+		{"empty/zero-array-ptr", &arr, emptyNonNil},
+		{"empty/rune", '\u0000', emptyNonNil},
+		{"empty/complex", 0i, emptyNonNil},
+		{"empty/error", errors.New(""), emptyNonNil},
+		{"empty/struct-with-func", FStruct{x: nil}, emptyNonNil},
 
 		// Non-empty comparable category
 		{"non-empty/int", 42, nonEmptyComparable},
+		{"non-empty/rune", 'A', nonEmptyComparable},
 		{"non-empty/string", "hello", nonEmptyComparable},
 		{"non-empty/bool", true, nonEmptyComparable},
 		{"non-empty/slice", []int{1}, nonEmptyComparable},
@@ -88,6 +99,11 @@ func unifiedUnaryCases() iter.Seq[unaryTestCase] {
 
 		// Non-empty non-comparable category
 		{"non-empty/error", errors.New("something"), nonEmptyNonComparable},
+		{"non-empty/slice-error", []error{errors.New("")}, nonEmptyNonComparable},
+		{"non-empty/slice-nil-error", []error{nil}, nonEmptyNonComparable},
+		{"non-empty/slice-zero", []int{0}, nonEmptyNonComparable},
+		{"non-empty/slice-nil", []*int{nil}, nonEmptyNonComparable},
+		{"non-empty/struct-with-func", FStruct{x: func() {}}, nonEmptyNonComparable},
 	})
 }
 
