@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-26 (version 43574c8) using codegen version v2.2.1-0.20260126160846-43574c83eea9+dirty [sha: 43574c83eea9c46dc5bb573128a4038e90e2f44b]
+// Generated on 2026-01-26 (version cbd4c16) using codegen version v2.2.1-0.20260126160846-43574c83eea9+dirty [sha: 43574c83eea9c46dc5bb573128a4038e90e2f44b]
 
 package require
 
@@ -10,11 +10,11 @@ import (
 	"github.com/go-openapi/testify/v2/internal/assertions"
 )
 
-var (
+const (
 	// ErrTest is an error instance useful for testing.
 	//
 	// If the code does not care about error specifics, and only needs
-	// to return the error for example, this error should be used to make
+	// to return the error as an example, this error may be used to make
 	// the test code more readable.
 	ErrTest = assertions.ErrTest
 )
@@ -79,6 +79,9 @@ type (
 		assertions.T
 		FailNow()
 	}
+
+	// TestExampleError is a sentinel error type that may be used for testing.
+	TestExampleError = assertions.TestExampleError
 
 	// Text is any type of underlying type string or []byte.
 	//

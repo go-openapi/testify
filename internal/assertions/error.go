@@ -22,7 +22,7 @@ func (e TestExampleError) Error() string {
 // If the code does not care about error specifics, and only needs
 // to return the error as an example, this error may be used to make
 // the test code more readable.
-const ErrTest TestExampleError = "ErrTest example error for testing"
+const ErrTest TestExampleError = "assert.ErrTest general error for testing"
 
 // NoError asserts that a function returned a nil error (ie. no error).
 //

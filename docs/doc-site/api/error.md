@@ -91,7 +91,7 @@ and that it is equal to the provided error.
 |--|--| 
 | [`assertions.EqualError(t T, err error, errString string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EqualError) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualError](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L80)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualError](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L87)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -139,7 +139,7 @@ Error asserts that a function returned a non-nil error (ie. an error).
 |--|--| 
 | [`assertions.Error(t T, err error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Error) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Error](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L56)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Error](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L63)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -188,7 +188,7 @@ This is a wrapper for [errors.As](https://pkg.go.dev/errors#As).
 |--|--| 
 | [`assertions.ErrorAs(t T, err error, target any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ErrorAs) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorAs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L211)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorAs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L218)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -237,7 +237,7 @@ error) and that the error contains the specified substring.
 |--|--| 
 | [`assertions.ErrorContains(t T, err error, contains string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ErrorContains) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L111)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L118)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -286,7 +286,7 @@ This is a wrapper for [errors.Is](https://pkg.go.dev/errors#Is).
 |--|--| 
 | [`assertions.ErrorIs(t T, err error, target error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ErrorIs) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorIs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L140)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorIs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L147)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -336,7 +336,7 @@ NoError asserts that a function returned a nil error (ie. no error).
 |--|--| 
 | [`assertions.NoError(t T, err error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NoError) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoError](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L33)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoError](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L40)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -384,7 +384,7 @@ but if so, sets target to that error value.
 |--|--| 
 | [`assertions.NotErrorAs(t T, err error, target any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotErrorAs) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotErrorAs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L245)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotErrorAs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L252)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -433,7 +433,7 @@ This is a wrapper for [errors.Is](https://pkg.go.dev/errors#Is).
 |--|--| 
 | [`assertions.NotErrorIs(t T, err error, target error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotErrorIs) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotErrorIs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L177)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotErrorIs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L184)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -453,5 +453,5 @@ SPDX-License-Identifier: Apache-2.0
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
 
-Generated on 2026-01-26 (version 43574c8) using codegen version v2.2.1-0.20260126160846-43574c83eea9+dirty [sha: 43574c83eea9c46dc5bb573128a4038e90e2f44b]
+Generated on 2026-01-26 (version cbd4c16) using codegen version v2.2.1-0.20260126160846-43574c83eea9+dirty [sha: 43574c83eea9c46dc5bb573128a4038e90e2f44b]
 -->
