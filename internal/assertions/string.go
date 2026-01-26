@@ -223,8 +223,14 @@ func asString(v any) (string, bool) {
 
 	// weird reflection: numbers CanConvert but their string rep is wrong. Need to check further.
 	typ := val.Type()
-	if kind != reflect.String && !(kind == reflect.Slice && typ.Elem().Kind() == reflect.Uint8) { //nolint:staticcheck // we want type.Elem() to be called only when kind is a slice
-		return "", false
+	if kind != reflect.String {
+		if kind != reflect.Slice {
+			return "", false
+		}
+
+		if typ.Elem().Kind() != reflect.Uint8 {
+			return "", false
+		}
 	}
 
 	// handle ~string, ~[]byte
