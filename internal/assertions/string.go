@@ -143,7 +143,7 @@ func NotRegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...a
 }
 
 func buildRegex(re any) (*regexp.Regexp, error) {
-	// Maintainer: proposal for enhancement(perf): cache regexp
+	// Maintainer: we decided that we won't cache regexp (too complex for very little value).
 	switch v := re.(type) {
 	case *regexp.Regexp:
 		if v == nil {
@@ -223,8 +223,14 @@ func asString(v any) (string, bool) {
 
 	// weird reflection: numbers CanConvert but their string rep is wrong. Need to check further.
 	typ := val.Type()
-	if kind != reflect.String && !(kind == reflect.Slice && typ.Elem().Kind() == reflect.Uint8) { //nolint:staticcheck // we want type.Elem() to be called only when kind is a slice
-		return "", false
+	if kind != reflect.String {
+		if kind != reflect.Slice {
+			return "", false
+		}
+
+		if typ.Elem().Kind() != reflect.Uint8 && typ.Elem().Kind() != reflect.Uint32 {
+			return "", false
+		}
 	}
 
 	// handle ~string, ~[]byte

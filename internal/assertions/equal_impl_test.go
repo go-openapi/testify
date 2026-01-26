@@ -4,12 +4,10 @@
 package assertions
 
 import (
-	"errors"
 	"fmt"
 	"iter"
 	"slices"
 	"testing"
-	"time"
 )
 
 const shortpkg = "assertions"
@@ -17,26 +15,8 @@ const shortpkg = "assertions"
 func TestEqualUnexportedImplementationDetails(t *testing.T) {
 	t.Parallel()
 
-	t.Run("samePointers", testSamePointers())
 	t.Run("formatUnequalValue", testFormatUnequalValues())
-	t.Run("isEmpty", testIsEmpty())
 	t.Run("validateEqualArgs", testValidateEqualArgs())
-}
-
-func testSamePointers() func(*testing.T) {
-	return func(t *testing.T) {
-		t.Parallel()
-
-		for tt := range equalSamePointersCases() {
-			t.Run(tt.name, func(t *testing.T) {
-				t.Parallel()
-
-				same, ok := samePointers(tt.args.first, tt.args.second)
-				tt.same(t, same)
-				tt.ok(t, ok)
-			})
-		}
-	}
 }
 
 func testFormatUnequalValues() func(*testing.T) {
@@ -52,131 +32,6 @@ func testFormatUnequalValues() func(*testing.T) {
 				Equal(t, tt.expectedActual, actual, tt.testName)
 			})
 		}
-	}
-}
-
-func testIsEmpty() func(*testing.T) {
-	return func(t *testing.T) {
-		t.Parallel()
-
-		chWithValue := make(chan struct{}, 1)
-		chWithValue <- struct{}{}
-
-		True(t, isEmpty(""))
-		True(t, isEmpty(nil))
-		True(t, isEmpty(error(nil)))
-		True(t, isEmpty((*int)(nil)))
-		True(t, isEmpty((*string)(nil)))
-		True(t, isEmpty(new(string)))
-		True(t, isEmpty([]string{}))
-		True(t, isEmpty([]string(nil)))
-		True(t, isEmpty([]byte(nil)))
-		True(t, isEmpty([]byte{}))
-		True(t, isEmpty([]byte("")))
-		True(t, isEmpty([]bool(nil)))
-		True(t, isEmpty([]bool{}))
-		True(t, isEmpty([]any(nil)))
-		True(t, isEmpty([]any{}))
-		True(t, isEmpty(struct{}{}))
-		True(t, isEmpty(&struct{}{}))
-		True(t, isEmpty(struct{ A int }{A: 0}))
-		True(t, isEmpty(struct{ a int }{a: 0}))
-		True(t, isEmpty(struct {
-			a int
-			B int
-		}{a: 0, B: 0}))
-		True(t, isEmpty(0))
-		True(t, isEmpty(int(0)))
-		True(t, isEmpty(int8(0)))
-		True(t, isEmpty(int16(0)))
-		True(t, isEmpty(uint16(0)))
-		True(t, isEmpty(int32(0)))
-		True(t, isEmpty(uint32(0)))
-		True(t, isEmpty(int64(0)))
-		True(t, isEmpty(uint64(0)))
-		True(t, isEmpty('\u0000')) // rune => int32
-		True(t, isEmpty(float32(0)))
-		True(t, isEmpty(float64(0)))
-		True(t, isEmpty(0i))   // complex
-		True(t, isEmpty(0.0i)) // complex
-		True(t, isEmpty(false))
-		True(t, isEmpty(new(bool)))
-		True(t, isEmpty(map[string]string{}))
-		True(t, isEmpty(map[string]string(nil)))
-		True(t, isEmpty(new(time.Time)))
-		True(t, isEmpty(time.Time{}))
-		True(t, isEmpty(make(chan struct{})))
-		True(t, isEmpty(chan struct{}(nil)))
-		True(t, isEmpty(chan<- struct{}(nil)))
-		True(t, isEmpty(make(chan struct{})))
-		True(t, isEmpty(make(chan<- struct{})))
-		True(t, isEmpty(make(chan struct{}, 1)))
-		True(t, isEmpty(make(chan<- struct{}, 1)))
-		True(t, isEmpty([1]int{0}))
-		True(t, isEmpty([2]int{0, 0}))
-		True(t, isEmpty([8]int{}))
-		True(t, isEmpty([...]int{7: 0}))
-		True(t, isEmpty([...]bool{false, false}))
-		True(t, isEmpty(errors.New(""))) // BEWARE
-		True(t, isEmpty([]error{}))
-		True(t, isEmpty([]error(nil)))
-		True(t, isEmpty(&[1]int{0}))
-		True(t, isEmpty(&[2]int{0, 0}))
-		False(t, isEmpty("something"))
-		False(t, isEmpty(errors.New("something")))
-		False(t, isEmpty([]string{"something"}))
-		False(t, isEmpty(1))
-		False(t, isEmpty(int(1)))
-		False(t, isEmpty(uint(1)))
-		False(t, isEmpty(byte(1)))
-		False(t, isEmpty(int8(1)))
-		False(t, isEmpty(uint8(1)))
-		False(t, isEmpty(int16(1)))
-		False(t, isEmpty(uint16(1)))
-		False(t, isEmpty(int32(1)))
-		False(t, isEmpty(uint32(1)))
-		False(t, isEmpty(int64(1)))
-		False(t, isEmpty(uint64(1)))
-		False(t, isEmpty('A')) // rune => int32
-		False(t, isEmpty(true))
-		False(t, isEmpty(1.0))
-		False(t, isEmpty(1i))            // complex
-		False(t, isEmpty([]byte{0}))     // elements values are ignored for slices
-		False(t, isEmpty([]byte{0, 0}))  // elements values are ignored for slices
-		False(t, isEmpty([]string{""}))  // elements values are ignored for slices
-		False(t, isEmpty([]string{"a"})) // elements values are ignored for slices
-		False(t, isEmpty([]bool{false})) // elements values are ignored for slices
-		False(t, isEmpty([]bool{true}))  // elements values are ignored for slices
-		False(t, isEmpty([]error{errors.New("xxx")}))
-		False(t, isEmpty([]error{nil}))            // BEWARE
-		False(t, isEmpty([]error{errors.New("")})) // BEWARE
-		False(t, isEmpty(map[string]string{"Hello": "World"}))
-		False(t, isEmpty(map[string]string{"": ""}))
-		False(t, isEmpty(map[string]string{"foo": ""}))
-		False(t, isEmpty(map[string]string{"": "foo"}))
-		False(t, isEmpty(chWithValue))
-		False(t, isEmpty([1]bool{true}))
-		False(t, isEmpty([2]bool{false, true}))
-		False(t, isEmpty([...]bool{10: true}))
-		False(t, isEmpty([]int{0}))
-		False(t, isEmpty([]int{42}))
-		False(t, isEmpty([1]int{42}))
-		False(t, isEmpty([2]int{0, 42}))
-		False(t, isEmpty(&[1]int{42}))
-		False(t, isEmpty(&[2]int{0, 42}))
-		False(t, isEmpty([1]*int{new(int)})) // array elements must be the zero value, not any Empty value
-		False(t, isEmpty(struct{ A int }{A: 42}))
-		False(t, isEmpty(struct{ a int }{a: 42}))
-		False(t, isEmpty(struct{ a *int }{a: new(int)})) // fields must be the zero value, not any Empty value
-		False(t, isEmpty(struct{ a []int }{a: []int{}})) // fields must be the zero value, not any Empty value
-		False(t, isEmpty(struct {
-			a int
-			B int
-		}{a: 0, B: 42}))
-		False(t, isEmpty(struct {
-			a int
-			B int
-		}{a: 42, B: 0}))
 	}
 }
 
@@ -228,65 +83,5 @@ func formatUnequalCases() iter.Seq[formatUnequalCase] {
 		{uint16(123), uint16(124), `123`, `124`, "uint16 should print clean"},
 		{uint32(123), uint32(124), `123`, `124`, "uint32 should print clean"},
 		{uint64(123), uint64(124), `123`, `124`, "uint64 should print clean"},
-	})
-}
-
-type samePointersCase struct {
-	name string
-	args args
-	same BoolAssertionFunc
-	ok   BoolAssertionFunc
-}
-
-type args struct {
-	first  any
-	second any
-}
-
-func equalSamePointersCases() iter.Seq[samePointersCase] {
-	p := ptr(2)
-	return slices.Values([]samePointersCase{
-		{
-			name: "1 != 2",
-			args: args{first: 1, second: 2},
-			same: False,
-			ok:   False,
-		},
-		{
-			name: "1 != 1 (not same ptr)",
-			args: args{first: 1, second: 1},
-			same: False,
-			ok:   False,
-		},
-		{
-			name: "ptr(1) == ptr(1)",
-			args: args{first: p, second: p},
-			same: True,
-			ok:   True,
-		},
-		{
-			name: "int(1) != float32(1)",
-			args: args{first: int(1), second: float32(1)},
-			same: False,
-			ok:   False,
-		},
-		{
-			name: "array != slice",
-			args: args{first: [2]int{1, 2}, second: []int{1, 2}},
-			same: False,
-			ok:   False,
-		},
-		{
-			name: "non-pointer vs pointer (1 != ptr(2))",
-			args: args{first: 1, second: p},
-			same: False,
-			ok:   False,
-		},
-		{
-			name: "pointer vs non-pointer (ptr(2) != 1)",
-			args: args{first: p, second: 1},
-			same: False,
-			ok:   False,
-		},
 	})
 }

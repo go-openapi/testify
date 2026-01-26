@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
+// SPDX-License-Identifier: Apache-2.0
+
 package assertions
 
 import (
@@ -51,10 +54,14 @@ func unifiedUnaryCases() iter.Seq[unaryTestCase] {
 	xP := &x
 	z := 0
 	zP := &z
+	var arr [1]int
 
 	type TString string
 	type TStruct struct {
 		x int
+	}
+	type FStruct struct {
+		x func()
 	}
 
 	return slices.Values([]unaryTestCase{
@@ -74,9 +81,16 @@ func unifiedUnaryCases() iter.Seq[unaryTestCase] {
 		{"empty/aliased-string", TString(""), emptyNonNil},
 		{"empty/zero-array", [1]int{}, emptyNonNil},
 		{"empty/zero-ptr", zP, emptyNonNil},
+		{"empty/zero-struct-ptr", &TStruct{}, emptyNonNil},
+		{"empty/zero-array-ptr", &arr, emptyNonNil},
+		{"empty/rune", '\u0000', emptyNonNil},
+		{"empty/complex", 0i, emptyNonNil},
+		{"empty/error", errors.New(""), emptyNonNil},
+		{"empty/struct-with-func", FStruct{x: nil}, emptyNonNil},
 
 		// Non-empty comparable category
 		{"non-empty/int", 42, nonEmptyComparable},
+		{"non-empty/rune", 'A', nonEmptyComparable},
 		{"non-empty/string", "hello", nonEmptyComparable},
 		{"non-empty/bool", true, nonEmptyComparable},
 		{"non-empty/slice", []int{1}, nonEmptyComparable},
@@ -88,6 +102,11 @@ func unifiedUnaryCases() iter.Seq[unaryTestCase] {
 
 		// Non-empty non-comparable category
 		{"non-empty/error", errors.New("something"), nonEmptyNonComparable},
+		{"non-empty/slice-error", []error{errors.New("")}, nonEmptyNonComparable},
+		{"non-empty/slice-nil-error", []error{nil}, nonEmptyNonComparable},
+		{"non-empty/slice-zero", []int{0}, nonEmptyNonComparable},
+		{"non-empty/slice-nil", []*int{nil}, nonEmptyNonComparable},
+		{"non-empty/struct-with-func", FStruct{x: func() {}}, nonEmptyNonComparable},
 	})
 }
 
@@ -144,6 +163,12 @@ type equalEmptyCase struct {
 	expectedErrMsg string
 }
 
+// Proposal for enhancement: should improve the overall readability and maintainability of the error message
+// checks. Expectations are too specific to maintain, down to the tab/CR character.
+// The line feeds and tab are not helping to spot what is expected.
+//
+// See [captureT] to figure
+// a test refactoring plan.
 func equalEmptyCases() iter.Seq[equalEmptyCase] {
 	chWithValue := make(chan struct{}, 1)
 	chWithValue <- struct{}{}
@@ -227,20 +252,18 @@ func equalEmptyCases() iter.Seq[equalEmptyCase] {
 			name:           "string with only spaces is not empty",
 			value:          "   ",
 			expectedResult: false,
-			expectedErrMsg: "Should be empty, but was    \n", // Proposal for enhancement: FIX THIS strange error message
+			expectedErrMsg: "Should be empty, but was    \n",
 		},
 		{
 			name:           "string with a line feed is not empty",
 			value:          "\n",
 			expectedResult: false,
-			// Proposal for enhancement: This is the exact same error message as for an empty string
-			expectedErrMsg: "Should be empty, but was \n", // Proposal for enhancement: FIX THIS strange error message
+			expectedErrMsg: "Should be empty, but was \n",
 		},
 		{
 			name:           "string with only tabulation and lines feed is not empty",
 			value:          "\n\t\n",
 			expectedResult: false,
-			// Proposal for enhancement: The line feeds and tab are not helping to spot what is expected
 			expectedErrMsg: "" + // this syntax is used to show how errors are reported.
 				"Should be empty, but was \n" +
 				"\t\n",
@@ -249,14 +272,12 @@ func equalEmptyCases() iter.Seq[equalEmptyCase] {
 			name:           "string with trailing lines feed is not empty",
 			value:          "foo\n\n",
 			expectedResult: false,
-			// Proposal for enhancement: it's not clear if one or two lines feed are expected
 			expectedErrMsg: "Should be empty, but was foo\n\n",
 		},
 		{
 			name:           "string with leading and trailing tabulation and lines feed is not empty",
 			value:          "\n\nfoo\t\n\t\n",
 			expectedResult: false,
-			// Proposal for enhancement: The line feeds and tab are not helping to figure what is expected
 			expectedErrMsg: "" +
 				"Should be empty, but was \n" +
 				"\n" +
@@ -267,11 +288,10 @@ func equalEmptyCases() iter.Seq[equalEmptyCase] {
 			name:           "non-printable character is not empty",
 			value:          "\u00a0", // NO-BREAK SPACE UNICODE CHARACTER
 			expectedResult: false,
-			// Proposal for enhancement: here you cannot figure out what is expected
 			expectedErrMsg: "Should be empty, but was \u00a0\n",
 		},
-		// Here we are testing there is no error message on success
 		{
+			// check that there is no error message on success
 			name:           "Empty string is empty",
 			value:          "",
 			expectedResult: true,

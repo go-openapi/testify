@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-25 (version f9aee45) using codegen version v2.1.9-0.20260125223317-f9aee45df796+dirty [sha: f9aee45df7969f1ad686953c5695ffe353eaa13a]
+// Generated on 2026-01-26 (version cbd4c16) using codegen version v2.2.1-0.20260126160846-43574c83eea9+dirty [sha: 43574c83eea9c46dc5bb573128a4038e90e2f44b]
 
 package assert_test
 

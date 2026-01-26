@@ -97,10 +97,12 @@ With 76 assertion functions, this generates 608 functions automatically.
 ### Dependency Isolation Strategy
 - **internal/spew**: Internalized copy of go-spew for pretty-printing values
 - **internal/difflib**: Internalized copy of go-difflib for generating diffs
-- **assert/yaml**: Stub package that panics by default if YAML assertions are used
+- **internal/assertions/enable**: Internal stubs that panic by default if YAML/color assertions are used
+- **enable/stubs**: Public API for enabling optional features (yaml, colors)
 - **enable/yaml**: Optional module that activates YAML support via init() when imported
+- **enable/colors**: Optional module that activates colorized output via init() when imported
 
-The "enable" pattern allows YAML functionality to be opt-in: import `_ "github.com/go-openapi/testify/v2/enable/yaml"` to activate YAML assertions without forcing a dependency on all users.
+The "enable" pattern allows optional functionality to be opt-in: import `_ "github.com/go-openapi/testify/v2/enable/yaml"` to activate YAML assertions, or `_ "github.com/go-openapi/testify/v2/enable/colors"` to enable colorized output, without forcing dependencies on all users.
 
 ## Development Commands
 
