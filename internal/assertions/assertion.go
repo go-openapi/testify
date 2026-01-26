@@ -7,10 +7,3 @@ package assertions
 type Assertions struct {
 	t T
 }
-
-// New makes a new [Assertions] object for the specified [T].
-func New(t T) *Assertions {
-	return &Assertions{
-		t: t,
-	}
-}
