@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	target "github.com/go-openapi/testify/v2/assert"
-	colorstub "github.com/go-openapi/testify/v2/assert/enable/colors"
+	colorstub "github.com/go-openapi/testify/v2/enable/stubs/colors"
 )
 
 func TestMain(m *testing.M) {

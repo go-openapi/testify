@@ -48,4 +48,12 @@ Everything in these packages is generated. Never edit generated files directly.
 Exceptions:
 * `doc.go` is not generated
 * ad'hoc testable examples are not generated
-* the `assert` package contains an `enable` package to enable features. This is not generated.
+
+**Optional Feature Packages: `enable/`**
+
+The `enable/` package provides optional features that users can activate via blank imports:
+- `enable/stubs/` - Public stub APIs for enabling features (yaml, colors)
+- `enable/yaml/` - Activates YAML support via `import _ "github.com/go-openapi/testify/v2/enable/yaml"`
+- `enable/colors/` - Activates colorized output via `import _ "github.com/go-openapi/testify/v2/enable/colors"`
+
+These packages are not generated and allow optional dependencies to be isolated from the core library.

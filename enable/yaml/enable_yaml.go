@@ -5,7 +5,7 @@
 package yaml
 
 import (
-	yamlstub "github.com/go-openapi/testify/v2/assert/enable/yaml"
+	yamlstub "github.com/go-openapi/testify/v2/enable/stubs/yaml"
 
 	yaml "go.yaml.in/yaml/v3"
 )

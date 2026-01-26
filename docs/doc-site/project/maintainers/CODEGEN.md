@@ -56,7 +56,6 @@ This repository uses code generation extensively to maintain consistency across 
         direction LR
         docgo_assert@{ shape: document, label: "doc.go" }
         adhoc_assert@{ shape: document, label: "*_adhoc*_test.go" }
-        enable_assert@{ shape: lin-doc, label: "enable" }
       end
     end
 

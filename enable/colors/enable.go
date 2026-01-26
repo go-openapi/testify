@@ -11,7 +11,7 @@ import (
 
 	"golang.org/x/term"
 
-	colorstub "github.com/go-openapi/testify/v2/assert/enable/colors"
+	colorstub "github.com/go-openapi/testify/v2/enable/stubs/colors"
 )
 
 const (
