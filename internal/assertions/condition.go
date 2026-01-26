@@ -155,14 +155,12 @@ func eventually(t T, condition func() bool, waitFor time.Duration, tick time.Dur
 		h.Helper()
 	}
 
-	return pollCondition(t,
-		condition, waitFor, tick,
-		pollOptions{
-			mode:        pollUntilTrue,
-			failMessage: "condition never satisfied",
-		},
-		msgAndArgs...,
-	)
+	p := newConditionPoller(pollOptions{
+		mode:        pollUntilTrue,
+		failMessage: "condition never satisfied",
+	})
+
+	return p.pollCondition(t, condition, waitFor, tick, msgAndArgs...)
 }
 
 func never(t T, condition func() bool, waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool {
@@ -170,14 +168,12 @@ func never(t T, condition func() bool, waitFor time.Duration, tick time.Duration
 		h.Helper()
 	}
 
-	return pollCondition(t,
-		condition, waitFor, tick,
-		pollOptions{
-			mode:        pollUntilTimeout,
-			failMessage: "condition satisfied",
-		},
-		msgAndArgs...,
-	)
+	p := newConditionPoller(pollOptions{
+		mode:        pollUntilTimeout,
+		failMessage: "condition satisfied",
+	})
+
+	return p.pollCondition(t, condition, waitFor, tick, msgAndArgs...)
 }
 
 func eventuallyWithT(t T, collectCondition func(collector *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool {
@@ -205,16 +201,23 @@ func eventuallyWithT(t T, collectCondition func(collector *CollectT), waitFor ti
 		}
 	}
 
-	return pollCondition(t,
-		condition, waitFor, tick,
-		pollOptions{
-			mode:        pollUntilTrue,
-			failMessage: "condition never satisfied",
-			onFailure:   copyCollected,
-			onSetup:     func(cancel func()) { cancelFunc = cancel },
-		},
-		msgAndArgs...,
-	)
+	p := newConditionPoller(pollOptions{
+		mode:        pollUntilTrue,
+		failMessage: "condition never satisfied",
+		onFailure:   copyCollected,
+		onSetup:     func(cancel func()) { cancelFunc = cancel },
+	})
+
+	return p.pollCondition(t, condition, waitFor, tick, msgAndArgs...)
+}
+
+type conditionPoller struct {
+	pollOptions
+
+	ticker        *time.Ticker
+	reported      atomic.Bool
+	conditionChan chan func() bool
+	doneChan      chan struct{}
 }
 
 // pollMode determines how the condition polling should behave.
@@ -235,15 +238,217 @@ type pollOptions struct {
 	onSetup     func(cancel func()) // called after context setup to expose cancel function
 }
 
+func newConditionPoller(o pollOptions) *conditionPoller {
+	return &conditionPoller{
+		pollOptions:   o,
+		conditionChan: make(chan func() bool, 1),
+		doneChan:      make(chan struct{}),
+	}
+}
+
 // pollCondition is the common implementation for eventually, never, and eventuallyWithT.
-// It polls a condition function at regular intervals until success or timeout.
 //
-//nolint:gocognit,gocyclo,cyclop // A refactoring is planned for this complex function.
-func pollCondition(t T, condition func() bool, waitFor, tick time.Duration, opts pollOptions, msgAndArgs ...any) bool {
+// It polls a condition function at regular intervals until success or timeout.
+func (p *conditionPoller) pollCondition(t T, condition func() bool, waitFor, tick time.Duration, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 
+	parentCtx := p.parentContextFromT(t)
+	ctx, cancel := p.cancellableContext(parentCtx, waitFor)
+	defer cancel()
+
+	failFunc := p.failFunc(t, msgAndArgs...)
+
+	// Allow caller to capture the cancel function (for eventuallyWithT's CollectT)
+	if p.onSetup != nil {
+		p.onSetup(cancel)
+	}
+
+	p.ticker = time.NewTicker(tick)
+	defer p.ticker.Stop()
+
+	// Check the condition once first on the initial call.
+	p.conditionChan <- condition
+
+	var wg sync.WaitGroup
+
+	// Goroutine 1: Poll for the condition at every tick
+	wg.Add(1)
+	go p.pollAtTickFunc(parentCtx, ctx, condition, failFunc, &wg)()
+
+	// Goroutine 2: Execute the condition and check results
+	wg.Add(1)
+	go p.executeCondition(parentCtx, ctx, failFunc, &wg)()
+
+	wg.Wait()
+
+	// Determine success based on mode
+	return p.determineOutcome(parentCtx, ctx, failFunc, t)()
+}
+
+func (p *conditionPoller) failFunc(t T, msgAndArgs ...any) func(string) {
+	return func(reason string) {
+		if p.reported.CompareAndSwap(false, true) {
+			if reason != "" {
+				t.Errorf("%s", reason)
+			}
+			Fail(t, p.failMessage, msgAndArgs...)
+		}
+	}
+}
+
+func (p *conditionPoller) pollAtTickFunc(parentCtx, ctx context.Context, condition func() bool, failFunc func(string), wg *sync.WaitGroup) func() {
+	if p.mode == pollUntilTimeout {
+		// For Never: check parent context separately
+		return func() {
+			defer wg.Done()
+
+			for {
+				select {
+				case <-parentCtx.Done():
+					failFunc(parentCtx.Err().Error())
+					return
+				case <-ctx.Done():
+					return // timeout reached = success for Never
+				case <-p.doneChan:
+					return
+				case <-p.ticker.C:
+					// Nested select prevents blocking on channel send if context was cancelled
+					// between receiving the tick and attempting to send the condition.
+					select {
+					case <-parentCtx.Done():
+						failFunc(parentCtx.Err().Error())
+						return
+					case <-ctx.Done():
+						return
+					case <-p.doneChan:
+						return
+					case p.conditionChan <- condition:
+					}
+				}
+			}
+		}
+	}
+
+	// For Eventually: parent cancellation flows through ctx
+	return func() {
+		defer wg.Done()
+
+		for {
+			select {
+			case <-ctx.Done():
+				failFunc(ctx.Err().Error())
+				return
+			case <-p.doneChan:
+				return
+			case <-p.ticker.C:
+				// Nested select prevents blocking on channel send if context was cancelled
+				// between receiving the tick and attempting to send the condition.
+				select {
+				case <-ctx.Done():
+					failFunc(ctx.Err().Error())
+					return
+				case <-p.doneChan:
+					return
+				case p.conditionChan <- condition:
+				}
+			}
+		}
+	}
+}
+
+func (p *conditionPoller) executeCondition(parentCtx, ctx context.Context, failFunc func(string), wg *sync.WaitGroup) func() {
+	if p.mode == pollUntilTimeout {
+		// For Never
+		return func() {
+			defer wg.Done()
+
+			for {
+				select {
+				case <-parentCtx.Done():
+					failFunc(parentCtx.Err().Error())
+					return
+				case <-ctx.Done():
+					return // timeout = success
+				case fn := <-p.conditionChan:
+					if fn() {
+						close(p.doneChan) // condition true = failure for Never
+						return
+					}
+				}
+			}
+		}
+	}
+
+	// For Eventually
+	return func() {
+		defer wg.Done()
+
+		for {
+			select {
+			case <-ctx.Done():
+				failFunc(ctx.Err().Error())
+				return
+			case fn := <-p.conditionChan:
+				if fn() {
+					close(p.doneChan) // condition true = success
+					return
+				}
+			}
+		}
+	}
+}
+
+func (p *conditionPoller) determineOutcome(parentCtx, ctx context.Context, failFunc func(string), t T) func() bool {
+	if p.mode == pollUntilTimeout {
+		return func() bool {
+			select {
+			case <-p.doneChan:
+				// For Never: doneChan closed means condition became true
+				// But if timeout was reached first (ctx.Err != nil), it's still a success.
+				// This handles the race between timeout and condition becoming true.
+				if ctx.Err() != nil {
+					return true
+				}
+				// Condition became true before timeout = failure
+				failFunc("")
+				return false
+			default:
+				// doneChan not closed
+				// For Never: timeout reached without condition being true = success
+				// We should return a success, unless the parent context has failed.
+				return parentCtx.Err() == nil
+			}
+		}
+	}
+
+	return func() bool {
+		select {
+		case <-p.doneChan:
+			// For Eventually: doneChan closed means condition became true
+			if ctx.Err() != nil {
+				// Timeout occurred before or during success
+				if p.onFailure != nil {
+					p.onFailure(t)
+				}
+				return false
+			}
+			return true
+		default:
+			// doneChan not closed
+			// opts.mode = pollUntilTrue
+			// For Eventually: should not reach here (failFunc already called)
+			if p.onFailure != nil {
+				p.onFailure(t)
+			}
+
+			return false
+		}
+	}
+}
+
+func (p *conditionPoller) parentContextFromT(t T) context.Context {
 	var parentCtx context.Context
 	if withContext, ok := t.(contextualizer); ok {
 		parentCtx = withContext.Context()
@@ -252,167 +457,21 @@ func pollCondition(t T, condition func() bool, waitFor, tick time.Duration, opts
 		parentCtx = context.Background()
 	}
 
+	return parentCtx
+}
+
+func (p *conditionPoller) cancellableContext(parentCtx context.Context, waitFor time.Duration) (context.Context, func()) {
 	// For pollUntilTimeout (Never), we detach from parent cancellation
 	// so that timeout reaching is a success, not a failure.
 	var ctx context.Context
 	var cancel context.CancelFunc
-	if opts.mode == pollUntilTimeout {
+	if p.mode == pollUntilTimeout {
 		ctx, cancel = context.WithTimeout(context.WithoutCancel(parentCtx), waitFor)
 	} else {
 		ctx, cancel = context.WithTimeout(parentCtx, waitFor)
 	}
-	defer cancel()
 
-	// Allow caller to capture the cancel function (for eventuallyWithT's CollectT)
-	if opts.onSetup != nil {
-		opts.onSetup(cancel)
-	}
-
-	var reported atomic.Bool
-	failFunc := func(reason string) {
-		if reported.CompareAndSwap(false, true) {
-			if reason != "" {
-				t.Errorf("%s", reason)
-			}
-			Fail(t, opts.failMessage, msgAndArgs...)
-		}
-	}
-
-	conditionChan := make(chan func() bool, 1)
-	doneChan := make(chan struct{})
-
-	ticker := time.NewTicker(tick)
-	defer ticker.Stop()
-
-	// Check the condition once first on the initial call.
-	conditionChan <- condition
-
-	var wg sync.WaitGroup
-
-	// Goroutine 1: Poll for the condition at every tick
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-
-		for {
-			if opts.mode == pollUntilTimeout {
-				// For Never: check parent context separately
-				select {
-				case <-parentCtx.Done():
-					failFunc(parentCtx.Err().Error())
-					return
-				case <-ctx.Done():
-					return // timeout reached = success for Never
-				case <-doneChan:
-					return
-				case <-ticker.C:
-					select {
-					case <-parentCtx.Done():
-						failFunc(parentCtx.Err().Error())
-						return
-					case <-ctx.Done():
-						return
-					case <-doneChan:
-						return
-					case conditionChan <- condition:
-					}
-				}
-			} else {
-				// For Eventually: parent cancellation flows through ctx
-				select {
-				case <-ctx.Done():
-					failFunc(ctx.Err().Error())
-					return
-				case <-doneChan:
-					return
-				case <-ticker.C:
-					select {
-					case <-ctx.Done():
-						failFunc(ctx.Err().Error())
-						return
-					case <-doneChan:
-						return
-					case conditionChan <- condition:
-					}
-				}
-			}
-		}
-	}()
-
-	// Goroutine 2: Execute the condition and check results
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-
-		for {
-			if opts.mode == pollUntilTimeout {
-				select {
-				case <-parentCtx.Done():
-					failFunc(parentCtx.Err().Error())
-					return
-				case <-ctx.Done():
-					return // timeout = success
-				case fn := <-conditionChan:
-					if fn() {
-						close(doneChan) // condition true = failure for Never
-						return
-					}
-				}
-			} else {
-				select {
-				case <-ctx.Done():
-					failFunc(ctx.Err().Error())
-					return
-				case fn := <-conditionChan:
-					if fn() {
-						close(doneChan) // condition true = success
-						return
-					}
-				}
-			}
-		}
-	}()
-
-	wg.Wait()
-
-	// Determine success based on mode
-	select {
-	case <-doneChan:
-		if opts.mode == pollUntilTimeout {
-			// For Never: doneChan closed means condition became true
-			// But if timeout was reached first (ctx.Err != nil), it's still a success
-			if ctx.Err() != nil {
-				return true
-			}
-			// Condition became true before timeout = failure
-			failFunc("")
-			return false
-		}
-		// For Eventually: doneChan closed means condition became true
-		if ctx.Err() != nil {
-			// Timeout occurred before or during success
-			if opts.onFailure != nil {
-				opts.onFailure(t)
-			}
-			return false
-		}
-		return true
-	default:
-		// doneChan not closed
-		if opts.mode == pollUntilTimeout {
-			// For Never: timeout reached without condition being true = success
-			// We should return a success, unless the parent context has failed.
-			return parentCtx.Err() == nil
-		}
-
-		// opts.mode = pollUntilTrue
-		// For Eventually: should not reach here (failFunc already called)
-		if opts.onFailure != nil {
-			opts.onFailure(t)
-		}
-
-		return false
-	}
+	return ctx, cancel
 }
 
 // CollectT implements the [T] interface and collects all errors.
@@ -428,7 +487,8 @@ type CollectT struct {
 	//   2. Deprecated methods have been removed.
 
 	// A slice of errors. Non-empty slice denotes a failure.
-	// A c.FailNow() will thee lose accumulated errors
+	// NOTE: When c.FailNow() is called, it cancels the context and exits the goroutine.
+	// The "failed now" error is appended but may be lost if the goroutine exits before collection.
 	errors []error
 
 	// cancelContext cancels the parent context on FailNow()
