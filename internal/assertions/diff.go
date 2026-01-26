@@ -2,7 +2,6 @@ package assertions
 
 import (
 	"reflect"
-	"time"
 
 	"github.com/go-openapi/testify/v2/internal/assertions/enable/colors"
 	"github.com/go-openapi/testify/v2/internal/difflib"
@@ -30,14 +29,12 @@ func diff(expected any, actual any) string {
 
 	switch et {
 	case reflect.TypeFor[string]():
+		// short-circuit for plain strings
 		e = reflect.ValueOf(expected).String()
 		a = reflect.ValueOf(actual).String()
-	case reflect.TypeFor[time.Time]():
-		e = spewConfigStringerEnabled.Sdump(expected)
-		a = spewConfigStringerEnabled.Sdump(actual)
 	default:
-		e = spewConfig.Sdump(expected)
-		a = spewConfig.Sdump(actual)
+		e = dumper(expected)
+		a = dumper(actual)
 	}
 
 	unified := difflib.UnifiedDiff{

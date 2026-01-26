@@ -839,16 +839,16 @@ func formatListDiff(listA, listB any, extraA, extraB []any) string {
 	msg.WriteString("elements differ")
 	if len(extraA) > 0 {
 		msg.WriteString("\n\nextra elements in list A:\n")
-		msg.WriteString(spewConfig.Sdump(extraA))
+		msg.WriteString(dumper(extraA))
 	}
 	if len(extraB) > 0 {
 		msg.WriteString("\n\nextra elements in list B:\n")
-		msg.WriteString(spewConfig.Sdump(extraB))
+		msg.WriteString(dumper(extraB))
 	}
 	msg.WriteString("\n\nlistA:\n")
-	msg.WriteString(spewConfig.Sdump(listA))
+	msg.WriteString(dumper(listA))
 	msg.WriteString("\n\nlistB:\n")
-	msg.WriteString(spewConfig.Sdump(listB))
+	msg.WriteString(dumper(listB))
 
 	return msg.String()
 }
