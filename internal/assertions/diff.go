@@ -61,11 +61,16 @@ func diff(expected any, actual any) string {
 
 func typeAndKind(v any) (reflect.Type, reflect.Kind) {
 	t := reflect.TypeOf(v)
-	k := t.Kind() // Proposal for enhancement: check if t is not nil
+	if t == nil {
+		return nil, reflect.Invalid
+	}
+
+	k := t.Kind()
 
 	if k == reflect.Ptr {
 		t = t.Elem()
 		k = t.Kind()
 	}
+
 	return t, k
 }
