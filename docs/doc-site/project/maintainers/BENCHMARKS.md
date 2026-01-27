@@ -8,7 +8,10 @@ weight: 10
 
 ## Overview
 
-While the primary motivation for adding **38 generic assertion functions** to testify v2 was **compile-time type safety** (see [Generics Guide](../../usage/GENERICS.md) for details), comprehensive benchmarking revealed an unexpected bonus: **dramatic performance improvements** ranging from 1.2x to 81x faster, with up to 99% reduction in memory allocations for collection operations.
+While the primary motivation for adding **generic assertion functions** to testify v2 was **compile-time type safety**
+(see [Generics Guide](../../usage/GENERICS.md) for details), our benchmarking revealed an unexpected bonus:
+**dramatic performance improvements** ranging from 1.2x to 81x faster,
+with up to 99% reduction in memory allocations for collection operations.
 
 This document focuses on the performance measurements and explains why these improvements occur.
 
@@ -24,7 +27,8 @@ assert.ElementsMatch(t, []int{1, 2}, []string{"a", "b"})
 assert.ElementsMatchT(t, []int{1, 2}, []string{"a", "b"})  // ❌ Compile error!
 ```
 
-See the [Generics Guide](../../usage/GENERICS.md) for comprehensive coverage of type safety benefits, refactoring safety, and when to use generic vs reflection variants.
+See the [Generics Guide](../../usage/GENERICS.md) for comprehensive coverage of type safety benefits,
+refactoring safety, and when to use generic vs reflection variants.
 
 ## Performance Results by Category
 

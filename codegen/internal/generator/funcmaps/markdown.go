@@ -25,7 +25,6 @@ const sensiblePrealloc = 20
 //  1. Reference-style markdown links: [text]: url
 //  2. Godoc-style links: [errors.Is], [testing.T], etc.
 func FormatMarkdown(in string) string {
-
 	// Step 1: Extract reference-style link definitions
 	// Pattern: [text]: url (at start of line or after whitespace)
 	refLinks := make(map[string]string)

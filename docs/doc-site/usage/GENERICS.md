@@ -17,28 +17,36 @@ Generic assertions work exactly like their reflection-based counterparts, but wi
 {{< cards >}}
 {{% card title="Reflection-based" %}}
 ```go
-import "github.com/go-openapi/testify/v2/assert"
+import (
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
 
 func TestUser(t *testing.T) {
-    expected := 42
-    actual := getUserAge()
+	expected := 42
+	actual := getUserAge()
 
-    // Compiles, but type errors appear at runtime
-    assert.Equal(t, expected, actual)
+	// Compiles, but type errors appear at runtime
+	assert.Equal(t, expected, actual)
 }
 ```
 {{% /card %}}
 
 {{% card title="Generic (Type-safe)" %}}
 ```go
-import "github.com/go-openapi/testify/v2/assert"
+import (
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
 
 func TestUser(t *testing.T) {
-    expected := 42
-    actual := getUserAge()
+	expected := 42
+	actual := getUserAge()
 
-    // Compiler checks types immediately
-    assert.EqualT(t, expected, actual)
+	// Compiler checks types immediately
+	assert.EqualT(t, expected, actual)
 }
 ```
 {{% /card %}}
@@ -51,15 +59,15 @@ func TestUser(t *testing.T) {
 1. **Testing with known concrete types** - The most common case
    ```go
    assert.EqualT(t, 42, result)              // int comparison
-   assert.GreaterT(t, count, 0)              // numeric comparison
-   assert.ElementsMatchT(t, expected, actual) // slice comparison
+         assert.GreaterT(t, count, 0)              // numeric comparison
+         assert.ElementsMatchT(t, expected, actual) // slice comparison
    ```
 
 2. **You want refactoring safety** - Compiler catches broken tests immediately
    ```go
    // If getUserIDs() changes from []int to []string,
-   // the compiler flags this line immediately
-   assert.ElementsMatchT(t, expectedIDs, getUserIDs())
+         // the compiler flags this line immediately
+         assert.ElementsMatchT(t, expectedIDs, getUserIDs())
    ```
 
 3. **IDE assistance matters** - Autocomplete suggests only correctly-typed variables
@@ -77,20 +85,20 @@ func TestUser(t *testing.T) {
 1. **Intentionally comparing different types** - Especially with `EqualValues`
    ```go
    // Comparing int and int64 for semantic equality
-   assert.EqualValues(t, int64(42), int32(42))  // ✓ Reflection handles this
-   assert.EqualT(t, int64(42), int32(42))       // ❌ Compiler error
+         assert.EqualValues(t, int64(42), int32(42))  // ✓ Reflection handles this
+         assert.EqualT(t, int64(42), int32(42))       // ❌ Compiler error
    ```
 
 2. **Working with heterogeneous collections** - `[]any` or `interface{}` slices
    ```go
    mixed := []any{1, "string", true}
-   assert.Contains(t, mixed, "string")  // ✓ Reflection works
+         assert.Contains(t, mixed, "string")  // ✓ Reflection works
    ```
 
 3. **Dynamic type scenarios** - Where compile-time type is unknown
    ```go
    var result interface{} = getResult()
-   assert.Equal(t, expected, result)  // ✓ Reflection handles dynamic types
+         assert.Equal(t, expected, result)  // ✓ Reflection handles dynamic types
    ```
 
 4. **Backward compatibility** - Existing test code using reflection-based assertions
@@ -238,30 +246,43 @@ For a detailed documentation of all generic functions, see the [API Reference](.
 {{< cards >}}
 {{% card title="Type-Safe Collection Assertions" %}}
 ```go
+import (
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
 func TestUserPermissions(t *testing.T) {
-    user := getUser(123)
+	user := getUser(123)
 
-    expectedPerms := []string{"read", "write"}
-    actualPerms := user.Permissions
+	expectedPerms := []string{"read", "write"}
+	actualPerms := user.Permissions
 
-    // Compiler ensures both slices are []string
-    assert.ElementsMatchT(t, expectedPerms, actualPerms)
+	// Compiler ensures both slices are []string
+	assert.ElementsMatchT(t, expectedPerms, actualPerms)
 
-    // Check subset relationship
-    assert.SliceSubsetT(t, []string{"read"}, actualPerms)
+	// Check subset relationship
+	assert.SliceSubsetT(t, []string{"read"}, actualPerms)
 }
 ```
 {{% /card %}}
 
 {{% card title="Iterator Support (Go 1.23+)" %}}
 ```go
-func TestSequenceContains(t *testing.T) {
-    // iter.Seq[int] from Go 1.23
-    numbers := slices.Values([]int{1, 2, 3, 4, 5})
+import (
+	"slices"
+	"testing"
 
-    // Type-safe iterator checking
-    assert.SeqContainsT(t, numbers, 3)
-    assert.SeqNotContainsT(t, numbers, 99)
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func TestSequenceContains(t *testing.T) {
+	// iter.Seq[int] from Go 1.23
+	numbers := slices.Values([]int{1, 2, 3, 4, 5})
+
+	// Type-safe iterator checking
+	assert.SeqContainsT(t, numbers, 3)
+	assert.SeqNotContainsT(t, numbers, 99)
 }
 ```
 {{% /card %}}
@@ -272,29 +293,41 @@ func TestSequenceContains(t *testing.T) {
 {{< cards >}}
 {{% card title="Ordered Types" %}}
 ```go
-func TestPricing(t *testing.T) {
-    price := calculatePrice(item)
-    discount := calculateDiscount(item)
+import (
+	"testing"
 
-    // Type-safe numeric comparisons
-    assert.PositiveT(t, price)
-    assert.GreaterT(t, price, discount)
-    assert.LessOrEqualT(t, discount, price)
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func TestPricing(t *testing.T) {
+	price := calculatePrice(item)
+	discount := calculateDiscount(item)
+
+	// Type-safe numeric comparisons
+	assert.PositiveT(t, price)
+	assert.GreaterT(t, price, discount)
+	assert.LessOrEqualT(t, discount, price)
 }
 ```
 {{% /card %}}
 
 {{% card title="Float Comparisons" %}}
 ```go
+import (
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
 func TestPhysicsCalculation(t *testing.T) {
-    result := calculateVelocity(mass, force)
-    expected := 42.0
+	result := calculateVelocity(mass, force)
+	expected := 42.0
 
-    // Type-safe float comparison with delta
-    assert.InDeltaT(t, expected, result, 1e-6)
+	// Type-safe float comparison with delta
+	assert.InDeltaT(t, expected, result, 1e-6)
 
-    // Or with epsilon (relative error)
-    assert.InEpsilonT(t, expected, result, 0.001)
+	// Or with epsilon (relative error)
+	assert.InEpsilonT(t, expected, result, 0.001)
 }
 ```
 {{% /card %}}
@@ -307,28 +340,40 @@ The `IsOfTypeT` function eliminates the need for dummy values:
 {{< cards >}}
 {{% card title="Old Way (Reflection)" %}}
 ```go
+import (
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
 func TestGetUser(t *testing.T) {
-    result := getUser(123)
+	result := getUser(123)
 
-    // Need to create a dummy User instance
-    assert.IsType(t, User{}, result)
+	// Need to create a dummy User instance
+	assert.IsType(t, User{}, result)
 
-    // Or use a pointer dummy
-    assert.IsType(t, (*User)(nil), result)
+	// Or use a pointer dummy
+	assert.IsType(t, (*User)(nil), result)
 }
 ```
 {{% /card %}}
 
 {{% card title="New Way (Generic)" %}}
 ```go
+import (
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
 func TestGetUser(t *testing.T) {
-    result := getUser(123)
+	result := getUser(123)
 
-    // No dummy value needed!
-    assert.IsOfTypeT[User](t, result)
+	// No dummy value needed!
+	assert.IsOfTypeT[User](t, result)
 
-    // For pointer types
-    assert.IsOfTypeT[*User](t, result)
+	// For pointer types
+	assert.IsOfTypeT[*User](t, result)
 }
 ```
 {{% /card %}}
@@ -339,35 +384,47 @@ func TestGetUser(t *testing.T) {
 {{< cards >}}
 {{% card title="Ordering Checks" %}}
 ```go
-func TestSortedData(t *testing.T) {
-    timestamps := []int64{
-        1640000000,
-        1640000100,
-        1640000200,
-    }
+import (
+	"testing"
 
-    // Type-safe ordering assertions
-    assert.IsIncreasingT(t, timestamps)
-    assert.SortedT(t, timestamps)  // Generic-only function
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func TestSortedData(t *testing.T) {
+	timestamps := []int64{
+		1640000000,
+		1640000100,
+		1640000200,
+	}
+
+	// Type-safe ordering assertions
+	assert.IsIncreasingT(t, timestamps)
+	assert.SortedT(t, timestamps) // Generic-only function
 }
 ```
 {{% /card %}}
 
 {{% card title="Custom Ordered Types" %}}
 ```go
+import (
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
 type Priority int
 
 const (
-    Low Priority = iota
-    Medium
-    High
+	Low Priority = iota
+	Medium
+	High
 )
 
 func TestPriorities(t *testing.T) {
-    tasks := []Priority{Low, Medium, High}
+	tasks := []Priority{Low, Medium, High}
 
-    // Works with Ordered types (custom types supported)
-    assert.IsNonDecreasingT(t, tasks)
+	// Works with Ordered types (custom types supported)
+	assert.IsNonDecreasingT(t, tasks)
 }
 ```
 {{% /card %}}
@@ -439,16 +496,22 @@ assert.Equal(t, int64(result), count)
 You don't need to migrate everything at once:
 
 ```go
+import (
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
 func TestMixedAssertions(t *testing.T) {
-    // Use generic where types are known
-    assert.EqualT(t, 42, getAge())
-    assert.GreaterT(t, count, 0)
+	// Use generic where types are known
+	assert.EqualT(t, 42, getAge())
+	assert.GreaterT(t, count, 0)
 
-    // Keep reflection for dynamic types
-    var result interface{} = getResult()
-    assert.Equal(t, expected, result)
+	// Keep reflection for dynamic types
+	var result interface{} = getResult()
+	assert.Equal(t, expected, result)
 
-    // Both styles coexist peacefully
+	// Both styles coexist peacefully
 }
 ```
 
@@ -479,7 +542,7 @@ See the complete [Performance Benchmarks](../../project/maintainers/BENCHMARKS.m
 2. **Let the compiler guide you** - Type errors reveal design issues
    ```go
    // Compiler error reveals you're comparing wrong types
-   assert.EqualT(t, userID, orderID)  // ❌ Good - catches mistake!
+         assert.EqualT(t, userID, orderID)  // ❌ Good - catches mistake!
    ```
 
 3. **Use explicit types for clarity**
@@ -490,9 +553,9 @@ See the complete [Performance Benchmarks](../../project/maintainers/BENCHMARKS.m
 4. **Leverage performance wins in hot paths** - Generic assertions are faster
    ```go
    // Table-driven tests with many iterations
-   for _, tc := range testCases {
-       assert.EqualT(t, tc.expected, tc.actual)  // ✓ Fast
-   }
+         for _, tc := range testCases {
+             assert.EqualT(t, tc.expected, tc.actual)  // ✓ Fast
+         }
    ```
 
 ### ❌ Don't
@@ -500,25 +563,25 @@ See the complete [Performance Benchmarks](../../project/maintainers/BENCHMARKS.m
 1. **Don't force generics for dynamic types**
    ```go
    var result interface{} = getResult()
-   assert.Equal(t, expected, result)  // ✓ Reflection is fine here
+         assert.Equal(t, expected, result)  // ✓ Reflection is fine here
    ```
 
 2. **Don't use reflection to avoid fixing types**
    ```go
    // Bad: Using reflection to bypass type safety
-   assert.Equal(t, expected, actual)  // ✗ Defeats the purpose
-
-   // Good: Fix the types or use EqualValues if intentional
-   assert.EqualT(t, expected, actual)  // ✓ Type safe
+         assert.Equal(t, expected, actual)  // ✗ Defeats the purpose
+      
+         // Good: Fix the types or use EqualValues if intentional
+         assert.EqualT(t, expected, actual)  // ✓ Type safe
    ```
 
 3. **Don't create unnecessary type conversions**
    ```go
    // Bad: Unnecessary conversion
-   assert.EqualT(t, int64(42), int64(result))
-
-   // Good: Work with natural types
-   assert.EqualT(t, 42, result)
+         assert.EqualT(t, int64(42), int64(result))
+      
+         // Good: Work with natural types
+         assert.EqualT(t, 42, result)
    ```
 
 ## Type Constraints Reference

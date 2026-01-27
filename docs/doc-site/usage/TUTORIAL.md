@@ -22,12 +22,19 @@ A good test is:
 **With testify, you write tests that read like documentation:**
 
 ```go
-func TestUserCreation(t *testing.T) {
-    user := CreateUser("alice@example.com")
+import (
+	"testing"
 
-    require.NotNil(t, user)
-    assert.Equal(t, "alice@example.com", user.Email) // if user is nil, will fail and stop before
-    assert.True(t, user.Active)
+	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func TestUserCreation(t *testing.T) {
+	user := CreateUser("alice@example.com")
+
+	require.NotNil(t, user)
+	assert.Equal(t, "alice@example.com", user.Email) // if user is nil, will fail and stop before
+	assert.True(t, user.Active)
 }
 ```
 {{% notice style="tip" title="tip" icon="meteor" %}}
@@ -60,25 +67,38 @@ The assertions are self-documenting - you can read the test and immediately unde
 Oftentimes, much of the test logic can be replaced by a proper use of `require`.
 
 ```go
+import (
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
 // ❌ Don't do this - repetitive and hard to maintain
 func TestUserCreation(t *testing.T) {
-    user := CreateUser("alice@example.com")
+	user := CreateUser("alice@example.com")
 
-    if assert.NotNil(t, user) {
-        assert.Equal(t, "alice@example.com", user.Email) // if user is nil, will skip this test
-        assert.True(t, user.Active)
-    }
+	if assert.NotNil(t, user) {
+		assert.Equal(t, "alice@example.com", user.Email) // if user is nil, will skip this test
+		assert.True(t, user.Active)
+	}
 }
 ```
 
 ```go
+import (
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
+)
+
 // ✅ Better - linear flow, no indented subcases
 func TestUserCreation(t *testing.T) {
-    user := CreateUser("alice@example.com")
+	user := CreateUser("alice@example.com")
 
-    require.NotNil(t, user)
-    assert.Equal(t, "alice@example.com", user.Email) // if user is nil, will fail and stop before
-    assert.True(t, user.Active)
+	require.NotNil(t, user)
+	assert.Equal(t, "alice@example.com", user.Email) // if user is nil, will fail and stop before
+	assert.True(t, user.Active)
 }
 ```
 
@@ -91,20 +111,26 @@ The **iterator pattern** is the idiomatic way to write table-driven tests in Go 
 Instead of writing separate test functions for each case:
 
 ```go
+import (
+	"testing"
+
+	"gotest.tools/assert"
+)
+
 // ❌ Don't do this - repetitive and hard to maintain
 func TestAdd_PositiveNumbers(t *testing.T) {
-    result := Add(2, 3)
-    assert.Equal(t, 5, result)
+	result := Add(2, 3)
+	assert.Equal(t, 5, result)
 }
 
 func TestAdd_NegativeNumbers(t *testing.T) {
-    result := Add(-2, -3)
-    assert.Equal(t, -5, result)
+	result := Add(-2, -3)
+	assert.Equal(t, -5, result)
 }
 
 func TestAdd_MixedSigns(t *testing.T) {
-    result := Add(-2, 3)
-    assert.Equal(t, 1, result)
+	result := Add(-2, 3)
+	assert.Equal(t, 1, result)
 }
 ```
 
@@ -137,61 +163,62 @@ func addTestCases() iter.Seq[addTestCase] {
 
 ```go
 import (
-    "iter"
-    "slices"
-    "testing"
-    "github.com/go-openapi/testify/v2/assert"
+	"iter"
+	"slices"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 // 1. Define a test case struct
 type addTestCase struct {
-    name     string
-    a, b     int
-    expected int
+	name     string
+	a, b     int
+	expected int
 }
 
 // 2. Create an iterator function returning iter.Seq[T]
 func addTestCases() iter.Seq[addTestCase] {
-    return slices.Values([]addTestCase{
-        {
-            name:     "positive numbers",
-            a:        2,
-            b:        3,
-            expected: 5,
-        },
-        {
-            name:     "negative numbers",
-            a:        -2,
-            b:        -3,
-            expected: -5,
-        },
-        {
-            name:     "mixed signs",
-            a:        -2,
-            b:        3,
-            expected: 1,
-        },
-        {
-            name:     "with zero",
-            a:        0,
-            b:        5,
-            expected: 5,
-        },
-    })
+	return slices.Values([]addTestCase{
+		{
+			name:     "positive numbers",
+			a:        2,
+			b:        3,
+			expected: 5,
+		},
+		{
+			name:     "negative numbers",
+			a:        -2,
+			b:        -3,
+			expected: -5,
+		},
+		{
+			name:     "mixed signs",
+			a:        -2,
+			b:        3,
+			expected: 1,
+		},
+		{
+			name:     "with zero",
+			a:        0,
+			b:        5,
+			expected: 5,
+		},
+	})
 }
 
 // 3. Test function iterates over cases using range
 func TestAdd(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 
-    for c := range addTestCases() {
-        t.Run(c.name, func(t *testing.T) {
-            t.Parallel()
+	for c := range addTestCases() {
+		t.Run(c.name, func(t *testing.T) {
+			t.Parallel()
 
-            result := Add(c.a, c.b)
-            assert.Equal(t, c.expected, result)
-        })
-    }
+			result := Add(c.a, c.b)
+			assert.Equal(t, c.expected, result)
+		})
+	}
 }
 ```
 
@@ -225,56 +252,68 @@ func TestAdd(t *testing.T) {
 **Traditional inline pattern:**
 
 ```go
-func TestAdd(t *testing.T) {
-    tests := []struct {
-        name     string
-        a, b     int
-        expected int
-    }{
-        {"positive", 2, 3, 5},
-        {"negative", -2, -3, -5},
-        // Test data mixed with test function
-        // Hard to reuse
-        // No named fields - order matters
-    }
+import (
+	"testing"
 
-    for _, tt := range tests {
-        t.Run(tt.name, func(t *testing.T) {
-            result := Add(tt.a, tt.b)
-            assert.Equal(t, tt.expected, result)
-        })
-    }
+	"gotest.tools/assert"
+)
+
+func TestAdd(t *testing.T) {
+	tests := []struct {
+		name     string
+		a, b     int
+		expected int
+	}{
+		{"positive", 2, 3, 5},
+		{"negative", -2, -3, -5},
+		// Test data mixed with test function
+		// Hard to reuse
+		// No named fields - order matters
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := Add(tt.a, tt.b)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
 }
 ```
 
 **Iterator pattern:**
 
 ```go
+import (
+	"iter"
+	"slices"
+	"testing"
+)
+
 // Test logic separate and clean
 func TestAdd(t *testing.T) {
-    t.Parallel()
-    for c := range addTestCases() {  // Clean iteration
-        // ...
-    }
+	t.Parallel()
+	for c := range addTestCases() { // Clean iteration
+		// ...
+	}
 }
 
 type addTestCase struct {
-    name     string
-    a, b     int
-    expected int
+	name     string
+	a, b     int
+	expected int
 }
 
 // Test data in separate function - clean, reusable
 func addTestCases() iter.Seq[addTestCase] {
-    return slices.Values([]addTestCase{
-        {
-            name:     "positive numbers",  // Named fields
-            a:        2,                   // Self-documenting
-            b:        3,
-            expected: 5,
-        },
-        // More cases...
-    })
+	return slices.Values([]addTestCase{
+		{
+			name:     "positive numbers", // Named fields
+			a:        2,                  // Self-documenting
+			b:        3,
+			expected: 5,
+		},
+		// More cases...
+	})
 }
 ```
 
@@ -289,63 +328,71 @@ func addTestCases() iter.Seq[addTestCase] {
 **Example - complex setup:**
 
 ```go
+import (
+	"iter"
+	"slices"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
 func TestUserValidation(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 
-    for c := range userValidationCases() {
-        t.Run(c.name, func(t *testing.T) {
-            t.Parallel()
+	for c := range userValidationCases() {
+		t.Run(c.name, func(t *testing.T) {
+			t.Parallel()
 
-            err := ValidateUser(c.user)
+			err := ValidateUser(c.user)
 
-            if c.shouldErr {
-                assert.Error(t, err)
-                assert.ErrorContains(t, err, c.errMsg)
-            } else {
-                assert.NoError(t, err)
-            }
-        })
-    }
+			if c.shouldErr {
+				assert.Error(t, err)
+				assert.ErrorContains(t, err, c.errMsg)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
 }
 
 type userValidationCase struct {
-    name      string
-    user      User
-    shouldErr bool
-    errMsg    string
+	name      string
+	user      User
+	shouldErr bool
+	errMsg    string
 }
 
 func userValidationCases() iter.Seq[userValidationCase] {
-    return slices.Values([]userValidationCase{
-        {
-            name: "valid user",
-            user: User{
-                Name:  "Alice",
-                Email: "alice@example.com",
-                Age:   25,
-            },
-            shouldErr: false,
-        },
-        {
-            name: "missing email",
-            user: User{
-                Name: "Bob",
-                Age:  30,
-            },
-            shouldErr: true,
-            errMsg:    "email is required",
-        },
-        {
-            name: "invalid age",
-            user: User{
-                Name:  "Charlie",
-                Email: "charlie@example.com",
-                Age:   -5,
-            },
-            shouldErr: true,
-            errMsg:    "age must be positive",
-        },
-    })
+	return slices.Values([]userValidationCase{
+		{
+			name: "valid user",
+			user: User{
+				Name:  "Alice",
+				Email: "alice@example.com",
+				Age:   25,
+			},
+			shouldErr: false,
+		},
+		{
+			name: "missing email",
+			user: User{
+				Name: "Bob",
+				Age:  30,
+			},
+			shouldErr: true,
+			errMsg:    "email is required",
+		},
+		{
+			name: "invalid age",
+			user: User{
+				Name:  "Charlie",
+				Email: "charlie@example.com",
+				Age:   -5,
+			},
+			shouldErr: true,
+			errMsg:    "age must be positive",
+		},
+	})
 }
 ```
 
@@ -356,22 +403,28 @@ func userValidationCases() iter.Seq[userValidationCase] {
 The iterator pattern works beautifully with testify's forward methods:
 
 ```go
+import (
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
 func TestUserOperations(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 
-    for c := range userOperationCases() {
-        t.Run(c.name, func(t *testing.T) {
-            t.Parallel()
-            a := assert.New(t)  // Forward assertion object
+	for c := range userOperationCases() {
+		t.Run(c.name, func(t *testing.T) {
+			t.Parallel()
+			a := assert.New(t) // Forward assertion object
 
-            user := PerformOperation(c.input)
+			user := PerformOperation(c.input)
 
-            // Clean assertions without repeating 't'
-            a.NotNil(user)
-            a.Equal(c.expectedName, user.Name)
-            a.Greater(user.ID, 0)
-        })
-    }
+			// Clean assertions without repeating 't'
+			a.NotNil(user)
+			a.Equal(c.expectedName, user.Name)
+			a.Greater(user.ID, 0)
+		})
+	}
 }
 ```
 
@@ -382,20 +435,26 @@ func TestUserOperations(t *testing.T) {
 When extracting common assertions into helper functions, use `t.Helper()` to get better error messages:
 
 ```go
-func assertUserValid(t *testing.T, user *User) {
-    t.Helper()  // Makes test failures point to the caller
+import (
+	"testing"
 
-    assert.NotNil(t, user)
-    assert.NotEmpty(t, user.Name)
-    assert.NotEmpty(t, user.Email)
-    assert.Greater(t, user.Age, 0)
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func assertUserValid(t *testing.T, user *User) {
+	t.Helper() // Makes test failures point to the caller
+
+	assert.NotNil(t, user)
+	assert.NotEmpty(t, user.Name)
+	assert.NotEmpty(t, user.Email)
+	assert.Greater(t, user.Age, 0)
 }
 
 func TestUserCreation(t *testing.T) {
-    user := CreateUser("alice@example.com")
+	user := CreateUser("alice@example.com")
 
-    // If this fails, error points HERE, not inside assertUserValid
-    assertUserValid(t, user)
+	// If this fails, error points HERE, not inside assertUserValid
+	assertUserValid(t, user)
 }
 ```
 
@@ -408,17 +467,23 @@ Without `t.Helper()`, failures would show the line number inside `assertUserVali
 Always use `t.Parallel()` unless you have a specific reason not to:
 
 ```go
+import (
+	"testing"
+
+	"gotest.tools/assert"
+)
+
 func TestAdd(t *testing.T) {
-    t.Parallel()  // Outer test runs in parallel
+	t.Parallel() // Outer test runs in parallel
 
-    for c := range addTestCases() {
-        t.Run(c.name, func(t *testing.T) {
-            t.Parallel()  // Each subtest runs in parallel
+	for c := range addTestCases() {
+		t.Run(c.name, func(t *testing.T) {
+			t.Parallel() // Each subtest runs in parallel
 
-            result := Add(c.a, c.b)
-            assert.Equal(t, c.expected, result)
-        })
-    }
+			result := Add(c.a, c.b)
+			assert.Equal(t, c.expected, result)
+		})
+	}
 }
 ```
 
@@ -554,70 +619,71 @@ Here's a complete example showing all patterns together:
 package calculator_test
 
 import (
-    "iter"
-    "slices"
-    "testing"
-    "github.com/go-openapi/testify/v2/assert"
-    "github.com/go-openapi/testify/v2/require"
+	"iter"
+	"slices"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 type divideTestCase struct {
-    name      string
-    a, b      float64
-    expected  float64
-    shouldErr bool
+	name      string
+	a, b      float64
+	expected  float64
+	shouldErr bool
 }
 
 func divideTestCases() iter.Seq[divideTestCase] {
-    return slices.Values([]divideTestCase{
-        {
-            name:      "positive numbers",
-            a:         10,
-            b:         2,
-            expected:  5,
-            shouldErr: false,
-        },
-        {
-            name:      "negative dividend",
-            a:         -10,
-            b:         2,
-            expected:  -5,
-            shouldErr: false,
-        },
-        {
-            name:      "division by zero",
-            a:         10,
-            b:         0,
-            shouldErr: true,
-        },
-        {
-            name:      "zero dividend",
-            a:         0,
-            b:         5,
-            expected:  0,
-            shouldErr: false,
-        },
-    })
+	return slices.Values([]divideTestCase{
+		{
+			name:      "positive numbers",
+			a:         10,
+			b:         2,
+			expected:  5,
+			shouldErr: false,
+		},
+		{
+			name:      "negative dividend",
+			a:         -10,
+			b:         2,
+			expected:  -5,
+			shouldErr: false,
+		},
+		{
+			name:      "division by zero",
+			a:         10,
+			b:         0,
+			shouldErr: true,
+		},
+		{
+			name:      "zero dividend",
+			a:         0,
+			b:         5,
+			expected:  0,
+			shouldErr: false,
+		},
+	})
 }
 
 func TestDivide(t *testing.T) {
-    t.Parallel()
+	t.Parallel()
 
-    for c := range divideTestCases() {
-        t.Run(c.name, func(t *testing.T) {
-            t.Parallel()
+	for c := range divideTestCases() {
+		t.Run(c.name, func(t *testing.T) {
+			t.Parallel()
 
-            result, err := Divide(c.a, c.b)
+			result, err := Divide(c.a, c.b)
 
-            if c.shouldErr {
-                assert.Error(t, err)
-                assert.ErrorIs(t, err, ErrDivisionByZero)
-            } else {
-                require.NoError(t, err)
-                assert.Equal(t, c.expected, result)
-            }
-        })
-    }
+			if c.shouldErr {
+				assert.Error(t, err)
+				assert.ErrorIs(t, err, ErrDivisionByZero)
+			} else {
+				require.NoError(t, err)
+				assert.Equal(t, c.expected, result)
+			}
+		})
+	}
 }
 ```
 

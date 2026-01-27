@@ -189,7 +189,6 @@ func TestSomethingWithPlaceholder(t *testing.T) {
 
 	// assert that the expectations were met
 	testObj.AssertExpectations(t)
-
 }
 
 // TestSomethingElse2 is a third example that shows how you can use

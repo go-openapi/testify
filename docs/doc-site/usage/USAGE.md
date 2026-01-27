@@ -11,6 +11,47 @@ weight: 1
 
 Testify v2 provides **over 40 core assertion types** (76+ functions including inverse variants and all naming styles) organized into clear domains. This guide explains how to navigate the API and use the naming conventions effectively.
 
+## How the API is Organized
+
+Assertions are grouped by domain for easier discovery:
+
+| Domain | Examples | Count |
+|--------|----------|-------|
+| **Boolean** | `True`, `False` | 2 |
+| **Equality** | `Equal`, `NotEqual`, `EqualValues`, `Same`, `Exactly` | 8 |
+| **Comparison** | `Greater`, `Less`, `Positive` | 8 |
+| **Collection** | `Contains`, `Len`, `Empty`, `ElementsMatch` | 18 |
+| **Error** | `Error`, `NoError`, `ErrorIs`, `ErrorAs`, `ErrorContains` | 8 |
+| **Type** | `IsType`, `Implements`, `Zero` | 7 |
+| **String** | `Regexp`, `NotRegexp` | 4 |
+| **Numeric** | `InDelta`, `InEpsilon` | 6 |
+| **Ordering** | `IsIncreasing`, `Sorted` | 8 |
+| **Panic** | `Panics`, `NotPanics` | 4 |
+| **Others** | HTTP, JSON, YAML, Time, File assertions | 12 |
+
+{{% notice style="info" title="Browse by Domain" icon="book" %}}
+See the complete [API Reference](../../api/_index.md) organized by domain for a  detailed documentation of all assertions.
+{{% /notice %}}
+
+## Navigating the Documentation
+
+### Quick Reference
+
+- **[Examples](../examples)** - Practical code examples for common testing scenarios
+- **[API Reference](../../api/_index.md)** - Complete assertion catalog organized by domain
+- **[Generics Guide](../GENERICS.md)** - Using type-safe assertions with the `T` suffix
+- **[Changes](../CHANGES.md)** - All changes since fork from stretchr/testify
+- **[pkg.go.dev](https://pkg.go.dev/github.com/go-openapi/testify/v2)** - godoc API reference with full signatures
+
+### Finding the Right Assertion
+
+1. Browse the [API Reference](../../api/_index.md) by domain (e.g., "Collection" for slice operations)
+2. Search in the [API Reference](../../api/_index.md) (use search box)
+3. Check (or search) the provided [Examples](../examples) for practical usage patterns
+4. Check [pkg.go.dev](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert) for alphabetical listing
+5. Use your editor's Go to Definition on any assertion
+6. Use your IDE's autocomplete - type `assert.` and explore
+
 ## API Conventions
 
 Understanding the naming patterns helps you find and use the right assertions quickly.
@@ -22,14 +63,18 @@ Understanding the naming patterns helps you find and use the right assertions qu
 **Use when**: Tests should continue after failures to gather more context
 
 ```go
-import "github.com/go-openapi/testify/v2/assert"
+import (
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
 
 func TestUser(t *testing.T) {
-    user := getUser()
+	user := getUser()
 
-    assert.NotNil(t, user)        // ✓ Returns false
-    assert.Equal(t, "Alice", user.Name)  // Still runs
-    assert.True(t, user.Active)          // Still runs
+	assert.NotNil(t, user)              // ✓ Returns false
+	assert.Equal(t, "Alice", user.Name) // Still runs
+	assert.True(t, user.Active)         // Still runs
 }
 ```
 
@@ -40,14 +85,18 @@ func TestUser(t *testing.T) {
 **Use when**: Test cannot continue meaningfully after failure
 
 ```go
-import "github.com/go-openapi/testify/v2/require"
+import (
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
 
 func TestUser(t *testing.T) {
-    user := getUser()
+	user := getUser()
 
-    require.NotNil(t, user)       // ✓ Calls t.FailNow() if fails
-    require.Equal(t, "Alice", user.Name)  // Safe to proceed
-    require.True(t, user.Active)          // user is guaranteed non-nil
+	require.NotNil(t, user)              // ✓ Calls t.FailNow() if fails
+	require.Equal(t, "Alice", user.Name) // Safe to proceed
+	require.True(t, user.Active)         // user is guaranteed non-nil
 }
 ```
 
@@ -218,33 +267,45 @@ When unsure about argument order:
 - Consult [pkg.go.dev](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert) for complete documentation
 {{% /notice %}}
 
-### Forward Methods (Chaining Style)
+### Forward Methods
 
-Create an `Assertions` object to reduce repetition in tests with many assertions:
+Create an `Assertion` object to reduce repetition in tests with many assertions:
 
 {{< cards >}}
 {{% card title="Package-Level Functions" %}}
 ```go
-func TestUser(t *testing.T) {
-    user := getUser()
+import (
+	"testing"
 
-    assert.NotNil(t, user)
-    assert.Equal(t, "Alice", user.Name)
-    assert.True(t, user.Active)
-    assert.Greater(t, user.Age, 0)
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func TestUser(t *testing.T) {
+	user := getUser()
+
+	assert.NotNil(t, user)
+	assert.Equal(t, "Alice", user.Name)
+	assert.True(t, user.Active)
+	assert.Greater(t, user.Age, 0)
 }
 ```
 {{% /card %}}
 
 {{% card title="Forward Methods" %}}
 ```go
-func TestUser(t *testing.T) {
-    a := assert.New(t)  // Create once
-    user := getUser()
+import (
+	"testing"
 
-    a.NotNil(user)          // No 't' needed
-    a.Equal("Alice", user.Name)
-    a.True(user.Active)
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func TestUser(t *testing.T) {
+	a := assert.New(t) // Create once
+	user := getUser()
+
+	a.NotNil(user) // No 't' needed
+	a.Equal("Alice", user.Name)
+	a.True(user.Active)
 }
 ```
 {{% /card %}}
@@ -255,50 +316,6 @@ func TestUser(t *testing.T) {
 **⚠️ Generic assertions are not available as forward methods** (this is a limitation of go generics).
 
 
-## How the API is Organized
-
-Assertions are grouped by domain for easier discovery:
-
-| Domain | Examples | Count |
-|--------|----------|-------|
-| **Boolean** | `True`, `False` | 2 |
-| **Equality** | `Equal`, `NotEqual`, `EqualValues`, `Same`, `Exactly` | 8 |
-| **Comparison** | `Greater`, `Less`, `Positive` | 8 |
-| **Collection** | `Contains`, `Len`, `Empty`, `ElementsMatch` | 18 |
-| **Error** | `Error`, `NoError`, `ErrorIs`, `ErrorAs`, `ErrorContains` | 8 |
-| **Type** | `IsType`, `Implements`, `Zero` | 7 |
-| **String** | `Regexp`, `NotRegexp` | 4 |
-| **Numeric** | `InDelta`, `InEpsilon` | 6 |
-| **Ordering** | `IsIncreasing`, `Sorted` | 8 |
-| **Panic** | `Panics`, `NotPanics` | 4 |
-| **Others** | HTTP, JSON, YAML, Time, File assertions | 12 |
-
-{{% notice style="info" title="Browse by Domain" icon="book" %}}
-See the complete [API Reference](../../api/_index.md) organized by domain for detailed documentation of all assertions.
-{{% /notice %}}
-
-## Navigating the Documentation
-
-### Quick Reference
-
-- **[Examples](../examples)** - Practical code examples for common testing scenarios
-- **[API Reference](../../api/_index.md)** - Complete assertion catalog organized by domain
-- **[Generics Guide](../GENERICS.md)** - Using type-safe assertions with the `T` suffix
-- **[Changes](../CHANGES.md)** - All changes since fork from stretchr/testify
-- **[pkg.go.dev](https://pkg.go.dev/github.com/go-openapi/testify/v2)** - Generated API reference with full signatures
-
-### Finding the Right Assertion
-
-**By task:**
-1. Browse the [API Reference](../../api/_index.md) by domain (e.g., "Collection" for slice operations)
-2. Check [Examples](../examples) for practical usage patterns
-3. Use your IDE's autocomplete - type `assert.` and explore
-
-**By name:**
-- Search in the [API Reference](../../api/_index.md) (use search box)
-- Check [pkg.go.dev](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert) for alphabetical listing
-- Use your editor's Go to Definition on any assertion
-
 ## Common Usage Patterns
 
 {{% tabs %}}
@@ -307,23 +324,30 @@ See the complete [API Reference](../../api/_index.md) organized by domain for de
 **Pattern 1: Table-Driven Tests**
 
 ```go
-func TestCalculation(t *testing.T) {
-    tests := slices.Values([]struct {
-        name     string
-        input    int
-        expected int
-    }{
-        {"positive", 5, 25},
-        {"negative", -3, 9},
-        {"zero", 0, 0},
-    })
+import (
+	"slices"
+	"testing"
 
-    for tt := range tests {
-        t.Run(tt.name, func(t *testing.T) {
-            result := square(tt.input)
-            assert.Equal(t, tt.expected, result)
-        })
-    }
+	"gotest.tools/assert"
+)
+
+func TestCalculation(t *testing.T) {
+	tests := slices.Values([]struct {
+		name     string
+		input    int
+		expected int
+	}{
+		{"positive", 5, 25},
+		{"negative", -3, 9},
+		{"zero", 0, 0},
+	})
+
+	for tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := square(tt.input)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
 }
 ```
 {{% /tab %}}
@@ -333,14 +357,20 @@ func TestCalculation(t *testing.T) {
 **Pattern 2: Multiple Assertions (assert for context)**
 
 ```go
-func TestUserValidation(t *testing.T) {
-    user := createUser()
+import (
+	"testing"
 
-    // Use assert to see all failures
-    assert.NotEmpty(t, user.Name)      // Check name
-    assert.NotEmpty(t, user.Email)     // Check email
-    assert.Greater(t, user.Age, 0)     // Check age
-    // All assertions run - see complete picture
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func TestUserValidation(t *testing.T) {
+	user := createUser()
+
+	// Use assert to see all failures
+	assert.NotEmpty(t, user.Name)  // Check name
+	assert.NotEmpty(t, user.Email) // Check email
+	assert.Greater(t, user.Age, 0) // Check age
+	// All assertions run - see complete picture
 }
 ```
 {{% /tab %}}
@@ -349,15 +379,22 @@ func TestUserValidation(t *testing.T) {
 **Pattern 3: Early Exit (use require for prerequisites)**
 
 ```go
+import (
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
+)
+
 func TestDatabaseQuery(t *testing.T) {
-    db := connectDB()
-    require.NotNil(t, db)  // Stop if no connection
+	db := connectDB()
+	require.NotNil(t, db) // Stop if no connection
 
-    result := db.Query("SELECT * FROM users")
-    require.NoError(t, result.Error)  // Stop if query fails
+	result := db.Query("SELECT * FROM users")
+	require.NoError(t, result.Error) // Stop if query fails
 
-    // Safe to proceed - db and result are valid
-    assert.NotEmpty(t, result.Rows)
+	// Safe to proceed - db and result are valid
+	assert.NotEmpty(t, result.Rows)
 }
 ```
 {{% /tab %}}
@@ -366,16 +403,22 @@ func TestDatabaseQuery(t *testing.T) {
 **Pattern 4: Type-Safe Generics**
 
 ```go
+import (
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
 func TestTypeSafety(t *testing.T) {
-    expected := []int{1, 2, 3}
-    actual := getNumbers()
+	expected := []int{1, 2, 3}
+	actual := getNumbers()
 
-    // Compiler checks types at compile time
-    assert.ElementsMatchT(t, expected, actual)
-    assert.GreaterT(t, len(actual), 0)
+	// Compiler checks types at compile time
+	assert.ElementsMatchT(t, expected, actual)
+	assert.GreaterT(t, len(actual), 0)
 
-    // If getNumbers() changes return type,
-    // compiler catches it immediately
+	// If getNumbers() changes return type,
+	// compiler catches it immediately
 }
 ```
 {{% /tab %}}
@@ -385,9 +428,7 @@ func TestTypeSafety(t *testing.T) {
 
 1. **Import the package:**
    ```go
-   import "github.com/go-openapi/testify/v2/assert"
    // or
-   import "github.com/go-openapi/testify/v2/require"
    ```
 
 2. **Choose your style:**
@@ -426,6 +467,134 @@ func TestTypeSafety(t *testing.T) {
 - Read the [Generics Guide](../GENERICS.md) for type-safe testing
 - Check [pkg.go.dev](https://pkg.go.dev/github.com/go-openapi/testify/v2) for complete reference
 {{% /notice %}}
+
+---
+
+## Customization
+
+### Using a Custom YAML Unmarshaler
+
+By default, testify uses `gopkg.in/yaml.v3` for YAML assertions (e.g. `YAMLEq`) when you import the standard
+`enable/yaml/v2` package.
+
+However, you can register a custom YAML unmarshaler to use alternative libraries like
+[goccy/go-yaml](https://github.com/goccy/go-yaml), either because you need additional features such as colored error
+messages or better performance.
+
+#### How It Works
+
+The YAML support in testify works through a registration mechanism:
+
+1. `internal/assertions/yaml.go` calls `yaml.Unmarshal()` - an abstraction layer
+2. The abstraction layer panics if no unmarshaler is registered
+3. The `enable/yaml/v2` package registers `gopkg.in/yaml.v3` via `init()` when imported (e.g. on blank import)
+4. You can register a custom unmarshaler using `enable/stubs/yaml.EnableYAMLWithUnmarshal()`
+
+#### Example: Using goccy/go-yaml
+
+Create a custom enable package in your test code:
+
+```go
+package testutil
+
+import (
+	goccyyaml "github.com/goccy/go-yaml"
+	yamlstub "github.com/go-openapi/testify/v2/enable/stubs/yaml"
+)
+
+func init() {
+	// Register goccy/go-yaml as the YAML unmarshaler
+	yamlstub.EnableYAMLWithUnmarshal(goccyyaml.Unmarshal)
+}
+```
+
+Then import your custom enable package in your tests:
+
+```go
+// File: mypackage/user_test.go
+package mypackage
+
+import (
+	"testing"
+
+	_ "yourmodule/internal/testutil" // Register goccy/go-yaml
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func TestUserYAML(t *testing.T) {
+	expected := `
+name: Alice
+email: alice@example.com
+age: 30
+`
+	actual := serializeUser(getUser())
+
+	// Now uses goccy/go-yaml under the hood
+	assert.YAMLEq(t, expected, actual)
+}
+```
+
+#### Why Use a Custom YAML Library?
+
+Different YAML libraries offer different trade-offs:
+
+**`gopkg.in/yaml.v3` (default):**
+- De factor standard library for Go YAML
+- Widely used and well-tested
+- Complete YAML 1.2 support
+
+**`github.com/goccy/go-yaml`:**
+- Better performance (up to 2-3x faster)
+- Colored error messages for debugging
+- Better error reporting with line/column numbers
+- JSON-like syntax support
+- Comment preservation (useful for config testing)
+
+#### Important Notes
+
+1. **Register once:** Call `EnableYAMLWithUnmarshal()` only once, typically in an `init()` function
+2. **Not concurrent-safe:** The registration is global and should happen during package or main program initialization
+3. **Signature compatibility:** The custom unmarshaler must match the signature `func([]byte, any) error`
+4. **No mixing:** Don't import both `github.com/go-openapi/testify/enable/yaml/v2` and your custom enable package - choose one
+
+#### Advanced: Wrapping Unmarshalers
+
+You can also wrap an unmarshaler to add custom behavior:
+
+```go
+package testutil
+
+import (
+	"fmt"
+	"log"
+
+	goccyyaml "github.com/goccy/go-yaml"
+
+	yamlstub "github.com/go-openapi/testify/v2/enable/stubs/yaml"
+)
+
+func init() {
+	// Wrap the unmarshaler to add logging or validation
+	yamlstub.EnableYAMLWithUnmarshal(func(data []byte, v any) error {
+		// Custom pre-processing
+		if len(data) == 0 {
+			return fmt.Errorf("empty YAML document")
+		}
+
+		// Call the actual unmarshaler
+		err := goccyyaml.Unmarshal(data, v)
+		// Custom post-processing
+		if err != nil {
+			log.Printf("YAML unmarshal error: %v", err)
+		}
+
+		return err
+	})
+}
+```
+
+This pattern allows you to add logging, validation, or transformation logic around any YAML library.
 
 ---
 
