@@ -37,7 +37,7 @@ See the complete [API Reference](../api/_index.md) organized by domain for a det
 
 ### Quick Reference
 
-- **[Examples](../examples)** - Practical code examples for common testing scenarios
+- **[Examples](./EXAMPLES.md)** - Practical code examples for common testing scenarios
 - **[API Reference](../api/_index.md)** - Complete assertion catalog organized by domain
 - **[Generics Guide](../GENERICS.md)** - Using type-safe assertions with the `T` suffix
 - **[Changes](../CHANGES.md)** - All changes since fork from stretchr/testify
@@ -47,7 +47,7 @@ See the complete [API Reference](../api/_index.md) organized by domain for a det
 
 1. Browse the [API Reference](../api/_index.md) by domain (e.g., "Collection" for slice operations)
 2. Search in the [API Reference](../api/_index.md) (use search box)
-3. Check (or search) the provided [Examples](../examples) for practical usage patterns
+3. Check (or search) the provided [Examples](./EXAMPLES.md) for practical usage patterns
 4. Check [pkg.go.dev](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert) for alphabetical listing
 5. Use your editor's Go to Definition on any assertion
 6. Use your IDE's autocomplete - type `assert.` and explore
@@ -464,9 +464,9 @@ func TestTypeSafety(t *testing.T) {
 
 {{% notice style="success" title="Ready to Test" icon="check" %}}
 **Next Steps:**
-- Explore [Examples](../examples) for practical usage patterns
+- Explore [Examples](./EXAMPLES.md) for practical usage patterns
 - Browse the [API Reference](../api/_index.md) to discover assertions
-- Read the [Generics Guide](../GENERICS.md) for type-safe testing
+- Read the [Generics Guide](./GENERICS.md) for type-safe testing
 - Check [pkg.go.dev](https://pkg.go.dev/github.com/go-openapi/testify/v2) for complete reference
 {{% /notice %}}
 
