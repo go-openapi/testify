@@ -5,7 +5,15 @@
 //
 // Colorization is disabled by default when the standard output is not a terminal.
 //
-// Colors are somewhat limited, but the package works on unix and windows without any extra dependencies.
+// Colors are somewhat limited. We want the package to work on unix and windows without any extra dependencies.
+//
+// # Usage
+//
+// To enable the test colorization feature, use a blank import like so:
+//
+//	import (
+//			_ "github.com/go-openapi/testify/enable/colors/v2"
+//	)
 //
 // # Command line arguments
 //

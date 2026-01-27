@@ -17,15 +17,13 @@
 //	)
 //
 //	func TestSomething(t *testing.T) {
-//
 //	  var a string = "Hello"
 //	  var b string = "Hello"
 //
 //	  assert.Equal(t, a, b, "The two words should be the same.")
-//
 //	}
 //
-// if you assert many times, use the format below:
+// if you assert many times, you might find the format below more concise:
 //
 //	import (
 //	  "testing"
@@ -43,16 +41,17 @@
 //
 // # Assertions
 //
-// Assertions allow you to easily write test code.
+// Assertions allow you to easily write test code using go's standard testing library.
 //
 // All assertion functions take as the first argument, the [*testing.T] object provided by the
 // standard testing framework.
 //
-// This allows the assertion functions to write the failings and other details to the correct place.
+// This allows the assertion functions to write their failings and other details to the correct place.
 //
-// Every assertion function also takes an optional string message as the final argument,
+// Every assertion function takes an optional string message as the final argument,
 // allowing custom error messages to be appended to the message the assertion method outputs.
 //
-// See [our doc site](https://go-openapi.github.io/testify/) for usage and examples and
-// [go docs](https://pkg.go/dev/go-openapi/testify) for complete reference.
+// See our doc site at https://go-openapi.github.io/testify/ for usage, examples and searchable reference.
+//
+// See https://pkg.go/dev/go-openapi/testify/ for complete reference.
 package assert

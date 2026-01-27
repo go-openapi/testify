@@ -1,19 +1,26 @@
 # internal/difflib
 
-This is an internalized and modernized copy of [github.com/pmezard/go-difflib](https://github.com/pmezard/go-difflib), a partial port of Python's difflib module for generating textual diffs.
+This is an internalized and modernized copy of [github.com/pmezard/go-difflib](https://github.com/pmezard/go-difflib),
+a partial port of Python's difflib module for generating textual diffs.
 
 ## Original Source
 
 **Source repository:** github.com/pmezard/go-difflib
-**Original license:** BSD 3-Clause License (see [LICENSE](./LICENSE))
+
+**Original license:** BSD 3-Clause License (see [NOTICE](./NOTICE))
+
 **Copyright:** 2013 Patrick Mezard
+
 **Maintenance status:** ⚠️ No longer maintained (archived by author)
 
-go-difflib provides tools to compare sequences of strings and generate textual diffs in unified or context format. It implements Python's `SequenceMatcher` class and `unified_diff()`/`context_diff()` functions.
+`difflib` provides tools to compare sequences of strings and generate textual diffs in unified or context format.
+
+It implements Python's `SequenceMatcher` class and `unified_diff()`/`context_diff()` functions.
 
 ## Why Internalized
 
-This fork of testify maintains **zero external dependencies** for the core assertion packages. By internalizing go-difflib, we:
+This fork of testify maintains **zero external dependencies** for the core assertion packages.
+By internalizing `difflib`, we:
 
 1. Eliminate the external dependency on an **unmaintained package** (last updated 2014)
 2. Gain full control to apply modernizations aligned with our go1.24 target
@@ -29,7 +36,7 @@ This internalized copy has been significantly modernized and refactored from the
 - **Modern operators:** Used `--` instead of `-= 1` for decrement operations
 - **Efficient conversions:** Used `strconv.Itoa()` instead of `fmt.Sprintf("%d", ...)` for integer-to-string conversion
 - **Buffer handling:** Used `bytes.Buffer.String()` instead of `string(bytes.Buffer.Bytes())`
-- **Modern initialization:** Used `new(bytes.Buffer)` instead of `&bytes.Buffer{}`
+- Used `new(bytes.Buffer)` instead of `&bytes.Buffer{}`
 
 ### Code Organization & Complexity Reduction
 
@@ -75,15 +82,15 @@ This package is used by testify's assertion functions to generate human-readable
 
 The diff output helps developers quickly identify what changed between expected and actual values during test failures.
 
+## Enhancements
+- [x] Colorized output support
+
 ## Future Enhancements
 
 As an internalized dependency, this copy can receive targeted improvements:
 
 - **Potential:** Performance optimizations for large diffs
 - **Potential:** Enhanced diff algorithms for specific data types
-- **Potential:** Colorized output support (if implemented as `enable/color` module)
-
-These enhancements would be difficult to incorporate if difflib remained an external, unmaintained dependency.
 
 ## Maintenance
 
@@ -94,6 +101,7 @@ https://github.com/go-openapi/testify/issues
 
 ## License
 
-This code retains its original BSD 3-Clause License. See [LICENSE](./LICENSE) for the full license text.
+This library ships under the [SPDX-License-Identifier: Apache-2.0](./LICENSE) and acknowledges the original licensing
+terms (BSD-3-Clause-License) from the original source it was copied from: [NOTICE](./NOTICE).
 
 The original copyright and license terms are preserved in accordance with the BSD License requirements.

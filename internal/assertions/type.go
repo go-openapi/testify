@@ -128,7 +128,7 @@ func IsNotType(t T, theType, object any, msgAndArgs ...any) bool {
 	return Fail(t, fmt.Sprintf("Object type expected to be different than %T", theType), msgAndArgs...)
 }
 
-// IsNotOfTypeT asserts that an object is of a given type.
+// IsNotOfTypeT asserts that an object is not of a given type.
 //
 // # Usage
 //
