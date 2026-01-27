@@ -63,7 +63,7 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 
 Greater asserts that the first element is strictly greater than the second.
 
-Both elements must be of the same type in the [reflect.Kind](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#reflect.Kind)(https://pkg.go.dev/reflect#Kind) sense.
+Both elements must be of the same type in the [reflect.Kind](https://pkg.go.dev/reflect#Kind) sense.
 To compare values that need a type conversion (e.g. float32 against float64), you need to convert types beforehand.
 
 {{% expand title="Examples" %}}
@@ -168,8 +168,8 @@ See also [Greater](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Gr
 GreaterOrEqualT asserts that for two elements of the same type,
 the first element is greater than or equal to the second.
 
-The [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) type can be any of Go's [cmp.Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#cmp.Ordered)(https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
-[]byte (uses [bytes.Compare](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#bytes.Compare)(https://pkg.go.dev/bytes#Compare)) and [time.Time](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#time.Time)(https://pkg.go.dev/time#Time) (uses [time.Time.Compare](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#time.Time.Compare)(https://pkg.go.dev/time#Time.Compare).
+The [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) type can be any of Go's [cmp.Ordered](https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
+[]byte (uses [bytes.Compare](https://pkg.go.dev/bytes#Compare)) and [time.Time](https://pkg.go.dev/time#Time) (uses [time.Time.Compare](https://pkg.go.dev/time#Time.Compare).
 
 Notice that pointers are not [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered), but uintptr are. So you can't call [GreaterOrEqualT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#GreaterOrEqualT) with [*time.Time].
 
@@ -225,8 +225,8 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 GreaterT asserts that for two elements of the same type,
 the first element is strictly greater than the second.
 
-The [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) type can be any of Go's [cmp.Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#cmp.Ordered)(https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
-[]byte (uses [bytes.Compare](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#bytes.Compare)(https://pkg.go.dev/bytes#Compare)) and [time.Time](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#time.Time)(https://pkg.go.dev/time#Time) (uses [time.Time.Compare](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#time.Time.Compare)(https://pkg.go.dev/time#Time.Compare).
+The [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) type can be any of Go's [cmp.Ordered](https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
+[]byte (uses [bytes.Compare](https://pkg.go.dev/bytes#Compare)) and [time.Time](https://pkg.go.dev/time#Time) (uses [time.Time.Compare](https://pkg.go.dev/time#Time.Compare).
 
 Notice that pointers are not [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered), but uintptr are. So you can't call [GreaterT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#GreaterT) with [*time.Time].
 
@@ -280,7 +280,7 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 
 Less asserts that the first element is strictly less than the second.
 
-Both elements must be of the same type in the [reflect.Kind](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#reflect.Kind)(https://pkg.go.dev/reflect#Kind) sense.
+Both elements must be of the same type in the [reflect.Kind](https://pkg.go.dev/reflect#Kind) sense.
 To compare values that need a type conversion (e.g. float32 against float64), you need to convert types beforehand.
 
 {{% expand title="Examples" %}}
@@ -382,8 +382,8 @@ LessOrEqual asserts that the first element is less than or equal to the second.
 
 LessOrEqualT asserts that for two elements of the same type, the first element is less than or equal to the second.
 
-The [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) type can be any of Go's [cmp.Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#cmp.Ordered)(https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
-[]byte (uses [bytes.Compare](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#bytes.Compare)(https://pkg.go.dev/bytes#Compare)) and [time.Time](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#time.Time)(https://pkg.go.dev/time#Time) (uses [time.Time.Compare](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#time.Time.Compare)(https://pkg.go.dev/time#Time.Compare).
+The [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) type can be any of Go's [cmp.Ordered](https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
+[]byte (uses [bytes.Compare](https://pkg.go.dev/bytes#Compare)) and [time.Time](https://pkg.go.dev/time#Time) (uses [time.Time.Compare](https://pkg.go.dev/time#Time.Compare).
 
 Notice that pointers are not [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered), but uintptr are. So you can't call [LessOrEqualT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#LessOrEqualT) with [*time.Time].
 
@@ -438,8 +438,8 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 
 LessT asserts that for two elements of the same type, the first element is strictly less than the second.
 
-The [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) type can be any of Go's [cmp.Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#cmp.Ordered)(https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
-[]byte (uses [bytes.Compare](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#bytes.Compare)(https://pkg.go.dev/bytes#Compare)) and [time.Time](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#time.Time)(https://pkg.go.dev/time#Time) (uses [time.Time.Compare](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#time.Time.Compare)(https://pkg.go.dev/time#Time.Compare).
+The [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) type can be any of Go's [cmp.Ordered](https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
+[]byte (uses [bytes.Compare](https://pkg.go.dev/bytes#Compare)) and [time.Time](https://pkg.go.dev/time#Time) (uses [time.Time.Compare](https://pkg.go.dev/time#Time.Compare).
 
 Notice that pointers are not [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered), but uintptr are. So you can't call [LessT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#LessT) with [*time.Time].
 
@@ -689,5 +689,5 @@ SPDX-License-Identifier: Apache-2.0
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
 
-Generated on 2026-01-27 (version 61ec163) using codegen version v2.2.1-0.20260127115002-61ec163bd53f+dirty [sha: 61ec163bd53f24e4475864100307781755a3fb81]
+Generated on 2026-01-27 (version 3be1cd4) using codegen version v2.2.1-0.20260127164537-3be1cd4700ad+dirty [sha: 3be1cd4700ad89a7d85f1e54fe462fc0f4df7091]
 -->

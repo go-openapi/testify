@@ -32,6 +32,7 @@ func ParseTaggedComments(text string) []model.ExtraComment {
 	startValueMaintainer := StartValueFunc(maintainerPrefix)
 	startValueNote := StartValueFunc(notePrefix)
 	startValueMention := StartValueFunc(mentionPrefix)
+
 	startTaggedValue := func(line string) (key string, val string, tag model.CommentTag, multiline bool, ok bool) {
 		val, ok = startValueDomain(line)
 		if ok {

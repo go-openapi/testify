@@ -26,12 +26,12 @@ func StartSectionFunc(placeholder string) func(string) bool {
 
 // StartValueFunc creates a matcher function for key-value lines.
 //
-// A value line has the format: "placeholder: value"
+// A value line has the format: "placeholder: value" or "placeholders: value" (plural form).
 // Returns the value part (everything after the colon) and true if matched.
 // Matching is case-insensitive.
 func StartValueFunc(placeholder string) func(string) (string, bool) {
 	valueRex := regexp.MustCompile(
-		fmt.Sprintf(`(?i)^\s*%[1]s\s*:\s*`, regexp.QuoteMeta(placeholder)),
+		fmt.Sprintf(`(?i)^\s*%[1]ss?\s*:\s*`, regexp.QuoteMeta(placeholder)),
 	)
 
 	return func(text string) (string, bool) {

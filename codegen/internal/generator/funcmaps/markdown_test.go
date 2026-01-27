@@ -155,12 +155,12 @@ It also references [TestingT] interface.
 
 	assertions.Something[T TestingT](t)`,
 			contains: []string{
-				`[T]`,        // No package qualifier, left unchanged
-				`[TestingT]`, // No package qualifier, left unchanged
+				`[T](https://pkg.go.dev/github.com/go-openapi`,        // No package qualifier, link to the go doc for our lib
+				`[TestingT](https://pkg.go.dev/github.com/go-openapi`, // No package qualifier, link to the go doc for our lib
 			},
 			notContains: []string{
-				`[T](https://`, // Should NOT be converted to a link
-				`[TestingT](https://`,
+				`[T](https://pkg.go.dev#T`, // Should not be appended directly
+				`[TestingT](https://pkg.go.dev#T`,
 			},
 		},
 	})

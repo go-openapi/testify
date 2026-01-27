@@ -12,18 +12,19 @@ import (
 var (
 	refLinkPattern = regexp.MustCompile(`(?m)^\[([^\]]+)\]:\s+(.+)$`)
 	// Find godoc-style links: [word.word].
-	godocPattern      = regexp.MustCompile(`\[([a-zA-Z0-9_]+\.[a-zA-Z0-9_.]+)\]`)
-	godocPatternLocal = regexp.MustCompile(`\[([a-zA-Z0-9_.]+)\]`)
+	godocPattern      = regexp.MustCompile(`\[([a-zA-Z0-9_]+\.[a-zA-Z0-9_.]+)\]`) // there is a dot
+	godocPatternLocal = regexp.MustCompile(`\[([a-zA-Z0-9_]+)\]`)                 // no dot
 	tabSectionPattern = regexp.MustCompile(`^#\s+(Examples?|Usage|Use)$`)
 	sectionPattern    = regexp.MustCompile(`^#\s+`)
 )
+
+const sensiblePrealloc = 20
 
 // FormatMarkdown carries out a formatting of inline markdown in comments that handles:
 //
 //  1. Reference-style markdown links: [text]: url
 //  2. Godoc-style links: [errors.Is], [testing.T], etc.
 func FormatMarkdown(in string) string {
-	const sensiblePrealloc = 20
 
 	// Step 1: Extract reference-style link definitions
 	// Pattern: [text]: url (at start of line or after whitespace)

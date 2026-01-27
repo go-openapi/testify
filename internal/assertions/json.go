@@ -24,7 +24,8 @@ import (
 //	failure: []byte(`{"hello": "world", "foo": "bar"}`), []byte(`[{"foo": "bar"}, {"hello": "world"}]`)
 func JSONEqBytes(t T, expected, actual []byte, msgAndArgs ...any) bool {
 	// Domain: json
-	// Maintainer: proposal for enhancement. We could use and indirection for users to inject their favorite JSON
+	// Maintainers: Proposal for enhancement.
+	// We could use and indirection for users to inject their favorite JSON
 	// library like we do for YAML.
 	if h, ok := t.(H); ok {
 		h.Helper()
