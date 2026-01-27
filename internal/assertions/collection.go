@@ -81,7 +81,7 @@ func Contains(t T, s, contains any, msgAndArgs ...any) bool {
 
 // StringContainsT asserts that a string contains the specified substring.
 //
-// Strings may be go strings or []byte.
+// Strings may be go strings or []byte according to the type constraint [Text].
 //
 // # Usage
 //
@@ -106,6 +106,8 @@ func StringContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs 
 
 // SliceContainsT asserts that the specified slice contains a comparable element.
 //
+// Go native comparable types are explained there: [comparable-types].
+//
 // # Usage
 //
 //	assertions.SliceContainsT(t, []{"Hello","World"}, "World")
@@ -114,6 +116,8 @@ func StringContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs 
 //
 //	success: []string{"A","B"}, "A"
 //	failure: []string{"A","B"}, "C"
+//
+// [comparable-types]: https://go.dev/blog/comparable
 func SliceContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArgs ...any) bool {
 	// Domain: collection
 	if h, ok := t.(H); ok {
@@ -129,6 +133,10 @@ func SliceContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArg
 
 // SeqContainsT asserts that the specified iterator contains a comparable element.
 //
+// The sequence may not be consumed entirely: the iteration stops as soon as the specified element is found.
+//
+// Go native comparable types are explained there: [comparable-types].
+//
 // # Usage
 //
 //	assertions.SeqContainsT(t, slices.Values([]{"Hello","World"}), "World")
@@ -137,21 +145,26 @@ func SliceContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArg
 //
 //	success: slices.Values([]string{"A","B"}), "A"
 //	failure: slices.Values([]string{"A","B"}), "C"
+//
+// [comparable-types]: https://go.dev/blog/comparable
 func SeqContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool {
 	// Domain: collection
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 
-	s := slices.Collect(iter)
-	if !slices.Contains(s, element) {
-		return Fail(t, fmt.Sprintf("%s does not contain %#v", truncatingFormat("%#v", s), element), msgAndArgs...)
+	for iterated := range iter {
+		if iterated == element {
+			return true
+		}
 	}
 
-	return true
+	return Fail(t, fmt.Sprintf("sequence does not contain %#v", element), msgAndArgs...)
 }
 
 // MapContainsT asserts that the specified map contains a key.
+//
+// Go native comparable types are explained there: [comparable-types].
 //
 // # Usage
 //
@@ -161,6 +174,8 @@ func SeqContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...
 //
 //	success: map[string]string{"A": "B"}, "A"
 //	failure: map[string]string{"A": "B"}, "C"
+//
+// [comparable-types]: https://go.dev/blog/comparable
 func MapContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndArgs ...any) bool {
 	// Domain: collection
 	if h, ok := t.(H); ok {
@@ -207,7 +222,7 @@ func NotContains(t T, s, contains any, msgAndArgs ...any) bool {
 
 // StringNotContainsT asserts that a string does not contain the specified substring.
 //
-// Strings may be go strings or []byte.
+// See [StringContainsT].
 //
 // # Usage
 //
@@ -232,6 +247,8 @@ func StringNotContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndAr
 
 // SliceNotContainsT asserts that the specified slice does not contain a comparable element.
 //
+// See [SliceContainsT].
+//
 // # Usage
 //
 //	assertions.SliceNotContainsT(t, []{"Hello","World"}, "hi")
@@ -255,6 +272,8 @@ func SliceNotContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAnd
 
 // SeqNotContainsT asserts that the specified iterator does not contain a comparable element.
 //
+// See [SeqContainsT].
+//
 // # Usage
 //
 //	assertions.SeqContainsT(t, slices.Values([]{"Hello","World"}), "World")
@@ -269,9 +288,10 @@ func SeqNotContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs 
 		h.Helper()
 	}
 
-	s := slices.Collect(iter)
-	if slices.Contains(s, element) {
-		return Fail(t, fmt.Sprintf("%s does not contain %#v", truncatingFormat("%#v", s), element), msgAndArgs...)
+	for iterated := range iter {
+		if iterated == element {
+			return Fail(t, fmt.Sprintf("sequence does not contain %#v", element), msgAndArgs...)
+		}
 	}
 
 	return true
