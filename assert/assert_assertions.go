@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-26 (version cbd4c16) using codegen version v2.2.1-0.20260126160846-43574c83eea9+dirty [sha: 43574c83eea9c46dc5bb573128a4038e90e2f44b]
+// Generated on 2026-01-27 (version 61ec163) using codegen version v2.2.1-0.20260127115002-61ec163bd53f+dirty [sha: 61ec163bd53f24e4475864100307781755a3fb81]
 
 package assert
 
@@ -436,7 +436,11 @@ func Eventually(t T, condition func() bool, waitFor time.Duration, tick time.Dur
 //	assertions.EventuallyWithT(t, func(c *assertions.CollectT) {
 //		// add assertions as needed; any assertion failure will fail the current tick
 //		assertions.True(c, externalValue, "expected 'externalValue' to be true")
-//	}, 10*time.Second, 1*time.Second, "external state has not changed to 'true'; still false")
+//	},
+//	10*time.Second,
+//	1*time.Second,
+//	"external state has not changed to 'true'; still false",
+//	)
 //
 // # Concurrency
 //
@@ -531,6 +535,8 @@ func False(t T, value bool, msgAndArgs ...any) bool {
 }
 
 // FalseT asserts that the specified value is false.
+//
+// The type constraint [Boolean] accepts any type which underlying type is bool.
 //
 // # Usage
 //
@@ -1256,7 +1262,7 @@ func IsNonIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice
 	return assertions.IsNonIncreasingT[OrderedSlice, E](t, collection, msgAndArgs...)
 }
 
-// IsNotOfTypeT asserts that an object is of a given type.
+// IsNotOfTypeT asserts that an object is not of a given type.
 //
 // # Usage
 //
@@ -1332,7 +1338,7 @@ func IsType(t T, expectedType any, object any, msgAndArgs ...any) bool {
 	return assertions.IsType(t, expectedType, object, msgAndArgs...)
 }
 
-// JSONEq asserts that two JSON strings are equivalent.
+// JSONEq asserts that two JSON strings are semantically equivalent.
 //
 // Expected and actual must be valid JSON.
 //
@@ -1353,7 +1359,7 @@ func JSONEq(t T, expected string, actual string, msgAndArgs ...any) bool {
 	return assertions.JSONEq(t, expected, actual, msgAndArgs...)
 }
 
-// JSONEqBytes asserts that two JSON slices of bytes are equivalent.
+// JSONEqBytes asserts that two JSON slices of bytes are semantically equivalent.
 //
 // Expected and actual must be valid JSON.
 //
@@ -1374,7 +1380,7 @@ func JSONEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any) bool {
 	return assertions.JSONEqBytes(t, expected, actual, msgAndArgs...)
 }
 
-// JSONEqT asserts that two JSON documents are equivalent.
+// JSONEqT asserts that two JSON documents are semantically equivalent.
 //
 // The expected and actual arguments may be string or []byte. They do not need to be of the same type.
 //
@@ -2551,6 +2557,8 @@ func True(t T, value bool, msgAndArgs ...any) bool {
 }
 
 // TrueT asserts that the specified value is true.
+//
+// The type constraint [Boolean] accepts any type which underlying type is bool.
 //
 // # Usage
 //

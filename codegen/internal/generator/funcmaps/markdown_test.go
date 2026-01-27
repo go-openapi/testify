@@ -4,17 +4,62 @@
 package funcmaps
 
 import (
+	"iter"
+	"slices"
 	"strings"
 	"testing"
 )
 
 func TestMarkdownFormatEnhanced(t *testing.T) {
-	tests := []struct {
-		name        string
-		input       string
-		contains    []string // strings that should appear in output
-		notContains []string // strings that should NOT appear
-	}{
+	for tt := range markdownTestCases() {
+		t.Run(tt.name, func(t *testing.T) {
+			result := FormatMarkdown(tt.input)
+
+			for _, want := range tt.contains {
+				if !strings.Contains(result, want) {
+					t.Errorf("FormatMarkdown() missing expected string:\nwant: %q\ngot: %s", want, result)
+				}
+			}
+
+			for _, notWant := range tt.notContains {
+				if strings.Contains(result, notWant) {
+					t.Errorf("FormatMarkdown() contains unexpected string:\ndon't want: %q\ngot: %s", notWant, result)
+				}
+			}
+		})
+	}
+}
+
+func TestMarkdownFormatEnhanced_Output(t *testing.T) {
+	input := `Empty asserts that the given value is "empty".
+
+Zero values are "empty".
+
+Values can be of type [strings.Builder] or [Boolean].
+
+# Usage
+
+	assertions.Empty(t, obj)
+
+# Examples
+
+	success: ""
+	failure: "not empty"
+[Zero values]: https://go.dev/ref/spec#The_zero_value`
+
+	result := FormatMarkdown(input)
+	t.Logf("Output:\n%s", result)
+}
+
+type markdownTestCase struct {
+	name        string
+	input       string
+	contains    []string // strings that should appear in output
+	notContains []string // strings that should NOT appear
+}
+
+func markdownTestCases() iter.Seq[markdownTestCase] {
+	return slices.Values([]markdownTestCase{
 		{
 			name: "reference-style markdown link (dangling)",
 			input: `Empty asserts that the given value is "empty".
@@ -118,42 +163,5 @@ It also references [TestingT] interface.
 				`[TestingT](https://`,
 			},
 		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := FormatMarkdown(tt.input)
-
-			for _, want := range tt.contains {
-				if !strings.Contains(result, want) {
-					t.Errorf("FormatMarkdown() missing expected string:\nwant: %q\ngot: %s", want, result)
-				}
-			}
-
-			for _, notWant := range tt.notContains {
-				if strings.Contains(result, notWant) {
-					t.Errorf("FormatMarkdown() contains unexpected string:\ndon't want: %q\ngot: %s", notWant, result)
-				}
-			}
-		})
-	}
-}
-
-func TestMarkdownFormatEnhanced_Output(t *testing.T) {
-	input := `Empty asserts that the given value is "empty".
-
-Zero values are "empty".
-
-# Usage
-
-	assertions.Empty(t, obj)
-
-# Examples
-
-	success: ""
-	failure: "not empty"
-[Zero values]: https://go.dev/ref/spec#The_zero_value`
-
-	result := FormatMarkdown(input)
-	t.Logf("Output:\n%s", result)
+	})
 }

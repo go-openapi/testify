@@ -1,7 +1,7 @@
 ---
 title: "Comparison"
 description: "Comparing Ordered Values"
-modified: 2026-01-26
+modified: 2026-01-27
 weight: 3
 domains:
   - "comparison"
@@ -42,7 +42,7 @@ Comparing Ordered Values
 _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
 This domain exposes 12 functionalities.
-Generic assertions are marked with a {{% icon icon="star" color=orange %}}
+Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 
 ```tree
 - [Greater](#greater) | angles-right
@@ -63,7 +63,7 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}
 
 Greater asserts that the first element is strictly greater than the second.
 
-Both elements must be of the same type in the [reflect.Kind](https://pkg.go.dev/reflect#Kind) sense.
+Both elements must be of the same type in the [reflect.Kind](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#reflect.Kind)(https://pkg.go.dev/reflect#Kind) sense.
 To compare values that need a type conversion (e.g. float32 against float64), you need to convert types beforehand.
 
 {{% expand title="Examples" %}}
@@ -115,7 +115,7 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 
 GreaterOrEqual asserts that the first element is greater than or equal to the second.
 
-See also [Greater].
+See also [Greater](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Greater).
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -168,13 +168,13 @@ See also [Greater].
 GreaterOrEqualT asserts that for two elements of the same type,
 the first element is greater than or equal to the second.
 
-The [Ordered] type can be any of Go's [cmp.Ordered](https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
-[]byte (uses [bytes.Compare](https://pkg.go.dev/bytes#Compare)) and [time.Time](https://pkg.go.dev/time#Time) (uses [time.Time.Compare](https://pkg.go.dev/time#Time.Compare).
+The [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) type can be any of Go's [cmp.Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#cmp.Ordered)(https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
+[]byte (uses [bytes.Compare](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#bytes.Compare)(https://pkg.go.dev/bytes#Compare)) and [time.Time](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#time.Time)(https://pkg.go.dev/time#Time) (uses [time.Time.Compare](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#time.Time.Compare)(https://pkg.go.dev/time#Time.Compare).
 
-Notice that pointers are not [Ordered], but uintptr are. So you can't call [GreaterOrEqualT] with [*time.Time].
+Notice that pointers are not [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered), but uintptr are. So you can't call [GreaterOrEqualT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#GreaterOrEqualT) with [*time.Time].
 
-[GreaterOrEqualT] ensures type safety at build time. If you need to compare values with a dynamically assigned type,
-use [GreaterOrEqual] instead.
+[GreaterOrEqualT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#GreaterOrEqualT) ensures type safety at build time. If you need to compare values with a dynamically assigned type,
+use [GreaterOrEqual](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#GreaterOrEqual) instead.
 
 To compare values that need a type conversion (e.g. float32 against float64), you need to convert types beforehand.
 
@@ -225,12 +225,12 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 GreaterT asserts that for two elements of the same type,
 the first element is strictly greater than the second.
 
-The [Ordered] type can be any of Go's [cmp.Ordered](https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
-[]byte (uses [bytes.Compare](https://pkg.go.dev/bytes#Compare)) and [time.Time](https://pkg.go.dev/time#Time) (uses [time.Time.Compare](https://pkg.go.dev/time#Time.Compare).
+The [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) type can be any of Go's [cmp.Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#cmp.Ordered)(https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
+[]byte (uses [bytes.Compare](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#bytes.Compare)(https://pkg.go.dev/bytes#Compare)) and [time.Time](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#time.Time)(https://pkg.go.dev/time#Time) (uses [time.Time.Compare](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#time.Time.Compare)(https://pkg.go.dev/time#Time.Compare).
 
-Notice that pointers are not [Ordered], but uintptr are. So you can't call [GreaterT] with [*time.Time].
+Notice that pointers are not [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered), but uintptr are. So you can't call [GreaterT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#GreaterT) with [*time.Time].
 
-[GreaterT] ensures type safety at build time. If you need to compare values with a dynamically assigned type, use [Greater] instead.
+[GreaterT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#GreaterT) ensures type safety at build time. If you need to compare values with a dynamically assigned type, use [Greater](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Greater) instead.
 
 To compare values that need a type conversion (e.g. float32 against float64), you need to convert types beforehand.
 
@@ -280,7 +280,7 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 
 Less asserts that the first element is strictly less than the second.
 
-Both elements must be of the same type in the [reflect.Kind](https://pkg.go.dev/reflect#Kind) sense.
+Both elements must be of the same type in the [reflect.Kind](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#reflect.Kind)(https://pkg.go.dev/reflect#Kind) sense.
 To compare values that need a type conversion (e.g. float32 against float64), you need to convert types beforehand.
 
 {{% expand title="Examples" %}}
@@ -382,15 +382,15 @@ LessOrEqual asserts that the first element is less than or equal to the second.
 
 LessOrEqualT asserts that for two elements of the same type, the first element is less than or equal to the second.
 
-The [Ordered] type can be any of Go's [cmp.Ordered](https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
-[]byte (uses [bytes.Compare](https://pkg.go.dev/bytes#Compare)) and [time.Time](https://pkg.go.dev/time#Time) (uses [time.Time.Compare](https://pkg.go.dev/time#Time.Compare).
+The [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) type can be any of Go's [cmp.Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#cmp.Ordered)(https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
+[]byte (uses [bytes.Compare](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#bytes.Compare)(https://pkg.go.dev/bytes#Compare)) and [time.Time](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#time.Time)(https://pkg.go.dev/time#Time) (uses [time.Time.Compare](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#time.Time.Compare)(https://pkg.go.dev/time#Time.Compare).
 
-Notice that pointers are not [Ordered], but uintptr are. So you can't call [LessOrEqualT] with [*time.Time].
+Notice that pointers are not [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered), but uintptr are. So you can't call [LessOrEqualT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#LessOrEqualT) with [*time.Time].
 
-[LessOrEqualT] ensures type safety at build time. If you need to compare values with a dynamically assigned type,
-use [LessOrEqual] instead.
+[LessOrEqualT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#LessOrEqualT) ensures type safety at build time. If you need to compare values with a dynamically assigned type,
+use [LessOrEqual](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#LessOrEqual) instead.
 
-To compare values that need a type conversion (e.g. float32 against float64), you should use [LessOrEqual] instead.
+To compare values that need a type conversion (e.g. float32 against float64), you should use [LessOrEqual](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#LessOrEqual) instead.
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -438,13 +438,13 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 
 LessT asserts that for two elements of the same type, the first element is strictly less than the second.
 
-The [Ordered] type can be any of Go's [cmp.Ordered](https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
-[]byte (uses [bytes.Compare](https://pkg.go.dev/bytes#Compare)) and [time.Time](https://pkg.go.dev/time#Time) (uses [time.Time.Compare](https://pkg.go.dev/time#Time.Compare).
+The [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) type can be any of Go's [cmp.Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#cmp.Ordered)(https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
+[]byte (uses [bytes.Compare](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#bytes.Compare)(https://pkg.go.dev/bytes#Compare)) and [time.Time](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#time.Time)(https://pkg.go.dev/time#Time) (uses [time.Time.Compare](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#time.Time.Compare)(https://pkg.go.dev/time#Time.Compare).
 
-Notice that pointers are not [Ordered], but uintptr are. So you can't call [LessT] with [*time.Time].
+Notice that pointers are not [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered), but uintptr are. So you can't call [LessT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#LessT) with [*time.Time].
 
-[LessT] ensures type safety at build time. If you need to compare values with a dynamically assigned type,
-use [Less] instead.
+[LessT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#LessT) ensures type safety at build time. If you need to compare values with a dynamically assigned type,
+use [Less](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Less) instead.
 
 To compare values that need a type conversion (e.g. float32 against float64), you need to convert types beforehand.
 
@@ -689,5 +689,5 @@ SPDX-License-Identifier: Apache-2.0
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
 
-Generated on 2026-01-26 (version cbd4c16) using codegen version v2.2.1-0.20260126160846-43574c83eea9+dirty [sha: 43574c83eea9c46dc5bb573128a4038e90e2f44b]
+Generated on 2026-01-27 (version 61ec163) using codegen version v2.2.1-0.20260127115002-61ec163bd53f+dirty [sha: 61ec163bd53f24e4475864100307781755a3fb81]
 -->

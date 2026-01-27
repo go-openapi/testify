@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-26 (version cbd4c16) using codegen version v2.2.1-0.20260126160846-43574c83eea9+dirty [sha: 43574c83eea9c46dc5bb573128a4038e90e2f44b]
+// Generated on 2026-01-27 (version 61ec163) using codegen version v2.2.1-0.20260127115002-61ec163bd53f+dirty [sha: 61ec163bd53f24e4475864100307781755a3fb81]
 
 package require
 

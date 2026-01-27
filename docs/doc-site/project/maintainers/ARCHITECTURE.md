@@ -26,6 +26,15 @@ journey
       code & doc generator:5: Knowledge of internals
 {{< /mermaid >}}
 
+Most common maintenance tasks should not require much more than fixing/enhancing the code in `internal/assertions`.
+
+API changes need an extra code generation.
+
+Dependency changes (adding new features that need extra dependencies) is a bit more involved, but still manageable.
+
+The code & doc generator should rapidly become a very stable component. The maintenance of the generator itself remains
+an operation that requires an extended understanding of the internals of the project.
+
 Fixes and enhancements propagate naturally to the variants without the need to regenerate code.
 
 ### The maths with assertion variants
