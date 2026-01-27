@@ -27,6 +27,8 @@ func True(t T, value bool, msgAndArgs ...any) bool {
 
 // TrueT asserts that the specified value is true.
 //
+// The type constraint [Boolean] accepts any type which underlying type is bool.
+//
 // # Usage
 //
 //	type B bool
@@ -73,6 +75,8 @@ func False(t T, value bool, msgAndArgs ...any) bool {
 }
 
 // FalseT asserts that the specified value is false.
+//
+// The type constraint [Boolean] accepts any type which underlying type is bool.
 //
 // # Usage
 //

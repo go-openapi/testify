@@ -17,21 +17,24 @@ type OpCode struct {
 	J2  int
 }
 
-// SequenceMatcher compares sequence of strings. The basic
-// algorithm predates, and is a little fancier than, an algorithm
-// published in the late 1980's by Ratcliff and Obershelp under the
-// hyperbolic name "gestalt pattern matching".  The basic idea is to find
-// the longest contiguous matching subsequence that contains no "junk"
-// elements (R-O doesn't address junk).  The same idea is then applied
+// SequenceMatcher compares sequence of strings.
+//
+// The basic algorithm predates, and is a little fancier than, an algorithm
+// published in the late 1980's by Ratcliff and Obershelp (R-O) under the
+// hyperbolic name "[gestalt pattern matching]".
+//
+// The basic idea is to find the longest contiguous matching subsequence that contains
+// no "junk" elements (R-O doesn't address junk). The same idea is then applied
 // recursively to the pieces of the sequences to the left and to the right
 // of the matching subsequence.  This does not yield minimal edit
 // sequences, but does tend to yield matches that "look right" to people.
 //
-// SequenceMatcher tries to compute a "human-friendly diff" between two
-// sequences.  Unlike e.g. UNIX(tm) diff, the fundamental notion is the
+// The SequenceMatcher tries to compute a "human-friendly diff" between two
+// sequences. Unlike e.g. UNIX(tm) diff, the fundamental notion is the
 // longest *contiguous* & junk-free matching subsequence.  That's what
 // catches peoples' eyes.  The Windows(tm) windiff has another interesting
 // notion, pairing up elements that appear uniquely in each sequence.
+//
 // That, and the method here, appear to yield more intuitive difference
 // reports than does diff.  This method appears to be the least vulnerable
 // to synching up on blocks of "junk lines", though (like blank lines in
@@ -43,6 +46,8 @@ type OpCode struct {
 // case.  SequenceMatcher is quadratic time for the worst case and has
 // expected-case behavior dependent in a complicated way on how many
 // elements the sequences have in common; best case time is linear.
+//
+// [gestalt pattern matching]: https://en.wikipedia.org/wiki/Gestalt_pattern_matching
 type SequenceMatcher struct {
 	a              []string
 	b              []string
@@ -216,10 +221,10 @@ func (m *SequenceMatcher) GetOpCodes() []OpCode {
 	return m.opCodes
 }
 
-// GetGroupedOpCodes isolates change clusters by eliminating ranges with no changes.
+// GetGroupedOpCodes isolates changed clusters by eliminating ranges with no changes.
 //
 // Return a generator of groups with up to n lines of context.
-// Each group is in the same format as returned by GetOpCodes().
+// Each group is in the same format as returned by [SequenceMatcher.GetOpCodes].
 func (m *SequenceMatcher) GetGroupedOpCodes(n int) [][]OpCode {
 	if n < 0 {
 		n = 3

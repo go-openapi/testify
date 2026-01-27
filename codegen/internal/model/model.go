@@ -230,6 +230,26 @@ const (
 
 type CommentTag uint8
 
+// String representation of a comment tag, mostly useful for debugging purpose.
+func (t CommentTag) String() string {
+	switch t {
+	case CommentTagNone:
+		return "comment-tag-none"
+	case CommentTagDomain:
+		return "comment-tag-domain"
+	case CommentTagMaintainer:
+		return "comment-tag-maintainer"
+	case CommentTagMention:
+		return "comment-tag-mention"
+	case CommentTagNote:
+		return "comment-tag-note"
+	case CommentTagDomainDescription:
+		return "comment-tag-domain-description"
+	default:
+		return "invalid-value"
+	}
+}
+
 const (
 	CommentTagNone CommentTag = iota
 	CommentTagDomain

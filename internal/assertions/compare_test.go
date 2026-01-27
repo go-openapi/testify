@@ -181,7 +181,7 @@ func TestCompareGreaterAndLessT(t *testing.T) {
 				testAllComparisonT[[]byte](tc)(t)
 			default:
 				// Custom types (like redefined uintptr) - skip, they're tested separately
-				t.Skip("custom types tested separately")
+				t.Logf("%s: custom types tested separately (got: %T)", t.Name(), tc.less)
 			}
 		})
 	}

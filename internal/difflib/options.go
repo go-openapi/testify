@@ -9,15 +9,22 @@ import (
 )
 
 type (
+	// Formatter is a formatting function like [fmt.Printf].
 	Formatter func(format string, args ...any) error
-	Printer   func(string) error
+
+	// Printer outputs a formatted string, e.g. to some underlying writer.
+	Printer func(string) error
 )
 
 type (
+	// FormatterBuilder is a function that builds a [Formatter] given a bufferized [bufio.Writer].
 	FormatterBuilder func(*bufio.Writer) Formatter
-	PrinterBuilder   func(*bufio.Writer) Printer
+
+	// PrinterBuilder is a function that builds a [Printer] given a bufferized [bufio.Writer].
+	PrinterBuilder func(*bufio.Writer) Printer
 )
 
+// Options to fine-tune the rendering of the diff output.
 type Options struct {
 	EqualPrinter  PrinterBuilder
 	DeletePrinter PrinterBuilder

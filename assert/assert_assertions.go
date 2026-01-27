@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-26 (version cbd4c16) using codegen version v2.2.1-0.20260126160846-43574c83eea9+dirty [sha: 43574c83eea9c46dc5bb573128a4038e90e2f44b]
+// Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 
 package assert
 
@@ -436,7 +436,11 @@ func Eventually(t T, condition func() bool, waitFor time.Duration, tick time.Dur
 //	assertions.EventuallyWithT(t, func(c *assertions.CollectT) {
 //		// add assertions as needed; any assertion failure will fail the current tick
 //		assertions.True(c, externalValue, "expected 'externalValue' to be true")
-//	}, 10*time.Second, 1*time.Second, "external state has not changed to 'true'; still false")
+//	},
+//	10*time.Second,
+//	1*time.Second,
+//	"external state has not changed to 'true'; still false",
+//	)
 //
 // # Concurrency
 //
@@ -531,6 +535,8 @@ func False(t T, value bool, msgAndArgs ...any) bool {
 }
 
 // FalseT asserts that the specified value is false.
+//
+// The type constraint [Boolean] accepts any type which underlying type is bool.
 //
 // # Usage
 //
@@ -1256,7 +1262,7 @@ func IsNonIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice
 	return assertions.IsNonIncreasingT[OrderedSlice, E](t, collection, msgAndArgs...)
 }
 
-// IsNotOfTypeT asserts that an object is of a given type.
+// IsNotOfTypeT asserts that an object is not of a given type.
 //
 // # Usage
 //
@@ -1332,7 +1338,7 @@ func IsType(t T, expectedType any, object any, msgAndArgs ...any) bool {
 	return assertions.IsType(t, expectedType, object, msgAndArgs...)
 }
 
-// JSONEq asserts that two JSON strings are equivalent.
+// JSONEq asserts that two JSON strings are semantically equivalent.
 //
 // Expected and actual must be valid JSON.
 //
@@ -1353,7 +1359,7 @@ func JSONEq(t T, expected string, actual string, msgAndArgs ...any) bool {
 	return assertions.JSONEq(t, expected, actual, msgAndArgs...)
 }
 
-// JSONEqBytes asserts that two JSON slices of bytes are equivalent.
+// JSONEqBytes asserts that two JSON slices of bytes are semantically equivalent.
 //
 // Expected and actual must be valid JSON.
 //
@@ -1374,7 +1380,7 @@ func JSONEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any) bool {
 	return assertions.JSONEqBytes(t, expected, actual, msgAndArgs...)
 }
 
-// JSONEqT asserts that two JSON documents are equivalent.
+// JSONEqT asserts that two JSON documents are semantically equivalent.
 //
 // The expected and actual arguments may be string or []byte. They do not need to be of the same type.
 //
@@ -1557,6 +1563,8 @@ func LessT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any
 
 // MapContainsT asserts that the specified map contains a key.
 //
+// Go native comparable types are explained there: [comparable-types].
+//
 // # Usage
 //
 //	assertions.MapContainsT(t, map[string]string{"Hello": "x","World": "y"}, "World")
@@ -1567,6 +1575,8 @@ func LessT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any
 //	failure: map[string]string{"A": "B"}, "C"
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
+//
+// [comparable-types]: https://go.dev/blog/comparable
 func MapContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
@@ -2326,6 +2336,10 @@ func SameT[P any](t T, expected *P, actual *P, msgAndArgs ...any) bool {
 
 // SeqContainsT asserts that the specified iterator contains a comparable element.
 //
+// The sequence may not be consumed entirely: the iteration stops as soon as the specified element is found.
+//
+// Go native comparable types are explained there: [comparable-types].
+//
 // # Usage
 //
 //	assertions.SeqContainsT(t, slices.Values([]{"Hello","World"}), "World")
@@ -2336,6 +2350,8 @@ func SameT[P any](t T, expected *P, actual *P, msgAndArgs ...any) bool {
 //	failure: slices.Values([]string{"A","B"}), "C"
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
+//
+// [comparable-types]: https://go.dev/blog/comparable
 func SeqContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
@@ -2344,6 +2360,8 @@ func SeqContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...
 }
 
 // SeqNotContainsT asserts that the specified iterator does not contain a comparable element.
+//
+// See [SeqContainsT].
 //
 // # Usage
 //
@@ -2364,6 +2382,8 @@ func SeqNotContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs 
 
 // SliceContainsT asserts that the specified slice contains a comparable element.
 //
+// Go native comparable types are explained there: [comparable-types].
+//
 // # Usage
 //
 //	assertions.SliceContainsT(t, []{"Hello","World"}, "World")
@@ -2374,6 +2394,8 @@ func SeqNotContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs 
 //	failure: []string{"A","B"}, "C"
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
+//
+// [comparable-types]: https://go.dev/blog/comparable
 func SliceContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
@@ -2382,6 +2404,8 @@ func SliceContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArg
 }
 
 // SliceNotContainsT asserts that the specified slice does not contain a comparable element.
+//
+// See [SliceContainsT].
 //
 // # Usage
 //
@@ -2463,7 +2487,7 @@ func SortedT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndA
 
 // StringContainsT asserts that a string contains the specified substring.
 //
-// Strings may be go strings or []byte.
+// Strings may be go strings or []byte according to the type constraint [Text].
 //
 // # Usage
 //
@@ -2484,7 +2508,7 @@ func StringContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs 
 
 // StringNotContainsT asserts that a string does not contain the specified substring.
 //
-// Strings may be go strings or []byte.
+// See [StringContainsT].
 //
 // # Usage
 //
@@ -2551,6 +2575,8 @@ func True(t T, value bool, msgAndArgs ...any) bool {
 }
 
 // TrueT asserts that the specified value is true.
+//
+// The type constraint [Boolean] accepts any type which underlying type is bool.
 //
 // # Usage
 //

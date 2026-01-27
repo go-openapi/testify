@@ -9,14 +9,22 @@ import (
 	"strings"
 )
 
-var refLinkPattern = regexp.MustCompile(`(?m)^\[([^\]]+)\]:\s+(.+)$`)
+var (
+	refLinkPattern = regexp.MustCompile(`(?m)^\[([^\]]+)\]:\s+(.+)$`)
+	// Find godoc-style links: [word.word].
+	godocPattern      = regexp.MustCompile(`\[([a-zA-Z0-9_]+\.[a-zA-Z0-9_.]+)\]`) // there is a dot
+	godocPatternLocal = regexp.MustCompile(`\[([a-zA-Z0-9_]+)\]`)                 // no dot
+	tabSectionPattern = regexp.MustCompile(`^#\s+(Examples?|Usage|Use)$`)
+	sectionPattern    = regexp.MustCompile(`^#\s+`)
+)
+
+const sensiblePrealloc = 20
 
 // FormatMarkdown carries out a formatting of inline markdown in comments that handles:
 //
 //  1. Reference-style markdown links: [text]: url
 //  2. Godoc-style links: [errors.Is], [testing.T], etc.
 func FormatMarkdown(in string) string {
-	const sensiblePrealloc = 20
 
 	// Step 1: Extract reference-style link definitions
 	// Pattern: [text]: url (at start of line or after whitespace)
@@ -64,9 +72,7 @@ func FormatMarkdown(in string) string {
 			continue
 		}
 
-		// Find godoc-style links: [word.word]
-		godocPattern := regexp.MustCompile(`\[([a-zA-Z0-9_]+\.[a-zA-Z0-9_.]+)\]`)
-		lines[i] = godocPattern.ReplaceAllStringFunc(line, func(match string) string {
+		replacedStdLib := godocPattern.ReplaceAllStringFunc(line, func(match string) string {
 			identifier := strings.Trim(match, "[]")
 
 			// Has package qualifier - link to pkg.go.dev
@@ -86,11 +92,25 @@ func FormatMarkdown(in string) string {
 			// Assume standard library for simple package names
 			return fmt.Sprintf("[%s](https://pkg.go.dev/%s#%s)", identifier, pkgPath, symbol)
 		})
+
+		// check for links with current package, e.g. [Boolean]. Those don't have a dot.
+		replacedLocal := godocPatternLocal.ReplaceAllStringFunc(replacedStdLib, func(match string) string {
+			identifier := strings.Trim(match, "[]")
+			return fmt.Sprintf("[%s](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#%s)", identifier, identifier)
+		})
+
+		lines[i] = replacedLocal
 	}
+
 	processed = strings.Join(lines, "\n")
 
-	// Step 4: Do existing processing (Hugo shortcodes)
+	// Step 4: render Usage and Examples sections with Hugo shortcodes
+	// These are rendered as tabs.
 	result := make([]string, 0, sensiblePrealloc)
+	trailer := make([]string, 0, sensiblePrealloc)
+
+	// parse state
+	tabsCollection := false
 	expanded := false
 	tab := false
 
@@ -99,44 +119,61 @@ func FormatMarkdown(in string) string {
 			continue
 		}
 
-		if strings.HasPrefix(line, "#") {
-			if !expanded {
-				result = append(result, `{{% expand title="Examples" %}}`)
-				result = append(result, `{{< tabs >}}`)
-				expanded = true
+		matches := tabSectionPattern.FindStringSubmatch(line)
+		const expectedCapture = 1
+		if len(matches) != expectedCapture+1 {
+			// either a regular line or a section header that we don't want in the trailer tabs
+			if sectionPattern.MatchString(line) {
+				// found a new section
+				expanded = false
+				line = strings.ReplaceAll(line, "#", "####") // containing function heading is ###
 			}
 
-			title := Titleize(strings.TrimLeft(line, "# \t"))
-			if tab {
-				result = append(result, "```")
-				result = append(result, `{{< /tab >}}`)
+			if expanded {
+				trailer = append(trailer, line)
+			} else {
+				result = append(result, line)
 			}
-
-			result = append(result, fmt.Sprintf(`{{%% tab title="%s" %%}}`, title))
-			result = append(result, "```go")
-			tab = true
 
 			continue
 		}
 
-		result = append(result, line)
+		// interesting section to catch as a tab
+		section := matches[expectedCapture]
+		expanded = true
+
+		if !tabsCollection {
+			trailer = append(trailer, `{{% expand title="Examples" %}}`) // the title of the collapsible section
+			trailer = append(trailer, `{{< tabs >}}`)
+			tabsCollection = true
+		}
+
+		title := titleize(section)
+		if tab {
+			trailer = append(trailer, "```")
+			trailer = append(trailer, `{{< /tab >}}`)
+		}
+
+		trailer = append(trailer, fmt.Sprintf(`{{%% tab title="%s" %%}}`, title))
+		trailer = append(trailer, "```go")
+		tab = true
 	}
 
 	if tab {
-		result = append(result, "```")
-		result = append(result, `{{< /tab >}}`)
+		trailer = append(trailer, "```")
+		trailer = append(trailer, `{{< /tab >}}`)
 	}
 
-	if expanded {
-		result = append(result, `{{< /tabs >}}`)
-		result = append(result, `{{% /expand %}}`)
-
-		// Append dangling reference links as additional context
-		if len(danglingRefs) > 0 {
-			result = append(result, "")
-			result = append(result, danglingRefs...)
-		}
+	if tabsCollection {
+		trailer = append(trailer, `{{< /tabs >}}`)
+		trailer = append(trailer, `{{% /expand %}}`)
 	}
 
-	return strings.Join(result, "\n")
+	// Append dangling reference links as additional context
+	if len(danglingRefs) > 0 {
+		result = append(result, "")
+		result = append(result, danglingRefs...)
+	}
+
+	return strings.Join(append(result, trailer...), "\n")
 }

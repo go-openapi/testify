@@ -60,6 +60,7 @@ func FuncMap() template.FuncMap {
 		"sourceLink":       sourceLink,
 		"titleize":         titleize,
 		"slugize":          slugize,
+		"blockquote":       blockquote,
 	}
 }
 
@@ -363,4 +364,17 @@ func slugize(in string) string {
 		},
 			in,
 		))
+}
+
+// blockquote prints a text as a markdown blockquote.
+func blockquote(in string) string {
+	result := make([]string, 0, sensiblePrealloc)
+	for line := range strings.SplitSeq(in, "\n") {
+		result = append(result, "> "+line)
+		if strings.HasSuffix(line, ".") {
+			result = append(result, ">")
+		}
+	}
+
+	return strings.Join(result, "\n")
 }

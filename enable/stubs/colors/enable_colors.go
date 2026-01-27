@@ -30,6 +30,11 @@ type (
 	Theme = colorstub.Theme
 )
 
+const (
+	ThemeDark  = colorstub.ThemeDark
+	ThemeLight = colorstub.ThemeLight
+)
+
 // WithEnable enables colorization.
 func WithEnable(enabled bool) Option {
 	return colorstub.WithEnable(enabled)

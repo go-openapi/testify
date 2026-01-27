@@ -10,7 +10,7 @@ import (
 	"fmt"
 )
 
-// JSONEqBytes asserts that two JSON slices of bytes are equivalent.
+// JSONEqBytes asserts that two JSON slices of bytes are semantically equivalent.
 //
 // Expected and actual must be valid JSON.
 //
@@ -24,7 +24,8 @@ import (
 //	failure: []byte(`{"hello": "world", "foo": "bar"}`), []byte(`[{"foo": "bar"}, {"hello": "world"}]`)
 func JSONEqBytes(t T, expected, actual []byte, msgAndArgs ...any) bool {
 	// Domain: json
-	// Maintainer: proposal for enhancement. We could use and indirection for users to inject their favorite JSON
+	// Maintainers: Proposal for enhancement.
+	// We could use and indirection for users to inject their favorite JSON
 	// library like we do for YAML.
 	if h, ok := t.(H); ok {
 		h.Helper()
@@ -47,7 +48,7 @@ func JSONEqBytes(t T, expected, actual []byte, msgAndArgs ...any) bool {
 	return Equal(t, expectedJSONAsInterface, actualJSONAsInterface, msgAndArgs...)
 }
 
-// JSONEq asserts that two JSON strings are equivalent.
+// JSONEq asserts that two JSON strings are semantically equivalent.
 //
 // Expected and actual must be valid JSON.
 //
@@ -68,7 +69,7 @@ func JSONEq(t T, expected, actual string, msgAndArgs ...any) bool {
 	return JSONEqBytes(t, []byte(expected), []byte(actual), msgAndArgs)
 }
 
-// JSONEqT asserts that two JSON documents are equivalent.
+// JSONEqT asserts that two JSON documents are semantically equivalent.
 //
 // The expected and actual arguments may be string or []byte. They do not need to be of the same type.
 //

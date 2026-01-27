@@ -130,7 +130,11 @@ func Never(t T, condition func() bool, waitFor time.Duration, tick time.Duration
 //	assertions.EventuallyWithT(t, func(c *assertions.CollectT) {
 //		// add assertions as needed; any assertion failure will fail the current tick
 //		assertions.True(c, externalValue, "expected 'externalValue' to be true")
-//	}, 10*time.Second, 1*time.Second, "external state has not changed to 'true'; still false")
+//	},
+//	10*time.Second,
+//	1*time.Second,
+//	"external state has not changed to 'true'; still false",
+//	)
 //
 // # Concurrency
 //

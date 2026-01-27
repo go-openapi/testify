@@ -13,7 +13,7 @@ import (
 )
 
 // SplitLines splits a string on "\n" while preserving them. The output can be used
-// as input for UnifiedDiff and ContextDiff structures.
+// as input for the [UnifiedDiff] structure.
 func SplitLines(s string) []string {
 	lines := strings.SplitAfter(s, "\n")
 	lines[len(lines)-1] += "\n"
@@ -50,7 +50,7 @@ func (u *UnifiedDiff) applyWriter(buf *bufio.Writer) {
 	u.wf = u.Formatter(buf)
 }
 
-// GetUnifiedDiffString is like WriteUnifiedDiff but returns the diff a string.
+// GetUnifiedDiffString is like [WriteUnifiedDiff] but returns the diff as a string instead of writing to an [io.Writer].
 func GetUnifiedDiffString(diff UnifiedDiff) (string, error) {
 	w := new(bytes.Buffer)
 	err := WriteUnifiedDiff(w, diff)
@@ -58,12 +58,14 @@ func GetUnifiedDiffString(diff UnifiedDiff) (string, error) {
 	return w.String(), err
 }
 
-// WriteUnifiedDiff write the comparison between two sequences of lines.
+// WriteUnifiedDiff writes the comparison between two sequences of lines.
 // It generates the delta as a unified diff.
 //
 // Unified diffs are a compact way of showing line changes and a few
-// lines of context.  The number of context lines is set by 'n' which
+// lines of context. The number of context lines is set by 'n' which
 // defaults to three.
+//
+// # Format
 //
 // By default, the diff control lines (those with ---, +++, or @@) are
 // created with a trailing newline.  This is helpful so that inputs
@@ -76,6 +78,7 @@ func GetUnifiedDiffString(diff UnifiedDiff) (string, error) {
 //
 // The unidiff format normally has a header for filenames and modification
 // 'fromfile', 'tofile', 'fromfiledate', and 'tofiledate'.
+//
 // The modification times are normally expressed in the ISO 8601 format.
 func WriteUnifiedDiff(writer io.Writer, diff UnifiedDiff) error {
 	diff.Options = optionsWithDefaults(diff.Options)

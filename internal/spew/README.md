@@ -1,18 +1,27 @@
 # internal/spew
 
-This is an internalized and modernized copy of [github.com/davecgh/go-spew](https://github.com/davecgh/go-spew), a deep pretty printer for Go data structures.
+This is an internalized and modernized copy of [github.com/davecgh/go-spew](https://github.com/davecgh/go-spew),
+a deep pretty printer for Go data structures.
 
 ## Original Source
 
 **Source repository:** github.com/davecgh/go-spew
+
 **Original license:** ISC License (see [LICENSE](./LICENSE))
+
 **Copyright:** 2012-2016 Dave Collins
 
-go-spew implements a deep pretty printer for Go data structures to aid in debugging, providing features like pointer dereferencing, circular reference detection, custom Stringer/error interface handling, and hexdump-style byte array output.
+---
+
+go-spew implements a deep pretty printer for Go data structures to aid in debugging,
+providing features like pointer dereferencing, circular reference detection,
+custom Stringer/error interface handling, and hexdump-style byte array output.
 
 ## Why Internalized
 
-This fork of testify maintains **zero external dependencies** for the core assertion packages. By internalizing go-spew, we eliminate the external dependency while gaining full control over the code to apply modernizations aligned with our go1.24 target.
+This fork of testify maintains **zero external dependencies** for its core assertion packages.
+By internalizing go-spew, we eliminate the external dependency while gaining full control over the code
+to apply modernizations aligned with our go1.24 target.
 
 ## Modernizations Applied
 
@@ -36,7 +45,7 @@ This internalized copy has been modernized from the original go-spew codebase wi
 
 ### Documentation
 
-- **Markdown formatting:** Updated documentation comments to use modern markdown headings (`#`) and list formats (`-`)
+- **Markdown formatting:** Updated godoc documentation comments to use modern markdown headings (`#`) and list formats (`-`)
 - **Comment punctuation:** Standardized comment punctuation and formatting
 - **Clarity improvements:** Fixed typos and improved readability
 
@@ -49,20 +58,21 @@ This internalized copy has been modernized from the original go-spew codebase wi
 The internalized copy maintains API compatibility with the original while incorporating targeted improvements:
 
 - **Deterministic map sorting:** The `SpewKeys` configuration option enables sorted map key output for consistent diffs (relevant for testify's assertion output)
+  - [x] Additional optimizations for deterministic diff generation (stretchr/testify#1822)
 - **time.Time rendering:** Enhanced handling of `time.Time` values in nested structures (applied from stretchr/testify#1829)
+- **panic/hang** Reinforced input checking to avoid edge cases
+  - [x] Proper fix for panic on unexported struct keys in maps (stretchr/testify#1816)
+  - [x] Fix for circular map references (runtime stack overflow)
 
 ## Future Enhancements
 
-As an internalized dependency, this copy can receive targeted fixes and improvements that benefit testify's use case:
-
-- **Planned:** Proper fix for panic on unexported struct keys in maps (stretchr/testify#1816)
-- **Planned:** Additional optimizations for deterministic diff generation (stretchr/testify#1822)
-
-These enhancements would be difficult to incorporate if go-spew remained an external dependency.
+The linting effort is still going on...
 
 ## Maintenance
 
-This internalized copy is maintained as part of github.com/go-openapi/testify/v2 and follows the same Go version requirements (currently go1.24). It does not track upstream go-spew releases, as it has diverged through modernization.
+This internalized copy is maintained as part of github.com/go-openapi/testify/v2 and follows
+the same Go version requirements (currently go1.24).
+It does not track upstream go-spew releases, as it has diverged through modernization.
 
 For issues or improvements specific to this internalized version, please file issues at:
 https://github.com/go-openapi/testify/issues
