@@ -10,12 +10,8 @@ weight: 20
 
 ```go
 // Old
-import "github.com/stretchr/testify/assert"
-import "github.com/stretchr/testify/require"
 
 // New
-import "github.com/go-openapi/testify/v2/assert"
-import "github.com/go-openapi/testify/v2/require"
 ```
 
 ### 2. Optional: Enable YAML Support

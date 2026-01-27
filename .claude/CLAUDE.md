@@ -121,9 +121,9 @@ go test ./codegen/internal/... # Scanner and generator tests
 go test ./internal/assertions -run TestEqual
 
 # Run with coverage
-go test -cover ./internal/assertions        # Should be 90%+
-go test -cover ./assert                     # Should be ~100%
-go test -cover ./require                    # Should be ~100%
+go test -cover ./internal/assertions          # Should be 90%+
+go test -cover ./assert                       # Should be ~100%
+go test -cover ./require                      # Should be ~100%
 go test -cover ./codegen/internal/scanner/... # Scanner tests
 
 # Run tests with verbose output
@@ -160,6 +160,11 @@ cd hack/doc-site/hugo
 
 **Example - Adding a new assertion:**
 ```go
+import (
+	"fmt"
+	"strings"
+)
+
 // In internal/assertions/string.go
 
 // StartsWith asserts that the string starts with the given prefix.
@@ -168,16 +173,16 @@ cd hack/doc-site/hugo
 //
 // Examples:
 //
-//   success: "hello world", "hello"
-//   failure: "hello world", "bye"
+//	success: "hello world", "hello"
+//	failure: "hello world", "bye"
 func StartsWith(t T, str, prefix string, msgAndArgs ...any) bool {
-    if h, ok := t.(H); ok {
-        h.Helper()
-    }
-    if !strings.HasPrefix(str, prefix) {
-        return Fail(t, fmt.Sprintf("Expected %q to start with %q", str, prefix), msgAndArgs...)
-    }
-    return true
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if !strings.HasPrefix(str, prefix) {
+		return Fail(t, fmt.Sprintf("Expected %q to start with %q", str, prefix), msgAndArgs...)
+	}
+	return true
 }
 ```
 
@@ -233,10 +238,10 @@ The generator reads "Examples:" sections from doc comments:
 //
 // Examples:
 //
-//   success: 123, 123
-//   failure: 123, 456
+//	success: 123, 123
+//	failure: 123, 456
 func Equal(t T, expected, actual any, msgAndArgs ...any) bool {
-    // implementation
+	// implementation
 }
 ```
 
@@ -297,10 +302,11 @@ To assign a function to a domain, add a domain tag in its doc comment:
 // domain: equality
 //
 // Examples:
-//   success: 123, 123
-//   failure: 123, 456
+//
+//	success: 123, 123
+//	failure: 123, 456
 func Equal(t T, expected, actual any, msgAndArgs ...any) bool {
-    // implementation
+	// implementation
 }
 ```
 
@@ -396,6 +402,12 @@ This layered approach ensures:
 **This repository uses a signature testing pattern** based on Go 1.23's `iter.Seq` for all table-driven tests:
 
 ```go
+import (
+	"iter"
+	"slices"
+	"testing"
+)
+
 // Define test case struct
 type parseTestExamplesCase struct {
 	name     string

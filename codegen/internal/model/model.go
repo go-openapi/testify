@@ -133,7 +133,7 @@ func (f Function) GenericName(suffixes ...string) string {
 }
 
 // GenericCallName renders the function name with explicit type parameters.
-// This is used when forwarding type parameters, as all type parameters may not be always infered from the arguments.
+// This is used when forwarding type parameters, as all type parameters may not be always inferred from the arguments.
 func (f Function) GenericCallName(suffixes ...string) string {
 	suffix := strings.Join(suffixes, "")
 	if !f.IsGeneric { // means len(f.TypeParams) == 0

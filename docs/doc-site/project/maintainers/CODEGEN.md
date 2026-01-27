@@ -90,20 +90,25 @@ This repository uses code generation extensively to maintain consistency across 
    The following example would like go to `string.go`, next to the `Regexp` assertion.
 
    ```go
+   import (
+   	"fmt"
+   	"strings"
+   )
+   
    // StartsWith asserts that the string starts with the given prefix.
    //
    // Examples:
    //
-   //   success: "hello world", "hello"
-   //   failure: "hello world", "bye"
+   //	success: "hello world", "hello"
+   //	failure: "hello world", "bye"
    func StartsWith(t T, str, prefix string, msgAndArgs ...any) bool {
-       if h, ok := t.(H); ok {
-           h.Helper()
-       }
-       if !strings.HasPrefix(str, prefix) {
-           return Fail(t, fmt.Sprintf("Expected %q to start with %q", str, prefix), msgAndArgs...)
-       }
-       return true
+   	if h, ok := t.(H); ok {
+   		h.Helper()
+   	}
+   	if !strings.HasPrefix(str, prefix) {
+   		return Fail(t, fmt.Sprintf("Expected %q to start with %q", str, prefix), msgAndArgs...)
+   	}
+   	return true
    }
    ```
 
@@ -250,17 +255,17 @@ from an external package. The relocation uses go parsing capabilities. The only 
 
 ```bash
 go run ./codegen/main.go \
-  -work-dir=.. \
-  -input-package=github.com/go-openapi/testify/v2/internal/assertions \
-  -output-packages=assert,require \
-  -target-root=.. \
-  -include-format-funcs=true \
-  -include-forward-funcs=true \
-  -include-tests=true \
-  -include-examples=true \
-  -runnable-examples=true \
-  -include-helpers=true \
-  -include-generics=false
+	-work-dir=.. \
+	-input-package=github.com/go-openapi/testify/v2/internal/assertions \
+	-output-packages=assert,require \
+	-target-root=.. \
+	-include-format-funcs=true \
+	-include-forward-funcs=true \
+	-include-tests=true \
+	-include-examples=true \
+	-runnable-examples=true \
+	-include-helpers=true \
+	-include-generics=false
 ```
 
 Current usage with `go generate` (see `doc.go`):
@@ -279,9 +284,9 @@ After generation, verify:
 go test ./...
 
 # Coverage remains high
-go test -cover ./internal/assertions  # Should be ~94%
-go test -cover ./assert               # Should be ~99.5%
-go test -cover ./require              # Should be ~99.5%
+go test -cover ./internal/assertions # Should be ~94%
+go test -cover ./assert              # Should be ~99.5%
+go test -cover ./require             # Should be ~99.5%
 
 # Examples are valid
 go test -run Example ./assert

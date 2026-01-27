@@ -81,7 +81,7 @@ go get github.com/go-openapi/testify/v2
 `testify` simplifies your test assertions like so.
 
 ```go
-    import (
+import (
         "testing"
     )
     ...
@@ -101,7 +101,7 @@ go get github.com/go-openapi/testify/v2
 Becomes:
 
 ```go
-    import (
+import (
         "testing"
         "github.com/go-openapi/testify/v2/require"
     )
@@ -190,8 +190,8 @@ Maintainers can cut a new release by either:
 [doc-examples]: https://go-openapi.github.io/testify/usage/examples
 [doc-generics]: https://go-openapi.github.io/testify/usage/generics
 [example-with-generics-url]: https://go-openapi.github.io/testify#usage-with-generics
-[godoc-badge]: https://pkg.go.dev/badge/github.com/go-openapi/testify
-[godoc-url]: http://pkg.go.dev/github.com/go-openapi/testify
+[godoc-badge]: https://pkg.go.dev/badge/github.com/go-openapi/testify/v2
+[godoc-url]: https://pkg.go.dev/github.com/go-openapi/testify/v2
 [slack-logo]: https://a.slack-edge.com/e6a93c1/img/icons/favicon-32.png
 [slack-badge]: https://img.shields.io/badge/slack-blue?link=https%3A%2F%2Fgoswagger.slack.com%2Farchives%2FC04R30YM
 [slack-url]: https://goswagger.slack.com/archives/C04R30YMU

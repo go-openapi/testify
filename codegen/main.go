@@ -63,6 +63,7 @@ func registerFlags(cfg *config) {
 }
 
 func execute(cfg *config) error {
+	// 1. Scan internal/assertions
 	scanner := scanner.New(
 		scanner.WithWorkDir(cfg.dir),
 		scanner.WithPackage(cfg.inputPkg),
@@ -73,6 +74,7 @@ func execute(cfg *config) error {
 		return err
 	}
 
+	// 2. Generate assert and require packages
 	builder := generator.New(scanned)
 	var doc model.Documentation
 
@@ -105,7 +107,9 @@ func execute(cfg *config) error {
 		return nil
 	}
 
-	// and now for something completely different: generating the documentation
+	// ... and now for something completely different: generating the documentation
+	//
+	// 3. Generate API documentation in docs/doc-site/api
 	documentalist := generator.NewDocGenerator(doc)
 	err = documentalist.Generate(
 		// where to generate

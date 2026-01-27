@@ -169,9 +169,15 @@ Focused testing of known problematic patterns using the edge case generator.
 Go native fuzzing integrated with rapid:
 
 ```go
+import (
+	"testing"
+
+	"pgregory.net/rapid"
+)
+
 func FuzzSdump(f *testing.F) {
-    prop := NoPanicProp(f.Context(), Generator(WithSkipCircularMap()))
-    f.Fuzz(rapid.MakeFuzz(prop))
+	prop := NoPanicProp(f.Context(), Generator(WithSkipCircularMap()))
+	f.Fuzz(rapid.MakeFuzz(prop))
 }
 ```
 
@@ -214,31 +220,33 @@ Example structure:
 package mypackage
 
 import (
-    "context"
-    "testing"
-    "pgregory.net/rapid"
+	"context"
+	"testing"
+	"time"
+
+	"pgregory.net/rapid"
 )
 
 func TestMyFunction(t *testing.T) {
-    rapid.Check(t, func(rt *rapid.T) {
-        input := myGenerator().Draw(rt, "input")
+	rapid.Check(t, func(rt *rapid.T) {
+		input := myGenerator().Draw(rt, "input")
 
-        ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-        defer cancel()
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
 
-        done := make(chan struct{})
-        go func() {
-            defer close(done)
-            _ = mypackage.MyFunction(input)
-        }()
+		done := make(chan struct{})
+		go func() {
+			defer close(done)
+			_ = mypackage.MyFunction(input)
+		}()
 
-        select {
-        case <-done:
-            // success
-        case <-ctx.Done():
-            rt.Fatal("function timed out")
-        }
-    })
+		select {
+		case <-done:
+			// success
+		case <-ctx.Done():
+			rt.Fatal("function timed out")
+		}
+	})
 }
 ```
 

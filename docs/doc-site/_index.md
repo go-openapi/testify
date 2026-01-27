@@ -20,7 +20,7 @@ This is the go-openapi fork of the great [testify](https://github.com/stretchr/t
 {{% button href="https://github.com/go-openapi/testify/fork" hint="fork me on github" style=primary icon=code-fork %}}Fork me{{% /button %}}
 Design and exploration phase. Feedback, contributions and proposals are welcome.
 
-See our [ROADMAP](./maintainers/ROADMAP.md).
+See our [ROADMAP](./project/maintainers/ROADMAP.md).
 
 ### Motivation
 
@@ -31,7 +31,7 @@ See [why we wanted a v2](./MOTIVATION.md).
 Import this library in your project like so.
 
 ```cmd
-    go get github.com/go-openapi/testify/v2
+go get github.com/go-openapi/testify/v2
 ```
 
 ... and start writing tests. Look at our [examples][doc-examples].
@@ -43,7 +43,7 @@ Import this library in your project like so.
 {{< cards >}}
 {{% card title="Standard library" %}}
 ```go
-    import (
+import (
         "testing"
     )
     ...
@@ -64,7 +64,7 @@ Import this library in your project like so.
 
 {{% card title="testify" %}}
 ```go
-    import (
+import (
         "testing"
 
         "github.com/go-openapi/testify/v2/require"
@@ -91,7 +91,7 @@ Obviously, the `Assertion` type cannot be extended with generic methods, as of `
 {{< cards >}}
 {{% card title="EqualT" %}}
 ```go
-    import (
+import (
         "testing"
 
         "github.com/go-openapi/testify/v2/require"
@@ -107,7 +107,7 @@ Obviously, the `Assertion` type cannot be extended with generic methods, as of `
 {{% /card %}}
 {{% card title="InDeltaT" %}}
 ```go
-    import (
+import (
         "testing"
 
         "github.com/go-openapi/testify/v2/require"
