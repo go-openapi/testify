@@ -218,7 +218,7 @@ func TestConditionEventuallyNoLeak(t *testing.T) {
 	})
 }
 
-func TestConditionEventuallyWithT(t *testing.T) {
+func TestConditionEventuallyWith(t *testing.T) {
 	t.Parallel()
 
 	t.Run("should complete with false", func(t *testing.T) {
@@ -232,7 +232,7 @@ func TestConditionEventuallyWithT(t *testing.T) {
 			Fail(collect, "another condition fixed failure")
 		}
 
-		False(t, EventuallyWithT(mock, condition, testTimeout, testTick))
+		False(t, EventuallyWith(mock, condition, testTimeout, testTick))
 
 		const expectedErrors = 4
 		Len(t, mock.errors, expectedErrors, "expected 2 errors from the condition, and 2 additional errors from Eventually")
@@ -253,7 +253,7 @@ func TestConditionEventuallyWithT(t *testing.T) {
 			True(collect, counter == 2)
 		}
 
-		True(t, EventuallyWithT(mock, condition, testTimeout, testTick))
+		True(t, EventuallyWith(mock, condition, testTimeout, testTick))
 		Len(t, mock.errors, 0)
 		const expectedCalls = 2
 		Equal(t, expectedCalls, counter, "Condition is expected to have been called 2 times")
@@ -267,8 +267,8 @@ func TestConditionEventuallyWithT(t *testing.T) {
 			Fail(collect, "condition fixed failure")
 		}
 
-		// To trigger race conditions, we run EventuallyWithT with a nanosecond tick.
-		False(t, EventuallyWithT(mock, condition, testTimeout, time.Nanosecond))
+		// To trigger race conditions, we run EventuallyWith with a nanosecond tick.
+		False(t, EventuallyWith(mock, condition, testTimeout, time.Nanosecond))
 		const expectedErrors = 3
 		Len(t, mock.errors, expectedErrors, "expected 1 errors from the condition, and 2 additional errors from Eventually")
 	})
@@ -294,7 +294,7 @@ func TestConditionEventuallyWithT(t *testing.T) {
 			Fail(collect, "condition fixed failure")
 		}
 
-		False(t, EventuallyWithT(mock, condition, testTimeout, testTick))
+		False(t, EventuallyWith(mock, condition, testTimeout, testTick))
 		const expectedErrors = 3
 		Len(t, mock.errors, expectedErrors, "expected 1 errors from the condition, and 2 additional errors from Eventually")
 	})
@@ -307,7 +307,7 @@ func TestConditionEventuallyWithT(t *testing.T) {
 
 		// By making the tick longer than the total duration, we expect that this test would fail if
 		// we didn't check the condition before the first tick elapses.
-		True(t, EventuallyWithT(mock, condition, testTimeout, time.Second))
+		True(t, EventuallyWith(mock, condition, testTimeout, time.Second))
 	})
 
 	t.Run("should fail with a call to collect.FailNow", func(t *testing.T) {
@@ -316,16 +316,16 @@ func TestConditionEventuallyWithT(t *testing.T) {
 		mock := new(errorsCapturingT)
 		counter := 0
 
-		// The call to FailNow cancels the execution context of EventuallyWithT.
+		// The call to FailNow cancels the execution context of EventuallyWith.
 		// so we don't have to wait for the timeout.
 		condition := func(collect *CollectT) {
 			counter++
 			collect.FailNow()
 		}
 
-		False(t, EventuallyWithT(mock, condition, 30*time.Minute, testTick))
+		False(t, EventuallyWith(mock, condition, 30*time.Minute, testTick))
 		const expectedErrors = 2
-		Len(t, mock.errors, expectedErrors) // we have 0 accumulated error + 2 errors from EventuallyWithT (includes the timeout)
+		Len(t, mock.errors, expectedErrors) // we have 0 accumulated error + 2 errors from EventuallyWith (includes the timeout)
 		if counter != 1 {
 			t.Errorf("expected the condition function to have been called only once, but got: %d", counter)
 		}

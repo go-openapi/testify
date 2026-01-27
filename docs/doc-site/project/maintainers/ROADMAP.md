@@ -52,7 +52,7 @@ timeline
 6. [x] Introduces colorization (opt-in)
 7. [x] Introduces generics
 8. [x] Realign behavior re quirks, bugs, unexpected logics ... (e.g. IsNonDecreasing, EventuallyWithT...)
-10. [ ] Unclear assertions might be provided an alternative verb (e.g. `EventuallyWithT`)
+10. [x] Unclear assertions might be provided an alternative verb (e.g. `EventuallyWithT`)
 
 ### Adoption timeline at go-openapi
 

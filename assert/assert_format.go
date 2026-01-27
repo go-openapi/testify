@@ -185,14 +185,14 @@ func Eventuallyf(t T, condition func() bool, waitFor time.Duration, tick time.Du
 	return assertions.Eventually(t, condition, waitFor, tick, forwardArgs(msg, args))
 }
 
-// EventuallyWithTf is the same as [EventuallyWithT], but it accepts a format msg string to format arguments like [fmt.Printf].
+// EventuallyWithf is the same as [EventuallyWith], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func EventuallyWithTf(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msg string, args ...any) bool {
+func EventuallyWithf(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msg string, args ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.EventuallyWithT(t, condition, waitFor, tick, forwardArgs(msg, args))
+	return assertions.EventuallyWith(t, condition, waitFor, tick, forwardArgs(msg, args))
 }
 
 // Exactlyf is the same as [Exactly], but it accepts a format msg string to format arguments like [fmt.Printf].

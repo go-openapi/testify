@@ -211,9 +211,10 @@ See also a quick [migration guide](./MIGRATION.md).
 
 | Change | Origin | Description |
 |--------|--------|-------------|
-| Fixed goroutine leak | [#1611] | Consolidated `Eventually`, `Never`, and `EventuallyWithT` into single `pollCondition` function |
+| Fixed goroutine leak | [#1611] | Consolidated `Eventually`, `Never`, and `EventuallyWith` into single `pollCondition` function |
 | Context-based polling | Internal refactoring | Reimplemented with context-based approach for better resource management |
 | Unified implementation | Internal refactoring | Single implementation eliminates code duplication and prevents resource leaks |
+| **Renaming** | `EventuallyWithT` renamed into `EventuallyWith` (conflicted with the convention adopted for generics) |
 
 **Impact**: This fix eliminates goroutine leaks that could occur when using `Eventually` or `Never` assertions. The new implementation uses a context-based approach that properly manages resources and provides a cleaner shutdown mechanism. Callers should **NOT** assume that the call to `Eventually` or `Never` exits before the condition is evaluated. Callers should **NOT** assume that the call to `Eventually` or `Never` exits before the condition is evaluated.
 

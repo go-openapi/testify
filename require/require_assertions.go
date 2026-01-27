@@ -478,7 +478,7 @@ func Eventually(t T, condition func() bool, waitFor time.Duration, tick time.Dur
 	t.FailNow()
 }
 
-// EventuallyWithT asserts that the given condition will be met in waitFor time,
+// EventuallyWith asserts that the given condition will be met in waitFor time,
 // periodically checking the target function at each tick.
 //
 // In contrast to [Eventually], the condition function is supplied with a [CollectT]
@@ -500,7 +500,7 @@ func Eventually(t T, condition func() bool, waitFor time.Duration, tick time.Dur
 //		externalValue = true
 //	}()
 //
-//	assertions.EventuallyWithT(t, func(c *assertions.CollectT) {
+//	assertions.EventuallyWith(t, func(c *assertions.CollectT) {
 //		// add assertions as needed; any assertion failure will fail the current tick
 //		assertions.True(c, externalValue, "expected 'externalValue' to be true")
 //	},
@@ -520,11 +520,11 @@ func Eventually(t T, condition func() bool, waitFor time.Duration, tick time.Dur
 //	failure: func(c *CollectT) { False(c,true) }, 100*time.Millisecond, 20*time.Millisecond
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func EventuallyWithT(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) {
+func EventuallyWith(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.EventuallyWithT(t, condition, waitFor, tick, msgAndArgs...) {
+	if assertions.EventuallyWith(t, condition, waitFor, tick, msgAndArgs...) {
 		return
 	}
 
