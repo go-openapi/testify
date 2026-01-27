@@ -159,9 +159,9 @@ func ExampleEventually() {
 	// Output: success: true
 }
 
-func ExampleEventuallyWithT() {
+func ExampleEventuallyWith() {
 	t := new(testing.T)
-	success := assert.EventuallyWithT(t, func(c *assert.CollectT) {
+	success := assert.EventuallyWith(t, func(c *assert.CollectT) {
 		assert.True(c, true)
 	}, 100*time.Millisecond, 20*time.Millisecond)
 	fmt.Printf("success: %t\n", success)

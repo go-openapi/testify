@@ -160,9 +160,9 @@ func ExampleEventually() {
 	// Output: passed
 }
 
-func ExampleEventuallyWithT() {
+func ExampleEventuallyWith() {
 	t := new(testing.T)
-	require.EventuallyWithT(t, func(c *assert.CollectT) {
+	require.EventuallyWith(t, func(c *assert.CollectT) {
 		assert.True(c, true)
 	}, 100*time.Millisecond, 20*time.Millisecond)
 	fmt.Println("passed")

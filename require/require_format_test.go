@@ -357,11 +357,11 @@ func TestEventuallyf(t *testing.T) {
 	})
 }
 
-func TestEventuallyWithTf(t *testing.T) {
+func TestEventuallyWithf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		EventuallyWithTf(t, func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond, "test message")
+		EventuallyWithf(t, func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond, "test message")
 		// require functions don't return a value
 	})
 
@@ -369,10 +369,10 @@ func TestEventuallyWithTf(t *testing.T) {
 		t.Parallel()
 
 		mock := new(mockFailNowT)
-		EventuallyWithTf(mock, func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond, "test message")
+		EventuallyWithf(mock, func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond, "test message")
 		// require functions don't return a value
 		if !mock.failed {
-			t.Error("EventuallyWithT should call FailNow()")
+			t.Error("EventuallyWith should call FailNow()")
 		}
 	})
 }

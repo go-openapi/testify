@@ -123,8 +123,6 @@ The `f` suffix follows Go's standard library convention (like `Printf`, `Errorf`
 - **Generic (`T` suffix)**: Prefer for compile-time type safety and better performance
 {{% /notice %}}
 
-One (historical) exception: `EventuallyWithT` is not generic...
-
 ### Inverse Assertions
 
 Most assertions come with their opposite variant, typically formed by adding a `Not` prefix:

@@ -28,7 +28,7 @@ type (
 
 	// CollectT implements the [T] interface and collects all errors.
 	//
-	// [CollectT] is specifically intended to be used with [EventuallyWithT] and
+	// [CollectT] is specifically intended to be used with [EventuallyWith] and
 	// should not be used outside of that context.
 	CollectT = assertions.CollectT
 

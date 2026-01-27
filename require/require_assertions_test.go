@@ -357,11 +357,11 @@ func TestEventually(t *testing.T) {
 	})
 }
 
-func TestEventuallyWithT(t *testing.T) {
+func TestEventuallyWith(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		EventuallyWithT(t, func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
+		EventuallyWith(t, func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
 		// require functions don't return a value
 	})
 
@@ -369,10 +369,10 @@ func TestEventuallyWithT(t *testing.T) {
 		t.Parallel()
 
 		mock := new(mockFailNowT)
-		EventuallyWithT(mock, func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
+		EventuallyWith(mock, func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
 		// require functions don't return a value
 		if !mock.failed {
-			t.Error("EventuallyWithT should call FailNow()")
+			t.Error("EventuallyWith should call FailNow()")
 		}
 	})
 }

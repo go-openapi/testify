@@ -105,7 +105,7 @@ func Never(t T, condition func() bool, waitFor time.Duration, tick time.Duration
 	return never(t, condition, waitFor, tick, msgAndArgs...)
 }
 
-// EventuallyWithT asserts that the given condition will be met in waitFor time,
+// EventuallyWith asserts that the given condition will be met in waitFor time,
 // periodically checking the target function at each tick.
 //
 // In contrast to [Eventually], the condition function is supplied with a [CollectT]
@@ -127,7 +127,7 @@ func Never(t T, condition func() bool, waitFor time.Duration, tick time.Duration
 //		externalValue = true
 //	}()
 //
-//	assertions.EventuallyWithT(t, func(c *assertions.CollectT) {
+//	assertions.EventuallyWith(t, func(c *assertions.CollectT) {
 //		// add assertions as needed; any assertion failure will fail the current tick
 //		assertions.True(c, externalValue, "expected 'externalValue' to be true")
 //	},
@@ -145,7 +145,7 @@ func Never(t T, condition func() bool, waitFor time.Duration, tick time.Duration
 //
 //	success: func(c *CollectT) { True(c,true) }, 100*time.Millisecond, 20*time.Millisecond
 //	failure: func(c *CollectT) { False(c,true) }, 100*time.Millisecond, 20*time.Millisecond
-func EventuallyWithT(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+func EventuallyWith(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool {
 	// Domain: condition
 	if h, ok := t.(H); ok {
 		h.Helper()
@@ -480,7 +480,7 @@ func (p *conditionPoller) cancellableContext(parentCtx context.Context, waitFor 
 
 // CollectT implements the [T] interface and collects all errors.
 //
-// [CollectT] is specifically intended to be used with [EventuallyWithT] and
+// [CollectT] is specifically intended to be used with [EventuallyWith] and
 // should not be used outside of that context.
 type CollectT struct {
 	// Domain: condition
@@ -507,7 +507,7 @@ func (c *CollectT) Errorf(format string, args ...any) {
 	c.errors = append(c.errors, fmt.Errorf(format, args...))
 }
 
-// FailNow records a failure and cancels the parent [EventuallyWithT] context,
+// FailNow records a failure and cancels the parent [EventuallyWith] context,
 // before exiting the current go routine with [runtime.Goexit].
 //
 // This causes the assertion to fail immediately without waiting for a timeout.
