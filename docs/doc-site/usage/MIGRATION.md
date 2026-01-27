@@ -123,10 +123,12 @@ Replace testify suites with:
 - Standard Go subtests for test organization
 - or wait until we reintroduce this feature (possible, but not certain)
 
-### 6. Remove HTTP Assertion Usage
+### 6. Remove use of the `testify/http` package
 
 If you were still using the deprecated package `github.com/stretchr/testitfy/http`,
-you'll need to replace with standard HTTP testing. We won't reintroduce this package ever.
+you'll need to replace it by the standard `net/http/httptest` package.
+
+We won't reintroduce this package ever.
 
 ## Breaking Changes Summary
 
@@ -136,9 +138,10 @@ you'll need to replace with standard HTTP testing. We won't reintroduce this pac
 - ❌ `mock` - Use [mockery](https://github.com/vektra/mockery)
 - ❌ `http` - May be reintroduced later
 
-### Removed Functions
+### Removed Functions and Types
 
 - ❌ All deprecated functions from v1 removed
+- ❌ Removed extraneous "helper" types: `PanicTestFunc` (`func()`)
 
 ### Behavior Changes
 

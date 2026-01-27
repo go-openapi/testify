@@ -6,7 +6,7 @@ weight: 16
 
 ## Upstream Tracking
 
-We continue to monitor and selectively adopt changes from upstream:
+We continue to monitor and selectively adopt changes from the upstream repository.
 
 ### Implemented from Upstream
 - ✅ [#1513] - JSONEqBytes

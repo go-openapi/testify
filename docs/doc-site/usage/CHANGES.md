@@ -7,24 +7,23 @@ weight: 15
 ## Summary
 
 **Key Changes:**
-- **Dependencies**: Zero external (internalized 2, optional 1 via enable pattern)
-- **New functions**: 51 total (38 generic + 13 reflection-based)
-- **Performance**: ~10x for generic variants (from 1.2x to 81x, your mileage may vary)
-- **Architecture**: 100% code generation from single source
-- **Breaking changes**: Requires go1.24, removed suites, mocks, http tooling, and deprecated functions. YAMLEq becomes optional (panics by default).
+- ✅ **Zero Dependencies**: Completely self-contained
+- ✅ **New functions**: 51 additional assertions (38 generic + 13 reflection-based)
+- ✅ **Performance**: ~10x for generic variants (from 1.2x to 81x, your mileage may vary)
+- ✅ **Breaking changes**: Requires go1.24, removed suites, mocks, http tooling, and deprecated functions. YAMLEq becomes optional (panics by default).
 
 ---
 
 **Testify v2 represents a comprehensive modernization**
 
-- ✅ **Zero Dependencies**: Completely self-contained
 - ✅ **Type Safety**: 38 generic assertions catch errors at compile time
-- ✅ **Performance**: Up to 81x faster with generics
-- ✅ **Documentation**: compelling Hugo site to document the API by use-case domain
-- ✅ **Quality**: 96% test coverage, extensive fuzzing & benchmarking
+- ✅ **Documentation**: compelling documentation site to search the API by use-case domain
 - ✅ **Maintainability**: 100% code generation from single source
+- ✅ **Quality**: 96% test coverage, use unified test scenarios, extensive fuzzing & benchmarking
 
 This fork maintains compatibility where possible while making bold improvements in architecture, safety, and performance.
+
+The original philosophy of `testify` is preserved, and the new API is 90% compatible.
 
 **Fork Information:**
 - **Upstream repository**: [github.com/stretchr/testify](https://github.com/stretchr/testify)
@@ -355,7 +354,9 @@ See also a quick [migration guide](./MIGRATION.md).
 
 **New functions**: None
 
-**Behavior changes**: None
+#### ⚠️ Behavior Changes
+
+Removed extraneous type declaration `PanicTestFunc` (`func()`).
 
 ### String
 

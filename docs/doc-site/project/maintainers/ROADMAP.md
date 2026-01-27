@@ -10,30 +10,39 @@ weight: 4
 timeline
     title Planned releases
     section Q4 2025
-    ✅ v2.0 (Nov 2025) : zero dependencies
+    ✅ v2.0 (Nov 2025) : Zero dependencies
                     : optional dependencies (YAML)
                     : modernized code (relint)
                     : JSONEqBytes
     section Q1 2026
-    ✅ v2.1 (Jan 2026) : generated assertions
+    ✅ v2.1 (Jan 2026) : Generated assertions
                     : complete refactoring
                     : documentation site
                     : panic handling fixes
                     : removed deprecated
-    📝 v2.2 (Fev 2026) : generics
+    📝 v2.2 (Fev 2026) : Generics
                     : Kind/NotKind
                     : SortedT, NotSortedT
                     : complete test refactoring
                     : more benchmarks. Perf improvements
                     : optional dependencies (colorized)
-    ⏳ v2.3 (Mar 2026) : other extensions
-                    : JSON assertions. JSONMarshalsAs...
+    ⏳ v2.3 (Fev 2026) : Other extensions
+                    : Extensible Assertion type
+                    : JSON & YAML assertions: JSONMarshalsAs...
+                    : NoGoroutineLeak
                     : more documentation and examples
-                    : export internal tools (spew, difflib, benchviz)
+    📝 v2.4 (Mar 2026) : Stabilize API (no more removals)
+                    : NoFileDescriptorLeak (unix)
+                    : async: Eventually/Never to accept error and context
+                    : JSONPointerT
+                    : export internal tools (spew, difflib,
     section Q2 2026
-    v2.4 (Apr 2026) : Stabilize API
+    v2.5 (May 2026) : New candidate features from upstream
+                    : NoFileDescriptorLeak (windows port)
                     : export internal tools (blackbox)
 {{< /mermaid >}}
+
+## Notes
 
 1. [x] The first release comes with zero dependencies and an unstable API (see below [our use case](#usage-at-go-openapi))
 2. [x] This project is going to be injected as the main and sole test dependency of the `go-openapi` libraries
@@ -43,9 +52,13 @@ timeline
 6. [x] Introduces colorization (opt-in)
 7. [x] Introduces generics
 8. [x] Realign behavior re quirks, bugs, unexpected logics ... (e.g. IsNonDecreasing, EventuallyWithT...)
-9. [ ] New features following test simplification effort in go-openapi repos (e.g. JSONMarshalsAs ...)
 10. [ ] Unclear assertions might be provided an alternative verb (e.g. `EventuallyWithT`)
-11. [ ] Inject this test dependency into the `go-swagger` tool
+
+### Adoption timeline at go-openapi
+
+1. [x]  Jan 2026: all go-openapi projects adopts the forked testify
+2. [ ] Feb 2026: all go-openapi projects transition to generics
+3. [ ] Mar 2026: go-swagger transitions to the forked testify
 
 ### What won't come anytime soon
 
@@ -59,7 +72,7 @@ We actively monitor [github.com/stretchr/testify](https://github.com/stretchr/te
 
 **Review frequency**: Quarterly (next review: April 2026)
 
-**Processed items**: 28 upstream PRs and issues have been reviewed, with 21 implemented/merged, 5 superseded by our implementation or merely marked as informational, and 2 currently under consideration. See also [Tracking](../../usage/TRACKING.md).
+**Processed items**: 28 upstream PRs and issues have been reviewed, with 21 implemented/merged, 5 superseded by our implementation or merely marked as informational, and 2 currently under consideration.
 
 For a complete catalog of all upstream PRs and issues we've processed (implemented, adapted, superseded, or monitoring), see the [Upstream Tracking](../../usage/TRACKING.md).
 

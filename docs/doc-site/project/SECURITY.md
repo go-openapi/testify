@@ -2,7 +2,7 @@
 title: Security Policy
 description: |
   This document outlines the commitment and practices of the go-openapi maintainers regarding security
-weight: 2
+weight: 3
 ---
 
 This policy outlines the commitment and practices of the go-openapi maintainers regarding security.
@@ -11,7 +11,7 @@ This policy outlines the commitment and practices of the go-openapi maintainers 
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 2.1.x   | :white_check_mark: |
+| 2.2.x   | :white_check_mark: |
 
 ## Vulnerability checks in place
 

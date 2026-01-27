@@ -77,7 +77,7 @@ This repository uses code generation extensively to maintain consistency across 
     style not_generated_require fill:#4a9eff,color:#fff
 {{< /mermaid >}}
 
-> The generator scans source code, extracts metadata, builds a model, and applies templates to generate ~600+ functions, tests, and documentation from ~70-80+ source functions.
+> The generator scans source code, extracts metadata, builds a model, and applies templates to generate ~800+ functions, tests, and documentation from ~100+ source functions.
 
 ---
 
@@ -158,7 +158,9 @@ graph TD
     style require_group fill:#ffb6c1,color:#000
 {{< /mermaid >}}
 
-> **76 functions × 8 variants = 608 generated functions** (plus tests and documentation for each)
+> **reflection-based assertions become 8, generic assertions become 4**
+>
+> (plus tests and documentation for each).
 
 ---
 

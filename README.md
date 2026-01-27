@@ -122,7 +122,7 @@ thus reducing their dependencies footprint.
 
 Go-swagger will be adapted over Q1 2026.
 
-Features will probably be added to support our main use cases there.
+Features will be added to support our main use cases there.
 
 ## Change log
 
@@ -144,6 +144,7 @@ distributed with this fork, including internalized libraries.
 * [Motivations](https://go-openapi.github.io/testify/project/readme)
 * [Roadmap][doc-roadmap]
 * [Internal architecture](https://go-openapi.github.io/testify/project/maintainers/architecture)
+* [Benchmarks](https://go-openapi.github.io/testify/project/maintainers/benchmarks)
 
 * [All-time contributors](./CONTRIBUTORS.md)
 * [Contributing guidelines](https://go-openapi.github.io/testify/project/contributing/)

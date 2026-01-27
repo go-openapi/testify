@@ -20,32 +20,11 @@ This is the go-openapi fork of the great [testify](https://github.com/stretchr/t
 {{% button href="https://github.com/go-openapi/testify/fork" hint="fork me on github" style=primary icon=code-fork %}}Fork me{{% /button %}}
 Design and exploration phase. Feedback, contributions and proposals are welcome.
 
+See our [ROADMAP](./maintainers/ROADMAP.md).
+
 ### Motivation
 
-From the maintainers of `testify`, it looks like a v2 will eventually be released, but they'll do it at their own pace.
-
-We like all the principles they exposed to build this v2. [See discussion about v2](https://github.com/stretchr/testify/discussions/1560).
-
-However, at `go-openapi` we would like to address the well-known issues in `testify` with different priorities.
-
-With this fork, we want to:
-1. [x] remove all external dependencies.
-2. [x] make it easy to maintain and extend.
-3. [x] pare down some of the chrome that has been added over the years.
-
-{{% notice style="primary" title="Extended hand" icon="hand" %}}
-We hope that this endeavor will help the original project with a live-drill of what a v2 could look like.
-
-Hopefully, some of our ideas will eventually percolate back into the original project and help the wider 
-community of go developers write better, clearer test code.
-
-Feedback is welcome and we are always happy to discuss with people who face the same problems as we do: avoid breaking changes, 
-APIs that became bloated over a decade or so, uncontrolled dependencies, difficult choices when it comes to introduce
-breaking changes, conflicting demands from users etc.
-{{% /notice %}}
-
-Find more about our motivations in the project's [README](README.md#motivation).
-You might also be curious about our [ROADMAP](project/maintainers/ROADMAP.md).
+See [why we wanted a v2](./MOTIVATION.md).
 
 ### Getting started
 
@@ -179,6 +158,7 @@ See also our [CONTRIBUTING guidelines](./project/contributing/CONTRIBUTING.md).
 - [Generics Guide](./usage/GENERICS.md) - Type-safe assertions with 38 generic functions
 - [Migration Guide](./usage/MIGRATION.md) - Migrating from stretchr/testify v1
 - [Changes from v1](./usage/CHANGES.md) - All changes and improvements in v2
+- [Benchmarks](./project/maintainers/benchmarks.md) - Performance improvements in v2
 
 **Reference:**
 - [API Reference](./api/_index.md) - Complete assertion catalog organized by domain

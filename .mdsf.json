@@ -1,0 +1,13 @@
+{
+  "$schema": "https://raw.githubusercontent.com/hougesen/mdsf/main/schemas/v0.11.1/mdsf.schema.json",
+  "format_finished_document": false,
+  "languages": {
+    "go": "golangci-lint:fmt",
+    "shell": "shfmt"
+  },
+  "language_aliases": {
+    "sh": "shell",
+    "cmd": "shell",
+    "bash": "shell"
+  }
+}

@@ -1,51 +1,21 @@
 ---
 title: README
 description: |
-  Introducing `go-openapi/testify/v2`.
+  Introducing go-openapi/testify/v2.
 
   - Approach
   - Main features
   - Differences with v1
-weight: 1
+weight: 2
 ---
 
-**Go testing assertions for the rest of us**
+**The v2 our tests wanted**
 
 ## Motivation
 
-1. We want first to remove all external dependencies.
+See [why we wanted a v2](./MOTIVATION.md).
 
-> For all our libraries and generated test code we don't want test dependencies
-> to drill farther than `import github.com/go-openapi/testify/v2`, but on some specific (and controlled)
-> occasions.
->
-> In this fork, all external stuff is either internalized (`go-spew`, `difflib`),
-> removed (`mocks`, `suite`, `http`) or specifically enabled by importing this module
-> (`github.com/go-openapi/testify/enable/yaml/v2`).
-
-2. Make it easy to maintain and extend.
-
-> For go-openapi, testify should just be yet another part of our toolkit.
-> We need it to work, be easily adaptable to our needs and not divert our development effort away from our other repos.
-> This big refactor is an investment that has to pay off.
-
-3. We want to pare down some of the chrome that has been added over the years
-
-> The `go-openapi` libraries and the `go-swagger` project make a rather limited use of the vast API provided by `testify`.
->
-> With this first version of the fork, we have removed `mocks` and `suite`, which we don't use.
-> They might be added later on, with better controlled dependencies.
->
-> In the forthcoming maintenance of this fork, much of the "chrome" or "ambiguous" API will be pared down.
-> There is no commitment yet on the stability of the API.
->
-> Chrome would be added later: we have the "enable" packages just for that.
-
-4. We hope that this endeavor will help the original project with a live-drill of what a v2 could look like.
-   We are always happy to discuss with people who face the same problems as we do: avoid breaking changes, 
-   APIs that became bloated over a decade or so, uncontrolled dependencies, conflicting demands from users etc.
-
-### The approach with this fork
+### Approach with this fork
 
 This fork targets **go1.24**.
 

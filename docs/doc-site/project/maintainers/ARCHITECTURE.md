@@ -4,6 +4,65 @@ description: Project structure
 weight: 2
 ---
 
+## Primer
+
+### Goals
+
+We want the maintainance of dozens of test assertions, times many variants, to remain reasonably low.
+
+The maintainance flow is intended to require different activities and levels of understanding,
+dependending on the complexity of a planned evolution.
+
+{{< mermaid align="center" zoom="true" >}}
+journey
+    section Fixes & minor enhancements
+      internal/assertions:5: Knowledge of the functionality
+    section New dependencies
+      internal/assertions/enable/...:5: Understanding of the repo architecture
+      enable/...:5:  Understanding of the repo architecture
+    section API changes
+      regenerate code:5: No specific knowledge
+    section New constructs to support
+      code & doc generator:5: Knowledge of internals
+{{< /mermaid >}}
+
+Fixes and enhancements propagate naturally to the variants without the need to regenerate code.
+
+### The maths with assertion variants
+
+Each test assertion produces 2 base variants (assert, require).
+
+Each of these variants produces another formatted variant. Except for generic assertions, we produce
+one "forward" variant and one "forward formatted" variant (as methods).
+
+**For every non-generic assertion: 8 variants.**
+
+**For every generic assertion: 4 variants.**
+
+**For every "helper" function (not an assertion): 2 variants.**
+
+
+All these variants make up several hundreds functions, which poses a challenge for maintainance and documentation.
+
+We have adopted code and documentation generation as a mean to mitigate this issue.
+
+#### Current (v2.2.0)
+
+ 1. Generic assertions (with type parameters): 38 functions
+ 2. Non-generic assertions (with t T parameter, no type parameters): 82 functions
+ 3. Helper functions (no t T parameter): 4 functions
+
+ Total: 124 functions to _maintain_
+
+ **Generated Functions**
+
+ 1. Generic assertions: 152
+ 2. Non-generic assertions: 656
+ 3. Helper functions: 8
+ 4. Constructors: 2
+
+ Total: 818 functions
+
 ## Architecture Overview
 
 {{< mermaid align="center" zoom="true" >}}
@@ -31,7 +90,6 @@ All assertion implementations live in `internal/assertions/`, organized by domai
 **Code Generator: `codegen/`**
 
 The generator scans `internal/assertions/` and produces:
-- n assertion functions × 8 variants = 608 generated functions (current: n=76)
 - Package-level functions (`assert.Equal`, `require.Equal`)
 - Format variants (`assert.Equalf`, `require.Equalf`)
 - Forward methods (`a.Equal()`, `r.Equal()`)
@@ -40,6 +98,8 @@ The generator scans `internal/assertions/` and produces:
 - Documentation for documentation site, organized by domain
 
 **Generated Packages: `assert/` and `require/`**
+
+The generated functions directly call the internal implementation: no code duplication or change in semantics.
 
 **Generated Documentation: `docs/doc-site/api/`**
 
@@ -57,3 +117,7 @@ The `enable/` package provides optional features that users can activate via bla
 - `enable/colors/` - Activates colorized output via `import _ "github.com/go-openapi/testify/v2/enable/colors"`
 
 These packages are not generated and allow optional dependencies to be isolated from the core library.
+
+## See Also
+
+- [Code generation](./CODEGEN.md) - Detailed view of our code and doc generator
