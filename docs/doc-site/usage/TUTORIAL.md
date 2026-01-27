@@ -114,7 +114,7 @@ Instead of writing separate test functions for each case:
 import (
 	"testing"
 
-	"gotest.tools/assert"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 // ❌ Don't do this - repetitive and hard to maintain
@@ -255,7 +255,7 @@ func TestAdd(t *testing.T) {
 import (
 	"testing"
 
-	"gotest.tools/assert"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func TestAdd(t *testing.T) {
@@ -470,7 +470,7 @@ Always use `t.Parallel()` unless you have a specific reason not to:
 import (
 	"testing"
 
-	"gotest.tools/assert"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func TestAdd(t *testing.T) {

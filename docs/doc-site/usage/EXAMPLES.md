@@ -35,7 +35,7 @@ func TestCalculator(t *testing.T) {
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func TestUser(t *testing.T) {
@@ -54,8 +54,7 @@ func TestUser(t *testing.T) {
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
+	"github.com/go-openapi/testify/v2/assert"
 	"github.com/go-openapi/testify/v2/require"
 )
 
@@ -210,8 +209,7 @@ Testify provides multiple ways to call assertions:
 import (
 	"testing"
 
-	"gotest.tools/assert"
-
+	"github.com/go-openapi/testify/v2/assert"
 	"github.com/go-openapi/testify/v2/require"
 )
 
@@ -291,7 +289,7 @@ import (
 	"slices"
 	"testing"
 
-	"gotest.tools/assert"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func TestAdd(t *testing.T) {
@@ -456,17 +454,16 @@ func TestPanics(t *testing.T) {
 import (
 	"testing"
 
-	"gotest.tools/assert"
-
+	"github.com/go-openapi/testify/v2/assert"
 	"github.com/go-openapi/testify/v2/require"
 )
 
 func TestWithSetup(t *testing.T) {
 	// Setup
 	db := setupTestDatabase(t)
-    t.Cleanup(func() {
-	    db.Close() // Teardown
-    })
+	t.Cleanup(func() {
+		db.Close() // Teardown
+	})
 
 	// Test
 	user := &User{Name: "Alice"}

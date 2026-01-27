@@ -45,7 +45,7 @@ We continue to monitor and selectively adopt changes from the upstream repositor
 [#1822]: https://github.com/stretchr/testify/issues/1822
 [#1825]: https://github.com/stretchr/testify/pull/1825
 [#1828]: https://github.com/stretchr/testify/pull/1828
-[1829]: https://github.com/stretchr/testify/issues/1829
+[#1829]: https://github.com/stretchr/testify/issues/1829
 
 ## Appendix: Upstream References
 
