@@ -372,7 +372,7 @@ standards, then **assertion-style testing is the natural extension of those valu
 
 BDD frameworks serve teams with different priorities (narrative specifications, framework-managed workflows, stakeholder
 communication). Those are valid priorities. But they optimize for values orthogonal to Go's design philosophy.
-For such teams, **Ginkgo/Omega** provides a great BDD testing framework.
+For such teams, **Ginkgo/Gomega** provides a great BDD testing framework.
 
 **For Go developers who embrace Go values, assertion-style testing is the idiomatic approach.**. And **testify** is the tool.
 

@@ -29,7 +29,7 @@ APIs that became bloated over a decade or so, uncontrolled dependencies, difficu
 breaking changes, conflicting demands from users etc.
 {{% /notice %}}
 
-You might also be curious about our [ROADMAP](project/maintainers/ROADMAP.md).
+You might also be curious about our [ROADMAP](./maintainers/ROADMAP.md).
 
 ---
 

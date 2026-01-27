@@ -30,7 +30,7 @@ Assertions are grouped by domain for easier discovery:
 | **Others** | HTTP, JSON, YAML, Time, File assertions | 12 |
 
 {{% notice style="info" title="Browse by Domain" icon="book" %}}
-See the complete [API Reference](../../api/_index.md) organized by domain for a  detailed documentation of all assertions.
+See the complete [API Reference](../api/_index.md) organized by domain for a detailed documentation of all assertions.
 {{% /notice %}}
 
 ## Navigating the Documentation
@@ -38,15 +38,15 @@ See the complete [API Reference](../../api/_index.md) organized by domain for a 
 ### Quick Reference
 
 - **[Examples](../examples)** - Practical code examples for common testing scenarios
-- **[API Reference](../../api/_index.md)** - Complete assertion catalog organized by domain
+- **[API Reference](../api/_index.md)** - Complete assertion catalog organized by domain
 - **[Generics Guide](../GENERICS.md)** - Using type-safe assertions with the `T` suffix
 - **[Changes](../CHANGES.md)** - All changes since fork from stretchr/testify
 - **[pkg.go.dev](https://pkg.go.dev/github.com/go-openapi/testify/v2)** - godoc API reference with full signatures
 
 ### Finding the Right Assertion
 
-1. Browse the [API Reference](../../api/_index.md) by domain (e.g., "Collection" for slice operations)
-2. Search in the [API Reference](../../api/_index.md) (use search box)
+1. Browse the [API Reference](../api/_index.md) by domain (e.g., "Collection" for slice operations)
+2. Search in the [API Reference](../api/_index.md) (use search box)
 3. Check (or search) the provided [Examples](../examples) for practical usage patterns
 4. Check [pkg.go.dev](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert) for alphabetical listing
 5. Use your editor's Go to Definition on any assertion
@@ -262,7 +262,7 @@ assert.Eventually(t, condition, waitFor, tick)      // Condition first, timing p
 
 {{% notice style="tip" title="Finding Argument Order" icon="lightbulb" %}}
 When unsure about argument order:
-- Check the [API Reference](../../api/_index.md) for detailed signatures
+- Check the [API Reference](../api/_index.md) for detailed signatures
 - Use IDE autocomplete to see parameter names
 - Consult [pkg.go.dev](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert) for complete documentation
 {{% /notice %}}
@@ -328,7 +328,7 @@ import (
 	"slices"
 	"testing"
 
-	"gotest.tools/assert"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func TestCalculation(t *testing.T) {
@@ -428,7 +428,9 @@ func TestTypeSafety(t *testing.T) {
 
 1. **Import the package:**
    ```go
+   import "github.com/go-openapi/testify/v2/assert"
    // or
+   import "github.com/go-openapi/testify/v2/require"
    ```
 
 2. **Choose your style:**
@@ -436,11 +438,11 @@ func TestTypeSafety(t *testing.T) {
    - Forward methods: `a := assert.New(t); a.Equal(expected, actual)`
 
 3. **Explore by domain:**
-   - Browse [API Reference](../../api/_index.md) to discover assertions
-   - Check [Examples](../examples) for practical patterns
+   - Browse [API Reference](../api/_index.md) to discover assertions
+   - Check [Examples](./EXAMPLES.md) for practical patterns
 
 4. **Use generics for type safety:**
-   - See [Generics Guide](../GENERICS.md) for type-safe assertions
+   - See [Generics Guide](./GENERICS.md) for type-safe assertions
    - Add `T` suffix for compile-time type checking
 
 ## Best Practices
@@ -463,7 +465,7 @@ func TestTypeSafety(t *testing.T) {
 {{% notice style="success" title="Ready to Test" icon="check" %}}
 **Next Steps:**
 - Explore [Examples](../examples) for practical usage patterns
-- Browse the [API Reference](../../api/_index.md) to discover assertions
+- Browse the [API Reference](../api/_index.md) to discover assertions
 - Read the [Generics Guide](../GENERICS.md) for type-safe testing
 - Check [pkg.go.dev](https://pkg.go.dev/github.com/go-openapi/testify/v2) for complete reference
 {{% /notice %}}
@@ -540,7 +542,7 @@ age: 30
 Different YAML libraries offer different trade-offs:
 
 **`gopkg.in/yaml.v3` (default):**
-- De factor standard library for Go YAML
+- De facto standard library for Go YAML
 - Widely used and well-tested
 - Complete YAML 1.2 support
 

@@ -1,6 +1,6 @@
 ---
 title: "Testing"
-description: "Mimicks Methods From The Testing Standard Library"
+description: "Mimics Methods From The Testing Standard Library"
 modified: 2026-01-27
 weight: 14
 domains:
@@ -12,7 +12,7 @@ keywords:
   - "FailNowf"
 ---
 
-Mimicks Methods From The Testing Standard Library
+Mimics Methods From The Testing Standard Library
 
 ## Assertions
 

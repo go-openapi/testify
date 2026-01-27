@@ -78,7 +78,7 @@ func TestUser(t *testing.T) {
    //               actualOrder ✗ (wrong type - grayed out)
    ```
 
-4. **Performance-critical tests** - See [benchmarks](../../project/maintainers/BENCHMARKS.md) for 1.2-81x speedups
+4. **Performance-critical tests** - See [benchmarks](../project/maintainers/BENCHMARKS.md) for 1.2-81x speedups
 
 ### 🔄 Use Reflection Variants (no suffix) When:
 
@@ -236,7 +236,7 @@ Testify v2 provides generic variants across all major domains:
 - `YAMLEqT[S Text]` - YAML strings are semantically equal
 
 {{% notice style="info" title="See Complete API" icon="book" %}}
-For a detailed documentation of all generic functions, see the [API Reference](../../api/_index.md) organized by domain.
+For a detailed documentation of all generic functions, see the [API Reference](../api/_index.md) organized by domain.
 {{% /notice %}}
 
 ## Practical Examples
@@ -527,7 +527,7 @@ Generic assertions provide significant performance improvements, especially for 
 | **SliceContainsT** | **16x faster** | Collection membership tests |
 
 {{% notice style="success" title="Learn More" icon="chart-line" %}}
-See the complete [Performance Benchmarks](../../project/maintainers/BENCHMARKS.md) for detailed analysis and real benchmark results.
+See the complete [Performance Benchmarks](../project/maintainers/BENCHMARKS.md) for detailed analysis and real benchmark results.
 {{% /notice %}}
 
 ## Best Practices
@@ -624,7 +624,7 @@ Generic assertions use custom type constraints defined in `internal/assertions/g
 - **Format variants**: Add `Tf` suffix (e.g., `EqualTf`, `GreaterTf`)
 - **When to use**: Prefer generics for known concrete types
 - **When not to**: Keep reflection for dynamic types and cross-type comparisons
-- **Performance**: See [benchmarks](../../project/maintainers/BENCHMARKS.md) for dramatic speedups
+- **Performance**: See [benchmarks](../project/maintainers/BENCHMARKS.md) for dramatic speedups
 {{% /notice %}}
 
 ---
@@ -634,6 +634,6 @@ Generic assertions use custom type constraints defined in `internal/assertions/g
 - [Examples](./EXAMPLES.md) - Practical examples including generic assertion usage
 - [Tutorial](./TUTORIAL.md) - Best practices for writing tests with testify
 - [Usage Guide](./USAGE.md) - API conventions and naming patterns
-- [Performance Benchmarks](../../project/maintainers/BENCHMARKS.md) - Detailed performance analysis of generic vs reflection
+- [Performance Benchmarks](../project/maintainers/BENCHMARKS.md) - Detailed performance analysis of generic vs reflection
 - [Changes from v1](./CHANGES.md) - Complete list of new generic functions and improvements
 - [API Reference](../api/_index.md) - Complete assertion catalog with all generic variants

@@ -1,7 +1,7 @@
 ---
 title: "Testify v2"
 type: home
-description: 'The v2 our test wanted'
+description: 'The v2 our tests wanted'
 weight: 1
 ---
 
@@ -167,4 +167,4 @@ See also our [CONTRIBUTING guidelines](./project/contributing/CONTRIBUTING.md).
 
 {{< children type="card" description="true" >}}
 
-[doc-examples]: ./usage/examples
+[doc-examples]: ./usage/EXAMPLES.md

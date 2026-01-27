@@ -45,7 +45,7 @@ Each domain contains assertions regrouped by their use case (e.g. http, json, er
 - [Ordering](./ordering.md) - Asserting How Collections Are Ordered (10)
 - [Panic](./panic.md) - Asserting A Panic Behavior (4)
 - [String](./string.md) - Asserting Strings (4)
-- [Testing](./testing.md) - Mimicks Methods From The Testing Standard Library (2)
+- [Testing](./testing.md) - Mimics Methods From The Testing Standard Library (2)
 - [Time](./time.md) - Asserting Times And Durations (2)
 - [Type](./type.md) - Asserting Types Rather Than Values (10)
 - [Yaml](./yaml.md) - Asserting Yaml Documents (3)

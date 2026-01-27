@@ -171,7 +171,7 @@ See also a quick [migration guide](./MIGRATION.md).
 
 **Origin**: Generic initiative + [#1685] (partial - SeqContains variants only)
 
-**Performance**: 16-81x faster than reflection-based variants (see [benchmarks](../../project/maintainers/BENCHMARKS.md))
+**Performance**: 16-81x faster than reflection-based variants (see [benchmarks](../project/maintainers/BENCHMARKS.md))
 
 [#1685]: https://github.com/stretchr/testify/pull/1685
 {{% /expand %}}
@@ -464,7 +464,7 @@ Removed extraneous type declaration `PanicTestFunc` (`func()`).
 
 ### Performance Improvements
 
-See [Performance Benchmarks](../../project/maintainers/BENCHMARKS.md) for a detailed presentation.
+See [Performance Benchmarks](../project/maintainers/BENCHMARKS.md) for a detailed presentation.
 
 #### Generic vs Reflection Performance
 
@@ -532,7 +532,7 @@ github.com/go-openapi/testify/v2           # Core (zero deps) [go.mod]
 | **Generated functions** | ~600 (76 × 8 variants - generics get 4 variants only) |
 | **Generic coverage** | 10 domains |
 | **Performance improvement** | 1.2x to 81x faster |
-| **Dependencies** | 0 external (was 2 requiredl) |
+| **Dependencies** | 0 external (was 2 required) |
 | **Test coverage** | 96% overall, 100% on public APIs |
 | **Documentation domains** | 18 logical categories |
 
@@ -542,7 +542,7 @@ github.com/go-openapi/testify/v2           # Core (zero deps) [go.mod]
 
 - [Migration Guide](./MIGRATION.md) - Step-by-step guide to migrating from testify v1
 - [Generics Guide](./GENERICS.md) - Detailed documentation of all 38 generic assertions
-- [Performance Benchmarks](../../project/maintainers/BENCHMARKS.md) - Comprehensive performance analysis
+- [Performance Benchmarks](../project/maintainers/BENCHMARKS.md) - Comprehensive performance analysis
 - [Examples](./EXAMPLES.md) - Practical usage examples showing new features
 - [Tutorial](./TUTORIAL.md) - Best practices for writing tests with testify v2
 - [API Reference](../api/_index.md) - Complete assertion catalog organized by domain
