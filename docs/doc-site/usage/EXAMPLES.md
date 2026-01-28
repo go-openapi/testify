@@ -526,6 +526,14 @@ func TestUserCompleteness(t *testing.T) {
 
 Testify provides three assertions for testing asynchronous code: `Eventually`, `Never`, and `EventuallyWith`.
 
+{{% notice warning %}}
+> Asynchronous testing may sometimes be unavoidable. It should be avoided whenever possible.
+>
+> Async tests (with timeouts, ticks etc) may easily become flaky under heavy concurrence on small CI runners.
+>
+> When you've control over the code you test, always prefer sync tests, possibly with well-designed mocks.
+{{% /notice %}}
+
 #### Eventually: Wait for a Condition to Become True
 
 Use `Eventually` when testing code that updates state asynchronously (background goroutines, event loops, caches).
