@@ -16,7 +16,7 @@ weight: 15
 
 **Testify v2 represents a comprehensive modernization**
 
-- ✅ **Type Safety**: 38 generic assertions catch errors at compile time
+- ✅ **Type Safety**: 40 generic assertions catch errors at compile time
 - ✅ **Documentation**: compelling documentation site to search the API by use-case domain
 - ✅ **Maintainability**: 100% code generation from single source
 - ✅ **Quality**: 96% test coverage, use unified test scenarios, extensive fuzzing & benchmarking
@@ -278,11 +278,13 @@ See also a quick [migration guide](./MIGRATION.md).
 
 {{% expand title="Generics" %}}
 
-#### New Generic Function (1)
+#### New Generic Functions (3)
 
 | Function | Type Parameters | Description |
 |----------|-----------------|-------------|
 | `JSONEqT[S Text]` | String or []byte | Type-safe JSON semantic equality |
+| `JSONMarshalAsT[EDoc Text]` | String or []byte | Type-safe JSON marshal and equality check |
+| `JSONUnmarshalAsT[ADoc Text, Object any]` | String or []byte | Type-safe JSON unmarshal and equality check |
 
 **Performance**: Comparable (JSON parsing dominates)
 {{% /expand %}}

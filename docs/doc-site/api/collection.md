@@ -278,7 +278,7 @@ See also [reflect.Len](https://pkg.go.dev/reflect#Len).
 
 > **Note**
 >
-> (proposals) this does not currently support iterators, or collection objects that have a Len() method.
+> (proposal for enhancement) this does not currently support iterators, or collection objects that have a Len() method.
 >
 {{% /tab %}}
 {{< /tabs >}}

@@ -55,22 +55,22 @@ All these variants make up several hundreds functions, which poses a challenge f
 
 We have adopted code and documentation generation as a mean to mitigate this issue.
 
-#### Current (v2.2.0)
+#### Current (v2.3.0-unreleased)
 
- 1. Generic assertions (with type parameters): 38 functions
+ 1. Generic assertions (with type parameters): 40 functions
  2. Non-generic assertions (with t T parameter, no type parameters): 82 functions
  3. Helper functions (no t T parameter): 4 functions
 
- Total: 124 functions to _maintain_
+ Total: 126 functions to _maintain_
 
  **Generated Functions**
 
- 1. Generic assertions: 152
+ 1. Generic assertions: 160
  2. Non-generic assertions: 656
  3. Helper functions: 8
  4. Constructors: 2
 
- Total: 818 functions
+ Total: 826 functions
 
 ## Architecture Overview
 
