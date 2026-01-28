@@ -33,7 +33,7 @@ func JSONEqBytes(t T, expected, actual []byte, msgAndArgs ...any) bool {
 	var expectedJSONAsInterface, actualJSONAsInterface any
 
 	if err := json.Unmarshal(expected, &expectedJSONAsInterface); err != nil {
-		return Fail(t, fmt.Sprintf("Expected value ('%s') is not valid json.\nJSON parsing error: '%s'", expected, err.Error()), msgAndArgs...)
+		return Fail(t, fmt.Sprintf("Expected value (%q) is not valid json.\nJSON parsing error: %v", expected, err), msgAndArgs...)
 	}
 
 	// Shortcut if same bytes
@@ -42,7 +42,7 @@ func JSONEqBytes(t T, expected, actual []byte, msgAndArgs ...any) bool {
 	}
 
 	if err := json.Unmarshal(actual, &actualJSONAsInterface); err != nil {
-		return Fail(t, fmt.Sprintf("Input ('%s') needs to be valid json.\nJSON parsing error: '%s'", actual, err.Error()), msgAndArgs...)
+		return Fail(t, fmt.Sprintf("Input (%q) needs to be valid json.\nJSON parsing error: %v", actual, err), msgAndArgs...)
 	}
 
 	return Equal(t, expectedJSONAsInterface, actualJSONAsInterface, msgAndArgs...)

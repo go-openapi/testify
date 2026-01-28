@@ -51,7 +51,7 @@ func YAMLEqBytes(t T, expected, actual []byte, msgAndArgs ...any) bool {
 	var expectedYAMLAsInterface, actualYAMLAsInterface any
 
 	if err := yaml.Unmarshal(expected, &expectedYAMLAsInterface); err != nil {
-		return Fail(t, fmt.Sprintf("Expected value ('%s') is not valid yaml.\nYAML parsing error: '%s'", expected, err.Error()), msgAndArgs...)
+		return Fail(t, fmt.Sprintf("Expected value (%q) is not valid yaml.\nYAML parsing error: %v", expected, err), msgAndArgs...)
 	}
 
 	// Shortcut if same bytes
@@ -60,7 +60,7 @@ func YAMLEqBytes(t T, expected, actual []byte, msgAndArgs ...any) bool {
 	}
 
 	if err := yaml.Unmarshal(actual, &actualYAMLAsInterface); err != nil {
-		return Fail(t, fmt.Sprintf("Input ('%s') needs to be valid yaml.\nYAML error: '%s'", actual, err.Error()), msgAndArgs...)
+		return Fail(t, fmt.Sprintf("Input (%q) needs to be valid yaml.\nYAML error: %v", actual, err), msgAndArgs...)
 	}
 
 	return Equal(t, expectedYAMLAsInterface, actualYAMLAsInterface, msgAndArgs...)
