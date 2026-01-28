@@ -267,7 +267,7 @@ When unsure about argument order:
 
 ### Forward Methods
 
-Create an `Assertion` object to reduce repetition in tests with many assertions:
+Create an `Assertions` object to reduce repetition in tests with many assertions:
 
 {{< cards >}}
 {{% card title="Package-Level Functions" %}}
