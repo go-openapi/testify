@@ -2398,6 +2398,28 @@ func TestYAMLEqTf(t *testing.T) {
 	})
 }
 
+func TestYAMLMarshalAsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("panic", func(t *testing.T) {
+		t.Parallel()
+
+		Panicsf(t, func() {
+			YAMLMarshalAsTf(t, "key: value", "key: value", "test message")
+		}, "should panic without the yaml feature enabled.")
+	})
+}
+
+func TestYAMLUnmarshalAsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("panic", func(t *testing.T) {
+		t.Parallel()
+
+		Panicsf(t, func() {
+			YAMLUnmarshalAsTf(t, "key: value", "key: value", "test message")
+		}, "should panic without the yaml feature enabled.")
+	})
+}
+
 func TestZerof(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {

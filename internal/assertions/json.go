@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
 // SPDX-License-Identifier: Apache-2.0
 
+//nolint:dupl // YAML is actually very similar to JSON but we can't easily factorize this.
 package assertions
 
 import (
@@ -105,7 +106,7 @@ func JSONEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any
 //	expected := struct {
 //		A int `json:"a"`
 //	}{
-//		A: 10
+//		A: 10,
 //	}
 //
 //	assertions.JSONUnmarshalAsT(t,expected, `{"a": 10}`)
@@ -114,7 +115,7 @@ func JSONEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any
 //
 //	success: dummyStruct{A: "a"} , []byte(`{"A": "a"}`)
 //	failure: 1, `[{"foo": "bar"}, {"hello": "world"}]`
-func JSONUnmarshalAsT[ADoc Text, Object any](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool {
+func JSONUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool {
 	// Domain: json
 	if h, ok := t.(H); ok {
 		h.Helper()
@@ -140,7 +141,7 @@ func JSONUnmarshalAsT[ADoc Text, Object any](t T, expected Object, jazon ADoc, m
 //	actual := struct {
 //		A int `json:"a"`
 //	}{
-//		A: 10
+//		A: 10,
 //	}
 //
 //	assertions.JSONUnmarshalAsT(t,expected, `{"a": 10}`)

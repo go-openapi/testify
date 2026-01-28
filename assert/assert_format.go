@@ -628,11 +628,11 @@ func JSONMarshalAsTf[EDoc Text](t T, expected EDoc, object any, msg string, args
 // JSONUnmarshalAsTf is the same as [JSONUnmarshalAsT], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func JSONUnmarshalAsTf[ADoc Text, Object any](t T, expected Object, jazon ADoc, msg string, args ...any) bool {
+func JSONUnmarshalAsTf[Object any, ADoc Text](t T, expected Object, jazon ADoc, msg string, args ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.JSONUnmarshalAsT[ADoc, Object](t, expected, jazon, forwardArgs(msg, args))
+	return assertions.JSONUnmarshalAsT[Object, ADoc](t, expected, jazon, forwardArgs(msg, args))
 }
 
 // Kindf is the same as [Kind], but it accepts a format msg string to format arguments like [fmt.Printf].
@@ -1223,6 +1223,26 @@ func YAMLEqTf[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msg string, args
 		h.Helper()
 	}
 	return assertions.YAMLEqT[EDoc, ADoc](t, expected, actual, forwardArgs(msg, args))
+}
+
+// YAMLMarshalAsTf is the same as [YAMLMarshalAsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func YAMLMarshalAsTf[EDoc Text](t T, expected EDoc, object any, msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.YAMLMarshalAsT[EDoc](t, expected, object, forwardArgs(msg, args))
+}
+
+// YAMLUnmarshalAsTf is the same as [YAMLUnmarshalAsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func YAMLUnmarshalAsTf[Object any, ADoc Text](t T, expected Object, jazon ADoc, msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.YAMLUnmarshalAsT[Object, ADoc](t, expected, jazon, forwardArgs(msg, args))
 }
 
 // Zerof is the same as [Zero], but it accepts a format msg string to format arguments like [fmt.Printf].

@@ -1414,7 +1414,7 @@ func JSONEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any
 //	actual := struct {
 //		A int `json:"a"`
 //	}{
-//		A: 10
+//		A: 10,
 //	}
 //
 //	assertions.JSONUnmarshalAsT(t,expected, `{"a": 10}`)
@@ -1446,7 +1446,7 @@ func JSONMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any
 //	expected := struct {
 //		A int `json:"a"`
 //	}{
-//		A: 10
+//		A: 10,
 //	}
 //
 //	assertions.JSONUnmarshalAsT(t,expected, `{"a": 10}`)
@@ -1457,11 +1457,11 @@ func JSONMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any
 //	failure: 1, `[{"foo": "bar"}, {"hello": "world"}]`
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func JSONUnmarshalAsT[ADoc Text, Object any](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool {
+func JSONUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.JSONUnmarshalAsT[ADoc, Object](t, expected, jazon, msgAndArgs...)
+	return assertions.JSONUnmarshalAsT[Object, ADoc](t, expected, jazon, msgAndArgs...)
 }
 
 // Kind asserts that the [reflect.Kind] of a given object matches the expected [reflect.Kind].
@@ -2772,6 +2772,68 @@ func YAMLEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any
 		h.Helper()
 	}
 	return assertions.YAMLEqT[EDoc, ADoc](t, expected, actual, msgAndArgs...)
+}
+
+// YAMLMarshalAsT wraps [YAMLEq] after [yaml.Marshal].
+//
+// The input YAML may be a string or []byte.
+//
+// It fails if the marshaling returns an error or if the expected YAML bytes differ semantically
+// from the expected ones.
+//
+// # Usage
+//
+//	actual := struct {
+//		A int `yaml:"a"`
+//	}{
+//		A: 10,
+//	}
+//
+//	assertions.YAMLUnmarshalAsT(t,expected, `{"a": 10}`)
+//
+// # Examples
+//
+//	panic: "key: value", "key: value"
+//	should panic without the yaml feature enabled.
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func YAMLMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.YAMLMarshalAsT[EDoc](t, expected, object, msgAndArgs...)
+}
+
+// YAMLUnmarshalAsT wraps [Equal] after [yaml.Unmarshal].
+//
+// The input YAML may be a string or []byte.
+//
+// It fails if the unmarshaling returns an error or if the resulting object is not equal to the expected one.
+//
+// Be careful not to wrap the expected object into an "any" interface if this is not what you expected:
+// the unmarshaling would take this type to unmarshal as a map[string]any.
+//
+// # Usage
+//
+//	expected := struct {
+//		A int `yaml:"a"`
+//	}{
+//		A: 10,
+//	}
+//
+//	assertions.YAMLUnmarshalAsT(t,expected, `{"a": 10}`)
+//
+// # Examples
+//
+//	panic: "key: value", "key: value"
+//	should panic without the yaml feature enabled.
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func YAMLUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.YAMLUnmarshalAsT[Object, ADoc](t, expected, jazon, msgAndArgs...)
 }
 
 // Zero asserts that i is the zero value for its type.
