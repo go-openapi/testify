@@ -497,6 +497,22 @@ func ExampleJSONEqT() {
 	// Output: success: true
 }
 
+func ExampleJSONMarshalAsT() {
+	t := new(testing.T)
+	success := assert.JSONMarshalAsT(t, []byte(`{"A": "a"}`), dummyStruct{A: "a"})
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleJSONUnmarshalAsT() {
+	t := new(testing.T)
+	success := assert.JSONUnmarshalAsT(t, dummyStruct{A: "a"}, []byte(`{"A": "a"}`))
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleKind() {
 	t := new(testing.T)
 	success := assert.Kind(t, reflect.String, "hello")

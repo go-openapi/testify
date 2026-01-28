@@ -4,7 +4,7 @@ description: Using generic assertions.
 weight: 10
 ---
 
-Testify v2 provides **38 generic assertion functions** that offer compile-time type safety alongside the traditional reflection-based assertions. Generic variants are identified by the `T` suffix (e.g., `EqualT`, `GreaterT`, `ElementsMatchT`).
+Testify v2 provides **40 generic assertion functions** that offer compile-time type safety alongside the traditional reflection-based assertions. Generic variants are identified by the `T` suffix (e.g., `EqualT`, `GreaterT`, `ElementsMatchT`).
 
 {{% notice style="success" title="Type Safety First" icon="check" %}}
 Generic assertions catch type mismatches **when writing tests**, not when running them. The performance improvements (1.2x-81x faster) are a bonus on top of this primary benefit.

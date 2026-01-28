@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
 // SPDX-License-Identifier: Apache-2.0
 
-//nolint:dupl // we need to duplicate at least some godoc.
 package assertions
 
 import (

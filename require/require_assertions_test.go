@@ -1205,6 +1205,46 @@ func TestJSONEqT(t *testing.T) {
 	})
 }
 
+func TestJSONMarshalAsT(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		JSONMarshalAsT(t, []byte(`{"A": "a"}`), dummyStruct{A: "a"})
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		JSONMarshalAsT(mock, `[{"foo": "bar"}, {"hello": "world"}]`, 1)
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("JSONMarshalAsT should call FailNow()")
+		}
+	})
+}
+
+func TestJSONUnmarshalAsT(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		JSONUnmarshalAsT(t, dummyStruct{A: "a"}, []byte(`{"A": "a"}`))
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		JSONUnmarshalAsT(mock, 1, `[{"foo": "bar"}, {"hello": "world"}]`)
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("JSONUnmarshalAsT should call FailNow()")
+		}
+	})
+}
+
 func TestKind(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {

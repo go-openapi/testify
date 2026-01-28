@@ -615,6 +615,26 @@ func JSONEqTf[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msg string, args
 	return assertions.JSONEqT[EDoc, ADoc](t, expected, actual, forwardArgs(msg, args))
 }
 
+// JSONMarshalAsTf is the same as [JSONMarshalAsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func JSONMarshalAsTf[EDoc Text](t T, expected EDoc, object any, msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.JSONMarshalAsT[EDoc](t, expected, object, forwardArgs(msg, args))
+}
+
+// JSONUnmarshalAsTf is the same as [JSONUnmarshalAsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func JSONUnmarshalAsTf[ADoc Text, Object any](t T, expected Object, jazon ADoc, msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.JSONUnmarshalAsT[ADoc, Object](t, expected, jazon, forwardArgs(msg, args))
+}
+
 // Kindf is the same as [Kind], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.

@@ -498,6 +498,22 @@ func ExampleJSONEqT() {
 	// Output: passed
 }
 
+func ExampleJSONMarshalAsT() {
+	t := new(testing.T)
+	require.JSONMarshalAsT(t, []byte(`{"A": "a"}`), dummyStruct{A: "a"})
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleJSONUnmarshalAsT() {
+	t := new(testing.T)
+	require.JSONUnmarshalAsT(t, dummyStruct{A: "a"}, []byte(`{"A": "a"}`))
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleKind() {
 	t := new(testing.T)
 	require.Kind(t, reflect.String, "hello")

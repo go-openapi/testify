@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
 // SPDX-License-Identifier: Apache-2.0
 
-//nolint:dupl // we need to duplicate at least some godoc.
 package assertions
 
 import (
@@ -90,4 +89,76 @@ func JSONEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any
 	}
 
 	return JSONEqBytes(t, []byte(expected), []byte(actual), msgAndArgs)
+}
+
+// JSONUnmarshalAsT wraps [Equal] after [json.Unmarshal].
+//
+// The input JSON may be a string or []byte.
+//
+// It fails if the unmarshaling returns an error or if the resulting object is not equal to the expected one.
+//
+// Be careful not to wrap the expected object into an "any" interface if this is not what you expected:
+// the unmarshaling would take this type to unmarshal as a map[string]any.
+//
+// # Usage
+//
+//	expected := struct {
+//		A int `json:"a"`
+//	}{
+//		A: 10
+//	}
+//
+//	assertions.JSONUnmarshalAsT(t,expected, `{"a": 10}`)
+//
+// # Examples
+//
+//	success: dummyStruct{A: "a"} , []byte(`{"A": "a"}`)
+//	failure: 1, `[{"foo": "bar"}, {"hello": "world"}]`
+func JSONUnmarshalAsT[ADoc Text, Object any](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool {
+	// Domain: json
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	var actual Object
+	if err := json.Unmarshal([]byte(jazon), &actual); err != nil {
+		return Fail(t, fmt.Sprintf("JSON unmarshal failed: %v", err), msgAndArgs...)
+	}
+
+	return Equal(t, expected, actual, msgAndArgs...)
+}
+
+// JSONMarshalAsT wraps [JSONEq] after [json.Marshal].
+//
+// The input JSON may be a string or []byte.
+//
+// It fails if the marshaling returns an error or if the expected JSON bytes differ semantically
+// from the expected ones.
+//
+// # Usage
+//
+//	actual := struct {
+//		A int `json:"a"`
+//	}{
+//		A: 10
+//	}
+//
+//	assertions.JSONUnmarshalAsT(t,expected, `{"a": 10}`)
+//
+// # Examples
+//
+//	success: []byte(`{"A": "a"}`), dummyStruct{A: "a"}
+//	failure: `[{"foo": "bar"}, {"hello": "world"}]`, 1
+func JSONMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any) bool {
+	// Domain: json
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	actual, err := json.Marshal(object)
+	if err != nil {
+		return Fail(t, fmt.Sprintf("JSON marshal failed: %v", err), msgAndArgs...)
+	}
+
+	return JSONEqBytes(t, []byte(expected), actual, msgAndArgs...)
 }
