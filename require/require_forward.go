@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 
 package require
 
@@ -451,28 +450,28 @@ func (a *Assertions) Eventuallyf(condition func() bool, waitFor time.Duration, t
 	a.t.FailNow()
 }
 
-// EventuallyWithT is the same as [EventuallyWithT], as a method rather than a package-level function.
+// EventuallyWith is the same as [EventuallyWith], as a method rather than a package-level function.
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func (a *Assertions) EventuallyWithT(condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) {
+func (a *Assertions) EventuallyWith(condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) {
 	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	if assertions.EventuallyWithT(a.t, condition, waitFor, tick, msgAndArgs...) {
+	if assertions.EventuallyWith(a.t, condition, waitFor, tick, msgAndArgs...) {
 		return
 	}
 
 	a.t.FailNow()
 }
 
-// EventuallyWithTf is the same as [Assertions.EventuallyWithT], but it accepts a format msg string to format arguments like [fmt.Printf].
+// EventuallyWithf is the same as [Assertions.EventuallyWith], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func (a *Assertions) EventuallyWithTf(condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msg string, args ...any) {
+func (a *Assertions) EventuallyWithf(condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msg string, args ...any) {
 	if h, ok := a.t.(H); ok {
 		h.Helper()
 	}
-	if assertions.EventuallyWithT(a.t, condition, waitFor, tick, forwardArgs(msg, args)) {
+	if assertions.EventuallyWith(a.t, condition, waitFor, tick, forwardArgs(msg, args)) {
 		return
 	}
 

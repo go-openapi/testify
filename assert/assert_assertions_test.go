@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 
 package assert
 
@@ -426,13 +425,13 @@ func TestEventually(t *testing.T) {
 	})
 }
 
-func TestEventuallyWithT(t *testing.T) {
+func TestEventuallyWith(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := EventuallyWithT(t, func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
+		result := EventuallyWith(t, func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
 		if !result {
-			t.Error("EventuallyWithT should return true on success")
+			t.Error("EventuallyWith should return true on success")
 		}
 	})
 
@@ -440,12 +439,12 @@ func TestEventuallyWithT(t *testing.T) {
 		t.Parallel()
 
 		mock := new(mockT)
-		result := EventuallyWithT(mock, func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
+		result := EventuallyWith(mock, func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
 		if result {
-			t.Error("EventuallyWithT should return false on failure")
+			t.Error("EventuallyWith should return false on failure")
 		}
 		if !mock.failed {
-			t.Error("EventuallyWithT should mark test as failed")
+			t.Error("EventuallyWith should mark test as failed")
 		}
 	})
 }
@@ -1438,6 +1437,54 @@ func TestJSONEqT(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("JSONEqT should mark test as failed")
+		}
+	})
+}
+
+func TestJSONMarshalAsT(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := JSONMarshalAsT(t, []byte(`{"A": "a"}`), dummyStruct{A: "a"})
+		if !result {
+			t.Error("JSONMarshalAsT should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := JSONMarshalAsT(mock, `[{"foo": "bar"}, {"hello": "world"}]`, 1)
+		if result {
+			t.Error("JSONMarshalAsT should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("JSONMarshalAsT should mark test as failed")
+		}
+	})
+}
+
+func TestJSONUnmarshalAsT(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		result := JSONUnmarshalAsT(t, dummyStruct{A: "a"}, []byte(`{"A": "a"}`))
+		if !result {
+			t.Error("JSONUnmarshalAsT should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := JSONUnmarshalAsT(mock, 1, `[{"foo": "bar"}, {"hello": "world"}]`)
+		if result {
+			t.Error("JSONUnmarshalAsT should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("JSONUnmarshalAsT should mark test as failed")
 		}
 	})
 }
@@ -2815,6 +2862,28 @@ func TestYAMLEqT(t *testing.T) {
 
 		Panics(t, func() {
 			YAMLEqT(t, "key: value", "key: value")
+		}, "should panic without the yaml feature enabled.")
+	})
+}
+
+func TestYAMLMarshalAsT(t *testing.T) {
+	t.Parallel()
+	t.Run("panic", func(t *testing.T) {
+		t.Parallel()
+
+		Panics(t, func() {
+			YAMLMarshalAsT(t, "key: value", "key: value")
+		}, "should panic without the yaml feature enabled.")
+	})
+}
+
+func TestYAMLUnmarshalAsT(t *testing.T) {
+	t.Parallel()
+	t.Run("panic", func(t *testing.T) {
+		t.Parallel()
+
+		Panics(t, func() {
+			YAMLUnmarshalAsT(t, "key: value", "key: value")
 		}, "should panic without the yaml feature enabled.")
 	})
 }

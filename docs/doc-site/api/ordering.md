@@ -1,7 +1,6 @@
 ---
 title: "Ordering"
 description: "Asserting How Collections Are Ordered"
-modified: 2026-01-27
 weight: 11
 domains:
   - "ordering"
@@ -141,7 +140,7 @@ IsDecreasingT asserts that a slice of [Ordered](https://pkg.go.dev/github.com/go
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.IsDecreasingT(t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsDecreasingT) | internal implementation |
+| [`assertions.IsDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsDecreasingT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsDecreasingT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L220)
 {{% /tab %}}
@@ -235,7 +234,7 @@ IsIncreasingT asserts that a slice of [Ordered](https://pkg.go.dev/github.com/go
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.IsIncreasingT(t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsIncreasingT) | internal implementation |
+| [`assertions.IsIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsIncreasingT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsIncreasingT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L53)
 {{% /tab %}}
@@ -329,7 +328,7 @@ IsNonDecreasingT asserts that a slice of [Ordered](https://pkg.go.dev/github.com
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.IsNonDecreasingT(t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNonDecreasingT) | internal implementation |
+| [`assertions.IsNonDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNonDecreasingT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNonDecreasingT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L275)
 {{% /tab %}}
@@ -423,7 +422,7 @@ IsNonIncreasingT asserts that a slice of [Ordered](https://pkg.go.dev/github.com
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.IsNonIncreasingT(t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNonIncreasingT) | internal implementation |
+| [`assertions.IsNonIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNonIncreasingT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNonIncreasingT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L164)
 {{% /tab %}}
@@ -470,7 +469,7 @@ Unlike [IsDecreasingT](https://pkg.go.dev/github.com/go-openapi/testify/v2/asser
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.NotSortedT(t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotSortedT) | internal implementation |
+| [`assertions.NotSortedT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotSortedT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSortedT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L109)
 {{% /tab %}}
@@ -517,7 +516,7 @@ Unlike [IsIncreasingT](https://pkg.go.dev/github.com/go-openapi/testify/v2/asser
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.SortedT(t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SortedT) | internal implementation |
+| [`assertions.SortedT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SortedT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#SortedT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L81)
 {{% /tab %}}
@@ -538,6 +537,4 @@ SPDX-License-Identifier: Apache-2.0
 
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
-
-Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 -->

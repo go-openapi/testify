@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 
 package assert_test
 
@@ -160,9 +159,9 @@ func ExampleEventually() {
 	// Output: success: true
 }
 
-func ExampleEventuallyWithT() {
+func ExampleEventuallyWith() {
 	t := new(testing.T)
-	success := assert.EventuallyWithT(t, func(c *assert.CollectT) {
+	success := assert.EventuallyWith(t, func(c *assert.CollectT) {
 		assert.True(c, true)
 	}, 100*time.Millisecond, 20*time.Millisecond)
 	fmt.Printf("success: %t\n", success)
@@ -493,6 +492,22 @@ func ExampleJSONEqBytes() {
 func ExampleJSONEqT() {
 	t := new(testing.T)
 	success := assert.JSONEqT(t, `{"hello": "world", "foo": "bar"}`, []byte(`{"foo": "bar", "hello": "world"}`))
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleJSONMarshalAsT() {
+	t := new(testing.T)
+	success := assert.JSONMarshalAsT(t, []byte(`{"A": "a"}`), dummyStruct{A: "a"})
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleJSONUnmarshalAsT() {
+	t := new(testing.T)
+	success := assert.JSONUnmarshalAsT(t, dummyStruct{A: "a"}, []byte(`{"A": "a"}`))
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -964,6 +979,14 @@ func ExampleWithinRange() {
 // }
 
 // func ExampleYAMLEqT() {
+// no success example available. Please add some examples to produce a testable example.
+// }
+
+// func ExampleYAMLMarshalAsT() {
+// no success example available. Please add some examples to produce a testable example.
+// }
+
+// func ExampleYAMLUnmarshalAsT() {
 // no success example available. Please add some examples to produce a testable example.
 // }
 

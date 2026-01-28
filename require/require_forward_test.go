@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 
 package require
 
@@ -752,13 +751,13 @@ func TestAssertionsEventuallyf(t *testing.T) {
 	})
 }
 
-func TestAssertionsEventuallyWithT(t *testing.T) {
+func TestAssertionsEventuallyWith(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
 
 		a := New(t)
-		a.EventuallyWithT(func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
+		a.EventuallyWith(func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
 		// require functions don't return a value
 	})
 
@@ -767,21 +766,21 @@ func TestAssertionsEventuallyWithT(t *testing.T) {
 
 		mock := new(mockFailNowT)
 		a := New(mock)
-		a.EventuallyWithT(func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
+		a.EventuallyWith(func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
 		// require functions don't return a value
 		if !mock.failed {
-			t.Error("EventuallyWithT should call FailNow()")
+			t.Error("EventuallyWith should call FailNow()")
 		}
 	})
 }
 
-func TestAssertionsEventuallyWithTf(t *testing.T) {
+func TestAssertionsEventuallyWithf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
 
 		a := New(t)
-		a.EventuallyWithTf(func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond, "test message")
+		a.EventuallyWithf(func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond, "test message")
 		// require functions don't return a value
 	})
 
@@ -790,13 +789,13 @@ func TestAssertionsEventuallyWithTf(t *testing.T) {
 
 		mock := new(mockFailNowT)
 		a := New(mock)
-		a.EventuallyWithTf(func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond, "test message")
+		a.EventuallyWithf(func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond, "test message")
 		// require functions don't return a value
 		if !mock.failed {
-			t.Error("Assertions.EventuallyWithT should mark test as failed")
+			t.Error("Assertions.EventuallyWith should mark test as failed")
 		}
 		if !mock.failed {
-			t.Error("Assertions.EventuallyWithTf should call FailNow()")
+			t.Error("Assertions.EventuallyWithf should call FailNow()")
 		}
 	})
 }

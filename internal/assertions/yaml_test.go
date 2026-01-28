@@ -21,6 +21,11 @@ a: 1
 			expected = ""
 			success  = false
 		)
+		a := struct {
+			A string `json:"a"`
+		}{
+			A: "x",
+		}
 
 		t.Run("with YAMLEq", testYAMLEq(expected, actual, success))
 		t.Run("with YAMLEqBytes", testYAMLEqBytes(expected, actual, success))
@@ -28,6 +33,8 @@ a: 1
 		t.Run("with YAMLEqT[[]byte,string]", testYAMLEqT[[]byte, string](expected, actual, success))
 		t.Run("with YAMLEqT[string,[]byte]", testYAMLEqT[string, []byte](expected, actual, success))
 		t.Run("with YAMLEqT[[]byte,[]byte]", testYAMLEqT[[]byte, []byte](expected, actual, success))
+		t.Run("with YAMLMarshalAsT[[]byte,struct{}]", testYAMLMarshalAsT(expected, a, success))
+		t.Run("with YAMLUnmarshalAsT[struct{},[]byte]", testYAMLUnmarshalAsT(a, actual, success))
 	}
 }
 
@@ -70,6 +77,34 @@ func testYAMLEqT[ADoc, EDoc Text](expected, actual string, success bool) func(*t
 			_ = YAMLEqT(mock, EDoc(expected), ADoc(actual))
 		}) {
 			croakWantPanic(t, "YAMLEqT")
+		}
+	}
+}
+
+func testYAMLUnmarshalAsT[ADoc Text, Object any](expected Object, actual ADoc, success bool) func(*testing.T) {
+	_ = success
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		if !Panics(t, func() {
+			_ = YAMLUnmarshalAsT(mock, expected, actual)
+		}) {
+			croakWantPanic(t, "YAMLUnmarshalAsT")
+		}
+	}
+}
+
+func testYAMLMarshalAsT[EDoc Text](expected EDoc, actual any, success bool) func(*testing.T) {
+	_ = success
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		if !Panics(t, func() {
+			_ = YAMLMarshalAsT(mock, expected, actual)
+		}) {
+			croakWantPanic(t, "YAMLMarshalAsT")
 		}
 	}
 }

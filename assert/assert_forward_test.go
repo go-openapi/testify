@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 
 package assert
 
@@ -827,15 +826,15 @@ func TestAssertionsEventuallyf(t *testing.T) {
 	})
 }
 
-func TestAssertionsEventuallyWithT(t *testing.T) {
+func TestAssertionsEventuallyWith(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
 
 		a := New(t)
-		result := a.EventuallyWithT(func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
+		result := a.EventuallyWith(func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
 		if !result {
-			t.Error("Assertions.EventuallyWithT should return true on success")
+			t.Error("Assertions.EventuallyWith should return true on success")
 		}
 	})
 
@@ -844,25 +843,25 @@ func TestAssertionsEventuallyWithT(t *testing.T) {
 
 		mock := new(mockT)
 		a := New(mock)
-		result := a.EventuallyWithT(func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
+		result := a.EventuallyWith(func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
 		if result {
-			t.Error("Assertions.EventuallyWithT should return false on failure")
+			t.Error("Assertions.EventuallyWith should return false on failure")
 		}
 		if !mock.failed {
-			t.Error("EventuallyWithT should mark test as failed")
+			t.Error("EventuallyWith should mark test as failed")
 		}
 	})
 }
 
-func TestAssertionsEventuallyWithTf(t *testing.T) {
+func TestAssertionsEventuallyWithf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
 
 		a := New(t)
-		result := a.EventuallyWithTf(func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond, "test message")
+		result := a.EventuallyWithf(func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond, "test message")
 		if !result {
-			t.Error("Assertions.EventuallyWithT should return true on success")
+			t.Error("Assertions.EventuallyWith should return true on success")
 		}
 	})
 
@@ -871,12 +870,12 @@ func TestAssertionsEventuallyWithTf(t *testing.T) {
 
 		mock := new(mockT)
 		a := New(mock)
-		result := a.EventuallyWithTf(func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond, "test message")
+		result := a.EventuallyWithf(func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond, "test message")
 		if result {
-			t.Error("Assertions.EventuallyWithT should return false on failure")
+			t.Error("Assertions.EventuallyWith should return false on failure")
 		}
 		if !mock.failed {
-			t.Error("Assertions.EventuallyWithT should mark test as failed")
+			t.Error("Assertions.EventuallyWith should mark test as failed")
 		}
 	})
 }
