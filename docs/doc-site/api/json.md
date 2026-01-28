@@ -34,7 +34,7 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 - [JSONEqBytes](#jsoneqbytes) | angles-right
 - [JSONEqT[EDoc, ADoc Text]](#jsoneqtedoc-adoc-text) | star | orange
 - [JSONMarshalAsT[EDoc Text]](#jsonmarshalastedoc-text) | star | orange
-- [JSONUnmarshalAsT[ADoc Text, Object any]](#jsonunmarshalastadoc-text-object-any) | star | orange
+- [JSONUnmarshalAsT[Object any, ADoc Text]](#jsonunmarshalastobject-any-adoc-text) | star | orange
 ```
 
 ### JSONEq{#jsoneq}
@@ -82,7 +82,7 @@ Expected and actual must be valid JSON.
 |--|--| 
 | [`assertions.JSONEq(t T, expected string, actual string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#JSONEq) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONEq](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L62)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONEq](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L63)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -131,7 +131,7 @@ Expected and actual must be valid JSON.
 |--|--| 
 | [`assertions.JSONEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#JSONEqBytes) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONEqBytes](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L24)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONEqBytes](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L25)
 
 > **Maintainer Note**
 >
@@ -184,9 +184,9 @@ Expected and actual must be valid JSON.
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.JSONEqT(t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#JSONEqT) | internal implementation |
+| [`assertions.JSONEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#JSONEqT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONEqT](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L85)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONEqT](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L86)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -206,7 +206,7 @@ from the expected ones.
 	actual := struct {
 		A int `json:"a"`
 	}{
-		A: 10
+		A: 10,
 	}
 	assertions.JSONUnmarshalAsT(t,expected, `{"a": 10}`)
 ```
@@ -237,13 +237,13 @@ from the expected ones.
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.JSONMarshalAsT(t T, expected EDoc, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#JSONMarshalAsT) | internal implementation |
+| [`assertions.JSONMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#JSONMarshalAsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONMarshalAsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L152)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONMarshalAsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L153)
 {{% /tab %}}
 {{< /tabs >}}
 
-### JSONUnmarshalAsT[ADoc Text, Object any] {{% icon icon="star" color=orange %}}{#jsonunmarshalastadoc-text-object-any}
+### JSONUnmarshalAsT[Object any, ADoc Text] {{% icon icon="star" color=orange %}}{#jsonunmarshalastobject-any-adoc-text}
 
 JSONUnmarshalAsT wraps [Equal](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Equal) after [json.Unmarshal](https://pkg.go.dev/json#Unmarshal).
 
@@ -261,7 +261,7 @@ the unmarshaling would take this type to unmarshal as a map[string](https://pkg.
 	expected := struct {
 		A int `json:"a"`
 	}{
-		A: 10
+		A: 10,
 	}
 	assertions.JSONUnmarshalAsT(t,expected, `{"a": 10}`)
 ```
@@ -279,22 +279,22 @@ the unmarshaling would take this type to unmarshal as a map[string](https://pkg.
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`assert.JSONUnmarshalAsT[ADoc Text, Object any](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#JSONUnmarshalAsT) | package-level function |
-| [`assert.JSONUnmarshalAsTf[ADoc Text, Object any](t T, expected Object, jazon ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#JSONUnmarshalAsTf) | formatted variant |
+| [`assert.JSONUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#JSONUnmarshalAsT) | package-level function |
+| [`assert.JSONUnmarshalAsTf[Object any, ADoc Text](t T, expected Object, jazon ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#JSONUnmarshalAsTf) | formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.JSONUnmarshalAsT[ADoc Text, Object any](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONUnmarshalAsT) | package-level function |
-| [`require.JSONUnmarshalAsTf[ADoc Text, Object any](t T, expected Object, jazon ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONUnmarshalAsTf) | formatted variant |
+| [`require.JSONUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONUnmarshalAsT) | package-level function |
+| [`require.JSONUnmarshalAsTf[Object any, ADoc Text](t T, expected Object, jazon ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONUnmarshalAsTf) | formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.JSONUnmarshalAsT(t T, expected Object, jazon ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#JSONUnmarshalAsT) | internal implementation |
+| [`assertions.JSONUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#JSONUnmarshalAsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONUnmarshalAsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L117)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONUnmarshalAsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L118)
 {{% /tab %}}
 {{< /tabs >}}
 

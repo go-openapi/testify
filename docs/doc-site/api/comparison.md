@@ -213,7 +213,7 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.GreaterOrEqualT(t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#GreaterOrEqualT) | internal implementation |
+| [`assertions.GreaterOrEqualT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#GreaterOrEqualT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#GreaterOrEqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L124)
 {{% /tab %}}
@@ -269,7 +269,7 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.GreaterT(t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#GreaterT) | internal implementation |
+| [`assertions.GreaterT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#GreaterT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#GreaterT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L62)
 {{% /tab %}}
@@ -427,7 +427,7 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.LessOrEqualT(t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#LessOrEqualT) | internal implementation |
+| [`assertions.LessOrEqualT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#LessOrEqualT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#LessOrEqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L243)
 {{% /tab %}}
@@ -482,7 +482,7 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.LessT(t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#LessT) | internal implementation |
+| [`assertions.LessT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#LessT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#LessT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L184)
 {{% /tab %}}
@@ -574,7 +574,7 @@ NegativeT asserts that the specified element of a signed numeric type is strictl
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.NegativeT(t T, e SignedNumber, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NegativeT) | internal implementation |
+| [`assertions.NegativeT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NegativeT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NegativeT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L335)
 {{% /tab %}}
@@ -666,7 +666,7 @@ PositiveT asserts that the specified element of a signed numeric type is strictl
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.PositiveT(t T, e SignedNumber, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#PositiveT) | internal implementation |
+| [`assertions.PositiveT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#PositiveT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#PositiveT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L289)
 {{% /tab %}}

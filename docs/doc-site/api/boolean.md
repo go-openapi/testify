@@ -122,7 +122,7 @@ The type constraint [Boolean](https://pkg.go.dev/github.com/go-openapi/testify/v
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.FalseT(t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FalseT) | internal implementation |
+| [`assertions.FalseT[B Boolean](t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FalseT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#FalseT](https://github.com/go-openapi/testify/blob/master/internal/assertions/boolean.go#L92)
 {{% /tab %}}
@@ -216,7 +216,7 @@ The type constraint [Boolean](https://pkg.go.dev/github.com/go-openapi/testify/v
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.TrueT(t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#TrueT) | internal implementation |
+| [`assertions.TrueT[B Boolean](t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#TrueT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#TrueT](https://github.com/go-openapi/testify/blob/master/internal/assertions/boolean.go#L43)
 {{% /tab %}}

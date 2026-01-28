@@ -136,7 +136,7 @@ IsNotOfTypeT asserts that an object is not of a given type.
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.IsNotOfTypeT(t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNotOfTypeT) | internal implementation |
+| [`assertions.IsNotOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNotOfTypeT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNotOfTypeT](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L141)
 {{% /tab %}}
@@ -226,7 +226,7 @@ IsOfTypeT asserts that an object is of a given type.
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.IsOfTypeT(t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsOfTypeT) | internal implementation |
+| [`assertions.IsOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsOfTypeT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsOfTypeT](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L96)
 {{% /tab %}}

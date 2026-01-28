@@ -11,4 +11,5 @@ import (
 
 func init() { //nolint:gochecknoinits // we precisely want this init to run when importing the package
 	yamlstub.EnableYAMLWithUnmarshal(yaml.Unmarshal)
+	yamlstub.EnableYAMLWithMarshal(yaml.Marshal)
 }

@@ -11,6 +11,10 @@ keywords:
   - "YAMLEqBytesf"
   - "YAMLEqT"
   - "YAMLEqTf"
+  - "YAMLMarshalAsT"
+  - "YAMLMarshalAsTf"
+  - "YAMLUnmarshalAsT"
+  - "YAMLUnmarshalAsTf"
 ---
 
 Asserting Yaml Documents
@@ -22,13 +26,15 @@ Asserting Yaml Documents
 
 _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
-This domain exposes 3 functionalities.
+This domain exposes 5 functionalities.
 Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 
 ```tree
 - [YAMLEq](#yamleq) | angles-right
 - [YAMLEqBytes](#yamleqbytes) | angles-right
 - [YAMLEqT[EDoc, ADoc Text]](#yamleqtedoc-adoc-text) | star | orange
+- [YAMLMarshalAsT[EDoc Text]](#yamlmarshalastedoc-text) | star | orange
+- [YAMLUnmarshalAsT[Object any, ADoc Text]](#yamlunmarshalastobject-any-adoc-text) | star | orange
 ```
 
 ### YAMLEq{#yamleq}
@@ -71,7 +77,7 @@ See [YAMLEqBytes](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAM
 |--|--| 
 | [`assertions.YAMLEq(t T, expected string, actual string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLEq) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLEq](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L76)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLEq](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L77)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -140,7 +146,7 @@ To enable it, you should add a blank import like so:
 |--|--| 
 | [`assertions.YAMLEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLEqBytes) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLEqBytes](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L45)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLEqBytes](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L46)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -180,9 +186,117 @@ See [YAMLEqBytes](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAM
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.YAMLEqT(t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLEqT) | internal implementation |
+| [`assertions.YAMLEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLEqT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLEqT](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L95)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLEqT](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L96)
+{{% /tab %}}
+{{< /tabs >}}
+
+### YAMLMarshalAsT[EDoc Text] {{% icon icon="star" color=orange %}}{#yamlmarshalastedoc-text}
+
+YAMLMarshalAsT wraps [YAMLEq](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLEq) after [yaml.Marshal](https://pkg.go.dev/yaml#Marshal).
+
+The input YAML may be a string or []byte.
+
+It fails if the marshaling returns an error or if the expected YAML bytes differ semantically
+from the expected ones.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	actual := struct {
+		A int `yaml:"a"`
+	}{
+		A: 10,
+	}
+	assertions.YAMLUnmarshalAsT(t,expected, `{"a": 10}`)
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	panic: "key: value", "key: value"
+	should panic without the yaml feature enabled.
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.YAMLMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLMarshalAsT) | package-level function |
+| [`assert.YAMLMarshalAsTf[EDoc Text](t T, expected EDoc, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLMarshalAsTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.YAMLMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLMarshalAsT) | package-level function |
+| [`require.YAMLMarshalAsTf[EDoc Text](t T, expected EDoc, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLMarshalAsTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.YAMLMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLMarshalAsT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLMarshalAsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L163)
+{{% /tab %}}
+{{< /tabs >}}
+
+### YAMLUnmarshalAsT[Object any, ADoc Text] {{% icon icon="star" color=orange %}}{#yamlunmarshalastobject-any-adoc-text}
+
+YAMLUnmarshalAsT wraps [Equal](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Equal) after [yaml.Unmarshal](https://pkg.go.dev/yaml#Unmarshal).
+
+The input YAML may be a string or []byte.
+
+It fails if the unmarshaling returns an error or if the resulting object is not equal to the expected one.
+
+Be careful not to wrap the expected object into an "any" interface if this is not what you expected:
+the unmarshaling would take this type to unmarshal as a map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)any.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	expected := struct {
+		A int `yaml:"a"`
+	}{
+		A: 10,
+	}
+	assertions.YAMLUnmarshalAsT(t,expected, `{"a": 10}`)
+```
+{{< /tab >}}
+{{% tab title="Examples" %}}
+```go
+	panic: "key: value", "key: value"
+	should panic without the yaml feature enabled.
+```
+{{< /tab >}}
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.YAMLUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLUnmarshalAsT) | package-level function |
+| [`assert.YAMLUnmarshalAsTf[Object any, ADoc Text](t T, expected Object, jazon ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLUnmarshalAsTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.YAMLUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLUnmarshalAsT) | package-level function |
+| [`require.YAMLUnmarshalAsTf[Object any, ADoc Text](t T, expected Object, jazon ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLUnmarshalAsTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.YAMLUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLUnmarshalAsT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLUnmarshalAsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L128)
 {{% /tab %}}
 {{< /tabs >}}
 

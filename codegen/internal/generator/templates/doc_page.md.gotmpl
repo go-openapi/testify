@@ -88,7 +88,7 @@ Generic assertions are marked with a {{ print "{{" }}% icon icon="star" color=or
 | Signature | Usage |
 |--|--|
         {{- $pkg := $.Package.Package }} 
-| [`{{ $pkg }}.{{ .Name }}({{ params .AllParams }}) {{ returns .Returns }}`]({{ $godoc }}/internal/{{ $pkg }}#{{ .Name }}) | internal implementation |
+| [`{{ $pkg }}.{{ .GenericName }}({{ params .AllParams }}) {{ returns .Returns }}`]({{ $godoc }}/internal/{{ $pkg }}#{{ .Name }}) | internal implementation |
 
 **Source:** [{{ .SourcePackage }}#{{ .Name }}]({{ sourceLink $github .SourceLink }})
 

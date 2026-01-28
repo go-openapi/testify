@@ -983,6 +983,14 @@ func ExampleWithinRange() {
 // no success example available. Please add some examples to produce a testable example.
 // }
 
+// func ExampleYAMLMarshalAsT() {
+// no success example available. Please add some examples to produce a testable example.
+// }
+
+// func ExampleYAMLUnmarshalAsT() {
+// no success example available. Please add some examples to produce a testable example.
+// }
+
 func ExampleZero() {
 	t := new(testing.T)
 	require.Zero(t, 0)

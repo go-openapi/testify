@@ -868,11 +868,11 @@ func JSONMarshalAsTf[EDoc Text](t T, expected EDoc, object any, msg string, args
 // JSONUnmarshalAsTf is the same as [JSONUnmarshalAsT], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func JSONUnmarshalAsTf[ADoc Text, Object any](t T, expected Object, jazon ADoc, msg string, args ...any) {
+func JSONUnmarshalAsTf[Object any, ADoc Text](t T, expected Object, jazon ADoc, msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.JSONUnmarshalAsT[ADoc, Object](t, expected, jazon, forwardArgs(msg, args)) {
+	if assertions.JSONUnmarshalAsT[Object, ADoc](t, expected, jazon, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1699,6 +1699,34 @@ func YAMLEqTf[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msg string, args
 		h.Helper()
 	}
 	if assertions.YAMLEqT[EDoc, ADoc](t, expected, actual, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// YAMLMarshalAsTf is the same as [YAMLMarshalAsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func YAMLMarshalAsTf[EDoc Text](t T, expected EDoc, object any, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.YAMLMarshalAsT[EDoc](t, expected, object, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// YAMLUnmarshalAsTf is the same as [YAMLUnmarshalAsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func YAMLUnmarshalAsTf[Object any, ADoc Text](t T, expected Object, jazon ADoc, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.YAMLUnmarshalAsT[Object, ADoc](t, expected, jazon, forwardArgs(msg, args)) {
 		return
 	}
 
