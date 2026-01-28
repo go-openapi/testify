@@ -185,7 +185,7 @@ Reference documentation (released):
 [contributors-doc]: ../contributing/CONTRIBUTORS.md
 [contributing-doc]: ../contributing/CONTRIBUTING.md
 [dco-doc]: ../contributing/DCO.md
-[style-doc]: ./STYLE.md
+[style-doc]: ../contributing/STYLE.md
 [coc-doc]: ../contributing/CODE_OF_CONDUCT.md
 [security-doc]: ../SECURITY.md
 [license-doc]: ../LICENSE.md
