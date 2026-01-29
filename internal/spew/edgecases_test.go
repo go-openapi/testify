@@ -10,6 +10,7 @@ import (
 
 func TestEdgeCases(t *testing.T) {
 	t.Parallel()
+
 	cfg := Config
 	output := io.Discard
 
