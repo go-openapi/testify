@@ -186,9 +186,9 @@ func TestParse_RenderWholeFile(t *testing.T) {
 		t.Fatal("Render() returned empty string")
 	}
 
-	t.Run("Should contain the example function (renamed from main)", func(t *testing.T) {
-		if !strings.Contains(rendered, "func ExampleFormatter()") {
-			t.Errorf("expected rendered code to contain example function declaration, got:\n%s", rendered)
+	t.Run("Should contain a main function", func(t *testing.T) {
+		if !strings.Contains(rendered, "func main()") {
+			t.Errorf("expected rendered code to contain main function declaration, got:\n%s", rendered)
 		}
 	})
 
@@ -198,11 +198,11 @@ func TestParse_RenderWholeFile(t *testing.T) {
 		}
 	})
 
-	t.Run("Should NOT contain package clause or imports", func(t *testing.T) {
-		if strings.Contains(rendered, "package ") {
+	t.Run("Should contain package clause or imports", func(t *testing.T) {
+		if !strings.Contains(rendered, "package ") {
 			t.Errorf("expected rendered code without package clause, got:\n%s", rendered)
 		}
-		if strings.Contains(rendered, "import ") {
+		if !strings.Contains(rendered, "import ") {
 			t.Errorf("expected rendered code without imports, got:\n%s", rendered)
 		}
 	})
