@@ -42,14 +42,45 @@ NotPanics asserts that the code inside the specified function does NOT panic.
 {{% tab title="Usage" %}}
 ```go
 	assertions.NotPanics(t, func(){ RemainCalm() })
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: func() { }
 	failure: func() { panic("panicking") }
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotPanics(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.NotPanics(t, func() {
+	})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -89,14 +120,46 @@ Panics asserts that the code inside the specified function panics.
 {{% tab title="Usage" %}}
 ```go
 	assertions.Panics(t, func(){ GoCrazy() })
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: func() { panic("panicking") }
 	failure: func() { }
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestPanics(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.Panics(t, func() {
+		panic("panicking")
+	})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -137,14 +200,47 @@ and that the recovered panic value is an error that satisfies the EqualError com
 {{% tab title="Usage" %}}
 ```go
 	assertions.PanicsWithError(t, "crazy error", func(){ GoCrazy() })
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: ErrTest.Error(), func() { panic(ErrTest) }
 	failure: ErrTest.Error(), func() { }
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestPanicsWithError(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.PanicsWithError(t, assert.ErrTest.Error(), func() {
+		panic(assert.ErrTest)
+	})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -185,14 +281,46 @@ and that the recovered panic value equals the expected panic value.
 {{% tab title="Usage" %}}
 ```go
 	assertions.PanicsWithValue(t, "crazy error", func(){ GoCrazy() })
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: "panicking", func() { panic("panicking") }
 	failure: "panicking", func() { }
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestPanicsWithValue(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.PanicsWithValue(t, "panicking", func() {
+		panic("panicking")
+	})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 

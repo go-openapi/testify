@@ -32,7 +32,7 @@ func Example{{ .Name }}() {
         {{- range .Tests }}
           {{- if eq .ExpectedOutcome 1 }}{{/* TestSuccess */}}
             {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
-    t := new(testing.T)
+    t := new(testing.T) // should come from testing, e.g. func Test{{ $fn.Name }}(t *testing.T)
             {{- if $isRequire }}
     {{ $pkg }}.{{ $fn.Name }}{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(t, {{ relocate .TestedValues $pkg }})
     fmt.Println("passed")

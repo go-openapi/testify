@@ -21,7 +21,7 @@ import (
 )
 
 func ExampleCondition() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestCondition(t *testing.T)
 	require.Condition(t, func() bool {
 		return true
 	})
@@ -31,7 +31,7 @@ func ExampleCondition() {
 }
 
 func ExampleContains() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestContains(t *testing.T)
 	require.Contains(t, []string{"A", "B"}, "A")
 	fmt.Println("passed")
 
@@ -39,7 +39,7 @@ func ExampleContains() {
 }
 
 func ExampleDirExists() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestDirExists(t *testing.T)
 	require.DirExists(t, filepath.Join(testDataPath(), "existing_dir"))
 	fmt.Println("passed")
 
@@ -47,7 +47,7 @@ func ExampleDirExists() {
 }
 
 func ExampleDirNotExists() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestDirNotExists(t *testing.T)
 	require.DirNotExists(t, filepath.Join(testDataPath(), "non_existing_dir"))
 	fmt.Println("passed")
 
@@ -55,7 +55,7 @@ func ExampleDirNotExists() {
 }
 
 func ExampleElementsMatch() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestElementsMatch(t *testing.T)
 	require.ElementsMatch(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
 	fmt.Println("passed")
 
@@ -63,7 +63,7 @@ func ExampleElementsMatch() {
 }
 
 func ExampleElementsMatchT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestElementsMatchT(t *testing.T)
 	require.ElementsMatchT(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
 	fmt.Println("passed")
 
@@ -71,7 +71,7 @@ func ExampleElementsMatchT() {
 }
 
 func ExampleEmpty() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEmpty(t *testing.T)
 	require.Empty(t, "")
 	fmt.Println("passed")
 
@@ -79,7 +79,7 @@ func ExampleEmpty() {
 }
 
 func ExampleEqual() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEqual(t *testing.T)
 	require.Equal(t, 123, 123)
 	fmt.Println("passed")
 
@@ -87,7 +87,7 @@ func ExampleEqual() {
 }
 
 func ExampleEqualError() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEqualError(t *testing.T)
 	require.EqualError(t, require.ErrTest, "assert.ErrTest general error for testing")
 	fmt.Println("passed")
 
@@ -95,7 +95,7 @@ func ExampleEqualError() {
 }
 
 func ExampleEqualExportedValues() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEqualExportedValues(t *testing.T)
 	require.EqualExportedValues(t, &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "a", b: 2})
 	fmt.Println("passed")
 
@@ -103,7 +103,7 @@ func ExampleEqualExportedValues() {
 }
 
 func ExampleEqualT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEqualT(t *testing.T)
 	require.EqualT(t, 123, 123)
 	fmt.Println("passed")
 
@@ -111,7 +111,7 @@ func ExampleEqualT() {
 }
 
 func ExampleEqualValues() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEqualValues(t *testing.T)
 	require.EqualValues(t, uint32(123), int32(123))
 	fmt.Println("passed")
 
@@ -119,7 +119,7 @@ func ExampleEqualValues() {
 }
 
 func ExampleError() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestError(t *testing.T)
 	require.Error(t, require.ErrTest)
 	fmt.Println("passed")
 
@@ -127,7 +127,7 @@ func ExampleError() {
 }
 
 func ExampleErrorAs() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestErrorAs(t *testing.T)
 	require.ErrorAs(t, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
 	fmt.Println("passed")
 
@@ -135,7 +135,7 @@ func ExampleErrorAs() {
 }
 
 func ExampleErrorContains() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestErrorContains(t *testing.T)
 	require.ErrorContains(t, require.ErrTest, "general error")
 	fmt.Println("passed")
 
@@ -143,7 +143,7 @@ func ExampleErrorContains() {
 }
 
 func ExampleErrorIs() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestErrorIs(t *testing.T)
 	require.ErrorIs(t, fmt.Errorf("wrap: %w", io.EOF), io.EOF)
 	fmt.Println("passed")
 
@@ -151,7 +151,7 @@ func ExampleErrorIs() {
 }
 
 func ExampleEventually() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEventually(t *testing.T)
 	require.Eventually(t, func() bool {
 		return true
 	}, 100*time.Millisecond, 20*time.Millisecond)
@@ -161,7 +161,7 @@ func ExampleEventually() {
 }
 
 func ExampleEventuallyWith() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEventuallyWith(t *testing.T)
 	require.EventuallyWith(t, func(c *assert.CollectT) {
 		assert.True(c, true)
 	}, 100*time.Millisecond, 20*time.Millisecond)
@@ -171,7 +171,7 @@ func ExampleEventuallyWith() {
 }
 
 func ExampleExactly() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestExactly(t *testing.T)
 	require.Exactly(t, int32(123), int32(123))
 	fmt.Println("passed")
 
@@ -187,7 +187,7 @@ func ExampleExactly() {
 // }
 
 func ExampleFalse() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestFalse(t *testing.T)
 	require.False(t, 1 == 0)
 	fmt.Println("passed")
 
@@ -195,7 +195,7 @@ func ExampleFalse() {
 }
 
 func ExampleFalseT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestFalseT(t *testing.T)
 	require.FalseT(t, 1 == 0)
 	fmt.Println("passed")
 
@@ -203,7 +203,7 @@ func ExampleFalseT() {
 }
 
 func ExampleFileEmpty() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestFileEmpty(t *testing.T)
 	require.FileEmpty(t, filepath.Join(testDataPath(), "empty_file"))
 	fmt.Println("passed")
 
@@ -211,7 +211,7 @@ func ExampleFileEmpty() {
 }
 
 func ExampleFileExists() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestFileExists(t *testing.T)
 	require.FileExists(t, filepath.Join(testDataPath(), "existing_file"))
 	fmt.Println("passed")
 
@@ -219,7 +219,7 @@ func ExampleFileExists() {
 }
 
 func ExampleFileNotEmpty() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestFileNotEmpty(t *testing.T)
 	require.FileNotEmpty(t, filepath.Join(testDataPath(), "existing_file"))
 	fmt.Println("passed")
 
@@ -227,7 +227,7 @@ func ExampleFileNotEmpty() {
 }
 
 func ExampleFileNotExists() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestFileNotExists(t *testing.T)
 	require.FileNotExists(t, filepath.Join(testDataPath(), "non_existing_file"))
 	fmt.Println("passed")
 
@@ -235,7 +235,7 @@ func ExampleFileNotExists() {
 }
 
 func ExampleGreater() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestGreater(t *testing.T)
 	require.Greater(t, 2, 1)
 	fmt.Println("passed")
 
@@ -243,7 +243,7 @@ func ExampleGreater() {
 }
 
 func ExampleGreaterOrEqual() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestGreaterOrEqual(t *testing.T)
 	require.GreaterOrEqual(t, 2, 1)
 	fmt.Println("passed")
 
@@ -251,7 +251,7 @@ func ExampleGreaterOrEqual() {
 }
 
 func ExampleGreaterOrEqualT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestGreaterOrEqualT(t *testing.T)
 	require.GreaterOrEqualT(t, 2, 1)
 	fmt.Println("passed")
 
@@ -259,7 +259,7 @@ func ExampleGreaterOrEqualT() {
 }
 
 func ExampleGreaterT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestGreaterT(t *testing.T)
 	require.GreaterT(t, 2, 1)
 	fmt.Println("passed")
 
@@ -267,7 +267,7 @@ func ExampleGreaterT() {
 }
 
 func ExampleHTTPBodyContains() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestHTTPBodyContains(t *testing.T)
 	require.HTTPBodyContains(t, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, World!")
 	fmt.Println("passed")
 
@@ -275,7 +275,7 @@ func ExampleHTTPBodyContains() {
 }
 
 func ExampleHTTPBodyNotContains() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestHTTPBodyNotContains(t *testing.T)
 	require.HTTPBodyNotContains(t, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, Bob!")
 	fmt.Println("passed")
 
@@ -283,7 +283,7 @@ func ExampleHTTPBodyNotContains() {
 }
 
 func ExampleHTTPError() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestHTTPError(t *testing.T)
 	require.HTTPError(t, httpError, "GET", "/", nil)
 	fmt.Println("passed")
 
@@ -291,7 +291,7 @@ func ExampleHTTPError() {
 }
 
 func ExampleHTTPRedirect() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestHTTPRedirect(t *testing.T)
 	require.HTTPRedirect(t, httpRedirect, "GET", "/", nil)
 	fmt.Println("passed")
 
@@ -299,7 +299,7 @@ func ExampleHTTPRedirect() {
 }
 
 func ExampleHTTPStatusCode() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestHTTPStatusCode(t *testing.T)
 	require.HTTPStatusCode(t, httpOK, "GET", "/", nil, http.StatusOK)
 	fmt.Println("passed")
 
@@ -307,7 +307,7 @@ func ExampleHTTPStatusCode() {
 }
 
 func ExampleHTTPSuccess() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestHTTPSuccess(t *testing.T)
 	require.HTTPSuccess(t, httpOK, "GET", "/", nil)
 	fmt.Println("passed")
 
@@ -315,7 +315,7 @@ func ExampleHTTPSuccess() {
 }
 
 func ExampleImplements() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestImplements(t *testing.T)
 	require.Implements(t, ptr(dummyInterface), new(testing.T))
 	fmt.Println("passed")
 
@@ -323,7 +323,7 @@ func ExampleImplements() {
 }
 
 func ExampleInDelta() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInDelta(t *testing.T)
 	require.InDelta(t, 1.0, 1.01, 0.02)
 	fmt.Println("passed")
 
@@ -331,7 +331,7 @@ func ExampleInDelta() {
 }
 
 func ExampleInDeltaMapValues() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInDeltaMapValues(t *testing.T)
 	require.InDeltaMapValues(t, map[string]float64{"a": 1.0}, map[string]float64{"a": 1.01}, 0.02)
 	fmt.Println("passed")
 
@@ -339,7 +339,7 @@ func ExampleInDeltaMapValues() {
 }
 
 func ExampleInDeltaSlice() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInDeltaSlice(t *testing.T)
 	require.InDeltaSlice(t, []float64{1.0, 2.0}, []float64{1.01, 2.01}, 0.02)
 	fmt.Println("passed")
 
@@ -347,7 +347,7 @@ func ExampleInDeltaSlice() {
 }
 
 func ExampleInDeltaT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInDeltaT(t *testing.T)
 	require.InDeltaT(t, 1.0, 1.01, 0.02)
 	fmt.Println("passed")
 
@@ -355,7 +355,7 @@ func ExampleInDeltaT() {
 }
 
 func ExampleInEpsilon() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilon(t *testing.T)
 	require.InEpsilon(t, 100.0, 101.0, 0.02)
 	fmt.Println("passed")
 
@@ -363,7 +363,7 @@ func ExampleInEpsilon() {
 }
 
 func ExampleInEpsilonSlice() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonSlice(t *testing.T)
 	require.InEpsilonSlice(t, []float64{100.0, 200.0}, []float64{101.0, 202.0}, 0.02)
 	fmt.Println("passed")
 
@@ -371,7 +371,7 @@ func ExampleInEpsilonSlice() {
 }
 
 func ExampleInEpsilonT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonT(t *testing.T)
 	require.InEpsilonT(t, 100.0, 101.0, 0.02)
 	fmt.Println("passed")
 
@@ -379,7 +379,7 @@ func ExampleInEpsilonT() {
 }
 
 func ExampleIsDecreasing() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsDecreasing(t *testing.T)
 	require.IsDecreasing(t, []int{3, 2, 1})
 	fmt.Println("passed")
 
@@ -387,7 +387,7 @@ func ExampleIsDecreasing() {
 }
 
 func ExampleIsDecreasingT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsDecreasingT(t *testing.T)
 	require.IsDecreasingT(t, []int{3, 2, 1})
 	fmt.Println("passed")
 
@@ -395,7 +395,7 @@ func ExampleIsDecreasingT() {
 }
 
 func ExampleIsIncreasing() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsIncreasing(t *testing.T)
 	require.IsIncreasing(t, []int{1, 2, 3})
 	fmt.Println("passed")
 
@@ -403,7 +403,7 @@ func ExampleIsIncreasing() {
 }
 
 func ExampleIsIncreasingT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsIncreasingT(t *testing.T)
 	require.IsIncreasingT(t, []int{1, 2, 3})
 	fmt.Println("passed")
 
@@ -411,7 +411,7 @@ func ExampleIsIncreasingT() {
 }
 
 func ExampleIsNonDecreasing() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsNonDecreasing(t *testing.T)
 	require.IsNonDecreasing(t, []int{1, 1, 2})
 	fmt.Println("passed")
 
@@ -419,7 +419,7 @@ func ExampleIsNonDecreasing() {
 }
 
 func ExampleIsNonDecreasingT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsNonDecreasingT(t *testing.T)
 	require.IsNonDecreasingT(t, []int{1, 1, 2})
 	fmt.Println("passed")
 
@@ -427,7 +427,7 @@ func ExampleIsNonDecreasingT() {
 }
 
 func ExampleIsNonIncreasing() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsNonIncreasing(t *testing.T)
 	require.IsNonIncreasing(t, []int{2, 1, 1})
 	fmt.Println("passed")
 
@@ -435,7 +435,7 @@ func ExampleIsNonIncreasing() {
 }
 
 func ExampleIsNonIncreasingT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsNonIncreasingT(t *testing.T)
 	require.IsNonIncreasingT(t, []int{2, 1, 1})
 	fmt.Println("passed")
 
@@ -443,7 +443,7 @@ func ExampleIsNonIncreasingT() {
 }
 
 func ExampleIsNotOfTypeT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsNotOfTypeT(t *testing.T)
 	require.IsNotOfTypeT[myType](t, 123.123)
 	fmt.Println("passed")
 
@@ -451,7 +451,7 @@ func ExampleIsNotOfTypeT() {
 }
 
 func ExampleIsNotType() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsNotType(t *testing.T)
 	require.IsNotType(t, int32(123), int64(456))
 	fmt.Println("passed")
 
@@ -459,7 +459,7 @@ func ExampleIsNotType() {
 }
 
 func ExampleIsOfTypeT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsOfTypeT(t *testing.T)
 	require.IsOfTypeT[myType](t, myType(123.123))
 	fmt.Println("passed")
 
@@ -467,7 +467,7 @@ func ExampleIsOfTypeT() {
 }
 
 func ExampleIsType() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsType(t *testing.T)
 	require.IsType(t, 123, 456)
 	fmt.Println("passed")
 
@@ -475,7 +475,7 @@ func ExampleIsType() {
 }
 
 func ExampleJSONEq() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestJSONEq(t *testing.T)
 	require.JSONEq(t, `{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
 	fmt.Println("passed")
 
@@ -483,7 +483,7 @@ func ExampleJSONEq() {
 }
 
 func ExampleJSONEqBytes() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestJSONEqBytes(t *testing.T)
 	require.JSONEqBytes(t, []byte(`{"hello": "world", "foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`))
 	fmt.Println("passed")
 
@@ -491,7 +491,7 @@ func ExampleJSONEqBytes() {
 }
 
 func ExampleJSONEqT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestJSONEqT(t *testing.T)
 	require.JSONEqT(t, `{"hello": "world", "foo": "bar"}`, []byte(`{"foo": "bar", "hello": "world"}`))
 	fmt.Println("passed")
 
@@ -499,7 +499,7 @@ func ExampleJSONEqT() {
 }
 
 func ExampleJSONMarshalAsT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestJSONMarshalAsT(t *testing.T)
 	require.JSONMarshalAsT(t, []byte(`{"A": "a"}`), dummyStruct{A: "a"})
 	fmt.Println("passed")
 
@@ -507,7 +507,7 @@ func ExampleJSONMarshalAsT() {
 }
 
 func ExampleJSONUnmarshalAsT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestJSONUnmarshalAsT(t *testing.T)
 	require.JSONUnmarshalAsT(t, dummyStruct{A: "a"}, []byte(`{"A": "a"}`))
 	fmt.Println("passed")
 
@@ -515,7 +515,7 @@ func ExampleJSONUnmarshalAsT() {
 }
 
 func ExampleKind() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestKind(t *testing.T)
 	require.Kind(t, reflect.String, "hello")
 	fmt.Println("passed")
 
@@ -523,7 +523,7 @@ func ExampleKind() {
 }
 
 func ExampleLen() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestLen(t *testing.T)
 	require.Len(t, []string{"A", "B"}, 2)
 	fmt.Println("passed")
 
@@ -531,7 +531,7 @@ func ExampleLen() {
 }
 
 func ExampleLess() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestLess(t *testing.T)
 	require.Less(t, 1, 2)
 	fmt.Println("passed")
 
@@ -539,7 +539,7 @@ func ExampleLess() {
 }
 
 func ExampleLessOrEqual() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestLessOrEqual(t *testing.T)
 	require.LessOrEqual(t, 1, 2)
 	fmt.Println("passed")
 
@@ -547,7 +547,7 @@ func ExampleLessOrEqual() {
 }
 
 func ExampleLessOrEqualT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestLessOrEqualT(t *testing.T)
 	require.LessOrEqualT(t, 1, 2)
 	fmt.Println("passed")
 
@@ -555,7 +555,7 @@ func ExampleLessOrEqualT() {
 }
 
 func ExampleLessT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestLessT(t *testing.T)
 	require.LessT(t, 1, 2)
 	fmt.Println("passed")
 
@@ -563,7 +563,7 @@ func ExampleLessT() {
 }
 
 func ExampleMapContainsT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestMapContainsT(t *testing.T)
 	require.MapContainsT(t, map[string]string{"A": "B"}, "A")
 	fmt.Println("passed")
 
@@ -571,7 +571,7 @@ func ExampleMapContainsT() {
 }
 
 func ExampleMapNotContainsT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestMapNotContainsT(t *testing.T)
 	require.MapNotContainsT(t, map[string]string{"A": "B"}, "C")
 	fmt.Println("passed")
 
@@ -579,7 +579,7 @@ func ExampleMapNotContainsT() {
 }
 
 func ExampleNegative() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNegative(t *testing.T)
 	require.Negative(t, -1)
 	fmt.Println("passed")
 
@@ -587,7 +587,7 @@ func ExampleNegative() {
 }
 
 func ExampleNegativeT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNegativeT(t *testing.T)
 	require.NegativeT(t, -1)
 	fmt.Println("passed")
 
@@ -595,7 +595,7 @@ func ExampleNegativeT() {
 }
 
 func ExampleNever() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNever(t *testing.T)
 	require.Never(t, func() bool {
 		return false
 	}, 100*time.Millisecond, 20*time.Millisecond)
@@ -605,7 +605,7 @@ func ExampleNever() {
 }
 
 func ExampleNil() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNil(t *testing.T)
 	require.Nil(t, nil)
 	fmt.Println("passed")
 
@@ -613,7 +613,7 @@ func ExampleNil() {
 }
 
 func ExampleNoError() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNoError(t *testing.T)
 	require.NoError(t, nil)
 	fmt.Println("passed")
 
@@ -621,7 +621,7 @@ func ExampleNoError() {
 }
 
 func ExampleNotContains() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotContains(t *testing.T)
 	require.NotContains(t, []string{"A", "B"}, "C")
 	fmt.Println("passed")
 
@@ -629,7 +629,7 @@ func ExampleNotContains() {
 }
 
 func ExampleNotElementsMatch() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotElementsMatch(t *testing.T)
 	require.NotElementsMatch(t, []int{1, 2, 3}, []int{1, 2, 4})
 	fmt.Println("passed")
 
@@ -637,7 +637,7 @@ func ExampleNotElementsMatch() {
 }
 
 func ExampleNotElementsMatchT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotElementsMatchT(t *testing.T)
 	require.NotElementsMatchT(t, []int{1, 2, 3}, []int{1, 2, 4})
 	fmt.Println("passed")
 
@@ -645,7 +645,7 @@ func ExampleNotElementsMatchT() {
 }
 
 func ExampleNotEmpty() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotEmpty(t *testing.T)
 	require.NotEmpty(t, "not empty")
 	fmt.Println("passed")
 
@@ -653,7 +653,7 @@ func ExampleNotEmpty() {
 }
 
 func ExampleNotEqual() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotEqual(t *testing.T)
 	require.NotEqual(t, 123, 456)
 	fmt.Println("passed")
 
@@ -661,7 +661,7 @@ func ExampleNotEqual() {
 }
 
 func ExampleNotEqualT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotEqualT(t *testing.T)
 	require.NotEqualT(t, 123, 456)
 	fmt.Println("passed")
 
@@ -669,7 +669,7 @@ func ExampleNotEqualT() {
 }
 
 func ExampleNotEqualValues() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotEqualValues(t *testing.T)
 	require.NotEqualValues(t, uint32(123), int32(456))
 	fmt.Println("passed")
 
@@ -677,7 +677,7 @@ func ExampleNotEqualValues() {
 }
 
 func ExampleNotErrorAs() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotErrorAs(t *testing.T)
 	require.NotErrorAs(t, require.ErrTest, new(*dummyError))
 	fmt.Println("passed")
 
@@ -685,7 +685,7 @@ func ExampleNotErrorAs() {
 }
 
 func ExampleNotErrorIs() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotErrorIs(t *testing.T)
 	require.NotErrorIs(t, require.ErrTest, io.EOF)
 	fmt.Println("passed")
 
@@ -693,7 +693,7 @@ func ExampleNotErrorIs() {
 }
 
 func ExampleNotImplements() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotImplements(t *testing.T)
 	require.NotImplements(t, (*error)(nil), new(testing.T))
 	fmt.Println("passed")
 
@@ -701,7 +701,7 @@ func ExampleNotImplements() {
 }
 
 func ExampleNotKind() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotKind(t *testing.T)
 	require.NotKind(t, reflect.String, 0)
 	fmt.Println("passed")
 
@@ -709,7 +709,7 @@ func ExampleNotKind() {
 }
 
 func ExampleNotNil() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotNil(t *testing.T)
 	require.NotNil(t, "not nil")
 	fmt.Println("passed")
 
@@ -717,7 +717,7 @@ func ExampleNotNil() {
 }
 
 func ExampleNotPanics() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotPanics(t *testing.T)
 	require.NotPanics(t, func() {
 	})
 	fmt.Println("passed")
@@ -726,7 +726,7 @@ func ExampleNotPanics() {
 }
 
 func ExampleNotRegexp() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotRegexp(t *testing.T)
 	require.NotRegexp(t, "^start", "not starting")
 	fmt.Println("passed")
 
@@ -734,7 +734,7 @@ func ExampleNotRegexp() {
 }
 
 func ExampleNotRegexpT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotRegexpT(t *testing.T)
 	require.NotRegexpT(t, "^start", "not starting")
 	fmt.Println("passed")
 
@@ -742,7 +742,7 @@ func ExampleNotRegexpT() {
 }
 
 func ExampleNotSame() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotSame(t *testing.T)
 	require.NotSame(t, &staticVar, ptr("static string"))
 	fmt.Println("passed")
 
@@ -750,7 +750,7 @@ func ExampleNotSame() {
 }
 
 func ExampleNotSameT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotSameT(t *testing.T)
 	require.NotSameT(t, &staticVar, ptr("static string"))
 	fmt.Println("passed")
 
@@ -758,7 +758,7 @@ func ExampleNotSameT() {
 }
 
 func ExampleNotSortedT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotSortedT(t *testing.T)
 	require.NotSortedT(t, []int{3, 1, 3})
 	fmt.Println("passed")
 
@@ -766,7 +766,7 @@ func ExampleNotSortedT() {
 }
 
 func ExampleNotSubset() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotSubset(t *testing.T)
 	require.NotSubset(t, []int{1, 2, 3}, []int{4, 5})
 	fmt.Println("passed")
 
@@ -774,7 +774,7 @@ func ExampleNotSubset() {
 }
 
 func ExampleNotZero() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotZero(t *testing.T)
 	require.NotZero(t, 1)
 	fmt.Println("passed")
 
@@ -782,7 +782,7 @@ func ExampleNotZero() {
 }
 
 func ExamplePanics() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestPanics(t *testing.T)
 	require.Panics(t, func() {
 		panic("panicking")
 	})
@@ -792,7 +792,7 @@ func ExamplePanics() {
 }
 
 func ExamplePanicsWithError() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestPanicsWithError(t *testing.T)
 	require.PanicsWithError(t, assert.ErrTest.Error(), func() {
 		panic(assert.ErrTest)
 	})
@@ -802,7 +802,7 @@ func ExamplePanicsWithError() {
 }
 
 func ExamplePanicsWithValue() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestPanicsWithValue(t *testing.T)
 	require.PanicsWithValue(t, "panicking", func() {
 		panic("panicking")
 	})
@@ -812,7 +812,7 @@ func ExamplePanicsWithValue() {
 }
 
 func ExamplePositive() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestPositive(t *testing.T)
 	require.Positive(t, 1)
 	fmt.Println("passed")
 
@@ -820,7 +820,7 @@ func ExamplePositive() {
 }
 
 func ExamplePositiveT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestPositiveT(t *testing.T)
 	require.PositiveT(t, 1)
 	fmt.Println("passed")
 
@@ -828,7 +828,7 @@ func ExamplePositiveT() {
 }
 
 func ExampleRegexp() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestRegexp(t *testing.T)
 	require.Regexp(t, "^start", "starting")
 	fmt.Println("passed")
 
@@ -836,7 +836,7 @@ func ExampleRegexp() {
 }
 
 func ExampleRegexpT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestRegexpT(t *testing.T)
 	require.RegexpT(t, "^start", "starting")
 	fmt.Println("passed")
 
@@ -844,7 +844,7 @@ func ExampleRegexpT() {
 }
 
 func ExampleSame() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSame(t *testing.T)
 	require.Same(t, &staticVar, staticVarPtr)
 	fmt.Println("passed")
 
@@ -852,7 +852,7 @@ func ExampleSame() {
 }
 
 func ExampleSameT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSameT(t *testing.T)
 	require.SameT(t, &staticVar, staticVarPtr)
 	fmt.Println("passed")
 
@@ -860,7 +860,7 @@ func ExampleSameT() {
 }
 
 func ExampleSeqContainsT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSeqContainsT(t *testing.T)
 	require.SeqContainsT(t, slices.Values([]string{"A", "B"}), "A")
 	fmt.Println("passed")
 
@@ -868,7 +868,7 @@ func ExampleSeqContainsT() {
 }
 
 func ExampleSeqNotContainsT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSeqNotContainsT(t *testing.T)
 	require.SeqNotContainsT(t, slices.Values([]string{"A", "B"}), "C")
 	fmt.Println("passed")
 
@@ -876,7 +876,7 @@ func ExampleSeqNotContainsT() {
 }
 
 func ExampleSliceContainsT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSliceContainsT(t *testing.T)
 	require.SliceContainsT(t, []string{"A", "B"}, "A")
 	fmt.Println("passed")
 
@@ -884,7 +884,7 @@ func ExampleSliceContainsT() {
 }
 
 func ExampleSliceNotContainsT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSliceNotContainsT(t *testing.T)
 	require.SliceNotContainsT(t, []string{"A", "B"}, "C")
 	fmt.Println("passed")
 
@@ -892,7 +892,7 @@ func ExampleSliceNotContainsT() {
 }
 
 func ExampleSliceNotSubsetT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSliceNotSubsetT(t *testing.T)
 	require.SliceNotSubsetT(t, []int{1, 2, 3}, []int{4, 5})
 	fmt.Println("passed")
 
@@ -900,7 +900,7 @@ func ExampleSliceNotSubsetT() {
 }
 
 func ExampleSliceSubsetT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSliceSubsetT(t *testing.T)
 	require.SliceSubsetT(t, []int{1, 2, 3}, []int{1, 2})
 	fmt.Println("passed")
 
@@ -908,7 +908,7 @@ func ExampleSliceSubsetT() {
 }
 
 func ExampleSortedT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSortedT(t *testing.T)
 	require.SortedT(t, []int{1, 1, 3})
 	fmt.Println("passed")
 
@@ -916,7 +916,7 @@ func ExampleSortedT() {
 }
 
 func ExampleStringContainsT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestStringContainsT(t *testing.T)
 	require.StringContainsT(t, "AB", "A")
 	fmt.Println("passed")
 
@@ -924,7 +924,7 @@ func ExampleStringContainsT() {
 }
 
 func ExampleStringNotContainsT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestStringNotContainsT(t *testing.T)
 	require.StringNotContainsT(t, "AB", "C")
 	fmt.Println("passed")
 
@@ -932,7 +932,7 @@ func ExampleStringNotContainsT() {
 }
 
 func ExampleSubset() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSubset(t *testing.T)
 	require.Subset(t, []int{1, 2, 3}, []int{1, 2})
 	fmt.Println("passed")
 
@@ -940,7 +940,7 @@ func ExampleSubset() {
 }
 
 func ExampleTrue() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestTrue(t *testing.T)
 	require.True(t, 1 == 1)
 	fmt.Println("passed")
 
@@ -948,7 +948,7 @@ func ExampleTrue() {
 }
 
 func ExampleTrueT() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestTrueT(t *testing.T)
 	require.TrueT(t, 1 == 1)
 	fmt.Println("passed")
 
@@ -956,7 +956,7 @@ func ExampleTrueT() {
 }
 
 func ExampleWithinDuration() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestWithinDuration(t *testing.T)
 	require.WithinDuration(t, time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 12, 0, 1, 0, time.UTC), 2*time.Second)
 	fmt.Println("passed")
 
@@ -964,7 +964,7 @@ func ExampleWithinDuration() {
 }
 
 func ExampleWithinRange() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestWithinRange(t *testing.T)
 	require.WithinRange(t, time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 11, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 13, 0, 0, 0, time.UTC))
 	fmt.Println("passed")
 
@@ -992,7 +992,7 @@ func ExampleWithinRange() {
 // }
 
 func ExampleZero() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestZero(t *testing.T)
 	require.Zero(t, 0)
 	fmt.Println("passed")
 

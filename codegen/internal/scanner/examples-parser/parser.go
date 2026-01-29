@@ -283,11 +283,40 @@ type TestableExample struct {
 //
 // In both cases, the code is formatted with [imports.Process] (goimports).
 func (x TestableExample) Render() string {
-	if x.WholeFile && x.play != nil {
-		return x.renderWholeFile()
+	// Render the full Play file as a standalone main program when available.
+	if x.play != nil {
+		return x.renderPlay()
 	}
 
 	return x.renderBody()
+
+	// Previous routing: stripped package/imports/main scaffolding.
+	// if x.WholeFile && x.play != nil {
+	// 	return x.renderWholeFile()
+	// }
+	// return x.renderBody()
+}
+
+// renderPlay renders the Play AST as-is: a complete runnable program
+// with package clause, imports, and func main().
+func (x TestableExample) renderPlay() string {
+	var buf bytes.Buffer
+	p := printer.Config{Mode: printer.UseSpaces, Tabwidth: tabWidth}
+	if err := p.Fprint(&buf, x.fset, x.play); err != nil {
+		return ""
+	}
+
+	raw := buf.String()
+
+	formatted, err := imports.Process("example.go", []byte(raw), &imports.Options{
+		Fragment:   true,
+		FormatOnly: true,
+	})
+	if err != nil {
+		return raw
+	}
+
+	return string(formatted)
 }
 
 // renderBody renders the example function body only.

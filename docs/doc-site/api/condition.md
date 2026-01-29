@@ -42,14 +42,46 @@ Condition uses a [Comparison](https://pkg.go.dev/github.com/go-openapi/testify/v
 {{% tab title="Usage" %}}
 ```go
 	assertions.Condition(t, func() bool { return myCondition })
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success:  func() bool { return true }
 	failure:  func() bool { return false }
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestCondition(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.Condition(t, func() bool {
+		return true
+	})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -106,14 +138,47 @@ A blocking condition will cause [Eventually](https://pkg.go.dev/github.com/go-op
 {{% tab title="Usage" %}}
 ```go
 	assertions.Eventually(t, func() bool { return true }, time.Second, 10*time.Millisecond)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success:  func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond
 	failure:  func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEventually(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.Eventually(t, func() bool {
+		return true
+	}, 100*time.Millisecond, 20*time.Millisecond)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -182,14 +247,48 @@ It may write to variables outside its scope without triggering race conditions.
 	1*time.Second,
 	"external state has not changed to 'true'; still false",
 	)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: func(c *CollectT) { True(c,true) }, 100*time.Millisecond, 20*time.Millisecond
 	failure: func(c *CollectT) { False(c,true) }, 100*time.Millisecond, 20*time.Millisecond
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEventuallyWith(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.EventuallyWith(t, func(c *assert.CollectT) {
+		assert.True(c, true)
+	}, 100*time.Millisecond, 20*time.Millisecond)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -242,14 +341,47 @@ A blocking condition will cause [Never](https://pkg.go.dev/github.com/go-openapi
 {{% tab title="Usage" %}}
 ```go
 	assertions.Never(t, func() bool { return false }, time.Second, 10*time.Millisecond)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success:  func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond
 	failure:  func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNever(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.Never(t, func() bool {
+		return false
+	}, 100*time.Millisecond, 20*time.Millisecond)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 

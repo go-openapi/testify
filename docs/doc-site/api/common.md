@@ -7,6 +7,8 @@ domains:
 keywords:
   - "CallerInfo"
   - "CallerInfof"
+  - "New"
+  - "Newf"
   - "ObjectsAreEqual"
   - "ObjectsAreEqualf"
   - "ObjectsAreEqualValues"
@@ -22,7 +24,7 @@ Other Uncategorized Helpers
 
 _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
-This domain exposes 3 functionalities.
+This domain exposes 4 functionalities.
 
 ```tree
 ```
@@ -61,6 +63,31 @@ failed.
 >
 > it is not necessary to export CallerInfo. This should remain an internal implementation detail.
 >
+{{% /tab %}}
+{{< /tabs >}}
+
+### New
+
+
+
+{{< tabs >}}
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.New(t T) *Assertions`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#New) | package-level function |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.New(t T) *Assertions`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#New) | package-level function |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--| 
+| [`assertions.New(t T) *Assertions`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#New) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#New](https://github.com/go-openapi/testify/blob/master/internal/assertions/assertion.go#L26)
 {{% /tab %}}
 {{< /tabs >}}
 

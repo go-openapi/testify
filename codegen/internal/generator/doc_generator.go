@@ -14,6 +14,7 @@ import (
 	"github.com/go-openapi/testify/codegen/v2/internal/generator/domains"
 	"github.com/go-openapi/testify/codegen/v2/internal/generator/funcmaps"
 	"github.com/go-openapi/testify/codegen/v2/internal/model"
+	exparser "github.com/go-openapi/testify/codegen/v2/internal/scanner/examples-parser"
 )
 
 const (
@@ -53,8 +54,11 @@ func (d *DocGenerator) Generate(opts ...GenerateOption) error {
 		return err
 	}
 
-	// Proposal for enhancement: other fun stuff
-	// - capture testable examples and render their source code
+	// capture testable examples from generated packages and attach them to
+	// the model so templates may render their source code.
+	if err := d.populateExamples(); err != nil {
+		return err
+	}
 
 	// reorganize accumulated package-based docs into domain-based docs
 	//
@@ -221,6 +225,93 @@ func (d *DocGenerator) loadTemplates() error {
 	d.ctx.templates = templates
 
 	return nil
+}
+
+// populateExamples runs the examples-parser against all generated packages in the
+// merged Documentation and attaches the discovered testable examples to the
+// corresponding Function and Ident objects.
+//
+// This must run before [reorganizeByDomain] because domain discovery copies
+// functions and types into domain entries.
+func (d *DocGenerator) populateExamples() error {
+	if !d.ctx.runnableExamples {
+		return nil
+	}
+
+	docs := domains.FlattenDocumentation(d.doc)
+
+	// derive the module root from the assertions import that every generated
+	// package carries (e.g. "github.com/go-openapi/testify/v2").
+	var rootPkg string
+	for _, doc := range docs {
+		if doc.Package != nil && doc.Package.Imports != nil {
+			if assertionsPath, ok := doc.Package.Imports[assertions]; ok {
+				rootPkg = path.Dir(path.Dir(assertionsPath))
+
+				break
+			}
+		}
+	}
+	if rootPkg == "" {
+		return nil // nothing to do
+	}
+
+	workDir, err := filepath.Abs(d.ctx.targetRoot)
+	if err != nil {
+		return fmt.Errorf("resolving target root: %w", err)
+	}
+
+	for _, doc := range docs {
+		pkg := doc.Package
+		if pkg == nil {
+			continue
+		}
+
+		// Skip the internal assertions package: testable examples live in the
+		// generated packages (assert, require), not in the source package.
+		if path.Base(pkg.Package) == assertions {
+			continue
+		}
+
+		importPath := rootPkg + "/" + pkg.Package
+		examples, parseErr := exparser.New(importPath, exparser.WithWorkDir(workDir)).Parse()
+		if parseErr != nil {
+			return fmt.Errorf("parsing examples for %s: %w", pkg.Package, parseErr)
+		}
+
+		populateFunctionExamples(pkg, examples)
+		populateIdentExamples(pkg.Types, examples)
+	}
+
+	return nil
+}
+
+func populateFunctionExamples(pkg *model.AssertionPackage, examples exparser.Examples) {
+	for i, fn := range pkg.Functions {
+		exs, ok := examples[fn.Name]
+		if !ok {
+			continue
+		}
+		renderables := make([]model.Renderable, len(exs))
+		for j := range exs {
+			renderables[j] = exs[j]
+		}
+		pkg.Functions[i].Examples = renderables
+	}
+}
+
+func populateIdentExamples(idents []model.Ident, examples exparser.Examples) {
+	for i, id := range idents {
+		exs, ok := examples[id.Name]
+		if !ok {
+			continue
+		}
+		renderables := make([]model.Renderable, len(exs))
+		for j := range exs {
+			renderables[j] = exs[j]
+		}
+		idents[i].Examples = renderables
+	}
 }
 
 func (d *DocGenerator) render(name string, target string, data any) error {

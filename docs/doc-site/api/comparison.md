@@ -72,14 +72,44 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 	assertions.Greater(t, 2, 1)
 	assertions.Greater(t, float64(2), float64(1))
 	assertions.Greater(t, "b", "a")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 2, 1
 	failure: 1, 2
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestGreater(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.Greater(t, 2, 1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -124,14 +154,44 @@ See also [Greater](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Gr
 	assertions.GreaterOrEqual(t, 2, 2)
 	assertions.GreaterOrEqual(t, "b", "a")
 	assertions.GreaterOrEqual(t, "b", "b")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 2, 1
 	failure: 1, 2
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestGreaterOrEqual(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.GreaterOrEqual(t, 2, 1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -185,14 +245,44 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 	assertions.GreaterOrEqualT(t, 2, 2)
 	assertions.GreaterOrEqualT(t, "b", "a")
 	assertions.GreaterOrEqualT(t, "b", "b")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 2, 1
 	failure: 1, 2
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestGreaterOrEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.GreaterOrEqualT(t, 2, 1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -241,14 +331,44 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 	assertions.GreaterT(t, float64(2), float64(1))
 	assertions.GreaterT(t, "b", "a")
 	assertions.GreaterT(t, time.Date(2026,1,1,0,0,0,0,nil), time.Now())
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 2, 1
 	failure: 1, 2
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestGreaterT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.GreaterT(t, 2, 1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -289,14 +409,44 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 	assertions.Less(t, 1, 2)
 	assertions.Less(t, float64(1), float64(2))
 	assertions.Less(t, "a", "b")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1, 2
 	failure: 2, 1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestLess(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.Less(t, 1, 2)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -339,14 +489,44 @@ LessOrEqual asserts that the first element is less than or equal to the second.
 	assertions.LessOrEqual(t, 2, 2)
 	assertions.LessOrEqual(t, "a", "b")
 	assertions.LessOrEqual(t, "b", "b")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1, 2
 	failure: 2, 1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestLessOrEqual(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.LessOrEqual(t, 1, 2)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -399,14 +579,44 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 	assertions.LessOrEqualT(t, 2, 2)
 	assertions.LessOrEqualT(t, "a", "b")
 	assertions.LessOrEqualT(t, "b", "b")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1, 2
 	failure: 2, 1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestLessOrEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.LessOrEqualT(t, 1, 2)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -454,14 +664,44 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 	assertions.LessT(t, 1, 2)
 	assertions.LessT(t, float64(1), float64(2))
 	assertions.LessT(t, "a", "b")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1, 2
 	failure: 2, 1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestLessT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.LessT(t, 1, 2)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -498,14 +738,44 @@ Negative asserts that the specified element is strictly negative.
 ```go
 	assertions.Negative(t, -1)
 	assertions.Negative(t, -1.23)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: -1
 	failure: 1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNegative(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.Negative(t, -1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -546,14 +816,44 @@ NegativeT asserts that the specified element of a signed numeric type is strictl
 ```go
 	assertions.NegativeT(t, -1)
 	assertions.NegativeT(t, -1.23)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: -1
 	failure: 1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNegativeT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.NegativeT(t, -1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -590,14 +890,44 @@ Positive asserts that the specified element is strictly positive.
 ```go
 	assertions.Positive(t, 1)
 	assertions.Positive(t, 1.23)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1
 	failure: -1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestPositive(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.Positive(t, 1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -638,14 +968,44 @@ PositiveT asserts that the specified element of a signed numeric type is strictl
 ```go
 	assertions.PositiveT(t, 1)
 	assertions.PositiveT(t, 1.23)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1
 	failure: -1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestPositiveT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.PositiveT(t, 1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 

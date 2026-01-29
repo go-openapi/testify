@@ -30,6 +30,10 @@ func New(t T) *Assertions {
 	}
 }
 
+func (a *Assertions) T() T {
+	return a.t
+}
+
 // Condition is the same as [Condition], as a method rather than a package-level function.
 //
 // Upon failure, the test [T] is marked as failed and continues execution.

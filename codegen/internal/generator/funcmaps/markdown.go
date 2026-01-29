@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+
+	"github.com/go-openapi/testify/codegen/v2/internal/model"
 )
 
 var (
@@ -24,7 +26,18 @@ const sensiblePrealloc = 20
 //
 //  1. Reference-style markdown links: [text]: url
 //  2. Godoc-style links: [errors.Is], [testing.T], etc.
-func FormatMarkdown(in string) string {
+//
+//nolint:gocognit,gocyclo,cyclop // will refactor later this highly complex function
+func FormatMarkdown(in string, object any) string {
+	var (
+		testableExamples []model.Renderable
+		funcName         string
+	)
+	if function, ok := (object).(model.Function); ok {
+		testableExamples = function.Examples
+		funcName = function.Name
+	}
+
 	// Step 1: Extract reference-style link definitions
 	// Pattern: [text]: url (at start of line or after whitespace)
 	refLinks := make(map[string]string)
@@ -112,6 +125,7 @@ func FormatMarkdown(in string) string {
 	tabsCollection := false
 	expanded := false
 	tab := false
+	hasTestableExamples := false
 
 	for line := range strings.SplitSeq(processed, "\n") {
 		if expanded && len(strings.TrimSpace(line)) == 0 {
@@ -147,12 +161,16 @@ func FormatMarkdown(in string) string {
 			tabsCollection = true
 		}
 
+		if strings.EqualFold(section, "Examples") && len(testableExamples) > 0 {
+			hasTestableExamples = true
+			continue // skip : we'll add testable examples below
+		}
+
 		title := titleize(section)
 		if tab {
 			trailer = append(trailer, "```")
 			trailer = append(trailer, `{{< /tab >}}`)
 		}
-
 		trailer = append(trailer, fmt.Sprintf(`{{%% tab title="%s" %%}}`, title))
 		trailer = append(trailer, "```go")
 		tab = true
@@ -161,6 +179,28 @@ func FormatMarkdown(in string) string {
 	if tab {
 		trailer = append(trailer, "```")
 		trailer = append(trailer, `{{< /tab >}}`)
+	}
+
+	if hasTestableExamples {
+		trailer = append(trailer, `{{% tab title="Testable Examples" %}}`)
+		trailer = append(trailer, `{{% cards %}}`)
+		tabsCollection = true
+
+		for _, example := range testableExamples {
+			trailer = append(trailer, `{{% card href="https://go.dev/play/" %}}`)
+			trailer = append(trailer, "\n")
+			trailer = append(trailer, `*Copy and click to open Go Playground*`)
+			trailer = append(trailer, "\n")
+			trailer = append(trailer, "```go")
+			trailer = append(trailer, fmt.Sprintf("// real-world test would inject *testing.T from Test%s(t *testing.T)", funcName))
+			trailer = append(trailer, example.Render())
+			trailer = append(trailer, "```")
+			trailer = append(trailer, `{{% /card %}}`)
+			trailer = append(trailer, "\n")
+		}
+		trailer = append(trailer, `{{% /cards %}}`)
+		trailer = append(trailer, `{{< /tab >}}`)
+		trailer = append(trailer, "\n")
 	}
 
 	if tabsCollection {

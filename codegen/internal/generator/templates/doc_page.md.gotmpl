@@ -60,7 +60,7 @@ Generic assertions are marked with a {{ print "{{" }}% icon icon="star" color=or
 <div style="background-color: #fceea5;">{{/* like godoc TODO: use css */}}
         {{- end }}
 
-{{ mdformat .DocString }}{{/* reformat inner markdown and reformat */}}
+{{ mdformat .DocString . }}{{/* reformat inner markdown and reformat */}}
 
         {{- $funcName := .Name }}
         {{- with $extraPackages }}
@@ -133,7 +133,7 @@ Generic assertions are marked with a {{ print "{{" }}% icon icon="star" color=or
 <div style="background-color: #fceea5;">{{/* like godoc */}}
         {{- end }}
 
-{{ mdformat .DocString }}
+{{ mdformat .DocString . }}
 
         {{- $funcName := .Name }}
         {{- with $extraPackages }}

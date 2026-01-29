@@ -48,7 +48,7 @@ Each domain contains assertions regrouped by their use case (e.g. http, json, er
 - [Time](./time.md) - Asserting Times And Durations (2)
 - [Type](./type.md) - Asserting Types Rather Than Values (10)
 - [Yaml](./yaml.md) - Asserting Yaml Documents (5)
-- [Common](./common.md) - Other Uncategorized Helpers (3)
+- [Common](./common.md) - Other Uncategorized Helpers (4)
 
 ---
 

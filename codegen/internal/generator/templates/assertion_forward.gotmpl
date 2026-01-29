@@ -27,6 +27,10 @@ func New(t T) *{{ .Receiver }} {
   }
 }
 
+func (a *{{ $.Receiver }}) T() T {
+	return a.t
+}
+
 {{- range .Functions }} 
   {{- if and (not .IsGeneric) (not .IsHelper) (not .IsConstructor) }}{{/* generics can't be added to the receiver */}}
 

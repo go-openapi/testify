@@ -91,14 +91,44 @@ specified substring or element.
 	assertions.Contains(t, "Hello World", "World")
 	assertions.Contains(t, []string{"Hello", "World"}, "World")
 	assertions.Contains(t, map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"Hello": "World"}, "Hello")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []string{"A","B"}, "A"
 	failure: []string{"A","B"}, "C"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestContains(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.Contains(t, []string{"A", "B"}, "A")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -140,14 +170,44 @@ the number of appearances of each of them in both lists should match.
 {{% tab title="Usage" %}}
 ```go
 	assertions.ElementsMatch(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []int{1, 3, 2, 3}, []int{1, 3, 3, 2}
 	failure: []int{1, 2, 3}, []int{1, 2, 4}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestElementsMatch(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.ElementsMatch(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -189,14 +249,44 @@ the number of appearances of each of them in both lists should match.
 {{% tab title="Usage" %}}
 ```go
 	assertions.ElementsMatchT(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []int{1, 3, 2, 3}, []int{1, 3, 3, 2}
 	failure: []int{1, 2, 3}, []int{1, 2, 4}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestElementsMatchT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.ElementsMatchT(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -240,14 +330,44 @@ See also [reflect.Len](https://pkg.go.dev/reflect#Len).
 	assertions.Len(t, mySlice, 3)
 	assertions.Len(t, myString, 4)
 	assertions.Len(t, myMap, 5)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []string{"A","B"}, 2
 	failure: []string{"A","B"}, 1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestLen(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.Len(t, []string{"A", "B"}, 2)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -294,14 +414,44 @@ Go native comparable types are explained there: [comparable-types](https://go.de
 {{% tab title="Usage" %}}
 ```go
 	assertions.MapContainsT(t, map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"Hello": "x","World": "y"}, "World")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"A": "B"}, "A"
 	failure: map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"A": "B"}, "C"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestMapContainsT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.MapContainsT(t, map[string]string{"A": "B"}, "A")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -337,14 +487,44 @@ MapNotContainsT asserts that the specified map does not contain a key.
 {{% tab title="Usage" %}}
 ```go
 	assertions.MapNotContainsT(t, map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"Hello": "x","World": "y"}, "hi")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"A": "B"}, "C"
 	failure: map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"A": "B"}, "A"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestMapNotContainsT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.MapNotContainsT(t, map[string]string{"A": "B"}, "C")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -383,14 +563,44 @@ specified substring or element.
 	assertions.NotContains(t, "Hello World", "Earth")
 	assertions.NotContains(t, ["Hello", "World"], "Earth")
 	assertions.NotContains(t, {"Hello": "World"}, "Earth")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []string{"A","B"}, "C"
 	failure: []string{"A","B"}, "B"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotContains(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.NotContains(t, []string{"A", "B"}, "C")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -435,14 +645,44 @@ This is an inverse of ElementsMatch.
 	assertions.NotElementsMatch(t, []int{1, 1, 2, 3}, []int{1, 1, 2, 3}) -> false
 	assertions.NotElementsMatch(t, []int{1, 1, 2, 3}, []int{1, 2, 3}) -> true
 	assertions.NotElementsMatch(t, []int{1, 2, 3}, []int{1, 2, 4}) -> true
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []int{1, 2, 3}, []int{1, 2, 4}
 	failure: []int{1, 3, 2, 3}, []int{1, 3, 3, 2}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotElementsMatch(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.NotElementsMatch(t, []int{1, 2, 3}, []int{1, 2, 4})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -487,14 +727,44 @@ This is an inverse of ElementsMatch.
 	assertions.NotElementsMatchT(t, []int{1, 1, 2, 3}, []int{1, 1, 2, 3}) -> false
 	assertions.NotElementsMatchT(t, []int{1, 1, 2, 3}, []int{1, 2, 3}) -> true
 	assertions.NotElementsMatchT(t, []int{1, 2, 3}, []int{1, 2, 4}) -> true
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []int{1, 2, 3}, []int{1, 2, 4}
 	failure: []int{1, 3, 2, 3}, []int{1, 3, 3, 2}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotElementsMatchT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.NotElementsMatchT(t, []int{1, 2, 3}, []int{1, 2, 4})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -536,14 +806,44 @@ only the map key is evaluated.
 	assertions.NotSubset(t, {"x": 1, "y": 2}, {"z": 3})
 	assertions.NotSubset(t, [1, 3, 4], {1: "one", 2: "two"})
 	assertions.NotSubset(t, {"x": 1, "y": 2}, ["z"])
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []int{1, 2, 3}, []int{4, 5}
 	failure: []int{1, 2, 3}, []int{1, 2}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotSubset(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.NotSubset(t, []int{1, 2, 3}, []int{4, 5})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -587,14 +887,45 @@ Go native comparable types are explained there: [comparable-types](https://go.de
 {{% tab title="Usage" %}}
 ```go
 	assertions.SeqContainsT(t, slices.Values([]{"Hello","World"}), "World")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: slices.Values([]string{"A","B"}), "A"
 	failure: slices.Values([]string{"A","B"}), "C"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestSeqContainsT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"slices"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.SeqContainsT(t, slices.Values([]string{"A", "B"}), "A")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -632,14 +963,45 @@ See [SeqContainsT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Se
 {{% tab title="Usage" %}}
 ```go
 	assertions.SeqContainsT(t, slices.Values([]{"Hello","World"}), "World")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: slices.Values([]string{"A","B"}), "C"
 	failure: slices.Values([]string{"A","B"}), "A"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestSeqNotContainsT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"slices"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.SeqNotContainsT(t, slices.Values([]string{"A", "B"}), "C")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -677,14 +1039,44 @@ Go native comparable types are explained there: [comparable-types](https://go.de
 {{% tab title="Usage" %}}
 ```go
 	assertions.SliceContainsT(t, []{"Hello","World"}, "World")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []string{"A","B"}, "A"
 	failure: []string{"A","B"}, "C"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestSliceContainsT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.SliceContainsT(t, []string{"A", "B"}, "A")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -722,14 +1114,44 @@ See [SliceContainsT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#
 {{% tab title="Usage" %}}
 ```go
 	assertions.SliceNotContainsT(t, []{"Hello","World"}, "hi")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []string{"A","B"}, "C"
 	failure: []string{"A","B"}, "A"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestSliceNotContainsT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.SliceNotContainsT(t, []string{"A", "B"}, "C")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -765,14 +1187,44 @@ SliceNotSubsetT asserts that a slice of comparable elements does not contain all
 {{% tab title="Usage" %}}
 ```go
 	assertions.SliceNotSubsetT(t, []int{1, 2, 3}, []int{1, 4})
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []int{1, 2, 3}, []int{4, 5}
 	failure: []int{1, 2, 3}, []int{1, 2}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestSliceNotSubsetT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.SliceNotSubsetT(t, []int{1, 2, 3}, []int{4, 5})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -808,14 +1260,44 @@ SliceSubsetT asserts that a slice of comparable elements contains all the elemen
 {{% tab title="Usage" %}}
 ```go
 	assertions.SliceSubsetT(t, []int{1, 2, 3}, []int{1, 2})
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []int{1, 2, 3}, []int{1, 2}
 	failure: []int{1, 2, 3}, []int{4, 5}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestSliceSubsetT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.SliceSubsetT(t, []int{1, 2, 3}, []int{1, 2})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -853,14 +1335,44 @@ Strings may be go strings or []byte according to the type constraint [Text](http
 {{% tab title="Usage" %}}
 ```go
 	assertions.StringContainsT(t, "Hello World", "World")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: "AB", "A"
 	failure: "AB", "C"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestStringContainsT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.StringContainsT(t, "AB", "A")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -898,14 +1410,44 @@ See [StringContainsT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert
 {{% tab title="Usage" %}}
 ```go
 	assertions.StringNotContainsT(t, "Hello World", "hi")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: "AB", "C"
 	failure: "AB", "A"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestStringNotContainsT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.StringNotContainsT(t, "AB", "C")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -950,14 +1492,44 @@ nil values are considered as empty sets.
 	assertions.Subset(t, []string{"x": 1, "y": 2}, []string{"x": 1})
 	assertions.Subset(t, []int{1, 2, 3}, map[int](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#int)string{1: "one", 2: "two"})
 	assertions.Subset(t, map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)int{"x": 1, "y": 2}, []string{"x"})
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []int{1, 2, 3}, []int{1, 2}
 	failure: []int{1, 2, 3}, []int{4, 5}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestSubset(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.Subset(t, []int{1, 2, 3}, []int{1, 2})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 

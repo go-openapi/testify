@@ -56,14 +56,44 @@ and that it is equal to the provided error.
 ```go
 	actualObj, err := SomeFunction()
 	assertions.EqualError(t, err,  expectedErrorString)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: ErrTest, "assert.ErrTest general error for testing"
 	failure: ErrTest, "wrong error message"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEqualError(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.EqualError(t, require.ErrTest, "assert.ErrTest general error for testing")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -104,14 +134,44 @@ Error asserts that a function returned a non-nil error (ie. an error).
 ```go
 	actualObj, err := SomeFunction()
 	assertions.Error(t, err)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: ErrTest
 	failure: nil
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestError(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.Error(t, require.ErrTest)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -153,14 +213,51 @@ This is a wrapper for [errors.As](https://pkg.go.dev/errors#As).
 {{% tab title="Usage" %}}
 ```go
 	assertions.ErrorAs(t, err, &target)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError)
 	failure: ErrTest, new(*dummyError)
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestErrorAs(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.ErrorAs(t, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
+	fmt.Println("passed")
+
+}
+
+type dummyError struct {
+}
+
+func (d *dummyError) Error() string {
+	return "dummy error"
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -202,14 +299,44 @@ error) and that the error contains the specified substring.
 ```go
 	actualObj, err := SomeFunction()
 	assertions.ErrorContains(t, err,  expectedErrorSubString)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: ErrTest, "general error"
 	failure: ErrTest, "not in message"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestErrorContains(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.ErrorContains(t, require.ErrTest, "general error")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -251,14 +378,45 @@ This is a wrapper for [errors.Is](https://pkg.go.dev/errors#Is).
 {{% tab title="Usage" %}}
 ```go
 	assertions.ErrorIs(t, err, io.EOF)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: fmt.Errorf("wrap: %w", io.EOF), io.EOF
 	failure: ErrTest, io.EOF
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestErrorIs(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"io"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.ErrorIs(t, fmt.Errorf("wrap: %w", io.EOF), io.EOF)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -301,14 +459,44 @@ NoError asserts that a function returned a nil error (ie. no error).
 	if assert.NoError(t, err) {
 		assertions.Equal(t, expectedObj, actualObj)
 	}
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: nil
 	failure: ErrTest
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNoError(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.NoError(t, nil)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -349,14 +537,51 @@ but if so, sets target to that error value.
 {{% tab title="Usage" %}}
 ```go
 	assertions.NotErrorAs(t, err, &target)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: ErrTest, new(*dummyError)
 	failure: fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError)
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotErrorAs(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.NotErrorAs(t, require.ErrTest, new(*dummyError))
+	fmt.Println("passed")
+
+}
+
+type dummyError struct {
+}
+
+func (d *dummyError) Error() string {
+	return "dummy error"
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -398,14 +623,45 @@ This is a wrapper for [errors.Is](https://pkg.go.dev/errors#Is).
 {{% tab title="Usage" %}}
 ```go
 	assertions.NotErrorIs(t, err, io.EOF)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: ErrTest, io.EOF
 	failure: fmt.Errorf("wrap: %w", io.EOF), io.EOF
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotErrorIs(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"io"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.NotErrorIs(t, require.ErrTest, io.EOF)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 

@@ -11,6 +11,10 @@ import (
 	"strings"
 )
 
+type Renderable interface {
+	Render() string
+}
+
 // AssertionPackage describes the internal/assertions package.
 type AssertionPackage struct {
 	Tool             string
@@ -97,6 +101,7 @@ type Function struct {
 	Domain        string
 	SourceLink    *token.Position
 	ExtraComments []ExtraComment
+	Examples      []Renderable // testable examples as a collection of [Renderable] examples
 }
 
 // GenericName renders the function name with one or more suffixes,
@@ -198,6 +203,7 @@ type Ident struct {
 	Domain        string
 	SourceLink    *token.Position
 	ExtraComments []ExtraComment
+	Examples      []Renderable // testable examples as a collection of [Renderable] examples
 }
 
 // TestValue represents a single parsed test value expression.

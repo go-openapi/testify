@@ -13,7 +13,7 @@ import (
 func TestMarkdownFormatEnhanced(t *testing.T) {
 	for tt := range markdownTestCases() {
 		t.Run(tt.name, func(t *testing.T) {
-			result := FormatMarkdown(tt.input)
+			result := FormatMarkdown(tt.input, nil)
 
 			for _, want := range tt.contains {
 				if !strings.Contains(result, want) {
@@ -47,7 +47,7 @@ Values can be of type [strings.Builder] or [Boolean].
 	failure: "not empty"
 [Zero values]: https://go.dev/ref/spec#The_zero_value`
 
-	result := FormatMarkdown(input)
+	result := FormatMarkdown(input, nil)
 	t.Logf("Output:\n%s", result)
 }
 
