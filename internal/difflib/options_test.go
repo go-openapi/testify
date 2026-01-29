@@ -130,6 +130,9 @@ func TestOptionsWithAllCustomPrinters(t *testing.T) {
 		}
 	}
 
+	// customFormatter is a simplified formatter for testing purposes only.
+	// It only handles string arguments with %s placeholders.
+	// This is sufficient for the diff header format strings used in the library.
 	customFormatter := func(w *bufio.Writer) Formatter {
 		return func(format string, args ...any) error {
 			s := "[FMT]" + format
