@@ -464,7 +464,7 @@ func TestAutoJunkPopularElements(t *testing.T) {
 	b := make([]string, n)
 
 	// Fill with mostly unique elements
-	for i := 0; i < n; i++ {
+	for i := range n {
 		a[i] = fmt.Sprintf("line%d", i)
 		b[i] = fmt.Sprintf("line%d", i)
 	}
