@@ -94,3 +94,126 @@ func ansiPrinterBuilder(mark string) PrinterBuilder {
 		}
 	}
 }
+
+// TestDefaultPrinterBuilder tests the DefaultPrinterBuilder function.
+func TestDefaultPrinterBuilder(t *testing.T) {
+	var buf strings.Builder
+	w := bufio.NewWriter(&buf)
+
+	printer := DefaultPrinterBuilder(w)
+	err := printer("hello world")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	w.Flush()
+
+	if buf.String() != "hello world" {
+		t.Errorf("expected 'hello world', got %q", buf.String())
+	}
+}
+
+// TestOptionsWithAllCustomPrinters tests that all custom printers are applied.
+func TestOptionsWithAllCustomPrinters(t *testing.T) {
+	const (
+		a = "line1\nline2\nline3\n"
+		b = "line1\nmodified\nline3\nnewline\n"
+	)
+
+	// Create custom printers for all types including OtherPrinter and Formatter
+	customPrinter := func(prefix string) PrinterBuilder {
+		return func(w *bufio.Writer) Printer {
+			return func(str string) error {
+				_, err := w.WriteString(prefix + str)
+				return err
+			}
+		}
+	}
+
+	customFormatter := func(w *bufio.Writer) Formatter {
+		return func(format string, args ...any) error {
+			s := "[FMT]" + format
+			for _, arg := range args {
+				if str, ok := arg.(string); ok {
+					s = strings.Replace(s, "%s", str, 1)
+				}
+			}
+			_, err := w.WriteString(s)
+			return err
+		}
+	}
+
+	diff, err := GetUnifiedDiffString(UnifiedDiff{
+		A:        SplitLines(a),
+		B:        SplitLines(b),
+		FromFile: "Original",
+		ToFile:   "Modified",
+		Context:  1,
+		Options: &Options{
+			EqualPrinter:  customPrinter("[EQ]"),
+			DeletePrinter: customPrinter("[DEL]"),
+			UpdatePrinter: customPrinter("[UPD]"),
+			InsertPrinter: customPrinter("[INS]"),
+			OtherPrinter:  customPrinter("[OTH]"),
+			Formatter:     customFormatter,
+		},
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	// Verify the custom formatter was used for headers
+	if !strings.Contains(diff, "[FMT]") {
+		t.Error("expected custom formatter to be used")
+	}
+
+	// Verify custom printers were used
+	if !strings.Contains(diff, "[EQ]") {
+		t.Error("expected equal printer to be used")
+	}
+	if !strings.Contains(diff, "[DEL]") {
+		t.Error("expected delete printer to be used")
+	}
+	if !strings.Contains(diff, "[INS]") {
+		t.Error("expected insert printer to be used")
+	}
+}
+
+// TestOptionsWithDefaults tests that default options are applied correctly.
+func TestOptionsWithDefaults(t *testing.T) {
+	// Test with nil options
+	opts := optionsWithDefaults(nil)
+	if opts == nil {
+		t.Fatal("expected non-nil options")
+	}
+	if opts.EqualPrinter == nil {
+		t.Error("expected EqualPrinter to be set")
+	}
+	if opts.DeletePrinter == nil {
+		t.Error("expected DeletePrinter to be set")
+	}
+	if opts.UpdatePrinter == nil {
+		t.Error("expected UpdatePrinter to be set")
+	}
+	if opts.InsertPrinter == nil {
+		t.Error("expected InsertPrinter to be set")
+	}
+	if opts.OtherPrinter == nil {
+		t.Error("expected OtherPrinter to be set")
+	}
+	if opts.Formatter == nil {
+		t.Error("expected Formatter to be set")
+	}
+
+	// Test with partial options (only some fields set)
+	partialOpts := &Options{
+		EqualPrinter: ansiPrinterBuilder(greenMark),
+	}
+	opts = optionsWithDefaults(partialOpts)
+	if opts.EqualPrinter == nil {
+		t.Error("expected EqualPrinter to be preserved")
+	}
+	if opts.DeletePrinter == nil {
+		t.Error("expected DeletePrinter to have default")
+	}
+}

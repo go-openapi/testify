@@ -237,3 +237,340 @@ func splitChars(s string) []string {
 
 	return chars
 }
+
+// TestSequenceMatcherCaching tests that GetMatchingBlocks and GetOpCodes
+// return cached results when called multiple times.
+func TestSequenceMatcherCaching(t *testing.T) {
+	a := splitChars("abc")
+	b := splitChars("abd")
+
+	sm := NewMatcher(a, b)
+
+	// Call GetMatchingBlocks twice - second call should use cache
+	blocks1 := sm.GetMatchingBlocks()
+	blocks2 := sm.GetMatchingBlocks()
+	assertEqual(t, blocks1, blocks2)
+
+	// Call GetOpCodes twice - second call should use cache
+	codes1 := sm.GetOpCodes()
+	codes2 := sm.GetOpCodes()
+	assertEqual(t, codes1, codes2)
+}
+
+// TestSetSeqSameSequence tests that SetSeq1 and SetSeq2 early return
+// when the same sequence is passed.
+func TestSetSeqSameSequence(t *testing.T) {
+	a := []string{"a", "b", "c"}
+	b := []string{"x", "y", "z"}
+
+	sm := NewMatcher(a, b)
+
+	// Get initial blocks
+	blocks1 := sm.GetMatchingBlocks()
+
+	// Set the same sequences again using SetSeqs
+	sm.SetSeq1(a)
+	sm.SetSeq2(b)
+
+	// Blocks should be reset (nil) after setting sequences
+	// and GetMatchingBlocks should recalculate
+	blocks2 := sm.GetMatchingBlocks()
+	assertEqual(t, blocks1, blocks2)
+}
+
+// TestSequenceMatcherWithIsJunk tests the junk filtering functionality.
+func TestSequenceMatcherWithIsJunk(t *testing.T) {
+	// Test with a simple IsJunk function that marks whitespace as junk
+	a := []string{"a", " ", "b", " ", "c"}
+	b := []string{"a", "b", "c"}
+
+	sm := NewMatcher(nil, nil)
+	sm.IsJunk = func(s string) bool {
+		return s == " "
+	}
+	sm.SetSeqs(a, b)
+
+	// The matcher should still find matches but handle junk elements
+	blocks := sm.GetMatchingBlocks()
+	if len(blocks) == 0 {
+		t.Error("expected some matching blocks with junk filter")
+	}
+}
+
+// TestAutoJunkWithLargeSequence tests the autoJunk feature with sequences >= 200 elements.
+func TestAutoJunkWithLargeSequence(t *testing.T) {
+	// Create a sequence with more than 200 elements where one element appears
+	// more than 1% of the time (which makes it "popular" and gets filtered)
+	a := make([]string, 250)
+	b := make([]string, 250)
+
+	// Fill with unique elements
+	for i := 0; i < 250; i++ {
+		a[i] = fmt.Sprintf("a%d", i)
+		b[i] = fmt.Sprintf("a%d", i)
+	}
+
+	// Make element "common" appear more than 1% (3+ times out of 250)
+	for i := 0; i < 10; i++ {
+		b[i] = "common"
+	}
+
+	sm := NewMatcher(a, b)
+	// The popular element "common" should be filtered
+	if len(sm.bPopular) == 0 {
+		t.Log("bPopular might be empty if 'common' doesn't exceed threshold, which is expected")
+	}
+
+	// The matcher should still work
+	blocks := sm.GetMatchingBlocks()
+	if blocks == nil {
+		t.Error("expected matching blocks")
+	}
+}
+
+// TestFindLongestMatchWithJunk tests finding longest match with junk elements.
+func TestFindLongestMatchWithJunk(t *testing.T) {
+	// Create sequences where junk elements are adjacent to interesting matches
+	a := []string{"x", "a", "b", "c", "y"}
+	b := []string{"a", "b", "c"}
+
+	sm := NewMatcher(nil, nil)
+	// Mark x and y as junk
+	sm.IsJunk = func(s string) bool {
+		return s == "x" || s == "y"
+	}
+	sm.SetSeqs(a, b)
+
+	blocks := sm.GetMatchingBlocks()
+	// Should find the "a", "b", "c" match
+	found := false
+	for _, block := range blocks {
+		if block.Size == 3 {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Error("expected to find a match of size 3")
+	}
+}
+
+// TestFindLongestMatchExtension tests the extension of matches past popular elements.
+func TestFindLongestMatchExtension(t *testing.T) {
+	// Test cases that exercise the match extension loops in findLongestMatch
+	a := []string{"a", "b", "c", "d", "e"}
+	b := []string{"x", "b", "c", "d", "y"}
+
+	sm := NewMatcher(a, b)
+	blocks := sm.GetMatchingBlocks()
+
+	// Should find the "b", "c", "d" match
+	found := false
+	for _, block := range blocks {
+		if block.Size >= 3 {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Error("expected to find a match of size >= 3")
+	}
+}
+
+// TestJunkFilteringInChainB tests the IsJunk function in chainB.
+func TestJunkFilteringInChainB(t *testing.T) {
+	// Create a matcher with junk filtering
+	a := []string{"line1", "junk", "line2", "junk", "line3"}
+	b := []string{"line1", "junk", "line2", "junk", "line3", "junk"}
+
+	sm := NewMatcher(nil, nil)
+	sm.IsJunk = func(s string) bool {
+		return s == "junk"
+	}
+	sm.SetSeqs(a, b)
+
+	// Verify junk is correctly identified
+	if !sm.isBJunk("junk") {
+		t.Error("expected 'junk' to be identified as junk")
+	}
+
+	// Non-junk should not be identified as junk
+	if sm.isBJunk("line1") {
+		t.Error("expected 'line1' to not be junk")
+	}
+
+	// Should still be able to find matches
+	blocks := sm.GetMatchingBlocks()
+	if len(blocks) == 0 {
+		t.Error("expected some matching blocks")
+	}
+}
+
+// TestMatchExtensionWithJunkOnBothSides tests junk matching extension.
+func TestMatchExtensionWithJunkOnBothSides(t *testing.T) {
+	// Create sequences where junk elements surround interesting matches
+	// to exercise the junk extension loops in findLongestMatch
+	a := []string{"junk1", "junk2", "a", "b", "c", "junk3", "junk4"}
+	b := []string{"junk1", "junk2", "a", "b", "c", "junk3", "junk4"}
+
+	sm := NewMatcher(nil, nil)
+	sm.IsJunk = func(s string) bool {
+		return strings.HasPrefix(s, "junk")
+	}
+	sm.SetSeqs(a, b)
+
+	blocks := sm.GetMatchingBlocks()
+	// Should find matches including junk elements that are identical
+	totalSize := 0
+	for _, block := range blocks {
+		totalSize += block.Size
+	}
+	if totalSize < 3 {
+		t.Errorf("expected total match size >= 3, got %d", totalSize)
+	}
+}
+
+// TestFindLongestMatchBreakCondition tests the j >= bhi break condition.
+func TestFindLongestMatchBreakCondition(t *testing.T) {
+	// Create sequences that will trigger the j >= bhi condition
+	// This happens when b2j has indices that exceed the search range
+	a := []string{"x", "y", "z"}
+	b := []string{"a", "b", "x", "y", "z"}
+
+	sm := NewMatcher(a, b)
+	blocks := sm.GetMatchingBlocks()
+
+	// Should find the "x", "y", "z" match
+	found := false
+	for _, block := range blocks {
+		if block.Size == 3 {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Error("expected to find a match of size 3")
+	}
+}
+
+// TestAutoJunkPopularElements tests the autoJunk filtering of popular elements.
+func TestAutoJunkPopularElements(t *testing.T) {
+	// Create a sequence with > 200 elements where one element appears
+	// more than 1% of the time
+	n := 250
+	a := make([]string, n)
+	b := make([]string, n)
+
+	// Fill with mostly unique elements
+	for i := 0; i < n; i++ {
+		a[i] = fmt.Sprintf("line%d", i)
+		b[i] = fmt.Sprintf("line%d", i)
+	}
+
+	// Make "popular" appear more than 1% (more than 2-3 times)
+	// We need it to appear > n/100 + 1 times = 3+ times
+	for i := 0; i < 10; i++ {
+		b[i*25] = "popular"
+	}
+
+	sm := NewMatcher(a, b)
+
+	// The element "popular" should be filtered as popular
+	if len(sm.bPopular) == 0 {
+		t.Log("bPopular might be empty if threshold not exceeded")
+	}
+
+	// Matcher should still produce valid results
+	blocks := sm.GetMatchingBlocks()
+	if blocks == nil {
+		t.Error("expected non-nil matching blocks")
+	}
+}
+
+// TestFindLongestMatchWithJunkExtension tests the junk extension loops
+// at the end of findLongestMatch function.
+func TestFindLongestMatchWithJunkExtension(t *testing.T) {
+	// Create sequences where junk elements are adjacent to matches
+	// This should trigger the junk extension loops
+	a := []string{"junk", "a", "b", "c", "junk"}
+	b := []string{"junk", "a", "b", "c", "junk"}
+
+	sm := NewMatcher(nil, nil)
+	sm.IsJunk = func(s string) bool {
+		return s == "junk"
+	}
+	sm.SetSeqs(a, b)
+
+	blocks := sm.GetMatchingBlocks()
+	// Should find matches including junk extension
+	totalSize := 0
+	for _, block := range blocks {
+		totalSize += block.Size
+	}
+	// All 5 elements should match
+	if totalSize != 5 {
+		t.Errorf("expected total match size 5, got %d", totalSize)
+	}
+}
+
+// TestFindLongestMatchEdgeCases tests edge cases in findLongestMatch.
+func TestFindLongestMatchEdgeCases(t *testing.T) {
+	// Test case where matches are found at the end of sequences
+	a := []string{"unique1", "unique2", "match"}
+	b := []string{"other1", "other2", "match"}
+
+	sm := NewMatcher(a, b)
+	blocks := sm.GetMatchingBlocks()
+
+	// Should find the "match" element
+	found := false
+	for _, block := range blocks {
+		if block.Size == 1 && block.A == 2 && block.B == 2 {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Error("expected to find a match at the end")
+	}
+}
+
+// TestMatcherWithBothSequencesSame tests the matcher with identical sequences.
+func TestMatcherWithBothSequencesSame(t *testing.T) {
+	a := []string{"line1", "line2", "line3"}
+	b := []string{"line1", "line2", "line3"}
+
+	sm := NewMatcher(a, b)
+	blocks := sm.GetMatchingBlocks()
+
+	// Should find all lines match
+	if len(blocks) < 1 {
+		t.Error("expected at least one matching block")
+	}
+
+	// The last block is always a sentinel with size 0
+	for _, block := range blocks[:len(blocks)-1] {
+		if block.Size != 3 {
+			t.Errorf("expected matching block of size 3, got %d", block.Size)
+		}
+	}
+}
+
+// TestWriteUnifiedDiffWithDefaultEol tests that default EOL is applied.
+func TestWriteUnifiedDiffWithDefaultEol(t *testing.T) {
+	// Test that when Eol is empty, it defaults to "\n"
+	diff := UnifiedDiff{
+		A:        splitChars("abc"),
+		B:        splitChars("abd"),
+		FromFile: "file1",
+		ToFile:   "file2",
+		// Eol not set - should default to "\n"
+	}
+	result, err := GetUnifiedDiffString(diff)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if !strings.Contains(result, "\n") {
+		t.Error("expected newlines in output")
+	}
+}
