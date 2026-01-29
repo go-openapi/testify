@@ -18,4 +18,6 @@ func TestAssertionNew(t *testing.T) {
 	if a.t == nil {
 		FailNow(t, "assertion should contain a T")
 	}
+
+	// TODO: check methods
 }
