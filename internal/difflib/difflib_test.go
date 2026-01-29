@@ -307,13 +307,13 @@ func TestAutoJunkWithLargeSequence(t *testing.T) {
 	b := make([]string, 250)
 
 	// Fill with unique elements
-	for i := 0; i < 250; i++ {
+	for i := range 250 {
 		a[i] = fmt.Sprintf("a%d", i)
 		b[i] = fmt.Sprintf("a%d", i)
 	}
 
 	// Make element "common" appear more than 1% (3+ times out of 250)
-	for i := 0; i < 10; i++ {
+	for i := range 10 {
 		b[i] = "common"
 	}
 
@@ -471,7 +471,7 @@ func TestAutoJunkPopularElements(t *testing.T) {
 
 	// Make "popular" appear more than 1% (more than 2-3 times)
 	// We need it to appear > n/100 + 1 times = 3+ times
-	for i := 0; i < 10; i++ {
+	for i := range 10 {
 		b[i*25] = "popular"
 	}
 
