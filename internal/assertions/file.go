@@ -25,16 +25,16 @@ func FileExists(t T, path string, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	info, err := os.Lstat(path)
+
+	info, err := lstat(path, "file")
 	if err != nil {
-		if os.IsNotExist(err) {
-			return Fail(t, fmt.Sprintf("unable to find file %q", path), msgAndArgs...)
-		}
-		return Fail(t, fmt.Sprintf("error when running os.Lstat(%q): %s", path, err), msgAndArgs...)
+		return Fail(t, err.Error(), msgAndArgs...)
 	}
+
 	if info.IsDir() {
 		return Fail(t, fmt.Sprintf("%q is a directory", path), msgAndArgs...)
 	}
+
 	return true
 }
 
@@ -54,10 +54,12 @@ func FileNotExists(t T, path string, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
+
 	info, err := os.Lstat(path)
 	if err != nil {
 		return true
 	}
+
 	if info.IsDir() {
 		return true
 	}
@@ -80,16 +82,16 @@ func DirExists(t T, path string, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	info, err := os.Lstat(path)
+
+	info, err := lstat(path, "directory")
 	if err != nil {
-		if os.IsNotExist(err) {
-			return Fail(t, fmt.Sprintf("unable to find file %q", path), msgAndArgs...)
-		}
-		return Fail(t, fmt.Sprintf("error when running os.Lstat(%q): %s", path, err), msgAndArgs...)
+		return Fail(t, err.Error(), msgAndArgs...)
 	}
+
 	if !info.IsDir() {
 		return Fail(t, fmt.Sprintf("%q is a file", path), msgAndArgs...)
 	}
+
 	return true
 }
 
@@ -109,16 +111,16 @@ func DirNotExists(t T, path string, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
+
 	info, err := os.Lstat(path)
 	if err != nil {
-		if os.IsNotExist(err) {
-			return true
-		}
 		return true
 	}
+
 	if !info.IsDir() {
 		return true
 	}
+
 	return Fail(t, fmt.Sprintf("directory %q exists", path), msgAndArgs...)
 }
 
@@ -138,16 +140,16 @@ func FileEmpty(t T, path string, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	info, err := os.Lstat(path)
+
+	info, err := lstat(path, "file")
 	if err != nil {
-		if os.IsNotExist(err) {
-			return Fail(t, fmt.Sprintf("unable to find file %q", path), msgAndArgs...)
-		}
-		return Fail(t, fmt.Sprintf("error when running os.Lstat(%q): %s", path, err), msgAndArgs...)
+		return Fail(t, err.Error(), msgAndArgs...)
 	}
+
 	if info.IsDir() {
 		return Fail(t, fmt.Sprintf("%q is a directory", path), msgAndArgs...)
 	}
+
 	if info.Mode()&fs.ModeSymlink > 0 {
 		target, err := os.Readlink(path)
 		if err != nil {
@@ -179,16 +181,16 @@ func FileNotEmpty(t T, path string, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	info, err := os.Lstat(path)
+
+	info, err := lstat(path, "file")
 	if err != nil {
-		if os.IsNotExist(err) {
-			return Fail(t, fmt.Sprintf("unable to find file %q", path), msgAndArgs...)
-		}
-		return Fail(t, fmt.Sprintf("error when running os.Lstat(%q): %s", path, err), msgAndArgs...)
+		return Fail(t, err.Error(), msgAndArgs...)
 	}
+
 	if info.IsDir() {
 		return Fail(t, fmt.Sprintf("%q is a directory", path), msgAndArgs...)
 	}
+
 	if info.Mode()&fs.ModeSymlink > 0 {
 		target, err := os.Readlink(path)
 		if err != nil {
@@ -202,4 +204,17 @@ func FileNotEmpty(t T, path string, msgAndArgs ...any) bool {
 	}
 
 	return true
+}
+
+func lstat(path, kind string) (info os.FileInfo, err error) {
+	info, err = os.Lstat(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return info, fmt.Errorf("unable to find %s %q: %w", kind, path, err)
+		}
+
+		return info, fmt.Errorf("error when running os.Lstat(%q): %w", path, err)
+	}
+
+	return info, nil
 }

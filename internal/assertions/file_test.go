@@ -260,7 +260,7 @@ func fileFailCases() iter.Seq[failCase] {
 		{
 			name:         "DirExists/nonexistent",
 			assertion:    func(t T) bool { return DirExists(t, "nonexistent_dir") },
-			wantContains: []string{"unable to find file"},
+			wantContains: []string{"unable to find directory"},
 		},
 		{
 			name:         "DirExists/is-file",
