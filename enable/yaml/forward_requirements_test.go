@@ -12,11 +12,11 @@ import (
 func TestRequireYAMLEqWrapper_EqualYAMLString(t *testing.T) {
 	t.Parallel()
 
-	mockT := new(MockT)
-	mockRequire := target.New(mockT)
+	mock := new(MockT)
+	mockRequire := target.New(mock)
 
 	mockRequire.YAMLEq(`{"hello": "world", "foo": "bar"}`, `{"hello": "world", "foo": "bar"}`)
-	if mockT.Failed {
+	if mock.Failed {
 		t.Error("Check should pass")
 	}
 }
@@ -24,11 +24,11 @@ func TestRequireYAMLEqWrapper_EqualYAMLString(t *testing.T) {
 func TestRequireYAMLEqWrapper_EquivalentButNotEqual(t *testing.T) {
 	t.Parallel()
 
-	mockT := new(MockT)
-	mockRequire := target.New(mockT)
+	mock := new(MockT)
+	mockRequire := target.New(mock)
 
 	mockRequire.YAMLEq(`{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
-	if mockT.Failed {
+	if mock.Failed {
 		t.Error("Check should pass")
 	}
 }
@@ -36,8 +36,8 @@ func TestRequireYAMLEqWrapper_EquivalentButNotEqual(t *testing.T) {
 func TestRequireYAMLEqWrapper_HashOfArraysAndHashes(t *testing.T) {
 	t.Parallel()
 
-	mockT := new(MockT)
-	mockRequire := target.New(mockT)
+	mock := new(MockT)
+	mockRequire := target.New(mock)
 
 	expected := `
 numeric: 1.5
@@ -66,7 +66,7 @@ array:
 `
 
 	mockRequire.YAMLEq(expected, actual)
-	if mockT.Failed {
+	if mock.Failed {
 		t.Error("Check should pass")
 	}
 }
@@ -74,11 +74,11 @@ array:
 func TestRequireYAMLEqWrapper_Array(t *testing.T) {
 	t.Parallel()
 
-	mockT := new(MockT)
-	mockRequire := target.New(mockT)
+	mock := new(MockT)
+	mockRequire := target.New(mock)
 
 	mockRequire.YAMLEq(`["foo", {"hello": "world", "nested": "hash"}]`, `["foo", {"nested": "hash", "hello": "world"}]`)
-	if mockT.Failed {
+	if mock.Failed {
 		t.Error("Check should pass")
 	}
 }
@@ -86,11 +86,11 @@ func TestRequireYAMLEqWrapper_Array(t *testing.T) {
 func TestRequireYAMLEqWrapper_HashAndArrayNotEquivalent(t *testing.T) {
 	t.Parallel()
 
-	mockT := new(MockT)
-	mockRequire := target.New(mockT)
+	mock := new(MockT)
+	mockRequire := target.New(mock)
 
 	mockRequire.YAMLEq(`["foo", {"hello": "world", "nested": "hash"}]`, `{"foo": "bar", {"nested": "hash", "hello": "world"}}`)
-	if !mockT.Failed {
+	if !mock.Failed {
 		t.Error("Check should fail")
 	}
 }
@@ -98,11 +98,11 @@ func TestRequireYAMLEqWrapper_HashAndArrayNotEquivalent(t *testing.T) {
 func TestRequireYAMLEqWrapper_HashesNotEquivalent(t *testing.T) {
 	t.Parallel()
 
-	mockT := new(MockT)
-	mockRequire := target.New(mockT)
+	mock := new(MockT)
+	mockRequire := target.New(mock)
 
 	mockRequire.YAMLEq(`{"foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
-	if !mockT.Failed {
+	if !mock.Failed {
 		t.Error("Check should fail")
 	}
 }
@@ -110,11 +110,11 @@ func TestRequireYAMLEqWrapper_HashesNotEquivalent(t *testing.T) {
 func TestRequireYAMLEqWrapper_ActualIsSimpleString(t *testing.T) {
 	t.Parallel()
 
-	mockT := new(MockT)
-	mockRequire := target.New(mockT)
+	mock := new(MockT)
+	mockRequire := target.New(mock)
 
 	mockRequire.YAMLEq(`{"foo": "bar"}`, "Simple String")
-	if !mockT.Failed {
+	if !mock.Failed {
 		t.Error("Check should fail")
 	}
 }
@@ -122,11 +122,11 @@ func TestRequireYAMLEqWrapper_ActualIsSimpleString(t *testing.T) {
 func TestRequireYAMLEqWrapper_ExpectedIsSimpleString(t *testing.T) {
 	t.Parallel()
 
-	mockT := new(MockT)
-	mockRequire := target.New(mockT)
+	mock := new(MockT)
+	mockRequire := target.New(mock)
 
 	mockRequire.YAMLEq("Simple String", `{"foo": "bar", "hello": "world"}`)
-	if !mockT.Failed {
+	if !mock.Failed {
 		t.Error("Check should fail")
 	}
 }
@@ -134,11 +134,11 @@ func TestRequireYAMLEqWrapper_ExpectedIsSimpleString(t *testing.T) {
 func TestRequireYAMLEqWrapper_ExpectedAndActualSimpleString(t *testing.T) {
 	t.Parallel()
 
-	mockT := new(MockT)
-	mockRequire := target.New(mockT)
+	mock := new(MockT)
+	mockRequire := target.New(mock)
 
 	mockRequire.YAMLEq("Simple String", "Simple String")
-	if mockT.Failed {
+	if mock.Failed {
 		t.Error("Check should pass")
 	}
 }
@@ -146,11 +146,11 @@ func TestRequireYAMLEqWrapper_ExpectedAndActualSimpleString(t *testing.T) {
 func TestRequireYAMLEqWrapper_ArraysOfDifferentOrder(t *testing.T) {
 	t.Parallel()
 
-	mockT := new(MockT)
-	mockRequire := target.New(mockT)
+	mock := new(MockT)
+	mockRequire := target.New(mock)
 
 	mockRequire.YAMLEq(`["foo", {"hello": "world", "nested": "hash"}]`, `[{ "hello": "world", "nested": "hash"}, "foo"]`)
-	if !mockT.Failed {
+	if !mock.Failed {
 		t.Error("Check should fail")
 	}
 }

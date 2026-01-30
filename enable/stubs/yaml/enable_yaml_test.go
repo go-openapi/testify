@@ -22,7 +22,7 @@ func TestEnableYAML(t *testing.T) {
 	})
 	type dummy struct {
 		Hello string `yaml:"hello"`
-		Foo   string `yaml:"hello"`
+		Foo   string `yaml:"foo"`
 	}
 	value := dummy{Hello: "world", Foo: "bar"}
 
