@@ -25,7 +25,10 @@ type mockT struct {
 	args     []any
 }
 
-const errString = "Error"
+const (
+	errString = "Error"
+	errTrace  = "Error Trace"
+)
 
 // Helper is like [testing.T.Helper] but does nothing.
 func (mockT) Helper() {}
@@ -140,20 +143,16 @@ func shouldPassOrFail(t *testing.T, mock *mockT, result, shouldPass bool) {
 	t.Helper()
 
 	if shouldPass {
-		t.Run("should pass", func(t *testing.T) {
-			if !result || mock.Failed() {
-				t.Errorf("expected to pass")
-			}
-		})
+		if !result || mock.Failed() {
+			t.Error("expected to pass")
+		}
 
 		return
 	}
 
-	t.Run("should fail", func(t *testing.T) {
-		if result || !mock.Failed() {
-			t.Errorf("expected to fail")
-		}
-	})
+	if result || !mock.Failed() {
+		t.Error("expected to fail")
+	}
 }
 
 func ptr(i int) *int {
@@ -211,7 +210,7 @@ func runFailCase(tc failCase) func(*testing.T) {
 		var errorContent string
 		for _, lc := range parsed {
 			switch lc.label {
-			case "Error Trace":
+			case errTrace:
 				hasErrorTrace = true
 			case errString:
 				hasError = true

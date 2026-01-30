@@ -73,10 +73,18 @@ func TestTypeIsOfTypeT(t *testing.T) {
 	var myVar myType = 1.2
 	f := 1.2
 
-	True(t, IsOfTypeT[myType](mock, myVar), "expected myVar to be of type %T", myVar)
-	False(t, IsNotOfTypeT[myType](mock, myVar), "expected myVar to be of type %T", myVar)
-	False(t, IsOfTypeT[myType](mock, f), "expected f (%T) not to be of type %T", f, myVar)
-	True(t, IsNotOfTypeT[myType](mock, f), "expected f (%T) not to be of type %T", f, myVar)
+	if !IsOfTypeT[myType](mock, myVar) {
+		t.Errorf("expected myVar to be of type %T", myVar)
+	}
+	if IsNotOfTypeT[myType](mock, myVar) {
+		t.Errorf("expected IsNotOfTypeT to return false for myVar of type %T", myVar)
+	}
+	if IsOfTypeT[myType](mock, f) {
+		t.Errorf("expected f (%T) not to be of type %T", f, myVar)
+	}
+	if !IsNotOfTypeT[myType](mock, f) {
+		t.Errorf("expected IsNotOfTypeT to return true for f (%T) vs %T", f, myVar)
+	}
 }
 
 func TestTypeZero(t *testing.T) {
@@ -84,11 +92,15 @@ func TestTypeZero(t *testing.T) {
 	mock := new(mockT)
 
 	for test := range typeZeros() {
-		True(t, Zero(mock, test, "%#v is not the %T zero value", test, test))
+		if !Zero(mock, test) {
+			t.Errorf("expected %#v to be the zero value for %T", test, test)
+		}
 	}
 
 	for test := range typeNonZeros() {
-		False(t, Zero(mock, test, "%#v is not the %T zero value", test, test))
+		if Zero(mock, test) {
+			t.Errorf("expected %#v to NOT be the zero value for %T", test, test)
+		}
 	}
 }
 
@@ -97,11 +109,15 @@ func TestTypeNotZero(t *testing.T) {
 	mock := new(mockT)
 
 	for test := range typeZeros() {
-		False(t, NotZero(mock, test, "%#v is not the %T zero value", test, test))
+		if NotZero(mock, test) {
+			t.Errorf("expected NotZero to return false for zero value %#v (%T)", test, test)
+		}
 	}
 
 	for test := range typeNonZeros() {
-		True(t, NotZero(mock, test, "%#v is not the %T zero value", test, test))
+		if !NotZero(mock, test) {
+			t.Errorf("expected NotZero to return true for non-zero value %#v (%T)", test, test)
+		}
 	}
 }
 
@@ -141,12 +157,21 @@ func TestTypeKind(t *testing.T) {
 func TestTypeDiffEmptyCases(t *testing.T) {
 	t.Parallel()
 
-	Equal(t, "", diff(nil, nil))
-	Equal(t, "", diff(struct{ foo string }{}, nil))
-	Equal(t, "", diff(nil, struct{ foo string }{}))
-	Equal(t, "", diff(1, 2))
-	Equal(t, "", diff(1, 2))
-	Equal(t, "", diff([]int{1}, []bool{true}))
+	cases := []struct {
+		a, b any
+	}{
+		{nil, nil},
+		{struct{ foo string }{}, nil},
+		{nil, struct{ foo string }{}},
+		{1, 2},
+		{1, 2},
+		{[]int{1}, []bool{true}},
+	}
+	for _, tc := range cases {
+		if result := diff(tc.a, tc.b); result != "" {
+			t.Errorf("expected empty diff for (%v, %v), got %q", tc.a, tc.b, result)
+		}
+	}
 }
 
 func TestTypeErrorMessages(t *testing.T) {

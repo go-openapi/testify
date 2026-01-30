@@ -14,18 +14,28 @@ func TestTestingFailNowWithPlainT(t *testing.T) {
 	t.Parallel()
 	mock := &mockT{}
 
-	Panics(t, func() {
+	func() {
+		defer func() {
+			if recover() == nil {
+				t.Error("should panic since mockT is missing FailNow()")
+			}
+		}()
 		FailNow(mock, "failed")
-	}, "should panic since mockT is missing FailNow()")
+	}()
 }
 
 func TestTestingFailNowWithFullT(t *testing.T) {
 	t.Parallel()
 	mock := &mockFailNowT{}
 
-	NotPanics(t, func() {
+	func() {
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("should call mockT.FailNow() rather than panicking: %v", r)
+			}
+		}()
 		FailNow(mock, "failed")
-	}, "should call mockT.FailNow() rather than panicking")
+	}()
 }
 
 func TestIndentMessageLines(t *testing.T) {
@@ -36,7 +46,9 @@ func TestIndentMessageLines(t *testing.T) {
 			t.Parallel()
 
 			result := indentMessageLines(tc.message, tc.longestLabel)
-			Equal(t, tc.expected, result)
+			if tc.expected != result {
+				t.Errorf("expected %q, got %q", tc.expected, result)
+			}
 		})
 	}
 }
@@ -47,14 +59,22 @@ func TestParseLabeledOutput(t *testing.T) {
 	t.Run("round-trip single label", func(t *testing.T) {
 		t.Parallel()
 
-		input := []labeledContent{{"Error", "test message"}}
+		input := []labeledContent{{errString, "test message"}}
 		output := labeledOutput(input...)
 		parsed := parseLabeledOutput(output)
 
-		NotNil(t, parsed)
-		Len(t, parsed, 1)
-		Equal(t, "Error", parsed[0].label)
-		Equal(t, "test message\n", parsed[0].content)
+		if parsed == nil {
+			t.Fatal("expected non-nil parsed output")
+		}
+		if len(parsed) != 1 {
+			t.Fatalf("expected 1 label, got %d", len(parsed))
+		}
+		if parsed[0].label != errString {
+			t.Errorf("expected label %q, got %q", errString, parsed[0].label)
+		}
+		if parsed[0].content != "test message\n" {
+			t.Errorf("expected content %q, got %q", "test message\n", parsed[0].content)
+		}
 	})
 
 	t.Run("round-trip multiple labels", func(t *testing.T) {
@@ -62,19 +82,31 @@ func TestParseLabeledOutput(t *testing.T) {
 
 		input := []labeledContent{
 			{"Error Trace", "file.go:42"},
-			{"Error", "not equal"},
+			{errString, "not equal"},
 			{"Test", "TestFoo"},
 			{"Messages", "extra info"},
 		}
 		output := labeledOutput(input...)
 		parsed := parseLabeledOutput(output)
 
-		NotNil(t, parsed)
-		Len(t, parsed, 4)
-		Equal(t, "Error Trace", parsed[0].label)
-		Equal(t, "Error", parsed[1].label)
-		Equal(t, "Test", parsed[2].label)
-		Equal(t, "Messages", parsed[3].label)
+		if parsed == nil {
+			t.Fatal("expected non-nil parsed output")
+		}
+		if len(parsed) != 4 {
+			t.Fatalf("expected 4 labels, got %d", len(parsed))
+		}
+		if parsed[0].label != "Error Trace" {
+			t.Errorf("expected label %q, got %q", "Error Trace", parsed[0].label)
+		}
+		if parsed[1].label != errString {
+			t.Errorf("expected label %q, got %q", errString, parsed[1].label)
+		}
+		if parsed[2].label != "Test" {
+			t.Errorf("expected label %q, got %q", "Test", parsed[2].label)
+		}
+		if parsed[3].label != "Messages" {
+			t.Errorf("expected label %q, got %q", "Messages", parsed[3].label)
+		}
 	})
 
 	t.Run("blank line skipping", func(t *testing.T) {
@@ -84,16 +116,24 @@ func TestParseLabeledOutput(t *testing.T) {
 		output := "\n\tError:\ttest message\n\n"
 		parsed := parseLabeledOutput(output)
 
-		NotNil(t, parsed)
-		Len(t, parsed, 1)
-		Equal(t, "Error", parsed[0].label)
+		if parsed == nil {
+			t.Fatal("expected non-nil parsed output")
+		}
+		if len(parsed) != 1 {
+			t.Fatalf("expected 1 label, got %d", len(parsed))
+		}
+		if parsed[0].label != errString {
+			t.Errorf("expected label %q, got %q", errString, parsed[0].label)
+		}
 	})
 
 	t.Run("malformed input returns nil", func(t *testing.T) {
 		t.Parallel()
 
 		parsed := parseLabeledOutput("this is not labeled output")
-		Nil(t, parsed)
+		if parsed != nil {
+			t.Errorf("expected nil, got %v", parsed)
+		}
 	})
 }
 
@@ -105,7 +145,9 @@ func TestMessageFromMsgAndArgs(t *testing.T) {
 			t.Parallel()
 
 			result := messageFromMsgAndArgs(tc.args...)
-			Equal(t, tc.expected, result)
+			if tc.expected != result {
+				t.Errorf("expected %q, got %q", tc.expected, result)
+			}
 		})
 	}
 }
@@ -119,7 +161,9 @@ func TestLabeledOutput(t *testing.T) {
 			t.Parallel()
 
 			result := labeledOutput(tc.input...)
-			Equal(t, tc.expected, result)
+			if tc.expected != result {
+				t.Errorf("expected %q, got %q", tc.expected, result)
+			}
 		})
 	}
 }
@@ -130,10 +174,14 @@ func TestErrorEnvelopeIntegration(t *testing.T) {
 	mock := new(captureT)
 	Fail(mock, "test message")
 
-	True(t, mock.failed, "Fail should mark test as failed")
+	if !mock.failed {
+		t.Fatal("Fail should mark test as failed")
+	}
 
 	parsed := parseLabeledOutput(mock.msg)
-	NotNil(t, parsed, "Fail output should be parseable by parseLabeledOutput")
+	if parsed == nil {
+		t.Fatal("Fail output should be parseable by parseLabeledOutput")
+	}
 
 	var hasErrorTrace, hasError bool
 	var errorContent string
@@ -141,15 +189,21 @@ func TestErrorEnvelopeIntegration(t *testing.T) {
 		switch lc.label {
 		case "Error Trace":
 			hasErrorTrace = true
-		case "Error":
+		case errString:
 			hasError = true
 			errorContent = strings.TrimRight(lc.content, "\n")
 		}
 	}
 
-	True(t, hasErrorTrace, "envelope should contain Error Trace label")
-	True(t, hasError, "envelope should contain Error label")
-	Equal(t, "test message", errorContent)
+	if !hasErrorTrace {
+		t.Error("envelope should contain Error Trace label")
+	}
+	if !hasError {
+		t.Error("envelope should contain Error label")
+	}
+	if errorContent != "test message" {
+		t.Errorf("expected error content %q, got %q", "test message", errorContent)
+	}
 }
 
 // =======================================
@@ -166,14 +220,14 @@ func labeledOutputCases() iter.Seq[labeledOutputCase] {
 	return slices.Values([]labeledOutputCase{
 		{
 			name:     "single label",
-			input:    []labeledContent{{"Error", "something failed"}},
+			input:    []labeledContent{{errString, "something failed"}},
 			expected: "\tError:\tsomething failed\n",
 		},
 		{
 			name: "multiple labels aligned",
 			input: []labeledContent{
 				{"Error Trace", "file.go:42"},
-				{"Error", "not equal"},
+				{errString, "not equal"},
 				{"Test", "TestFoo"},
 			},
 			expected: "\tError Trace:\tfile.go:42\n" +
@@ -182,7 +236,7 @@ func labeledOutputCases() iter.Seq[labeledOutputCase] {
 		},
 		{
 			name:  "multi-line content indented",
-			input: []labeledContent{{"Error", "line1\nline2\nline3"}},
+			input: []labeledContent{{errString, "line1\nline2\nline3"}},
 			expected: "\tError:\tline1\n" +
 				"\t      \tline2\n" +
 				"\t      \tline3\n",

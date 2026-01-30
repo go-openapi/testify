@@ -55,7 +55,10 @@ func TestNumberInDeltaMapValues(t *testing.T) {
 
 	// only have a reflection-based assertion here
 	for tc := range numberInDeltaMapCases() {
-		tc.f(t, InDeltaMapValues(mock, tc.expect, tc.actual, tc.delta), tc.name+"\n"+diff(tc.expect, tc.actual))
+		result := InDeltaMapValues(mock, tc.expect, tc.actual, tc.delta)
+		if result != tc.shouldPass {
+			t.Errorf("%s: expected result=%v, got %v\n%s", tc.name, tc.shouldPass, result, diff(tc.expect, tc.actual))
+		}
 	}
 }
 
@@ -252,14 +255,7 @@ func testDelta[Number Measurable](expected, actual, delta Number, shouldPass boo
 		mock := new(mockT)
 		// InDelta requires delta as float64, so convert it
 		result := InDelta(mock, expected, actual, float64(delta))
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-		} else {
-			False(t, result)
-			True(t, mock.Failed())
-		}
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 
@@ -269,25 +265,18 @@ func testDeltaT[Number Measurable](expected, actual, delta Number, shouldPass bo
 
 		mock := new(mockT)
 		result := InDeltaT(mock, expected, actual, delta)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-		} else {
-			False(t, result)
-			True(t, mock.Failed())
-		}
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 
 // Helper functions and test data for InDeltaMapValues
 
 type numberInDeltaMapCase struct {
-	name   string
-	expect any
-	actual any
-	f      func(T, bool, ...any) bool
-	delta  float64
+	name       string
+	expect     any
+	actual     any
+	shouldPass bool
+	delta      float64
 }
 
 func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
@@ -307,8 +296,8 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 				"bar": 1.99,
 				"baz": math.NaN(),
 			},
-			delta: 0.1,
-			f:     True,
+			delta:      0.1,
+			shouldPass: true,
 		},
 		{
 			name: "Within delta",
@@ -320,8 +309,8 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 				1: 1.0,
 				2: 1.99,
 			},
-			delta: 0.1,
-			f:     True,
+			delta:      0.1,
+			shouldPass: true,
 		},
 		{
 			name: "Different number of keys",
@@ -332,8 +321,8 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 			actual: map[int]float64{
 				1: 1.0,
 			},
-			delta: 0.1,
-			f:     False,
+			delta:      0.1,
+			shouldPass: false,
 		},
 		{
 			name: "Within delta with zero value",
@@ -343,8 +332,8 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 			actual: map[string]float64{
 				"zero": 0,
 			},
-			delta: 0.1,
-			f:     True,
+			delta:      0.1,
+			shouldPass: true,
 		},
 		{
 			name: "With missing key with zero value",
@@ -356,25 +345,25 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 				"zero": 0,
 				"bar":  0,
 			},
-			f: False,
+			shouldPass: false,
 		},
 		{
-			name:   "With nil maps",
-			expect: map[string]float64(nil),
-			actual: map[string]float64(nil),
-			f:      True,
+			name:       "With nil maps",
+			expect:     map[string]float64(nil),
+			actual:     map[string]float64(nil),
+			shouldPass: true,
 		},
 		{
-			name:   "With nil values (not a map)",
-			expect: map[string]float64(nil),
-			actual: []float64(nil),
-			f:      False,
+			name:       "With nil values (not a map)",
+			expect:     map[string]float64(nil),
+			actual:     []float64(nil),
+			shouldPass: false,
 		},
 		{
-			name:   "With nil values (not a map)",
-			expect: []float64(nil),
-			actual: map[string]float64(nil),
-			f:      False,
+			name:       "With nil values (not a map)",
+			expect:     []float64(nil),
+			actual:     map[string]float64(nil),
+			shouldPass: false,
 		},
 		{
 			name: "With expected nil keys",
@@ -386,7 +375,7 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 				&keyA:          1.00,
 				(*string)(nil): 2.00,
 			},
-			f: True,
+			shouldPass: true,
 		},
 		{
 			name: "With expected invalid value",
@@ -396,7 +385,7 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 			actual: map[string]any{
 				keyA: &iface,
 			},
-			f: False,
+			shouldPass: false,
 		},
 	})
 }
@@ -557,14 +546,7 @@ func testEpsilon[Number Measurable](expected, actual Number, epsilon float64, sh
 
 		mock := new(mockT)
 		result := InEpsilon(mock, expected, actual, epsilon)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-		} else {
-			False(t, result)
-			True(t, mock.Failed())
-		}
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 
@@ -574,14 +556,7 @@ func testEpsilonT[Number Measurable](expected, actual Number, epsilon float64, s
 
 		mock := new(mockT)
 		result := InEpsilonT(mock, expected, actual, epsilon)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-		} else {
-			False(t, result)
-			True(t, mock.Failed())
-		}
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 
@@ -635,14 +610,7 @@ func testDeltaSlice(expected, actual any, delta float64, shouldPass bool) func(*
 
 		mock := new(mockT)
 		result := InDeltaSlice(mock, expected, actual, delta)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-		} else {
-			False(t, result)
-			True(t, mock.Failed())
-		}
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 
@@ -707,14 +675,7 @@ func testEpsilonSlice(expected, actual any, epsilon float64, shouldPass bool) fu
 
 		mock := new(mockT)
 		result := InEpsilonSlice(mock, expected, actual, epsilon)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-		} else {
-			False(t, result)
-			True(t, mock.Failed())
-		}
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 

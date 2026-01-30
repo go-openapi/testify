@@ -114,7 +114,9 @@ func TestTypeDiffRace(t *testing.T) {
 
 	for _, ch := range rChans {
 		for msg := range ch {
-			NotZero(t, msg) // dummy assert
+			if msg == "" {
+				t.Error("expected non-empty diff result")
+			}
 		}
 	}
 }

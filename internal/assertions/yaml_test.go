@@ -48,9 +48,16 @@ func testYAMLEq(expected, actual string, success bool) func(*testing.T) {
 		t.Parallel()
 
 		mock := new(mockT)
-		if !Panics(t, func() {
+		panicked := func() (didPanic bool) {
+			defer func() {
+				if recover() != nil {
+					didPanic = true
+				}
+			}()
 			_ = YAMLEq(mock, expected, actual)
-		}) {
+			return false
+		}()
+		if !panicked {
 			croakWantPanic(t, "YAMLEq")
 		}
 	}
@@ -62,9 +69,16 @@ func testYAMLEqBytes(expected, actual string, success bool) func(*testing.T) {
 		t.Parallel()
 
 		mock := new(mockT)
-		if !Panics(t, func() {
+		panicked := func() (didPanic bool) {
+			defer func() {
+				if recover() != nil {
+					didPanic = true
+				}
+			}()
 			_ = YAMLEqBytes(mock, []byte(expected), []byte(actual))
-		}) {
+			return false
+		}()
+		if !panicked {
 			croakWantPanic(t, "YAMLEqBytes")
 		}
 	}
@@ -77,9 +91,16 @@ func testYAMLEqT[ADoc, EDoc Text](expected, actual string, success bool) func(*t
 		t.Parallel()
 
 		mock := new(mockT)
-		if !Panics(t, func() {
+		panicked := func() (didPanic bool) {
+			defer func() {
+				if recover() != nil {
+					didPanic = true
+				}
+			}()
 			_ = YAMLEqT(mock, EDoc(expected), ADoc(actual))
-		}) {
+			return false
+		}()
+		if !panicked {
 			croakWantPanic(t, "YAMLEqT")
 		}
 	}
@@ -91,9 +112,16 @@ func testYAMLUnmarshalAsT[ADoc Text, Object any](expected Object, actual ADoc, s
 		t.Parallel()
 
 		mock := new(mockT)
-		if !Panics(t, func() {
+		panicked := func() (didPanic bool) {
+			defer func() {
+				if recover() != nil {
+					didPanic = true
+				}
+			}()
 			_ = YAMLUnmarshalAsT(mock, expected, actual)
-		}) {
+			return false
+		}()
+		if !panicked {
 			croakWantPanic(t, "YAMLUnmarshalAsT")
 		}
 	}
@@ -105,9 +133,16 @@ func testYAMLMarshalAsT[EDoc Text](expected EDoc, actual any, success bool) func
 		t.Parallel()
 
 		mock := new(mockT)
-		if !Panics(t, func() {
+		panicked := func() (didPanic bool) {
+			defer func() {
+				if recover() != nil {
+					didPanic = true
+				}
+			}()
 			_ = YAMLMarshalAsT(mock, expected, actual)
-		}) {
+			return false
+		}()
+		if !panicked {
 			croakWantPanic(t, "YAMLMarshalAsT")
 		}
 	}

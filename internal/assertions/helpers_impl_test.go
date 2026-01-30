@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"iter"
+	"reflect"
 	"slices"
 	"strings"
 	"testing"
@@ -29,13 +30,19 @@ func testTruncatingFormat() func(*testing.T) {
 
 		t.Run("should not truncate rendered value", func(t *testing.T) {
 			result := truncatingFormat("%#v", original)
-			Equal(t, fmt.Sprintf("%#v", original), result, "string should not be truncated")
+			expected := fmt.Sprintf("%#v", original)
+			if expected != result {
+				t.Errorf("string should not be truncated: expected %q, got %q", expected, result)
+			}
 		})
 
 		t.Run("should truncate rendered value", func(t *testing.T) {
 			original += strings.Repeat("x", 100)
 			result := truncatingFormat("%#v", original)
-			NotEqual(t, fmt.Sprintf("%#v", original), result, "string should have been truncated.")
+			full := fmt.Sprintf("%#v", original)
+			if full == result {
+				t.Error("string should have been truncated")
+			}
 
 			if !strings.HasSuffix(result, "<... truncated>") {
 				t.Error("truncated string should have <... truncated> suffix")
@@ -57,7 +64,9 @@ func testDiff() func(*testing.T) {
 						tt.valueA,
 						tt.valueB,
 					)
-					Equal(t, tt.expected, actual)
+					if tt.expected != actual {
+						t.Errorf("expected diff:\n%s\ngot:\n%s", tt.expected, actual)
+					}
 				}
 			})
 		}
@@ -73,10 +82,14 @@ func testDiffList() func(*testing.T) {
 				t.Parallel()
 
 				actualExtraA, actualExtraB := diffLists(test.listA, test.listB)
-				Equal(t, test.extraA, actualExtraA, "extra A does not match for listA=%v listB=%v",
-					test.listA, test.listB)
-				Equal(t, test.extraB, actualExtraB, "extra B does not match for listA=%v listB=%v",
-					test.listA, test.listB)
+				if !reflect.DeepEqual(test.extraA, actualExtraA) {
+					t.Errorf("extra A does not match for listA=%v listB=%v: expected %v, got %v",
+						test.listA, test.listB, test.extraA, actualExtraA)
+				}
+				if !reflect.DeepEqual(test.extraB, actualExtraB) {
+					t.Errorf("extra B does not match for listA=%v listB=%v: expected %v, got %v",
+						test.listA, test.listB, test.extraB, actualExtraB)
+				}
 			})
 		}
 	}

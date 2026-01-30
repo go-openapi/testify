@@ -127,8 +127,12 @@ func testGreaterTCustomInt() func(*testing.T) {
 		mock := new(mockT)
 
 		type MyInt int
-		True(t, GreaterT(mock, MyInt(2), MyInt(1)))
-		False(t, GreaterT(mock, MyInt(1), MyInt(2)))
+		if !GreaterT(mock, MyInt(2), MyInt(1)) {
+			t.Error("expected GreaterT(2, 1) to pass")
+		}
+		if GreaterT(mock, MyInt(1), MyInt(2)) {
+			t.Error("expected GreaterT(1, 2) to fail")
+		}
 	}
 }
 
@@ -236,16 +240,7 @@ func testComparison(cmp func(T, any, any, ...any) bool, e1, e2 any, shouldPass b
 
 		mock := new(mockT)
 		result := cmp(mock, e1, e2)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-
-			return
-		}
-
-		False(t, result)
-		True(t, mock.Failed())
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 
@@ -307,16 +302,7 @@ func testComparisonT[V Ordered](cmp func(T, V, V, ...any) bool, e1, e2 V, should
 
 		mock := new(mockT)
 		result := cmp(mock, e1, e2)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-
-			return
-		}
-
-		False(t, result)
-		True(t, mock.Failed())
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 
@@ -383,16 +369,7 @@ func testSign(sign func(T, any, ...any) bool, e any, shouldPass bool) func(*test
 
 		mock := new(mockT)
 		result := sign(mock, e)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-
-			return
-		}
-
-		False(t, result)
-		True(t, mock.Failed())
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 
@@ -441,16 +418,7 @@ func testSignT[V SignedNumeric](sign func(T, V, ...any) bool, e V, shouldPass bo
 
 		mock := new(mockT)
 		result := sign(mock, e)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-
-			return
-		}
-
-		False(t, result)
-		True(t, mock.Failed())
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 

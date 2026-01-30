@@ -17,17 +17,33 @@ func TestTimeWithinDuration(t *testing.T) {
 	a := time.Now()
 	b := a.Add(10 * time.Second)
 
-	True(t, WithinDuration(mock, a, b, 10*time.Second), "A 10s difference is within a 10s time difference")
-	True(t, WithinDuration(mock, b, a, 10*time.Second), "A 10s difference is within a 10s time difference")
+	if !WithinDuration(mock, a, b, 10*time.Second) {
+		t.Error("A 10s difference is within a 10s time difference")
+	}
+	if !WithinDuration(mock, b, a, 10*time.Second) {
+		t.Error("A 10s difference is within a 10s time difference (reversed)")
+	}
 
-	False(t, WithinDuration(mock, a, b, 9*time.Second), "A 10s difference is not within a 9s time difference")
-	False(t, WithinDuration(mock, b, a, 9*time.Second), "A 10s difference is not within a 9s time difference")
+	if WithinDuration(mock, a, b, 9*time.Second) {
+		t.Error("A 10s difference is not within a 9s time difference")
+	}
+	if WithinDuration(mock, b, a, 9*time.Second) {
+		t.Error("A 10s difference is not within a 9s time difference (reversed)")
+	}
 
-	False(t, WithinDuration(mock, a, b, -9*time.Second), "A 10s difference is not within a 9s time difference")
-	False(t, WithinDuration(mock, b, a, -9*time.Second), "A 10s difference is not within a 9s time difference")
+	if WithinDuration(mock, a, b, -9*time.Second) {
+		t.Error("A 10s difference is not within a -9s time difference")
+	}
+	if WithinDuration(mock, b, a, -9*time.Second) {
+		t.Error("A 10s difference is not within a -9s time difference (reversed)")
+	}
 
-	False(t, WithinDuration(mock, a, b, -11*time.Second), "A 10s difference is not within a 9s time difference")
-	False(t, WithinDuration(mock, b, a, -11*time.Second), "A 10s difference is not within a 9s time difference")
+	if WithinDuration(mock, a, b, -11*time.Second) {
+		t.Error("A 10s difference is not within a -11s time difference")
+	}
+	if WithinDuration(mock, b, a, -11*time.Second) {
+		t.Error("A 10s difference is not within a -11s time difference (reversed)")
+	}
 }
 
 func TestTimeWithinRange(t *testing.T) {
@@ -38,16 +54,30 @@ func TestTimeWithinRange(t *testing.T) {
 	s := n.Add(-time.Second)
 	e := n.Add(time.Second)
 
-	True(t, WithinRange(mock, n, n, n), "Exact same actual, start, and end values return true")
+	if !WithinRange(mock, n, n, n) {
+		t.Error("Exact same actual, start, and end values should return true")
+	}
 
-	True(t, WithinRange(mock, n, s, e), "Time in range is within the time range")
-	True(t, WithinRange(mock, s, s, e), "The start time is within the time range")
-	True(t, WithinRange(mock, e, s, e), "The end time is within the time range")
+	if !WithinRange(mock, n, s, e) {
+		t.Error("Time in range should be within the time range")
+	}
+	if !WithinRange(mock, s, s, e) {
+		t.Error("The start time should be within the time range")
+	}
+	if !WithinRange(mock, e, s, e) {
+		t.Error("The end time should be within the time range")
+	}
 
-	False(t, WithinRange(mock, s.Add(-time.Nanosecond), s, e, "Just before the start time is not within the time range"))
-	False(t, WithinRange(mock, e.Add(time.Nanosecond), s, e, "Just after the end time is not within the time range"))
+	if WithinRange(mock, s.Add(-time.Nanosecond), s, e) {
+		t.Error("Just before the start time should not be within the time range")
+	}
+	if WithinRange(mock, e.Add(time.Nanosecond), s, e) {
+		t.Error("Just after the end time should not be within the time range")
+	}
 
-	False(t, WithinRange(mock, n, e, s, "Just after the end time is not within the time range"))
+	if WithinRange(mock, n, e, s) {
+		t.Error("Reversed range (start > end) should return false")
+	}
 }
 
 func TestTimeErrorMessages(t *testing.T) {

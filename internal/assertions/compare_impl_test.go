@@ -65,7 +65,9 @@ func testContainsValue() func(*testing.T) {
 
 		for currCase := range compareContainsValueCases() {
 			result := containsValue(currCase.values, currCase.value)
-			Equal(t, currCase.result, result)
+			if currCase.result != result {
+				t.Errorf("containsValue(%v, %v): expected %v, got %v", currCase.values, currCase.value, currCase.result, result)
+			}
 		}
 	}
 }
@@ -78,7 +80,9 @@ func testCompareTwoValuesDifferentTypes() func(*testing.T) {
 				mock := new(mockT)
 
 				result := compareTwoValues(mock, currCase.v1, currCase.v2, []compareResult{compareLess, compareEqual, compareGreater}, "testFailMessage")
-				False(t, result)
+				if result {
+					t.Error("expected compareTwoValues to return false for different types")
+				}
 			})
 		}
 	}
@@ -92,7 +96,9 @@ func testCompareTwoValuesNotComparable() func(*testing.T) {
 				mock := new(mockT)
 
 				result := compareTwoValues(mock, currCase.v1, currCase.v2, []compareResult{compareLess, compareEqual, compareGreater}, "testFailMessage")
-				False(t, result)
+				if result {
+					t.Error("expected compareTwoValues to return false for non-comparable types")
+				}
 			})
 		}
 	}
@@ -106,7 +112,9 @@ func testCompareTwoValuesCorrectCompareResult() func(*testing.T) {
 				mock := new(mockT)
 
 				result := compareTwoValues(mock, currCase.v1, currCase.v2, currCase.allowedResults, "testFailMessage")
-				True(t, result)
+				if !result {
+					t.Errorf("expected compareTwoValues to return true for %v vs %v with allowed %v", currCase.v1, currCase.v2, currCase.allowedResults)
+				}
 			})
 		}
 	}

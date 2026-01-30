@@ -83,12 +83,16 @@ func TestErrorNoError(t *testing.T) {
 	// start with a nil error
 	var err error
 
-	True(t, NoError(mock, err), "NoError should return True for nil arg")
+	if !NoError(mock, err) {
+		t.Error("NoError should return true for nil arg")
+	}
 
 	// now set an error
 	err = errors.New("some error")
 
-	False(t, NoError(mock, err), "NoError with error should return False")
+	if NoError(mock, err) {
+		t.Error("NoError with error should return false")
+	}
 
 	// returning an empty error interface
 	err = func() error {
@@ -100,7 +104,9 @@ func TestErrorNoError(t *testing.T) {
 		t.Errorf("Error should be nil due to empty interface: %s", err)
 	}
 
-	False(t, NoError(mock, err), "NoError should fail with empty error interface")
+	if NoError(mock, err) {
+		t.Error("NoError should fail with empty error interface")
+	}
 }
 
 func TestError(t *testing.T) {
@@ -110,12 +116,16 @@ func TestError(t *testing.T) {
 	// start with a nil error
 	var err error
 
-	False(t, Error(mock, err), "Error should return False for nil arg")
+	if Error(mock, err) {
+		t.Error("Error should return false for nil arg")
+	}
 
 	// now set an error
 	err = errors.New("some error")
 
-	True(t, Error(mock, err), "Error with error should return True")
+	if !Error(mock, err) {
+		t.Error("Error with error should return true")
+	}
 
 	// returning an empty error interface
 	err = func() error {
@@ -127,7 +137,9 @@ func TestError(t *testing.T) {
 		t.Errorf("Error should be nil due to empty interface: %s", err)
 	}
 
-	True(t, Error(mock, err), "Error should pass with empty error interface")
+	if !Error(mock, err) {
+		t.Error("Error should pass with empty error interface")
+	}
 }
 
 func TestErrorEqualError(t *testing.T) {
@@ -136,12 +148,18 @@ func TestErrorEqualError(t *testing.T) {
 
 	// start with a nil error
 	var err error
-	False(t, EqualError(mock, err, ""), "EqualError should return false for nil arg")
+	if EqualError(mock, err, "") {
+		t.Error("EqualError should return false for nil arg")
+	}
 
 	// now set an error
 	err = errors.New("some error")
-	False(t, EqualError(mock, err, "Not some error"), "EqualError should return false for different error string")
-	True(t, EqualError(mock, err, "some error"), "EqualError should return true")
+	if EqualError(mock, err, "Not some error") {
+		t.Error("EqualError should return false for different error string")
+	}
+	if !EqualError(mock, err, "some error") {
+		t.Error("EqualError should return true")
+	}
 }
 
 func TestErrorContains(t *testing.T) {
@@ -150,13 +168,21 @@ func TestErrorContains(t *testing.T) {
 
 	// start with a nil error
 	var err error
-	False(t, ErrorContains(mock, err, ""), "ErrorContains should return false for nil arg")
+	if ErrorContains(mock, err, "") {
+		t.Error("ErrorContains should return false for nil arg")
+	}
 
 	// now set an error
 	err = errors.New("some error: another error")
-	False(t, ErrorContains(mock, err, "bad error"), "ErrorContains should return false for different error string")
-	True(t, ErrorContains(mock, err, "some error"), "ErrorContains should return true")
-	True(t, ErrorContains(mock, err, "another error"), "ErrorContains should return true")
+	if ErrorContains(mock, err, "bad error") {
+		t.Error("ErrorContains should return false for different error string")
+	}
+	if !ErrorContains(mock, err, "some error") {
+		t.Error("ErrorContains should return true for 'some error'")
+	}
+	if !ErrorContains(mock, err, "another error") {
+		t.Error("ErrorContains should return true for 'another error'")
+	}
 }
 
 // ============================================================================
