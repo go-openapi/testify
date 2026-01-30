@@ -108,9 +108,11 @@ func (f spewFunc) String() string {
 		fSprintf:        "spew.Sprintf",
 		fSprintln:       "spew.Sprintln",
 	}
+
 	if s, ok := names[f]; ok {
 		return s
 	}
+
 	return fmt.Sprintf("Unknown spewFunc (%d)", int(f))
 }
 
@@ -159,6 +161,7 @@ func spewTestCases() iter.Seq[spewTest] {
 		slice []string
 		m     map[string]int
 	}
+
 	dt := depthTester{
 		indirCir1{nil},
 		[1]string{"arr"},
@@ -357,6 +360,7 @@ func runWithStdoutRedirect(fn func(spewTest)) spewTestRunner {
 		if err != nil {
 			return err.Error()
 		}
+
 		buf.Write(b)
 		return ""
 	}
