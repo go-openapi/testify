@@ -15,5 +15,5 @@ jobs:
     permissions:
       contents: read
       security-events: write
-    uses: go-openapi/ci-workflows/.github/workflows/scanner.yml@057c8455d283298809477f4b18e66ebfb6d64ac3 # V0.2.4
+    uses: go-openapi/ci-workflows/.github/workflows/scanner.yml@2a3bc27eb79f3f5e5dc7a43954e9f41eeb96ebcb # V0.2.4
     secrets: inherit
