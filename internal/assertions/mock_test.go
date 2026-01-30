@@ -129,41 +129,6 @@ func (ctt *captureT) Errorf(format string, args ...any) {
 	ctt.failed = true
 }
 
-func (ctt *captureT) checkResultAndErrMsg(t *testing.T, expectedRes, res bool, expectedErrMsg string) {
-	t.Helper()
-
-	if res != expectedRes {
-		t.Errorf("Should return %t", expectedRes)
-		return
-	}
-	if res == ctt.failed {
-		t.Errorf("The test result (%t) should be reflected in the testing.T type (%t)", res, !ctt.failed)
-		return
-	}
-	contents := parseLabeledOutput(ctt.msg)
-	if res == true {
-		if contents != nil {
-			t.Errorf("Should not log an error. Log output: %q", ctt.msg)
-		}
-		return
-	}
-	if contents == nil {
-		t.Errorf("Should log an error. Log output: %q", ctt.msg)
-		return
-	}
-
-	for _, content := range contents {
-		if content.label == errString {
-			if expectedErrMsg == content.content {
-				return
-			}
-			t.Errorf("Recorded Error: %q", content.content)
-		}
-	}
-
-	t.Errorf("Expected Error: %q", expectedErrMsg)
-}
-
 // parseLabeledOutput does the inverse of labeledOutput - it takes a formatted
 // output string and turns it back into a slice of labeledContent.
 func parseLabeledOutput(output string) []labeledContent {

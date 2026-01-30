@@ -91,11 +91,11 @@ func TestPanicsWithValue(t *testing.T) {
 func TestPanicsWithError(t *testing.T) {
 	t.Parallel()
 
-	mock := new(captureT)
+	mock := new(mockT)
 	succeeded := PanicsWithError(mock, "panic", func() {
 		panic(errors.New("panic"))
 	})
-	mock.checkResultAndErrMsg(t, true, succeeded, "")
+	shouldPassOrFail(t, mock, succeeded, true)
 }
 
 func TestPanicNotPanics(t *testing.T) {

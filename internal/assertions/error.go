@@ -10,6 +10,8 @@ import (
 	"strings"
 )
 
+var _ error = TestExampleError("")
+
 // TestExampleError is a sentinel error type that may be used for testing.
 type TestExampleError string
 
