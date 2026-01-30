@@ -29,6 +29,16 @@ func TestStringRegexp(t *testing.T) {
 	}
 }
 
+func TestStringErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, stringFailCases())
+}
+
+// =======================================
+// TestStringRegexp
+// =======================================
+
 // Values to populate the test harness:
 //
 // - valid and invalid patterns
@@ -290,4 +300,33 @@ func croakWantNotMatch(t *testing.T, rx, str any) {
 func testRex(rex string) *regexp.Regexp {
 	rx, _ := compileRegex(rex)
 	return rx
+}
+
+// =======================================
+// TestStringErrorMessages
+// =======================================
+
+func stringFailCases() iter.Seq[failCase] {
+	return slices.Values([]failCase{
+		{
+			name:         "Regexp/no-match",
+			assertion:    func(t T) bool { return Regexp(t, "^start", "no match") },
+			wantContains: []string{"Expect", "to match"},
+		},
+		{
+			name:         "NotRegexp/unexpected-match",
+			assertion:    func(t T) bool { return NotRegexp(t, "^start", "starting") },
+			wantContains: []string{"Expect", "to NOT match"},
+		},
+		{
+			name:         "Regexp/invalid-regexp",
+			assertion:    func(t T) bool { return Regexp(t, "\\C", "whatever") },
+			wantContains: []string{"invalid error expression"},
+		},
+		{
+			name:         "Regexp/invalid-type",
+			assertion:    func(t T) bool { return Regexp(t, struct{ a string }{a: "x"}, "whatever") },
+			wantContains: []string{"type for regexp is not supported"},
+		},
+	})
 }

@@ -4,7 +4,8 @@
 package assertions
 
 import (
-	"regexp"
+	"iter"
+	"slices"
 	"testing"
 	"time"
 )
@@ -49,12 +50,22 @@ func TestTimeWithinRange(t *testing.T) {
 	False(t, WithinRange(mock, n, e, s, "Just after the end time is not within the time range"))
 }
 
-func TestTimeEqualityErrorFormatting(t *testing.T) {
+func TestTimeErrorMessages(t *testing.T) {
 	t.Parallel()
-	mock := new(mockT)
 
-	Equal(mock, time.Second*2, time.Millisecond)
+	runFailCases(t, timeFailCases())
+}
 
-	expectedErr := "\\s+Error Trace:\\s+Error:\\s+Not equal:\\s+\n\\s+expected: 2s\n\\s+actual\\s+: 1ms\n"
-	Regexp(t, regexp.MustCompile(expectedErr), mock.errorString())
+// =======================================
+// TestTimeErrorMessages
+// =======================================
+
+func timeFailCases() iter.Seq[failCase] {
+	return slices.Values([]failCase{
+		{
+			name:         "Equal/time-formatting",
+			assertion:    func(t T) bool { return Equal(t, time.Second*2, time.Millisecond) },
+			wantContains: []string{"Not equal:", "2s", "1ms"},
+		},
+	})
 }

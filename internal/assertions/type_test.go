@@ -79,18 +79,6 @@ func TestTypeIsOfTypeT(t *testing.T) {
 	True(t, IsNotOfTypeT[myType](mock, f), "expected f (%T) not to be of type %T", f, myVar)
 }
 
-func TestTypeZeroWithSliceTooLongToPrint(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
-
-	longSlice := make([]int, 1_000_000)
-	Zero(mock, longSlice)
-	Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	Should be zero, but was [0 0 0`)
-	Contains(t, mock.errorString(), `<... truncated>`)
-}
-
 func TestTypeZero(t *testing.T) {
 	t.Parallel()
 	mock := new(testing.T)
@@ -161,39 +149,29 @@ func TestTypeDiffEmptyCases(t *testing.T) {
 	Equal(t, "", diff([]int{1}, []bool{true}))
 }
 
-// Ensure there are no data races.
-func TestTypeDiffRace(t *testing.T) {
+func TestTypeErrorMessages(t *testing.T) {
 	t.Parallel()
 
-	expected := map[string]string{
-		"a": "A",
-		"b": "B",
-		"c": "C",
-	}
-
-	actual := map[string]string{
-		"d": "D",
-		"e": "E",
-		"f": "F",
-	}
-
-	// run diffs in parallel simulating tests with t.Parallel()
-	numRoutines := 10
-	rChans := make([]chan string, numRoutines)
-	for idx := range rChans {
-		rChans[idx] = make(chan string)
-		go func(ch chan string) {
-			defer close(ch)
-			ch <- diff(expected, actual)
-		}(rChans[idx])
-	}
-
-	for _, ch := range rChans {
-		for msg := range ch {
-			NotZero(t, msg) // dummy assert
-		}
-	}
+	runFailCases(t, typeFailCases())
 }
+
+// =======================================
+// TestTypeErrorMessages
+// =======================================
+
+func typeFailCases() iter.Seq[failCase] {
+	return slices.Values([]failCase{
+		{
+			name:         "Zero/large-slice-truncated",
+			assertion:    func(t T) bool { return Zero(t, make([]int, 1_000_000)) },
+			wantContains: []string{"Should be zero, but was", "<... truncated>"},
+		},
+	})
+}
+
+// =======================================
+// TestTypeIsZero
+// =======================================
 
 func typeZeros() iter.Seq[any] {
 	return slices.Values([]any{

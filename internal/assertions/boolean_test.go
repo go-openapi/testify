@@ -3,7 +3,11 @@
 
 package assertions
 
-import "testing"
+import (
+	"iter"
+	"slices"
+	"testing"
+)
 
 func TestBooleanTrue(t *testing.T) {
 	t.Parallel()
@@ -63,5 +67,36 @@ func TestBooleanTrueTFalseT(t *testing.T) {
 		if !FalseT(mock, falsy) {
 			t.Error("FalseT should return false")
 		}
+	})
+}
+
+func TestBooleanErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, booleanFailCases())
+}
+
+func booleanFailCases() iter.Seq[failCase] {
+	return slices.Values([]failCase{
+		{
+			name:      "True/false-value",
+			assertion: func(t T) bool { return True(t, false) },
+			wantError: "Should be true",
+		},
+		{
+			name:      "False/true-value",
+			assertion: func(t T) bool { return False(t, true) },
+			wantError: "Should be false",
+		},
+		{
+			name:      "TrueT/false-value",
+			assertion: func(t T) bool { return TrueT(t, false) },
+			wantError: "Should be true",
+		},
+		{
+			name:      "FalseT/true-value",
+			assertion: func(t T) bool { return FalseT(t, true) },
+			wantError: "Should be false",
+		},
 	})
 }

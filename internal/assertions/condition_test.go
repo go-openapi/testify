@@ -5,6 +5,8 @@ package assertions
 
 import (
 	"context"
+	"iter"
+	"slices"
 	"sort"
 	"strings"
 	"sync"
@@ -399,5 +401,21 @@ func TestConditionNever(t *testing.T) {
 			return false
 		}
 		False(t, Never(mock, condition, testTimeout, time.Second))
+	})
+}
+
+func TestConditionErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, conditionFailCases())
+}
+
+func conditionFailCases() iter.Seq[failCase] {
+	return slices.Values([]failCase{
+		{
+			name:      "Condition/false",
+			assertion: func(t T) bool { return Condition(t, func() bool { return false }) },
+			wantError: "condition failed",
+		},
 	})
 }

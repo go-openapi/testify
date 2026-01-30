@@ -4,131 +4,11 @@
 package assertions
 
 import (
-	"bytes"
 	"iter"
 	"slices"
 	"testing"
 	"time"
 )
-
-func TestCompareErrorMessages(t *testing.T) {
-	// Error message validation
-	t.Parallel()
-
-	t.Run("with Greater", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		Greater(mock, 1, 2)
-
-		if !mock.Failed() {
-			t.Error("Expected test to fail but it passed")
-		}
-
-		errorMsg := mock.errorString()
-		if !Contains(t, errorMsg, `"1" is not greater than "2"`) {
-			t.Errorf("Error message should contain comparison details, got: %s", errorMsg)
-		}
-	})
-
-	t.Run("with GreaterOrEqual", func(t *testing.T) {
-		mock := new(mockT)
-		GreaterOrEqual(mock, 1, 2)
-
-		if !mock.Failed() {
-			t.Error("Expected test to fail but it passed")
-		}
-
-		errorMsg := mock.errorString()
-		if !Contains(t, errorMsg, `"1" is not greater than or equal to "2"`) {
-			t.Errorf("Error message should contain comparison details, got: %s", errorMsg)
-		}
-	})
-
-	t.Run("with Less", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		Less(mock, 2, 1)
-
-		if !mock.Failed() {
-			t.Error("Expected test to fail but it passed")
-		}
-
-		errorMsg := mock.errorString()
-		if !Contains(t, errorMsg, `"2" is not less than "1"`) {
-			t.Errorf("Error message should contain comparison details, got: %s", errorMsg)
-		}
-	})
-
-	t.Run("with LessOrEqual", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		LessOrEqual(mock, 2, 1)
-
-		if !mock.Failed() {
-			t.Error("Expected test to fail but it passed")
-		}
-
-		errorMsg := mock.errorString()
-		if !Contains(t, errorMsg, `"2" is not less than or equal to "1"`) {
-			t.Errorf("Error message should contain comparison details, got: %s", errorMsg)
-		}
-	})
-
-	t.Run("with Positive", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		Positive(mock, -1)
-
-		if !mock.Failed() {
-			t.Error("Expected test to fail but it passed")
-		}
-
-		errorMsg := mock.errorString()
-		if !Contains(t, errorMsg, `"-1" is not positive`) {
-			t.Errorf("Error message should contain sign check details, got: %s", errorMsg)
-		}
-	})
-
-	t.Run("with Negative", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		Negative(mock, 1)
-
-		if !mock.Failed() {
-			t.Error("Expected test to fail but it passed")
-		}
-
-		errorMsg := mock.errorString()
-		if !Contains(t, errorMsg, `"1" is not negative`) {
-			t.Errorf("Error message should contain sign check details, got: %s", errorMsg)
-		}
-	})
-
-	t.Run("with forwarded args", func(t *testing.T) {
-		msgAndArgs := []any{"format %s %x", "this", 0xc001}
-		const expectedOutput = "format this c001\n"
-
-		funcs := []func(t T){
-			func(t T) { Greater(t, 1, 2, msgAndArgs...) },
-			func(t T) { GreaterOrEqual(t, 1, 2, msgAndArgs...) },
-			func(t T) { Less(t, 2, 1, msgAndArgs...) },
-			func(t T) { LessOrEqual(t, 2, 1, msgAndArgs...) },
-			func(t T) { Positive(t, 0, msgAndArgs...) },
-			func(t T) { Negative(t, 0, msgAndArgs...) },
-		}
-
-		for _, f := range funcs {
-			mock := &outputT{buf: bytes.NewBuffer(nil)}
-			f(mock)
-			Contains(t, mock.buf.String(), expectedOutput)
-		}
-	})
-}
 
 func TestCompareGreaterAndLess(t *testing.T) {
 	t.Parallel()
@@ -224,6 +104,12 @@ func TestComparePositive(t *testing.T) {
 	for tc := range signCases() {
 		t.Run(tc.name+"/unified", testAllSign(tc))
 	}
+}
+
+func TestCompareErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, compareFailCases())
 }
 
 // genericTestCase wraps a test function with its name for table-driven tests of generic functions.
@@ -566,4 +452,43 @@ func testSignT[V SignedNumeric](sign func(T, V, ...any) bool, e V, shouldPass bo
 		False(t, result)
 		True(t, mock.Failed())
 	}
+}
+
+// ============================================================================
+// TestCompareErrorMessages
+// ============================================================================
+
+func compareFailCases() iter.Seq[failCase] {
+	return slices.Values([]failCase{
+		{
+			name:         "Greater/int",
+			assertion:    func(t T) bool { return Greater(t, 1, 2) },
+			wantContains: []string{`"1" is not greater than "2"`},
+		},
+		{
+			name:         "GreaterOrEqual/int",
+			assertion:    func(t T) bool { return GreaterOrEqual(t, 1, 2) },
+			wantContains: []string{`"1" is not greater than or equal to "2"`},
+		},
+		{
+			name:         "Less/int",
+			assertion:    func(t T) bool { return Less(t, 2, 1) },
+			wantContains: []string{`"2" is not less than "1"`},
+		},
+		{
+			name:         "LessOrEqual/int",
+			assertion:    func(t T) bool { return LessOrEqual(t, 2, 1) },
+			wantContains: []string{`"2" is not less than or equal to "1"`},
+		},
+		{
+			name:         "Positive/negative-value",
+			assertion:    func(t T) bool { return Positive(t, -1) },
+			wantContains: []string{`"-1" is not positive`},
+		},
+		{
+			name:         "Negative/positive-value",
+			assertion:    func(t T) bool { return Negative(t, 1) },
+			wantContains: []string{`"1" is not negative`},
+		},
+	})
 }

@@ -12,108 +12,6 @@ import (
 	"testing"
 )
 
-func TestErrorNoErrorWithErrorTooLongToPrint(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
-
-	longSlice := make([]int, 1_000_000)
-	NoError(mock, fmt.Errorf("long: %v", longSlice))
-	Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	Received unexpected error:
-	            	long: [0 0 0`)
-	Contains(t, mock.errorString(), `<... truncated>`)
-}
-
-func TestErrorEqualErrorWithErrorTooLongToPrint(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
-
-	longSlice := make([]int, 1_000_000)
-	EqualError(mock, fmt.Errorf("long: %v", longSlice), "EOF")
-	Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	Error message not equal:
-	            	expected: "EOF"
-	            	actual  : "long: [0 0 0`)
-	Contains(t, mock.errorString(), `<... truncated>`)
-}
-
-func TestErrorContainsWithErrorTooLongToPrint(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
-
-	longSlice := make([]int, 1_000_000)
-	ErrorContains(mock, fmt.Errorf("long: %v", longSlice), "EOF")
-	Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	Error "long: [0 0 0`)
-	Contains(t, mock.errorString(), `<... truncated> does not contain "EOF"`)
-}
-
-func TestErrorIsWithErrorTooLongToPrint(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
-
-	longSlice := make([]int, 1_000_000)
-	ErrorIs(mock, fmt.Errorf("long: %v", longSlice), fmt.Errorf("also: %v", longSlice))
-	Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	Target error should be in err chain:
-	            	expected: "also: [0 0 0`)
-	Contains(t, mock.errorString(), `<... truncated>
-	            	in chain: "long: [0 0 0`)
-}
-
-func TestErrorNotErrorIsWithErrorTooLongToPrint(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
-
-	longSlice := make([]int, 1_000_000)
-	err := fmt.Errorf("long: %v", longSlice)
-	NotErrorIs(mock, err, err)
-	Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	Target error should not be in err chain:
-	            	found: "long: [0 0 0`)
-	Contains(t, mock.errorString(), `<... truncated>
-	            	in chain: "long: [0 0 0`)
-}
-
-func TestErrorAsWithErrorTooLongToPrint(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
-
-	longSlice := make([]int, 1_000_000)
-	var target *customError
-	ErrorAs(mock, fmt.Errorf("long: %v", longSlice), &target)
-	Contains(t, mock.errorString(), fmt.Sprintf(`
-	Error Trace:	
-	Error:      	Should be in error chain:
-	            	expected: *%s.customError`,
-		shortpkg))
-	Contains(t, mock.errorString(), `
-	            	in chain: "long: [0 0 0`)
-	Contains(t, mock.errorString(), "<... truncated>")
-}
-
-func TestErrorNotErrorAsWithErrorTooLongToPrint(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
-
-	longSlice := make([]int, 1_000_000)
-	var target *customError
-	NotErrorAs(mock, fmt.Errorf("long: %v %w", longSlice, &customError{}), &target)
-	Contains(t, mock.errorString(), fmt.Sprintf(`
-	Error Trace:	
-	Error:      	Target error should not be in err chain:
-	            	found: *%s.customError`,
-		shortpkg))
-	Contains(t, mock.errorString(), `
-	            	in chain: "long: [0 0 0`)
-	Contains(t, mock.errorString(), "<... truncated>")
-}
-
 func TestErrorNotErrorAs(t *testing.T) {
 	t.Parallel()
 
@@ -127,6 +25,12 @@ func TestErrorNotErrorAs(t *testing.T) {
 			mock.checkResultAndErrMsg(t, tt.result, res, tt.resultErrMsg)
 		})
 	}
+}
+
+func TestErrorErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, errorFailCases())
 }
 
 func TestErrorIs(t *testing.T) {
@@ -261,6 +165,10 @@ func TestErrorContains(t *testing.T) {
 	True(t, ErrorContains(mock, err, "another error"),
 		"ErrorContains should return true")
 }
+
+// ============================================================================
+// TestNotErrorAs
+// ============================================================================
 
 type errorNotErrorAsCase struct {
 	err          error
@@ -453,3 +361,161 @@ func errorAsCases() iter.Seq[errorAsCase] {
 type customError struct{}
 
 func (*customError) Error() string { return "fail" }
+
+// ============================================================================
+// TestErrorErrorMessages
+// ============================================================================
+
+func errorFailCases() iter.Seq[failCase] {
+	longSlice := make([]int, 1_000_000)
+
+	return slices.Values([]failCase{
+		// --- truncation cases ---
+		truncationCase("NoError/truncation", func(t T) bool {
+			return NoError(t, fmt.Errorf("long: %v", longSlice))
+		}),
+		truncationCase("EqualError/truncation", func(t T) bool {
+			return EqualError(t, fmt.Errorf("long: %v", longSlice), "EOF")
+		}),
+		truncationCase("ErrorContains/truncation", func(t T) bool {
+			return ErrorContains(t, fmt.Errorf("long: %v", longSlice), "EOF")
+		}),
+		truncationCase("ErrorIs/truncation", func(t T) bool {
+			return ErrorIs(t, fmt.Errorf("long: %v", longSlice), fmt.Errorf("also: %v", longSlice))
+		}),
+		truncationCase("NotErrorIs/truncation", func(t T) bool {
+			err := fmt.Errorf("long: %v", longSlice)
+			return NotErrorIs(t, err, err)
+		}),
+		truncationCase("ErrorAs/truncation", func(t T) bool {
+			var target *customError
+			return ErrorAs(t, fmt.Errorf("long: %v", longSlice), &target)
+		}),
+		truncationCase("NotErrorAs/truncation", func(t T) bool {
+			var target *customError
+			return NotErrorAs(t, fmt.Errorf("long: %v %w", longSlice, &customError{}), &target)
+		}),
+
+		// --- ErrorIs message cases ---
+		{
+			name: "ErrorIs/not_in_chain",
+			assertion: func(t T) bool {
+				return ErrorIs(t, io.EOF, io.ErrClosedPipe)
+			},
+			wantError: "" +
+				"Target error should be in err chain:\n" +
+				"expected: \"io: read/write on closed pipe\"\n" +
+				"in chain: \"EOF\"",
+		},
+		{
+			name: "ErrorIs/nil_err",
+			assertion: func(t T) bool {
+				return ErrorIs(t, nil, io.EOF)
+			},
+			wantError: "Expected error with \"EOF\" in chain but got nil.",
+		},
+		{
+			name: "ErrorIs/nil_target",
+			assertion: func(t T) bool {
+				return ErrorIs(t, io.EOF, nil)
+			},
+			wantError: "" +
+				"Target error should be in err chain:\n" +
+				"expected: \"\"\n" +
+				"in chain: \"EOF\"",
+		},
+		{
+			name: "ErrorIs/wrapped_not_in_chain",
+			assertion: func(t T) bool {
+				return ErrorIs(t, fmt.Errorf("abc: %w", errors.New("def")), io.EOF)
+			},
+			wantError: "" +
+				"Target error should be in err chain:\n" +
+				"expected: \"EOF\"\n" +
+				"in chain: \"abc: def\"\n" +
+				"\t\"def\"",
+		},
+
+		// --- NotErrorIs message cases ---
+		{
+			name: "NotErrorIs/same_error",
+			assertion: func(t T) bool {
+				return NotErrorIs(t, io.EOF, io.EOF)
+			},
+			wantError: "" +
+				"Target error should not be in err chain:\n" +
+				"found: \"EOF\"\n" +
+				"in chain: \"EOF\"",
+		},
+		{
+			name: "NotErrorIs/wrapped_in_chain",
+			assertion: func(t T) bool {
+				return NotErrorIs(t, fmt.Errorf("wrap: %w", io.EOF), io.EOF)
+			},
+			wantError: "" +
+				"Target error should not be in err chain:\n" +
+				"found: \"EOF\"\n" +
+				"in chain: \"wrap: EOF\"\n" +
+				"\t\"EOF\"",
+		},
+		{
+			name: "NotErrorIs/both_nil",
+			assertion: func(t T) bool {
+				return NotErrorIs(t, nil, nil)
+			},
+			wantError: "" +
+				"Target error should not be in err chain:\n" +
+				"found: \"\"\n" +
+				"in chain: ",
+		},
+
+		// --- ErrorAs message cases ---
+		{
+			name: "ErrorAs/not_in_chain",
+			assertion: func(t T) bool {
+				var target *customError
+				return ErrorAs(t, io.EOF, &target)
+			},
+			wantError: "" +
+				"Should be in error chain:\n" +
+				fmt.Sprintf("expected: *%s.customError\n", shortpkg) +
+				"in chain: \"EOF\" (*errors.errorString)",
+		},
+		{
+			name: "ErrorAs/nil_err",
+			assertion: func(t T) bool {
+				var target *customError
+				return ErrorAs(t, nil, &target)
+			},
+			wantError: "" +
+				"An error is expected but got nil.\n" +
+				fmt.Sprintf("expected: *%s.customError", shortpkg),
+		},
+		{
+			name: "ErrorAs/wrapped_not_in_chain",
+			assertion: func(t T) bool {
+				var target *customError
+				return ErrorAs(t, fmt.Errorf("abc: %w", errors.New("def")), &target)
+			},
+			wantError: "" +
+				"Should be in error chain:\n" +
+				fmt.Sprintf("expected: *%s.customError\n", shortpkg) +
+				"in chain: \"abc: def\" (*fmt.wrapError)\n" +
+				"\t\"def\" (*errors.errorString)",
+		},
+
+		// --- NotErrorAs message cases ---
+		{
+			name: "NotErrorAs/found_in_chain",
+			assertion: func(t T) bool {
+				var target *customError
+				return NotErrorAs(t, fmt.Errorf("wrap: %w", &customError{}), &target)
+			},
+			wantError: "" +
+				"Target error should not be in err chain:\n" +
+				fmt.Sprintf("found: *%s.customError\n", shortpkg) +
+				"in chain: \"wrap: fail\" (*fmt.wrapError)\n" +
+				fmt.Sprintf("\t\"fail\" (*%s.customError)", shortpkg),
+		},
+	})
+}

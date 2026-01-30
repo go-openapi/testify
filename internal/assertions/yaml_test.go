@@ -11,6 +11,10 @@ func TestYAML(t *testing.T) {
 	t.Run("should panic", testAllYAMLEq())
 }
 
+// =======================================
+// TestYAML: all YAML assertions
+// =======================================
+
 func testAllYAMLEq() func(*testing.T) {
 	return func(t *testing.T) {
 		const (

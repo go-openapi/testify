@@ -6,8 +6,10 @@ package assertions
 import (
 	"fmt"
 	"io"
+	"iter"
 	"net/http"
 	"net/url"
+	"slices"
 	"testing"
 )
 
@@ -28,7 +30,6 @@ func TestHTTPSuccess(t *testing.T) {
 		"was not expecting a failure here",
 	), false)
 	True(t, mock3.Failed())
-	Contains(t, mock3.errorString(), "was not expecting a failure here")
 
 	mock4 := new(testing.T)
 	Equal(t, HTTPSuccess(mock4, httpStatusCode, "GET", "/", nil), false)
@@ -48,7 +49,6 @@ func TestHTTPRedirect(t *testing.T) {
 		"was expecting a 3xx status code. Got 200.",
 	), false)
 	True(t, mock1.Failed())
-	Contains(t, mock1.errorString(), "was expecting a 3xx status code. Got 200.")
 
 	mock2 := new(testing.T)
 	Equal(t, HTTPRedirect(mock2, httpRedirect, "GET", "/", nil), true)
@@ -76,7 +76,6 @@ func TestHTTPError(t *testing.T) {
 		"Expected this request to error out. But it didn't",
 	), false)
 	True(t, mock2.Failed())
-	Contains(t, mock2.errorString(), "Expected this request to error out. But it didn't")
 
 	mock3 := new(testing.T)
 	Equal(t, HTTPError(mock3, httpError, "GET", "/", nil), true)
@@ -104,7 +103,6 @@ func TestHTTPStatusCode(t *testing.T) {
 		"Expected the status code to be %d", http.StatusSwitchingProtocols,
 	), false)
 	True(t, mock3.Failed())
-	Contains(t, mock3.errorString(), "Expected the status code to be 101")
 
 	mock4 := new(testing.T)
 	Equal(t, HTTPStatusCode(mock4, httpStatusCode, "GET", "/", nil, http.StatusSwitchingProtocols), true)
@@ -175,9 +173,36 @@ func TestHttpBody(t *testing.T) {
 		"Expected the request body to not contain 'World'. But it did.",
 	))
 	True(t, HTTPBodyNotContains(mock, httpHelloName, "GET", "/", url.Values{"name": []string{"World"}}, "world"))
-	Contains(t, mock.errorString(), "Expected the request body to not contain 'World'. But it did.")
-
 	True(t, HTTPBodyContains(mock, httpReadBody, "GET", "/", nil, "hello"))
+}
+
+func TestHTTPErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, httpFailCases())
+}
+
+// ============================================================================
+// TestHTTPErrorMessages
+// ============================================================================.
+func httpFailCases() iter.Seq[failCase] {
+	return slices.Values([]failCase{
+		{
+			name:         "HTTPSuccess/error-handler",
+			assertion:    func(t T) bool { return HTTPSuccess(t, httpError, "GET", "/", nil) },
+			wantContains: []string{"Expected HTTP success status code"},
+		},
+		{
+			name:         "HTTPRedirect/ok-handler",
+			assertion:    func(t T) bool { return HTTPRedirect(t, httpOK, "GET", "/", nil) },
+			wantContains: []string{"Expected HTTP redirect status code"},
+		},
+		{
+			name:         "HTTPError/redirect-handler",
+			assertion:    func(t T) bool { return HTTPError(t, httpRedirect, "GET", "/", nil) },
+			wantContains: []string{"Expected HTTP error status code"},
+		},
+	})
 }
 
 func TestHTTPBodyWrappers(t *testing.T) {

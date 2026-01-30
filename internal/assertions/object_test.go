@@ -26,30 +26,6 @@ func TestObjectsAreEqual(t *testing.T) {
 	}
 }
 
-/* redundant with Equal
-func TestEqualBytes(t *testing.T) {
-	t.Parallel()
-
-	i := 0
-	for c := range equalBytesCases() {
-		Equal(t, reflect.DeepEqual(c.a, c.b), ObjectsAreEqual(c.a, c.b), "case %d failed", i)
-		i++
-	}
-}
-
-type equalBytesCase struct {
-	a, b []byte
-}
-
-func equalBytesCases() iter.Seq[equalBytesCase] {
-	return slices.Values([]equalBytesCase{
-		{make([]byte, 2), make([]byte, 2)},
-		{make([]byte, 2), make([]byte, 2, 3)},
-		{nil, make([]byte, 0)},
-	})
-}
-*/
-
 func TestObjectsAreEqualValues(t *testing.T) {
 	t.Parallel()
 

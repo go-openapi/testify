@@ -95,7 +95,7 @@ func FalseT[B Boolean](t T, value B, msgAndArgs ...any) bool {
 		if h, ok := t.(H); ok {
 			h.Helper()
 		}
-		return Fail(t, "Should be true", msgAndArgs...)
+		return Fail(t, "Should be false", msgAndArgs...)
 	}
 
 	return true

@@ -7,76 +7,8 @@ import (
 	"iter"
 	"math"
 	"slices"
-	"strings"
 	"testing"
 )
-
-func TestNumberInDeltaTErrorMessage(t *testing.T) {
-	t.Parallel()
-
-	mock := new(mockT)
-
-	// Test that error message shows correct difference
-	result := InDeltaT(mock, 10, 1, 5)
-	if result || !mock.Failed() {
-		t.Error("Expected test to fail but it passed")
-	}
-
-	// Verify the error message contains the actual difference (9)
-	errorMsg := mock.errorString()
-	if !strings.Contains(errorMsg, "difference was 9") {
-		t.Errorf("Error message should contain 'difference was 9', got: %s", errorMsg)
-	}
-}
-
-func TestNumberInEpsilonTErrorMessage(t *testing.T) {
-	t.Parallel()
-
-	t.Run("relative error message", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-
-		// Test relative error: 100 vs 110 has 10% error, exceeds 5% epsilon
-		result := InEpsilonT(mock, 100.0, 110.0, 0.05)
-		if result || !mock.Failed() {
-			t.Error("Expected test to fail but it passed")
-		}
-
-		// Verify the error message contains relative error
-		errorMsg := mock.errorString()
-		if !strings.Contains(errorMsg, "Relative error is too high") {
-			t.Errorf("Error message should contain 'Relative error is too high', got: %s", errorMsg)
-		}
-
-		// Should show actual relative error of 0.1 (10%)
-		if !Contains(t, errorMsg, "0.1") {
-			t.Errorf("Error message should contain '0.1' (10%% relative error), got: %s", errorMsg)
-		}
-	})
-
-	t.Run("absolute error message for zero expected", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-
-		// Test absolute error: expected=0, actual=0.5, epsilon=0.1
-		result := InEpsilonT(mock, 0.0, 0.5, 0.1)
-		if result || !mock.Failed() {
-			t.Error("Expected test to fail but it passed")
-		}
-
-		// Verify the error message mentions absolute error
-		errorMsg := mock.errorString()
-		if !strings.Contains(errorMsg, "Expected value is zero, using absolute error comparison") {
-			t.Errorf("Error message should mention absolute error comparison, got: %s", errorMsg)
-		}
-		// Should show actual absolute difference of 0.5
-		if !strings.Contains(errorMsg, "0.5") {
-			t.Errorf("Error message should contain '0.5' (absolute difference), got: %s", errorMsg)
-		}
-	})
-}
 
 func TestNumberInDeltaEdgeCases(t *testing.T) {
 	t.Parallel()
@@ -144,7 +76,15 @@ func TestNumberInEpsilonSlice(t *testing.T) {
 	}
 }
 
-// Helper functions and test data for InDelta/InDeltaT
+func TestNumberErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, numberFailCases())
+}
+
+// =======================================
+// Test NumberInDelta variants
+// =======================================
 
 func deltaCases() iter.Seq[genericTestCase] {
 	return slices.Values([]genericTestCase{
@@ -461,7 +401,9 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 	})
 }
 
-// Helper functions and test data for InEpsilon/InEpsilonT
+// =======================================
+// Test NumberInEpsilon variants
+// =======================================
 
 func epsilonCases() iter.Seq[genericTestCase] {
 	return slices.Values([]genericTestCase{
@@ -774,4 +716,28 @@ func testEpsilonSlice(expected, actual any, epsilon float64, shouldPass bool) fu
 			True(t, mock.Failed())
 		}
 	}
+}
+
+// =======================================
+// Test NumberErrorMessages
+// =======================================
+
+func numberFailCases() iter.Seq[failCase] {
+	return slices.Values([]failCase{
+		{
+			name:         "InDeltaT/shows-difference",
+			assertion:    func(t T) bool { return InDeltaT(t, 10, 1, 5) },
+			wantContains: []string{"difference was 9"},
+		},
+		{
+			name:         "InEpsilonT/relative-error",
+			assertion:    func(t T) bool { return InEpsilonT(t, 100.0, 110.0, 0.05) },
+			wantContains: []string{"Relative error is too high", "0.1"},
+		},
+		{
+			name:         "InEpsilonT/absolute-error-for-zero",
+			assertion:    func(t T) bool { return InEpsilonT(t, 0.0, 0.5, 0.1) },
+			wantContains: []string{"Expected value is zero, using absolute error comparison", "0.5"},
+		},
+	})
 }

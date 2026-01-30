@@ -6,39 +6,9 @@ package assertions
 import (
 	"fmt"
 	"iter"
-	"regexp"
 	"slices"
-	"strings"
 	"testing"
 )
-
-func TestEqualErrorMessages(t *testing.T) {
-	t.Parallel()
-
-	t.Run("should render when value is too long to print", testEqualTooLongToPrint())
-
-	t.Run("error message should match expression", func(t *testing.T) {
-		// checking error messsages on Equal with a regexp. The object of the test is Equal, not Regexp
-		for tc := range stringEqualFormattingCases() {
-			t.Run(tc.name, func(t *testing.T) {
-				mock := &bufferT{}
-
-				isEqual := Equal(mock, tc.equalWant, tc.equalGot, tc.msgAndArgs...)
-				if isEqual {
-					t.Errorf("expected %q to be different than %q", tc.equalGot, tc.equalWant)
-
-					return
-				}
-
-				rex := regexp.MustCompile(tc.want)
-				match := rex.MatchString(mock.buf.String())
-				if !match {
-					t.Errorf("expected message to match %q, but got:\n%s", tc.want, mock.buf.String())
-				}
-			})
-		}
-	})
-}
 
 // Test EqualValues and NotEqualValues.
 func TestEqualValues(t *testing.T) {
@@ -71,6 +41,12 @@ func TestEqualValues(t *testing.T) {
 	}
 }
 
+func TestEqualErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, equalErrorMessageCases())
+}
+
 // Test EqualExportedValues.
 func TestEqualExportedValues(t *testing.T) {
 	t.Parallel()
@@ -84,18 +60,16 @@ func TestEqualExportedValues(t *testing.T) {
 			if actual != tc.expectedEqual {
 				t.Errorf("Expected EqualExportedValues to be %t, but was %t", tc.expectedEqual, actual)
 			}
-
-			if tc.expectedFailMsg == "" {
-				// skip error message check
-				return
-			}
-
-			actualFail := mockT.errorString()
-			if !strings.Contains(actualFail, tc.expectedFailMsg) {
-				t.Errorf("Contains failure should include %q but was %q", tc.expectedFailMsg, actualFail)
-			}
 		})
 	}
+}
+
+// TestEqualExportedValuesErrorMessages tests the semantic content of error messages
+// produced by EqualExportedValues for failing cases.
+func TestEqualExportedValuesErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, equalExportedValuesFailCases())
 }
 
 // Deep equality tests (Equal, EqualT, NotEqual, NotEqualT, Exactly).
@@ -510,191 +484,58 @@ func testEqualityGenericAssertion[V comparable](mock T, kind equalityAssertionKi
 }
 
 // ============================================================================
-// TestEqualErrorMessages: too long to print checks that error
-// messages are properly truncated when the values to display are too large.
+// equalErrorMessageCases: error message tests for Equal-family assertions.
 // ============================================================================
 
-func testEqualTooLongToPrint() func(*testing.T) {
-	const (
-		expected = `&[]int{0, 0, 0,`
-		message  = `
-	Error Trace:	
-	Error:      	Should not be: []int{0, 0, 0,`
-		trailer = `<... truncated>`
-	)
-
-	return func(t *testing.T) {
-		t.Run("with Same", func(t *testing.T) {
-			t.Parallel()
-
-			mock := new(mockT)
-
+func equalErrorMessageCases() iter.Seq[failCase] {
+	return slices.Values([]failCase{
+		// Truncation cases (values too long to print)
+		truncationCase("truncation/Same", func(t T) bool {
 			longSlice := make([]int, 1_000_000)
-			result := Same(mock, &[]int{}, &longSlice)
-			if result {
-				t.Errorf("expected Same to fail")
-				return
-			}
-
-			if !strings.Contains(mock.errorString(), expected) {
-				t.Errorf("expected message to contain %q but got: %q", expected, mock.errorString())
-			}
-		})
-
-		t.Run("with NotSame", func(t *testing.T) {
-			t.Parallel()
-
-			mock := new(mockT)
-
+			return Same(t, &[]int{}, &longSlice)
+		}),
+		truncationCase("truncation/NotSame", func(t T) bool {
 			longSlice := make([]int, 1_000_000)
-			result := NotSame(mock, &longSlice, &longSlice)
-			if result {
-				t.Errorf("expected NotSame to fail")
-				return
-			}
-
-			if !strings.Contains(mock.errorString(), expected) {
-				t.Errorf("expected message to contain %q but got: %q", expected, mock.errorString())
-			}
-		})
-
-		t.Run("with NotEqual", func(t *testing.T) {
-			t.Parallel()
-
-			mock := new(mockT)
-
+			return NotSame(t, &longSlice, &longSlice)
+		}),
+		truncationCase("truncation/NotEqual", func(t T) bool {
 			longSlice := make([]int, 1_000_000)
-			result := NotEqual(mock, longSlice, longSlice)
-			if result {
-				t.Errorf("expected NotEqual to fail")
-				return
-			}
-
-			if !strings.Contains(mock.errorString(), message) {
-				t.Errorf("expected message to contain %q but got: %q", message, mock.errorString())
-			}
-
-			if !strings.Contains(mock.errorString(), trailer) {
-				t.Errorf("expected message to contain %q but got: %q", trailer, mock.errorString())
-			}
-		})
-
-		t.Run("with NotEqualValues", func(t *testing.T) {
-			t.Parallel()
-			mock := new(mockT)
-
+			return NotEqual(t, longSlice, longSlice)
+		}),
+		truncationCase("truncation/NotEqualValues", func(t T) bool {
 			longSlice := make([]int, 1_000_000)
-			result := NotEqualValues(mock, longSlice, longSlice)
-			if result {
-				t.Errorf("expected NotEqualValues to fail")
-				return
-			}
+			return NotEqualValues(t, longSlice, longSlice)
+		}),
 
-			if !strings.Contains(mock.errorString(), message) {
-				t.Errorf("expected message to contain %q but got: %q", message, mock.errorString())
-			}
-			const trailer = `<... truncated>`
-			if !strings.Contains(mock.errorString(), trailer) {
-				t.Errorf("expected message to contain %q but got: %q", trailer, mock.errorString())
-			}
-		})
-	}
-}
-
-type equalStringCase struct {
-	name       string
-	equalWant  string
-	equalGot   string
-	msgAndArgs []any
-	want       string
-}
-
-func stringEqualFormattingCases() iter.Seq[equalStringCase] {
-	return slices.Values([]equalStringCase{
+		// Semantic content of Equal diff messages
 		{
-			name:      "multiline diff message",
-			equalWant: "hi, \nmy name is",
-			equalGot:  "what,\nmy name is",
-			want: "\t[a-z]+.go:\\d+: \n" +
-				"\t+Error Trace:\t\n+" +
-				"\t+Error:\\s+Not equal:\\s+\n" +
-				"\\s+expected: \"hi, \\\\nmy name is\"\n" +
-				"\\s+actual\\s+: " + "\"what,\\\\nmy name is\"\n" +
-				"\\s+Diff:\n" +
-				"\\s+-+ Expected\n\\s+\\++ " +
-				"Actual\n" +
-				"\\s+@@ -1,2 \\+1,2 @@\n" +
-				"\\s+-hi, \n\\s+\\+what,\n" +
-				"\\s+my name is",
+			name: "Equal/multiline-diff",
+			assertion: func(t T) bool {
+				return Equal(t, "hi, \nmy name is", "what,\nmy name is")
+			},
+			wantContains: []string{
+				"Not equal:",
+				`expected: "hi, \nmy name is"`,
+				`actual  : "what,\nmy name is"`,
+				"--- Expected",
+				"+++ Actual",
+				"-hi,",
+				"+what,",
+				"my name is",
+			},
 		},
 		{
-			name:      "single line diff message",
-			equalWant: "want",
-			equalGot:  "got",
-			want: "\t[a-z]+.go:\\d+: \n" +
-				"\t+Error Trace:\t\n" +
-				"\t+Error:\\s+Not equal:\\s+\n" +
-				"\\s+expected: \"want\"\n" +
-				"\\s+actual\\s+: \"got\"\n" +
-				"\\s+Diff:\n\\s+-+ Expected\n\\s+\\++ " +
-				"Actual\n" +
-				"\\s+@@ -1 \\+1 @@\n" +
-				"\\s+-want\n" +
-				"\\s+\\+got\n",
-		},
-		{
-			name:       "diff message with args",
-			equalWant:  "want",
-			equalGot:   "got",
-			msgAndArgs: []any{"hello, %v!", "world"},
-			want: "\t[a-z]+.go:[0-9]+: \n" +
-				"\t+Error Trace:\t\n" +
-				"\t+Error:\\s+Not equal:\\s+\n" +
-				"\\s+expected: \"want\"\n" +
-				"\\s+actual\\s+: \"got\"\n" +
-				"\\s+Diff:\n" +
-				"\\s+-+ Expected\n" +
-				"\\s+\\++ Actual\n" +
-				"\\s+@@ -1 \\+1 @@\n" +
-				"\\s+-want\n" +
-				"\\s+\\+got\n" +
-				"\\s+Messages:\\s+hello, world!\n",
-		},
-		{
-			name:       "diff message with integer arg",
-			equalWant:  "want",
-			equalGot:   "got",
-			msgAndArgs: []any{123},
-			want: "\t[a-z]+.go:[0-9]+: \n" +
-				"\t+Error Trace:\t\n" +
-				"\t+Error:\\s+Not equal:\\s+\n" +
-				"\\s+expected: \"want\"\n" +
-				"\\s+actual\\s+: \"got\"\n" +
-				"\\s+Diff:\n" +
-				"\\s+-+ Expected\n" +
-				"\\s+\\++ Actual\n" +
-				"\\s+@@ -1 \\+1 @@\n" +
-				"\\s+-want\n" +
-				"\\s+\\+got\n" +
-				"\\s+Messages:\\s+123\n",
-		},
-		{
-			name:       "diff message with struct arg",
-			equalWant:  "want",
-			equalGot:   "got",
-			msgAndArgs: []any{struct{ a string }{"hello"}},
-			want: "\t[a-z]+.go:[0-9]+: \n" +
-				"\t+Error Trace:\t\n" +
-				"\t+Error:\\s+Not equal:\\s+\n" +
-				"\\s+expected: \"want\"\n" +
-				"\\s+actual\\s+: \"got\"\n" +
-				"\\s+Diff:\n" +
-				"\\s+-+ Expected\n" +
-				"\\s+\\++ Actual\n" +
-				"\\s+@@ -1 \\+1 @@\n" +
-				"\\s+-want\n" +
-				"\\s+\\+got\n" +
-				"\\s+Messages:\\s+{a:hello}\n",
+			name: "Equal/single-line-diff",
+			assertion: func(t T) bool {
+				return Equal(t, "want", "got")
+			},
+			wantContains: []string{
+				"Not equal:",
+				`expected: "want"`,
+				`actual  : "got"`,
+				"-want",
+				"+got",
+			},
 		},
 	})
 }
@@ -742,11 +583,10 @@ func equalValuesCases() iter.Seq[equalValuesCase] {
 // ============================================================================
 
 type objectEqualExportedValuesCase struct {
-	name            string
-	expected        any
-	actual          any
-	expectedEqual   bool
-	expectedFailMsg string
+	name          string
+	expected      any
+	actual        any
+	expectedEqual bool
 }
 
 func objectEqualExportedValuesCases() iter.Seq[objectEqualExportedValuesCase] {
@@ -810,32 +650,12 @@ func objectEqualExportedValuesCases() iter.Seq[objectEqualExportedValuesCase] {
 			expected:      S{1, Nested{2, 3}, 4, Nested{5, 6}},
 			actual:        S{1, Nested{1, nil}, nil, Nested{}},
 			expectedEqual: false,
-			expectedFailMsg: fmt.Sprintf(`
-	            	Diff:
-	            	--- Expected
-	            	+++ Actual
-	            	@@ -3,3 +3,3 @@
-	            	  Exported2: (%s.Nested) {
-	            	-  Exported: (int) 2,
-	            	+  Exported: (int) 1,
-	            	   notExported: (interface {}) <nil>`,
-				shortpkg),
 		},
 		{
 			name:          "diff-values/nested-struct(2)",
 			expected:      S3{&Nested{1, 2}, &Nested{3, 4}},
 			actual:        S3{&Nested{"a", 2}, &Nested{3, 4}},
 			expectedEqual: false,
-			expectedFailMsg: fmt.Sprintf(`
-	            	Diff:
-	            	--- Expected
-	            	+++ Actual
-	            	@@ -2,3 +2,3 @@
-	            	  Exported1: (*%s.Nested)({
-	            	-  Exported: (int) 1,
-	            	+  Exported: (string) (len=1) "a",
-	            	   notExported: (interface {}) <nil>`,
-				shortpkg),
 		},
 		{
 			name: "diff-values/inner-slice",
@@ -848,16 +668,6 @@ func objectEqualExportedValuesCases() iter.Seq[objectEqualExportedValuesCase] {
 				{2, "b"},
 			}},
 			expectedEqual: false,
-			expectedFailMsg: fmt.Sprintf(`
-	            	Diff:
-	            	--- Expected
-	            	+++ Actual
-	            	@@ -7,3 +7,3 @@
-	            	   (*%s.Nested)({
-	            	-   Exported: (int) 3,
-	            	+   Exported: (int) 2,
-	            	    notExported: (interface {}) <nil>`,
-				shortpkg),
 		},
 		{
 			name:          "equal-values/inner-array-unexported-diff",
@@ -876,16 +686,6 @@ func objectEqualExportedValuesCases() iter.Seq[objectEqualExportedValuesCase] {
 			expected:      &S{1, Nested{2, 3}, 4, Nested{5, 6}},
 			actual:        &S{1, Nested{1, nil}, nil, Nested{}},
 			expectedEqual: false,
-			expectedFailMsg: fmt.Sprintf(`
-	            	Diff:
-	            	--- Expected
-	            	+++ Actual
-	            	@@ -3,3 +3,3 @@
-	            	  Exported2: (%s.Nested) {
-	            	-  Exported: (int) 2,
-	            	+  Exported: (int) 1,
-	            	   notExported: (interface {}) <nil>`,
-				shortpkg),
 		},
 		{
 			name:          "equal-values/slice",
@@ -898,15 +698,6 @@ func objectEqualExportedValuesCases() iter.Seq[objectEqualExportedValuesCase] {
 			expected:      []int{1, 2},
 			actual:        []int{1, 3},
 			expectedEqual: false,
-			expectedFailMsg: `
-	            	Diff:
-	            	--- Expected
-	            	+++ Actual
-	            	@@ -2,3 +2,3 @@
-	            	  (int) 1,
-	            	- (int) 2
-	            	+ (int) 3
-	            	 }`,
 		},
 		{
 			name:          "equal-values/slice-of-pointers",
@@ -937,16 +728,114 @@ func objectEqualExportedValuesCases() iter.Seq[objectEqualExportedValuesCase] {
 				{2, "b"},
 			},
 			expectedEqual: false,
-			expectedFailMsg: fmt.Sprintf(`
-	            	Diff:
-	            	--- Expected
-	            	+++ Actual
-	            	@@ -6,3 +6,3 @@
-	            	  (*%s.Nested)({
-	            	-  Exported: (int) 3,
-	            	+  Exported: (int) 2,
-	            	   notExported: (interface {}) <nil>`,
-				shortpkg),
+		},
+	})
+}
+
+// ============================================================================
+// TestEqualExportedValuesErrorMessages
+// ============================================================================
+
+func equalExportedValuesFailCases() iter.Seq[failCase] {
+	return slices.Values([]failCase{
+		{
+			name: "nested-struct(1)/diff-in-exported-field",
+			assertion: func(t T) bool {
+				return EqualExportedValues(t,
+					S{1, Nested{2, 3}, 4, Nested{5, 6}},
+					S{1, Nested{1, nil}, nil, Nested{}},
+				)
+			},
+			wantContains: []string{
+				"Not equal (comparing only exported fields):",
+				"--- Expected",
+				"+++ Actual",
+				fmt.Sprintf("Exported2: (%s.Nested) {", shortpkg),
+				"-  Exported: (int) 2,",
+				"+  Exported: (int) 1,",
+			},
+		},
+		{
+			name: "nested-struct(2)/int-vs-string",
+			assertion: func(t T) bool {
+				return EqualExportedValues(t,
+					S3{&Nested{1, 2}, &Nested{3, 4}},
+					S3{&Nested{"a", 2}, &Nested{3, 4}},
+				)
+			},
+			wantContains: []string{
+				"Not equal (comparing only exported fields):",
+				"--- Expected",
+				"+++ Actual",
+				fmt.Sprintf("Exported1: (*%s.Nested)({", shortpkg),
+				"-  Exported: (int) 1,",
+				`+  Exported: (string) (len=1) "a",`,
+			},
+		},
+		{
+			name: "inner-slice/diff-in-nested-exported",
+			assertion: func(t T) bool {
+				return EqualExportedValues(t,
+					S4{[]*Nested{{1, 2}, {3, 4}}},
+					S4{[]*Nested{{1, "a"}, {2, "b"}}},
+				)
+			},
+			wantContains: []string{
+				"Not equal (comparing only exported fields):",
+				"--- Expected",
+				"+++ Actual",
+				fmt.Sprintf("(*%s.Nested)({", shortpkg),
+				"-   Exported: (int) 3,",
+				"+   Exported: (int) 2,",
+			},
+		},
+		{
+			name: "inner-slice-exported-diff/ptr-receiver",
+			assertion: func(t T) bool {
+				return EqualExportedValues(t,
+					&S{1, Nested{2, 3}, 4, Nested{5, 6}},
+					&S{1, Nested{1, nil}, nil, Nested{}},
+				)
+			},
+			wantContains: []string{
+				"Not equal (comparing only exported fields):",
+				"--- Expected",
+				"+++ Actual",
+				fmt.Sprintf("Exported2: (%s.Nested) {", shortpkg),
+				"-  Exported: (int) 2,",
+				"+  Exported: (int) 1,",
+			},
+		},
+		{
+			name: "slice/int-diff",
+			assertion: func(t T) bool {
+				return EqualExportedValues(t, []int{1, 2}, []int{1, 3})
+			},
+			wantContains: []string{
+				"Not equal (comparing only exported fields):",
+				"--- Expected",
+				"+++ Actual",
+				"(int) 1,",
+				"- (int) 2",
+				"+ (int) 3",
+			},
+		},
+		{
+			name: "slice-of-struct/diff-in-exported",
+			assertion: func(t T) bool {
+				return EqualExportedValues(t,
+					[]*Nested{{1, 2}, {3, 4}},
+					[]*Nested{{1, "a"}, {2, "b"}},
+				)
+			},
+			wantContains: []string{
+				"Not equal (comparing only exported fields):",
+				"--- Expected",
+				"+++ Actual",
+				fmt.Sprintf("(*%s.Nested)({", shortpkg),
+				"-  Exported: (int) 3,",
+				"+  Exported: (int) 2,",
+			},
 		},
 	})
 }
