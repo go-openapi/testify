@@ -1,13 +1,18 @@
 # Integration Testing Module
 
-This is a separate Go module dedicated to property-based and fuzz testing of internal packages.
+This is a separate Go module dedicated to cross-module integration testing of features that require
+external dependencies.
 
 ## Purpose
 
-This module uses external testing libraries (like `rapid`) to perform comprehensive black-box testing
-without polluting the main module's dependency tree.
+Some testify features are opt-in and require importing external dependencies (YAML support, colorized
+output). These features cannot be tested in the main module without breaking the zero-dependency
+guarantee. This module provides a place to:
 
-This maintains our zero-dependency goal while enabling powerful testing techniques.
+- **Exercise opt-in features** that activate via the `enable/` import pattern (YAML, colors)
+- **Run property-based and fuzz testing** using external testing libraries (rapid)
+
+This maintains our zero-dependency goal while enabling thorough testing of the full feature set.
 
 ## Structure
 
@@ -15,7 +20,15 @@ This maintains our zero-dependency goal while enabling powerful testing techniqu
 internal/testintegration/
 ├── go.mod                    # Separate module with test dependencies
 ├── go.sum                    # Dependency checksums
+├── doc.go                    # Package documentation
 ├── README.md                 # This file
+├── colors/
+│   ├── doc.go                # Package documentation
+│   └── assertions_test.go    # Tests for colorized assertion output
+├── yaml/
+│   ├── doc.go                # Package documentation
+│   ├── enable.go             # YAML enablement via stubs
+│   └── assertions_test.go    # Tests for YAML assertions (YAMLEq)
 └── spew/
     ├── doc.go                # Package documentation
     ├── generator.go          # Reflection-based random value generator
@@ -24,30 +37,49 @@ internal/testintegration/
     ├── edgecases_test.go     # Edge case focused tests
     ├── dump_test.go          # Main property-based tests (rapid.Check)
     ├── dump_fuzz_test.go     # Go native fuzz tests
-    └── testdata/             # Fuzz corpus and rapid failure files
+    └── options.go            # Generator options (e.g., WithSkipCircularMap)
 ```
 
 ## Dependencies
 
 - **pgregory.net/rapid** - Property-based testing library with fuzzing capabilities
+- **go.yaml.in/yaml/v3** - YAML parsing (for YAML assertion integration tests)
+- **github.com/go-openapi/testify/enable/colors/v2** - Colorized output activation
 
-## Bugs Fixed in spew
+## Test Packages
 
-This test suite helped identify and validate fixes for the following issues:
+### `colors/` — Colorized Output
 
-### Circular Reference Hangs
+Tests that the `enable/colors` import pattern correctly activates ANSI color codes in assertion
+failure messages.
 
-1. **Pointer wrapped as interface** - `self = &self` pattern caused infinite loop
-2. **Map containing itself** - `m["key"] = m` pattern caused infinite loop
+- Imports `_ "github.com/go-openapi/testify/enable/colors/v2"` to activate colors
+- Forces the `-testify.colorized` and `-testify.colorized.notty` flags via `init()`
+- Verifies that assertion output contains ANSI escape sequences (`\x1b`)
+
+### `yaml/` — YAML Assertions
+
+Tests that YAML assertions work when the YAML feature is enabled via the stubs mechanism.
+
+- Calls `yamlstub.EnableYAMLWithUnmarshal(yaml.Unmarshal)` to wire in the real YAML parser
+- Exercises `YAMLEq` with matching and non-matching YAML documents
+
+### `spew/` — Property-Based and Fuzz Testing
+
+Uses `pgregory.net/rapid` to perform comprehensive black-box testing of `internal/spew`.
+
+#### Bugs Fixed
+
+1. **Pointer wrapped as interface** — `self = &self` pattern caused infinite loop
+2. **Map containing itself** — `m["key"] = m` pattern caused infinite loop
 
 Both are now correctly handled with `<already shown>` markers.
 
-### Historical Issues Addressed
+Historical issues addressed:
+- **#1828** — Panic on structs with unexported fields
+- **#1829** — Time rendering in diffs
 
-- **#1828** - Panic on structs with unexported fields
-- **#1829** - Time rendering in diffs
-
-## Generator Architecture
+## Generator Architecture (spew)
 
 ### Two-Layer Generator System
 
@@ -132,11 +164,13 @@ Generator(WithSkipCircularMap())
 ```bash
 cd internal/testintegration
 
-# Run all tests (100,000 rapid checks by default)
+# Run all integration tests
 go test ./...
 
-# Run with verbose output
-go test -v ./spew
+# Run feature-specific tests
+go test -v ./colors          # Colorized output tests
+go test -v ./yaml            # YAML assertion tests
+go test -v ./spew            # Property-based spew tests
 
 # Run specific test
 go test -v ./spew -run TestSdump
@@ -147,6 +181,11 @@ go test -fuzz=FuzzSdump ./spew -fuzztime=30s
 # Run with custom rapid iterations
 go test ./spew -rapid.checks=1000000
 ```
+
+> [!NOTE]
+>
+> In CI, rapid's value generator generates 10,000 values only (local tests: 100,000)
+> and fuzz tests run for 5min
 
 ## Test Types
 
@@ -211,57 +250,25 @@ Values that cannot be generated via reflection:
 
 ## Adding New Tests
 
-To add fuzz tests for other internal packages:
+To add integration tests for a new feature or internal package:
 
 1. Create a new subdirectory under `internal/testintegration/`
-2. Add test files with generators specific to that package
-3. Use `NoPanicProp` pattern for hang detection
+2. Add a `doc.go` with package documentation
+3. Add test files exercising the feature
 
-Example structure:
-
-```go
-package mypackage
-
-import (
-	"context"
-	"testing"
-	"time"
-
-	"pgregory.net/rapid"
-)
-
-func TestMyFunction(t *testing.T) {
-	rapid.Check(t, func(rt *rapid.T) {
-		input := myGenerator().Draw(rt, "input")
-
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-		defer cancel()
-
-		done := make(chan struct{})
-		go func() {
-			defer close(done)
-			_ = mypackage.MyFunction(input)
-		}()
-
-		select {
-		case <-done:
-			// success
-		case <-ctx.Done():
-			rt.Fatal("function timed out")
-		}
-	})
-}
-```
+For features that require the `enable/` import pattern, follow the `yaml/` or `colors/` examples.
+For property-based or fuzz testing, follow the `spew/` example using `pgregory.net/rapid`.
 
 ## Why a Separate Module?
 
 This approach:
 
-- **Isolates test dependencies** - rapid is only needed for integration testing
-- **Maintains zero dependencies** - Main module stays clean
-- **Enables powerful testing** - Use best-in-class testing tools
-- **Clear separation** - Test infrastructure vs production code
-- **Flexible versioning** - Can update test tools independently
+- **Isolates test dependencies** — rapid, yaml, and colors dependencies stay out of the main module
+- **Maintains zero dependencies** — Main module keeps its zero-dependency guarantee
+- **Tests the enable pattern end-to-end** — Verifies that opt-in features work when activated
+- **Enables powerful testing** — Property-based and fuzz testing with best-in-class tools
+- **Clear separation** — Test infrastructure vs production code
+- **Flexible versioning** — Can update test tools independently
 
 ## Rapid Quick Reference
 
