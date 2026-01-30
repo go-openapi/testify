@@ -21,7 +21,7 @@ func ExampleAssertions_with_generics() {
 	a.Equal(expected, goodValue) // classic reflect-based assertion
 	fmt.Println("good value")
 
-	require.EqualT(a.T(), expected, goodValue) // usage with generic assertion
+	require.EqualT(a.T, expected, goodValue) // usage with generic assertion
 	fmt.Println("good value")
 
 	// Output:

@@ -620,6 +620,10 @@ func ExampleNoError() {
 	// Output: passed
 }
 
+// func ExampleNoGoRoutineLeak() {
+// no success example available. Please add some examples to produce a testable example.
+// }
+
 func ExampleNotContains() {
 	t := new(testing.T) // should come from testing, e.g. func TestNotContains(t *testing.T)
 	require.NotContains(t, []string{"A", "B"}, "C")

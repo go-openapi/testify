@@ -120,7 +120,7 @@ func main() {
 |--|--| 
 | [`assertions.EqualError(t T, err error, errString string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EqualError) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualError](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L87)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualError](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L89)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -198,7 +198,7 @@ func main() {
 |--|--| 
 | [`assertions.Error(t T, err error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Error) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Error](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L63)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Error](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L65)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -284,7 +284,7 @@ func (d *dummyError) Error() string {
 |--|--| 
 | [`assertions.ErrorAs(t T, err error, target any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ErrorAs) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorAs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L218)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorAs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L220)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -363,7 +363,7 @@ func main() {
 |--|--| 
 | [`assertions.ErrorContains(t T, err error, contains string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ErrorContains) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L118)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L120)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -443,7 +443,7 @@ func main() {
 |--|--| 
 | [`assertions.ErrorIs(t T, err error, target error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ErrorIs) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorIs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L147)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorIs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L149)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -523,7 +523,7 @@ func main() {
 |--|--| 
 | [`assertions.NoError(t T, err error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NoError) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoError](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L40)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoError](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L42)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -608,7 +608,7 @@ func (d *dummyError) Error() string {
 |--|--| 
 | [`assertions.NotErrorAs(t T, err error, target any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotErrorAs) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotErrorAs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L252)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotErrorAs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L254)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -688,7 +688,7 @@ func main() {
 |--|--| 
 | [`assertions.NotErrorIs(t T, err error, target error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotErrorIs) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotErrorIs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L184)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotErrorIs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L186)
 {{% /tab %}}
 {{< /tabs >}}
 

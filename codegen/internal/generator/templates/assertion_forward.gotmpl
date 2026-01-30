@@ -17,18 +17,14 @@ import (
 //
 {{ docStringPackage .Package }}
 type {{ .Receiver }} struct {
-  t T
+  T
 }
 
 // New makes a new [{{ .Receiver }}] object for the specified [T] (e.g. [testing.T]).
 func New(t T) *{{ .Receiver }} {
   return &{{ .Receiver }}{
-    t: t,
+    T: t,
   }
-}
-
-func (a *{{ $.Receiver }}) T() T {
-	return a.t
 }
 
 {{- range .Functions }} 
@@ -38,8 +34,8 @@ func (a *{{ $.Receiver }}) T() T {
 //
 {{ docStringPackage $.Package }}
 func (a *{{ $.Receiver }}) {{.Name}}({{ params .Params }}, msgAndArgs ...any) {{ returns .Returns }} {
-	if h, ok := a.t.(H); ok { h.Helper() }
-	return {{ .TargetPackage }}.{{.Name}}(a.t, {{ forward .Params }}, msgAndArgs...)
+	if h, ok := a.T.(H); ok { h.Helper() }
+	return {{ .TargetPackage }}.{{.Name}}(a.T, {{ forward .Params }}, msgAndArgs...)
 }
     {{- if $.EnableFormat }}
 
@@ -47,8 +43,8 @@ func (a *{{ $.Receiver }}) {{.Name}}({{ params .Params }}, msgAndArgs ...any) {{
 //
 {{ docStringPackage $.Package }}
 func (a *{{ $.Receiver }}){{ .Name }}f({{ params .Params }}, msg string, args ...any) {{ returns .Returns }} {
-	if h, ok := a.t.(H); ok { h.Helper() }
-  return {{ .TargetPackage }}.{{ .Name }}(a.t, {{ forward .Params }}, forwardArgs(msg, args))
+	if h, ok := a.T.(H); ok { h.Helper() }
+  return {{ .TargetPackage }}.{{ .Name }}(a.T, {{ forward .Params }}, forwardArgs(msg, args))
 }
     {{- end }}
   {{- end }}

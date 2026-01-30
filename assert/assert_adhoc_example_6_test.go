@@ -22,10 +22,10 @@ func ExampleAssertions_with_generics() {
 	r0 := a.Equal(expected, goodValue) // classic reflect-based assertion
 	fmt.Printf("good value is %t\n", r0)
 
-	r1 := assert.EqualT(a.T(), expected, goodValue) // usage with generic assertion
+	r1 := assert.EqualT(a.T, expected, goodValue) // usage with generic assertion
 	fmt.Printf("good value is %t\n", r1)
 
-	r2 := assert.EqualT(a.T(), expected, wrongValue)
+	r2 := assert.EqualT(a.T, expected, wrongValue)
 	fmt.Printf("wrong value is %t\n", r2)
 
 	// Output:

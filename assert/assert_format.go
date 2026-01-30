@@ -765,6 +765,16 @@ func NoErrorf(t T, err error, msg string, args ...any) bool {
 	return assertions.NoError(t, err, forwardArgs(msg, args))
 }
 
+// NoGoRoutineLeakf is the same as [NoGoRoutineLeak], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func NoGoRoutineLeakf(t T, inside func(), msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.NoGoRoutineLeak(t, inside, forwardArgs(msg, args))
+}
+
 // NotContainsf is the same as [NotContains], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.

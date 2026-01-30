@@ -1801,6 +1801,11 @@ func TestNoErrorf(t *testing.T) {
 	})
 }
 
+func TestNoGoRoutineLeakf(t *testing.T) {
+	t.Parallel()
+	t.Skip() // this function doesn't have tests yet: feed the original function with examples to test.
+}
+
 func TestNotContainsf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {

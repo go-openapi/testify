@@ -330,7 +330,7 @@ func TestUser(t *testing.T) {
 	user := getUser()
 
 	a.NotNil(user) // No 't' needed
-	assert.EqualT(a.T(), "Alice", user.Name)
+	assert.EqualT(a.T, "Alice", user.Name) // use a.T as an escape hatch to call generics
 	a.True(user.Active)
 }
 ```

@@ -2895,6 +2895,16 @@ func TestAssertionsNoErrorf(t *testing.T) {
 	})
 }
 
+func TestAssertionsNoGoRoutineLeak(t *testing.T) {
+	t.Parallel()
+	t.Skip() // this function doesn't have tests yet: feed the original function with examples to test.
+}
+
+func TestAssertionsNoGoRoutineLeakf(t *testing.T) {
+	t.Parallel()
+	t.Skip() // this function doesn't have tests yet: feed the original function with examples to test.
+}
+
 func TestAssertionsNotContains(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {

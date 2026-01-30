@@ -756,6 +756,48 @@ func TestEventuallyWithRequire(t *testing.T) {
 4. Use `Eventually` for simple boolean conditions (faster, simpler)
 5. Use `Never` to verify invariants over time (no race conditions, no invalid state)
 
+### Extensible assertions
+
+The `Assertions` type may be extended to fit your needs like so.
+
+```go
+   import (
+   	"fmt"
+   	"strings"
+
+	"github.com/go-openapi/testify/v2/assert"
+   )
+
+   // Assertions is a customized version of [assert.Assertions].
+   type Assertions struct {
+       *assert.Assertions
+   }
+
+   func New(t assert.T) *Assertions {
+       return &Assertions{
+           Assertions: assert.New(t),
+       }
+   }
+   
+   // StartsWith asserts that the string starts with the given prefix.
+   //
+   // Examples:
+   //
+   //	success: "hello world", "hello"
+   //	failure: "hello world", "bye"
+   func (a *Assertions) StartsWith(str, prefix string, msgAndArgs ...any) bool {
+        if h, ok := a.T.(assert.H); ok {
+   		    h.Helper() // preserve the original failing location
+   	    }
+
+   	    if !strings.HasPrefix(str, prefix) {
+   		    return a.Fail(fmt.Sprintf("Expected %q to start with %q", str, prefix), msgAndArgs...)
+   	    }
+
+   	    return true
+    }
+```
+
 ---
 
 ## YAML Support (Optional)

@@ -24,7 +24,7 @@ with all documented exported variants documented in a more concise form than the
 
 ## Domains
 
-The `testify` API is organized in 18 logical domains shown below.
+The `testify` API is organized in 19 logical domains shown below.
 Each domain contains assertions regrouped by their use case (e.g. http, json, error).
 
 {{< children type="card" description="true" >}}
@@ -43,12 +43,13 @@ Each domain contains assertions regrouped by their use case (e.g. http, json, er
 - [Number](./number.md) - Asserting Numbers (7)
 - [Ordering](./ordering.md) - Asserting How Collections Are Ordered (10)
 - [Panic](./panic.md) - Asserting A Panic Behavior (4)
+- [Safety](./safety.md) -  (1)
 - [String](./string.md) - Asserting Strings (4)
 - [Testing](./testing.md) - Mimics Methods From The Testing Standard Library (2)
 - [Time](./time.md) - Asserting Times And Durations (2)
 - [Type](./type.md) - Asserting Types Rather Than Values (10)
 - [Yaml](./yaml.md) - Asserting Yaml Documents (5)
-- [Common](./common.md) - Other Uncategorized Helpers (4)
+- [Common](./common.md) - Other Uncategorized Helpers (3)
 
 ---
 

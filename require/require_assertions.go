@@ -2073,6 +2073,20 @@ func NoError(t T, err error, msgAndArgs ...any) {
 	t.FailNow()
 }
 
+// NoGoRoutineLeak ensures that no goroutine did leak from inside the tested function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func NoGoRoutineLeak(t T, inside func(), msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NoGoRoutineLeak(t, inside, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
 // NotContains asserts that the specified string, list(array, slice...) or map does NOT contain the
 // specified substring or element.
 //
