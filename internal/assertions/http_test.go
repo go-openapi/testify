@@ -16,11 +16,11 @@ import (
 func TestHTTPSuccess(t *testing.T) {
 	t.Parallel()
 
-	mock1 := new(testing.T)
+	mock1 := new(mockT)
 	Equal(t, HTTPSuccess(mock1, httpOK, "GET", "/", nil), true)
 	False(t, mock1.Failed())
 
-	mock2 := new(testing.T)
+	mock2 := new(mockT)
 	Equal(t, HTTPSuccess(mock2, httpRedirect, "GET", "/", nil), false)
 	True(t, mock2.Failed())
 
@@ -31,11 +31,11 @@ func TestHTTPSuccess(t *testing.T) {
 	), false)
 	True(t, mock3.Failed())
 
-	mock4 := new(testing.T)
+	mock4 := new(mockT)
 	Equal(t, HTTPSuccess(mock4, httpStatusCode, "GET", "/", nil), false)
 	True(t, mock4.Failed())
 
-	mock5 := new(testing.T)
+	mock5 := new(mockT)
 	Equal(t, HTTPSuccess(mock5, httpReadBody, "POST", "/", nil), true)
 	False(t, mock5.Failed())
 }
@@ -50,15 +50,15 @@ func TestHTTPRedirect(t *testing.T) {
 	), false)
 	True(t, mock1.Failed())
 
-	mock2 := new(testing.T)
+	mock2 := new(mockT)
 	Equal(t, HTTPRedirect(mock2, httpRedirect, "GET", "/", nil), true)
 	False(t, mock2.Failed())
 
-	mock3 := new(testing.T)
+	mock3 := new(mockT)
 	Equal(t, HTTPRedirect(mock3, httpError, "GET", "/", nil), false)
 	True(t, mock3.Failed())
 
-	mock4 := new(testing.T)
+	mock4 := new(mockT)
 	Equal(t, HTTPRedirect(mock4, httpStatusCode, "GET", "/", nil), false)
 	True(t, mock4.Failed())
 }
@@ -66,7 +66,7 @@ func TestHTTPRedirect(t *testing.T) {
 func TestHTTPError(t *testing.T) {
 	t.Parallel()
 
-	mock1 := new(testing.T)
+	mock1 := new(mockT)
 	Equal(t, HTTPError(mock1, httpOK, "GET", "/", nil), false)
 	True(t, mock1.Failed())
 
@@ -77,11 +77,11 @@ func TestHTTPError(t *testing.T) {
 	), false)
 	True(t, mock2.Failed())
 
-	mock3 := new(testing.T)
+	mock3 := new(mockT)
 	Equal(t, HTTPError(mock3, httpError, "GET", "/", nil), true)
 	False(t, mock3.Failed())
 
-	mock4 := new(testing.T)
+	mock4 := new(mockT)
 	Equal(t, HTTPError(mock4, httpStatusCode, "GET", "/", nil), false)
 	True(t, mock4.Failed())
 }
@@ -89,11 +89,11 @@ func TestHTTPError(t *testing.T) {
 func TestHTTPStatusCode(t *testing.T) {
 	t.Parallel()
 
-	mock1 := new(testing.T)
+	mock1 := new(mockT)
 	Equal(t, HTTPStatusCode(mock1, httpOK, "GET", "/", nil, http.StatusSwitchingProtocols), false)
 	True(t, mock1.Failed())
 
-	mock2 := new(testing.T)
+	mock2 := new(mockT)
 	Equal(t, HTTPStatusCode(mock2, httpRedirect, "GET", "/", nil, http.StatusSwitchingProtocols), false)
 	True(t, mock2.Failed())
 
@@ -104,7 +104,7 @@ func TestHTTPStatusCode(t *testing.T) {
 	), false)
 	True(t, mock3.Failed())
 
-	mock4 := new(testing.T)
+	mock4 := new(mockT)
 	Equal(t, HTTPStatusCode(mock4, httpStatusCode, "GET", "/", nil, http.StatusSwitchingProtocols), true)
 	False(t, mock4.Failed())
 }

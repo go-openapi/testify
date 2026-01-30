@@ -12,7 +12,7 @@ import (
 func TestBooleanTrue(t *testing.T) {
 	t.Parallel()
 
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	if !True(mock, true) {
 		t.Error("True should return true")
@@ -26,7 +26,7 @@ func TestBooleanTrue(t *testing.T) {
 func TestBooleanFalse(t *testing.T) {
 	t.Parallel()
 
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	if !False(mock, false) {
 		t.Error("False should return true")

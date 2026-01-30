@@ -52,7 +52,7 @@ func testJSONEq(expected, actual string, success bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		res := JSONEq(mock, expected, actual)
 		if res != success {
 			if success {
@@ -68,7 +68,7 @@ func testJSONEqBytes(expected, actual string, success bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		res := JSONEqBytes(mock, []byte(expected), []byte(actual))
 		if res != success {
 			if success {
@@ -85,7 +85,7 @@ func testJSONEqT[EDoc, ADoc Text](expected, actual string, success bool) func(*t
 	return func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		res := JSONEqT(mock, EDoc(expected), ADoc(actual))
 		if res != success {
 			if success {

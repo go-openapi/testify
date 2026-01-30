@@ -13,7 +13,7 @@ import (
 
 func TestTypeImplements(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	if !Implements(mock, (*AssertionTesterInterface)(nil), new(AssertionTesterConformingObject)) {
 		t.Error("Implements method should return true: AssertionTesterConformingObject implements AssertionTesterInterface")
@@ -28,7 +28,7 @@ func TestTypeImplements(t *testing.T) {
 
 func TestTypeNotImplements(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	if !NotImplements(mock, (*AssertionTesterInterface)(nil), new(AssertionTesterNonConformingObject)) {
 		t.Error("NotImplements method should return true: AssertionTesterNonConformingObject does not implement AssertionTesterInterface")
@@ -43,7 +43,7 @@ func TestTypeNotImplements(t *testing.T) {
 
 func TestTypeIsType(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	if !IsType(mock, new(AssertionTesterConformingObject), new(AssertionTesterConformingObject)) {
 		t.Error("IsType should return true: AssertionTesterConformingObject is the same type as AssertionTesterConformingObject")
@@ -55,7 +55,7 @@ func TestTypeIsType(t *testing.T) {
 
 func TestTypeNotIsType(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	if !IsNotType(mock, new(AssertionTesterConformingObject), new(AssertionTesterNonConformingObject)) {
 		t.Error("NotIsType should return true: AssertionTesterConformingObject is not the same type as AssertionTesterNonConformingObject")
@@ -81,7 +81,7 @@ func TestTypeIsOfTypeT(t *testing.T) {
 
 func TestTypeZero(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	for test := range typeZeros() {
 		True(t, Zero(mock, test, "%#v is not the %T zero value", test, test))
@@ -94,7 +94,7 @@ func TestTypeZero(t *testing.T) {
 
 func TestTypeNotZero(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	for test := range typeZeros() {
 		False(t, NotZero(mock, test, "%#v is not the %T zero value", test, test))

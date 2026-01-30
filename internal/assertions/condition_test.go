@@ -25,7 +25,7 @@ func TestCondition(t *testing.T) {
 	t.Run("condition should be true", func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		if !Condition(mock, func() bool { return true }, "Truth") {
 			t.Error("condition should return true")
 		}
@@ -34,7 +34,7 @@ func TestCondition(t *testing.T) {
 	t.Run("condition should be false", func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		if Condition(mock, func() bool { return false }, "Lie") {
 			t.Error("condition should return false")
 		}

@@ -75,7 +75,7 @@ func testCompareTwoValuesDifferentTypes() func(*testing.T) {
 		for currCase := range compareTwoValuesDifferentTypesCases() {
 			t.Run("different types should not be comparable", func(t *testing.T) {
 				t.Parallel()
-				mock := new(testing.T)
+				mock := new(mockT)
 
 				result := compareTwoValues(mock, currCase.v1, currCase.v2, []compareResult{compareLess, compareEqual, compareGreater}, "testFailMessage")
 				False(t, result)
@@ -89,7 +89,7 @@ func testCompareTwoValuesNotComparable() func(*testing.T) {
 		for currCase := range compareTwoValuesNotComparableCases() {
 			t.Run("should not be comparable", func(t *testing.T) {
 				t.Parallel()
-				mock := new(testing.T)
+				mock := new(mockT)
 
 				result := compareTwoValues(mock, currCase.v1, currCase.v2, []compareResult{compareLess, compareEqual, compareGreater}, "testFailMessage")
 				False(t, result)
@@ -103,7 +103,7 @@ func testCompareTwoValuesCorrectCompareResult() func(*testing.T) {
 		for currCase := range compareTwoValuesCorrectResultCases() {
 			t.Run("should be comparable", func(t *testing.T) {
 				t.Parallel()
-				mock := new(testing.T)
+				mock := new(mockT)
 
 				result := compareTwoValues(mock, currCase.v1, currCase.v2, currCase.allowedResults, "testFailMessage")
 				True(t, result)

@@ -13,7 +13,7 @@ import (
 func TestTimeWithinDuration(t *testing.T) {
 	t.Parallel()
 
-	mock := new(testing.T)
+	mock := new(mockT)
 	a := time.Now()
 	b := a.Add(10 * time.Second)
 
@@ -33,7 +33,7 @@ func TestTimeWithinDuration(t *testing.T) {
 func TestTimeWithinRange(t *testing.T) {
 	t.Parallel()
 
-	mock := new(testing.T)
+	mock := new(mockT)
 	n := time.Now()
 	s := n.Add(-time.Second)
 	e := n.Add(time.Second)

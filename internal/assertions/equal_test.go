@@ -19,7 +19,7 @@ func TestEqualValues(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			mock := new(testing.T)
+			mock := new(mockT)
 
 			res := NotEqualValues(mock, tc.expected, tc.actual)
 			if res != tc.notEqualValue {
@@ -31,7 +31,7 @@ func TestEqualValues(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			mock := new(testing.T)
+			mock := new(mockT)
 
 			res := EqualValues(mock, tc.expected, tc.actual)
 			if res != tc.equalValue {

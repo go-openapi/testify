@@ -43,7 +43,7 @@ func TestPanicDidPanic(t *testing.T) {
 
 func TestPanics(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	if !Panics(mock, func() {
 		panic("Panic!")
@@ -59,7 +59,7 @@ func TestPanics(t *testing.T) {
 
 func TestPanicsWithValue(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	if !PanicsWithValue(mock, "Panic!", func() {
 		panic("Panic!")
@@ -100,7 +100,7 @@ func TestPanicsWithError(t *testing.T) {
 
 func TestPanicNotPanics(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	if !NotPanics(mock, func() {
 	}) {
@@ -130,11 +130,11 @@ func TestPanicsWithErrorMessages(t *testing.T) {
 	t.Run("string-panic-has-no-error-message-label", func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(captureT)
+		mock := new(mockT)
 		PanicsWithError(mock, "expected panic msg", func() {
 			panic("actual panic msg")
 		})
-		NotContains(t, mock.msg, "Error message:", "PanicsWithError should not report error message if not due an error")
+		NotContains(t, mock.errorString(), "Error message:", "PanicsWithError should not report error message if not due an error")
 	})
 }
 

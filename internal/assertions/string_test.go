@@ -227,7 +227,7 @@ func testRegexp(rx any, str any, success bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		res := Regexp(mock, rx, str)
 		if res != success {
 			if success {
@@ -243,7 +243,7 @@ func testNotRegexp(rx any, str any, success bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		res := NotRegexp(mock, rx, str)
 		if res != success {
 			if success {
@@ -259,7 +259,7 @@ func testRegexpT[Rex RegExp, ADoc Text](rx Rex, str ADoc, success bool) func(*te
 	return func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		res := RegexpT(mock, rx, str)
 		if res != success {
 			if success {
@@ -275,7 +275,7 @@ func testNotRegexpT[Rex RegExp, ADoc Text](rx Rex, str ADoc, success bool) func(
 	return func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		res := NotRegexpT(mock, rx, str)
 		if res != success {
 			if success {

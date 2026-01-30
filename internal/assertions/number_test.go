@@ -16,7 +16,7 @@ func TestNumberInDeltaEdgeCases(t *testing.T) {
 	t.Run("InDelta specific (type conversion)", func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		result := InDelta(mock, "", nil, 1)
 		if result {
 			t.Errorf("Expected non numerals to fail")
@@ -51,7 +51,7 @@ func TestNumberInDeltaSlice(t *testing.T) {
 
 func TestNumberInDeltaMapValues(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	// only have a reflection-based assertion here
 	for tc := range numberInDeltaMapCases() {

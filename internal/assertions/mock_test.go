@@ -4,12 +4,10 @@
 package assertions
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"iter"
 	"regexp"
-	"runtime"
 	"strings"
 	"testing"
 )
@@ -19,9 +17,7 @@ var (
 	_ T         = &mockFailNowT{}
 	_ failNower = &mockFailNowT{}
 	_ T         = &captureT{}
-	_ T         = &dummyT{}
 	_ T         = &errorsCapturingT{}
-	_ T         = &outputT{}
 )
 
 type mockT struct {
@@ -63,14 +59,6 @@ func (m *mockFailNowT) FailNow() {
 	m.failed = true
 }
 
-type dummyT struct{}
-
-func (dummyT) Errorf(string, ...any) {}
-
-func (dummyT) Context() context.Context {
-	return context.Background()
-}
-
 // errorsCapturingT is a mock implementation of TestingT that captures errors reported with Errorf.
 type errorsCapturingT struct {
 	errors []error
@@ -96,24 +84,6 @@ func (t *errorsCapturingT) WithContext(ctx context.Context) *errorsCapturingT {
 
 func (t *errorsCapturingT) Errorf(format string, args ...any) {
 	t.errors = append(t.errors, fmt.Errorf(format, args...))
-}
-
-type outputT struct {
-	buf     *bytes.Buffer
-	helpers map[string]struct{}
-}
-
-// Implements T.
-func (t *outputT) Errorf(format string, args ...any) {
-	s := fmt.Sprintf(format, args...)
-	t.buf.WriteString(s)
-}
-
-func (t *outputT) Helper() {
-	if t.helpers == nil {
-		t.helpers = make(map[string]struct{})
-	}
-	t.helpers[callerName(1)] = struct{}{}
 }
 
 type captureT struct {
@@ -164,20 +134,6 @@ func parseLabeledOutput(output string) []labeledContent {
 		return nil
 	}
 	return contents
-}
-
-// callerName gives the function name (qualified with a package path)
-// for the caller after skip frames (where 0 means the current function).
-func callerName(skip int) string {
-	// Make room for the skip PC.
-	var pc [1]uintptr
-	n := runtime.Callers(skip+2, pc[:]) // skip + runtime.Callers + callerName
-	if n == 0 {
-		panic("testing: zero callers found")
-	}
-	frames := runtime.CallersFrames(pc[:n])
-	frame, _ := frames.Next()
-	return frame.Function
 }
 
 func shouldPassOrFail(t *testing.T, mock *mockT, result, shouldPass bool) {

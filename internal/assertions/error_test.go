@@ -78,7 +78,7 @@ func TestErrorAs(t *testing.T) {
 
 func TestErrorNoError(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	// start with a nil error
 	var err error
@@ -105,7 +105,7 @@ func TestErrorNoError(t *testing.T) {
 
 func TestError(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	// start with a nil error
 	var err error
@@ -132,7 +132,7 @@ func TestError(t *testing.T) {
 
 func TestErrorEqualError(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	// start with a nil error
 	var err error
@@ -146,7 +146,7 @@ func TestErrorEqualError(t *testing.T) {
 
 func TestErrorContains(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	// start with a nil error
 	var err error
