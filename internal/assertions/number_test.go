@@ -10,14 +10,24 @@ import (
 	"testing"
 )
 
-func TestNumberInDeltaEdgeCases(t *testing.T) {
+func TestNumberEdgeCases(t *testing.T) {
 	t.Parallel()
 
-	t.Run("InDelta specific (type conversion)", func(t *testing.T) {
+	t.Run("InDelta reflect-specific (type conversion)", func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(mockT)
 		result := InDelta(mock, "", nil, 1)
+		if result {
+			t.Errorf("Expected non numerals to fail")
+		}
+	})
+
+	t.Run("InEpsilon reflect-specific (type conversion)", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := InEpsilon(mock, "", nil, 1)
 		if result {
 			t.Errorf("Expected non numerals to fail")
 		}
@@ -699,6 +709,16 @@ func numberFailCases() iter.Seq[failCase] {
 			name:         "InEpsilonT/absolute-error-for-zero",
 			assertion:    func(t T) bool { return InEpsilonT(t, 0.0, 0.5, 0.1) },
 			wantContains: []string{"Expected value is zero, using absolute error comparison", "0.5"},
+		},
+		{
+			name:         "InDelta/non-numeric-types",
+			assertion:    func(t T) bool { return InDelta(t, "", 0.5, 0.1) },
+			wantContains: []string{"Parameters must be numerical"},
+		},
+		{
+			name:         "InEpsilon/non-numeric-types",
+			assertion:    func(t T) bool { return InEpsilon(t, "", 0.5, 0.1) },
+			wantContains: []string{"Parameters must be numerical"},
 		},
 	})
 }
