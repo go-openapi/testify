@@ -3,7 +3,7 @@
 
 package assertions
 
-import "github.com/go-openapi/testify/v2/internal/assertions/leak"
+import "github.com/go-openapi/testify/v2/internal/leak"
 
 // NoGoRoutineLeak ensures that no goroutine did leak from inside the tested function.
 func NoGoRoutineLeak(t T, inside func(), msgAndArgs ...any) bool {
