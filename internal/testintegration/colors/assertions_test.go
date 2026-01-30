@@ -5,7 +5,6 @@ package colors
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strings"
 	"testing"
@@ -16,12 +15,13 @@ import (
 
 //nolint:gochecknoinits // we want specifically to test here the initialization process
 func init() {
-	// this forces the test program built to test this package to run with the testify flags for colorized output.
+	// This forces the test program built when testing this package to run with the testify flags for colorized output.
+	//
+	// We append the colorization flags (if not already there) to the command line _before_ it gets processed by go test
+	// flags parsing. It seems like this is the only way to explore the package initialization code in testify/enable/v2.
 	if len(os.Args) < 2 || !strings.Contains(os.Args[len(os.Args)-2], "-testify.colorized") {
 		os.Args = append(os.Args, "-testify.colorized", "-testify.colorized.notty")
 	}
-
-	log.Printf("testintegration/colors: enabling colorized output tests: %v", os.Args)
 }
 
 func TestColorsAssertJSONEq(t *testing.T) {

@@ -357,6 +357,7 @@ func (x TestableExample) renderBody() string {
 	return extractFuncBody(string(formatted))
 }
 
+/*
 // renderWholeFile renders a whole-file example, stripping the package clause
 // and imports, and renaming "func main()" back to the example function name.
 func (x TestableExample) renderWholeFile() string {
@@ -384,6 +385,7 @@ func (x TestableExample) renderWholeFile() string {
 	// Strip package clause and imports, rename main -> Example function.
 	return extractWholeFileBody(string(formatted), "Example"+x.Name)
 }
+*/
 
 // extractWholeFileBody strips the package clause and import blocks from a
 // formatted Go file, and renames "func main()" to the given example function name.
