@@ -125,5 +125,5 @@ func testLoad() int {
 		return 100
 	}
 
-	return 100000 // local testing explores more cases
+	return 100_000 // local testing explores more cases
 }

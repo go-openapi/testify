@@ -4,7 +4,10 @@ This is a separate Go module dedicated to property-based and fuzz testing of int
 
 ## Purpose
 
-This module uses external testing libraries (like `rapid`) to perform comprehensive black-box testing without polluting the main module's dependency tree. This maintains our zero-dependency goal while enabling powerful testing techniques.
+This module uses external testing libraries (like `rapid`) to perform comprehensive black-box testing
+without polluting the main module's dependency tree.
+
+This maintains our zero-dependency goal while enabling powerful testing techniques.
 
 ## Structure
 
