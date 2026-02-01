@@ -74,13 +74,13 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.HTTPBodyContains(t, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, World!")
-	fmt.Println("passed")
+	success := assert.HTTPBodyContains(t, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, World!")
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -141,6 +141,7 @@ Returns whether the assertion was successful (true) or not (false).
 	assertions.HTTPBodyNotContains(t, myHandler, "GET", "www.google.com", nil, "I'm Feeling Lucky")
 	success: httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, Bob!"
 	failure: httpBody, "GET", "/", url.Values{"name": []string{"Bob"}}, "Hello, Bob!"
+TODO(fred): use t.Context()
 ```
 {{< /tab >}}
 {{% tab title="Testable Examples" %}}
@@ -161,13 +162,13 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.HTTPBodyNotContains(t, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, Bob!")
-	fmt.Println("passed")
+	success := assert.HTTPBodyNotContains(t, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, Bob!")
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -210,7 +211,7 @@ func httpBody(w http.ResponseWriter, r *http.Request) {
 |--|--| 
 | [`assertions.HTTPBodyNotContains(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#HTTPBodyNotContains) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPBodyNotContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L191)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPBodyNotContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L193)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -246,13 +247,13 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.HTTPError(t, httpError, "GET", "/", nil)
-	fmt.Println("passed")
+	success := assert.HTTPError(t, httpError, "GET", "/", nil)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -330,13 +331,13 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.HTTPRedirect(t, httpRedirect, "GET", "/", nil)
-	fmt.Println("passed")
+	success := assert.HTTPRedirect(t, httpRedirect, "GET", "/", nil)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -414,13 +415,13 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.HTTPStatusCode(t, httpOK, "GET", "/", nil, http.StatusOK)
-	fmt.Println("passed")
+	success := assert.HTTPStatusCode(t, httpOK, "GET", "/", nil, http.StatusOK)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -498,13 +499,13 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.HTTPSuccess(t, httpOK, "GET", "/", nil)
-	fmt.Println("passed")
+	success := assert.HTTPSuccess(t, httpOK, "GET", "/", nil)
+	fmt.Printf("success: %t\n", success)
 
 }
 

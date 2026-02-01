@@ -55,7 +55,7 @@ failed.
 |--|--| 
 | [`assertions.CallerInfo() []string`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#CallerInfo) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#CallerInfo](https://github.com/go-openapi/testify/blob/master/internal/assertions/testing.go#L19)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#CallerInfo](https://github.com/go-openapi/testify/blob/master/internal/assertions/testing.go#L70)
 
 > **Maintainer Note**
 >

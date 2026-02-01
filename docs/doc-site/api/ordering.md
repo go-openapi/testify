@@ -83,13 +83,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.IsDecreasing(t, []int{3, 2, 1})
-	fmt.Println("passed")
+	success := assert.IsDecreasing(t, []int{3, 2, 1})
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -162,13 +162,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.IsDecreasingT(t, []int{3, 2, 1})
-	fmt.Println("passed")
+	success := assert.IsDecreasingT(t, []int{3, 2, 1})
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -237,13 +237,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.IsIncreasing(t, []int{1, 2, 3})
-	fmt.Println("passed")
+	success := assert.IsIncreasing(t, []int{1, 2, 3})
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -316,13 +316,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.IsIncreasingT(t, []int{1, 2, 3})
-	fmt.Println("passed")
+	success := assert.IsIncreasingT(t, []int{1, 2, 3})
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -391,13 +391,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.IsNonDecreasing(t, []int{1, 1, 2})
-	fmt.Println("passed")
+	success := assert.IsNonDecreasing(t, []int{1, 1, 2})
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -470,13 +470,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.IsNonDecreasingT(t, []int{1, 1, 2})
-	fmt.Println("passed")
+	success := assert.IsNonDecreasingT(t, []int{1, 1, 2})
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -545,13 +545,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.IsNonIncreasing(t, []int{2, 1, 1})
-	fmt.Println("passed")
+	success := assert.IsNonIncreasing(t, []int{2, 1, 1})
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -624,13 +624,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.IsNonIncreasingT(t, []int{2, 1, 1})
-	fmt.Println("passed")
+	success := assert.IsNonIncreasingT(t, []int{2, 1, 1})
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -701,13 +701,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.NotSortedT(t, []int{3, 1, 3})
-	fmt.Println("passed")
+	success := assert.NotSortedT(t, []int{3, 1, 3})
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -778,13 +778,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.SortedT(t, []int{1, 1, 3})
-	fmt.Println("passed")
+	success := assert.SortedT(t, []int{1, 1, 3})
+	fmt.Printf("success: %t\n", success)
 
 }
 

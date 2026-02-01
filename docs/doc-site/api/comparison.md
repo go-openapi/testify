@@ -92,13 +92,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.Greater(t, 2, 1)
-	fmt.Println("passed")
+	success := assert.Greater(t, 2, 1)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -174,13 +174,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.GreaterOrEqual(t, 2, 1)
-	fmt.Println("passed")
+	success := assert.GreaterOrEqual(t, 2, 1)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -265,13 +265,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.GreaterOrEqualT(t, 2, 1)
-	fmt.Println("passed")
+	success := assert.GreaterOrEqualT(t, 2, 1)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -351,13 +351,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.GreaterT(t, 2, 1)
-	fmt.Println("passed")
+	success := assert.GreaterT(t, 2, 1)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -429,13 +429,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.Less(t, 1, 2)
-	fmt.Println("passed")
+	success := assert.Less(t, 1, 2)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -509,13 +509,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.LessOrEqual(t, 1, 2)
-	fmt.Println("passed")
+	success := assert.LessOrEqual(t, 1, 2)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -599,13 +599,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.LessOrEqualT(t, 1, 2)
-	fmt.Println("passed")
+	success := assert.LessOrEqualT(t, 1, 2)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -684,13 +684,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.LessT(t, 1, 2)
-	fmt.Println("passed")
+	success := assert.LessT(t, 1, 2)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -758,13 +758,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.Negative(t, -1)
-	fmt.Println("passed")
+	success := assert.Negative(t, -1)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -836,13 +836,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.NegativeT(t, -1)
-	fmt.Println("passed")
+	success := assert.NegativeT(t, -1)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -910,13 +910,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.Positive(t, 1)
-	fmt.Println("passed")
+	success := assert.Positive(t, 1)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -988,13 +988,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.PositiveT(t, 1)
-	fmt.Println("passed")
+	success := assert.PositiveT(t, 1)
+	fmt.Printf("success: %t\n", success)
 
 }
 

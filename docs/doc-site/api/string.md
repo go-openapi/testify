@@ -66,13 +66,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.NotRegexp(t, "^start", "not starting")
-	fmt.Println("passed")
+	success := assert.NotRegexp(t, "^start", "not starting")
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -146,13 +146,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.NotRegexpT(t, "^start", "not starting")
-	fmt.Println("passed")
+	success := assert.NotRegexpT(t, "^start", "not starting")
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -224,13 +224,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.Regexp(t, "^start", "starting")
-	fmt.Println("passed")
+	success := assert.Regexp(t, "^start", "starting")
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -300,13 +300,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.RegexpT(t, "^start", "starting")
-	fmt.Println("passed")
+	success := assert.RegexpT(t, "^start", "starting")
+	fmt.Printf("success: %t\n", success)
 
 }
 

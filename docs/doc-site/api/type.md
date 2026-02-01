@@ -81,20 +81,20 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.Implements(t, ptr(dummyInterface), new(testing.T))
-	fmt.Println("passed")
+	success := assert.Implements(t, ptr(dummyInterface), new(testing.T))
+	fmt.Printf("success: %t\n", success)
 
 }
 
 var (
 	staticVar = "static string"
 
-	dummyInterface require.T
+	dummyInterface assert.T
 )
 
 func ptr[T any](value T) *T {
@@ -170,13 +170,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.IsNotOfTypeT[myType](t, 123.123)
-	fmt.Println("passed")
+	success := assert.IsNotOfTypeT[myType](t, 123.123)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -245,13 +245,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.IsNotType(t, int32(123), int64(456))
-	fmt.Println("passed")
+	success := assert.IsNotType(t, int32(123), int64(456))
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -322,13 +322,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.IsOfTypeT[myType](t, myType(123.123))
-	fmt.Println("passed")
+	success := assert.IsOfTypeT[myType](t, myType(123.123))
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -397,13 +397,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.IsType(t, 123, 456)
-	fmt.Println("passed")
+	success := assert.IsType(t, 123, 456)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -478,13 +478,13 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.Kind(t, reflect.String, "hello")
-	fmt.Println("passed")
+	success := assert.Kind(t, reflect.String, "hello")
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -555,13 +555,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.NotImplements(t, (*error)(nil), new(testing.T))
-	fmt.Println("passed")
+	success := assert.NotImplements(t, (*error)(nil), new(testing.T))
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -636,13 +636,13 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.NotKind(t, reflect.String, 0)
-	fmt.Println("passed")
+	success := assert.NotKind(t, reflect.String, 0)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -713,13 +713,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.NotZero(t, 1)
-	fmt.Println("passed")
+	success := assert.NotZero(t, 1)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -790,13 +790,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.Zero(t, 0)
-	fmt.Println("passed")
+	success := assert.Zero(t, 0)
+	fmt.Printf("success: %t\n", success)
 
 }
 

@@ -70,13 +70,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.DirExists(t, filepath.Join(testDataPath(), "existing_dir"))
-	fmt.Println("passed")
+	success := assert.DirExists(t, filepath.Join(testDataPath(), "existing_dir"))
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -118,7 +118,7 @@ func testDataPath() string {
 |--|--| 
 | [`assertions.DirExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#DirExists) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#DirExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L78)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#DirExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L81)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -153,13 +153,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.DirNotExists(t, filepath.Join(testDataPath(), "non_existing_dir"))
-	fmt.Println("passed")
+	success := assert.DirNotExists(t, filepath.Join(testDataPath(), "non_existing_dir"))
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -201,7 +201,7 @@ func testDataPath() string {
 |--|--| 
 | [`assertions.DirNotExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#DirNotExists) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#DirNotExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L107)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#DirNotExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L110)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -236,13 +236,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.FileEmpty(t, filepath.Join(testDataPath(), "empty_file"))
-	fmt.Println("passed")
+	success := assert.FileEmpty(t, filepath.Join(testDataPath(), "empty_file"))
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -284,7 +284,7 @@ func testDataPath() string {
 |--|--| 
 | [`assertions.FileEmpty(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FileEmpty) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L136)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L139)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -319,13 +319,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.FileExists(t, filepath.Join(testDataPath(), "existing_file"))
-	fmt.Println("passed")
+	success := assert.FileExists(t, filepath.Join(testDataPath(), "existing_file"))
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -402,13 +402,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.FileNotEmpty(t, filepath.Join(testDataPath(), "existing_file"))
-	fmt.Println("passed")
+	success := assert.FileNotEmpty(t, filepath.Join(testDataPath(), "existing_file"))
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -450,7 +450,7 @@ func testDataPath() string {
 |--|--| 
 | [`assertions.FileNotEmpty(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FileNotEmpty) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileNotEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L177)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileNotEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L180)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -485,13 +485,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.FileNotExists(t, filepath.Join(testDataPath(), "non_existing_file"))
-	fmt.Println("passed")
+	success := assert.FileNotExists(t, filepath.Join(testDataPath(), "non_existing_file"))
+	fmt.Printf("success: %t\n", success)
 
 }
 

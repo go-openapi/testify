@@ -84,13 +84,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.InDelta(t, 1.0, 1.01, 0.02)
-	fmt.Println("passed")
+	success := assert.InDelta(t, 1.0, 1.01, 0.02)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -163,13 +163,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.InDeltaMapValues(t, map[string]float64{"a": 1.0}, map[string]float64{"a": 1.01}, 0.02)
-	fmt.Println("passed")
+	success := assert.InDeltaMapValues(t, map[string]float64{"a": 1.0}, map[string]float64{"a": 1.01}, 0.02)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -242,13 +242,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.InDeltaSlice(t, []float64{1.0, 2.0}, []float64{1.01, 2.01}, 0.02)
-	fmt.Println("passed")
+	success := assert.InDeltaSlice(t, []float64{1.0, 2.0}, []float64{1.01, 2.01}, 0.02)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -331,13 +331,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.InDeltaT(t, 1.0, 1.01, 0.02)
-	fmt.Println("passed")
+	success := assert.InDeltaT(t, 1.0, 1.01, 0.02)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -418,13 +418,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.InEpsilon(t, 100.0, 101.0, 0.02)
-	fmt.Println("passed")
+	success := assert.InEpsilon(t, 100.0, 101.0, 0.02)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -497,13 +497,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.InEpsilonSlice(t, []float64{100.0, 200.0}, []float64{101.0, 202.0}, 0.02)
-	fmt.Println("passed")
+	success := assert.InEpsilonSlice(t, []float64{100.0, 200.0}, []float64{101.0, 202.0}, 0.02)
+	fmt.Printf("success: %t\n", success)
 
 }
 
@@ -594,13 +594,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/require"
+	"github.com/go-openapi/testify/v2/assert"
 )
 
 func main() {
 	t := new(testing.T)
-	require.InEpsilonT(t, 100.0, 101.0, 0.02)
-	fmt.Println("passed")
+	success := assert.InEpsilonT(t, 100.0, 101.0, 0.02)
+	fmt.Printf("success: %t\n", success)
 
 }
 

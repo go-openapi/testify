@@ -909,6 +909,8 @@ func HTTPBodyContains(t T, handler http.HandlerFunc, method string, url string, 
 //	success: httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, Bob!"
 //	failure: httpBody, "GET", "/", url.Values{"name": []string{"Bob"}}, "Hello, Bob!"
 //
+// TODO(fred): use t.Context()
+//
 // Upon failure, the test [T] is marked as failed and stops execution.
 func HTTPBodyNotContains(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msgAndArgs ...any) {
 	if h, ok := t.(H); ok {
@@ -2075,8 +2077,21 @@ func NoError(t T, err error, msgAndArgs ...any) {
 
 // NoGoRoutineLeak ensures that no goroutine did leak from inside the tested function.
 //
+// The function passed may apply optional filters to exclude known false positives (e.g. http, database connection...).
+//
+// # Usage
+//
+//	NoGoRoutineLeak(t, func() {
+//	},
+//	"should not leak any goroutine",
+//	)
+//
+// # Examples
+//
+//   - success: NOT IMPLEMENTED
+//
 // Upon failure, the test [T] is marked as failed and stops execution.
-func NoGoRoutineLeak(t T, inside func(), msgAndArgs ...any) {
+func NoGoRoutineLeak(t T, inside func(options ...LeakOption), msgAndArgs ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
