@@ -26,13 +26,27 @@ func TestPanicDidPanic(t *testing.T) {
 	{
 		funcDidPanic, msg, _ := didPanic(func() {
 			err := errors.New("test")
-			panic(err) // nil is no longer supported as a panic value and returns a runtime.PanicNil error
+			panic(err)
 		})
 		if !funcDidPanic {
 			t.Error("didPanic should have panicked")
 		}
 		if msg == nil {
 			t.Errorf("didPanic should have returned something, but got nil")
+		}
+	}
+
+	{
+		// Go 1.21+ wraps panic(nil) as runtime.PanicNilError;
+		// didPanic normalizes the message back to nil.
+		funcDidPanic, msg, _ := didPanic(func() {
+			panic(nil) //nolint:nilness // deliberate: testing the panic(nil) edge case
+		})
+		if !funcDidPanic {
+			t.Error("didPanic should have panicked on panic(nil)")
+		}
+		if msg != nil {
+			t.Errorf("didPanic should have normalized panic(nil) message to nil, got %v", msg)
 		}
 	}
 

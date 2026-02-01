@@ -12,70 +12,6 @@ import (
 	"testing"
 )
 
-func TestErrorNotErrorAs(t *testing.T) {
-	t.Parallel()
-
-	for tt := range errorNotErrorAsCases() {
-		t.Run(fmt.Sprintf("NotErrorAs(%#v,%#v)", tt.err, &customError{}), func(t *testing.T) {
-			t.Parallel()
-			mock := new(mockT)
-			var target *customError
-
-			res := NotErrorAs(mock, tt.err, &target)
-			shouldPassOrFail(t, mock, res, tt.result)
-		})
-	}
-}
-
-func TestErrorErrorMessages(t *testing.T) {
-	t.Parallel()
-
-	runFailCases(t, errorFailCases())
-}
-
-func TestErrorIs(t *testing.T) {
-	t.Parallel()
-
-	for tt := range errorIsCases() {
-		t.Run(fmt.Sprintf("ErrorIs(%#v,%#v)", tt.err, tt.target), func(t *testing.T) {
-			t.Parallel()
-			mock := new(mockT)
-
-			res := ErrorIs(mock, tt.err, tt.target)
-			shouldPassOrFail(t, mock, res, tt.result)
-		})
-	}
-}
-
-func TestErrorNotErrorIs(t *testing.T) {
-	t.Parallel()
-
-	for tt := range errorNotErrorIsCases() {
-		t.Run(fmt.Sprintf("NotErrorIs(%#v,%#v)", tt.err, tt.target), func(t *testing.T) {
-			t.Parallel()
-			mock := new(mockT)
-
-			res := NotErrorIs(mock, tt.err, tt.target)
-			shouldPassOrFail(t, mock, res, tt.result)
-		})
-	}
-}
-
-func TestErrorAs(t *testing.T) {
-	t.Parallel()
-
-	for tt := range errorAsCases() {
-		t.Run(fmt.Sprintf("ErrorAs(%#v,%#v)", tt.err, &customError{}), func(t *testing.T) {
-			t.Parallel()
-			mock := new(mockT)
-			var target *customError
-
-			res := ErrorAs(mock, tt.err, &target)
-			shouldPassOrFail(t, mock, res, tt.result)
-		})
-	}
-}
-
 func TestErrorNoError(t *testing.T) {
 	t.Parallel()
 	mock := new(mockT)
@@ -185,6 +121,70 @@ func TestErrorContains(t *testing.T) {
 	}
 }
 
+func TestErrorNotErrorAs(t *testing.T) {
+	t.Parallel()
+
+	for tt := range errorNotErrorAsCases() {
+		t.Run(fmt.Sprintf("NotErrorAs(%#v,%#v)", tt.err, &customError{}), func(t *testing.T) {
+			t.Parallel()
+			mock := new(mockT)
+			var target *customError
+
+			res := NotErrorAs(mock, tt.err, &target)
+			shouldPassOrFail(t, mock, res, tt.result)
+		})
+	}
+}
+
+func TestErrorErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, errorFailCases())
+}
+
+func TestErrorIs(t *testing.T) {
+	t.Parallel()
+
+	for tt := range errorIsCases() {
+		t.Run(fmt.Sprintf("ErrorIs(%#v,%#v)", tt.err, tt.target), func(t *testing.T) {
+			t.Parallel()
+			mock := new(mockT)
+
+			res := ErrorIs(mock, tt.err, tt.target)
+			shouldPassOrFail(t, mock, res, tt.result)
+		})
+	}
+}
+
+func TestErrorNotErrorIs(t *testing.T) {
+	t.Parallel()
+
+	for tt := range errorNotErrorIsCases() {
+		t.Run(fmt.Sprintf("NotErrorIs(%#v,%#v)", tt.err, tt.target), func(t *testing.T) {
+			t.Parallel()
+			mock := new(mockT)
+
+			res := NotErrorIs(mock, tt.err, tt.target)
+			shouldPassOrFail(t, mock, res, tt.result)
+		})
+	}
+}
+
+func TestErrorAs(t *testing.T) {
+	t.Parallel()
+
+	for tt := range errorAsCases() {
+		t.Run(fmt.Sprintf("ErrorAs(%#v,%#v)", tt.err, &customError{}), func(t *testing.T) {
+			t.Parallel()
+			mock := new(mockT)
+			var target *customError
+
+			res := ErrorAs(mock, tt.err, &target)
+			shouldPassOrFail(t, mock, res, tt.result)
+		})
+	}
+}
+
 // ============================================================================
 // TestNotErrorAs
 // ============================================================================
@@ -258,12 +258,19 @@ func errorAsCases() iter.Seq[errorAsCase] {
 		{err: io.EOF, result: false},
 		{err: nil, result: false},
 		{err: fmt.Errorf("abc: %w", errors.New("def")), result: false},
+		{err: &wrapsNilError{msg: "dead end"}, result: false},                     // covers unwrapAll: Unwrap() error returning nil
+		{err: errors.Join(errors.New("err1"), errors.New("err2")), result: false}, // covers unwrapAll: Unwrap() []error
 	})
 }
 
 type customError struct{}
 
 func (*customError) Error() string { return "fail" }
+
+type wrapsNilError struct{ msg string }
+
+func (e *wrapsNilError) Error() string { return e.msg }
+func (e *wrapsNilError) Unwrap() error { return nil }
 
 // ============================================================================
 // TestErrorErrorMessages

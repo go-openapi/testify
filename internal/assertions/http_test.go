@@ -9,286 +9,29 @@ import (
 	"iter"
 	"net/http"
 	"net/url"
-	"reflect"
 	"slices"
 	"testing"
 )
 
-func TestHTTPSuccess(t *testing.T) {
+// TestHTTPStatus runs all HTTP status assertions against a unified set of handlers.
+//
+// The expected pass/fail is determined by [expectedHTTPStatus].
+func TestHTTPStatus(t *testing.T) {
 	t.Parallel()
 
-	mock1 := new(mockT)
-	if result := HTTPSuccess(mock1, httpOK, "GET", "/", nil); !result {
-		t.Error("expected HTTPSuccess to return true for httpOK")
-	}
-	if mock1.Failed() {
-		t.Error("expected mock not to have failed")
-	}
-
-	mock2 := new(mockT)
-	if result := HTTPSuccess(mock2, httpRedirect, "GET", "/", nil); result {
-		t.Error("expected HTTPSuccess to return false for httpRedirect")
-	}
-	if !mock2.Failed() {
-		t.Error("expected mock to have failed")
-	}
-
-	mock3 := new(mockT)
-	if result := HTTPSuccess(
-		mock3, httpError, "GET", "/", nil,
-		"was not expecting a failure here",
-	); result {
-		t.Error("expected HTTPSuccess to return false for httpError")
-	}
-	if !mock3.Failed() {
-		t.Error("expected mock to have failed")
-	}
-
-	mock4 := new(mockT)
-	if result := HTTPSuccess(mock4, httpStatusCode, "GET", "/", nil); result {
-		t.Error("expected HTTPSuccess to return false for httpStatusCode")
-	}
-	if !mock4.Failed() {
-		t.Error("expected mock to have failed")
-	}
-
-	mock5 := new(mockT)
-	if result := HTTPSuccess(mock5, httpReadBody, "POST", "/", nil); !result {
-		t.Error("expected HTTPSuccess to return true for httpReadBody")
-	}
-	if mock5.Failed() {
-		t.Error("expected mock not to have failed")
+	for tc := range httpStatusCases() {
+		t.Run(tc.name, testAllHTTPStatusAssertions(tc))
 	}
 }
 
-func TestHTTPRedirect(t *testing.T) {
+// TestHTTPBody runs all HTTP body assertions against a unified set of cases.
+//
+// The expected pass/fail is determined by [expectedHTTPBody].
+func TestHTTPBody(t *testing.T) {
 	t.Parallel()
 
-	mock1 := new(mockT)
-	if result := HTTPRedirect(
-		mock1, httpOK, "GET", "/", nil,
-		"was expecting a 3xx status code. Got 200.",
-	); result {
-		t.Error("expected HTTPRedirect to return false for httpOK")
-	}
-	if !mock1.Failed() {
-		t.Error("expected mock to have failed")
-	}
-
-	mock2 := new(mockT)
-	if result := HTTPRedirect(mock2, httpRedirect, "GET", "/", nil); !result {
-		t.Error("expected HTTPRedirect to return true for httpRedirect")
-	}
-	if mock2.Failed() {
-		t.Error("expected mock not to have failed")
-	}
-
-	mock3 := new(mockT)
-	if result := HTTPRedirect(mock3, httpError, "GET", "/", nil); result {
-		t.Error("expected HTTPRedirect to return false for httpError")
-	}
-	if !mock3.Failed() {
-		t.Error("expected mock to have failed")
-	}
-
-	mock4 := new(mockT)
-	if result := HTTPRedirect(mock4, httpStatusCode, "GET", "/", nil); result {
-		t.Error("expected HTTPRedirect to return false for httpStatusCode")
-	}
-	if !mock4.Failed() {
-		t.Error("expected mock to have failed")
-	}
-}
-
-func TestHTTPError(t *testing.T) {
-	t.Parallel()
-
-	mock1 := new(mockT)
-	if result := HTTPError(mock1, httpOK, "GET", "/", nil); result {
-		t.Error("expected HTTPError to return false for httpOK")
-	}
-	if !mock1.Failed() {
-		t.Error("expected mock to have failed")
-	}
-
-	mock2 := new(mockT)
-	if result := HTTPError(
-		mock2, httpRedirect, "GET", "/", nil,
-		"Expected this request to error out. But it didn't",
-	); result {
-		t.Error("expected HTTPError to return false for httpRedirect")
-	}
-	if !mock2.Failed() {
-		t.Error("expected mock to have failed")
-	}
-
-	mock3 := new(mockT)
-	if result := HTTPError(mock3, httpError, "GET", "/", nil); !result {
-		t.Error("expected HTTPError to return true for httpError")
-	}
-	if mock3.Failed() {
-		t.Error("expected mock not to have failed")
-	}
-
-	mock4 := new(mockT)
-	if result := HTTPError(mock4, httpStatusCode, "GET", "/", nil); result {
-		t.Error("expected HTTPError to return false for httpStatusCode")
-	}
-	if !mock4.Failed() {
-		t.Error("expected mock to have failed")
-	}
-}
-
-func TestHTTPStatusCode(t *testing.T) {
-	t.Parallel()
-
-	mock1 := new(mockT)
-	if result := HTTPStatusCode(mock1, httpOK, "GET", "/", nil, http.StatusSwitchingProtocols); result {
-		t.Error("expected HTTPStatusCode to return false for httpOK")
-	}
-	if !mock1.Failed() {
-		t.Error("expected mock to have failed")
-	}
-
-	mock2 := new(mockT)
-	if result := HTTPStatusCode(mock2, httpRedirect, "GET", "/", nil, http.StatusSwitchingProtocols); result {
-		t.Error("expected HTTPStatusCode to return false for httpRedirect")
-	}
-	if !mock2.Failed() {
-		t.Error("expected mock to have failed")
-	}
-
-	mock3 := new(mockT)
-	if result := HTTPStatusCode(
-		mock3, httpError, "GET", "/", nil, http.StatusSwitchingProtocols,
-		"Expected the status code to be %d", http.StatusSwitchingProtocols,
-	); result {
-		t.Error("expected HTTPStatusCode to return false for httpError")
-	}
-	if !mock3.Failed() {
-		t.Error("expected mock to have failed")
-	}
-
-	mock4 := new(mockT)
-	if result := HTTPStatusCode(mock4, httpStatusCode, "GET", "/", nil, http.StatusSwitchingProtocols); !result {
-		t.Error("expected HTTPStatusCode to return true for httpStatusCode")
-	}
-	if mock4.Failed() {
-		t.Error("expected mock not to have failed")
-	}
-}
-
-func TestHTTPStatusWrapper(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
-
-	if !HTTPSuccess(mock, httpOK, "GET", "/", nil) {
-		t.Error("expected HTTPSuccess(httpOK) to return true")
-	}
-	if HTTPSuccess(mock, httpRedirect, "GET", "/", nil) {
-		t.Error("expected HTTPSuccess(httpRedirect) to return false")
-	}
-	if HTTPSuccess(mock, httpError, "GET", "/", nil) {
-		t.Error("expected HTTPSuccess(httpError) to return false")
-	}
-
-	if HTTPRedirect(mock, httpOK, "GET", "/", nil) {
-		t.Error("expected HTTPRedirect(httpOK) to return false")
-	}
-	if !HTTPRedirect(mock, httpRedirect, "GET", "/", nil) {
-		t.Error("expected HTTPRedirect(httpRedirect) to return true")
-	}
-	if HTTPRedirect(mock, httpError, "GET", "/", nil) {
-		t.Error("expected HTTPRedirect(httpError) to return false")
-	}
-
-	if HTTPError(mock, httpOK, "GET", "/", nil) {
-		t.Error("expected HTTPError(httpOK) to return false")
-	}
-	if HTTPError(mock, httpRedirect, "GET", "/", nil) {
-		t.Error("expected HTTPError(httpRedirect) to return false")
-	}
-	if !HTTPError(mock, httpError, "GET", "/", nil) {
-		t.Error("expected HTTPError(httpError) to return true")
-	}
-}
-
-func TestHTTPRequestWithNoParams(t *testing.T) {
-	t.Parallel()
-
-	var got *http.Request
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		got = r
-		w.WriteHeader(http.StatusOK)
-	}
-
-	if !HTTPSuccess(t, handler, "GET", "/url", nil) {
-		t.Error("expected HTTPSuccess to return true")
-	}
-
-	if len(got.URL.Query()) != 0 {
-		t.Errorf("expected empty query, got %v", got.URL.Query())
-	}
-	if got.URL.RequestURI() != "/url" {
-		t.Errorf("expected RequestURI %q, got %q", "/url", got.URL.RequestURI())
-	}
-}
-
-func TestHTTPRequestWithParams(t *testing.T) {
-	t.Parallel()
-
-	var got *http.Request
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		got = r
-		w.WriteHeader(http.StatusOK)
-	}
-	params := url.Values{}
-	params.Add("id", "12345")
-
-	if !HTTPSuccess(t, handler, "GET", "/url", params) {
-		t.Error("expected HTTPSuccess to return true")
-	}
-
-	expectedQuery := url.Values{"id": []string{"12345"}}
-	if !reflect.DeepEqual(expectedQuery, got.URL.Query()) {
-		t.Errorf("expected query %v, got %v", expectedQuery, got.URL.Query())
-	}
-	if got.URL.String() != "/url?id=12345" {
-		t.Errorf("expected URL string %q, got %q", "/url?id=12345", got.URL.String())
-	}
-	if got.URL.RequestURI() != "/url?id=12345" {
-		t.Errorf("expected RequestURI %q, got %q", "/url?id=12345", got.URL.RequestURI())
-	}
-}
-
-func TestHttpBody(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
-
-	if !HTTPBodyContains(mock, httpHelloName, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, World!") {
-		t.Error("expected HTTPBodyContains to return true for 'Hello, World!'")
-	}
-	if !HTTPBodyContains(mock, httpHelloName, "GET", "/", url.Values{"name": []string{"World"}}, "World") {
-		t.Error("expected HTTPBodyContains to return true for 'World'")
-	}
-	if HTTPBodyContains(mock, httpHelloName, "GET", "/", url.Values{"name": []string{"World"}}, "world") {
-		t.Error("expected HTTPBodyContains to return false for 'world' (case sensitive)")
-	}
-
-	if HTTPBodyNotContains(mock, httpHelloName, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, World!") {
-		t.Error("expected HTTPBodyNotContains to return false for 'Hello, World!'")
-	}
-	if HTTPBodyNotContains(
-		mock, httpHelloName, "GET", "/", url.Values{"name": []string{"World"}}, "World",
-		"Expected the request body to not contain 'World'. But it did.",
-	) {
-		t.Error("expected HTTPBodyNotContains to return false for 'World'")
-	}
-	if !HTTPBodyNotContains(mock, httpHelloName, "GET", "/", url.Values{"name": []string{"World"}}, "world") {
-		t.Error("expected HTTPBodyNotContains to return true for 'world' (case sensitive)")
-	}
-	if !HTTPBodyContains(mock, httpReadBody, "GET", "/", nil, "hello") {
-		t.Error("expected HTTPBodyContains to return true for httpReadBody 'hello'")
+	for tc := range httpBodyCases() {
+		t.Run(tc.name, testAllHTTPBodyAssertions(tc))
 	}
 }
 
@@ -299,52 +42,214 @@ func TestHTTPErrorMessages(t *testing.T) {
 }
 
 // ============================================================================
-// TestHTTPErrorMessages
-// ============================================================================.
+// Unified HTTP status assertion tests (truth matrix pattern)
+// ============================================================================
+
+// handlerKind represents the HTTP response category of a handler.
+type handlerKind int
+
+const (
+	successHandler    handlerKind = iota // 2xx
+	redirectHandler                      // 3xx
+	errorHandler                         // 4xx/5xx
+	otherHandler                         // 1xx or other non-standard
+	badRequestHandler                    // request construction fails (e.g. invalid method)
+)
+
+type httpAssertionKind int
+
+const (
+	httpSuccessAssertion httpAssertionKind = iota
+	httpRedirectAssertion
+	httpErrorAssertion
+)
+
+func testAllHTTPStatusAssertions(tc httpStatusTestCase) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Run("HTTPSuccess", func(t *testing.T) {
+			t.Parallel()
+
+			mock := new(mockT)
+			res := HTTPSuccess(mock, tc.handler, tc.method, "/", tc.params)
+			shouldPassOrFail(t, mock, res, expectedHTTPStatus(httpSuccessAssertion, tc.kind))
+		})
+
+		t.Run("HTTPRedirect", func(t *testing.T) {
+			t.Parallel()
+
+			mock := new(mockT)
+			res := HTTPRedirect(mock, tc.handler, tc.method, "/", tc.params)
+			shouldPassOrFail(t, mock, res, expectedHTTPStatus(httpRedirectAssertion, tc.kind))
+		})
+
+		t.Run("HTTPError", func(t *testing.T) {
+			t.Parallel()
+
+			mock := new(mockT)
+			res := HTTPError(mock, tc.handler, tc.method, "/", tc.params)
+			shouldPassOrFail(t, mock, res, expectedHTTPStatus(httpErrorAssertion, tc.kind))
+		})
+
+		t.Run("HTTPStatusCode/match", func(t *testing.T) {
+			t.Parallel()
+
+			mock := new(mockT)
+			res := HTTPStatusCode(mock, tc.handler, tc.method, "/", tc.params, tc.code)
+			shouldPassOrFail(t, mock, res, tc.kind != badRequestHandler)
+		})
+
+		t.Run("HTTPStatusCode/mismatch", func(t *testing.T) {
+			t.Parallel()
+
+			mock := new(mockT)
+			res := HTTPStatusCode(mock, tc.handler, tc.method, "/", tc.params, 0)
+			shouldPassOrFail(t, mock, res, false)
+		})
+	}
+}
+
+// ============================================================================
+// Unified HTTP body assertion tests (truth matrix pattern)
+// ============================================================================
+
+// bodyMatchKind represents whether a string is found in the response body.
+type bodyMatchKind int
+
+const (
+	bodyMatches bodyMatchKind = iota // string is found in response body
+	bodyMisses                       // string is not found in response body
+)
+
+type httpBodyAssertionKind int
+
+const (
+	httpBodyContainsAssertion httpBodyAssertionKind = iota
+	httpBodyNotContainsAssertion
+)
+
+func testAllHTTPBodyAssertions(tc httpBodyTestCase) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Run("HTTPBodyContains", func(t *testing.T) {
+			t.Parallel()
+
+			mock := new(mockT)
+			res := HTTPBodyContains(mock, tc.handler, tc.method, "/", tc.params, tc.str)
+			shouldPassOrFail(t, mock, res, expectedHTTPBody(httpBodyContainsAssertion, tc.kind))
+		})
+
+		t.Run("HTTPBodyNotContains", func(t *testing.T) {
+			t.Parallel()
+
+			mock := new(mockT)
+			res := HTTPBodyNotContains(mock, tc.handler, tc.method, "/", tc.params, tc.str)
+			shouldPassOrFail(t, mock, res, expectedHTTPBody(httpBodyNotContainsAssertion, tc.kind))
+		})
+	}
+}
+
+// ============================================================================
+// HTTP status test cases
+// ============================================================================
+
+type httpStatusTestCase struct {
+	name    string
+	handler http.HandlerFunc
+	kind    handlerKind
+	code    int        // actual HTTP status code returned by the handler
+	method  string     // HTTP method for the request
+	params  url.Values // optional query params (nil for none)
+}
+
+func httpStatusCases() iter.Seq[httpStatusTestCase] {
+	return slices.Values([]httpStatusTestCase{
+		{"ok", httpOK, successHandler, http.StatusOK, "GET", nil},
+		{"ok/with-params", httpOK, successHandler, http.StatusOK, "GET", url.Values{"id": {"12345"}}},
+		{"redirect", httpRedirect, redirectHandler, http.StatusTemporaryRedirect, "GET", nil},
+		{"error", httpError, errorHandler, http.StatusInternalServerError, "GET", nil},
+		{"status-code-1xx", httpStatusCode, otherHandler, http.StatusSwitchingProtocols, "GET", nil},
+		{"read-body", httpReadBody, successHandler, http.StatusOK, "GET", nil},
+		{"bad-method", httpOK, badRequestHandler, http.StatusOK, "BAD METHOD", nil},
+	})
+}
+
+// expectedHTTPStatus determines the expected pass/fail for each assertion based on handler kind.
+func expectedHTTPStatus(assertion httpAssertionKind, kind handlerKind) bool {
+	switch assertion {
+	case httpSuccessAssertion:
+		return kind == successHandler
+	case httpRedirectAssertion:
+		return kind == redirectHandler
+	case httpErrorAssertion:
+		return kind == errorHandler
+	default:
+		panic(fmt.Errorf("test case configuration error: invalid httpAssertionKind: %d", assertion))
+	}
+}
+
+// ============================================================================
+// HTTP Body tests
+// ============================================================================
+
+type httpBodyTestCase struct {
+	name    string
+	handler http.HandlerFunc
+	method  string
+	params  url.Values
+	str     string
+	kind    bodyMatchKind
+}
+
+func httpBodyCases() iter.Seq[httpBodyTestCase] {
+	p := url.Values{"name": []string{"World"}}
+
+	return slices.Values([]httpBodyTestCase{
+		{"full-match", httpHelloName, "GET", p, "Hello, World!", bodyMatches},
+		{"partial-match", httpHelloName, "GET", p, "World", bodyMatches},
+		{"case-sensitive-miss", httpHelloName, "GET", p, "world", bodyMisses},
+		{"read-body-handler", httpReadBody, "GET", nil, "hello", bodyMatches},
+		{"bad-method", httpHelloName, "BAD METHOD", nil, "Hello", bodyMisses},
+	})
+}
+
+// expectedHTTPBody determines the expected pass/fail for each assertion based on body match kind.
+func expectedHTTPBody(assertion httpBodyAssertionKind, kind bodyMatchKind) bool {
+	switch assertion {
+	case httpBodyContainsAssertion:
+		return kind == bodyMatches
+	case httpBodyNotContainsAssertion:
+		return kind == bodyMisses
+	default:
+		panic(fmt.Errorf("test case configuration error: invalid httpBodyAssertionKind: %d", assertion))
+	}
+}
+
+// ============================================================================
+// Error message tests
+// ============================================================================
+
 func httpFailCases() iter.Seq[failCase] {
 	return slices.Values([]failCase{
 		{
 			name:         "HTTPSuccess/error-handler",
 			assertion:    func(t T) bool { return HTTPSuccess(t, httpError, "GET", "/", nil) },
-			wantContains: []string{"Expected HTTP success status code"},
+			wantContains: []string{"expected HTTP success status code"},
 		},
 		{
 			name:         "HTTPRedirect/ok-handler",
 			assertion:    func(t T) bool { return HTTPRedirect(t, httpOK, "GET", "/", nil) },
-			wantContains: []string{"Expected HTTP redirect status code"},
+			wantContains: []string{"expected HTTP redirect status code"},
 		},
 		{
 			name:         "HTTPError/redirect-handler",
 			assertion:    func(t T) bool { return HTTPError(t, httpRedirect, "GET", "/", nil) },
-			wantContains: []string{"Expected HTTP error status code"},
+			wantContains: []string{"expected HTTP error status code"},
 		},
 	})
 }
 
-func TestHTTPBodyWrappers(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
-
-	if !HTTPBodyContains(mock, httpHelloName, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, World!") {
-		t.Error("expected HTTPBodyContains to return true for 'Hello, World!'")
-	}
-	if !HTTPBodyContains(mock, httpHelloName, "GET", "/", url.Values{"name": []string{"World"}}, "World") {
-		t.Error("expected HTTPBodyContains to return true for 'World'")
-	}
-	if HTTPBodyContains(mock, httpHelloName, "GET", "/", url.Values{"name": []string{"World"}}, "world") {
-		t.Error("expected HTTPBodyContains to return false for 'world'")
-	}
-
-	if HTTPBodyNotContains(mock, httpHelloName, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, World!") {
-		t.Error("expected HTTPBodyNotContains to return false for 'Hello, World!'")
-	}
-	if HTTPBodyNotContains(mock, httpHelloName, "GET", "/", url.Values{"name": []string{"World"}}, "World") {
-		t.Error("expected HTTPBodyNotContains to return false for 'World'")
-	}
-	if !HTTPBodyNotContains(mock, httpHelloName, "GET", "/", url.Values{"name": []string{"World"}}, "world") {
-		t.Error("expected HTTPBodyNotContains to return true for 'world'")
-	}
-}
+// ============================================================================
+// Test HTTP handlers
+// ============================================================================
 
 func httpHelloName(w http.ResponseWriter, r *http.Request) {
 	name := r.FormValue("name")

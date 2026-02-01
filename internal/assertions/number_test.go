@@ -8,7 +8,10 @@ import (
 	"math"
 	"slices"
 	"testing"
+	"time"
 )
+
+type customFloat float64
 
 func TestNumberEdgeCases(t *testing.T) {
 	t.Parallel()
@@ -234,6 +237,14 @@ func deltaCases() iter.Seq[genericTestCase] {
 		{"int/commutative-2", testAllDelta(int(5), int(10), int(6), true)},
 		{"float64/commutative-1", testAllDelta(10.0, 5.0, 6.0, true)},
 		{"float64/commutative-2", testAllDelta(5.0, 10.0, 6.0, true)},
+
+		// time.Duration (covers toFloat time.Duration case)
+		{"duration/success", testAllDelta(time.Second, time.Second+time.Millisecond, time.Millisecond, true)},
+		{"duration/failure", testAllDelta(time.Second, time.Second+10*time.Millisecond, time.Millisecond, false)},
+
+		// custom float type (covers toFloat reflect conversion)
+		{"custom-float/success", testAllDelta(customFloat(2.0), customFloat(1.0), customFloat(1.0), true)},
+		{"custom-float/failure", testAllDelta(customFloat(10.0), customFloat(1.0), customFloat(5.0), false)},
 	})
 }
 
@@ -526,6 +537,14 @@ func epsilonCases() iter.Seq[genericTestCase] {
 		{"float64/zero-epsilon-different", testAllEpsilon(100.0, 100.1, 0.0, false)}, // Zero epsilon, different
 		{"int/large-epsilon", testAllEpsilon(int(100), int(200), 1.5, true)},         // 100% error < 150% epsilon
 		{"float64/boundary", testAllEpsilon(100.0, 102.0, 0.02, true)},               // Exactly 2% error with 2% epsilon
+
+		// time.Duration (covers toFloat time.Duration case)
+		{"duration/success", testAllEpsilon(100*time.Millisecond, 101*time.Millisecond, 0.02, true)},  // 1% error < 2% epsilon
+		{"duration/failure", testAllEpsilon(100*time.Millisecond, 110*time.Millisecond, 0.05, false)}, // 10% error > 5% epsilon
+
+		// custom float type (covers toFloat reflect conversion)
+		{"custom-float/success", testAllEpsilon(customFloat(100.0), customFloat(101.0), 0.02, true)},  // 1% error < 2% epsilon
+		{"custom-float/failure", testAllEpsilon(customFloat(100.0), customFloat(110.0), 0.05, false)}, // 10% error > 5% epsilon
 	})
 }
 

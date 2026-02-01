@@ -63,6 +63,7 @@ func FileNotExists(t T, path string, msgAndArgs ...any) bool {
 	if info.IsDir() {
 		return true
 	}
+
 	return Fail(t, fmt.Sprintf("file %q exists", path), msgAndArgs...)
 }
 
@@ -150,11 +151,11 @@ func FileEmpty(t T, path string, msgAndArgs ...any) bool {
 		return Fail(t, fmt.Sprintf("%q is a directory", path), msgAndArgs...)
 	}
 
-	if info.Mode()&fs.ModeSymlink > 0 {
-		target, err := os.Readlink(path)
-		if err != nil {
-			return Fail(t, fmt.Sprintf("could not resolve symlink %q", path), msgAndArgs...)
-		}
+	target, isSymlink, err := isSymlink(path, info)
+	if err != nil {
+		return Fail(t, err.Error(), msgAndArgs...)
+	}
+	if isSymlink {
 		return FileEmpty(t, target, msgAndArgs...)
 	}
 
@@ -191,11 +192,11 @@ func FileNotEmpty(t T, path string, msgAndArgs ...any) bool {
 		return Fail(t, fmt.Sprintf("%q is a directory", path), msgAndArgs...)
 	}
 
-	if info.Mode()&fs.ModeSymlink > 0 {
-		target, err := os.Readlink(path)
-		if err != nil {
-			return Fail(t, fmt.Sprintf("could not resolve symlink %q", path), msgAndArgs...)
-		}
+	target, isSymlink, err := isSymlink(path, info)
+	if err != nil {
+		return Fail(t, err.Error(), msgAndArgs...)
+	}
+	if isSymlink {
 		return FileNotEmpty(t, target, msgAndArgs...)
 	}
 
@@ -217,4 +218,18 @@ func lstat(path, kind string) (info os.FileInfo, err error) {
 	}
 
 	return info, nil
+}
+
+func isSymlink(path string, info os.FileInfo) (target string, isSymlink bool, err error) {
+	if info.Mode()&fs.ModeSymlink == 0 {
+		return path, false, nil
+	}
+
+	target, err = os.Readlink(path)
+	if err != nil {
+		// This is not reachable on linux, but windows has different semantics for symlinks
+		return target, true, fmt.Errorf("could not resolve symlink %q", path)
+	}
+
+	return target, true, nil
 }

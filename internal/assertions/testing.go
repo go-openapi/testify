@@ -4,8 +4,6 @@
 package assertions
 
 import (
-	"bufio"
-	"bytes"
 	"fmt"
 	"runtime"
 	"strings"
@@ -13,16 +11,26 @@ import (
 	"unicode/utf8"
 )
 
-// CallerInfo returns an array of strings containing the file and line number
-// of each stack frame leading from the current test to the assert call that
-// failed.
-func CallerInfo() []string {
-	// CallerInfo is necessary because the assert functions use the testing object
-	// internally, causing it to print the file:line of the assert method, rather than where
-	// the problem actually occurred in calling code.*/
-	//
-	// Maintainer: it is not necessary to export CallerInfo. This should remain an internal implementation detail.
-	return callerInfo(1)
+// Fail reports a failure through.
+//
+// # Usage
+//
+//	assertions.Fail(t, "failed")
+//
+// # Examples
+//
+//	failure: "failed"
+func Fail(t T, failureMessage string, msgAndArgs ...any) bool {
+	// Domain: testing
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	if failureMessage != "" || len(msgAndArgs) > 0 {
+		errorWithCallerInfo(t, 1, failureMessage, msgAndArgs...)
+	}
+
+	return false
 }
 
 // FailNow fails test.
@@ -56,67 +64,16 @@ func FailNow(t T, failureMessage string, msgAndArgs ...any) bool {
 	return false
 }
 
-// Fail reports a failure through.
-//
-// # Usage
-//
-//	assertions.Fail(t, "failed")
-//
-// # Examples
-//
-//	failure: "failed"
-func Fail(t T, failureMessage string, msgAndArgs ...any) bool {
-	// Domain: testing
-	if h, ok := t.(H); ok {
-		h.Helper()
-	}
-
-	if failureMessage != "" || len(msgAndArgs) > 0 {
-		errorWithCallerInfo(t, 1, failureMessage, msgAndArgs...)
-	}
-
-	return false
-}
-
-// Aligns the provided message so that all lines after the first line start at the same location as the first line.
-// Assumes that the first line starts at the correct location (after carriage return, tab, label, spacer and tab).
-// The longestLabelLen parameter specifies the length of the longest label in the output (required because this is the
-// basis on which the alignment occurs).
-func indentMessageLines(message string, longestLabelLen int) string {
-	outBuf := new(bytes.Buffer)
-
-	scanner := bufio.NewScanner(strings.NewReader(message))
-	for firstLine := true; scanner.Scan(); firstLine = false {
-		if !firstLine {
-			fmt.Fprint(outBuf, "\n\t"+strings.Repeat(" ", longestLabelLen+1)+"\t")
-		}
-		fmt.Fprint(outBuf, scanner.Text())
-	}
-	if err := scanner.Err(); err != nil {
-		return fmt.Sprintf("cannot display message: %s", err)
-	}
-
-	return outBuf.String()
-}
-
-func messageFromMsgAndArgs(msgAndArgs ...any) string {
-	if len(msgAndArgs) == 0 || msgAndArgs == nil {
-		return ""
-	}
-	if len(msgAndArgs) == 1 {
-		msg := msgAndArgs[0]
-		if msgAsStr, ok := msg.(string); ok {
-			return msgAsStr
-		}
-		return fmt.Sprintf("%+v", msg)
-	}
-	if len(msgAndArgs) > 1 {
-		format, ok := msgAndArgs[0].(string)
-		if ok {
-			return fmt.Sprintf(format, msgAndArgs[1:]...)
-		}
-	}
-	return ""
+// CallerInfo returns an array of strings containing the file and line number
+// of each stack frame leading from the current test to the assert call that
+// failed.
+func CallerInfo() []string {
+	// CallerInfo is necessary because the assert functions use the testing object
+	// internally, causing it to print the file:line of the assert method, rather than where
+	// the problem actually occurred in calling code.*/
+	//
+	// Maintainer: it is not necessary to export CallerInfo. This should remain an internal implementation detail.
+	return callerInfo(1)
 }
 
 // Stolen from the `go test` tool.
@@ -132,6 +89,25 @@ func isTest(name, prefix string) bool {
 	}
 	r, _ := utf8.DecodeRuneInString(name[len(prefix):])
 	return !unicode.IsLower(r)
+}
+
+func errorWithCallerInfo(t T, offset int, failureMessage string, msgAndArgs ...any) {
+	content := []labeledContent{
+		{"Error Trace", strings.Join(callerInfo(offset), "\n\t\t\t")},
+		{"Error", failureMessage},
+	}
+
+	// Add test name if the Go version supports it
+	if n, ok := t.(namer); ok {
+		content = append(content, labeledContent{"Test", n.Name()})
+	}
+
+	message := messageFromMsgAndArgs(msgAndArgs...)
+	if len(message) > 0 {
+		content = append(content, labeledContent{"Messages", message})
+	}
+
+	t.Errorf("\n%s", ""+labeledOutput(content...))
 }
 
 func callerInfo(offset int) []string {
@@ -208,52 +184,4 @@ func callerInfo(offset int) []string {
 	}
 
 	return callers
-}
-
-func errorWithCallerInfo(t T, offset int, failureMessage string, msgAndArgs ...any) {
-	content := []labeledContent{
-		{"Error Trace", strings.Join(callerInfo(offset), "\n\t\t\t")},
-		{"Error", failureMessage},
-	}
-
-	// Add test name if the Go version supports it
-	if n, ok := t.(namer); ok {
-		content = append(content, labeledContent{"Test", n.Name()})
-	}
-
-	message := messageFromMsgAndArgs(msgAndArgs...)
-	if len(message) > 0 {
-		content = append(content, labeledContent{"Messages", message})
-	}
-
-	t.Errorf("\n%s", ""+labeledOutput(content...))
-}
-
-type labeledContent struct {
-	label   string
-	content string
-}
-
-// labeledOutput returns a string consisting of the provided labeledContent. Each labeled output is appended in the following manner:
-//
-//	\t{{label}}:{{align_spaces}}\t{{content}}\n
-//
-// The initial carriage return is required to undo/erase any padding added by testing.T.Errorf. The "\t{{label}}:" is for the label.
-// If a label is shorter than the longest label provided, padding spaces are added to make all the labels match in length. Once this
-// alignment is achieved, "\t{{content}}\n" is added for the output.
-//
-// If the content of the labeledOutput contains line breaks, the subsequent lines are aligned so that they start at the same location as the first line.
-func labeledOutput(content ...labeledContent) string {
-	longestLabel := 0
-	for _, v := range content {
-		if len(v.label) > longestLabel {
-			longestLabel = len(v.label)
-		}
-	}
-	var output strings.Builder
-	for _, v := range content {
-		output.WriteString("\t" + v.label + ":" + strings.Repeat(" ", longestLabel-len(v.label)) + "\t" + indentMessageLines(v.content, longestLabel) + "\n")
-	}
-
-	return output.String()
 }

@@ -23,6 +23,7 @@ var (
 type mockT struct {
 	errorFmt string
 	args     []any
+	failed   bool
 }
 
 const (
@@ -36,10 +37,11 @@ func (mockT) Helper() {}
 func (m *mockT) Errorf(format string, args ...any) {
 	m.errorFmt = format
 	m.args = args
+	m.failed = true
 }
 
 func (m *mockT) Failed() bool {
-	return m.errorFmt != ""
+	return m.errorFmt != "" || m.failed
 }
 
 func (m *mockT) errorString() string {
@@ -47,22 +49,16 @@ func (m *mockT) errorString() string {
 }
 
 type mockFailNowT struct {
-	failed bool
-}
-
-// Helper is like [testing.T.Helper] but does nothing.
-func (mockFailNowT) Helper() {}
-
-func (m *mockFailNowT) Errorf(format string, args ...any) {
-	_ = format
-	_ = args
+	mockT
 }
 
 func (m *mockFailNowT) FailNow() {
 	m.failed = true
 }
 
-// errorsCapturingT is a mock implementation of TestingT that captures errors reported with Errorf.
+// errorsCapturingT is a mock implementation of TestingT that captures multiple errors reported with Errorf.
+//
+// It may be equipped with a [context.Context] for tests that check on the [testing.T.Context].
 type errorsCapturingT struct {
 	errors []error
 	ctx    context.Context //nolint:containedctx // this is ok to support context injection tests
@@ -100,43 +96,6 @@ func (captureT) Helper() {}
 func (ctt *captureT) Errorf(format string, args ...any) {
 	ctt.msg = fmt.Sprintf(format, args...)
 	ctt.failed = true
-}
-
-// parseLabeledOutput does the inverse of labeledOutput - it takes a formatted
-// output string and turns it back into a slice of labeledContent.
-func parseLabeledOutput(output string) []labeledContent {
-	labelPattern := regexp.MustCompile(`^\t([^\t]*): *\t(.*)$`)
-	contentPattern := regexp.MustCompile(`^\t *\t(.*)$`)
-	var contents []labeledContent
-	lines := strings.Split(output, "\n")
-	i := -1
-	for _, line := range lines {
-		if line == "" {
-			// skip blank lines
-			continue
-		}
-		matches := labelPattern.FindStringSubmatch(line)
-		if len(matches) == 3 {
-			// a label
-			contents = append(contents, labeledContent{
-				label:   matches[1],
-				content: matches[2] + "\n",
-			})
-			i++
-			continue
-		}
-		matches = contentPattern.FindStringSubmatch(line)
-		if len(matches) == 2 {
-			// just content
-			if i >= 0 {
-				contents[i].content += matches[1] + "\n"
-				continue
-			}
-		}
-		// Couldn't parse output
-		return nil
-	}
-	return contents
 }
 
 func shouldPassOrFail(t *testing.T, mock *mockT, result, shouldPass bool) {

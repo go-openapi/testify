@@ -14,208 +14,118 @@ import (
 func TestFileExists(t *testing.T) {
 	t.Parallel()
 
-	mock := new(mockT)
-	if !FileExists(mock, filepath.Join("testdata", "existing_file")) {
-		t.Error("expected FileExists to return true for existing file")
-	}
+	for c := range fileExistsCases() {
+		t.Run(c.name, func(t *testing.T) {
+			t.Parallel()
 
-	mock = new(mockT)
-	if FileExists(mock, "random_file") {
-		t.Error("expected FileExists to return false for random_file")
-	}
-
-	mock = new(mockT)
-	if FileExists(mock, filepath.Join("testdata", "existing_dir")) {
-		t.Error("expected FileExists to return false for directory")
-	}
-
-	link := getTempSymlinkPath(t, filepath.Join("testdata", "existing_file"))
-	mock = new(mockT)
-	if !FileExists(mock, link) {
-		t.Error("expected FileExists to return true for symlink to existing file")
-	}
-
-	link = getTempSymlinkPath(t, "non_existent_file")
-	mock = new(mockT)
-	if !FileExists(mock, link) {
-		t.Error("expected FileExists to return true for symlink (broken symlink is still a file)")
+			path := resolvePath(t, c)
+			mock := new(mockT)
+			res := FileExists(mock, path)
+			shouldPassOrFail(t, mock, res, c.result)
+		})
 	}
 }
 
-func TestFileFileNotExists(t *testing.T) {
+func TestFileNotExists(t *testing.T) {
 	t.Parallel()
 
-	mock := new(mockT)
-	if FileNotExists(mock, filepath.Join("testdata", "existing_file")) {
-		t.Error("expected FileNotExists to return false for existing file")
-	}
+	for c := range fileNotExistsCases() {
+		t.Run(c.name, func(t *testing.T) {
+			t.Parallel()
 
-	mock = new(mockT)
-	if !FileNotExists(mock, "non_existent_file") {
-		t.Error("expected FileNotExists to return true for non-existent file")
-	}
-
-	mock = new(mockT)
-	if !FileNotExists(mock, filepath.Join("testdata", "existing_dir")) {
-		t.Error("expected FileNotExists to return true for directory")
-	}
-
-	link := getTempSymlinkPath(t, filepath.Join("testdata", "existing_file"))
-	mock = new(mockT)
-	if FileNotExists(mock, link) {
-		t.Error("expected FileNotExists to return false for symlink to existing file")
-	}
-
-	link = getTempSymlinkPath(t, "non_existent_file")
-	mock = new(mockT)
-	if FileNotExists(mock, link) {
-		t.Error("expected FileNotExists to return false for symlink")
+			path := resolvePath(t, c)
+			mock := new(mockT)
+			res := FileNotExists(mock, path)
+			shouldPassOrFail(t, mock, res, c.result)
+		})
 	}
 }
 
-func TestFileDirExists(t *testing.T) {
+func TestDirExists(t *testing.T) {
 	t.Parallel()
 
-	mock := new(mockT)
-	if DirExists(mock, filepath.Join("testdata", "existing_file")) {
-		t.Error("expected DirExists to return false for file")
-	}
+	for c := range dirExistsCases() {
+		t.Run(c.name, func(t *testing.T) {
+			t.Parallel()
 
-	mock = new(mockT)
-	if DirExists(mock, "non_existent_dir") {
-		t.Error("expected DirExists to return false for non-existent dir")
-	}
-
-	mock = new(mockT)
-	if !DirExists(mock, filepath.Join("testdata", "existing_dir")) {
-		t.Error("expected DirExists to return true for existing dir")
-	}
-
-	link := getTempSymlinkPath(t, filepath.Join("testdata", "existing_file"))
-	mock = new(mockT)
-	if DirExists(mock, link) {
-		t.Error("expected DirExists to return false for symlink to file")
-	}
-
-	link = getTempSymlinkPath(t, "non_existent_dir")
-	mock = new(mockT)
-	if DirExists(mock, link) {
-		t.Error("expected DirExists to return false for symlink to non-existent dir")
+			path := resolvePath(t, c)
+			mock := new(mockT)
+			res := DirExists(mock, path)
+			shouldPassOrFail(t, mock, res, c.result)
+		})
 	}
 }
 
-func TestFileDirNotExists(t *testing.T) {
+func TestDirNotExists(t *testing.T) {
 	t.Parallel()
 
-	mock := new(mockT)
-	if !DirNotExists(mock, filepath.Join("testdata", "existing_file")) {
-		t.Error("expected DirNotExists to return true for file")
-	}
+	for c := range dirNotExistsCases() {
+		t.Run(c.name, func(t *testing.T) {
+			t.Parallel()
 
-	mock = new(mockT)
-	if !DirNotExists(mock, "non_existent_dir") {
-		t.Error("expected DirNotExists to return true for non-existent dir")
-	}
-
-	mock = new(mockT)
-	if DirNotExists(mock, filepath.Join("testdata", "existing_dir")) {
-		t.Error("expected DirNotExists to return false for existing dir")
-	}
-
-	link := getTempSymlinkPath(t, filepath.Join("testdata", "existing_file"))
-	mock = new(mockT)
-	if !DirNotExists(mock, link) {
-		t.Error("expected DirNotExists to return true for symlink to file")
-	}
-
-	link = getTempSymlinkPath(t, "non_existent_dir")
-	mock = new(mockT)
-	if !DirNotExists(mock, link) {
-		t.Error("expected DirNotExists to return true for symlink to non-existent dir")
+			path := resolvePath(t, c)
+			mock := new(mockT)
+			res := DirNotExists(mock, path)
+			shouldPassOrFail(t, mock, res, c.result)
+		})
 	}
 }
 
 func TestFileEmpty(t *testing.T) {
 	t.Parallel()
 
-	mock := new(mockT)
-	if !FileEmpty(mock, filepath.Join("testdata", "empty_file")) {
-		t.Error("expected FileEmpty to return true for empty file")
-	}
+	for c := range fileEmptyCases() {
+		t.Run(c.name, func(t *testing.T) {
+			t.Parallel()
 
-	mock = new(mockT)
-	if FileEmpty(mock, filepath.Join("testdata", "existing_file")) {
-		t.Error("expected FileEmpty to return false for non-empty file")
-	}
-
-	mock = new(mockT)
-	if FileEmpty(mock, "random_file") {
-		t.Error("expected FileEmpty to return false for non-existent file")
-	}
-
-	mock = new(mockT)
-	if FileEmpty(mock, filepath.Join("testdata", "existing_dir")) {
-		t.Error("expected FileEmpty to return false for directory")
-	}
-
-	link := getTempSymlinkPath(t, filepath.Join("testdata", "empty_file"))
-	mock = new(mockT)
-	if !FileEmpty(mock, link) {
-		t.Error("expected FileEmpty to return true for symlink to empty file")
-	}
-
-	link = getTempSymlinkPath(t, filepath.Join("testdata", "existing_file"))
-	mock = new(mockT)
-	if FileEmpty(mock, link) {
-		t.Error("expected FileEmpty to return false for symlink to non-empty file")
-	}
-
-	link = getTempSymlinkPath(t, "non_existent_file")
-	mock = new(mockT)
-	if FileEmpty(mock, link) {
-		t.Error("expected FileEmpty to return false for symlink to non-existent file")
+			path := resolvePath(t, c)
+			mock := new(mockT)
+			res := FileEmpty(mock, path)
+			shouldPassOrFail(t, mock, res, c.result)
+		})
 	}
 }
 
 func TestFileNotEmpty(t *testing.T) {
 	t.Parallel()
 
+	for c := range fileNotEmptyCases() {
+		t.Run(c.name, func(t *testing.T) {
+			t.Parallel()
+
+			path := resolvePath(t, c)
+			mock := new(mockT)
+			res := FileNotEmpty(mock, path)
+			shouldPassOrFail(t, mock, res, c.result)
+		})
+	}
+}
+
+func TestFileLstatPermissionError(t *testing.T) {
+	t.Parallel()
+
+	if os.Getuid() == 0 {
+		t.Skip("skipping permission test when running as root")
+	}
+
+	// Create a directory with a file inside, then remove execute permission
+	// from the directory. os.Lstat on the file will fail with EACCES, not ENOENT.
+	dir := t.TempDir()
+	filePath := filepath.Join(dir, "secret")
+	if err := os.WriteFile(filePath, []byte("data"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chmod(dir, 0o000); err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { os.Chmod(dir, 0o755) }) //nolint:errcheck // best-effort restore for cleanup
+
 	mock := new(mockT)
-	if !FileNotEmpty(mock, filepath.Join("testdata", "existing_file")) {
-		t.Error("expected FileNotEmpty to return true for non-empty file")
+	if FileExists(mock, filePath) {
+		t.Error("expected FileExists to return false for inaccessible file")
 	}
-
-	mock = new(mockT)
-	if FileNotEmpty(mock, filepath.Join("testdata", "empty_file")) {
-		t.Error("expected FileNotEmpty to return false for empty file")
-	}
-
-	mock = new(mockT)
-	if FileNotEmpty(mock, "non_existent_file") {
-		t.Error("expected FileNotEmpty to return false for non-existent file")
-	}
-
-	mock = new(mockT)
-	if FileNotEmpty(mock, filepath.Join("testdata", "existing_dir")) {
-		t.Error("expected FileNotEmpty to return false for directory")
-	}
-
-	link := getTempSymlinkPath(t, filepath.Join("testdata", "empty_file"))
-	mock = new(mockT)
-	if FileNotEmpty(mock, link) {
-		t.Error("expected FileNotEmpty to return false for symlink to empty file")
-	}
-
-	link = getTempSymlinkPath(t, filepath.Join("testdata", "existing_file"))
-	mock = new(mockT)
-	if !FileNotEmpty(mock, link) {
-		t.Error("expected FileNotEmpty to return true for symlink to non-empty file")
-	}
-
-	link = getTempSymlinkPath(t, "non_existent_file")
-	mock = new(mockT)
-	if FileNotExists(mock, link) {
-		t.Error("expected FileNotExists to return false for symlink")
+	if !mock.failed {
+		t.Error("expected FileExists to fail")
 	}
 }
 
@@ -223,6 +133,27 @@ func TestFileErrorMessages(t *testing.T) {
 	t.Parallel()
 
 	runFailCases(t, fileFailCases())
+}
+
+// ============================================================================
+// Table-driven tests for file assertions
+// ============================================================================
+
+type fileTestCase struct {
+	name      string
+	path      string // direct path to test
+	symlinkTo string // if set, creates a symlink to this target instead
+	result    bool
+}
+
+func resolvePath(t *testing.T, c fileTestCase) string {
+	t.Helper()
+
+	if c.symlinkTo != "" {
+		return getTempSymlinkPath(t, c.symlinkTo)
+	}
+
+	return c.path
 }
 
 func getTempSymlinkPath(t *testing.T, file string) string {
@@ -234,6 +165,74 @@ func getTempSymlinkPath(t *testing.T, file string) string {
 		t.Fatalf("could not create temp symlink %q pointing to %q: %v", link, file, err)
 	}
 	return link
+}
+
+// ============================================================================
+// Test cases
+// ============================================================================
+
+func fileExistsCases() iter.Seq[fileTestCase] {
+	return slices.Values([]fileTestCase{
+		{name: "existing-file", path: filepath.Join("testdata", "existing_file"), result: true},
+		{name: "non-existent", path: "random_file", result: false},
+		{name: "directory", path: filepath.Join("testdata", "existing_dir"), result: false},
+		{name: "symlink/existing-file", symlinkTo: filepath.Join("testdata", "existing_file"), result: true},
+		{name: "symlink/broken", symlinkTo: "non_existent_file", result: true},
+	})
+}
+
+func fileNotExistsCases() iter.Seq[fileTestCase] {
+	return slices.Values([]fileTestCase{
+		{name: "existing-file", path: filepath.Join("testdata", "existing_file"), result: false},
+		{name: "non-existent", path: "non_existent_file", result: true},
+		{name: "directory", path: filepath.Join("testdata", "existing_dir"), result: true},
+		{name: "symlink/existing-file", symlinkTo: filepath.Join("testdata", "existing_file"), result: false},
+		{name: "symlink/broken", symlinkTo: "non_existent_file", result: false},
+	})
+}
+
+func dirExistsCases() iter.Seq[fileTestCase] {
+	return slices.Values([]fileTestCase{
+		{name: "is-file", path: filepath.Join("testdata", "existing_file"), result: false},
+		{name: "non-existent", path: "non_existent_dir", result: false},
+		{name: "existing-dir", path: filepath.Join("testdata", "existing_dir"), result: true},
+		{name: "symlink/to-file", symlinkTo: filepath.Join("testdata", "existing_file"), result: false},
+		{name: "symlink/broken", symlinkTo: "non_existent_dir", result: false},
+	})
+}
+
+func dirNotExistsCases() iter.Seq[fileTestCase] {
+	return slices.Values([]fileTestCase{
+		{name: "is-file", path: filepath.Join("testdata", "existing_file"), result: true},
+		{name: "non-existent", path: "non_existent_dir", result: true},
+		{name: "existing-dir", path: filepath.Join("testdata", "existing_dir"), result: false},
+		{name: "symlink/to-file", symlinkTo: filepath.Join("testdata", "existing_file"), result: true},
+		{name: "symlink/broken", symlinkTo: "non_existent_dir", result: true},
+	})
+}
+
+func fileEmptyCases() iter.Seq[fileTestCase] {
+	return slices.Values([]fileTestCase{
+		{name: "empty-file", path: filepath.Join("testdata", "empty_file"), result: true},
+		{name: "non-empty-file", path: filepath.Join("testdata", "existing_file"), result: false},
+		{name: "non-existent", path: "random_file", result: false},
+		{name: "directory", path: filepath.Join("testdata", "existing_dir"), result: false},
+		{name: "symlink/empty-file", symlinkTo: filepath.Join("testdata", "empty_file"), result: true},
+		{name: "symlink/non-empty-file", symlinkTo: filepath.Join("testdata", "existing_file"), result: false},
+		{name: "symlink/broken", symlinkTo: "non_existent_file", result: false},
+	})
+}
+
+func fileNotEmptyCases() iter.Seq[fileTestCase] {
+	return slices.Values([]fileTestCase{
+		{name: "non-empty-file", path: filepath.Join("testdata", "existing_file"), result: true},
+		{name: "empty-file", path: filepath.Join("testdata", "empty_file"), result: false},
+		{name: "non-existent", path: "non_existent_file", result: false},
+		{name: "directory", path: filepath.Join("testdata", "existing_dir"), result: false},
+		{name: "symlink/empty-file", symlinkTo: filepath.Join("testdata", "empty_file"), result: false},
+		{name: "symlink/non-empty-file", symlinkTo: filepath.Join("testdata", "existing_file"), result: true},
+		{name: "symlink/broken", symlinkTo: "non_existent_file", result: false},
+	})
 }
 
 // ============================================================================

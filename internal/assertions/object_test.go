@@ -98,6 +98,12 @@ func objectEqualCases() iter.Seq[objectEqualCase] {
 		{[]byte("Hello World"), []byte("Hello World"), true},
 		{nil, nil, true},
 
+		// byte slice: expected is []byte but actual is not
+		{[]byte("hello"), "hello", false},
+		// byte slice: nil cases
+		{[]byte(nil), []byte(nil), true},
+		{[]byte(nil), []byte("hello"), false},
+
 		// cases that are expected not to be equal
 		{map[int]int{5: 10}, map[int]int{10: 20}, false},
 		{'x', "x", false},
