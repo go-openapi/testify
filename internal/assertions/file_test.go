@@ -7,6 +7,7 @@ import (
 	"iter"
 	"os"
 	"path/filepath"
+	"runtime"
 	"slices"
 	"testing"
 )
@@ -103,6 +104,10 @@ func TestFileNotEmpty(t *testing.T) {
 
 func TestFileLstatPermissionError(t *testing.T) {
 	t.Parallel()
+
+	if runtime.GOOS == "windows" {
+		t.Skip("skipping on windows OS: altering file permissions don't work the same")
+	}
 
 	if os.Getuid() == 0 {
 		t.Skip("skipping permission test when running as root")
