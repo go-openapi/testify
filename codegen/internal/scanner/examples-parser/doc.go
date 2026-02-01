@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
 // SPDX-License-Identifier: Apache-2.0
 
-// Package parser scans a package of go source
-// and extracts testable examples.
+// Package parser scans a package of go source to extract testable examples.
 //
 // The outcome of the parser is an index of testable examples by exported function or type.
 //

@@ -297,8 +297,8 @@ func (x TestableExample) Render() string {
 	// return x.renderBody()
 }
 
-// renderPlay renders the Play AST as-is: a complete runnable program
-// with package clause, imports, and func main().
+// renderPlay renders the Play AST as-is:
+// a complete runnable program with package clause, imports, and func main().
 func (x TestableExample) renderPlay() string {
 	var buf bytes.Buffer
 	p := printer.Config{Mode: printer.UseSpaces, Tabwidth: tabWidth}
@@ -308,6 +308,7 @@ func (x TestableExample) renderPlay() string {
 
 	raw := buf.String()
 
+	// make sure the output is well formatted
 	formatted, err := imports.Process("example.go", []byte(raw), &imports.Options{
 		Fragment:   true,
 		FormatOnly: true,
