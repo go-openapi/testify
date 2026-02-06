@@ -109,13 +109,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.Empty(t, "")
-	fmt.Printf("success: %t\n", success)
+	require.Empty(t, "")
+	fmt.Println("passed")
 
 }
 
@@ -191,13 +191,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.Equal(t, 123, 123)
-	fmt.Printf("success: %t\n", success)
+	require.Equal(t, 123, 123)
+	fmt.Println("passed")
 
 }
 
@@ -278,13 +278,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.EqualExportedValues(t, &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "a", b: 2})
-	fmt.Printf("success: %t\n", success)
+	require.EqualExportedValues(t, &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "a", b: 2})
+	fmt.Println("passed")
 
 }
 
@@ -367,13 +367,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.EqualT(t, 123, 123)
-	fmt.Printf("success: %t\n", success)
+	require.EqualT(t, 123, 123)
+	fmt.Println("passed")
 
 }
 
@@ -443,13 +443,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.EqualValues(t, uint32(123), int32(123))
-	fmt.Printf("success: %t\n", success)
+	require.EqualValues(t, uint32(123), int32(123))
+	fmt.Println("passed")
 
 }
 
@@ -520,13 +520,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.Exactly(t, int32(123), int32(123))
-	fmt.Printf("success: %t\n", success)
+	require.Exactly(t, int32(123), int32(123))
+	fmt.Println("passed")
 
 }
 
@@ -597,13 +597,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.Nil(t, nil)
-	fmt.Printf("success: %t\n", success)
+	require.Nil(t, nil)
+	fmt.Println("passed")
 
 }
 
@@ -676,13 +676,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.NotEmpty(t, "not empty")
-	fmt.Printf("success: %t\n", success)
+	require.NotEmpty(t, "not empty")
+	fmt.Println("passed")
 
 }
 
@@ -756,13 +756,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.NotEqual(t, 123, 456)
-	fmt.Printf("success: %t\n", success)
+	require.NotEqual(t, 123, 456)
+	fmt.Println("passed")
 
 }
 
@@ -835,13 +835,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.NotEqualT(t, 123, 456)
-	fmt.Printf("success: %t\n", success)
+	require.NotEqualT(t, 123, 456)
+	fmt.Println("passed")
 
 }
 
@@ -910,13 +910,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.NotEqualValues(t, uint32(123), int32(456))
-	fmt.Printf("success: %t\n", success)
+	require.NotEqualValues(t, uint32(123), int32(456))
+	fmt.Println("passed")
 
 }
 
@@ -987,13 +987,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.NotNil(t, "not nil")
-	fmt.Printf("success: %t\n", success)
+	require.NotNil(t, "not nil")
+	fmt.Println("passed")
 
 }
 
@@ -1066,13 +1066,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.NotSame(t, &staticVar, ptr("static string"))
-	fmt.Printf("success: %t\n", success)
+	require.NotSame(t, &staticVar, ptr("static string"))
+	fmt.Println("passed")
 
 }
 
@@ -1153,13 +1153,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.NotSameT(t, &staticVar, ptr("static string"))
-	fmt.Printf("success: %t\n", success)
+	require.NotSameT(t, &staticVar, ptr("static string"))
+	fmt.Println("passed")
 
 }
 
@@ -1240,13 +1240,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.Same(t, &staticVar, staticVarPtr)
-	fmt.Printf("success: %t\n", success)
+	require.Same(t, &staticVar, staticVarPtr)
+	fmt.Println("passed")
 
 }
 
@@ -1324,13 +1324,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.SameT(t, &staticVar, staticVarPtr)
-	fmt.Printf("success: %t\n", success)
+	require.SameT(t, &staticVar, staticVarPtr)
+	fmt.Println("passed")
 
 }
 

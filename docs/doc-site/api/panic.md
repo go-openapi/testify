@@ -62,14 +62,14 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.NotPanics(t, func() {
+	require.NotPanics(t, func() {
 	})
-	fmt.Printf("success: %t\n", success)
+	fmt.Println("passed")
 
 }
 
@@ -140,15 +140,15 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.Panics(t, func() {
+	require.Panics(t, func() {
 		panic("panicking")
 	})
-	fmt.Printf("success: %t\n", success)
+	fmt.Println("passed")
 
 }
 
@@ -221,14 +221,15 @@ import (
 	"testing"
 
 	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.PanicsWithError(t, assert.ErrTest.Error(), func() {
+	require.PanicsWithError(t, assert.ErrTest.Error(), func() {
 		panic(assert.ErrTest)
 	})
-	fmt.Printf("success: %t\n", success)
+	fmt.Println("passed")
 
 }
 
@@ -300,15 +301,15 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.PanicsWithValue(t, "panicking", func() {
+	require.PanicsWithValue(t, "panicking", func() {
 		panic("panicking")
 	})
-	fmt.Printf("success: %t\n", success)
+	fmt.Println("passed")
 
 }
 

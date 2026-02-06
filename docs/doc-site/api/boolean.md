@@ -63,13 +63,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.False(t, 1 == 0)
-	fmt.Printf("success: %t\n", success)
+	require.False(t, 1 == 0)
+	fmt.Println("passed")
 
 }
 
@@ -144,13 +144,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.FalseT(t, 1 == 0)
-	fmt.Printf("success: %t\n", success)
+	require.FalseT(t, 1 == 0)
+	fmt.Println("passed")
 
 }
 
@@ -217,13 +217,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.True(t, 1 == 1)
-	fmt.Printf("success: %t\n", success)
+	require.True(t, 1 == 1)
+	fmt.Println("passed")
 
 }
 
@@ -298,13 +298,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.TrueT(t, 1 == 1)
-	fmt.Printf("success: %t\n", success)
+	require.TrueT(t, 1 == 1)
+	fmt.Println("passed")
 
 }
 

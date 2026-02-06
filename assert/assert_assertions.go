@@ -785,8 +785,6 @@ func HTTPBodyContains(t T, handler http.HandlerFunc, method string, url string, 
 //	success: httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, Bob!"
 //	failure: httpBody, "GET", "/", url.Values{"name": []string{"Bob"}}, "Hello, Bob!"
 //
-// TODO(fred): use t.Context()
-//
 // Upon failure, the test [T] is marked as failed and continues execution.
 func HTTPBodyNotContains(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
@@ -1781,13 +1779,30 @@ func NoError(t T, err error, msgAndArgs ...any) bool {
 
 // NoGoRoutineLeak ensures that no goroutine did leak from inside the tested function.
 //
-// The function passed may apply optional filters to exclude known false positives (e.g. http, database connection...).
+// NOTE: only the go routines spawned from inside the tested function are checked for leaks.
+// No filter or configuration is needed to exclude "known go routines".
+//
+// Resource cleanup should be done inside the tested function, and not using [testing.T.Cleanup],
+// as t.Cleanup is called after the leak check.
+//
+// # Edge cases
+//
+//   - if the tested function panics leaving behind leaked goroutines, these are detected.
+//   - if the tested function calls runtime.Goexit (e.g. from [testing.T.FailNow]) leaving behind leaked goroutines,
+//     these are detected.
+//   - if a panic occurs in one of the leaked go routines, it cannot be recovered with certainty and
+//     the calling program will usually panic.
+//
+// # Concurrency
+//
+// [NoGoRoutineLeak] may be used safely in parallel tests.
 //
 // # Usage
 //
 //	NoGoRoutineLeak(t, func() {
+//		...
 //	},
-//	"should not leak any goroutine",
+//	"should not leak any go routine",
 //	)
 //
 // # Examples
@@ -1795,11 +1810,11 @@ func NoError(t T, err error, msgAndArgs ...any) bool {
 //   - success: NOT IMPLEMENTED
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func NoGoRoutineLeak(t T, inside func(options ...LeakOption), msgAndArgs ...any) bool {
+func NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.NoGoRoutineLeak(t, inside, msgAndArgs...)
+	return assertions.NoGoRoutineLeak(t, tested, msgAndArgs...)
 }
 
 // NotContains asserts that the specified string, list(array, slice...) or map does NOT contain the

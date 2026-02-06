@@ -31,12 +31,11 @@ import (
 //
 // # Usage
 //
-//		NoGoRoutineLeak(t, func() {
-//			...
-//		},
-//	 nil,
-//		"should not leak any go routine",
-//		)
+//	NoGoRoutineLeak(t, func() {
+//		...
+//	},
+//	"should not leak any go routine",
+//	)
 //
 // # Examples
 //

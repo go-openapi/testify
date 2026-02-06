@@ -1,6 +1,6 @@
 ---
 title: "Safety"
-description: ""
+description: "Checks Against Leaked Resources"
 weight: 13
 domains:
   - "safety"
@@ -9,7 +9,7 @@ keywords:
   - "NoGoRoutineLeakf"
 ---
 
-
+Checks Against Leaked Resources
 
 ## Assertions
 
@@ -28,15 +28,32 @@ This domain exposes 1 functionalities.
 
 NoGoRoutineLeak ensures that no goroutine did leak from inside the tested function.
 
-The function passed may apply optional filters to exclude known false positives (e.g. http, database connection...).
+NOTE: only the go routines spawned from inside the tested function are checked for leaks.
+No filter or configuration is needed to exclude "known go routines".
+
+Resource cleanup should be done inside the tested function, and not using [testing.T.Cleanup](https://pkg.go.dev/testing#T.Cleanup),
+as t.Cleanup is called after the leak check.
+
+#### Edge cases
+
+  - if the tested function panics leaving behind leaked goroutines, these are detected.
+  - if the tested function calls runtime.Goexit (e.g. from [testing.T.FailNow](https://pkg.go.dev/testing#T.FailNow)) leaving behind leaked goroutines,
+    these are detected.
+  - if a panic occurs in one of the leaked go routines, it cannot be recovered with certainty and
+    the calling program will usually panic.
+
+#### Concurrency
+
+[NoGoRoutineLeak](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoGoRoutineLeak) may be used safely in parallel tests.
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
 {{% tab title="Usage" %}}
 ```go
 	NoGoRoutineLeak(t, func() {
+		...
 	},
-	"should not leak any goroutine",
+	"should not leak any go routine",
 	)
 ```
 {{< /tab >}}
@@ -52,26 +69,26 @@ The function passed may apply optional filters to exclude known false positives 
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`assert.NoGoRoutineLeak(t T, inside func(options ...LeakOption), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoGoRoutineLeak) | package-level function |
-| [`assert.NoGoRoutineLeakf(t T, inside func(options ...LeakOption), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoGoRoutineLeakf) | formatted variant |
-| [`assert.(*Assertions).NoGoRoutineLeak(inside func(options ...LeakOption)) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoGoRoutineLeak) | method variant |
-| [`assert.(*Assertions).NoGoRoutineLeakf(inside func(options ...LeakOption), msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoGoRoutineLeakf) | method formatted variant |
+| [`assert.NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoGoRoutineLeak) | package-level function |
+| [`assert.NoGoRoutineLeakf(t T, tested func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoGoRoutineLeakf) | formatted variant |
+| [`assert.(*Assertions).NoGoRoutineLeak(tested func()) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoGoRoutineLeak) | method variant |
+| [`assert.(*Assertions).NoGoRoutineLeakf(tested func(), msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoGoRoutineLeakf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NoGoRoutineLeak(t T, inside func(options ...LeakOption), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoGoRoutineLeak) | package-level function |
-| [`require.NoGoRoutineLeakf(t T, inside func(options ...LeakOption), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoGoRoutineLeakf) | formatted variant |
-| [`require.(*Assertions).NoGoRoutineLeak(inside func(options ...LeakOption)) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoGoRoutineLeak) | method variant |
-| [`require.(*Assertions).NoGoRoutineLeakf(inside func(options ...LeakOption), msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoGoRoutineLeakf) | method formatted variant |
+| [`require.NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoGoRoutineLeak) | package-level function |
+| [`require.NoGoRoutineLeakf(t T, tested func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoGoRoutineLeakf) | formatted variant |
+| [`require.(*Assertions).NoGoRoutineLeak(tested func()) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoGoRoutineLeak) | method variant |
+| [`require.(*Assertions).NoGoRoutineLeakf(tested func(), msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoGoRoutineLeakf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.NoGoRoutineLeak(t T, inside func(options ...LeakOption), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NoGoRoutineLeak) | internal implementation |
+| [`assertions.NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NoGoRoutineLeak) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoGoRoutineLeak](https://github.com/go-openapi/testify/blob/master/internal/assertions/safety.go#L27)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoGoRoutineLeak](https://github.com/go-openapi/testify/blob/master/internal/assertions/safety.go#L43)
 {{% /tab %}}
 {{< /tabs >}}
 

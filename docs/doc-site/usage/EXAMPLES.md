@@ -756,6 +756,102 @@ func TestEventuallyWithRequire(t *testing.T) {
 4. Use `Eventually` for simple boolean conditions (faster, simpler)
 5. Use `Never` to verify invariants over time (no race conditions, no invalid state)
 
+### Goroutine Leak Detection
+
+Use `NoGoRoutineLeak` to verify that your code doesn't leak goroutines. This is critical for long-running applications, connection pools, and worker patterns.
+
+```go
+import (
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func TestWorkerPool(t *testing.T) {
+	assert.NoGoRoutineLeak(t, func() {
+		pool := NewWorkerPool(10)
+		pool.Start()
+
+		// Submit work
+		pool.Submit(func() { /* do something */ })
+
+		// Cleanup MUST happen inside the tested function
+		pool.Shutdown()
+	})
+}
+```
+
+#### Why Use It?
+
+Traditional goroutine leak detection (like `go.uber.org/goleak`) requires maintaining filter lists to exclude known system goroutines. This approach is brittle and prone to false positives when:
+- Running parallel tests
+- Using connection pools (database, HTTP, gRPC)
+- Background runtime goroutines change between Go versions
+
+**`NoGoRoutineLeak` uses pprof labels** instead of stack-trace heuristics:
+- Only goroutines spawned by your tested function are checked
+- Pre-existing goroutines (runtime, connection pools, other tests) are ignored automatically
+- No configuration or filter lists needed
+- Works safely with `t.Parallel()`
+
+#### Real-World Example: Testing a Server
+
+```go
+import (
+	"net/http"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func TestHTTPServer(t *testing.T) {
+	assert.NoGoRoutineLeak(t, func() {
+		// Start server
+		server := &http.Server{Addr: ":0", Handler: myHandler}
+		go server.ListenAndServe()
+
+		// Do some requests...
+		resp, _ := http.Get("http://" + server.Addr + "/health")
+		resp.Body.Close()
+
+		// Shutdown MUST happen inside the tested function
+		server.Shutdown(context.Background())
+	})
+}
+```
+
+#### Important: Cleanup Inside the Tested Function
+
+Resource cleanup must happen inside the tested function, not via `t.Cleanup()`:
+
+```go
+// ❌ WRONG: t.Cleanup runs AFTER the leak check
+func TestWrong(t *testing.T) {
+	var server *Server
+	t.Cleanup(func() { server.Stop() }) // Too late!
+
+	assert.NoGoRoutineLeak(t, func() {
+		server = StartServer()
+		// Leak detected because server is still running
+	})
+}
+
+// ✅ CORRECT: cleanup inside tested function
+func TestCorrect(t *testing.T) {
+	assert.NoGoRoutineLeak(t, func() {
+		server := StartServer()
+		defer server.Stop() // Cleanup happens before leak check
+		// ... test code ...
+	})
+}
+```
+
+#### Edge Cases
+
+- **Panics**: If the tested function panics while goroutines are still running, the leak is detected and reported along with the panic
+- **`t.FailNow()`/`runtime.Goexit()`**: Leaks are still detected even if the tested function exits early
+- **Transitive goroutines**: Goroutines spawned by child goroutines inherit the label and are tracked
+
 ### Extensible assertions
 
 The `Assertions` type may be extended to fit your needs like so.

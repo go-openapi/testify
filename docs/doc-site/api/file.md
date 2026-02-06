@@ -70,13 +70,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.DirExists(t, filepath.Join(testDataPath(), "existing_dir"))
-	fmt.Printf("success: %t\n", success)
+	require.DirExists(t, filepath.Join(testDataPath(), "existing_dir"))
+	fmt.Println("passed")
 
 }
 
@@ -153,13 +153,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.DirNotExists(t, filepath.Join(testDataPath(), "non_existing_dir"))
-	fmt.Printf("success: %t\n", success)
+	require.DirNotExists(t, filepath.Join(testDataPath(), "non_existing_dir"))
+	fmt.Println("passed")
 
 }
 
@@ -236,13 +236,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.FileEmpty(t, filepath.Join(testDataPath(), "empty_file"))
-	fmt.Printf("success: %t\n", success)
+	require.FileEmpty(t, filepath.Join(testDataPath(), "empty_file"))
+	fmt.Println("passed")
 
 }
 
@@ -319,13 +319,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.FileExists(t, filepath.Join(testDataPath(), "existing_file"))
-	fmt.Printf("success: %t\n", success)
+	require.FileExists(t, filepath.Join(testDataPath(), "existing_file"))
+	fmt.Println("passed")
 
 }
 
@@ -402,13 +402,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.FileNotEmpty(t, filepath.Join(testDataPath(), "existing_file"))
-	fmt.Printf("success: %t\n", success)
+	require.FileNotEmpty(t, filepath.Join(testDataPath(), "existing_file"))
+	fmt.Println("passed")
 
 }
 
@@ -485,13 +485,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.FileNotExists(t, filepath.Join(testDataPath(), "non_existing_file"))
-	fmt.Printf("success: %t\n", success)
+	require.FileNotExists(t, filepath.Join(testDataPath(), "non_existing_file"))
+	fmt.Println("passed")
 
 }
 

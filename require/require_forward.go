@@ -1537,11 +1537,11 @@ func (a *Assertions) NoErrorf(err error, msg string, args ...any) {
 // NoGoRoutineLeak is the same as [NoGoRoutineLeak], as a method rather than a package-level function.
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func (a *Assertions) NoGoRoutineLeak(inside func(options ...LeakOption), msgAndArgs ...any) {
+func (a *Assertions) NoGoRoutineLeak(tested func(), msgAndArgs ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NoGoRoutineLeak(a.T, inside, msgAndArgs...) {
+	if assertions.NoGoRoutineLeak(a.T, tested, msgAndArgs...) {
 		return
 	}
 
@@ -1551,11 +1551,11 @@ func (a *Assertions) NoGoRoutineLeak(inside func(options ...LeakOption), msgAndA
 // NoGoRoutineLeakf is the same as [Assertions.NoGoRoutineLeak], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func (a *Assertions) NoGoRoutineLeakf(inside func(options ...LeakOption), msg string, args ...any) {
+func (a *Assertions) NoGoRoutineLeakf(tested func(), msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NoGoRoutineLeak(a.T, inside, forwardArgs(msg, args)) {
+	if assertions.NoGoRoutineLeak(a.T, tested, forwardArgs(msg, args)) {
 		return
 	}
 

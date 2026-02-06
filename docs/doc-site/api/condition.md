@@ -62,15 +62,15 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.Condition(t, func() bool {
+	require.Condition(t, func() bool {
 		return true
 	})
-	fmt.Printf("success: %t\n", success)
+	fmt.Println("passed")
 
 }
 
@@ -159,15 +159,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.Eventually(t, func() bool {
+	require.Eventually(t, func() bool {
 		return true
 	}, 100*time.Millisecond, 20*time.Millisecond)
-	fmt.Printf("success: %t\n", success)
+	fmt.Println("passed")
 
 }
 
@@ -269,14 +269,15 @@ import (
 	"time"
 
 	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.EventuallyWith(t, func(c *assert.CollectT) {
+	require.EventuallyWith(t, func(c *assert.CollectT) {
 		assert.True(c, true)
 	}, 100*time.Millisecond, 20*time.Millisecond)
-	fmt.Printf("success: %t\n", success)
+	fmt.Println("passed")
 
 }
 
@@ -361,15 +362,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.Never(t, func() bool {
+	require.Never(t, func() bool {
 		return false
 	}, 100*time.Millisecond, 20*time.Millisecond)
-	fmt.Printf("success: %t\n", success)
+	fmt.Println("passed")
 
 }
 

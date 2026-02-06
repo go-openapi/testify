@@ -8,7 +8,7 @@ weight: 15
 
 **Key Changes:**
 - ✅ **Zero Dependencies**: Completely self-contained
-- ✅ **New functions**: 55 additional assertions (42 generic + 13 reflection-based)
+- ✅ **New functions**: 56 additional assertions (42 generic + 14 reflection-based)
 - ✅ **Performance**: ~10x for generic variants (from 1.2x to 81x, your mileage may vary)
 - ✅ **Breaking changes**: Requires go1.24, removed suites, mocks, http tooling, and deprecated functions. YAMLEq becomes optional (panics by default).
 
@@ -361,6 +361,24 @@ See also a quick [migration guide](./MIGRATION.md).
 
 Removed extraneous type declaration `PanicTestFunc` (`func()`).
 
+### Safety
+
+**New domain** for resource leak detection.
+
+| Function | Type | Description |
+|----------|------|-------------|
+| `NoGoRoutineLeak` | Reflection | Assert that no goroutines leak from a tested function |
+
+#### Implementation
+
+Uses **pprof labels** instead of stack-trace heuristics (like `go.uber.org/goleak`):
+- Only goroutines spawned by the tested function are checked
+- Pre-existing goroutines (runtime, pools, parallel tests) are ignored automatically
+- No configuration or filter lists needed
+- Works safely with `t.Parallel()`
+
+See [Examples](./EXAMPLES.md#goroutine-leak-detection) for usage patterns.
+
 ### String
 
 {{% expand title="Generics" %}}
@@ -525,7 +543,7 @@ github.com/go-openapi/testify/v2           # Core (zero deps) [go.mod]
 ### Documentation
 
 - Hugo-based documentation site
-- Domain-organized API reference (18 domains)
+- Domain-organized API reference (19 domains)
 - Comprehensive examples and tutorials
 - Performance benchmarks
 
@@ -533,15 +551,15 @@ github.com/go-openapi/testify/v2           # Core (zero deps) [go.mod]
 
 | Metric | Value |
 |--------|-------|
-| **New functions** | 55 (42 generic + 13 reflection) |
+| **New functions** | 56 (42 generic + 14 reflection) |
 | **Total assertions** | 128 base assertions |
 | **Generated functions** | ~800 (see [the
 maths](../project/maintainers/ARCHITECTURE.md#the-maths-with-assertion-variants)
-| **Generic coverage** | 10 domains (10/18) |
+| **Generic coverage** | 10 domains (10/19) |
 | **Performance improvement** | 1.2x to 81x faster |
 | **Dependencies** | 0 external (was 2 required) |
 | **Test coverage** | 96% overall, 99% on public APIs |
-| **Documentation domains** | 18 logical categories |
+| **Documentation domains** | 19 logical categories |
 
 ---
 

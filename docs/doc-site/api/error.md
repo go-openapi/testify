@@ -76,13 +76,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.EqualError(t, assert.ErrTest, "assert.ErrTest general error for testing")
-	fmt.Printf("success: %t\n", success)
+	require.EqualError(t, require.ErrTest, "assert.ErrTest general error for testing")
+	fmt.Println("passed")
 
 }
 
@@ -154,13 +154,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.Error(t, assert.ErrTest)
-	fmt.Printf("success: %t\n", success)
+	require.Error(t, require.ErrTest)
+	fmt.Println("passed")
 
 }
 
@@ -233,13 +233,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.ErrorAs(t, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
-	fmt.Printf("success: %t\n", success)
+	require.ErrorAs(t, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
+	fmt.Println("passed")
 
 }
 
@@ -319,13 +319,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.ErrorContains(t, assert.ErrTest, "general error")
-	fmt.Printf("success: %t\n", success)
+	require.ErrorContains(t, require.ErrTest, "general error")
+	fmt.Println("passed")
 
 }
 
@@ -399,13 +399,13 @@ import (
 	"io"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.ErrorIs(t, fmt.Errorf("wrap: %w", io.EOF), io.EOF)
-	fmt.Printf("success: %t\n", success)
+	require.ErrorIs(t, fmt.Errorf("wrap: %w", io.EOF), io.EOF)
+	fmt.Println("passed")
 
 }
 
@@ -479,13 +479,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.NoError(t, nil)
-	fmt.Printf("success: %t\n", success)
+	require.NoError(t, nil)
+	fmt.Println("passed")
 
 }
 
@@ -557,13 +557,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.NotErrorAs(t, assert.ErrTest, new(*dummyError))
-	fmt.Printf("success: %t\n", success)
+	require.NotErrorAs(t, require.ErrTest, new(*dummyError))
+	fmt.Println("passed")
 
 }
 
@@ -644,13 +644,13 @@ import (
 	"io"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.NotErrorIs(t, assert.ErrTest, io.EOF)
-	fmt.Printf("success: %t\n", success)
+	require.NotErrorIs(t, require.ErrTest, io.EOF)
+	fmt.Println("passed")
 
 }
 

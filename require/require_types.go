@@ -47,8 +47,6 @@ type (
 	// This allows marking functions as test helpers, e.g. [testing.T.Helper].
 	H = assertions.H
 
-	LeakOption = assertions.LeakOption
-
 	// Measurable is any number for which we can compute a delta (floats or integers).
 	//
 	// This is used by [InDeltaT] and [InEpsilonT].

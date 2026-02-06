@@ -111,13 +111,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.Contains(t, []string{"A", "B"}, "A")
-	fmt.Printf("success: %t\n", success)
+	require.Contains(t, []string{"A", "B"}, "A")
+	fmt.Println("passed")
 
 }
 
@@ -190,13 +190,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.ElementsMatch(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
-	fmt.Printf("success: %t\n", success)
+	require.ElementsMatch(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
+	fmt.Println("passed")
 
 }
 
@@ -269,13 +269,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.ElementsMatchT(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
-	fmt.Printf("success: %t\n", success)
+	require.ElementsMatchT(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
+	fmt.Println("passed")
 
 }
 
@@ -350,13 +350,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.Len(t, []string{"A", "B"}, 2)
-	fmt.Printf("success: %t\n", success)
+	require.Len(t, []string{"A", "B"}, 2)
+	fmt.Println("passed")
 
 }
 
@@ -434,13 +434,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.MapContainsT(t, map[string]string{"A": "B"}, "A")
-	fmt.Printf("success: %t\n", success)
+	require.MapContainsT(t, map[string]string{"A": "B"}, "A")
+	fmt.Println("passed")
 
 }
 
@@ -507,13 +507,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.MapNotContainsT(t, map[string]string{"A": "B"}, "C")
-	fmt.Printf("success: %t\n", success)
+	require.MapNotContainsT(t, map[string]string{"A": "B"}, "C")
+	fmt.Println("passed")
 
 }
 
@@ -583,13 +583,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.NotContains(t, []string{"A", "B"}, "C")
-	fmt.Printf("success: %t\n", success)
+	require.NotContains(t, []string{"A", "B"}, "C")
+	fmt.Println("passed")
 
 }
 
@@ -665,13 +665,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.NotElementsMatch(t, []int{1, 2, 3}, []int{1, 2, 4})
-	fmt.Printf("success: %t\n", success)
+	require.NotElementsMatch(t, []int{1, 2, 3}, []int{1, 2, 4})
+	fmt.Println("passed")
 
 }
 
@@ -747,13 +747,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.NotElementsMatchT(t, []int{1, 2, 3}, []int{1, 2, 4})
-	fmt.Printf("success: %t\n", success)
+	require.NotElementsMatchT(t, []int{1, 2, 3}, []int{1, 2, 4})
+	fmt.Println("passed")
 
 }
 
@@ -826,13 +826,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.NotSubset(t, []int{1, 2, 3}, []int{4, 5})
-	fmt.Printf("success: %t\n", success)
+	require.NotSubset(t, []int{1, 2, 3}, []int{4, 5})
+	fmt.Println("passed")
 
 }
 
@@ -908,13 +908,13 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.SeqContainsT(t, slices.Values([]string{"A", "B"}), "A")
-	fmt.Printf("success: %t\n", success)
+	require.SeqContainsT(t, slices.Values([]string{"A", "B"}), "A")
+	fmt.Println("passed")
 
 }
 
@@ -984,13 +984,13 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.SeqNotContainsT(t, slices.Values([]string{"A", "B"}), "C")
-	fmt.Printf("success: %t\n", success)
+	require.SeqNotContainsT(t, slices.Values([]string{"A", "B"}), "C")
+	fmt.Println("passed")
 
 }
 
@@ -1059,13 +1059,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.SliceContainsT(t, []string{"A", "B"}, "A")
-	fmt.Printf("success: %t\n", success)
+	require.SliceContainsT(t, []string{"A", "B"}, "A")
+	fmt.Println("passed")
 
 }
 
@@ -1134,13 +1134,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.SliceNotContainsT(t, []string{"A", "B"}, "C")
-	fmt.Printf("success: %t\n", success)
+	require.SliceNotContainsT(t, []string{"A", "B"}, "C")
+	fmt.Println("passed")
 
 }
 
@@ -1207,13 +1207,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.SliceNotSubsetT(t, []int{1, 2, 3}, []int{4, 5})
-	fmt.Printf("success: %t\n", success)
+	require.SliceNotSubsetT(t, []int{1, 2, 3}, []int{4, 5})
+	fmt.Println("passed")
 
 }
 
@@ -1280,13 +1280,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.SliceSubsetT(t, []int{1, 2, 3}, []int{1, 2})
-	fmt.Printf("success: %t\n", success)
+	require.SliceSubsetT(t, []int{1, 2, 3}, []int{1, 2})
+	fmt.Println("passed")
 
 }
 
@@ -1355,13 +1355,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.StringContainsT(t, "AB", "A")
-	fmt.Printf("success: %t\n", success)
+	require.StringContainsT(t, "AB", "A")
+	fmt.Println("passed")
 
 }
 
@@ -1430,13 +1430,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.StringNotContainsT(t, "AB", "C")
-	fmt.Printf("success: %t\n", success)
+	require.StringNotContainsT(t, "AB", "C")
+	fmt.Println("passed")
 
 }
 
@@ -1512,13 +1512,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
 )
 
 func main() {
 	t := new(testing.T)
-	success := assert.Subset(t, []int{1, 2, 3}, []int{1, 2})
-	fmt.Printf("success: %t\n", success)
+	require.Subset(t, []int{1, 2, 3}, []int{1, 2})
+	fmt.Println("passed")
 
 }
 
