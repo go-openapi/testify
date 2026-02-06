@@ -4,11 +4,10 @@
 package assertions
 
 import (
-	"bytes"
 	"context"
 	"fmt"
+	"iter"
 	"regexp"
-	"runtime"
 	"strings"
 	"testing"
 )
@@ -18,16 +17,19 @@ var (
 	_ T         = &mockFailNowT{}
 	_ failNower = &mockFailNowT{}
 	_ T         = &captureT{}
-	_ T         = &bufferT{}
-	_ T         = &dummyT{}
 	_ T         = &errorsCapturingT{}
-	_ T         = &outputT{}
 )
 
 type mockT struct {
 	errorFmt string
 	args     []any
+	failed   bool
 }
+
+const (
+	errString = "Error"
+	errTrace  = "Error Trace"
+)
 
 // Helper is like [testing.T.Helper] but does nothing.
 func (mockT) Helper() {}
@@ -35,10 +37,11 @@ func (mockT) Helper() {}
 func (m *mockT) Errorf(format string, args ...any) {
 	m.errorFmt = format
 	m.args = args
+	m.failed = true
 }
 
 func (m *mockT) Failed() bool {
-	return m.errorFmt != ""
+	return m.errorFmt != "" || m.failed
 }
 
 func (m *mockT) errorString() string {
@@ -46,30 +49,16 @@ func (m *mockT) errorString() string {
 }
 
 type mockFailNowT struct {
-	failed bool
-}
-
-// Helper is like [testing.T.Helper] but does nothing.
-func (mockFailNowT) Helper() {}
-
-func (m *mockFailNowT) Errorf(format string, args ...any) {
-	_ = format
-	_ = args
+	mockT
 }
 
 func (m *mockFailNowT) FailNow() {
 	m.failed = true
 }
 
-type dummyT struct{}
-
-func (dummyT) Errorf(string, ...any) {}
-
-func (dummyT) Context() context.Context {
-	return context.Background()
-}
-
-// errorsCapturingT is a mock implementation of TestingT that captures errors reported with Errorf.
+// errorsCapturingT is a mock implementation of TestingT that captures multiple errors reported with Errorf.
+//
+// It may be equipped with a [context.Context] for tests that check on the [testing.T.Context].
 type errorsCapturingT struct {
 	errors []error
 	ctx    context.Context //nolint:containedctx // this is ok to support context injection tests
@@ -96,28 +85,6 @@ func (t *errorsCapturingT) Errorf(format string, args ...any) {
 	t.errors = append(t.errors, fmt.Errorf(format, args...))
 }
 
-type outputT struct {
-	buf     *bytes.Buffer
-	helpers map[string]struct{}
-}
-
-func newOutputMock() *outputT {
-	return &outputT{buf: bytes.NewBuffer(nil)}
-}
-
-// Implements T.
-func (t *outputT) Errorf(format string, args ...any) {
-	s := fmt.Sprintf(format, args...)
-	t.buf.WriteString(s)
-}
-
-func (t *outputT) Helper() {
-	if t.helpers == nil {
-		t.helpers = make(map[string]struct{})
-	}
-	t.helpers[callerName(1)] = struct{}{}
-}
-
 type captureT struct {
 	failed bool
 	msg    string
@@ -131,157 +98,124 @@ func (ctt *captureT) Errorf(format string, args ...any) {
 	ctt.failed = true
 }
 
-func (ctt *captureT) checkResultAndErrMsg(t *testing.T, expectedRes, res bool, expectedErrMsg string) {
-	t.Helper()
-
-	if res != expectedRes {
-		t.Errorf("Should return %t", expectedRes)
-		return
-	}
-	if res == ctt.failed {
-		t.Errorf("The test result (%t) should be reflected in the testing.T type (%t)", res, !ctt.failed)
-		return
-	}
-	contents := parseLabeledOutput(ctt.msg)
-	if res == true {
-		if contents != nil {
-			t.Errorf("Should not log an error. Log output: %q", ctt.msg)
-		}
-		return
-	}
-	if contents == nil {
-		t.Errorf("Should log an error. Log output: %q", ctt.msg)
-		return
-	}
-
-	for _, content := range contents {
-		if content.label == "Error" {
-			if expectedErrMsg == content.content {
-				return
-			}
-			t.Errorf("Recorded Error: %q", content.content)
-		}
-	}
-
-	t.Errorf("Expected Error: %q", expectedErrMsg)
-}
-
-// bufferT implements TestingT. Its implementation of Errorf writes the output that would be produced by
-// testing.T.Errorf to an internal bytes.Buffer.
-type bufferT struct {
-	buf bytes.Buffer
-}
-
-// Helper is like [testing.T.Helper] but does nothing.
-func (bufferT) Helper() {}
-
-func (t *bufferT) Errorf(format string, args ...any) {
-	// implementation of decorate is copied from testing.T
-	decorate := func(s string) string {
-		_, file, line, ok := runtime.Caller(3) // decorate + log + public function.
-		if ok {
-			// Truncate file name at last file name separator.
-			if index := strings.LastIndex(file, "/"); index >= 0 {
-				file = file[index+1:]
-			} else if index = strings.LastIndex(file, "\\"); index >= 0 {
-				file = file[index+1:]
-			}
-		} else {
-			file = "???"
-			line = 1
-		}
-		buf := new(bytes.Buffer)
-		// Every line is indented at least one tab.
-		buf.WriteByte('\t')
-		fmt.Fprintf(buf, "%s:%d: ", file, line)
-		lines := strings.Split(s, "\n")
-		if l := len(lines); l > 1 && lines[l-1] == "" {
-			lines = lines[:l-1]
-		}
-		for i, line := range lines {
-			if i > 0 {
-				// Second and subsequent lines are indented an extra tab.
-				buf.WriteString("\n\t\t")
-			}
-			buf.WriteString(line)
-		}
-		buf.WriteByte('\n')
-		return buf.String()
-	}
-	t.buf.WriteString(decorate(fmt.Sprintf(format, args...)))
-}
-
-// parseLabeledOutput does the inverse of labeledOutput - it takes a formatted
-// output string and turns it back into a slice of labeledContent.
-func parseLabeledOutput(output string) []labeledContent {
-	labelPattern := regexp.MustCompile(`^\t([^\t]*): *\t(.*)$`)
-	contentPattern := regexp.MustCompile(`^\t *\t(.*)$`)
-	var contents []labeledContent
-	lines := strings.Split(output, "\n")
-	i := -1
-	for _, line := range lines {
-		if line == "" {
-			// skip blank lines
-			continue
-		}
-		matches := labelPattern.FindStringSubmatch(line)
-		if len(matches) == 3 {
-			// a label
-			contents = append(contents, labeledContent{
-				label:   matches[1],
-				content: matches[2] + "\n",
-			})
-			i++
-			continue
-		}
-		matches = contentPattern.FindStringSubmatch(line)
-		if len(matches) == 2 {
-			// just content
-			if i >= 0 {
-				contents[i].content += matches[1] + "\n"
-				continue
-			}
-		}
-		// Couldn't parse output
-		return nil
-	}
-	return contents
-}
-
-// callerName gives the function name (qualified with a package path)
-// for the caller after skip frames (where 0 means the current function).
-func callerName(skip int) string {
-	// Make room for the skip PC.
-	var pc [1]uintptr
-	n := runtime.Callers(skip+2, pc[:]) // skip + runtime.Callers + callerName
-	if n == 0 {
-		panic("testing: zero callers found")
-	}
-	frames := runtime.CallersFrames(pc[:n])
-	frame, _ := frames.Next()
-	return frame.Function
-}
-
 func shouldPassOrFail(t *testing.T, mock *mockT, result, shouldPass bool) {
 	t.Helper()
 
 	if shouldPass {
-		t.Run("should pass", func(t *testing.T) {
-			if !result || mock.Failed() {
-				t.Errorf("expected to pass")
-			}
-		})
+		if !result || mock.Failed() {
+			t.Error("expected to pass")
+		}
 
 		return
 	}
 
-	t.Run("should fail", func(t *testing.T) {
-		if result || !mock.Failed() {
-			t.Errorf("expected to fail")
-		}
-	})
+	if result || !mock.Failed() {
+		t.Error("expected to fail")
+	}
 }
 
 func ptr(i int) *int {
 	return &i
+}
+
+// failCase defines a test case for verifying assertion error messages.
+//
+// Only one of wantError, wantMatch, or wantContains should be set per case.
+type failCase struct {
+	name         string
+	assertion    func(t T) bool // assertion call with bad inputs baked in
+	wantError    string         // exact match on errString label content
+	wantMatch    string         // regexp match on errString label content
+	wantContains []string       // substring checks on errString label content
+}
+
+// runFailCases runs a set of failCase tests using the standard harness.
+func runFailCases(t *testing.T, cases iter.Seq[failCase]) {
+	t.Helper()
+
+	for tc := range cases {
+		t.Run(tc.name, runFailCase(tc))
+	}
+}
+
+func runFailCase(tc failCase) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(captureT)
+		result := tc.assertion(mock)
+
+		// 1. Verify assertion returned false
+		if result {
+			t.Error("expected assertion to return false")
+			return
+		}
+
+		// 2. Verify mock recorded a failure
+		if !mock.failed {
+			t.Error("expected mock to record a failure")
+			return
+		}
+
+		// 3. Parse envelope
+		parsed := parseLabeledOutput(mock.msg)
+		if parsed == nil {
+			t.Errorf("could not parse labeled output: %q", mock.msg)
+			return
+		}
+
+		// 4. Validate envelope structure
+		var hasErrorTrace, hasError bool
+		var errorContent string
+		for _, lc := range parsed {
+			switch lc.label {
+			case errTrace:
+				hasErrorTrace = true
+			case errString:
+				hasError = true
+				errorContent = strings.TrimRight(lc.content, "\n")
+			}
+		}
+		if !hasErrorTrace {
+			t.Error("envelope missing Error Trace label")
+		}
+		if !hasError {
+			t.Error("envelope missing Error label")
+			return
+		}
+
+		// 5. Match based on which want* field is set
+		switch {
+		case tc.wantError != "":
+			if errorContent != tc.wantError {
+				t.Errorf("error content mismatch:\n  want: %q\n  got:  %q", tc.wantError, errorContent)
+			}
+		case tc.wantMatch != "":
+			matched, err := regexp.MatchString(tc.wantMatch, errorContent)
+			if err != nil {
+				t.Errorf("invalid regexp %q: %v", tc.wantMatch, err)
+
+				return
+			}
+
+			if !matched {
+				t.Errorf("error content does not match pattern %q:\n  got: %q", tc.wantMatch, errorContent)
+			}
+		case len(tc.wantContains) > 0:
+			for _, sub := range tc.wantContains {
+				if !strings.Contains(errorContent, sub) {
+					t.Errorf("error content missing substring %q:\n  got: %q", sub, errorContent)
+				}
+			}
+		}
+	}
+}
+
+// truncationCase is a convenience constructor for a failCase that checks for truncation.
+func truncationCase(name string, assertion func(t T) bool) failCase {
+	return failCase{
+		name:         name,
+		assertion:    assertion,
+		wantContains: []string{"<... truncated>"},
+	}
 }

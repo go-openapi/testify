@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 
 package require
 
@@ -358,11 +357,11 @@ func TestEventuallyf(t *testing.T) {
 	})
 }
 
-func TestEventuallyWithTf(t *testing.T) {
+func TestEventuallyWithf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		EventuallyWithTf(t, func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond, "test message")
+		EventuallyWithf(t, func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond, "test message")
 		// require functions don't return a value
 	})
 
@@ -370,10 +369,10 @@ func TestEventuallyWithTf(t *testing.T) {
 		t.Parallel()
 
 		mock := new(mockFailNowT)
-		EventuallyWithTf(mock, func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond, "test message")
+		EventuallyWithf(mock, func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond, "test message")
 		// require functions don't return a value
 		if !mock.failed {
-			t.Error("EventuallyWithT should call FailNow()")
+			t.Error("EventuallyWith should call FailNow()")
 		}
 	})
 }
@@ -1206,6 +1205,46 @@ func TestJSONEqTf(t *testing.T) {
 	})
 }
 
+func TestJSONMarshalAsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		JSONMarshalAsTf(t, []byte(`{"A": "a"}`), dummyStruct{A: "a"}, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		JSONMarshalAsTf(mock, `[{"foo": "bar"}, {"hello": "world"}]`, 1, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("JSONMarshalAsT should call FailNow()")
+		}
+	})
+}
+
+func TestJSONUnmarshalAsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+		JSONUnmarshalAsTf(t, dummyStruct{A: "a"}, []byte(`{"A": "a"}`), "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		JSONUnmarshalAsTf(mock, 1, `[{"foo": "bar"}, {"hello": "world"}]`, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("JSONUnmarshalAsT should call FailNow()")
+		}
+	})
+}
+
 func TestKindf(t *testing.T) {
 	t.Parallel()
 	t.Run("success", func(t *testing.T) {
@@ -1464,6 +1503,11 @@ func TestNoErrorf(t *testing.T) {
 			t.Error("NoError should call FailNow()")
 		}
 	})
+}
+
+func TestNoGoRoutineLeakf(t *testing.T) {
+	t.Parallel()
+	t.Skip() // this function doesn't have tests yet: feed the original function with examples to test.
 }
 
 func TestNotContainsf(t *testing.T) {
@@ -2355,6 +2399,28 @@ func TestYAMLEqTf(t *testing.T) {
 
 		Panicsf(t, func() {
 			YAMLEqTf(t, "key: value", "key: value", "test message")
+		}, "should panic without the yaml feature enabled.")
+	})
+}
+
+func TestYAMLMarshalAsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("panic", func(t *testing.T) {
+		t.Parallel()
+
+		Panicsf(t, func() {
+			YAMLMarshalAsTf(t, "key: value", "key: value", "test message")
+		}, "should panic without the yaml feature enabled.")
+	})
+}
+
+func TestYAMLUnmarshalAsTf(t *testing.T) {
+	t.Parallel()
+	t.Run("panic", func(t *testing.T) {
+		t.Parallel()
+
+		Panicsf(t, func() {
+			YAMLUnmarshalAsTf(t, "key: value", "key: value", "test message")
 		}, "should panic without the yaml feature enabled.")
 	})
 }

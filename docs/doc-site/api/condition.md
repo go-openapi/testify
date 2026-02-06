@@ -1,7 +1,6 @@
 ---
 title: "Condition"
 description: "Expressing Assertions Using Conditions"
-modified: 2026-01-27
 weight: 4
 domains:
   - "condition"
@@ -10,8 +9,8 @@ keywords:
   - "Conditionf"
   - "Eventually"
   - "Eventuallyf"
-  - "EventuallyWithT"
-  - "EventuallyWithTf"
+  - "EventuallyWith"
+  - "EventuallyWithf"
   - "Never"
   - "Neverf"
 ---
@@ -30,7 +29,7 @@ This domain exposes 4 functionalities.
 ```tree
 - [Condition](#condition) | angles-right
 - [Eventually](#eventually) | angles-right
-- [EventuallyWithT](#eventuallywitht) | angles-right
+- [EventuallyWith](#eventuallywith) | angles-right
 - [Never](#never) | angles-right
 ```
 
@@ -43,14 +42,46 @@ Condition uses a [Comparison](https://pkg.go.dev/github.com/go-openapi/testify/v
 {{% tab title="Usage" %}}
 ```go
 	assertions.Condition(t, func() bool { return myCondition })
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success:  func() bool { return true }
 	failure:  func() bool { return false }
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestCondition(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.Condition(t, func() bool {
+		return true
+	})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -107,14 +138,47 @@ A blocking condition will cause [Eventually](https://pkg.go.dev/github.com/go-op
 {{% tab title="Usage" %}}
 ```go
 	assertions.Eventually(t, func() bool { return true }, time.Second, 10*time.Millisecond)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success:  func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond
 	failure:  func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEventually(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.Eventually(t, func() bool {
+		return true
+	}, 100*time.Millisecond, 20*time.Millisecond)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -145,9 +209,9 @@ A blocking condition will cause [Eventually](https://pkg.go.dev/github.com/go-op
 {{% /tab %}}
 {{< /tabs >}}
 
-### EventuallyWithT{#eventuallywitht}
+### EventuallyWith{#eventuallywith}
 
-EventuallyWithT asserts that the given condition will be met in waitFor time,
+EventuallyWith asserts that the given condition will be met in waitFor time,
 periodically checking the target function at each tick.
 
 In contrast to [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Eventually), the condition function is supplied with a [CollectT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#CollectT)
@@ -175,7 +239,7 @@ It may write to variables outside its scope without triggering race conditions.
 		time.Sleep(8*time.Second)
 		externalValue = true
 	}()
-	assertions.EventuallyWithT(t, func(c *assertions.CollectT) {
+	assertions.EventuallyWith(t, func(c *assertions.CollectT) {
 		// add assertions as needed; any assertion failure will fail the current tick
 		assertions.True(c, externalValue, "expected 'externalValue' to be true")
 	},
@@ -183,14 +247,48 @@ It may write to variables outside its scope without triggering race conditions.
 	1*time.Second,
 	"external state has not changed to 'true'; still false",
 	)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: func(c *CollectT) { True(c,true) }, 100*time.Millisecond, 20*time.Millisecond
 	failure: func(c *CollectT) { False(c,true) }, 100*time.Millisecond, 20*time.Millisecond
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEventuallyWith(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.EventuallyWith(t, func(c *assert.CollectT) {
+		assert.True(c, true)
+	}, 100*time.Millisecond, 20*time.Millisecond)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -198,26 +296,26 @@ It may write to variables outside its scope without triggering race conditions.
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`assert.EventuallyWithT(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EventuallyWithT) | package-level function |
-| [`assert.EventuallyWithTf(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EventuallyWithTf) | formatted variant |
-| [`assert.(*Assertions).EventuallyWithT(condition func(collect *CollectT), waitFor time.Duration, tick time.Duration) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.EventuallyWithT) | method variant |
-| [`assert.(*Assertions).EventuallyWithTf(condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.EventuallyWithTf) | method formatted variant |
+| [`assert.EventuallyWith(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EventuallyWith) | package-level function |
+| [`assert.EventuallyWithf(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EventuallyWithf) | formatted variant |
+| [`assert.(*Assertions).EventuallyWith(condition func(collect *CollectT), waitFor time.Duration, tick time.Duration) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.EventuallyWith) | method variant |
+| [`assert.(*Assertions).EventuallyWithf(condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.EventuallyWithf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.EventuallyWithT(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EventuallyWithT) | package-level function |
-| [`require.EventuallyWithTf(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EventuallyWithTf) | formatted variant |
-| [`require.(*Assertions).EventuallyWithT(condition func(collect *CollectT), waitFor time.Duration, tick time.Duration) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.EventuallyWithT) | method variant |
-| [`require.(*Assertions).EventuallyWithTf(condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.EventuallyWithTf) | method formatted variant |
+| [`require.EventuallyWith(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EventuallyWith) | package-level function |
+| [`require.EventuallyWithf(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EventuallyWithf) | formatted variant |
+| [`require.(*Assertions).EventuallyWith(condition func(collect *CollectT), waitFor time.Duration, tick time.Duration) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.EventuallyWith) | method variant |
+| [`require.(*Assertions).EventuallyWithf(condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.EventuallyWithf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.EventuallyWithT(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EventuallyWithT) | internal implementation |
+| [`assertions.EventuallyWith(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EventuallyWithT](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L148)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L148)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -243,14 +341,47 @@ A blocking condition will cause [Never](https://pkg.go.dev/github.com/go-openapi
 {{% tab title="Usage" %}}
 ```go
 	assertions.Never(t, func() bool { return false }, time.Second, 10*time.Millisecond)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success:  func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond
 	failure:  func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNever(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.Never(t, func() bool {
+		return false
+	}, 100*time.Millisecond, 20*time.Millisecond)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -296,6 +427,4 @@ SPDX-License-Identifier: Apache-2.0
 
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
-
-Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 -->

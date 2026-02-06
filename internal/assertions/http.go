@@ -29,17 +29,13 @@ func HTTPSuccess(t T, handler http.HandlerFunc, method, url string, values url.V
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	code, err := httpCode(handler, method, url, values)
+
+	err := httpCodeInRange(handler, http.StatusOK, http.StatusPartialContent, "HTTP success", method, url, values)
 	if err != nil {
-		Fail(t, fmt.Sprintf("Failed to build test request, got error: %s", err), msgAndArgs...)
+		return Fail(t, err.Error(), msgAndArgs...)
 	}
 
-	isSuccessCode := code >= http.StatusOK && code <= http.StatusPartialContent
-	if !isSuccessCode {
-		Fail(t, fmt.Sprintf("Expected HTTP success status code for %q but received %d", url+"?"+values.Encode(), code), msgAndArgs...)
-	}
-
-	return isSuccessCode
+	return true
 }
 
 // HTTPRedirect asserts that a specified handler returns a redirect status code.
@@ -59,17 +55,13 @@ func HTTPRedirect(t T, handler http.HandlerFunc, method, url string, values url.
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	code, err := httpCode(handler, method, url, values)
+
+	err := httpCodeInRange(handler, http.StatusMultipleChoices, http.StatusTemporaryRedirect, "HTTP redirect", method, url, values)
 	if err != nil {
-		Fail(t, fmt.Sprintf("Failed to build test request, got error: %s", err), msgAndArgs...)
+		return Fail(t, err.Error(), msgAndArgs...)
 	}
 
-	isRedirectCode := code >= http.StatusMultipleChoices && code <= http.StatusTemporaryRedirect
-	if !isRedirectCode {
-		Fail(t, fmt.Sprintf("Expected HTTP redirect status code for %q but received %d", url+"?"+values.Encode(), code), msgAndArgs...)
-	}
-
-	return isRedirectCode
+	return true
 }
 
 // HTTPError asserts that a specified handler returns an error status code.
@@ -89,17 +81,13 @@ func HTTPError(t T, handler http.HandlerFunc, method, url string, values url.Val
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	code, err := httpCode(handler, method, url, values)
+
+	err := httpCodeInRange(handler, http.StatusBadRequest, -1, "HTTP error", method, url, values)
 	if err != nil {
-		Fail(t, fmt.Sprintf("Failed to build test request, got error: %s", err), msgAndArgs...)
+		return Fail(t, err.Error(), msgAndArgs...)
 	}
 
-	isErrorCode := code >= http.StatusBadRequest
-	if !isErrorCode {
-		Fail(t, fmt.Sprintf("Expected HTTP error status code for %q but received %d", url+"?"+values.Encode(), code), msgAndArgs...)
-	}
-
-	return isErrorCode
+	return true
 }
 
 // HTTPStatusCode asserts that a specified handler returns a specified status code.
@@ -119,17 +107,13 @@ func HTTPStatusCode(t T, handler http.HandlerFunc, method, url string, values ur
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	code, err := httpCode(handler, method, url, values)
+
+	err := httpCodeInRange(handler, statuscode, statuscode, fmt.Sprintf("HTTP status code %d", statuscode), method, url, values)
 	if err != nil {
-		Fail(t, fmt.Sprintf("Failed to build test request, got error: %s", err), msgAndArgs...)
+		return Fail(t, err.Error(), msgAndArgs...)
 	}
 
-	successful := code == statuscode
-	if !successful {
-		Fail(t, fmt.Sprintf("Expected HTTP status code %d for %q but received %d", statuscode, url+"?"+values.Encode(), code), msgAndArgs...)
-	}
-
-	return successful
+	return true
 }
 
 // HTTPBody is a helper that returns the HTTP body of the response.
@@ -203,16 +187,32 @@ func HTTPBodyNotContains(t T, handler http.HandlerFunc, method, url string, valu
 	return !contains
 }
 
+func httpCodeInRange(handler http.HandlerFunc, minStatusCode, maxStatusCode int, expectedStatus, method, url string, values url.Values) error {
+	code, err := httpCode(handler, method, url, values)
+	if err != nil {
+		return fmt.Errorf("failed to build test request, got error: %w", err)
+	}
+
+	if (code < minStatusCode && minStatusCode != -1) || (code > maxStatusCode && maxStatusCode != -1) {
+		return fmt.Errorf("expected %s status code for %q but received %d", expectedStatus, url+"?"+values.Encode(), code)
+	}
+
+	return nil
+}
+
 // httpCode is a helper that returns the HTTP code of the response.
 //
 // It returns -1 and an error if building a new request fails.
 func httpCode(handler http.HandlerFunc, method, url string, values url.Values) (int, error) {
+	// maintainer: should inject t.Context()
 	w := httptest.NewRecorder()
 	req, err := http.NewRequestWithContext(context.Background(), method, url, http.NoBody)
 	if err != nil {
 		return -1, err
 	}
+
 	req.URL.RawQuery = values.Encode()
 	handler(w, req)
+
 	return w.Code, nil
 }

@@ -77,7 +77,7 @@ func Fprintln(w io.Writer, a ...any) (n int, err error) {
 //
 //	fmt.Print(spew.NewFormatter(a), spew.NewFormatter(b))
 func Print(a ...any) (n int, err error) {
-	return fmt.Print(convertArgs(a)...)
+	return fmt.Print(convertArgs(a)...) //nolint:forbidigo // public API wrapping fmt.Print
 }
 
 // Printf is a wrapper for fmt.Printf that treats each argument as if it were
@@ -89,7 +89,7 @@ func Print(a ...any) (n int, err error) {
 //
 //	fmt.Printf(format, spew.NewFormatter(a), spew.NewFormatter(b))
 func Printf(format string, a ...any) (n int, err error) {
-	return fmt.Printf(format, convertArgs(a)...)
+	return fmt.Printf(format, convertArgs(a)...) //nolint:forbidigo // public API wrapping fmt.Printf
 }
 
 // Println is a wrapper for fmt.Println that treats each argument as if it were
@@ -101,7 +101,7 @@ func Printf(format string, a ...any) (n int, err error) {
 //
 //	fmt.Println(spew.NewFormatter(a), spew.NewFormatter(b))
 func Println(a ...any) (n int, err error) {
-	return fmt.Println(convertArgs(a)...)
+	return fmt.Println(convertArgs(a)...) //nolint:forbidigo // public API wrapping fmt.Println
 }
 
 // Sprint is a wrapper for fmt.Sprint that treats each argument as if it were

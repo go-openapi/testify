@@ -26,3 +26,10 @@ import (
 func EnableYAMLWithUnmarshal(unmarshaller func([]byte, any) error) {
 	yamlstub.EnableYAMLWithUnmarshal(unmarshaller)
 }
+
+// EnableYAMLWithMarshal registers a YAML-capable marshaler.
+//
+// See [EnableYAMLWithUnmarshal].
+func EnableYAMLWithMarshal(marshaller func(any) ([]byte, error)) {
+	yamlstub.EnableYAMLWithMarshal(marshaller)
+}

@@ -33,7 +33,7 @@ import (
 func Len(t T, object any, length int, msgAndArgs ...any) bool {
 	// Domain: collection
 	//
-	// Note: (proposals) this does not currently support iterators, or collection objects that have a Len() method.
+	// NOTE: (proposal for enhancement) this does not currently support iterators, or collection objects that have a Len() method.
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}

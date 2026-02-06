@@ -28,8 +28,12 @@ func testFormatUnequalValues() func(*testing.T) {
 				t.Parallel()
 
 				expected, actual := formatUnequalValues(tt.unequalExpected, tt.unequalActual)
-				Equal(t, tt.expectedExpected, expected, tt.testName)
-				Equal(t, tt.expectedActual, actual, tt.testName)
+				if tt.expectedExpected != expected {
+					t.Errorf("%s: expected formatted expected %q, got %q", tt.testName, tt.expectedExpected, expected)
+				}
+				if tt.expectedActual != actual {
+					t.Errorf("%s: expected formatted actual %q, got %q", tt.testName, tt.expectedActual, actual)
+				}
 			})
 		}
 	}

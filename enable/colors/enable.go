@@ -15,9 +15,10 @@ import (
 )
 
 const (
-	envVarColorize = "TESTIFY_COLORIZED"
-	envVarTheme    = "TESTIFY_THEME"
-	envVarNoTTY    = "TESTIFY_COLORIZED_NOTTY"
+	envVarColorize  = "TESTIFY_COLORIZED"
+	envVarTheme     = "TESTIFY_THEME"
+	envVarNoTTY     = "TESTIFY_COLORIZED_NOTTY"
+	envVarTestHatch = "TESTIFY_INTEGRATION_TEST" // escape hatch to enable init from CI
 )
 
 var flags cliFlags //nolint:gochecknoglobals // it's okay to store the state CLI flags in a package global
@@ -48,7 +49,7 @@ func colorizeFromEnv() bool {
 	envColorize := os.Getenv(envVarColorize)
 	isEnvConfigured, _ := strconv.ParseBool(envColorize)
 
-	return isEnvConfigured
+	return isEnvConfigured || integrationTestHatch()
 }
 
 func themeFromEnv() string {
@@ -61,5 +62,5 @@ func nottyFromEnv() bool {
 	envNoTTY := os.Getenv(envVarNoTTY)
 	isEnvNoTTY, _ := strconv.ParseBool(envNoTTY)
 
-	return isEnvNoTTY
+	return isEnvNoTTY || integrationTestHatch()
 }

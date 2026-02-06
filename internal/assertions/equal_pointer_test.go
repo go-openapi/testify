@@ -37,6 +37,16 @@ func TestEqualPointers(t *testing.T) {
 	}
 }
 
+func TestEqualPointerErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, equalPointerFailCases())
+}
+
+// ============================================================================
+// TestEqualPointers
+// ============================================================================
+
 type pointerPairTestCase struct {
 	name           string
 	makeValues     func() (expected, actual any)
@@ -180,4 +190,59 @@ func testPointerGenericAssertion[P any](mock T, kind pointerAssertionKind, expec
 	default:
 		panic(fmt.Errorf("test case configuration error: invalid pointerAssertionKind: %d", kind))
 	}
+}
+
+// ============================================================================
+// TestEqualPointerErrorMessages
+// ============================================================================
+
+func equalPointerFailCases() iter.Seq[failCase] {
+	return slices.Values([]failCase{
+		{
+			name: "Same/different-pointers",
+			assertion: func(t T) bool {
+				v1, v2 := 42, 42
+				return Same(t, &v1, &v2)
+			},
+			wantContains: []string{"Not same"},
+		},
+		{
+			name: "Same/not-pointers",
+			assertion: func(t T) bool {
+				return Same(t, 1, 2)
+			},
+			wantError: "Both arguments must be pointers",
+		},
+		{
+			name: "NotSame/same-pointer",
+			assertion: func(t T) bool {
+				v := 42
+				return NotSame(t, &v, &v)
+			},
+			wantContains: []string{"Expected and actual point to the same object"},
+		},
+		{
+			name: "NotSame/not-pointers",
+			assertion: func(t T) bool {
+				return NotSame(t, 1, 2)
+			},
+			wantError: "Both arguments must be pointers",
+		},
+		{
+			name: "SameT/different-pointers",
+			assertion: func(t T) bool {
+				v1, v2 := 42, 42
+				return SameT(t, &v1, &v2)
+			},
+			wantContains: []string{"Not same"},
+		},
+		{
+			name: "NotSameT/same-pointer",
+			assertion: func(t T) bool {
+				v := 42
+				return NotSameT(t, &v, &v)
+			},
+			wantContains: []string{"Expected and actual point to the same object"},
+		},
+	})
 }

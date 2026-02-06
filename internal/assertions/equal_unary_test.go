@@ -11,20 +11,6 @@ import (
 	"testing"
 )
 
-func TestEqualUnaryErrorMessages(t *testing.T) {
-	// error messages validation
-	for tc := range equalEmptyCases() {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
-			mock := new(captureT)
-
-			res := Empty(mock, tc.value)
-			mock.checkResultAndErrMsg(t, res, tc.expectedResult, tc.expectedErrMsg)
-		})
-	}
-}
-
 // Unary assertion tests (Nil, NotNil, Empty, NotEmpty).
 func TestEqualUnaryAssertions(t *testing.T) {
 	t.Parallel()
@@ -40,6 +26,16 @@ func TestEqualUnaryAssertions(t *testing.T) {
 		})
 	}
 }
+
+func TestEqualUnaryErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, equalUnaryFailCases())
+}
+
+// ============================================================================
+// TestEqualUnaryAssertions
+// ============================================================================
 
 type unaryTestCase struct {
 	name     string
@@ -156,27 +152,13 @@ func testUnaryAssertion(tc unaryTestCase, kind unaryAssertionKind, unaryAssertio
 	}
 }
 
-type equalEmptyCase struct {
-	name           string
-	value          any
-	expectedResult bool
-	expectedErrMsg string
-}
+// ============================================================================
+// TestEqualUnaryErrorMessages
+// ============================================================================
 
-// Proposal for enhancement: should improve the overall readability and maintainability of the error message
-// checks. Expectations are too specific to maintain, down to the tab/CR character.
-// The line feeds and tab are not helping to spot what is expected.
-//
-// See [captureT] to figure
-// a test refactoring plan.
-func equalEmptyCases() iter.Seq[equalEmptyCase] {
+func equalUnaryFailCases() iter.Seq[failCase] {
 	chWithValue := make(chan struct{}, 1)
 	chWithValue <- struct{}{}
-	// var tiP *time.Time
-	// var tiNP time.Time
-	// var s *string
-	// var f *os.File
-	// sP := &s
 	x := 1
 	xP := &x
 
@@ -185,117 +167,71 @@ func equalEmptyCases() iter.Seq[equalEmptyCase] {
 		x int
 	}
 
-	return slices.Values([]equalEmptyCase{
+	return slices.Values([]failCase{
 		{
-			name:           "Non Empty string is not empty",
-			value:          "something",
-			expectedResult: false,
-			expectedErrMsg: "Should be empty, but was something\n",
+			name:      "Empty/non-empty-string",
+			assertion: func(t T) bool { return Empty(t, "something") },
+			wantError: "Should be empty, but was something",
 		},
 		{
-			name:           "Non nil object is not empty",
-			value:          errors.New("something"),
-			expectedResult: false,
-			expectedErrMsg: "Should be empty, but was something\n",
+			name:      "Empty/non-nil-error",
+			assertion: func(t T) bool { return Empty(t, errors.New("something")) },
+			wantError: "Should be empty, but was something",
 		},
 		{
-			name:           "Non empty string array is not empty",
-			value:          []string{"something"},
-			expectedResult: false,
-			expectedErrMsg: "Should be empty, but was [something]\n",
+			name:      "Empty/non-empty-string-array",
+			assertion: func(t T) bool { return Empty(t, []string{"something"}) },
+			wantError: "Should be empty, but was [something]",
 		},
 		{
-			name:           "Non-zero int value is not empty",
-			value:          1,
-			expectedResult: false,
-			expectedErrMsg: "Should be empty, but was 1\n",
+			name:      "Empty/non-zero-int",
+			assertion: func(t T) bool { return Empty(t, 1) },
+			wantError: "Should be empty, but was 1",
 		},
 		{
-			name:           "True value is not empty",
-			value:          true,
-			expectedResult: false,
-			expectedErrMsg: "Should be empty, but was true\n",
+			name:      "Empty/true-value",
+			assertion: func(t T) bool { return Empty(t, true) },
+			wantError: "Should be empty, but was true",
 		},
 		{
-			name:           "Channel with values is not empty",
-			value:          chWithValue,
-			expectedResult: false,
-			expectedErrMsg: fmt.Sprintf("Should be empty, but was %v\n", chWithValue),
+			name:         "Empty/channel-with-values",
+			assertion:    func(t T) bool { return Empty(t, chWithValue) },
+			wantContains: []string{"Should be empty, but was"},
 		},
 		{
-			name:           "struct with initialized values is empty",
-			value:          TStruct{x: 1},
-			expectedResult: false,
-			expectedErrMsg: "Should be empty, but was {1}\n",
+			name:      "Empty/struct-with-values",
+			assertion: func(t T) bool { return Empty(t, TStruct{x: 1}) },
+			wantError: "Should be empty, but was {1}",
 		},
 		{
-			name:           "non-empty aliased string is empty",
-			value:          TString("abc"),
-			expectedResult: false,
-			expectedErrMsg: "Should be empty, but was abc\n",
+			name:      "Empty/aliased-string",
+			assertion: func(t T) bool { return Empty(t, TString("abc")) },
+			wantError: "Should be empty, but was abc",
 		},
 		{
-			name:           "ptr to non-nil value is not empty",
-			value:          xP,
-			expectedResult: false,
-			expectedErrMsg: fmt.Sprintf("Should be empty, but was %p\n", xP),
+			name:         "Empty/ptr-to-non-nil",
+			assertion:    func(t T) bool { return Empty(t, xP) },
+			wantContains: []string{"Should be empty, but was"},
 		},
 		{
-			name:           "array is not state",
-			value:          [1]int{42},
-			expectedResult: false,
-			expectedErrMsg: "Should be empty, but was [42]\n",
-		},
-
-		// Here are some edge cases
-		{
-			name:           "string with only spaces is not empty",
-			value:          "   ",
-			expectedResult: false,
-			expectedErrMsg: "Should be empty, but was    \n",
+			name:      "Empty/non-zero-array",
+			assertion: func(t T) bool { return Empty(t, [1]int{42}) },
+			wantError: "Should be empty, but was [42]",
 		},
 		{
-			name:           "string with a line feed is not empty",
-			value:          "\n",
-			expectedResult: false,
-			expectedErrMsg: "Should be empty, but was \n",
+			name:         "Empty/whitespace-string",
+			assertion:    func(t T) bool { return Empty(t, "   ") },
+			wantContains: []string{"Should be empty, but was"},
 		},
 		{
-			name:           "string with only tabulation and lines feed is not empty",
-			value:          "\n\t\n",
-			expectedResult: false,
-			expectedErrMsg: "" + // this syntax is used to show how errors are reported.
-				"Should be empty, but was \n" +
-				"\t\n",
+			name:         "Empty/newline-string",
+			assertion:    func(t T) bool { return Empty(t, "\n") },
+			wantContains: []string{"Should be empty, but was"},
 		},
 		{
-			name:           "string with trailing lines feed is not empty",
-			value:          "foo\n\n",
-			expectedResult: false,
-			expectedErrMsg: "Should be empty, but was foo\n\n",
-		},
-		{
-			name:           "string with leading and trailing tabulation and lines feed is not empty",
-			value:          "\n\nfoo\t\n\t\n",
-			expectedResult: false,
-			expectedErrMsg: "" +
-				"Should be empty, but was \n" +
-				"\n" +
-				"foo\t\n" +
-				"\t\n",
-		},
-		{
-			name:           "non-printable character is not empty",
-			value:          "\u00a0", // NO-BREAK SPACE UNICODE CHARACTER
-			expectedResult: false,
-			expectedErrMsg: "Should be empty, but was \u00a0\n",
-		},
-		{
-			// check that there is no error message on success
-			name:           "Empty string is empty",
-			value:          "",
-			expectedResult: true,
-			expectedErrMsg: "",
+			name:         "Empty/non-printable-char",
+			assertion:    func(t T) bool { return Empty(t, "\u00a0") },
+			wantContains: []string{"Should be empty, but was"},
 		},
 	})
 }

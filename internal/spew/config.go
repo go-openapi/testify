@@ -113,6 +113,18 @@ var Config = ConfigState{ //nolint:gochecknoglobals // this is global configurat
 	EnableTimeStringer: true,
 }
 
+// NewDefaultConfig returns a ConfigState with the following default settings.
+//
+//	Indent: " "
+//	MaxDepth: 0
+//	DisableMethods: false
+//	DisablePointerMethods: false
+//	ContinueOnMethod: false
+//	SortKeys: false
+func NewDefaultConfig() *ConfigState {
+	return &ConfigState{Indent: " "}
+}
+
 // Errorf is a wrapper for fmt.Errorf that treats each argument as if it were
 // passed with a Formatter interface returned by c.NewFormatter.  It returns
 // the formatted string as a value that satisfies error.  See NewFormatter
@@ -169,7 +181,7 @@ func (c *ConfigState) Fprintln(w io.Writer, a ...any) (n int, err error) {
 //
 //	fmt.Print(c.NewFormatter(a), c.NewFormatter(b))
 func (c *ConfigState) Print(a ...any) (n int, err error) {
-	return fmt.Print(c.convertArgs(a)...)
+	return fmt.Print(c.convertArgs(a)...) //nolint:forbidigo // public API wrapping fmt.Print
 }
 
 // Printf is a wrapper for fmt.Printf that treats each argument as if it were
@@ -181,7 +193,7 @@ func (c *ConfigState) Print(a ...any) (n int, err error) {
 //
 //	fmt.Printf(format, c.NewFormatter(a), c.NewFormatter(b))
 func (c *ConfigState) Printf(format string, a ...any) (n int, err error) {
-	return fmt.Printf(format, c.convertArgs(a)...)
+	return fmt.Printf(format, c.convertArgs(a)...) //nolint:forbidigo // public API wrapping fmt.Printf
 }
 
 // Println is a wrapper for fmt.Println that treats each argument as if it were
@@ -193,7 +205,7 @@ func (c *ConfigState) Printf(format string, a ...any) (n int, err error) {
 //
 //	fmt.Println(c.NewFormatter(a), c.NewFormatter(b))
 func (c *ConfigState) Println(a ...any) (n int, err error) {
-	return fmt.Println(c.convertArgs(a)...)
+	return fmt.Println(c.convertArgs(a)...) //nolint:forbidigo // public API wrapping fmt.Println
 }
 
 // Sprint is a wrapper for fmt.Sprint that treats each argument as if it were
@@ -301,16 +313,4 @@ func (c *ConfigState) convertArgs(args []any) (formatters []any) {
 		formatters[index] = newFormatter(c, arg)
 	}
 	return formatters
-}
-
-// NewDefaultConfig returns a ConfigState with the following default settings.
-//
-//	Indent: " "
-//	MaxDepth: 0
-//	DisableMethods: false
-//	DisablePointerMethods: false
-//	ContinueOnMethod: false
-//	SortKeys: false
-func NewDefaultConfig() *ConfigState {
-	return &ConfigState{Indent: " "}
 }

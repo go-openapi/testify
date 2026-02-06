@@ -123,8 +123,6 @@ The `f` suffix follows Go's standard library convention (like `Printf`, `Errorf`
 - **Generic (`T` suffix)**: Prefer for compile-time type safety and better performance
 {{% /notice %}}
 
-One (historical) exception: `EventuallyWithT` is not generic...
-
 ### Inverse Assertions
 
 Most assertions come with their opposite variant, typically formed by adding a `Not` prefix:
@@ -269,10 +267,16 @@ When unsure about argument order:
 
 ### Forward Methods
 
-Create an `Assertion` object to reduce repetition in tests with many assertions:
+Create an `Assertions` object to reduce repetition in tests with many assertions.
 
-{{< cards >}}
-{{% card title="Package-Level Functions" %}}
+**Both styles are equivalent** - choose based on your preference and test structure.
+
+**⚠️ Generic assertions are not directly available as forward methods** (this is a limitation of go generics).
+
+However, the forward-style assertion may use generic assertions like shown below.
+
+{{< tabs >}}
+{{% tab title="Package-Level Functions" %}}
 ```go
 import (
 	"testing"
@@ -289,9 +293,9 @@ func TestUser(t *testing.T) {
 	assert.Greater(t, user.Age, 0)
 }
 ```
-{{% /card %}}
+{{% /tab %}}
 
-{{% card title="Forward Methods" %}}
+{{% tab title="Forward Methods" %}}
 ```go
 import (
 	"testing"
@@ -308,13 +312,30 @@ func TestUser(t *testing.T) {
 	a.True(user.Active)
 }
 ```
-{{% /card %}}
-{{< /cards >}}
+{{% /tab %}}
 
-**Both styles are equivalent** - choose based on your preference and test structure.
+{{% tab title="Forward Methods with generics" %}}
 
-**⚠️ Generic assertions are not available as forward methods** (this is a limitation of go generics).
+This pattern overcomes the go limitation so you may use a "forward-style" and still benefit from generics.
 
+```go
+import (
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func TestUser(t *testing.T) {
+	a := assert.New(t) // Create once
+	user := getUser()
+
+	a.NotNil(user) // No 't' needed
+	assert.EqualT(a.T, "Alice", user.Name) // use a.T as an escape hatch to call generics
+	a.True(user.Active)
+}
+```
+{{% /tab %}}
+{{< /tabs >}}
 
 ## Common Usage Patterns
 

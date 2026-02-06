@@ -1,7 +1,6 @@
 ---
 title: "Http"
 description: "Asserting HTTP Response And Body"
-modified: 2026-01-27
 weight: 8
 domains:
   - "http"
@@ -53,14 +52,51 @@ Returns whether the assertion was successful (true) or not (false).
 {{% tab title="Usage" %}}
 ```go
 	assertions.HTTPBodyContains(t, myHandler, "GET", "www.google.com", nil, "I'm Feeling Lucky")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, World!"
 	failure: httpBody, "GET", "/", url.Values{"name": []string{"Bob"}}, "Hello, World!"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestHTTPBodyContains(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"net/url"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.HTTPBodyContains(t, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, World!")
+	fmt.Println("passed")
+
+}
+
+func httpBody(w http.ResponseWriter, r *http.Request) {
+	name := r.FormValue("name")
+	_, _ = fmt.Fprintf(w, "Hello, %s!", name)
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -87,7 +123,7 @@ Returns whether the assertion was successful (true) or not (false).
 |--|--| 
 | [`assertions.HTTPBodyContains(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#HTTPBodyContains) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPBodyContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L163)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPBodyContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L147)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -103,14 +139,51 @@ Returns whether the assertion was successful (true) or not (false).
 {{% tab title="Usage" %}}
 ```go
 	assertions.HTTPBodyNotContains(t, myHandler, "GET", "www.google.com", nil, "I'm Feeling Lucky")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, Bob!"
 	failure: httpBody, "GET", "/", url.Values{"name": []string{"Bob"}}, "Hello, Bob!"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestHTTPBodyNotContains(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"net/url"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.HTTPBodyNotContains(t, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, Bob!")
+	fmt.Println("passed")
+
+}
+
+func httpBody(w http.ResponseWriter, r *http.Request) {
+	name := r.FormValue("name")
+	_, _ = fmt.Fprintf(w, "Hello, %s!", name)
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -137,7 +210,7 @@ Returns whether the assertion was successful (true) or not (false).
 |--|--| 
 | [`assertions.HTTPBodyNotContains(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#HTTPBodyNotContains) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPBodyNotContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L191)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPBodyNotContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L175)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -152,14 +225,49 @@ Returns whether the assertion was successful (true) or not (false).
 {{% tab title="Usage" %}}
 ```go
 	assertions.HTTPError(t, myHandler, "POST", "/a/b/c", url.Values{"a": []string{"b", "c"}}
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: httpError, "GET", "/", nil
 	failure: httpOK, "GET", "/", nil
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestHTTPError(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.HTTPError(t, httpError, "GET", "/", nil)
+	fmt.Println("passed")
+
+}
+
+func httpError(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusInternalServerError)
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -186,7 +294,7 @@ Returns whether the assertion was successful (true) or not (false).
 |--|--| 
 | [`assertions.HTTPError(t T, handler http.HandlerFunc, method string, url string, values url.Values, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#HTTPError) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPError](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L87)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPError](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L79)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -201,14 +309,49 @@ Returns whether the assertion was successful (true) or not (false).
 {{% tab title="Usage" %}}
 ```go
 	assertions.HTTPRedirect(t, myHandler, "GET", "/a/b/c", url.Values{"a": []string{"b", "c"}}
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: httpRedirect, "GET", "/", nil
 	failure: httpError, "GET", "/", nil
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestHTTPRedirect(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.HTTPRedirect(t, httpRedirect, "GET", "/", nil)
+	fmt.Println("passed")
+
+}
+
+func httpRedirect(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusTemporaryRedirect)
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -235,7 +378,7 @@ Returns whether the assertion was successful (true) or not (false).
 |--|--| 
 | [`assertions.HTTPRedirect(t T, handler http.HandlerFunc, method string, url string, values url.Values, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#HTTPRedirect) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPRedirect](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L57)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPRedirect](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L53)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -250,14 +393,49 @@ Returns whether the assertion was successful (true) or not (false).
 {{% tab title="Usage" %}}
 ```go
 	assertions.HTTPStatusCode(t, myHandler, "GET", "/notImplemented", nil, 501)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: httpOK, "GET", "/", nil, http.StatusOK
 	failure: httpError, "GET", "/", nil, http.StatusOK
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestHTTPStatusCode(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.HTTPStatusCode(t, httpOK, "GET", "/", nil, http.StatusOK)
+	fmt.Println("passed")
+
+}
+
+func httpOK(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -284,7 +462,7 @@ Returns whether the assertion was successful (true) or not (false).
 |--|--| 
 | [`assertions.HTTPStatusCode(t T, handler http.HandlerFunc, method string, url string, values url.Values, statuscode int, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#HTTPStatusCode) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPStatusCode](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L117)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPStatusCode](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L105)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -299,14 +477,49 @@ Returns whether the assertion was successful (true) or not (false).
 {{% tab title="Usage" %}}
 ```go
 	assertions.HTTPSuccess(t, myHandler, "POST", "http://www.google.com", nil)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: httpOK, "GET", "/", nil
 	failure: httpError, "GET", "/", nil
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestHTTPSuccess(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.HTTPSuccess(t, httpOK, "GET", "/", nil)
+	fmt.Println("passed")
+
+}
+
+func httpOK(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -364,7 +577,7 @@ It returns the empty string if building a new request fails.
 |--|--| 
 | [`assertions.HTTPBody(handler http.HandlerFunc, method string, url string, values url.Values) string`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#HTTPBody) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPBody](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L137)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPBody](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L121)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -381,6 +594,4 @@ SPDX-License-Identifier: Apache-2.0
 
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
-
-Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 -->

@@ -120,6 +120,7 @@ func execute(cfg *config) error {
 		generator.WithIncludeForwardFuncs(cfg.includeFwd),
 		generator.WithIncludeGenerics(cfg.includeGen),
 		generator.WithIncludeHelpers(cfg.includeHlp),
+		generator.WithRunnableExamples(cfg.runExa), // extracts runnable examples from generated sourc
 	)
 	if err != nil {
 		return err

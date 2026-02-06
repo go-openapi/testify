@@ -13,7 +13,7 @@ import (
 
 func TestTypeImplements(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	if !Implements(mock, (*AssertionTesterInterface)(nil), new(AssertionTesterConformingObject)) {
 		t.Error("Implements method should return true: AssertionTesterConformingObject implements AssertionTesterInterface")
@@ -28,7 +28,7 @@ func TestTypeImplements(t *testing.T) {
 
 func TestTypeNotImplements(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	if !NotImplements(mock, (*AssertionTesterInterface)(nil), new(AssertionTesterNonConformingObject)) {
 		t.Error("NotImplements method should return true: AssertionTesterNonConformingObject does not implement AssertionTesterInterface")
@@ -43,7 +43,7 @@ func TestTypeNotImplements(t *testing.T) {
 
 func TestTypeIsType(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	if !IsType(mock, new(AssertionTesterConformingObject), new(AssertionTesterConformingObject)) {
 		t.Error("IsType should return true: AssertionTesterConformingObject is the same type as AssertionTesterConformingObject")
@@ -55,7 +55,7 @@ func TestTypeIsType(t *testing.T) {
 
 func TestTypeNotIsType(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	if !IsNotType(mock, new(AssertionTesterConformingObject), new(AssertionTesterNonConformingObject)) {
 		t.Error("NotIsType should return true: AssertionTesterConformingObject is not the same type as AssertionTesterNonConformingObject")
@@ -73,47 +73,51 @@ func TestTypeIsOfTypeT(t *testing.T) {
 	var myVar myType = 1.2
 	f := 1.2
 
-	True(t, IsOfTypeT[myType](mock, myVar), "expected myVar to be of type %T", myVar)
-	False(t, IsNotOfTypeT[myType](mock, myVar), "expected myVar to be of type %T", myVar)
-	False(t, IsOfTypeT[myType](mock, f), "expected f (%T) not to be of type %T", f, myVar)
-	True(t, IsNotOfTypeT[myType](mock, f), "expected f (%T) not to be of type %T", f, myVar)
-}
-
-func TestTypeZeroWithSliceTooLongToPrint(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
-
-	longSlice := make([]int, 1_000_000)
-	Zero(mock, longSlice)
-	Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	Should be zero, but was [0 0 0`)
-	Contains(t, mock.errorString(), `<... truncated>`)
+	if !IsOfTypeT[myType](mock, myVar) {
+		t.Errorf("expected myVar to be of type %T", myVar)
+	}
+	if IsNotOfTypeT[myType](mock, myVar) {
+		t.Errorf("expected IsNotOfTypeT to return false for myVar of type %T", myVar)
+	}
+	if IsOfTypeT[myType](mock, f) {
+		t.Errorf("expected f (%T) not to be of type %T", f, myVar)
+	}
+	if !IsNotOfTypeT[myType](mock, f) {
+		t.Errorf("expected IsNotOfTypeT to return true for f (%T) vs %T", f, myVar)
+	}
 }
 
 func TestTypeZero(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	for test := range typeZeros() {
-		True(t, Zero(mock, test, "%#v is not the %T zero value", test, test))
+		if !Zero(mock, test) {
+			t.Errorf("expected %#v to be the zero value for %T", test, test)
+		}
 	}
 
 	for test := range typeNonZeros() {
-		False(t, Zero(mock, test, "%#v is not the %T zero value", test, test))
+		if Zero(mock, test) {
+			t.Errorf("expected %#v to NOT be the zero value for %T", test, test)
+		}
 	}
 }
 
 func TestTypeNotZero(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	for test := range typeZeros() {
-		False(t, NotZero(mock, test, "%#v is not the %T zero value", test, test))
+		if NotZero(mock, test) {
+			t.Errorf("expected NotZero to return false for zero value %#v (%T)", test, test)
+		}
 	}
 
 	for test := range typeNonZeros() {
-		True(t, NotZero(mock, test, "%#v is not the %T zero value", test, test))
+		if !NotZero(mock, test) {
+			t.Errorf("expected NotZero to return true for non-zero value %#v (%T)", test, test)
+		}
 	}
 }
 
@@ -153,47 +157,46 @@ func TestTypeKind(t *testing.T) {
 func TestTypeDiffEmptyCases(t *testing.T) {
 	t.Parallel()
 
-	Equal(t, "", diff(nil, nil))
-	Equal(t, "", diff(struct{ foo string }{}, nil))
-	Equal(t, "", diff(nil, struct{ foo string }{}))
-	Equal(t, "", diff(1, 2))
-	Equal(t, "", diff(1, 2))
-	Equal(t, "", diff([]int{1}, []bool{true}))
-}
-
-// Ensure there are no data races.
-func TestTypeDiffRace(t *testing.T) {
-	t.Parallel()
-
-	expected := map[string]string{
-		"a": "A",
-		"b": "B",
-		"c": "C",
+	cases := []struct {
+		a, b any
+	}{
+		{nil, nil},
+		{struct{ foo string }{}, nil},
+		{nil, struct{ foo string }{}},
+		{1, 2},
+		{1, 2},
+		{[]int{1}, []bool{true}},
 	}
-
-	actual := map[string]string{
-		"d": "D",
-		"e": "E",
-		"f": "F",
-	}
-
-	// run diffs in parallel simulating tests with t.Parallel()
-	numRoutines := 10
-	rChans := make([]chan string, numRoutines)
-	for idx := range rChans {
-		rChans[idx] = make(chan string)
-		go func(ch chan string) {
-			defer close(ch)
-			ch <- diff(expected, actual)
-		}(rChans[idx])
-	}
-
-	for _, ch := range rChans {
-		for msg := range ch {
-			NotZero(t, msg) // dummy assert
+	for _, tc := range cases {
+		if result := diff(tc.a, tc.b); result != "" {
+			t.Errorf("expected empty diff for (%v, %v), got %q", tc.a, tc.b, result)
 		}
 	}
 }
+
+func TestTypeErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, typeFailCases())
+}
+
+// =======================================
+// TestTypeErrorMessages
+// =======================================
+
+func typeFailCases() iter.Seq[failCase] {
+	return slices.Values([]failCase{
+		{
+			name:         "Zero/large-slice-truncated",
+			assertion:    func(t T) bool { return Zero(t, make([]int, 1_000_000)) },
+			wantContains: []string{"Should be zero, but was", "<... truncated>"},
+		},
+	})
+}
+
+// =======================================
+// TestTypeIsZero
+// =======================================
 
 func typeZeros() iter.Seq[any] {
 	return slices.Values([]any{

@@ -52,6 +52,8 @@ func (dfs *dummyFmtState) Width() (int, bool) {
 // should never happen in real code and therefore can't be tested via the public
 // API.
 func TestInvalidReflectValue(t *testing.T) {
+	t.Parallel()
+
 	i := 1
 
 	// Dump invalid reflect value.

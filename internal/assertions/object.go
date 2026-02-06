@@ -62,9 +62,10 @@ func ObjectsAreEqualValues(expected, actual any) bool {
 
 	expectedConverted := expectedValue.Convert(actualType)
 	if !expectedConverted.CanInterface() {
-		// Cannot interface after conversion, so cannot be equal.
-		// This prevents panics when calling [reflect.Value.Interface].
-		return false
+		// Unreachable with current Go reflection: values from reflect.ValueOf()
+		// are always interfaceable, and Convert() preserves that property.
+		// CanInterface() is only false for values obtained via unexported struct fields.
+		panic("reflect: converted value is not interfaceable")
 	}
 
 	if !isNumericType(expectedType) || !isNumericType(actualType) {
@@ -79,16 +80,17 @@ func ObjectsAreEqualValues(expected, actual any) bool {
 	// the smaller type to a larger type before comparing.
 	if expectedType.Size() >= actualType.Size() {
 		if !actualValue.CanConvert(expectedType) {
-			// Cannot convert actual to the expected type, so cannot be equal.
-			// This is a hypothetical case to prevent panics when calling [reflect.Value.Convert].
-			return false
+			// Unreachable with current Go reflection: all numeric kinds (Int through Complex128)
+			// are convertible to all other numeric kinds.
+			panic("reflect: numeric value is not convertible to numeric type")
 		}
 
 		actualConverted := actualValue.Convert(expectedType)
 		if !actualConverted.CanInterface() {
-			// Cannot interface after conversion, so cannot be equal.
-			// This is a hypothetical case to prevent panics when calling [reflect.Value.Convert].
-			return false
+			// Unreachable with current Go reflection: values from reflect.ValueOf()
+			// are always interfaceable, and Convert() preserves that property.
+			// CanInterface() is only false for values obtained via unexported struct fields.
+			panic("reflect: converted value is not interfaceable")
 		}
 
 		return actualConverted.Interface() == expected

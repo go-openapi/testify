@@ -30,7 +30,12 @@ import (
 	"github.com/go-openapi/testify/v2/internal/spew/testsrc"
 )
 
-func addCgoDumpTests() {
+func cgoDumpTests() []dumpTest {
+	var tests []dumpTest
+	add := func(in any, wants ...string) {
+		tests = append(tests, dumpTest{in, wants})
+	}
+
 	// C char pointer.
 	v := testsrc.GetCgoCharPointer()
 	nv := testsrc.GetCgoNullCharPointer()
@@ -40,10 +45,10 @@ func addCgoDumpTests() {
 	pvAddr := fmt.Sprintf("%p", &pv)
 	vt := "*testsrc._Ctype_char"
 	vs := "116"
-	addDumpTest(v, "("+vt+")("+vcAddr+")("+vs+")\n")
-	addDumpTest(pv, "(*"+vt+")("+vAddr+"->"+vcAddr+")("+vs+")\n")
-	addDumpTest(&pv, "(**"+vt+")("+pvAddr+"->"+vAddr+"->"+vcAddr+")("+vs+")\n")
-	addDumpTest(nv, "("+vt+")(<nil>)\n")
+	add(v, "("+vt+")("+vcAddr+")("+vs+")\n")
+	add(pv, "(*"+vt+")("+vAddr+"->"+vcAddr+")("+vs+")\n")
+	add(&pv, "(**"+vt+")("+pvAddr+"->"+vAddr+"->"+vcAddr+")("+vs+")\n")
+	add(nv, "("+vt+")(<nil>)\n")
 
 	// C char array.
 	v2, v2l, v2c := testsrc.GetCgoCharArray()
@@ -53,7 +58,7 @@ func addCgoDumpTests() {
 	v2s := "(len=" + v2Len + " cap=" + v2Cap + ") " +
 		"{\n 00000000  74 65 73 74 32 00                               " +
 		"  |test2.|\n}"
-	addDumpTest(v2, "("+v2t+") "+v2s+"\n")
+	add(v2, "("+v2t+") "+v2s+"\n")
 
 	// C unsigned char array.
 	v3, v3l, v3c := testsrc.GetCgoUnsignedCharArray()
@@ -64,7 +69,7 @@ func addCgoDumpTests() {
 	v3s := "(len=" + v3Len + " cap=" + v3Cap + ") " +
 		"{\n 00000000  74 65 73 74 33 00                               " +
 		"  |test3.|\n}"
-	addDumpTest(v3, "("+v3t+") "+v3s+"\n", "("+v3t2+") "+v3s+"\n")
+	add(v3, "("+v3t+") "+v3s+"\n", "("+v3t2+") "+v3s+"\n")
 
 	// C signed char array.
 	v4, v4l, v4c := testsrc.GetCgoSignedCharArray()
@@ -76,7 +81,7 @@ func addCgoDumpTests() {
 		"{\n (" + v4t2 + ") 116,\n (" + v4t2 + ") 101,\n (" + v4t2 +
 		") 115,\n (" + v4t2 + ") 116,\n (" + v4t2 + ") 52,\n (" + v4t2 +
 		") 0\n}"
-	addDumpTest(v4, "("+v4t+") "+v4s+"\n")
+	add(v4, "("+v4t+") "+v4s+"\n")
 
 	// C uint8_t array.
 	v5, v5l, v5c := testsrc.GetCgoUint8tArray()
@@ -87,7 +92,7 @@ func addCgoDumpTests() {
 	v5s := "(len=" + v5Len + " cap=" + v5Cap + ") " +
 		"{\n 00000000  74 65 73 74 35 00                               " +
 		"  |test5.|\n}"
-	addDumpTest(v5, "("+v5t+") "+v5s+"\n", "("+v5t2+") "+v5s+"\n")
+	add(v5, "("+v5t+") "+v5s+"\n", "("+v5t2+") "+v5s+"\n")
 
 	// C typedefed unsigned char array.
 	v6, v6l, v6c := testsrc.GetCgoTypdefedUnsignedCharArray()
@@ -98,5 +103,7 @@ func addCgoDumpTests() {
 	v6s := "(len=" + v6Len + " cap=" + v6Cap + ") " +
 		"{\n 00000000  74 65 73 74 36 00                               " +
 		"  |test6.|\n}"
-	addDumpTest(v6, "("+v6t+") "+v6s+"\n", "("+v6t2+") "+v6s+"\n")
+	add(v6, "("+v6t+") "+v6s+"\n", "("+v6t2+") "+v6s+"\n")
+
+	return tests
 }

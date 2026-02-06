@@ -1,7 +1,6 @@
 ---
 title: "Ordering"
 description: "Asserting How Collections Are Ordered"
-modified: 2026-01-27
 weight: 11
 domains:
   - "ordering"
@@ -64,14 +63,44 @@ IsDecreasing asserts that the collection is strictly decreasing.
 	assertions.IsDecreasing(t, []int{2, 1, 0})
 	assertions.IsDecreasing(t, []float{2, 1})
 	assertions.IsDecreasing(t, []string{"b", "a"})
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []int{3, 2, 1}
 	failure: []int{1, 2, 3}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestIsDecreasing(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.IsDecreasing(t, []int{3, 2, 1})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -113,14 +142,44 @@ IsDecreasingT asserts that a slice of [Ordered](https://pkg.go.dev/github.com/go
 	assertions.IsDecreasingT(t, []int{2, 1, 0})
 	assertions.IsDecreasingT(t, []float{2, 1})
 	assertions.IsDecreasingT(t, []string{"b", "a"})
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []int{3, 2, 1}
 	failure: []int{1, 2, 3}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestIsDecreasingT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.IsDecreasingT(t, []int{3, 2, 1})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -141,7 +200,7 @@ IsDecreasingT asserts that a slice of [Ordered](https://pkg.go.dev/github.com/go
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.IsDecreasingT(t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsDecreasingT) | internal implementation |
+| [`assertions.IsDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsDecreasingT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsDecreasingT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L220)
 {{% /tab %}}
@@ -158,14 +217,44 @@ IsIncreasing asserts that the collection is strictly increasing.
 	assertions.IsIncreasing(t, []int{1, 2, 3})
 	assertions.IsIncreasing(t, []float{1, 2})
 	assertions.IsIncreasing(t, []string{"a", "b"})
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []int{1, 2, 3}
 	failure: []int{1, 1, 2}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestIsIncreasing(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.IsIncreasing(t, []int{1, 2, 3})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -207,14 +296,44 @@ IsIncreasingT asserts that a slice of [Ordered](https://pkg.go.dev/github.com/go
 	assertions.IsIncreasingT(t, []int{1, 2, 3})
 	assertions.IsIncreasingT(t, []float{1, 2})
 	assertions.IsIncreasingT(t, []string{"a", "b"})
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []int{1, 2, 3}
 	failure: []int{1, 1, 2}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestIsIncreasingT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.IsIncreasingT(t, []int{1, 2, 3})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -235,7 +354,7 @@ IsIncreasingT asserts that a slice of [Ordered](https://pkg.go.dev/github.com/go
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.IsIncreasingT(t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsIncreasingT) | internal implementation |
+| [`assertions.IsIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsIncreasingT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsIncreasingT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L53)
 {{% /tab %}}
@@ -252,14 +371,44 @@ IsNonDecreasing asserts that the collection is not strictly decreasing.
 	assertions.IsNonDecreasing(t, []int{1, 1, 2})
 	assertions.IsNonDecreasing(t, []float{1, 2})
 	assertions.IsNonDecreasing(t, []string{"a", "b"})
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []int{1, 1, 2}
 	failure: []int{2, 1, 0}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestIsNonDecreasing(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.IsNonDecreasing(t, []int{1, 1, 2})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -301,14 +450,44 @@ IsNonDecreasingT asserts that a slice of [Ordered](https://pkg.go.dev/github.com
 	assertions.IsNonDecreasingT(t, []int{1, 1, 2})
 	assertions.IsNonDecreasingT(t, []float{1, 2})
 	assertions.IsNonDecreasingT(t, []string{"a", "b"})
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []int{1, 1, 2}
 	failure: []int{2, 1, 0}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestIsNonDecreasingT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.IsNonDecreasingT(t, []int{1, 1, 2})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -329,7 +508,7 @@ IsNonDecreasingT asserts that a slice of [Ordered](https://pkg.go.dev/github.com
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.IsNonDecreasingT(t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNonDecreasingT) | internal implementation |
+| [`assertions.IsNonDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNonDecreasingT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNonDecreasingT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L275)
 {{% /tab %}}
@@ -346,14 +525,44 @@ IsNonIncreasing asserts that the collection is not increasing.
 	assertions.IsNonIncreasing(t, []int{2, 1, 1})
 	assertions.IsNonIncreasing(t, []float{2, 1})
 	assertions.IsNonIncreasing(t, []string{"b", "a"})
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []int{2, 1, 1}
 	failure: []int{1, 2, 3}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestIsNonIncreasing(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.IsNonIncreasing(t, []int{2, 1, 1})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -395,14 +604,44 @@ IsNonIncreasingT asserts that a slice of [Ordered](https://pkg.go.dev/github.com
 	assertions.IsNonIncreasing(t, []int{2, 1, 1})
 	assertions.IsNonIncreasing(t, []float{2, 1})
 	assertions.IsNonIncreasing(t, []string{"b", "a"})
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []int{2, 1, 1}
 	failure: []int{1, 2, 3}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestIsNonIncreasingT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.IsNonIncreasingT(t, []int{2, 1, 1})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -423,7 +662,7 @@ IsNonIncreasingT asserts that a slice of [Ordered](https://pkg.go.dev/github.com
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.IsNonIncreasingT(t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNonIncreasingT) | internal implementation |
+| [`assertions.IsNonIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNonIncreasingT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNonIncreasingT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L164)
 {{% /tab %}}
@@ -442,14 +681,44 @@ Unlike [IsDecreasingT](https://pkg.go.dev/github.com/go-openapi/testify/v2/asser
 	assertions.NotSortedT(t, []int{3, 2, 3})
 	assertions.NotSortedT(t, []float{2, 1})
 	assertions.NotSortedT(t, []string{"b", "a"})
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []int{3, 1, 3}
 	failure: []int{1, 4, 8}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotSortedT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.NotSortedT(t, []int{3, 1, 3})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -470,7 +739,7 @@ Unlike [IsDecreasingT](https://pkg.go.dev/github.com/go-openapi/testify/v2/asser
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.NotSortedT(t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotSortedT) | internal implementation |
+| [`assertions.NotSortedT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotSortedT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSortedT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L109)
 {{% /tab %}}
@@ -489,14 +758,44 @@ Unlike [IsIncreasingT](https://pkg.go.dev/github.com/go-openapi/testify/v2/asser
 	assertions.SortedT(t, []int{1, 2, 3})
 	assertions.SortedT(t, []float{1, 2})
 	assertions.SortedT(t, []string{"a", "b"})
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []int{1, 1, 3}
 	failure: []int{1, 4, 2}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestSortedT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T)
+	require.SortedT(t, []int{1, 1, 3})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
@@ -517,7 +816,7 @@ Unlike [IsIncreasingT](https://pkg.go.dev/github.com/go-openapi/testify/v2/asser
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--| 
-| [`assertions.SortedT(t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SortedT) | internal implementation |
+| [`assertions.SortedT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SortedT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#SortedT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L81)
 {{% /tab %}}
@@ -538,6 +837,4 @@ SPDX-License-Identifier: Apache-2.0
 
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
-
-Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 -->

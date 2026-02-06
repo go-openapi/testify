@@ -4,8 +4,9 @@
 package yaml
 
 import (
-	yamlstub "github.com/go-openapi/testify/v2/enable/stubs/yaml"
 	yaml "go.yaml.in/yaml/v3"
+
+	yamlstub "github.com/go-openapi/testify/v2/enable/stubs/yaml"
 )
 
 func enableYAML() {

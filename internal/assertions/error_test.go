@@ -12,106 +12,113 @@ import (
 	"testing"
 )
 
-func TestErrorNoErrorWithErrorTooLongToPrint(t *testing.T) {
+func TestErrorNoError(t *testing.T) {
 	t.Parallel()
 	mock := new(mockT)
 
-	longSlice := make([]int, 1_000_000)
-	NoError(mock, fmt.Errorf("long: %v", longSlice))
-	Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	Received unexpected error:
-	            	long: [0 0 0`)
-	Contains(t, mock.errorString(), `<... truncated>`)
+	// start with a nil error
+	var err error
+
+	if !NoError(mock, err) {
+		t.Error("NoError should return true for nil arg")
+	}
+
+	// now set an error
+	err = errors.New("some error")
+
+	if NoError(mock, err) {
+		t.Error("NoError with error should return false")
+	}
+
+	// returning an empty error interface
+	err = func() error {
+		var err *customError
+		return err
+	}()
+
+	if err == nil { // err is not nil here!
+		t.Errorf("Error should be nil due to empty interface: %s", err)
+	}
+
+	if NoError(mock, err) {
+		t.Error("NoError should fail with empty error interface")
+	}
 }
 
-func TestErrorEqualErrorWithErrorTooLongToPrint(t *testing.T) {
+func TestError(t *testing.T) {
 	t.Parallel()
 	mock := new(mockT)
 
-	longSlice := make([]int, 1_000_000)
-	EqualError(mock, fmt.Errorf("long: %v", longSlice), "EOF")
-	Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	Error message not equal:
-	            	expected: "EOF"
-	            	actual  : "long: [0 0 0`)
-	Contains(t, mock.errorString(), `<... truncated>`)
+	// start with a nil error
+	var err error
+
+	if Error(mock, err) {
+		t.Error("Error should return false for nil arg")
+	}
+
+	// now set an error
+	err = errors.New("some error")
+
+	if !Error(mock, err) {
+		t.Error("Error with error should return true")
+	}
+
+	// returning an empty error interface
+	err = func() error {
+		var err *customError
+		return err
+	}()
+
+	if err == nil { // err is not nil here!
+		t.Errorf("Error should be nil due to empty interface: %s", err)
+	}
+
+	if !Error(mock, err) {
+		t.Error("Error should pass with empty error interface")
+	}
 }
 
-func TestErrorContainsWithErrorTooLongToPrint(t *testing.T) {
+func TestErrorEqualError(t *testing.T) {
 	t.Parallel()
 	mock := new(mockT)
 
-	longSlice := make([]int, 1_000_000)
-	ErrorContains(mock, fmt.Errorf("long: %v", longSlice), "EOF")
-	Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	Error "long: [0 0 0`)
-	Contains(t, mock.errorString(), `<... truncated> does not contain "EOF"`)
+	// start with a nil error
+	var err error
+	if EqualError(mock, err, "") {
+		t.Error("EqualError should return false for nil arg")
+	}
+
+	// now set an error
+	err = errors.New("some error")
+	if EqualError(mock, err, "Not some error") {
+		t.Error("EqualError should return false for different error string")
+	}
+	if !EqualError(mock, err, "some error") {
+		t.Error("EqualError should return true")
+	}
 }
 
-func TestErrorIsWithErrorTooLongToPrint(t *testing.T) {
+func TestErrorContains(t *testing.T) {
 	t.Parallel()
 	mock := new(mockT)
 
-	longSlice := make([]int, 1_000_000)
-	ErrorIs(mock, fmt.Errorf("long: %v", longSlice), fmt.Errorf("also: %v", longSlice))
-	Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	Target error should be in err chain:
-	            	expected: "also: [0 0 0`)
-	Contains(t, mock.errorString(), `<... truncated>
-	            	in chain: "long: [0 0 0`)
-}
+	// start with a nil error
+	var err error
+	if ErrorContains(mock, err, "") {
+		t.Error("ErrorContains should return false for nil arg")
+	}
 
-func TestErrorNotErrorIsWithErrorTooLongToPrint(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
-
-	longSlice := make([]int, 1_000_000)
-	err := fmt.Errorf("long: %v", longSlice)
-	NotErrorIs(mock, err, err)
-	Contains(t, mock.errorString(), `
-	Error Trace:	
-	Error:      	Target error should not be in err chain:
-	            	found: "long: [0 0 0`)
-	Contains(t, mock.errorString(), `<... truncated>
-	            	in chain: "long: [0 0 0`)
-}
-
-func TestErrorAsWithErrorTooLongToPrint(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
-
-	longSlice := make([]int, 1_000_000)
-	var target *customError
-	ErrorAs(mock, fmt.Errorf("long: %v", longSlice), &target)
-	Contains(t, mock.errorString(), fmt.Sprintf(`
-	Error Trace:	
-	Error:      	Should be in error chain:
-	            	expected: *%s.customError`,
-		shortpkg))
-	Contains(t, mock.errorString(), `
-	            	in chain: "long: [0 0 0`)
-	Contains(t, mock.errorString(), "<... truncated>")
-}
-
-func TestErrorNotErrorAsWithErrorTooLongToPrint(t *testing.T) {
-	t.Parallel()
-	mock := new(mockT)
-
-	longSlice := make([]int, 1_000_000)
-	var target *customError
-	NotErrorAs(mock, fmt.Errorf("long: %v %w", longSlice, &customError{}), &target)
-	Contains(t, mock.errorString(), fmt.Sprintf(`
-	Error Trace:	
-	Error:      	Target error should not be in err chain:
-	            	found: *%s.customError`,
-		shortpkg))
-	Contains(t, mock.errorString(), `
-	            	in chain: "long: [0 0 0`)
-	Contains(t, mock.errorString(), "<... truncated>")
+	// now set an error
+	err = errors.New("some error: another error")
+	if ErrorContains(mock, err, "bad error") {
+		t.Error("ErrorContains should return false for different error string")
+	}
+	if !ErrorContains(mock, err, "some error") {
+		t.Error("ErrorContains should return true for 'some error'")
+	}
+	if !ErrorContains(mock, err, "another error") {
+		t.Error("ErrorContains should return true for 'another error'")
+	}
 }
 
 func TestErrorNotErrorAs(t *testing.T) {
@@ -120,13 +127,19 @@ func TestErrorNotErrorAs(t *testing.T) {
 	for tt := range errorNotErrorAsCases() {
 		t.Run(fmt.Sprintf("NotErrorAs(%#v,%#v)", tt.err, &customError{}), func(t *testing.T) {
 			t.Parallel()
-			mock := new(captureT)
+			mock := new(mockT)
 			var target *customError
 
 			res := NotErrorAs(mock, tt.err, &target)
-			mock.checkResultAndErrMsg(t, tt.result, res, tt.resultErrMsg)
+			shouldPassOrFail(t, mock, res, tt.result)
 		})
 	}
+}
+
+func TestErrorErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, errorFailCases())
 }
 
 func TestErrorIs(t *testing.T) {
@@ -135,10 +148,10 @@ func TestErrorIs(t *testing.T) {
 	for tt := range errorIsCases() {
 		t.Run(fmt.Sprintf("ErrorIs(%#v,%#v)", tt.err, tt.target), func(t *testing.T) {
 			t.Parallel()
-			mock := new(captureT)
+			mock := new(mockT)
 
 			res := ErrorIs(mock, tt.err, tt.target)
-			mock.checkResultAndErrMsg(t, tt.result, res, tt.resultErrMsg)
+			shouldPassOrFail(t, mock, res, tt.result)
 		})
 	}
 }
@@ -149,10 +162,10 @@ func TestErrorNotErrorIs(t *testing.T) {
 	for tt := range errorNotErrorIsCases() {
 		t.Run(fmt.Sprintf("NotErrorIs(%#v,%#v)", tt.err, tt.target), func(t *testing.T) {
 			t.Parallel()
-			mock := new(captureT)
+			mock := new(mockT)
 
 			res := NotErrorIs(mock, tt.err, tt.target)
-			mock.checkResultAndErrMsg(t, tt.result, res, tt.resultErrMsg)
+			shouldPassOrFail(t, mock, res, tt.result)
 		})
 	}
 }
@@ -163,109 +176,22 @@ func TestErrorAs(t *testing.T) {
 	for tt := range errorAsCases() {
 		t.Run(fmt.Sprintf("ErrorAs(%#v,%#v)", tt.err, &customError{}), func(t *testing.T) {
 			t.Parallel()
-			mock := new(captureT)
+			mock := new(mockT)
 			var target *customError
 
 			res := ErrorAs(mock, tt.err, &target)
-			mock.checkResultAndErrMsg(t, tt.result, res, tt.resultErrMsg)
+			shouldPassOrFail(t, mock, res, tt.result)
 		})
 	}
 }
 
-func TestErrorNoError(t *testing.T) {
-	t.Parallel()
-	mock := new(testing.T)
-
-	// start with a nil error
-	var err error
-
-	True(t, NoError(mock, err), "NoError should return True for nil arg")
-
-	// now set an error
-	err = errors.New("some error")
-
-	False(t, NoError(mock, err), "NoError with error should return False")
-
-	// returning an empty error interface
-	err = func() error {
-		var err *customError
-		return err
-	}()
-
-	if err == nil { // err is not nil here!
-		t.Errorf("Error should be nil due to empty interface: %s", err)
-	}
-
-	False(t, NoError(mock, err), "NoError should fail with empty error interface")
-}
-
-func TestError(t *testing.T) {
-	t.Parallel()
-	mock := new(testing.T)
-
-	// start with a nil error
-	var err error
-
-	False(t, Error(mock, err), "Error should return False for nil arg")
-
-	// now set an error
-	err = errors.New("some error")
-
-	True(t, Error(mock, err), "Error with error should return True")
-
-	// returning an empty error interface
-	err = func() error {
-		var err *customError
-		return err
-	}()
-
-	if err == nil { // err is not nil here!
-		t.Errorf("Error should be nil due to empty interface: %s", err)
-	}
-
-	True(t, Error(mock, err), "Error should pass with empty error interface")
-}
-
-func TestErrorEqualError(t *testing.T) {
-	t.Parallel()
-	mock := new(testing.T)
-
-	// start with a nil error
-	var err error
-	False(t, EqualError(mock, err, ""),
-		"EqualError should return false for nil arg")
-
-	// now set an error
-	err = errors.New("some error")
-	False(t, EqualError(mock, err, "Not some error"),
-		"EqualError should return false for different error string")
-	True(t, EqualError(mock, err, "some error"),
-		"EqualError should return true")
-}
-
-func TestErrorContains(t *testing.T) {
-	t.Parallel()
-	mock := new(testing.T)
-
-	// start with a nil error
-	var err error
-	False(t, ErrorContains(mock, err, ""),
-		"ErrorContains should return false for nil arg")
-
-	// now set an error
-	err = errors.New("some error: another error")
-	False(t, ErrorContains(mock, err, "bad error"),
-		"ErrorContains should return false for different error string")
-	True(t, ErrorContains(mock, err, "some error"),
-		"ErrorContains should return true")
-	True(t, ErrorContains(mock, err, "another error"),
-		"ErrorContains should return true")
-}
+// ============================================================================
+// TestNotErrorAs
+// ============================================================================
 
 type errorNotErrorAsCase struct {
-	err          error
-	result       bool
-	resultErrMsg string
+	err    error
+	result bool
 }
 
 func errorNotErrorAsCases() iter.Seq[errorNotErrorAsCase] {
@@ -273,11 +199,6 @@ func errorNotErrorAsCases() iter.Seq[errorNotErrorAsCase] {
 		{
 			err:    fmt.Errorf("wrap: %w", &customError{}),
 			result: false,
-			resultErrMsg: "" +
-				"Target error should not be in err chain:\n" +
-				fmt.Sprintf("found: *%[1]s.customError\n", shortpkg) +
-				"in chain: \"wrap: fail\" (*fmt.wrapError)\n" +
-				fmt.Sprintf("\t\"fail\" (*%[1]s.customError)\n", shortpkg),
 		},
 		{
 			err:    io.EOF,
@@ -291,165 +212,229 @@ func errorNotErrorAsCases() iter.Seq[errorNotErrorAsCase] {
 }
 
 type errorIsCase struct {
-	err          error
-	target       error
-	result       bool
-	resultErrMsg string
+	err    error
+	target error
+	result bool
 }
 
 func errorIsCases() iter.Seq[errorIsCase] {
 	return slices.Values([]errorIsCase{
-		{
-			err:    io.EOF,
-			target: io.EOF,
-			result: true,
-		},
-		{
-			err:    fmt.Errorf("wrap: %w", io.EOF),
-			target: io.EOF,
-			result: true,
-		},
-		{
-			err:    io.EOF,
-			target: io.ErrClosedPipe,
-			result: false,
-			resultErrMsg: "" +
-				"Target error should be in err chain:\n" +
-				"expected: \"io: read/write on closed pipe\"\n" +
-				"in chain: \"EOF\"\n",
-		},
-		{
-			err:          nil,
-			target:       io.EOF,
-			result:       false,
-			resultErrMsg: "Expected error with \"EOF\" in chain but got nil.\n",
-		},
-		{
-			err:    io.EOF,
-			target: nil,
-			result: false,
-			resultErrMsg: "" +
-				"Target error should be in err chain:\n" +
-				"expected: \"\"\n" +
-				"in chain: \"EOF\"\n",
-		},
-		{
-			err:    nil,
-			target: nil,
-			result: true,
-		},
-		{
-			err:    fmt.Errorf("abc: %w", errors.New("def")),
-			target: io.EOF,
-			result: false,
-			resultErrMsg: "" +
-				"Target error should be in err chain:\n" +
-				"expected: \"EOF\"\n" +
-				"in chain: \"abc: def\"\n" +
-				"\t\"def\"\n",
-		},
+		{err: io.EOF, target: io.EOF, result: true},
+		{err: fmt.Errorf("wrap: %w", io.EOF), target: io.EOF, result: true},
+		{err: io.EOF, target: io.ErrClosedPipe, result: false},
+		{err: nil, target: io.EOF, result: false},
+		{err: io.EOF, target: nil, result: false},
+		{err: nil, target: nil, result: true},
+		{err: fmt.Errorf("abc: %w", errors.New("def")), target: io.EOF, result: false},
 	})
 }
 
 type errorNotErrorIsCase struct {
-	err          error
-	target       error
-	result       bool
-	resultErrMsg string
+	err    error
+	target error
+	result bool
 }
 
 func errorNotErrorIsCases() iter.Seq[errorNotErrorIsCase] {
 	return slices.Values([]errorNotErrorIsCase{
-		{
-			err:    io.EOF,
-			target: io.EOF,
-			result: false,
-			resultErrMsg: "" +
-				"Target error should not be in err chain:\n" +
-				"found: \"EOF\"\n" +
-				"in chain: \"EOF\"\n",
-		},
-		{
-			err:    fmt.Errorf("wrap: %w", io.EOF),
-			target: io.EOF,
-			result: false,
-			resultErrMsg: "" +
-				"Target error should not be in err chain:\n" +
-				"found: \"EOF\"\n" +
-				"in chain: \"wrap: EOF\"\n" +
-				"\t\"EOF\"\n",
-		},
-		{
-			err:    io.EOF,
-			target: io.ErrClosedPipe,
-			result: true,
-		},
-		{
-			err:    nil,
-			target: io.EOF,
-			result: true,
-		},
-		{
-			err:    io.EOF,
-			target: nil,
-			result: true,
-		},
-		{
-			err:    nil,
-			target: nil,
-			result: false,
-			resultErrMsg: "" +
-				"Target error should not be in err chain:\n" +
-				"found: \"\"\n" +
-				"in chain: \n",
-		},
-		{
-			err:    fmt.Errorf("abc: %w", errors.New("def")),
-			target: io.EOF,
-			result: true,
-		},
+		{err: io.EOF, target: io.EOF, result: false},
+		{err: fmt.Errorf("wrap: %w", io.EOF), target: io.EOF, result: false},
+		{err: io.EOF, target: io.ErrClosedPipe, result: true},
+		{err: nil, target: io.EOF, result: true},
+		{err: io.EOF, target: nil, result: true},
+		{err: nil, target: nil, result: false},
+		{err: fmt.Errorf("abc: %w", errors.New("def")), target: io.EOF, result: true},
 	})
 }
 
 type errorAsCase struct {
-	err          error
-	result       bool
-	resultErrMsg string
+	err    error
+	result bool
 }
 
 func errorAsCases() iter.Seq[errorAsCase] {
 	return slices.Values([]errorAsCase{
-		{
-			err:    fmt.Errorf("wrap: %w", &customError{}),
-			result: true,
-		},
-		{
-			err:    io.EOF,
-			result: false,
-			resultErrMsg: "" +
-				"Should be in error chain:\n" +
-				fmt.Sprintf("expected: *%[1]s.customError\n", shortpkg) +
-				"in chain: \"EOF\" (*errors.errorString)\n",
-		},
-		{
-			err:    nil,
-			result: false,
-			resultErrMsg: "" +
-				"An error is expected but got nil.\n" +
-				fmt.Sprintf(`expected: *%s.customError`, shortpkg) + "\n",
-		},
-		{
-			err:    fmt.Errorf("abc: %w", errors.New("def")),
-			result: false,
-			resultErrMsg: "" +
-				"Should be in error chain:\n" +
-				fmt.Sprintf("expected: *%[1]s.customError\n", shortpkg) +
-				"in chain: \"abc: def\" (*fmt.wrapError)\n" +
-				"\t\"def\" (*errors.errorString)\n",
-		},
+		{err: fmt.Errorf("wrap: %w", &customError{}), result: true},
+		{err: io.EOF, result: false},
+		{err: nil, result: false},
+		{err: fmt.Errorf("abc: %w", errors.New("def")), result: false},
+		{err: &wrapsNilError{msg: "dead end"}, result: false},                     // covers unwrapAll: Unwrap() error returning nil
+		{err: errors.Join(errors.New("err1"), errors.New("err2")), result: false}, // covers unwrapAll: Unwrap() []error
 	})
 }
 
 type customError struct{}
 
 func (*customError) Error() string { return "fail" }
+
+type wrapsNilError struct{ msg string }
+
+func (e *wrapsNilError) Error() string { return e.msg }
+func (e *wrapsNilError) Unwrap() error { return nil }
+
+// ============================================================================
+// TestErrorErrorMessages
+// ============================================================================
+
+func errorFailCases() iter.Seq[failCase] {
+	longSlice := make([]int, 1_000_000)
+
+	return slices.Values([]failCase{
+		// --- truncation cases ---
+		truncationCase("NoError/truncation", func(t T) bool {
+			return NoError(t, fmt.Errorf("long: %v", longSlice))
+		}),
+		truncationCase("EqualError/truncation", func(t T) bool {
+			return EqualError(t, fmt.Errorf("long: %v", longSlice), "EOF")
+		}),
+		truncationCase("ErrorContains/truncation", func(t T) bool {
+			return ErrorContains(t, fmt.Errorf("long: %v", longSlice), "EOF")
+		}),
+		truncationCase("ErrorIs/truncation", func(t T) bool {
+			return ErrorIs(t, fmt.Errorf("long: %v", longSlice), fmt.Errorf("also: %v", longSlice))
+		}),
+		truncationCase("NotErrorIs/truncation", func(t T) bool {
+			err := fmt.Errorf("long: %v", longSlice)
+			return NotErrorIs(t, err, err)
+		}),
+		truncationCase("ErrorAs/truncation", func(t T) bool {
+			var target *customError
+			return ErrorAs(t, fmt.Errorf("long: %v", longSlice), &target)
+		}),
+		truncationCase("NotErrorAs/truncation", func(t T) bool {
+			var target *customError
+			return NotErrorAs(t, fmt.Errorf("long: %v %w", longSlice, &customError{}), &target)
+		}),
+
+		// --- ErrorIs message cases ---
+		{
+			name: "ErrorIs/not_in_chain",
+			assertion: func(t T) bool {
+				return ErrorIs(t, io.EOF, io.ErrClosedPipe)
+			},
+			wantError: "" +
+				"Target error should be in err chain:\n" +
+				"expected: \"io: read/write on closed pipe\"\n" +
+				"in chain: \"EOF\"",
+		},
+		{
+			name: "ErrorIs/nil_err",
+			assertion: func(t T) bool {
+				return ErrorIs(t, nil, io.EOF)
+			},
+			wantError: "Expected error with \"EOF\" in chain but got nil.",
+		},
+		{
+			name: "ErrorIs/nil_target",
+			assertion: func(t T) bool {
+				return ErrorIs(t, io.EOF, nil)
+			},
+			wantError: "" +
+				"Target error should be in err chain:\n" +
+				"expected: \"\"\n" +
+				"in chain: \"EOF\"",
+		},
+		{
+			name: "ErrorIs/wrapped_not_in_chain",
+			assertion: func(t T) bool {
+				return ErrorIs(t, fmt.Errorf("abc: %w", errors.New("def")), io.EOF)
+			},
+			wantError: "" +
+				"Target error should be in err chain:\n" +
+				"expected: \"EOF\"\n" +
+				"in chain: \"abc: def\"\n" +
+				"\t\"def\"",
+		},
+
+		// --- NotErrorIs message cases ---
+		{
+			name: "NotErrorIs/same_error",
+			assertion: func(t T) bool {
+				return NotErrorIs(t, io.EOF, io.EOF)
+			},
+			wantError: "" +
+				"Target error should not be in err chain:\n" +
+				"found: \"EOF\"\n" +
+				"in chain: \"EOF\"",
+		},
+		{
+			name: "NotErrorIs/wrapped_in_chain",
+			assertion: func(t T) bool {
+				return NotErrorIs(t, fmt.Errorf("wrap: %w", io.EOF), io.EOF)
+			},
+			wantError: "" +
+				"Target error should not be in err chain:\n" +
+				"found: \"EOF\"\n" +
+				"in chain: \"wrap: EOF\"\n" +
+				"\t\"EOF\"",
+		},
+		{
+			name: "NotErrorIs/both_nil",
+			assertion: func(t T) bool {
+				return NotErrorIs(t, nil, nil)
+			},
+			wantError: "" +
+				"Target error should not be in err chain:\n" +
+				"found: \"\"\n" +
+				"in chain: ",
+		},
+
+		// --- ErrorAs message cases ---
+		{
+			name: "ErrorAs/not_in_chain",
+			assertion: func(t T) bool {
+				var target *customError
+				return ErrorAs(t, io.EOF, &target)
+			},
+			wantError: "" +
+				"Should be in error chain:\n" +
+				fmt.Sprintf("expected: *%s.customError\n", shortpkg) +
+				"in chain: \"EOF\" (*errors.errorString)",
+		},
+		{
+			name: "ErrorAs/nil_err",
+			assertion: func(t T) bool {
+				var target *customError
+				return ErrorAs(t, nil, &target)
+			},
+			wantError: "" +
+				"An error is expected but got nil.\n" +
+				fmt.Sprintf("expected: *%s.customError", shortpkg),
+		},
+		{
+			name: "ErrorAs/wrapped_not_in_chain",
+			assertion: func(t T) bool {
+				var target *customError
+				return ErrorAs(t, fmt.Errorf("abc: %w", errors.New("def")), &target)
+			},
+			wantError: "" +
+				"Should be in error chain:\n" +
+				fmt.Sprintf("expected: *%s.customError\n", shortpkg) +
+				"in chain: \"abc: def\" (*fmt.wrapError)\n" +
+				"\t\"def\" (*errors.errorString)",
+		},
+
+		// --- NotErrorAs message cases ---
+		{
+			name: "NotErrorAs/found_in_chain",
+			assertion: func(t T) bool {
+				var target *customError
+				return NotErrorAs(t, fmt.Errorf("wrap: %w", &customError{}), &target)
+			},
+			wantError: "" +
+				"Target error should not be in err chain:\n" +
+				fmt.Sprintf("found: *%s.customError\n", shortpkg) +
+				"in chain: \"wrap: fail\" (*fmt.wrapError)\n" +
+				fmt.Sprintf("\t\"fail\" (*%s.customError)", shortpkg),
+		},
+		// -- TestExample error
+		{
+			name: "NotError/TestExampleError",
+			assertion: func(t T) bool {
+				return NoError(t, ErrTest)
+			},
+			wantError: "Received unexpected error:\n" +
+				"assert.ErrTest general error for testing",
+		},
+	})
+}

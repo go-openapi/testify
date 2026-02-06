@@ -25,8 +25,9 @@
 //   - number: asserting numbers
 //   - ordering: asserting how collections are ordered
 //   - panic: asserting a panic behavior
+//   - safety: checks against leaked resources
 //   - string: asserting strings
-//   - testing: mimicks methods from the testing standard library
+//   - testing: mimics methods from the testing standard library
 //   - time: asserting times and durations
 //   - type: asserting types rather than values
 //   - yaml: asserting yaml documents

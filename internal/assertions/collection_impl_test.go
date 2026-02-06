@@ -24,49 +24,28 @@ func testContainsElement() func(*testing.T) {
 		list2 := []int{1, 2}
 		simpleMap := map[any]any{"Foo": "Bar"}
 
-		ok, found := containsElement("Hello World", "World")
-		True(t, ok)
-		True(t, found)
+		checkContains := func(list any, elem any, expectOK, expectFound bool) {
+			t.Helper()
+			ok, found := containsElement(list, elem)
+			if ok != expectOK {
+				t.Errorf("containsElement(%v, %v): expected ok=%v, got %v", list, elem, expectOK, ok)
+			}
+			if found != expectFound {
+				t.Errorf("containsElement(%v, %v): expected found=%v, got %v", list, elem, expectFound, found)
+			}
+		}
 
-		ok, found = containsElement(list1, "Foo")
-		True(t, ok)
-		True(t, found)
-
-		ok, found = containsElement(list1, "Bar")
-		True(t, ok)
-		True(t, found)
-
-		ok, found = containsElement(list2, 1)
-		True(t, ok)
-		True(t, found)
-
-		ok, found = containsElement(list2, 2)
-		True(t, ok)
-		True(t, found)
-
-		ok, found = containsElement(list1, "Foo!")
-		True(t, ok)
-		False(t, found)
-
-		ok, found = containsElement(list2, 3)
-		True(t, ok)
-		False(t, found)
-
-		ok, found = containsElement(list2, "1")
-		True(t, ok)
-		False(t, found)
-
-		ok, found = containsElement(simpleMap, "Foo")
-		True(t, ok)
-		True(t, found)
-
-		ok, found = containsElement(simpleMap, "Bar")
-		True(t, ok)
-		False(t, found)
-
-		ok, found = containsElement(1433, "1")
-		False(t, ok)
-		False(t, found)
+		checkContains("Hello World", "World", true, true)
+		checkContains(list1, "Foo", true, true)
+		checkContains(list1, "Bar", true, true)
+		checkContains(list2, 1, true, true)
+		checkContains(list2, 2, true, true)
+		checkContains(list1, "Foo!", true, false)
+		checkContains(list2, 3, true, false)
+		checkContains(list2, "1", true, false)
+		checkContains(simpleMap, "Foo", true, true)
+		checkContains(simpleMap, "Bar", true, false)
+		checkContains(1433, "1", false, false)
 	}
 }
 
@@ -76,14 +55,22 @@ func testGetLen() func(*testing.T) {
 
 		for v := range collectionImplGetLenFalseCases() {
 			l, ok := getLen(v)
-			False(t, ok, "Expected getLen fail to get length of %#v", v)
-			Equal(t, 0, l, "getLen should return 0 for %#v", v)
+			if ok {
+				t.Errorf("expected getLen to fail for %#v", v)
+			}
+			if l != 0 {
+				t.Errorf("expected getLen to return 0 for %#v, got %d", v, l)
+			}
 		}
 
 		for c := range collectionImplGetLenTrueCases() {
 			l, ok := getLen(c.v)
-			True(t, ok, "Expected getLen success to get length of %#v", c.v)
-			Equal(t, c.l, l)
+			if !ok {
+				t.Errorf("expected getLen to succeed for %#v", c.v)
+			}
+			if c.l != l {
+				t.Errorf("expected length %d for %#v, got %d", c.l, c.v, l)
+			}
 		}
 	}
 }

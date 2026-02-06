@@ -5,6 +5,8 @@ package assertions
 
 import (
 	"context"
+	"iter"
+	"slices"
 	"sort"
 	"strings"
 	"sync"
@@ -23,7 +25,7 @@ func TestCondition(t *testing.T) {
 	t.Run("condition should be true", func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		if !Condition(mock, func() bool { return true }, "Truth") {
 			t.Error("condition should return true")
 		}
@@ -32,7 +34,7 @@ func TestCondition(t *testing.T) {
 	t.Run("condition should be false", func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		if Condition(mock, func() bool { return false }, "Lie") {
 			t.Error("condition should return false")
 		}
@@ -50,7 +52,9 @@ func TestConditionEventually(t *testing.T) {
 			return false
 		}
 
-		False(t, Eventually(mock, condition, testTimeout, testTick))
+		if Eventually(mock, condition, testTimeout, testTick) {
+			t.Error("expected Eventually to return false")
+		}
 	})
 
 	t.Run("condition should Eventually be true", func(t *testing.T) {
@@ -64,7 +68,9 @@ func TestConditionEventually(t *testing.T) {
 			return state == 2
 		}
 
-		True(t, Eventually(t, condition, testTimeout, testTick))
+		if !Eventually(t, condition, testTimeout, testTick) {
+			t.Error("expected Eventually to return true")
+		}
 	})
 }
 
@@ -84,7 +90,9 @@ func TestConditionEventuallyTimeout(t *testing.T) {
 			return true
 		}
 
-		False(t, Eventually(mock, condition, time.Millisecond, time.Microsecond))
+		if Eventually(mock, condition, time.Millisecond, time.Microsecond) {
+			t.Error("expected Eventually to return false on timeout")
+		}
 	})
 
 	t.Run("should fail on parent test failed", func(t *testing.T) {
@@ -101,11 +109,15 @@ func TestConditionEventuallyTimeout(t *testing.T) {
 			return true
 		}
 
-		False(t, Eventually(mock, condition, testTimeout, testTick))
+		if Eventually(mock, condition, testTimeout, testTick) {
+			t.Error("expected Eventually to return false when parent test fails")
+		}
 
 		t.Run("reported errors should include the context cancellation", func(t *testing.T) {
 			// assert how this failure is reported
-			Len(t, mock.errors, 2, "expected to have 2 error messages: 1 for the context canceled, 1 for the never met condition")
+			if len(mock.errors) != 2 {
+				t.Errorf("expected 2 error messages (1 for context canceled, 1 for never met condition), got %d", len(mock.errors))
+			}
 
 			var hasContextCancelled, hasFailedCondition bool
 			for _, err := range mock.errors {
@@ -117,8 +129,12 @@ func TestConditionEventuallyTimeout(t *testing.T) {
 					hasFailedCondition = true
 				}
 			}
-			True(t, hasContextCancelled, "expected a context cancelled error")
-			True(t, hasFailedCondition, "expected a condition never satisfied error")
+			if !hasContextCancelled {
+				t.Error("expected a context cancelled error")
+			}
+			if !hasFailedCondition {
+				t.Error("expected a condition never satisfied error")
+			}
 		})
 	})
 }
@@ -132,7 +148,9 @@ func TestConditionEventuallySucceedQuickly(t *testing.T) {
 
 		// By making the tick longer than the total duration, we expect that this test would fail if
 		// we didn't check the condition before the first tick elapses.
-		True(t, Eventually(mock, condition, testTimeout, 1*time.Second))
+		if !Eventually(mock, condition, testTimeout, 1*time.Second) {
+			t.Error("expected Eventually to return true before first tick")
+		}
 	})
 }
 
@@ -188,8 +206,12 @@ func TestConditionEventuallyNoLeak(t *testing.T) {
 		record(5)
 
 		const expectedActions = 6
-		Len(t, recordedActions, expectedActions, "expected 6 actions to be recorded during this execution", "got:", len(recordedActions))
-		True(t, sort.IntsAreSorted(recordedActions), "expected recorded actions to be ordered")
+		if len(recordedActions) != expectedActions {
+			t.Errorf("expected %d actions to be recorded, got %d", expectedActions, len(recordedActions))
+		}
+		if !sort.IntsAreSorted(recordedActions) {
+			t.Errorf("expected recorded actions to be ordered, got %v", recordedActions)
+		}
 	})
 
 	t.Run("should not leak a go routine for condition execution", func(t *testing.T) {
@@ -214,11 +236,13 @@ func TestConditionEventuallyNoLeak(t *testing.T) {
 
 		inEventually = false
 		result := <-done
-		True(t, result, "Condition should end while Eventually still runs.")
+		if !result {
+			t.Error("Condition should end while Eventually still runs.")
+		}
 	})
 }
 
-func TestConditionEventuallyWithT(t *testing.T) {
+func TestConditionEventuallyWith(t *testing.T) {
 	t.Parallel()
 
 	t.Run("should complete with false", func(t *testing.T) {
@@ -232,10 +256,14 @@ func TestConditionEventuallyWithT(t *testing.T) {
 			Fail(collect, "another condition fixed failure")
 		}
 
-		False(t, EventuallyWithT(mock, condition, testTimeout, testTick))
+		if EventuallyWith(mock, condition, testTimeout, testTick) {
+			t.Error("expected EventuallyWith to return false")
+		}
 
 		const expectedErrors = 4
-		Len(t, mock.errors, expectedErrors, "expected 2 errors from the condition, and 2 additional errors from Eventually")
+		if len(mock.errors) != expectedErrors {
+			t.Errorf("expected %d errors (2 from condition, 2 from Eventually), got %d", expectedErrors, len(mock.errors))
+		}
 
 		expectedCalls := int(testTimeout / testTick)
 		if counter < expectedCalls-1 || counter > expectedCalls+1 { // it may be 4, 5 or 6 depending on how the test schedules
@@ -253,10 +281,16 @@ func TestConditionEventuallyWithT(t *testing.T) {
 			True(collect, counter == 2)
 		}
 
-		True(t, EventuallyWithT(mock, condition, testTimeout, testTick))
-		Len(t, mock.errors, 0)
+		if !EventuallyWith(mock, condition, testTimeout, testTick) {
+			t.Error("expected EventuallyWith to return true")
+		}
+		if len(mock.errors) != 0 {
+			t.Errorf("expected 0 errors, got %d", len(mock.errors))
+		}
 		const expectedCalls = 2
-		Equal(t, expectedCalls, counter, "Condition is expected to have been called 2 times")
+		if expectedCalls != counter {
+			t.Errorf("expected condition to be called %d times, got %d", expectedCalls, counter)
+		}
 	})
 
 	t.Run("should complete with fail, on a nanosecond tick", func(t *testing.T) {
@@ -267,10 +301,14 @@ func TestConditionEventuallyWithT(t *testing.T) {
 			Fail(collect, "condition fixed failure")
 		}
 
-		// To trigger race conditions, we run EventuallyWithT with a nanosecond tick.
-		False(t, EventuallyWithT(mock, condition, testTimeout, time.Nanosecond))
+		// To trigger race conditions, we run EventuallyWith with a nanosecond tick.
+		if EventuallyWith(mock, condition, testTimeout, time.Nanosecond) {
+			t.Error("expected EventuallyWith to return false")
+		}
 		const expectedErrors = 3
-		Len(t, mock.errors, expectedErrors, "expected 1 errors from the condition, and 2 additional errors from Eventually")
+		if len(mock.errors) != expectedErrors {
+			t.Errorf("expected %d errors (1 from condition, 2 from Eventually), got %d", expectedErrors, len(mock.errors))
+		}
 	})
 
 	t.Run("should complete with fail, with latest failed condition", func(t *testing.T) {
@@ -294,9 +332,13 @@ func TestConditionEventuallyWithT(t *testing.T) {
 			Fail(collect, "condition fixed failure")
 		}
 
-		False(t, EventuallyWithT(mock, condition, testTimeout, testTick))
+		if EventuallyWith(mock, condition, testTimeout, testTick) {
+			t.Error("expected EventuallyWith to return false")
+		}
 		const expectedErrors = 3
-		Len(t, mock.errors, expectedErrors, "expected 1 errors from the condition, and 2 additional errors from Eventually")
+		if len(mock.errors) != expectedErrors {
+			t.Errorf("expected %d errors (1 from condition, 2 from Eventually), got %d", expectedErrors, len(mock.errors))
+		}
 	})
 
 	t.Run("should complete with success, with the ticker never used", func(t *testing.T) {
@@ -307,7 +349,9 @@ func TestConditionEventuallyWithT(t *testing.T) {
 
 		// By making the tick longer than the total duration, we expect that this test would fail if
 		// we didn't check the condition before the first tick elapses.
-		True(t, EventuallyWithT(mock, condition, testTimeout, time.Second))
+		if !EventuallyWith(mock, condition, testTimeout, time.Second) {
+			t.Error("expected EventuallyWith to return true")
+		}
 	})
 
 	t.Run("should fail with a call to collect.FailNow", func(t *testing.T) {
@@ -316,16 +360,20 @@ func TestConditionEventuallyWithT(t *testing.T) {
 		mock := new(errorsCapturingT)
 		counter := 0
 
-		// The call to FailNow cancels the execution context of EventuallyWithT.
+		// The call to FailNow cancels the execution context of EventuallyWith.
 		// so we don't have to wait for the timeout.
 		condition := func(collect *CollectT) {
 			counter++
 			collect.FailNow()
 		}
 
-		False(t, EventuallyWithT(mock, condition, 30*time.Minute, testTick))
+		if EventuallyWith(mock, condition, 30*time.Minute, testTick) {
+			t.Error("expected EventuallyWith to return false")
+		}
 		const expectedErrors = 2
-		Len(t, mock.errors, expectedErrors) // we have 0 accumulated error + 2 errors from EventuallyWithT (includes the timeout)
+		if len(mock.errors) != expectedErrors {
+			t.Errorf("expected %d errors (0 accumulated + 2 from EventuallyWith), got %d", expectedErrors, len(mock.errors))
+		}
 		if counter != 1 {
 			t.Errorf("expected the condition function to have been called only once, but got: %d", counter)
 		}
@@ -343,7 +391,9 @@ func TestConditionNever(t *testing.T) {
 			return false
 		}
 
-		True(t, Never(mock, condition, testTimeout, testTick))
+		if !Never(mock, condition, testTimeout, testTick) {
+			t.Error("expected Never to return true")
+		}
 	})
 
 	t.Run("should never be true, on timeout", func(t *testing.T) {
@@ -356,7 +406,9 @@ func TestConditionNever(t *testing.T) {
 			return true
 		}
 
-		True(t, Never(mock, condition, testTick, 1*time.Millisecond))
+		if !Never(mock, condition, testTick, 1*time.Millisecond) {
+			t.Error("expected Never to return true on timeout")
+		}
 	})
 
 	t.Run("should never be true fails", func(t *testing.T) {
@@ -376,7 +428,9 @@ func TestConditionNever(t *testing.T) {
 			return <-returns
 		}
 
-		False(t, Never(mock, condition, testTimeout, testTick))
+		if Never(mock, condition, testTimeout, testTick) {
+			t.Error("expected Never to return false")
+		}
 	})
 
 	t.Run("should never be true fails, with ticker never triggered", func(t *testing.T) {
@@ -386,7 +440,9 @@ func TestConditionNever(t *testing.T) {
 		// By making the tick longer than the total duration, we expect that this test would fail if
 		// we didn't check the condition before the first tick elapses.
 		condition := func() bool { return true }
-		False(t, Never(mock, condition, testTimeout, time.Second))
+		if Never(mock, condition, testTimeout, time.Second) {
+			t.Error("expected Never to return false")
+		}
 	})
 
 	t.Run("should never be true fails, with parent test failing", func(t *testing.T) {
@@ -398,6 +454,24 @@ func TestConditionNever(t *testing.T) {
 			failParent() // cancels the parent context, which results in Never to fail
 			return false
 		}
-		False(t, Never(mock, condition, testTimeout, time.Second))
+		if Never(mock, condition, testTimeout, time.Second) {
+			t.Error("expected Never to return false when parent test fails")
+		}
+	})
+}
+
+func TestConditionErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, conditionFailCases())
+}
+
+func conditionFailCases() iter.Seq[failCase] {
+	return slices.Values([]failCase{
+		{
+			name:      "Condition/false",
+			assertion: func(t T) bool { return Condition(t, func() bool { return false }) },
+			wantError: "condition failed",
+		},
 	})
 }

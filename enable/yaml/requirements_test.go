@@ -137,6 +137,20 @@ func TestRequireYAMLEq_ArraysOfDifferentOrder(t *testing.T) {
 	}
 }
 
+func TestRequireYAMLUnmarshalAsWrapper(t *testing.T) {
+	t.Parallel()
+
+	mock := new(testing.T)
+	type dummy struct {
+		Hello string `yaml:"hello"`
+		Foo   string `yaml:"foo"`
+	}
+
+	value := dummy{Hello: "world", Foo: "bar"}
+	target.YAMLUnmarshalAsT(mock, value, `{"hello": "world", "foo": "bar"}`)
+	target.YAMLMarshalAsT(mock, `{"hello": "world", "foo": "bar"}`, value)
+}
+
 type MockT struct {
 	Failed bool
 }

@@ -26,8 +26,21 @@ import (
 	"time"
 )
 
+// Numeric formatting constants.
+const (
+	decimalBase         = 10
+	hexBase             = 16
+	hexBufSize          = 18 // max uint64 hex (16 digits) + "0x" prefix
+	float32Precision    = 32
+	float64Precision    = 64
+	complex64Precision  = 32 // real/imag each float32
+	complex128Precision = 64 // real/imag each float64
+)
+
 // Some constants in the form of bytes to avoid string overhead.  This mirrors
 // the technique used in the fmt package.
+//
+//nolint:gochecknoglobals // immutable byte literals used as write constants
 var (
 	panicBytes            = []byte("(PANIC=")
 	plusBytes             = []byte("+")
@@ -66,16 +79,16 @@ var (
 )
 
 // hexDigits is used to map a decimal value to a hex digit.
-var hexDigits = "0123456789abcdef"
+var hexDigits = "0123456789abcdef" //nolint:gochecknoglobals // immutable lookup table
 
 // catchPanic handles any panics that might occur during the handleMethods
 // calls.
 func catchPanic(w io.Writer, v reflect.Value) {
 	_ = v // currently we do not render the panic value
 	if err := recover(); err != nil {
-		w.Write(panicBytes)
-		fmt.Fprintf(w, "%v", err)
-		w.Write(closeParenBytes)
+		_, _ = w.Write(panicBytes)
+		_, _ = fmt.Fprintf(w, "%v", err)
+		_, _ = w.Write(closeParenBytes)
 	}
 }
 
@@ -140,26 +153,26 @@ func handleErrorOrStringer(cs *ConfigState, w io.Writer, v reflect.Value) (handl
 	switch iface := v.Interface().(type) {
 	case error:
 		if cs.ContinueOnMethod {
-			w.Write(openParenBytes)
-			w.Write([]byte(iface.Error()))
-			w.Write(closeParenBytes)
-			w.Write(spaceBytes)
+			_, _ = w.Write(openParenBytes)
+			_, _ = w.Write([]byte(iface.Error()))
+			_, _ = w.Write(closeParenBytes)
+			_, _ = w.Write(spaceBytes)
 			return false, true
 		}
 
-		w.Write([]byte(iface.Error()))
+		_, _ = w.Write([]byte(iface.Error()))
 		return true, false
 
 	case fmt.Stringer:
 		if cs.ContinueOnMethod {
-			w.Write(openParenBytes)
-			w.Write([]byte(iface.String()))
-			w.Write(closeParenBytes)
-			w.Write(spaceBytes)
+			_, _ = w.Write(openParenBytes)
+			_, _ = w.Write([]byte(iface.String()))
+			_, _ = w.Write(closeParenBytes)
+			_, _ = w.Write(spaceBytes)
 			return false, true
 		}
 
-		w.Write([]byte(iface.String()))
+		_, _ = w.Write([]byte(iface.String()))
 		return true, false
 
 	default:
@@ -198,41 +211,41 @@ func handleErrorOrStringer(cs *ConfigState, w io.Writer, v reflect.Value) (handl
 // printBool outputs a boolean value as true or false to Writer w.
 func printBool(w io.Writer, val bool) {
 	if val {
-		w.Write(trueBytes)
+		_, _ = w.Write(trueBytes)
 	} else {
-		w.Write(falseBytes)
+		_, _ = w.Write(falseBytes)
 	}
 }
 
 // printInt outputs a signed integer value to Writer w.
 func printInt(w io.Writer, val int64, base int) { //nolint: unparam  // we leave base even though it is alway 10, to remain consistent with FormatInt
-	w.Write([]byte(strconv.FormatInt(val, base)))
+	_, _ = w.Write([]byte(strconv.FormatInt(val, base)))
 }
 
 // printUint outputs an unsigned integer value to Writer w.
 func printUint(w io.Writer, val uint64, base int) {
-	w.Write([]byte(strconv.FormatUint(val, base)))
+	_, _ = w.Write([]byte(strconv.FormatUint(val, base)))
 }
 
 // printFloat outputs a floating point value using the specified precision,
 // which is expected to be 32 or 64bit, to Writer w.
 func printFloat(w io.Writer, val float64, precision int) {
-	w.Write([]byte(strconv.FormatFloat(val, 'g', -1, precision)))
+	_, _ = w.Write([]byte(strconv.FormatFloat(val, 'g', -1, precision)))
 }
 
 // printComplex outputs a complex value using the specified float precision
 // for the real and imaginary parts to Writer w.
 func printComplex(w io.Writer, c complex128, floatPrecision int) {
 	r := real(c)
-	w.Write(openParenBytes)
-	w.Write([]byte(strconv.FormatFloat(r, 'g', -1, floatPrecision)))
+	_, _ = w.Write(openParenBytes)
+	_, _ = w.Write([]byte(strconv.FormatFloat(r, 'g', -1, floatPrecision)))
 	i := imag(c)
 	if i >= 0 {
-		w.Write(plusBytes)
+		_, _ = w.Write(plusBytes)
 	}
-	w.Write([]byte(strconv.FormatFloat(i, 'g', -1, floatPrecision)))
-	w.Write(iBytes)
-	w.Write(closeParenBytes)
+	_, _ = w.Write([]byte(strconv.FormatFloat(i, 'g', -1, floatPrecision)))
+	_, _ = w.Write(iBytes)
+	_, _ = w.Write(closeParenBytes)
 }
 
 // printHexPtr outputs a uintptr formatted as hexadecimal with a leading '0x'
@@ -241,15 +254,15 @@ func printHexPtr(w io.Writer, p uintptr) {
 	// Null pointer.
 	num := uint64(p)
 	if num == 0 {
-		w.Write(nilAngleBytes)
+		_, _ = w.Write(nilAngleBytes)
 		return
 	}
 
 	// Max uint64 is 16 bytes in hex + 2 bytes for '0x' prefix
-	buf := make([]byte, 18)
+	buf := make([]byte, hexBufSize)
 
 	// It's simpler to construct the hex string right to left.
-	base := uint64(16)
+	base := uint64(hexBase)
 	i := len(buf) - 1
 	for num >= base {
 		buf[i] = hexDigits[num%base]
@@ -266,7 +279,88 @@ func printHexPtr(w io.Writer, p uintptr) {
 
 	// Strip unused leading bytes.
 	buf = buf[i:]
-	w.Write(buf)
+	_, _ = w.Write(buf)
+}
+
+// tryHandleMethods checks whether the value should be handled by its
+// Stringer/error methods and invokes them if so. Returns true if the value
+// was handled.
+func tryHandleMethods(cs *ConfigState, w io.Writer, v reflect.Value, kind reflect.Kind) bool {
+	if cs.DisableMethods && (!cs.EnableTimeStringer || !isTime(v)) {
+		return false
+	}
+	if kind == reflect.Invalid || kind == reflect.Interface {
+		return false
+	}
+	return handleMethods(cs, w, v)
+}
+
+// ptrResolution holds the result of walking a pointer chain.
+type ptrResolution struct {
+	value        reflect.Value
+	pointerChain []uintptr
+	indirects    int
+	nilFound     bool
+	cycleFound   bool
+}
+
+// resolvePtr walks a pointer chain, dereferencing pointers and unpacking
+// interfaces while detecting circular references. It returns the final
+// resolved value along with metadata about the chain.
+func resolvePtr(v reflect.Value, depth int, pointers map[uintptr]int) ptrResolution {
+	r := ptrResolution{value: v}
+
+	for r.value.Kind() == reflect.Pointer {
+		if r.value.IsNil() {
+			r.nilFound = true
+			return r
+		}
+
+		r.indirects++
+		addr := r.value.Pointer()
+		r.pointerChain = append(r.pointerChain, addr)
+		if pd, ok := pointers[addr]; ok && pd < depth {
+			r.cycleFound = true
+			r.indirects--
+			return r
+		}
+		pointers[addr] = depth
+
+		r.value = r.value.Elem()
+		if r.value.Kind() == reflect.Interface {
+			if done := r.unpackInterface(depth, pointers); done {
+				return r
+			}
+		}
+	}
+
+	return r
+}
+
+// unpackInterface unpacks an interface value found during pointer resolution.
+// It returns true if the resolution is complete (nil or cycle found).
+func (r *ptrResolution) unpackInterface(depth int, pointers map[uintptr]int) bool {
+	if r.value.IsNil() {
+		r.nilFound = true
+		return true
+	}
+	r.value = r.value.Elem()
+
+	if r.value.Kind() != reflect.Pointer {
+		return false
+	}
+	if r.value.IsNil() {
+		r.nilFound = true
+		return true
+	}
+	addr := r.value.Pointer()
+	if pd, ok := pointers[addr]; ok && pd <= depth {
+		r.cycleFound = true
+		r.indirects--
+		return true
+	}
+	pointers[addr] = depth
+	return false
 }
 
 // valuesSorter implements sort.Interface to allow a slice of reflect.Value

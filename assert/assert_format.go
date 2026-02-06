@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 
 package assert
 
@@ -186,14 +185,14 @@ func Eventuallyf(t T, condition func() bool, waitFor time.Duration, tick time.Du
 	return assertions.Eventually(t, condition, waitFor, tick, forwardArgs(msg, args))
 }
 
-// EventuallyWithTf is the same as [EventuallyWithT], but it accepts a format msg string to format arguments like [fmt.Printf].
+// EventuallyWithf is the same as [EventuallyWith], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func EventuallyWithTf(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msg string, args ...any) bool {
+func EventuallyWithf(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msg string, args ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.EventuallyWithT(t, condition, waitFor, tick, forwardArgs(msg, args))
+	return assertions.EventuallyWith(t, condition, waitFor, tick, forwardArgs(msg, args))
 }
 
 // Exactlyf is the same as [Exactly], but it accepts a format msg string to format arguments like [fmt.Printf].
@@ -616,6 +615,26 @@ func JSONEqTf[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msg string, args
 	return assertions.JSONEqT[EDoc, ADoc](t, expected, actual, forwardArgs(msg, args))
 }
 
+// JSONMarshalAsTf is the same as [JSONMarshalAsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func JSONMarshalAsTf[EDoc Text](t T, expected EDoc, object any, msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.JSONMarshalAsT[EDoc](t, expected, object, forwardArgs(msg, args))
+}
+
+// JSONUnmarshalAsTf is the same as [JSONUnmarshalAsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func JSONUnmarshalAsTf[Object any, ADoc Text](t T, expected Object, jazon ADoc, msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.JSONUnmarshalAsT[Object, ADoc](t, expected, jazon, forwardArgs(msg, args))
+}
+
 // Kindf is the same as [Kind], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
@@ -744,6 +763,16 @@ func NoErrorf(t T, err error, msg string, args ...any) bool {
 		h.Helper()
 	}
 	return assertions.NoError(t, err, forwardArgs(msg, args))
+}
+
+// NoGoRoutineLeakf is the same as [NoGoRoutineLeak], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func NoGoRoutineLeakf(t T, tested func(), msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.NoGoRoutineLeak(t, tested, forwardArgs(msg, args))
 }
 
 // NotContainsf is the same as [NotContains], but it accepts a format msg string to format arguments like [fmt.Printf].
@@ -1204,6 +1233,26 @@ func YAMLEqTf[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msg string, args
 		h.Helper()
 	}
 	return assertions.YAMLEqT[EDoc, ADoc](t, expected, actual, forwardArgs(msg, args))
+}
+
+// YAMLMarshalAsTf is the same as [YAMLMarshalAsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func YAMLMarshalAsTf[EDoc Text](t T, expected EDoc, object any, msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.YAMLMarshalAsT[EDoc](t, expected, object, forwardArgs(msg, args))
+}
+
+// YAMLUnmarshalAsTf is the same as [YAMLUnmarshalAsT], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func YAMLUnmarshalAsTf[Object any, ADoc Text](t T, expected Object, jazon ADoc, msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.YAMLUnmarshalAsT[Object, ADoc](t, expected, jazon, forwardArgs(msg, args))
 }
 
 // Zerof is the same as [Zero], but it accepts a format msg string to format arguments like [fmt.Printf].

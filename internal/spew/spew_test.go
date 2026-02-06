@@ -19,12 +19,42 @@ package spew_test
 import (
 	"bytes"
 	"fmt"
+	"iter"
 	"os"
+	"slices"
 	"testing"
 	"time"
 
 	"github.com/go-openapi/testify/v2/internal/spew"
 )
+
+// TestSpew executes all of the tests described by spewTestCases.
+func TestSpew(t *testing.T) {
+	t.Parallel()
+
+	runners := spewTestRunners()
+
+	i := 0
+	for tc := range spewTestCases() {
+		buf := new(bytes.Buffer)
+		runner, ok := runners[tc.f]
+		if !ok {
+			t.Errorf("test configuration: %v #%d unrecognized function", tc.f, i)
+			continue
+		}
+
+		if errMsg := runner(t, buf, tc); errMsg != "" {
+			t.Errorf("%v #%d %s", tc.f, i, errMsg)
+			continue
+		}
+
+		if s := buf.String(); tc.want != s {
+			t.Errorf("ConfigState #%d\n  got: %s want: %s", i, s, tc.want)
+		}
+
+		i++
+	}
+}
 
 // spewFunc is used to identify which public function of the spew package or
 // ConfigState a test applies to.
@@ -54,35 +84,35 @@ const (
 	fSprintln
 )
 
-// Map of spewFunc values to names for pretty printing.
-var spewFuncStrings = map[spewFunc]string{
-	fCSFdump:        "ConfigState.Fdump",
-	fCSFprint:       "ConfigState.Fprint",
-	fCSFprintf:      "ConfigState.Fprintf",
-	fCSFprintln:     "ConfigState.Fprintln",
-	fCSSdump:        "ConfigState.Sdump",
-	fCSPrint:        "ConfigState.Print",
-	fCSPrintln:      "ConfigState.Println",
-	fCSSprint:       "ConfigState.Sprint",
-	fCSSprintf:      "ConfigState.Sprintf",
-	fCSSprintln:     "ConfigState.Sprintln",
-	fCSErrorf:       "ConfigState.Errorf",
-	fCSNewFormatter: "ConfigState.NewFormatter",
-	fErrorf:         "spew.Errorf",
-	fFprint:         "spew.Fprint",
-	fFprintln:       "spew.Fprintln",
-	fPrint:          "spew.Print",
-	fPrintln:        "spew.Println",
-	fSdump:          "spew.Sdump",
-	fSprint:         "spew.Sprint",
-	fSprintf:        "spew.Sprintf",
-	fSprintln:       "spew.Sprintln",
-}
-
 func (f spewFunc) String() string {
-	if s, ok := spewFuncStrings[f]; ok {
+	names := map[spewFunc]string{
+		fCSFdump:        "ConfigState.Fdump",
+		fCSFprint:       "ConfigState.Fprint",
+		fCSFprintf:      "ConfigState.Fprintf",
+		fCSFprintln:     "ConfigState.Fprintln",
+		fCSSdump:        "ConfigState.Sdump",
+		fCSPrint:        "ConfigState.Print",
+		fCSPrintln:      "ConfigState.Println",
+		fCSSprint:       "ConfigState.Sprint",
+		fCSSprintf:      "ConfigState.Sprintf",
+		fCSSprintln:     "ConfigState.Sprintln",
+		fCSErrorf:       "ConfigState.Errorf",
+		fCSNewFormatter: "ConfigState.NewFormatter",
+		fErrorf:         "spew.Errorf",
+		fFprint:         "spew.Fprint",
+		fFprintln:       "spew.Fprintln",
+		fPrint:          "spew.Print",
+		fPrintln:        "spew.Println",
+		fSdump:          "spew.Sdump",
+		fSprint:         "spew.Sprint",
+		fSprintf:        "spew.Sprintf",
+		fSprintln:       "spew.Sprintln",
+	}
+
+	if s, ok := names[f]; ok {
 		return s
 	}
+
 	return fmt.Sprintf("Unknown spewFunc (%d)", int(f))
 }
 
@@ -96,34 +126,13 @@ type spewTest struct {
 	want   string
 }
 
-// spewTests houses the tests to be performed against the public functions of
-// the spew package and ConfigState.
+// spewTestCases returns the tests to be performed against the public functions
+// of the spew package and ConfigState.
 //
 // These tests are only intended to ensure the public functions are exercised
 // and are intentionally not exhaustive of types.  The exhaustive type
 // tests are handled in the dump and format tests.
-var spewTests []spewTest
-
-// redirStdout is a helper function to return the standard output from f as a
-// byte slice.
-func redirStdout(f func()) ([]byte, error) {
-	tempFile, err := os.CreateTemp("", "ss-test")
-	if err != nil {
-		return nil, err
-	}
-	fileName := tempFile.Name()
-	defer os.Remove(fileName) // Ignore error
-
-	origStdout := os.Stdout
-	os.Stdout = tempFile
-	f()
-	os.Stdout = origStdout
-	tempFile.Close()
-
-	return os.ReadFile(fileName)
-}
-
-func initSpewTests() {
+func spewTestCases() iter.Seq[spewTest] {
 	// Config states with various settings.
 	scsDefault := spew.NewDefaultConfig()
 	scsNoMethods := &spew.ConfigState{Indent: " ", DisableMethods: true}
@@ -152,6 +161,7 @@ func initSpewTests() {
 		slice []string
 		m     map[string]int
 	}
+
 	dt := depthTester{
 		indirCir1{nil},
 		[1]string{"arr"},
@@ -171,7 +181,7 @@ func initSpewTests() {
 		redeclaredTime: redeclaredTime(tm),
 	}
 
-	spewTests = []spewTest{
+	return slices.Values([]spewTest{
 		// default config
 		{scsDefault, fCSFdump, "", int8(127), "(int8) 127\n"},
 		{scsDefault, fCSFprint, "", int16(32767), "32767"},
@@ -268,118 +278,109 @@ func initSpewTests() {
 		{scsNoMethodsButTimeStringer, fCSFdump, "", em, "(spew_test.embeddedTime) {\n Time: (time.Time) 2006-01-02 15:04:05.999999999 +0000 UTC\n}\n"},
 		{scsNoMethodsButTimeStringer, fCSFprint, "", emptr, "{<*>2006-01-02 15:04:05.999999999 +0000 UTC}"},
 		{scsNoMethodsButTimeStringer, fCSFdump, "", emptr, "(spew_test.embeddedTimePtr) {\n Time: (*time.Time)(" + tmAddr + ")(2006-01-02 15:04:05.999999999 +0000 UTC)\n}\n"},
+	})
+}
+
+// spewTestRunner is a function that executes a spew test case, writing output
+// to the buffer. It returns an error string if something goes wrong, or empty
+// string on success.
+type spewTestRunner func(t *testing.T, buf *bytes.Buffer, test spewTest) string
+
+// spewTestRunners returns the dispatch table mapping each spewFunc to its
+// test execution logic.
+func spewTestRunners() map[spewFunc]spewTestRunner {
+	return map[spewFunc]spewTestRunner{
+		fCSFdump:  func(_ *testing.T, buf *bytes.Buffer, test spewTest) string { test.cs.Fdump(buf, test.in); return "" },
+		fCSFprint: func(_ *testing.T, buf *bytes.Buffer, test spewTest) string { test.cs.Fprint(buf, test.in); return "" },
+		fCSFprintf: func(_ *testing.T, buf *bytes.Buffer, test spewTest) string {
+			test.cs.Fprintf(buf, test.format, test.in)
+			return ""
+		},
+		fCSFprintln: func(_ *testing.T, buf *bytes.Buffer, test spewTest) string {
+			test.cs.Fprintln(buf, test.in)
+			return ""
+		},
+		fCSPrint:   runWithStdoutRedirect(func(test spewTest) { test.cs.Print(test.in) }),
+		fCSPrintln: runWithStdoutRedirect(func(test spewTest) { test.cs.Println(test.in) }),
+		fCSSdump: func(_ *testing.T, buf *bytes.Buffer, test spewTest) string {
+			buf.WriteString(test.cs.Sdump(test.in))
+			return ""
+		},
+		fCSSprint: func(_ *testing.T, buf *bytes.Buffer, test spewTest) string {
+			buf.WriteString(test.cs.Sprint(test.in))
+			return ""
+		},
+		fCSSprintf: func(_ *testing.T, buf *bytes.Buffer, test spewTest) string {
+			buf.WriteString(test.cs.Sprintf(test.format, test.in))
+			return ""
+		},
+		fCSSprintln: func(_ *testing.T, buf *bytes.Buffer, test spewTest) string {
+			buf.WriteString(test.cs.Sprintln(test.in))
+			return ""
+		},
+		fCSErrorf: func(_ *testing.T, buf *bytes.Buffer, test spewTest) string {
+			buf.WriteString(test.cs.Errorf(test.format, test.in).Error())
+			return ""
+		},
+		fCSNewFormatter: func(_ *testing.T, buf *bytes.Buffer, test spewTest) string {
+			fmt.Fprintf(buf, test.format, test.cs.NewFormatter(test.in))
+			return ""
+		},
+		fErrorf: func(_ *testing.T, buf *bytes.Buffer, test spewTest) string {
+			buf.WriteString(spew.Errorf(test.format, test.in).Error())
+			return ""
+		},
+		fFprint:   func(_ *testing.T, buf *bytes.Buffer, test spewTest) string { spew.Fprint(buf, test.in); return "" },
+		fFprintln: func(_ *testing.T, buf *bytes.Buffer, test spewTest) string { spew.Fprintln(buf, test.in); return "" },
+		fPrint:    runWithStdoutRedirect(func(test spewTest) { spew.Print(test.in) }),
+		fPrintln:  runWithStdoutRedirect(func(test spewTest) { spew.Println(test.in) }),
+		fSdump: func(_ *testing.T, buf *bytes.Buffer, test spewTest) string {
+			buf.WriteString(spew.Sdump(test.in))
+			return ""
+		},
+		fSprint: func(_ *testing.T, buf *bytes.Buffer, test spewTest) string {
+			buf.WriteString(spew.Sprint(test.in))
+			return ""
+		},
+		fSprintf: func(_ *testing.T, buf *bytes.Buffer, test spewTest) string {
+			buf.WriteString(spew.Sprintf(test.format, test.in))
+			return ""
+		},
+		fSprintln: func(_ *testing.T, buf *bytes.Buffer, test spewTest) string {
+			buf.WriteString(spew.Sprintln(test.in))
+			return ""
+		},
 	}
 }
 
-// TestSpew executes all of the tests described by spewTests.
-func TestSpew(t *testing.T) {
-	initSpewTests()
-
-	t.Logf("Running %d tests", len(spewTests))
-	for i, test := range spewTests {
-		buf := new(bytes.Buffer)
-		switch test.f {
-		case fCSFdump:
-			test.cs.Fdump(buf, test.in)
-
-		case fCSFprint:
-			test.cs.Fprint(buf, test.in)
-
-		case fCSFprintf:
-			test.cs.Fprintf(buf, test.format, test.in)
-
-		case fCSFprintln:
-			test.cs.Fprintln(buf, test.in)
-
-		case fCSPrint:
-			b, err := redirStdout(func() { test.cs.Print(test.in) })
-			if err != nil {
-				t.Errorf("%v #%d %v", test.f, i, err)
-				continue
-			}
-			buf.Write(b)
-
-		case fCSPrintln:
-			b, err := redirStdout(func() { test.cs.Println(test.in) })
-			if err != nil {
-				t.Errorf("%v #%d %v", test.f, i, err)
-				continue
-			}
-			buf.Write(b)
-
-		case fCSSdump:
-			str := test.cs.Sdump(test.in)
-			buf.WriteString(str)
-
-		case fCSSprint:
-			str := test.cs.Sprint(test.in)
-			buf.WriteString(str)
-
-		case fCSSprintf:
-			str := test.cs.Sprintf(test.format, test.in)
-			buf.WriteString(str)
-
-		case fCSSprintln:
-			str := test.cs.Sprintln(test.in)
-			buf.WriteString(str)
-
-		case fCSErrorf:
-			err := test.cs.Errorf(test.format, test.in)
-			buf.WriteString(err.Error())
-
-		case fCSNewFormatter:
-			fmt.Fprintf(buf, test.format, test.cs.NewFormatter(test.in))
-
-		case fErrorf:
-			err := spew.Errorf(test.format, test.in)
-			buf.WriteString(err.Error())
-
-		case fFprint:
-			spew.Fprint(buf, test.in)
-
-		case fFprintln:
-			spew.Fprintln(buf, test.in)
-
-		case fPrint:
-			b, err := redirStdout(func() { spew.Print(test.in) })
-			if err != nil {
-				t.Errorf("%v #%d %v", test.f, i, err)
-				continue
-			}
-			buf.Write(b)
-
-		case fPrintln:
-			b, err := redirStdout(func() { spew.Println(test.in) })
-			if err != nil {
-				t.Errorf("%v #%d %v", test.f, i, err)
-				continue
-			}
-			buf.Write(b)
-
-		case fSdump:
-			str := spew.Sdump(test.in)
-			buf.WriteString(str)
-
-		case fSprint:
-			str := spew.Sprint(test.in)
-			buf.WriteString(str)
-
-		case fSprintf:
-			str := spew.Sprintf(test.format, test.in)
-			buf.WriteString(str)
-
-		case fSprintln:
-			str := spew.Sprintln(test.in)
-			buf.WriteString(str)
-
-		default:
-			t.Errorf("%v #%d unrecognized function", test.f, i)
-			continue
+// runWithStdoutRedirect returns a spewTestRunner that captures stdout output.
+func runWithStdoutRedirect(fn func(spewTest)) spewTestRunner {
+	return func(_ *testing.T, buf *bytes.Buffer, test spewTest) string {
+		b, err := redirStdout(func() { fn(test) })
+		if err != nil {
+			return err.Error()
 		}
-		s := buf.String()
-		if test.want != s {
-			t.Errorf("ConfigState #%d\n  got: %s want: %s", i, s, test.want)
-			continue
-		}
+
+		buf.Write(b)
+		return ""
 	}
+}
+
+// redirStdout is a helper function to return the standard output from f as a
+// byte slice.
+func redirStdout(f func()) ([]byte, error) {
+	tempFile, err := os.CreateTemp("", "ss-test")
+	if err != nil {
+		return nil, err
+	}
+	fileName := tempFile.Name()
+	defer os.Remove(fileName) // Ignore error
+
+	origStdout := os.Stdout
+	os.Stdout = tempFile
+	f()
+	os.Stdout = origStdout
+	tempFile.Close()
+
+	return os.ReadFile(fileName)
 }

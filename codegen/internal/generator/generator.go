@@ -268,7 +268,7 @@ func (g *Generator) transformModel() error {
 	tgt.EnableForward = g.ctx.enableForward
 	tgt.EnableGenerics = g.ctx.enableGenerics
 	tgt.EnableExamples = g.ctx.generateExamples
-	tgt.RunnableExamples = g.ctx.runnableExamples
+	tgt.RunnableExamples = g.ctx.runnableExamples /// instructs the doc generator to scan the generated packages to collect runnable examples
 	if tgt.Imports == nil {
 		tgt.Imports = make(model.ImportMap, 1)
 	}
