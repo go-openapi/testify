@@ -44,7 +44,7 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### InDelta{#indelta}
-
+  
 InDelta asserts that the two numerals are within delta of each other.
 
 Delta must be greater than or equal to zero.
@@ -106,6 +106,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -125,7 +126,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.InDelta(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InDelta) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDelta](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L35)
@@ -133,7 +134,7 @@ func main() {
 {{< /tabs >}}
 
 ### InDeltaMapValues{#indeltamapvalues}
-
+  
 InDeltaMapValues is the same as [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta), but it compares all values between two maps. Both maps must have exactly the same keys.
 
 See [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta).
@@ -185,6 +186,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -204,7 +206,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.InDeltaMapValues(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InDeltaMapValues) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaMapValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L271)
@@ -212,7 +214,7 @@ func main() {
 {{< /tabs >}}
 
 ### InDeltaSlice{#indeltaslice}
-
+  
 InDeltaSlice is the same as [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta), except it compares two slices.
 
 See [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta).
@@ -264,6 +266,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -283,7 +286,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.InDeltaSlice(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InDeltaSlice) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaSlice](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L235)
@@ -291,7 +294,7 @@ func main() {
 {{< /tabs >}}
 
 ### InDeltaT[Number Measurable] {{% icon icon="star" color=orange %}}{#indeltatnumber-measurable}
-
+  
 InDeltaT asserts that the two numerals of the same type numerical type are within delta of each other.
 
 [InDeltaT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDeltaT) accepts any go numeric type, including integer types.
@@ -353,6 +356,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -368,7 +372,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.InDeltaT[Number Measurable](t T, expected Number, actual Number, delta Number, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InDeltaT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaT](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L85)
@@ -376,7 +380,7 @@ func main() {
 {{< /tabs >}}
 
 ### InEpsilon{#inepsilon}
-
+  
 InEpsilon asserts that expected and actual have a relative error less than epsilon.
 
 #### Behavior with IEEE floating point arithmetics
@@ -440,6 +444,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -459,7 +464,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.InEpsilon(t T, expected any, actual any, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InEpsilon) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilon](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L142)
@@ -467,7 +472,7 @@ func main() {
 {{< /tabs >}}
 
 ### InEpsilonSlice{#inepsilonslice}
-
+  
 InEpsilonSlice is the same as [InEpsilon](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilon), except it compares each value from two slices.
 
 See [InEpsilon](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilon).
@@ -519,6 +524,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -538,7 +544,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.InEpsilonSlice(t T, expected any, actual any, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InEpsilonSlice) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilonSlice](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L326)
@@ -546,7 +552,7 @@ func main() {
 {{< /tabs >}}
 
 ### InEpsilonT[Number Measurable] {{% icon icon="star" color=orange %}}{#inepsilontnumber-measurable}
-
+  
 InEpsilonT asserts that expected and actual have a relative error less than epsilon.
 
 When expected is zero, epsilon is interpreted as an absolute error threshold,
@@ -616,6 +622,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -631,7 +638,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.InEpsilonT[Number Measurable](t T, expected Number, actual Number, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InEpsilonT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilonT](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L199)

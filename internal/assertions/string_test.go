@@ -103,8 +103,6 @@ func stringRegexpCases() iter.Seq[genericTestCase] {
 }
 
 // test all Regexp variants with the same input (possibly converted).
-//
-//nolint:thelper // linter false positive: this is not a helper
 func testAllRegexpWithTypes(regString, str string, success, valid bool) func(*testing.T) {
 	type (
 		// redefined types to check for ~string and ~[]byte type constraints
@@ -144,8 +142,6 @@ func testAllRegexpWithTypes(regString, str string, success, valid bool) func(*te
 }
 
 // testRegexpWithAny tests edge cases that are specific to the reflection-based variants.
-//
-//nolint:thelper // linter false positive: this is not a helper
 func testRegexpWithAny(rx any, actual any, success, valid bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
@@ -179,7 +175,6 @@ func testRegexpWithAny(rx any, actual any, success, valid bool) func(*testing.T)
 	}
 }
 
-//nolint:thelper // linter false positive: this is not a helper
 func testAllRegexp[Rex RegExp, ADoc Text](rx Rex, actual ADoc, success, valid bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()

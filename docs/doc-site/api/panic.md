@@ -34,7 +34,7 @@ This domain exposes 4 functionalities.
 ```
 
 ### NotPanics{#notpanics}
-
+  
 NotPanics asserts that the code inside the specified function does NOT panic.
 
 {{% expand title="Examples" %}}
@@ -85,6 +85,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -104,7 +105,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotPanics(t T, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotPanics) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotPanics](https://github.com/go-openapi/testify/blob/master/internal/assertions/panic.go#L111)
@@ -112,7 +113,7 @@ func main() {
 {{< /tabs >}}
 
 ### Panics{#panics}
-
+  
 Panics asserts that the code inside the specified function panics.
 
 {{% expand title="Examples" %}}
@@ -164,6 +165,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -183,7 +185,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Panics(t T, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Panics) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Panics](https://github.com/go-openapi/testify/blob/master/internal/assertions/panic.go#L25)
@@ -191,7 +193,7 @@ func main() {
 {{< /tabs >}}
 
 ### PanicsWithError{#panicswitherror}
-
+  
 PanicsWithError asserts that the code inside the specified function panics,
 and that the recovered panic value is an error that satisfies the EqualError comparison.
 
@@ -245,6 +247,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -264,7 +267,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.PanicsWithError(t T, errString string, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#PanicsWithError) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#PanicsWithError](https://github.com/go-openapi/testify/blob/master/internal/assertions/panic.go#L77)
@@ -272,7 +275,7 @@ func main() {
 {{< /tabs >}}
 
 ### PanicsWithValue{#panicswithvalue}
-
+  
 PanicsWithValue asserts that the code inside the specified function panics,
 and that the recovered panic value equals the expected panic value.
 
@@ -325,6 +328,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -344,7 +348,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.PanicsWithValue(t T, expected any, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#PanicsWithValue) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#PanicsWithValue](https://github.com/go-openapi/testify/blob/master/internal/assertions/panic.go#L49)

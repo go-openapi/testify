@@ -326,6 +326,11 @@ func (g *Generator) transformFunc(fn model.Function) model.Function {
 		fn.UseMock = "mockT"
 	}
 
+	for i, test := range fn.Tests {
+		test.Pkg = g.ctx.targetBase // override the target package for this test
+		fn.Tests[i] = test
+	}
+
 	return fn
 }
 

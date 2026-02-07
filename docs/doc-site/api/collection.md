@@ -80,7 +80,7 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### Contains{#contains}
-
+  
 Contains asserts that the specified string, list(array, slice...) or map contains the
 specified substring or element.
 
@@ -133,6 +133,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -152,7 +153,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Contains(t T, s any, contains any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Contains) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Contains](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L65)
@@ -160,7 +161,7 @@ func main() {
 {{< /tabs >}}
 
 ### ElementsMatch{#elementsmatch}
-
+  
 ElementsMatch asserts that the specified listA(array, slice...) is equal to specified
 listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 the number of appearances of each of them in both lists should match.
@@ -212,6 +213,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -231,7 +233,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.ElementsMatch(t T, listA any, listB any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ElementsMatch) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#ElementsMatch](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L540)
@@ -239,7 +241,7 @@ func main() {
 {{< /tabs >}}
 
 ### ElementsMatchT[E comparable] {{% icon icon="star" color=orange %}}{#elementsmatchte-comparable}
-
+  
 ElementsMatchT asserts that the specified listA(array, slice...) is equal to specified
 listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 the number of appearances of each of them in both lists should match.
@@ -291,6 +293,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -306,7 +309,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.ElementsMatchT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ElementsMatchT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#ElementsMatchT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L613)
@@ -314,7 +317,7 @@ func main() {
 {{< /tabs >}}
 
 ### Len{#len}
-
+  
 Len asserts that the specified object has specific length.
 
 Len also fails if the object has a type that len() does not accept.
@@ -372,6 +375,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -391,7 +395,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Len(t T, object any, length int, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Len) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Len](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L33)
@@ -404,7 +408,7 @@ func main() {
 {{< /tabs >}}
 
 ### MapContainsT[Map ~map[K]V, K comparable, V any] {{% icon icon="star" color=orange %}}{#mapcontainstmap-mapkv-k-comparable-v-any}
-
+  
 MapContainsT asserts that the specified map contains a key.
 
 Go native comparable types are explained there: [comparable-types](https://go.dev/blog/comparable).
@@ -456,6 +460,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -471,7 +476,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.MapContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#MapContainsT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#MapContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L179)
@@ -479,7 +484,7 @@ func main() {
 {{< /tabs >}}
 
 ### MapNotContainsT[Map ~map[K]V, K comparable, V any] {{% icon icon="star" color=orange %}}{#mapnotcontainstmap-mapkv-k-comparable-v-any}
-
+  
 MapNotContainsT asserts that the specified map does not contain a key.
 
 {{% expand title="Examples" %}}
@@ -529,6 +534,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -544,7 +550,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.MapNotContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#MapNotContainsT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#MapNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L310)
@@ -552,7 +558,7 @@ func main() {
 {{< /tabs >}}
 
 ### NotContains{#notcontains}
-
+  
 NotContains asserts that the specified string, list(array, slice...) or map does NOT contain the
 specified substring or element.
 
@@ -605,6 +611,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -624,7 +631,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotContains(t T, s any, contains any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotContains) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L206)
@@ -632,7 +639,7 @@ func main() {
 {{< /tabs >}}
 
 ### NotElementsMatch{#notelementsmatch}
-
+  
 NotElementsMatch asserts that the specified listA(array, slice...) is NOT equal to specified
 listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 the number of appearances of each of them in both lists should not match.
@@ -687,6 +694,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -706,7 +714,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotElementsMatch(t T, listA any, listB any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatch) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatch](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L577)
@@ -714,7 +722,7 @@ func main() {
 {{< /tabs >}}
 
 ### NotElementsMatchT[E comparable] {{% icon icon="star" color=orange %}}{#notelementsmatchte-comparable}
-
+  
 NotElementsMatchT asserts that the specified listA(array, slice...) is NOT equal to specified
 listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 the number of appearances of each of them in both lists should not match.
@@ -769,6 +777,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -784,7 +793,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotElementsMatchT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatchT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatchT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L649)
@@ -792,7 +801,7 @@ func main() {
 {{< /tabs >}}
 
 ### NotSubset{#notsubset}
-
+  
 NotSubset asserts that the list (array, slice, or map) does NOT contain all
 elements given in the subset (array, slice, or map).
 Map elements are key-value pairs unless compared with an array or slice where
@@ -848,6 +857,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -867,7 +877,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotSubset(t T, list any, subset any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotSubset) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSubset](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L446)
@@ -875,7 +885,7 @@ func main() {
 {{< /tabs >}}
 
 ### SeqContainsT[E comparable] {{% icon icon="star" color=orange %}}{#seqcontainste-comparable}
-
+  
 SeqContainsT asserts that the specified iterator contains a comparable element.
 
 The sequence may not be consumed entirely: the iteration stops as soon as the specified element is found.
@@ -930,6 +940,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -945,7 +956,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.SeqContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SeqContainsT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#SeqContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L150)
@@ -953,7 +964,7 @@ func main() {
 {{< /tabs >}}
 
 ### SeqNotContainsT[E comparable] {{% icon icon="star" color=orange %}}{#seqnotcontainste-comparable}
-
+  
 SeqNotContainsT asserts that the specified iterator does not contain a comparable element.
 
 See [SeqContainsT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SeqContainsT).
@@ -1006,6 +1017,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -1021,7 +1033,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.SeqNotContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SeqNotContainsT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#SeqNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L285)
@@ -1029,7 +1041,7 @@ func main() {
 {{< /tabs >}}
 
 ### SliceContainsT[Slice ~[]E, E comparable] {{% icon icon="star" color=orange %}}{#slicecontainstslice-e-e-comparable}
-
+  
 SliceContainsT asserts that the specified slice contains a comparable element.
 
 Go native comparable types are explained there: [comparable-types](https://go.dev/blog/comparable).
@@ -1081,6 +1093,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -1096,7 +1109,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.SliceContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SliceContainsT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L121)
@@ -1104,7 +1117,7 @@ func main() {
 {{< /tabs >}}
 
 ### SliceNotContainsT[Slice ~[]E, E comparable] {{% icon icon="star" color=orange %}}{#slicenotcontainstslice-e-e-comparable}
-
+  
 SliceNotContainsT asserts that the specified slice does not contain a comparable element.
 
 See [SliceContainsT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceContainsT).
@@ -1156,6 +1169,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -1171,7 +1185,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.SliceNotContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SliceNotContainsT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L260)
@@ -1179,7 +1193,7 @@ func main() {
 {{< /tabs >}}
 
 ### SliceNotSubsetT[Slice ~[]E, E comparable] {{% icon icon="star" color=orange %}}{#slicenotsubsettslice-e-e-comparable}
-
+  
 SliceNotSubsetT asserts that a slice of comparable elements does not contain all the elements given in the subset.
 
 {{% expand title="Examples" %}}
@@ -1229,6 +1243,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -1244,7 +1259,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.SliceNotSubsetT[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SliceNotSubsetT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceNotSubsetT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L513)
@@ -1252,7 +1267,7 @@ func main() {
 {{< /tabs >}}
 
 ### SliceSubsetT[Slice ~[]E, E comparable] {{% icon icon="star" color=orange %}}{#slicesubsettslice-e-e-comparable}
-
+  
 SliceSubsetT asserts that a slice of comparable elements contains all the elements given in the subset.
 
 {{% expand title="Examples" %}}
@@ -1302,6 +1317,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -1317,7 +1333,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.SliceSubsetT[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SliceSubsetT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceSubsetT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L415)
@@ -1325,7 +1341,7 @@ func main() {
 {{< /tabs >}}
 
 ### StringContainsT[ADoc, EDoc Text] {{% icon icon="star" color=orange %}}{#stringcontainstadoc-edoc-text}
-
+  
 StringContainsT asserts that a string contains the specified substring.
 
 Strings may be go strings or []byte according to the type constraint [Text](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Text).
@@ -1377,6 +1393,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -1392,7 +1409,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.StringContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#StringContainsT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#StringContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L94)
@@ -1400,7 +1417,7 @@ func main() {
 {{< /tabs >}}
 
 ### StringNotContainsT[ADoc, EDoc Text] {{% icon icon="star" color=orange %}}{#stringnotcontainstadoc-edoc-text}
-
+  
 StringNotContainsT asserts that a string does not contain the specified substring.
 
 See [StringContainsT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#StringContainsT).
@@ -1452,6 +1469,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -1467,7 +1485,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.StringNotContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#StringNotContainsT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#StringNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L235)
@@ -1475,7 +1493,7 @@ func main() {
 {{< /tabs >}}
 
 ### Subset{#subset}
-
+  
 Subset asserts that the list (array, slice, or map) contains all elements
 given in the subset (array, slice, or map).
 
@@ -1534,6 +1552,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -1553,7 +1572,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Subset(t T, list any, subset any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Subset) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Subset](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L345)

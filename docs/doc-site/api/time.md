@@ -28,7 +28,7 @@ This domain exposes 2 functionalities.
 ```
 
 ### WithinDuration{#withinduration}
-
+  
 WithinDuration asserts that the two times are within duration delta of each other.
 
 {{% expand title="Examples" %}}
@@ -79,6 +79,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -98,7 +99,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.WithinDuration(t T, expected time.Time, actual time.Time, delta time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#WithinDuration) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#WithinDuration](https://github.com/go-openapi/testify/blob/master/internal/assertions/time.go#L21)
@@ -106,7 +107,7 @@ func main() {
 {{< /tabs >}}
 
 ### WithinRange{#withinrange}
-
+  
 WithinRange asserts that a time is within a time range (inclusive).
 
 {{% expand title="Examples" %}}
@@ -157,6 +158,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -176,7 +178,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.WithinRange(t T, actual time.Time, start time.Time, end time.Time, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#WithinRange) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#WithinRange](https://github.com/go-openapi/testify/blob/master/internal/assertions/time.go#L45)

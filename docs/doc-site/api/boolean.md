@@ -35,7 +35,7 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### False{#false}
-
+  
 False asserts that the specified value is false.
 
 {{% expand title="Examples" %}}
@@ -85,6 +85,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -104,7 +105,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.False(t T, value bool, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#False) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#False](https://github.com/go-openapi/testify/blob/master/internal/assertions/boolean.go#L65)
@@ -112,7 +113,7 @@ func main() {
 {{< /tabs >}}
 
 ### FalseT[B Boolean] {{% icon icon="star" color=orange %}}{#falsetb-boolean}
-
+  
 FalseT asserts that the specified value is false.
 
 The type constraint [Boolean](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Boolean) accepts any type which underlying type is bool.
@@ -166,6 +167,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -181,7 +183,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.FalseT[B Boolean](t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FalseT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#FalseT](https://github.com/go-openapi/testify/blob/master/internal/assertions/boolean.go#L92)
@@ -189,7 +191,7 @@ func main() {
 {{< /tabs >}}
 
 ### True{#true}
-
+  
 True asserts that the specified value is true.
 
 {{% expand title="Examples" %}}
@@ -239,6 +241,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -258,7 +261,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.True(t T, value bool, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#True) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#True](https://github.com/go-openapi/testify/blob/master/internal/assertions/boolean.go#L16)
@@ -266,7 +269,7 @@ func main() {
 {{< /tabs >}}
 
 ### TrueT[B Boolean] {{% icon icon="star" color=orange %}}{#truetb-boolean}
-
+  
 TrueT asserts that the specified value is true.
 
 The type constraint [Boolean](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Boolean) accepts any type which underlying type is bool.
@@ -320,6 +323,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -335,7 +339,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.TrueT[B Boolean](t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#TrueT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#TrueT](https://github.com/go-openapi/testify/blob/master/internal/assertions/boolean.go#L43)

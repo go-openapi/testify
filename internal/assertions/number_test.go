@@ -249,8 +249,6 @@ func deltaCases() iter.Seq[genericTestCase] {
 }
 
 // testAllDelta tests both InDelta and InDeltaT with the same input.
-//
-//nolint:thelper // linter false positive: this is not a helper
 func testAllDelta[Number Measurable](expected, actual, delta Number, shouldPass bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
@@ -549,8 +547,6 @@ func epsilonCases() iter.Seq[genericTestCase] {
 }
 
 // testAllEpsilon tests both InEpsilon and InEpsilonT with the same input.
-//
-//nolint:thelper // linter false positive: this is not a helper
 func testAllEpsilon[Number Measurable](expected, actual Number, epsilon float64, shouldPass bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
@@ -632,7 +628,6 @@ func deltaSliceCases() iter.Seq[genericTestCase] {
 	})
 }
 
-//nolint:thelper // linter false positive: this is not a helper
 func testDeltaSlice(expected, actual any, delta float64, shouldPass bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
@@ -697,7 +692,6 @@ func epsilonSliceCases() iter.Seq[genericTestCase] {
 	})
 }
 
-//nolint:thelper // linter false positive: this is not a helper
 func testEpsilonSlice(expected, actual any, epsilon float64, shouldPass bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()

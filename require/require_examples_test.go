@@ -1003,9 +1003,9 @@ func ExampleZero() {
 	// Output: passed
 }
 
-// Test helpers (also in the tests for package require
+// Test helpers (also in the tests for package require.
 //
-// This code is duplicated because the current test is run as a separate test package: require_test
+// This code is duplicated because the current test is run as a separate test package: require_test.
 
 func testDataPath() string {
 	return filepath.Join("..", "internal", "assertions", "testdata")

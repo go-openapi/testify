@@ -40,7 +40,7 @@ This domain exposes 6 functionalities.
 ```
 
 ### DirExists{#direxists}
-
+  
 DirExists checks whether a directory exists in the given path. It also fails
 if the path is a file rather a directory or there is an error checking whether it exists.
 
@@ -96,6 +96,7 @@ func testDataPath() string {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -115,7 +116,7 @@ func testDataPath() string {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.DirExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#DirExists) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#DirExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L81)
@@ -123,7 +124,7 @@ func testDataPath() string {
 {{< /tabs >}}
 
 ### DirNotExists{#dirnotexists}
-
+  
 DirNotExists checks whether a directory does not exist in the given path.
 It fails if the path points to an existing _directory_ only.
 
@@ -179,6 +180,7 @@ func testDataPath() string {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -198,7 +200,7 @@ func testDataPath() string {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.DirNotExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#DirNotExists) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#DirNotExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L110)
@@ -206,7 +208,7 @@ func testDataPath() string {
 {{< /tabs >}}
 
 ### FileEmpty{#fileempty}
-
+  
 FileEmpty checks whether a file exists in the given path and is empty.
 It fails if the file is not empty, if the path points to a directory or there is an error when trying to check the file.
 
@@ -262,6 +264,7 @@ func testDataPath() string {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -281,7 +284,7 @@ func testDataPath() string {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.FileEmpty(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FileEmpty) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L139)
@@ -289,7 +292,7 @@ func testDataPath() string {
 {{< /tabs >}}
 
 ### FileExists{#fileexists}
-
+  
 FileExists checks whether a file exists in the given path. It also fails if
 the path points to a directory or there is an error when trying to check the file.
 
@@ -345,6 +348,7 @@ func testDataPath() string {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -364,7 +368,7 @@ func testDataPath() string {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.FileExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FileExists) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L23)
@@ -372,7 +376,7 @@ func testDataPath() string {
 {{< /tabs >}}
 
 ### FileNotEmpty{#filenotempty}
-
+  
 FileNotEmpty checks whether a file exists in the given path and is not empty.
 It fails if the file is empty, if the path points to a directory or there is an error when trying to check the file.
 
@@ -428,6 +432,7 @@ func testDataPath() string {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -447,7 +452,7 @@ func testDataPath() string {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.FileNotEmpty(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FileNotEmpty) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileNotEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L180)
@@ -455,7 +460,7 @@ func testDataPath() string {
 {{< /tabs >}}
 
 ### FileNotExists{#filenotexists}
-
+  
 FileNotExists checks whether a file does not exist in a given path. It fails
 if the path points to an existing _file_ only.
 
@@ -511,6 +516,7 @@ func testDataPath() string {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -530,7 +536,7 @@ func testDataPath() string {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.FileNotExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FileNotExists) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileNotExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L52)

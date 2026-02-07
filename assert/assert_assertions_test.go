@@ -19,9 +19,12 @@ import (
 
 func TestCondition(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Condition(t, func() bool { return true })
+
+		mock := new(mockT)
+		result := Condition(mock, func() bool { return true })
 		if !result {
 			t.Error("Condition should return true on success")
 		}
@@ -43,9 +46,12 @@ func TestCondition(t *testing.T) {
 
 func TestContains(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Contains(t, []string{"A", "B"}, "A")
+
+		mock := new(mockT)
+		result := Contains(mock, []string{"A", "B"}, "A")
 		if !result {
 			t.Error("Contains should return true on success")
 		}
@@ -67,9 +73,12 @@ func TestContains(t *testing.T) {
 
 func TestDirExists(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := DirExists(t, filepath.Join(testDataPath(), "existing_dir"))
+
+		mock := new(mockT)
+		result := DirExists(mock, filepath.Join(testDataPath(), "existing_dir"))
 		if !result {
 			t.Error("DirExists should return true on success")
 		}
@@ -91,9 +100,12 @@ func TestDirExists(t *testing.T) {
 
 func TestDirNotExists(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := DirNotExists(t, filepath.Join(testDataPath(), "non_existing_dir"))
+
+		mock := new(mockT)
+		result := DirNotExists(mock, filepath.Join(testDataPath(), "non_existing_dir"))
 		if !result {
 			t.Error("DirNotExists should return true on success")
 		}
@@ -115,9 +127,12 @@ func TestDirNotExists(t *testing.T) {
 
 func TestElementsMatch(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := ElementsMatch(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
+
+		mock := new(mockT)
+		result := ElementsMatch(mock, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
 		if !result {
 			t.Error("ElementsMatch should return true on success")
 		}
@@ -139,9 +154,12 @@ func TestElementsMatch(t *testing.T) {
 
 func TestElementsMatchT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := ElementsMatchT(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
+
+		mock := new(mockT)
+		result := ElementsMatchT(mock, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
 		if !result {
 			t.Error("ElementsMatchT should return true on success")
 		}
@@ -163,9 +181,12 @@ func TestElementsMatchT(t *testing.T) {
 
 func TestEmpty(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Empty(t, "")
+
+		mock := new(mockT)
+		result := Empty(mock, "")
 		if !result {
 			t.Error("Empty should return true on success")
 		}
@@ -187,9 +208,12 @@ func TestEmpty(t *testing.T) {
 
 func TestEqual(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Equal(t, 123, 123)
+
+		mock := new(mockT)
+		result := Equal(mock, 123, 123)
 		if !result {
 			t.Error("Equal should return true on success")
 		}
@@ -211,9 +235,12 @@ func TestEqual(t *testing.T) {
 
 func TestEqualError(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := EqualError(t, ErrTest, "assert.ErrTest general error for testing")
+
+		mock := new(mockT)
+		result := EqualError(mock, ErrTest, "assert.ErrTest general error for testing")
 		if !result {
 			t.Error("EqualError should return true on success")
 		}
@@ -235,9 +262,12 @@ func TestEqualError(t *testing.T) {
 
 func TestEqualExportedValues(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := EqualExportedValues(t, &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "a", b: 2})
+
+		mock := new(mockT)
+		result := EqualExportedValues(mock, &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "a", b: 2})
 		if !result {
 			t.Error("EqualExportedValues should return true on success")
 		}
@@ -259,9 +289,12 @@ func TestEqualExportedValues(t *testing.T) {
 
 func TestEqualT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := EqualT(t, 123, 123)
+
+		mock := new(mockT)
+		result := EqualT(mock, 123, 123)
 		if !result {
 			t.Error("EqualT should return true on success")
 		}
@@ -283,9 +316,12 @@ func TestEqualT(t *testing.T) {
 
 func TestEqualValues(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := EqualValues(t, uint32(123), int32(123))
+
+		mock := new(mockT)
+		result := EqualValues(mock, uint32(123), int32(123))
 		if !result {
 			t.Error("EqualValues should return true on success")
 		}
@@ -307,9 +343,12 @@ func TestEqualValues(t *testing.T) {
 
 func TestError(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Error(t, ErrTest)
+
+		mock := new(mockT)
+		result := Error(mock, ErrTest)
 		if !result {
 			t.Error("Error should return true on success")
 		}
@@ -331,9 +370,12 @@ func TestError(t *testing.T) {
 
 func TestErrorAs(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := ErrorAs(t, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
+
+		mock := new(mockT)
+		result := ErrorAs(mock, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
 		if !result {
 			t.Error("ErrorAs should return true on success")
 		}
@@ -355,9 +397,12 @@ func TestErrorAs(t *testing.T) {
 
 func TestErrorContains(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := ErrorContains(t, ErrTest, "general error")
+
+		mock := new(mockT)
+		result := ErrorContains(mock, ErrTest, "general error")
 		if !result {
 			t.Error("ErrorContains should return true on success")
 		}
@@ -379,9 +424,12 @@ func TestErrorContains(t *testing.T) {
 
 func TestErrorIs(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := ErrorIs(t, fmt.Errorf("wrap: %w", io.EOF), io.EOF)
+
+		mock := new(mockT)
+		result := ErrorIs(mock, fmt.Errorf("wrap: %w", io.EOF), io.EOF)
 		if !result {
 			t.Error("ErrorIs should return true on success")
 		}
@@ -403,9 +451,12 @@ func TestErrorIs(t *testing.T) {
 
 func TestEventually(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Eventually(t, func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond)
+
+		mock := new(mockT)
+		result := Eventually(mock, func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond)
 		if !result {
 			t.Error("Eventually should return true on success")
 		}
@@ -427,9 +478,12 @@ func TestEventually(t *testing.T) {
 
 func TestEventuallyWith(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := EventuallyWith(t, func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
+
+		mock := new(mockT)
+		result := EventuallyWith(mock, func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
 		if !result {
 			t.Error("EventuallyWith should return true on success")
 		}
@@ -451,9 +505,12 @@ func TestEventuallyWith(t *testing.T) {
 
 func TestExactly(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Exactly(t, int32(123), int32(123))
+
+		mock := new(mockT)
+		result := Exactly(mock, int32(123), int32(123))
 		if !result {
 			t.Error("Exactly should return true on success")
 		}
@@ -475,6 +532,7 @@ func TestExactly(t *testing.T) {
 
 func TestFail(t *testing.T) {
 	t.Parallel()
+
 	t.Run("failure", func(t *testing.T) {
 		t.Parallel()
 
@@ -491,6 +549,7 @@ func TestFail(t *testing.T) {
 
 func TestFailNow(t *testing.T) {
 	t.Parallel()
+
 	t.Run("failure", func(t *testing.T) {
 		t.Parallel()
 
@@ -507,9 +566,12 @@ func TestFailNow(t *testing.T) {
 
 func TestFalse(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := False(t, 1 == 0)
+
+		mock := new(mockT)
+		result := False(mock, 1 == 0)
 		if !result {
 			t.Error("False should return true on success")
 		}
@@ -531,9 +593,12 @@ func TestFalse(t *testing.T) {
 
 func TestFalseT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := FalseT(t, 1 == 0)
+
+		mock := new(mockT)
+		result := FalseT(mock, 1 == 0)
 		if !result {
 			t.Error("FalseT should return true on success")
 		}
@@ -555,9 +620,12 @@ func TestFalseT(t *testing.T) {
 
 func TestFileEmpty(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := FileEmpty(t, filepath.Join(testDataPath(), "empty_file"))
+
+		mock := new(mockT)
+		result := FileEmpty(mock, filepath.Join(testDataPath(), "empty_file"))
 		if !result {
 			t.Error("FileEmpty should return true on success")
 		}
@@ -579,9 +647,12 @@ func TestFileEmpty(t *testing.T) {
 
 func TestFileExists(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := FileExists(t, filepath.Join(testDataPath(), "existing_file"))
+
+		mock := new(mockT)
+		result := FileExists(mock, filepath.Join(testDataPath(), "existing_file"))
 		if !result {
 			t.Error("FileExists should return true on success")
 		}
@@ -603,9 +674,12 @@ func TestFileExists(t *testing.T) {
 
 func TestFileNotEmpty(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := FileNotEmpty(t, filepath.Join(testDataPath(), "existing_file"))
+
+		mock := new(mockT)
+		result := FileNotEmpty(mock, filepath.Join(testDataPath(), "existing_file"))
 		if !result {
 			t.Error("FileNotEmpty should return true on success")
 		}
@@ -627,9 +701,12 @@ func TestFileNotEmpty(t *testing.T) {
 
 func TestFileNotExists(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := FileNotExists(t, filepath.Join(testDataPath(), "non_existing_file"))
+
+		mock := new(mockT)
+		result := FileNotExists(mock, filepath.Join(testDataPath(), "non_existing_file"))
 		if !result {
 			t.Error("FileNotExists should return true on success")
 		}
@@ -651,9 +728,12 @@ func TestFileNotExists(t *testing.T) {
 
 func TestGreater(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Greater(t, 2, 1)
+
+		mock := new(mockT)
+		result := Greater(mock, 2, 1)
 		if !result {
 			t.Error("Greater should return true on success")
 		}
@@ -675,9 +755,12 @@ func TestGreater(t *testing.T) {
 
 func TestGreaterOrEqual(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := GreaterOrEqual(t, 2, 1)
+
+		mock := new(mockT)
+		result := GreaterOrEqual(mock, 2, 1)
 		if !result {
 			t.Error("GreaterOrEqual should return true on success")
 		}
@@ -699,9 +782,12 @@ func TestGreaterOrEqual(t *testing.T) {
 
 func TestGreaterOrEqualT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := GreaterOrEqualT(t, 2, 1)
+
+		mock := new(mockT)
+		result := GreaterOrEqualT(mock, 2, 1)
 		if !result {
 			t.Error("GreaterOrEqualT should return true on success")
 		}
@@ -723,9 +809,12 @@ func TestGreaterOrEqualT(t *testing.T) {
 
 func TestGreaterT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := GreaterT(t, 2, 1)
+
+		mock := new(mockT)
+		result := GreaterT(mock, 2, 1)
 		if !result {
 			t.Error("GreaterT should return true on success")
 		}
@@ -747,9 +836,12 @@ func TestGreaterT(t *testing.T) {
 
 func TestHTTPBodyContains(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := HTTPBodyContains(t, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, World!")
+
+		mock := new(mockT)
+		result := HTTPBodyContains(mock, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, World!")
 		if !result {
 			t.Error("HTTPBodyContains should return true on success")
 		}
@@ -771,9 +863,12 @@ func TestHTTPBodyContains(t *testing.T) {
 
 func TestHTTPBodyNotContains(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := HTTPBodyNotContains(t, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, Bob!")
+
+		mock := new(mockT)
+		result := HTTPBodyNotContains(mock, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, Bob!")
 		if !result {
 			t.Error("HTTPBodyNotContains should return true on success")
 		}
@@ -795,9 +890,12 @@ func TestHTTPBodyNotContains(t *testing.T) {
 
 func TestHTTPError(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := HTTPError(t, httpError, "GET", "/", nil)
+
+		mock := new(mockT)
+		result := HTTPError(mock, httpError, "GET", "/", nil)
 		if !result {
 			t.Error("HTTPError should return true on success")
 		}
@@ -819,9 +917,12 @@ func TestHTTPError(t *testing.T) {
 
 func TestHTTPRedirect(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := HTTPRedirect(t, httpRedirect, "GET", "/", nil)
+
+		mock := new(mockT)
+		result := HTTPRedirect(mock, httpRedirect, "GET", "/", nil)
 		if !result {
 			t.Error("HTTPRedirect should return true on success")
 		}
@@ -843,9 +944,12 @@ func TestHTTPRedirect(t *testing.T) {
 
 func TestHTTPStatusCode(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := HTTPStatusCode(t, httpOK, "GET", "/", nil, http.StatusOK)
+
+		mock := new(mockT)
+		result := HTTPStatusCode(mock, httpOK, "GET", "/", nil, http.StatusOK)
 		if !result {
 			t.Error("HTTPStatusCode should return true on success")
 		}
@@ -867,9 +971,12 @@ func TestHTTPStatusCode(t *testing.T) {
 
 func TestHTTPSuccess(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := HTTPSuccess(t, httpOK, "GET", "/", nil)
+
+		mock := new(mockT)
+		result := HTTPSuccess(mock, httpOK, "GET", "/", nil)
 		if !result {
 			t.Error("HTTPSuccess should return true on success")
 		}
@@ -891,9 +998,12 @@ func TestHTTPSuccess(t *testing.T) {
 
 func TestImplements(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Implements(t, ptr(dummyInterface), new(testing.T))
+
+		mock := new(mockT)
+		result := Implements(mock, ptr(dummyInterface), new(testing.T))
 		if !result {
 			t.Error("Implements should return true on success")
 		}
@@ -915,9 +1025,12 @@ func TestImplements(t *testing.T) {
 
 func TestInDelta(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := InDelta(t, 1.0, 1.01, 0.02)
+
+		mock := new(mockT)
+		result := InDelta(mock, 1.0, 1.01, 0.02)
 		if !result {
 			t.Error("InDelta should return true on success")
 		}
@@ -939,9 +1052,12 @@ func TestInDelta(t *testing.T) {
 
 func TestInDeltaMapValues(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := InDeltaMapValues(t, map[string]float64{"a": 1.0}, map[string]float64{"a": 1.01}, 0.02)
+
+		mock := new(mockT)
+		result := InDeltaMapValues(mock, map[string]float64{"a": 1.0}, map[string]float64{"a": 1.01}, 0.02)
 		if !result {
 			t.Error("InDeltaMapValues should return true on success")
 		}
@@ -963,9 +1079,12 @@ func TestInDeltaMapValues(t *testing.T) {
 
 func TestInDeltaSlice(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := InDeltaSlice(t, []float64{1.0, 2.0}, []float64{1.01, 2.01}, 0.02)
+
+		mock := new(mockT)
+		result := InDeltaSlice(mock, []float64{1.0, 2.0}, []float64{1.01, 2.01}, 0.02)
 		if !result {
 			t.Error("InDeltaSlice should return true on success")
 		}
@@ -987,9 +1106,12 @@ func TestInDeltaSlice(t *testing.T) {
 
 func TestInDeltaT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := InDeltaT(t, 1.0, 1.01, 0.02)
+
+		mock := new(mockT)
+		result := InDeltaT(mock, 1.0, 1.01, 0.02)
 		if !result {
 			t.Error("InDeltaT should return true on success")
 		}
@@ -1011,9 +1133,12 @@ func TestInDeltaT(t *testing.T) {
 
 func TestInEpsilon(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := InEpsilon(t, 100.0, 101.0, 0.02)
+
+		mock := new(mockT)
+		result := InEpsilon(mock, 100.0, 101.0, 0.02)
 		if !result {
 			t.Error("InEpsilon should return true on success")
 		}
@@ -1035,9 +1160,12 @@ func TestInEpsilon(t *testing.T) {
 
 func TestInEpsilonSlice(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := InEpsilonSlice(t, []float64{100.0, 200.0}, []float64{101.0, 202.0}, 0.02)
+
+		mock := new(mockT)
+		result := InEpsilonSlice(mock, []float64{100.0, 200.0}, []float64{101.0, 202.0}, 0.02)
 		if !result {
 			t.Error("InEpsilonSlice should return true on success")
 		}
@@ -1059,9 +1187,12 @@ func TestInEpsilonSlice(t *testing.T) {
 
 func TestInEpsilonT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := InEpsilonT(t, 100.0, 101.0, 0.02)
+
+		mock := new(mockT)
+		result := InEpsilonT(mock, 100.0, 101.0, 0.02)
 		if !result {
 			t.Error("InEpsilonT should return true on success")
 		}
@@ -1083,9 +1214,12 @@ func TestInEpsilonT(t *testing.T) {
 
 func TestIsDecreasing(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := IsDecreasing(t, []int{3, 2, 1})
+
+		mock := new(mockT)
+		result := IsDecreasing(mock, []int{3, 2, 1})
 		if !result {
 			t.Error("IsDecreasing should return true on success")
 		}
@@ -1107,9 +1241,12 @@ func TestIsDecreasing(t *testing.T) {
 
 func TestIsDecreasingT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := IsDecreasingT(t, []int{3, 2, 1})
+
+		mock := new(mockT)
+		result := IsDecreasingT(mock, []int{3, 2, 1})
 		if !result {
 			t.Error("IsDecreasingT should return true on success")
 		}
@@ -1131,9 +1268,12 @@ func TestIsDecreasingT(t *testing.T) {
 
 func TestIsIncreasing(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := IsIncreasing(t, []int{1, 2, 3})
+
+		mock := new(mockT)
+		result := IsIncreasing(mock, []int{1, 2, 3})
 		if !result {
 			t.Error("IsIncreasing should return true on success")
 		}
@@ -1155,9 +1295,12 @@ func TestIsIncreasing(t *testing.T) {
 
 func TestIsIncreasingT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := IsIncreasingT(t, []int{1, 2, 3})
+
+		mock := new(mockT)
+		result := IsIncreasingT(mock, []int{1, 2, 3})
 		if !result {
 			t.Error("IsIncreasingT should return true on success")
 		}
@@ -1179,9 +1322,12 @@ func TestIsIncreasingT(t *testing.T) {
 
 func TestIsNonDecreasing(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := IsNonDecreasing(t, []int{1, 1, 2})
+
+		mock := new(mockT)
+		result := IsNonDecreasing(mock, []int{1, 1, 2})
 		if !result {
 			t.Error("IsNonDecreasing should return true on success")
 		}
@@ -1203,9 +1349,12 @@ func TestIsNonDecreasing(t *testing.T) {
 
 func TestIsNonDecreasingT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := IsNonDecreasingT(t, []int{1, 1, 2})
+
+		mock := new(mockT)
+		result := IsNonDecreasingT(mock, []int{1, 1, 2})
 		if !result {
 			t.Error("IsNonDecreasingT should return true on success")
 		}
@@ -1227,9 +1376,12 @@ func TestIsNonDecreasingT(t *testing.T) {
 
 func TestIsNonIncreasing(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := IsNonIncreasing(t, []int{2, 1, 1})
+
+		mock := new(mockT)
+		result := IsNonIncreasing(mock, []int{2, 1, 1})
 		if !result {
 			t.Error("IsNonIncreasing should return true on success")
 		}
@@ -1251,9 +1403,12 @@ func TestIsNonIncreasing(t *testing.T) {
 
 func TestIsNonIncreasingT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := IsNonIncreasingT(t, []int{2, 1, 1})
+
+		mock := new(mockT)
+		result := IsNonIncreasingT(mock, []int{2, 1, 1})
 		if !result {
 			t.Error("IsNonIncreasingT should return true on success")
 		}
@@ -1275,9 +1430,12 @@ func TestIsNonIncreasingT(t *testing.T) {
 
 func TestIsNotOfTypeT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := IsNotOfTypeT[myType](t, 123.123)
+
+		mock := new(mockT)
+		result := IsNotOfTypeT[myType](mock, 123.123)
 		if !result {
 			t.Error("IsNotOfTypeT should return true on success")
 		}
@@ -1299,9 +1457,12 @@ func TestIsNotOfTypeT(t *testing.T) {
 
 func TestIsNotType(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := IsNotType(t, int32(123), int64(456))
+
+		mock := new(mockT)
+		result := IsNotType(mock, int32(123), int64(456))
 		if !result {
 			t.Error("IsNotType should return true on success")
 		}
@@ -1323,9 +1484,12 @@ func TestIsNotType(t *testing.T) {
 
 func TestIsOfTypeT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := IsOfTypeT[myType](t, myType(123.123))
+
+		mock := new(mockT)
+		result := IsOfTypeT[myType](mock, myType(123.123))
 		if !result {
 			t.Error("IsOfTypeT should return true on success")
 		}
@@ -1347,9 +1511,12 @@ func TestIsOfTypeT(t *testing.T) {
 
 func TestIsType(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := IsType(t, 123, 456)
+
+		mock := new(mockT)
+		result := IsType(mock, 123, 456)
 		if !result {
 			t.Error("IsType should return true on success")
 		}
@@ -1371,9 +1538,12 @@ func TestIsType(t *testing.T) {
 
 func TestJSONEq(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := JSONEq(t, `{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
+
+		mock := new(mockT)
+		result := JSONEq(mock, `{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
 		if !result {
 			t.Error("JSONEq should return true on success")
 		}
@@ -1395,9 +1565,12 @@ func TestJSONEq(t *testing.T) {
 
 func TestJSONEqBytes(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := JSONEqBytes(t, []byte(`{"hello": "world", "foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`))
+
+		mock := new(mockT)
+		result := JSONEqBytes(mock, []byte(`{"hello": "world", "foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`))
 		if !result {
 			t.Error("JSONEqBytes should return true on success")
 		}
@@ -1419,9 +1592,12 @@ func TestJSONEqBytes(t *testing.T) {
 
 func TestJSONEqT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := JSONEqT(t, `{"hello": "world", "foo": "bar"}`, []byte(`{"foo": "bar", "hello": "world"}`))
+
+		mock := new(mockT)
+		result := JSONEqT(mock, `{"hello": "world", "foo": "bar"}`, []byte(`{"foo": "bar", "hello": "world"}`))
 		if !result {
 			t.Error("JSONEqT should return true on success")
 		}
@@ -1443,9 +1619,12 @@ func TestJSONEqT(t *testing.T) {
 
 func TestJSONMarshalAsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := JSONMarshalAsT(t, []byte(`{"A": "a"}`), dummyStruct{A: "a"})
+
+		mock := new(mockT)
+		result := JSONMarshalAsT(mock, []byte(`{"A": "a"}`), dummyStruct{A: "a"})
 		if !result {
 			t.Error("JSONMarshalAsT should return true on success")
 		}
@@ -1467,9 +1646,12 @@ func TestJSONMarshalAsT(t *testing.T) {
 
 func TestJSONUnmarshalAsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := JSONUnmarshalAsT(t, dummyStruct{A: "a"}, []byte(`{"A": "a"}`))
+
+		mock := new(mockT)
+		result := JSONUnmarshalAsT(mock, dummyStruct{A: "a"}, []byte(`{"A": "a"}`))
 		if !result {
 			t.Error("JSONUnmarshalAsT should return true on success")
 		}
@@ -1491,9 +1673,12 @@ func TestJSONUnmarshalAsT(t *testing.T) {
 
 func TestKind(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Kind(t, reflect.String, "hello")
+
+		mock := new(mockT)
+		result := Kind(mock, reflect.String, "hello")
 		if !result {
 			t.Error("Kind should return true on success")
 		}
@@ -1515,9 +1700,12 @@ func TestKind(t *testing.T) {
 
 func TestLen(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Len(t, []string{"A", "B"}, 2)
+
+		mock := new(mockT)
+		result := Len(mock, []string{"A", "B"}, 2)
 		if !result {
 			t.Error("Len should return true on success")
 		}
@@ -1539,9 +1727,12 @@ func TestLen(t *testing.T) {
 
 func TestLess(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Less(t, 1, 2)
+
+		mock := new(mockT)
+		result := Less(mock, 1, 2)
 		if !result {
 			t.Error("Less should return true on success")
 		}
@@ -1563,9 +1754,12 @@ func TestLess(t *testing.T) {
 
 func TestLessOrEqual(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := LessOrEqual(t, 1, 2)
+
+		mock := new(mockT)
+		result := LessOrEqual(mock, 1, 2)
 		if !result {
 			t.Error("LessOrEqual should return true on success")
 		}
@@ -1587,9 +1781,12 @@ func TestLessOrEqual(t *testing.T) {
 
 func TestLessOrEqualT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := LessOrEqualT(t, 1, 2)
+
+		mock := new(mockT)
+		result := LessOrEqualT(mock, 1, 2)
 		if !result {
 			t.Error("LessOrEqualT should return true on success")
 		}
@@ -1611,9 +1808,12 @@ func TestLessOrEqualT(t *testing.T) {
 
 func TestLessT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := LessT(t, 1, 2)
+
+		mock := new(mockT)
+		result := LessT(mock, 1, 2)
 		if !result {
 			t.Error("LessT should return true on success")
 		}
@@ -1635,9 +1835,12 @@ func TestLessT(t *testing.T) {
 
 func TestMapContainsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := MapContainsT(t, map[string]string{"A": "B"}, "A")
+
+		mock := new(mockT)
+		result := MapContainsT(mock, map[string]string{"A": "B"}, "A")
 		if !result {
 			t.Error("MapContainsT should return true on success")
 		}
@@ -1659,9 +1862,12 @@ func TestMapContainsT(t *testing.T) {
 
 func TestMapNotContainsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := MapNotContainsT(t, map[string]string{"A": "B"}, "C")
+
+		mock := new(mockT)
+		result := MapNotContainsT(mock, map[string]string{"A": "B"}, "C")
 		if !result {
 			t.Error("MapNotContainsT should return true on success")
 		}
@@ -1683,9 +1889,12 @@ func TestMapNotContainsT(t *testing.T) {
 
 func TestNegative(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Negative(t, -1)
+
+		mock := new(mockT)
+		result := Negative(mock, -1)
 		if !result {
 			t.Error("Negative should return true on success")
 		}
@@ -1707,9 +1916,12 @@ func TestNegative(t *testing.T) {
 
 func TestNegativeT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NegativeT(t, -1)
+
+		mock := new(mockT)
+		result := NegativeT(mock, -1)
 		if !result {
 			t.Error("NegativeT should return true on success")
 		}
@@ -1731,9 +1943,12 @@ func TestNegativeT(t *testing.T) {
 
 func TestNever(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Never(t, func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond)
+
+		mock := new(mockT)
+		result := Never(mock, func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond)
 		if !result {
 			t.Error("Never should return true on success")
 		}
@@ -1755,9 +1970,12 @@ func TestNever(t *testing.T) {
 
 func TestNil(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Nil(t, nil)
+
+		mock := new(mockT)
+		result := Nil(mock, nil)
 		if !result {
 			t.Error("Nil should return true on success")
 		}
@@ -1779,9 +1997,12 @@ func TestNil(t *testing.T) {
 
 func TestNoError(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NoError(t, nil)
+
+		mock := new(mockT)
+		result := NoError(mock, nil)
 		if !result {
 			t.Error("NoError should return true on success")
 		}
@@ -1803,14 +2024,18 @@ func TestNoError(t *testing.T) {
 
 func TestNoGoRoutineLeak(t *testing.T) {
 	t.Parallel()
+
 	t.Skip() // this function doesn't have tests yet: feed the original function with examples to test.
 }
 
 func TestNotContains(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotContains(t, []string{"A", "B"}, "C")
+
+		mock := new(mockT)
+		result := NotContains(mock, []string{"A", "B"}, "C")
 		if !result {
 			t.Error("NotContains should return true on success")
 		}
@@ -1832,9 +2057,12 @@ func TestNotContains(t *testing.T) {
 
 func TestNotElementsMatch(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotElementsMatch(t, []int{1, 2, 3}, []int{1, 2, 4})
+
+		mock := new(mockT)
+		result := NotElementsMatch(mock, []int{1, 2, 3}, []int{1, 2, 4})
 		if !result {
 			t.Error("NotElementsMatch should return true on success")
 		}
@@ -1856,9 +2084,12 @@ func TestNotElementsMatch(t *testing.T) {
 
 func TestNotElementsMatchT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotElementsMatchT(t, []int{1, 2, 3}, []int{1, 2, 4})
+
+		mock := new(mockT)
+		result := NotElementsMatchT(mock, []int{1, 2, 3}, []int{1, 2, 4})
 		if !result {
 			t.Error("NotElementsMatchT should return true on success")
 		}
@@ -1880,9 +2111,12 @@ func TestNotElementsMatchT(t *testing.T) {
 
 func TestNotEmpty(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotEmpty(t, "not empty")
+
+		mock := new(mockT)
+		result := NotEmpty(mock, "not empty")
 		if !result {
 			t.Error("NotEmpty should return true on success")
 		}
@@ -1904,9 +2138,12 @@ func TestNotEmpty(t *testing.T) {
 
 func TestNotEqual(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotEqual(t, 123, 456)
+
+		mock := new(mockT)
+		result := NotEqual(mock, 123, 456)
 		if !result {
 			t.Error("NotEqual should return true on success")
 		}
@@ -1928,9 +2165,12 @@ func TestNotEqual(t *testing.T) {
 
 func TestNotEqualT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotEqualT(t, 123, 456)
+
+		mock := new(mockT)
+		result := NotEqualT(mock, 123, 456)
 		if !result {
 			t.Error("NotEqualT should return true on success")
 		}
@@ -1952,9 +2192,12 @@ func TestNotEqualT(t *testing.T) {
 
 func TestNotEqualValues(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotEqualValues(t, uint32(123), int32(456))
+
+		mock := new(mockT)
+		result := NotEqualValues(mock, uint32(123), int32(456))
 		if !result {
 			t.Error("NotEqualValues should return true on success")
 		}
@@ -1976,9 +2219,12 @@ func TestNotEqualValues(t *testing.T) {
 
 func TestNotErrorAs(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotErrorAs(t, ErrTest, new(*dummyError))
+
+		mock := new(mockT)
+		result := NotErrorAs(mock, ErrTest, new(*dummyError))
 		if !result {
 			t.Error("NotErrorAs should return true on success")
 		}
@@ -2000,9 +2246,12 @@ func TestNotErrorAs(t *testing.T) {
 
 func TestNotErrorIs(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotErrorIs(t, ErrTest, io.EOF)
+
+		mock := new(mockT)
+		result := NotErrorIs(mock, ErrTest, io.EOF)
 		if !result {
 			t.Error("NotErrorIs should return true on success")
 		}
@@ -2024,9 +2273,12 @@ func TestNotErrorIs(t *testing.T) {
 
 func TestNotImplements(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotImplements(t, (*error)(nil), new(testing.T))
+
+		mock := new(mockT)
+		result := NotImplements(mock, (*error)(nil), new(testing.T))
 		if !result {
 			t.Error("NotImplements should return true on success")
 		}
@@ -2048,9 +2300,12 @@ func TestNotImplements(t *testing.T) {
 
 func TestNotKind(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotKind(t, reflect.String, 0)
+
+		mock := new(mockT)
+		result := NotKind(mock, reflect.String, 0)
 		if !result {
 			t.Error("NotKind should return true on success")
 		}
@@ -2072,9 +2327,12 @@ func TestNotKind(t *testing.T) {
 
 func TestNotNil(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotNil(t, "not nil")
+
+		mock := new(mockT)
+		result := NotNil(mock, "not nil")
 		if !result {
 			t.Error("NotNil should return true on success")
 		}
@@ -2096,9 +2354,12 @@ func TestNotNil(t *testing.T) {
 
 func TestNotPanics(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotPanics(t, func() {})
+
+		mock := new(mockT)
+		result := NotPanics(mock, func() {})
 		if !result {
 			t.Error("NotPanics should return true on success")
 		}
@@ -2120,9 +2381,12 @@ func TestNotPanics(t *testing.T) {
 
 func TestNotRegexp(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotRegexp(t, "^start", "not starting")
+
+		mock := new(mockT)
+		result := NotRegexp(mock, "^start", "not starting")
 		if !result {
 			t.Error("NotRegexp should return true on success")
 		}
@@ -2144,9 +2408,12 @@ func TestNotRegexp(t *testing.T) {
 
 func TestNotRegexpT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotRegexpT(t, "^start", "not starting")
+
+		mock := new(mockT)
+		result := NotRegexpT(mock, "^start", "not starting")
 		if !result {
 			t.Error("NotRegexpT should return true on success")
 		}
@@ -2168,9 +2435,12 @@ func TestNotRegexpT(t *testing.T) {
 
 func TestNotSame(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotSame(t, &staticVar, ptr("static string"))
+
+		mock := new(mockT)
+		result := NotSame(mock, &staticVar, ptr("static string"))
 		if !result {
 			t.Error("NotSame should return true on success")
 		}
@@ -2192,9 +2462,12 @@ func TestNotSame(t *testing.T) {
 
 func TestNotSameT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotSameT(t, &staticVar, ptr("static string"))
+
+		mock := new(mockT)
+		result := NotSameT(mock, &staticVar, ptr("static string"))
 		if !result {
 			t.Error("NotSameT should return true on success")
 		}
@@ -2216,9 +2489,12 @@ func TestNotSameT(t *testing.T) {
 
 func TestNotSortedT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotSortedT(t, []int{3, 1, 3})
+
+		mock := new(mockT)
+		result := NotSortedT(mock, []int{3, 1, 3})
 		if !result {
 			t.Error("NotSortedT should return true on success")
 		}
@@ -2240,9 +2516,12 @@ func TestNotSortedT(t *testing.T) {
 
 func TestNotSubset(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotSubset(t, []int{1, 2, 3}, []int{4, 5})
+
+		mock := new(mockT)
+		result := NotSubset(mock, []int{1, 2, 3}, []int{4, 5})
 		if !result {
 			t.Error("NotSubset should return true on success")
 		}
@@ -2264,9 +2543,12 @@ func TestNotSubset(t *testing.T) {
 
 func TestNotZero(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := NotZero(t, 1)
+
+		mock := new(mockT)
+		result := NotZero(mock, 1)
 		if !result {
 			t.Error("NotZero should return true on success")
 		}
@@ -2288,9 +2570,12 @@ func TestNotZero(t *testing.T) {
 
 func TestPanics(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Panics(t, func() { panic("panicking") })
+
+		mock := new(mockT)
+		result := Panics(mock, func() { panic("panicking") })
 		if !result {
 			t.Error("Panics should return true on success")
 		}
@@ -2312,9 +2597,12 @@ func TestPanics(t *testing.T) {
 
 func TestPanicsWithError(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := PanicsWithError(t, ErrTest.Error(), func() { panic(ErrTest) })
+
+		mock := new(mockT)
+		result := PanicsWithError(mock, ErrTest.Error(), func() { panic(ErrTest) })
 		if !result {
 			t.Error("PanicsWithError should return true on success")
 		}
@@ -2336,9 +2624,12 @@ func TestPanicsWithError(t *testing.T) {
 
 func TestPanicsWithValue(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := PanicsWithValue(t, "panicking", func() { panic("panicking") })
+
+		mock := new(mockT)
+		result := PanicsWithValue(mock, "panicking", func() { panic("panicking") })
 		if !result {
 			t.Error("PanicsWithValue should return true on success")
 		}
@@ -2360,9 +2651,12 @@ func TestPanicsWithValue(t *testing.T) {
 
 func TestPositive(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Positive(t, 1)
+
+		mock := new(mockT)
+		result := Positive(mock, 1)
 		if !result {
 			t.Error("Positive should return true on success")
 		}
@@ -2384,9 +2678,12 @@ func TestPositive(t *testing.T) {
 
 func TestPositiveT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := PositiveT(t, 1)
+
+		mock := new(mockT)
+		result := PositiveT(mock, 1)
 		if !result {
 			t.Error("PositiveT should return true on success")
 		}
@@ -2408,9 +2705,12 @@ func TestPositiveT(t *testing.T) {
 
 func TestRegexp(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Regexp(t, "^start", "starting")
+
+		mock := new(mockT)
+		result := Regexp(mock, "^start", "starting")
 		if !result {
 			t.Error("Regexp should return true on success")
 		}
@@ -2432,9 +2732,12 @@ func TestRegexp(t *testing.T) {
 
 func TestRegexpT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := RegexpT(t, "^start", "starting")
+
+		mock := new(mockT)
+		result := RegexpT(mock, "^start", "starting")
 		if !result {
 			t.Error("RegexpT should return true on success")
 		}
@@ -2456,9 +2759,12 @@ func TestRegexpT(t *testing.T) {
 
 func TestSame(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Same(t, &staticVar, staticVarPtr)
+
+		mock := new(mockT)
+		result := Same(mock, &staticVar, staticVarPtr)
 		if !result {
 			t.Error("Same should return true on success")
 		}
@@ -2480,9 +2786,12 @@ func TestSame(t *testing.T) {
 
 func TestSameT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := SameT(t, &staticVar, staticVarPtr)
+
+		mock := new(mockT)
+		result := SameT(mock, &staticVar, staticVarPtr)
 		if !result {
 			t.Error("SameT should return true on success")
 		}
@@ -2504,9 +2813,12 @@ func TestSameT(t *testing.T) {
 
 func TestSeqContainsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := SeqContainsT(t, slices.Values([]string{"A", "B"}), "A")
+
+		mock := new(mockT)
+		result := SeqContainsT(mock, slices.Values([]string{"A", "B"}), "A")
 		if !result {
 			t.Error("SeqContainsT should return true on success")
 		}
@@ -2528,9 +2840,12 @@ func TestSeqContainsT(t *testing.T) {
 
 func TestSeqNotContainsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := SeqNotContainsT(t, slices.Values([]string{"A", "B"}), "C")
+
+		mock := new(mockT)
+		result := SeqNotContainsT(mock, slices.Values([]string{"A", "B"}), "C")
 		if !result {
 			t.Error("SeqNotContainsT should return true on success")
 		}
@@ -2552,9 +2867,12 @@ func TestSeqNotContainsT(t *testing.T) {
 
 func TestSliceContainsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := SliceContainsT(t, []string{"A", "B"}, "A")
+
+		mock := new(mockT)
+		result := SliceContainsT(mock, []string{"A", "B"}, "A")
 		if !result {
 			t.Error("SliceContainsT should return true on success")
 		}
@@ -2576,9 +2894,12 @@ func TestSliceContainsT(t *testing.T) {
 
 func TestSliceNotContainsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := SliceNotContainsT(t, []string{"A", "B"}, "C")
+
+		mock := new(mockT)
+		result := SliceNotContainsT(mock, []string{"A", "B"}, "C")
 		if !result {
 			t.Error("SliceNotContainsT should return true on success")
 		}
@@ -2600,9 +2921,12 @@ func TestSliceNotContainsT(t *testing.T) {
 
 func TestSliceNotSubsetT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := SliceNotSubsetT(t, []int{1, 2, 3}, []int{4, 5})
+
+		mock := new(mockT)
+		result := SliceNotSubsetT(mock, []int{1, 2, 3}, []int{4, 5})
 		if !result {
 			t.Error("SliceNotSubsetT should return true on success")
 		}
@@ -2624,9 +2948,12 @@ func TestSliceNotSubsetT(t *testing.T) {
 
 func TestSliceSubsetT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := SliceSubsetT(t, []int{1, 2, 3}, []int{1, 2})
+
+		mock := new(mockT)
+		result := SliceSubsetT(mock, []int{1, 2, 3}, []int{1, 2})
 		if !result {
 			t.Error("SliceSubsetT should return true on success")
 		}
@@ -2648,9 +2975,12 @@ func TestSliceSubsetT(t *testing.T) {
 
 func TestSortedT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := SortedT(t, []int{1, 1, 3})
+
+		mock := new(mockT)
+		result := SortedT(mock, []int{1, 1, 3})
 		if !result {
 			t.Error("SortedT should return true on success")
 		}
@@ -2672,9 +3002,12 @@ func TestSortedT(t *testing.T) {
 
 func TestStringContainsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := StringContainsT(t, "AB", "A")
+
+		mock := new(mockT)
+		result := StringContainsT(mock, "AB", "A")
 		if !result {
 			t.Error("StringContainsT should return true on success")
 		}
@@ -2696,9 +3029,12 @@ func TestStringContainsT(t *testing.T) {
 
 func TestStringNotContainsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := StringNotContainsT(t, "AB", "C")
+
+		mock := new(mockT)
+		result := StringNotContainsT(mock, "AB", "C")
 		if !result {
 			t.Error("StringNotContainsT should return true on success")
 		}
@@ -2720,9 +3056,12 @@ func TestStringNotContainsT(t *testing.T) {
 
 func TestSubset(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Subset(t, []int{1, 2, 3}, []int{1, 2})
+
+		mock := new(mockT)
+		result := Subset(mock, []int{1, 2, 3}, []int{1, 2})
 		if !result {
 			t.Error("Subset should return true on success")
 		}
@@ -2744,9 +3083,12 @@ func TestSubset(t *testing.T) {
 
 func TestTrue(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := True(t, 1 == 1)
+
+		mock := new(mockT)
+		result := True(mock, 1 == 1)
 		if !result {
 			t.Error("True should return true on success")
 		}
@@ -2768,9 +3110,12 @@ func TestTrue(t *testing.T) {
 
 func TestTrueT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := TrueT(t, 1 == 1)
+
+		mock := new(mockT)
+		result := TrueT(mock, 1 == 1)
 		if !result {
 			t.Error("TrueT should return true on success")
 		}
@@ -2792,9 +3137,12 @@ func TestTrueT(t *testing.T) {
 
 func TestWithinDuration(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := WithinDuration(t, time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 12, 0, 1, 0, time.UTC), 2*time.Second)
+
+		mock := new(mockT)
+		result := WithinDuration(mock, time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 12, 0, 1, 0, time.UTC), 2*time.Second)
 		if !result {
 			t.Error("WithinDuration should return true on success")
 		}
@@ -2816,9 +3164,12 @@ func TestWithinDuration(t *testing.T) {
 
 func TestWithinRange(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := WithinRange(t, time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 11, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 13, 0, 0, 0, time.UTC))
+
+		mock := new(mockT)
+		result := WithinRange(mock, time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 11, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 13, 0, 0, 0, time.UTC))
 		if !result {
 			t.Error("WithinRange should return true on success")
 		}
@@ -2840,64 +3191,107 @@ func TestWithinRange(t *testing.T) {
 
 func TestYAMLEq(t *testing.T) {
 	t.Parallel()
+
 	t.Run("panic", func(t *testing.T) {
 		t.Parallel()
 
-		Panics(t, func() {
-			YAMLEq(t, "key: value", "key: value")
+		mock := new(mockT)
+		result := Panics(t, func() {
+			YAMLEq(mock, "key: value", "key: value")
 		}, "should panic without the yaml feature enabled.")
+		if !result {
+			t.Error("YAMLEq should return true on panic")
+		}
+		if mock.failed {
+			t.Error("YAMLEq should panic as expected")
+		}
 	})
 }
 
 func TestYAMLEqBytes(t *testing.T) {
 	t.Parallel()
+
 	t.Run("panic", func(t *testing.T) {
 		t.Parallel()
 
-		Panics(t, func() {
-			YAMLEqBytes(t, []byte("key: value"), []byte("key: value"))
+		mock := new(mockT)
+		result := Panics(t, func() {
+			YAMLEqBytes(mock, []byte("key: value"), []byte("key: value"))
 		}, "should panic without the yaml feature enabled.")
+		if !result {
+			t.Error("YAMLEqBytes should return true on panic")
+		}
+		if mock.failed {
+			t.Error("YAMLEqBytes should panic as expected")
+		}
 	})
 }
 
 func TestYAMLEqT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("panic", func(t *testing.T) {
 		t.Parallel()
 
-		Panics(t, func() {
-			YAMLEqT(t, "key: value", "key: value")
+		mock := new(mockT)
+		result := Panics(t, func() {
+			YAMLEqT(mock, "key: value", "key: value")
 		}, "should panic without the yaml feature enabled.")
+		if !result {
+			t.Error("YAMLEqT should return true on panic")
+		}
+		if mock.failed {
+			t.Error("YAMLEqT should panic as expected")
+		}
 	})
 }
 
 func TestYAMLMarshalAsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("panic", func(t *testing.T) {
 		t.Parallel()
 
-		Panics(t, func() {
-			YAMLMarshalAsT(t, "key: value", "key: value")
+		mock := new(mockT)
+		result := Panics(t, func() {
+			YAMLMarshalAsT(mock, "key: value", "key: value")
 		}, "should panic without the yaml feature enabled.")
+		if !result {
+			t.Error("YAMLMarshalAsT should return true on panic")
+		}
+		if mock.failed {
+			t.Error("YAMLMarshalAsT should panic as expected")
+		}
 	})
 }
 
 func TestYAMLUnmarshalAsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("panic", func(t *testing.T) {
 		t.Parallel()
 
-		Panics(t, func() {
-			YAMLUnmarshalAsT(t, "key: value", "key: value")
+		mock := new(mockT)
+		result := Panics(t, func() {
+			YAMLUnmarshalAsT(mock, "key: value", "key: value")
 		}, "should panic without the yaml feature enabled.")
+		if !result {
+			t.Error("YAMLUnmarshalAsT should return true on panic")
+		}
+		if mock.failed {
+			t.Error("YAMLUnmarshalAsT should panic as expected")
+		}
 	})
 }
 
 func TestZero(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		result := Zero(t, 0)
+
+		mock := new(mockT)
+		result := Zero(mock, 0)
 		if !result {
 			t.Error("Zero should return true on success")
 		}

@@ -28,7 +28,7 @@ This domain exposes 2 functionalities.
 ```
 
 ### Fail{#fail}
-
+  
 Fail reports a failure through.
 
 {{% expand title="Examples" %}}
@@ -47,6 +47,7 @@ Fail reports a failure through.
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -66,7 +67,7 @@ Fail reports a failure through.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Fail(t T, failureMessage string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Fail) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Fail](https://github.com/go-openapi/testify/blob/master/internal/assertions/testing.go#L23)
@@ -74,7 +75,7 @@ Fail reports a failure through.
 {{< /tabs >}}
 
 ### FailNow{#failnow}
-
+  
 FailNow fails test.
 
 {{% expand title="Examples" %}}
@@ -93,6 +94,7 @@ FailNow fails test.
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -112,7 +114,7 @@ FailNow fails test.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.FailNow(t T, failureMessage string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FailNow) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#FailNow](https://github.com/go-openapi/testify/blob/master/internal/assertions/testing.go#L45)

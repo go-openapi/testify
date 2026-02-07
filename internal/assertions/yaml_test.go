@@ -84,7 +84,6 @@ func testYAMLEqBytes(expected, actual string, success bool) func(*testing.T) {
 	}
 }
 
-//nolint:thelper // linter false positive: this is not a helper
 func testYAMLEqT[ADoc, EDoc Text](expected, actual string, success bool) func(*testing.T) {
 	_ = success
 	return func(t *testing.T) {

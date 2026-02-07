@@ -46,7 +46,7 @@ This domain exposes 8 functionalities.
 ```
 
 ### EqualError{#equalerror}
-
+  
 EqualError asserts that a function returned a non-nil error (i.e. an error)
 and that it is equal to the provided error.
 
@@ -98,6 +98,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -117,7 +118,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.EqualError(t T, err error, errString string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EqualError) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualError](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L89)
@@ -125,7 +126,7 @@ func main() {
 {{< /tabs >}}
 
 ### Error{#error}
-
+  
 Error asserts that a function returned a non-nil error (ie. an error).
 
 {{% expand title="Examples" %}}
@@ -176,6 +177,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -195,7 +197,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Error(t T, err error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Error) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Error](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L65)
@@ -203,7 +205,7 @@ func main() {
 {{< /tabs >}}
 
 ### ErrorAs{#erroras}
-
+  
 ErrorAs asserts that at least one of the errors in err's chain matches target, and if so, sets target to that error value.
 
 This is a wrapper for [errors.As](https://pkg.go.dev/errors#As).
@@ -262,6 +264,7 @@ func (d *dummyError) Error() string {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -281,7 +284,7 @@ func (d *dummyError) Error() string {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.ErrorAs(t T, err error, target any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ErrorAs) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorAs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L220)
@@ -289,7 +292,7 @@ func (d *dummyError) Error() string {
 {{< /tabs >}}
 
 ### ErrorContains{#errorcontains}
-
+  
 ErrorContains asserts that a function returned a non-nil error (i.e. an
 error) and that the error contains the specified substring.
 
@@ -341,6 +344,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -360,7 +364,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.ErrorContains(t T, err error, contains string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ErrorContains) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L120)
@@ -368,7 +372,7 @@ func main() {
 {{< /tabs >}}
 
 ### ErrorIs{#erroris}
-
+  
 ErrorIs asserts that at least one of the errors in err's chain matches target.
 
 This is a wrapper for [errors.Is](https://pkg.go.dev/errors#Is).
@@ -421,6 +425,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -440,7 +445,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.ErrorIs(t T, err error, target error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ErrorIs) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorIs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L149)
@@ -448,7 +453,7 @@ func main() {
 {{< /tabs >}}
 
 ### NoError{#noerror}
-
+  
 NoError asserts that a function returned a nil error (ie. no error).
 
 {{% expand title="Examples" %}}
@@ -501,6 +506,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -520,7 +526,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NoError(t T, err error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NoError) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoError](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L42)
@@ -528,7 +534,7 @@ func main() {
 {{< /tabs >}}
 
 ### NotErrorAs{#noterroras}
-
+  
 NotErrorAs asserts that none of the errors in err's chain matches target,
 but if so, sets target to that error value.
 
@@ -586,6 +592,7 @@ func (d *dummyError) Error() string {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -605,7 +612,7 @@ func (d *dummyError) Error() string {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotErrorAs(t T, err error, target any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotErrorAs) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotErrorAs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L254)
@@ -613,7 +620,7 @@ func (d *dummyError) Error() string {
 {{< /tabs >}}
 
 ### NotErrorIs{#noterroris}
-
+  
 NotErrorIs asserts that none of the errors in err's chain matches target.
 
 This is a wrapper for [errors.Is](https://pkg.go.dev/errors#Is).
@@ -666,6 +673,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -685,7 +693,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotErrorIs(t T, err error, target error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotErrorIs) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotErrorIs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L186)

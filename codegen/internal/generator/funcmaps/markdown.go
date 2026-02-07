@@ -12,32 +12,48 @@ import (
 )
 
 var (
-	refLinkPattern = regexp.MustCompile(`(?m)^\[([^\]]+)\]:\s+(.+)$`)
-	// Find godoc-style links: [word.word].
+	refLinkPattern    = regexp.MustCompile(`(?m)^\[([^\]]+)\]:\s+(.+)$`)          // find godoc-style links: [word.word].
 	godocPattern      = regexp.MustCompile(`\[([a-zA-Z0-9_]+\.[a-zA-Z0-9_.]+)\]`) // there is a dot
 	godocPatternLocal = regexp.MustCompile(`\[([a-zA-Z0-9_]+)\]`)                 // no dot
 	tabSectionPattern = regexp.MustCompile(`^#\s+(Examples?|Usage|Use)$`)
 	sectionPattern    = regexp.MustCompile(`^#\s+`)
 )
 
-const sensiblePrealloc = 20
+const (
+	sensiblePrealloc = 20
+	godocHost        = "pkg.go.dev"
+	repo             = "github.com/go-openapi/testify/v2"
+)
 
 // FormatMarkdown carries out a formatting of inline markdown in comments that handles:
 //
 //  1. Reference-style markdown links: [text]: url
 //  2. Godoc-style links: [errors.Is], [testing.T], etc.
-//
-//nolint:gocognit,gocyclo,cyclop // will refactor later this highly complex function
+//  3. Rearrange godoc sections so we extract Usage and Examples. Examples are matched with the
+//     generated testable examples and reinjected as go code in the "Testable Examples" tab.
 func FormatMarkdown(in string, object any) string {
-	var (
-		testableExamples []model.Renderable
-		funcName         string
-	)
-	if function, ok := (object).(model.Function); ok {
-		testableExamples = function.Examples
-		funcName = function.Name
+	// 1. process godoc links
+	processed, danglingRefs := markdownLinks(in)
+
+	// 2. build pkg.go.dev links
+	processed = godocLinks(processed)
+
+	// 3. strip Usage and Example sections and render them as hugo tabs
+	result, trailer := stripSections(processed, object)
+
+	// Append dangling reference links as additional context
+	if len(danglingRefs) > 0 {
+		result = append(result, "")
+		result = append(result, danglingRefs...)
 	}
 
+	return strings.Join(append(result, trailer...), "\n")
+}
+
+// markdownLinks processes links found in godoc strings to produce markdown links.
+//
+// If some references are defined, they are stashed and returned as a slice of "dangling references".
+func markdownLinks(in string) (string, []string) {
 	// Step 1: Extract reference-style link definitions
 	// Pattern: [text]: url (at start of line or after whitespace)
 	refLinks := make(map[string]string)
@@ -54,7 +70,7 @@ func FormatMarkdown(in string, object any) string {
 	// Remove reference link definitions from input
 	processed := refLinkPattern.ReplaceAllString(in, "")
 
-	// Step 2: Convert reference-style links to inline links
+	// Convert reference-style links to inline links
 	// Replace [text] with [text](url) where we have the reference
 	usedRefs := make(map[string]bool)
 	for refText, refURL := range refLinks {
@@ -74,10 +90,15 @@ func FormatMarkdown(in string, object any) string {
 		}
 	}
 
-	// Step 3: Convert godoc-style links to pkg.go.dev URLs
-	// Pattern: [package.Type] - must contain a dot and only valid identifier chars
-	// We process line by line to avoid matching already-converted links
-	lines := strings.Split(processed, "\n")
+	return processed, danglingRefs
+}
+
+// godocLinks converts godoc-style links to pkg.go.dev URLs.
+//
+// Pattern: [package.Type] - must contain a dot and only valid identifier chars.
+// We process line by line to avoid matching already-converted links.
+func godocLinks(in string) string {
+	lines := strings.Split(in, "\n")
 	for i, line := range lines {
 		// Skip if line already has inline links (contains ](http)
 		if strings.Contains(line, "](") {
@@ -102,24 +123,37 @@ func FormatMarkdown(in string, object any) string {
 			symbol := parts[1]
 
 			// Assume standard library for simple package names
-			return fmt.Sprintf("[%s](https://pkg.go.dev/%s#%s)", identifier, pkgPath, symbol)
+			return fmt.Sprintf("[%s](https://%s/%s#%s)", identifier, godocHost, pkgPath, symbol)
 		})
 
 		// check for links with current package, e.g. [Boolean]. Those don't have a dot.
 		replacedLocal := godocPatternLocal.ReplaceAllStringFunc(replacedStdLib, func(match string) string {
 			identifier := strings.Trim(match, "[]")
-			return fmt.Sprintf("[%s](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#%s)", identifier, identifier)
+			return fmt.Sprintf("[%s](https://%s/%s/assert#%s)", identifier, godocHost, repo, identifier)
 		})
 
 		lines[i] = replacedLocal
 	}
 
-	processed = strings.Join(lines, "\n")
+	return strings.Join(lines, "\n")
+}
 
-	// Step 4: render Usage and Examples sections with Hugo shortcodes
-	// These are rendered as tabs.
-	result := make([]string, 0, sensiblePrealloc)
-	trailer := make([]string, 0, sensiblePrealloc)
+// stripSections renders Usage and Examples sections with Hugo shortcodes.
+// These are rendered as tabs.
+//
+// It returns a result of lines (indented markdown with sections), a trailer of lines (Usage and Examples tabs).
+func stripSections(in string, object any) (result, trailer []string) {
+	result = make([]string, 0, sensiblePrealloc)
+	trailer = make([]string, 0, sensiblePrealloc)
+
+	var (
+		testableExamples []model.Renderable
+		funcName         string
+	)
+	if function, ok := (object).(model.Function); ok {
+		testableExamples = function.Examples
+		funcName = function.Name
+	}
 
 	// parse state
 	tabsCollection := false
@@ -127,7 +161,7 @@ func FormatMarkdown(in string, object any) string {
 	tab := false
 	hasTestableExamples := false
 
-	for line := range strings.SplitSeq(processed, "\n") {
+	for line := range strings.SplitSeq(in, "\n") {
 		if expanded && len(strings.TrimSpace(line)) == 0 {
 			continue
 		}
@@ -208,11 +242,5 @@ func FormatMarkdown(in string, object any) string {
 		trailer = append(trailer, `{{% /expand %}}`)
 	}
 
-	// Append dangling reference links as additional context
-	if len(danglingRefs) > 0 {
-		result = append(result, "")
-		result = append(result, danglingRefs...)
-	}
-
-	return strings.Join(append(result, trailer...), "\n")
+	return result, trailer
 }

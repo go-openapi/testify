@@ -11,9 +11,7 @@ import (
 )
 {{- end }}
 
-{{- range .Functions }} 
-  {{- if or (not .IsGeneric) ($.EnableGenerics) }}
-    {{- if and (not .IsHelper) (not .IsConstructor) }}
+{{- range .Functions.Scope "include-generics" . }}
 
 {{ comment .DocString }}
 //
@@ -24,6 +22,4 @@ func {{ .GenericName }}({{ params .AllParams }}) {{ returns .Returns }} {
   }
   return {{ .TargetPackage }}.{{ .GenericCallName }}({{ forward .AllParams }})
 }
-    {{- end }}
-  {{- end }}
 {{- end }}

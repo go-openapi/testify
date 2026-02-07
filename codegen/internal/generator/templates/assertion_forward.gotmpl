@@ -27,8 +27,7 @@ func New(t T) *{{ .Receiver }} {
   }
 }
 
-{{- range .Functions }} 
-  {{- if and (not .IsGeneric) (not .IsHelper) (not .IsConstructor) }}{{/* generics can't be added to the receiver */}}
+{{- range .Functions.Scope "exclude-generics" . }}{{/* generics can't be added to the receiver */}}
 
 {{ docStringFor "forward" .Name }}
 //
@@ -37,7 +36,7 @@ func (a *{{ $.Receiver }}) {{.Name}}({{ params .Params }}, msgAndArgs ...any) {{
 	if h, ok := a.T.(H); ok { h.Helper() }
 	return {{ .TargetPackage }}.{{.Name}}(a.T, {{ forward .Params }}, msgAndArgs...)
 }
-    {{- if $.EnableFormat }}
+  {{- if $.EnableFormat }}
 
 {{ docStringFor "format" (concat $.Receiver "." .Name ) }}
 //
@@ -46,6 +45,5 @@ func (a *{{ $.Receiver }}){{ .Name }}f({{ params .Params }}, msg string, args ..
 	if h, ok := a.T.(H); ok { h.Helper() }
   return {{ .TargetPackage }}.{{ .Name }}(a.T, {{ forward .Params }}, forwardArgs(msg, args))
 }
-    {{- end }}
   {{- end }}
 {{- end }}

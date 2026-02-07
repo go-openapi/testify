@@ -59,7 +59,7 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### Greater{#greater}
-
+  
 Greater asserts that the first element is strictly greater than the second.
 
 Both elements must be of the same type in the [reflect.Kind](https://pkg.go.dev/reflect#Kind) sense.
@@ -114,6 +114,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -133,7 +134,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Greater(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Greater) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Greater](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L30)
@@ -141,7 +142,7 @@ func main() {
 {{< /tabs >}}
 
 ### GreaterOrEqual{#greaterorequal}
-
+  
 GreaterOrEqual asserts that the first element is greater than or equal to the second.
 
 See also [Greater](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Greater).
@@ -196,6 +197,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -215,7 +217,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.GreaterOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#GreaterOrEqual) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#GreaterOrEqual](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L91)
@@ -223,7 +225,7 @@ func main() {
 {{< /tabs >}}
 
 ### GreaterOrEqualT[Orderable Ordered] {{% icon icon="star" color=orange %}}{#greaterorequaltorderable-ordered}
-
+  
 GreaterOrEqualT asserts that for two elements of the same type,
 the first element is greater than or equal to the second.
 
@@ -287,6 +289,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -302,7 +305,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.GreaterOrEqualT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#GreaterOrEqualT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#GreaterOrEqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L124)
@@ -310,7 +313,7 @@ func main() {
 {{< /tabs >}}
 
 ### GreaterT[Orderable Ordered] {{% icon icon="star" color=orange %}}{#greatertorderable-ordered}
-
+  
 GreaterT asserts that for two elements of the same type,
 the first element is strictly greater than the second.
 
@@ -373,6 +376,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -388,7 +392,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.GreaterT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#GreaterT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#GreaterT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L62)
@@ -396,7 +400,7 @@ func main() {
 {{< /tabs >}}
 
 ### Less{#less}
-
+  
 Less asserts that the first element is strictly less than the second.
 
 Both elements must be of the same type in the [reflect.Kind](https://pkg.go.dev/reflect#Kind) sense.
@@ -451,6 +455,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -470,7 +475,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Less(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Less) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Less](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L153)
@@ -478,7 +483,7 @@ func main() {
 {{< /tabs >}}
 
 ### LessOrEqual{#lessorequal}
-
+  
 LessOrEqual asserts that the first element is less than or equal to the second.
 
 {{% expand title="Examples" %}}
@@ -531,6 +536,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -550,7 +556,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.LessOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#LessOrEqual) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#LessOrEqual](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L211)
@@ -558,7 +564,7 @@ func main() {
 {{< /tabs >}}
 
 ### LessOrEqualT[Orderable Ordered] {{% icon icon="star" color=orange %}}{#lessorequaltorderable-ordered}
-
+  
 LessOrEqualT asserts that for two elements of the same type, the first element is less than or equal to the second.
 
 The [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) type can be any of Go's [cmp.Ordered](https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
@@ -621,6 +627,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -636,7 +643,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.LessOrEqualT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#LessOrEqualT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#LessOrEqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L243)
@@ -644,7 +651,7 @@ func main() {
 {{< /tabs >}}
 
 ### LessT[Orderable Ordered] {{% icon icon="star" color=orange %}}{#lesstorderable-ordered}
-
+  
 LessT asserts that for two elements of the same type, the first element is strictly less than the second.
 
 The [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) type can be any of Go's [cmp.Ordered](https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
@@ -706,6 +713,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -721,7 +729,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.LessT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#LessT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#LessT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L184)
@@ -729,7 +737,7 @@ func main() {
 {{< /tabs >}}
 
 ### Negative{#negative}
-
+  
 Negative asserts that the specified element is strictly negative.
 
 {{% expand title="Examples" %}}
@@ -780,6 +788,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -799,7 +808,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Negative(t T, e any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Negative) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Negative](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L314)
@@ -807,7 +816,7 @@ func main() {
 {{< /tabs >}}
 
 ### NegativeT[SignedNumber SignedNumeric] {{% icon icon="star" color=orange %}}{#negativetsignednumber-signednumeric}
-
+  
 NegativeT asserts that the specified element of a signed numeric type is strictly negative.
 
 {{% expand title="Examples" %}}
@@ -858,6 +867,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -873,7 +883,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NegativeT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NegativeT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NegativeT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L335)
@@ -881,7 +891,7 @@ func main() {
 {{< /tabs >}}
 
 ### Positive{#positive}
-
+  
 Positive asserts that the specified element is strictly positive.
 
 {{% expand title="Examples" %}}
@@ -932,6 +942,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -951,7 +962,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Positive(t T, e any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Positive) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Positive](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L268)
@@ -959,7 +970,7 @@ func main() {
 {{< /tabs >}}
 
 ### PositiveT[SignedNumber SignedNumeric] {{% icon icon="star" color=orange %}}{#positivetsignednumber-signednumeric}
-
+  
 PositiveT asserts that the specified element of a signed numeric type is strictly positive.
 
 {{% expand title="Examples" %}}
@@ -1010,6 +1021,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -1025,7 +1037,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.PositiveT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#PositiveT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#PositiveT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L289)

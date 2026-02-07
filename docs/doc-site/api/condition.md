@@ -34,7 +34,7 @@ This domain exposes 4 functionalities.
 ```
 
 ### Condition{#condition}
-
+  
 Condition uses a [Comparison](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Comparison) to assert a complex condition.
 
 {{% expand title="Examples" %}}
@@ -86,6 +86,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -105,7 +106,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Condition(t T, comp Comparison, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Condition) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Condition](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L26)
@@ -113,7 +114,7 @@ func main() {
 {{< /tabs >}}
 
 ### Eventually{#eventually}
-
+  
 Eventually asserts that the given condition will be met in waitFor time,
 periodically checking the target function on each tick.
 
@@ -183,6 +184,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -202,7 +204,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Eventually(t T, condition func() bool, waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Eventually) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Eventually](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L67)
@@ -210,7 +212,7 @@ func main() {
 {{< /tabs >}}
 
 ### EventuallyWith{#eventuallywith}
-
+  
 EventuallyWith asserts that the given condition will be met in waitFor time,
 periodically checking the target function at each tick.
 
@@ -293,6 +295,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -312,7 +315,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.EventuallyWith(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L148)
@@ -320,7 +323,7 @@ func main() {
 {{< /tabs >}}
 
 ### Never{#never}
-
+  
 Never asserts that the given condition is never satisfied within waitFor time,
 periodically checking the target function at each tick.
 
@@ -386,6 +389,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -405,7 +409,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Never(t T, condition func() bool, waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Never) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Never](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L99)

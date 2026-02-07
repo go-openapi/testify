@@ -42,7 +42,7 @@ This domain exposes 7 functionalities.
 ```
 
 ### HTTPBodyContains{#httpbodycontains}
-
+  
 HTTPBodyContains asserts that a specified handler returns a body that contains a string.
 
 Returns whether the assertion was successful (true) or not (false).
@@ -101,6 +101,7 @@ func httpBody(w http.ResponseWriter, r *http.Request) {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -120,7 +121,7 @@ func httpBody(w http.ResponseWriter, r *http.Request) {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.HTTPBodyContains(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#HTTPBodyContains) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPBodyContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L147)
@@ -128,7 +129,7 @@ func httpBody(w http.ResponseWriter, r *http.Request) {
 {{< /tabs >}}
 
 ### HTTPBodyNotContains{#httpbodynotcontains}
-
+  
 HTTPBodyNotContains asserts that a specified handler returns a
 body that does not contain a string.
 
@@ -188,6 +189,7 @@ func httpBody(w http.ResponseWriter, r *http.Request) {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -207,7 +209,7 @@ func httpBody(w http.ResponseWriter, r *http.Request) {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.HTTPBodyNotContains(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#HTTPBodyNotContains) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPBodyNotContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L175)
@@ -215,7 +217,7 @@ func httpBody(w http.ResponseWriter, r *http.Request) {
 {{< /tabs >}}
 
 ### HTTPError{#httperror}
-
+  
 HTTPError asserts that a specified handler returns an error status code.
 
 Returns whether the assertion was successful (true) or not (false).
@@ -272,6 +274,7 @@ func httpError(w http.ResponseWriter, _ *http.Request) {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -291,7 +294,7 @@ func httpError(w http.ResponseWriter, _ *http.Request) {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.HTTPError(t T, handler http.HandlerFunc, method string, url string, values url.Values, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#HTTPError) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPError](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L79)
@@ -299,7 +302,7 @@ func httpError(w http.ResponseWriter, _ *http.Request) {
 {{< /tabs >}}
 
 ### HTTPRedirect{#httpredirect}
-
+  
 HTTPRedirect asserts that a specified handler returns a redirect status code.
 
 Returns whether the assertion was successful (true) or not (false).
@@ -356,6 +359,7 @@ func httpRedirect(w http.ResponseWriter, _ *http.Request) {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -375,7 +379,7 @@ func httpRedirect(w http.ResponseWriter, _ *http.Request) {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.HTTPRedirect(t T, handler http.HandlerFunc, method string, url string, values url.Values, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#HTTPRedirect) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPRedirect](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L53)
@@ -383,7 +387,7 @@ func httpRedirect(w http.ResponseWriter, _ *http.Request) {
 {{< /tabs >}}
 
 ### HTTPStatusCode{#httpstatuscode}
-
+  
 HTTPStatusCode asserts that a specified handler returns a specified status code.
 
 Returns whether the assertion was successful (true) or not (false).
@@ -440,6 +444,7 @@ func httpOK(w http.ResponseWriter, _ *http.Request) {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -459,7 +464,7 @@ func httpOK(w http.ResponseWriter, _ *http.Request) {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.HTTPStatusCode(t T, handler http.HandlerFunc, method string, url string, values url.Values, statuscode int, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#HTTPStatusCode) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPStatusCode](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L105)
@@ -467,7 +472,7 @@ func httpOK(w http.ResponseWriter, _ *http.Request) {
 {{< /tabs >}}
 
 ### HTTPSuccess{#httpsuccess}
-
+  
 HTTPSuccess asserts that a specified handler returns a success status code.
 
 Returns whether the assertion was successful (true) or not (false).
@@ -524,6 +529,7 @@ func httpOK(w http.ResponseWriter, _ *http.Request) {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -543,7 +549,7 @@ func httpOK(w http.ResponseWriter, _ *http.Request) {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.HTTPSuccess(t T, handler http.HandlerFunc, method string, url string, values url.Values, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#HTTPSuccess) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPSuccess](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L27)
@@ -554,27 +560,34 @@ func httpOK(w http.ResponseWriter, _ *http.Request) {
 
 ## Other helpers
 
-### HTTPBody
-
+### HTTPBody{#httpbody}
+  
 HTTPBody is a helper that returns the HTTP body of the response.
 It returns the empty string if building a new request fails.
 
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
 | [`assert.HTTPBody(handler http.HandlerFunc, method string, url string, values url.Values) string`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#HTTPBody) | package-level function |
+| [`assert.HTTPBodyf(t T, handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) string`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#HTTPBodyf) | formatted variant |
+| [`assert.(*Assertions).HTTPBody(handler http.HandlerFunc, method string, url string, values url.Values) string`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPBody) | method variant |
+| [`assert.(*Assertions).HTTPBodyf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPBodyf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
 | [`require.HTTPBody(handler http.HandlerFunc, method string, url string, values url.Values) string`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPBody) | package-level function |
+| [`require.HTTPBodyf(t T, handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) string`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPBodyf) | formatted variant |
+| [`require.(*Assertions).HTTPBody(handler http.HandlerFunc, method string, url string, values url.Values) string`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPBody) | method variant |
+| [`require.(*Assertions).HTTPBodyf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPBodyf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.HTTPBody(handler http.HandlerFunc, method string, url string, values url.Values) string`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#HTTPBody) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#HTTPBody](https://github.com/go-openapi/testify/blob/master/internal/assertions/http.go#L121)

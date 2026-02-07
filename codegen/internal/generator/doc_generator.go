@@ -132,6 +132,13 @@ func (d *DocGenerator) reorganizeByDomain() (iter.Seq2[string, model.Document], 
 				}
 				weight++
 
+				// populate document context in all children
+				doc.Package.Context = &doc
+				for i, fn := range doc.Package.Functions {
+					fn.Context = &doc
+					doc.Package.Functions[i] = fn
+				}
+
 				if !yield(doc.Domain, doc) {
 					return
 				}

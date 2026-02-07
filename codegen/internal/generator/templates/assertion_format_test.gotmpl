@@ -12,67 +12,22 @@ import (
 )
 {{- end }}
 
-{{- range .Functions }}
-  {{- if or (not .IsGeneric) ($.EnableGenerics) }}
-    {{- if and (not .IsHelper) (not .IsConstructor) }}
+
+{{- range .Functions.Scope "include-generics" . }}
+  {{- /* setting the appropriate context to call the test template */}}
+  {{- $call := ( printf "%sf%s(mock, " .Name .GenericSuffix ) }}{{/* with the "f" suffix */}}
+  {{- $mock := ( printf "mock := new(%s)" .UseMock ) }}
+  {{- $errorPrefix := ( printf "%sf" .Name ) }}
+  {{- $panic := "Panics(t, " }}
+  {{- $mockFailure :=  .FailMsg "f" }}
+  {{- $context := .WithTestCall $call }}
+  {{- $context = $context.WithTestMock $mock }}
+  {{- $context = $context.WithTestErrorPrefix $errorPrefix }}
+  {{- $context = $context.WithTestPanicWrapper $panic }}
+  {{- $context = $context.WithTestMockFailure $mockFailure }}
+  {{- $context = $context.WithTestMsg "test message" }}
 
 func Test{{ .Name }}f(t *testing.T) {
-  t.Parallel()
-
-      {{- if (not .HasTest) }}{{/* no testcases captured from the Example section of the original function */}}
-	t.Skip() // this function doesn't have tests yet: feed the original function with examples to test.
-      {{- else }}
-        {{- $fn := . }}
-        {{- $isRequire := (eq $.Package "require") }}
-        {{- $first := true }}
-        {{- range .Tests }}
-          {{- if eq .ExpectedOutcome 1 }}{{/* TestSuccess */}}
-            {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
-	t.Run("success", func(t *testing.T) {
-    t.Parallel()
-
-{{- if $isRequire }}
-		{{ $fn.Name }}f{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(t, {{ .TestedValue }}, "test message")
-		// require functions don't return a value
-{{- else }}
-		result := {{ $fn.Name }}f{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(t, {{ .TestedValue }}, "test message")
-		if !result {
-			t.Error("{{ $fn.Name }}f should return true on success")
-		}
-{{- end }}
-	})
-          {{- else if eq .ExpectedOutcome 2 }}{{/* TestFailure */}}
-            {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
-	t.Run("failure", func(t *testing.T) {
-    t.Parallel()
-
-		mock := new({{ $fn.UseMock }})
-            {{- if $isRequire }}
-		{{ $fn.Name }}f{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(mock, {{ .TestedValue }}, "test message")
-		// require functions don't return a value
-            {{- else }}
-		result := {{ $fn.Name }}f{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(mock, {{ .TestedValue }}, "test message")
-		if result {
-			t.Error("{{ $fn.Name }}f should return false on failure")
-		}
-            {{- end }}
-		if !mock.failed {
-      			t.Error("{{ $fn.Name }} {{ if eq $fn.UseMock "mockFailNowT" }}should call FailNow(){{ else }}should mark test as failed{{ end }}")
-		}
-	})
-          {{- else if eq .ExpectedOutcome 3 }}{{/* TestPanic */}}
-            {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
-	t.Run("panic", func(t *testing.T) {
-    t.Parallel()
-
-		Panicsf(t, func() {
-			{{ $fn.Name }}f{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(t, {{ .TestedValue }}, "test message")
-		}, "{{ .AssertionMessage }}")
-	})
-          {{- end }}
-        {{- end }}
-      {{- end }}
+{{- template "test-case" $context }}
 }
-    {{- end }}
-  {{- end }}
 {{- end }}

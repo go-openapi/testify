@@ -25,7 +25,7 @@ This domain exposes 1 functionalities.
 ```
 
 ### NoGoRoutineLeak{#nogoroutineleak}
-
+  
 NoGoRoutineLeak ensures that no goroutine did leak from inside the tested function.
 
 NOTE: only the go routines spawned from inside the tested function are checked for leaks.
@@ -66,6 +66,7 @@ as t.Cleanup is called after the leak check.
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -85,7 +86,7 @@ as t.Cleanup is called after the leak check.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NoGoRoutineLeak) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoGoRoutineLeak](https://github.com/go-openapi/testify/blob/master/internal/assertions/safety.go#L43)

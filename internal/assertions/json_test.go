@@ -37,7 +37,6 @@ func TestJSONErrorMessages(t *testing.T) {
 
 // test all JSONEq variants with the same input (possibly converted).
 func testAllJSONEq(expected, actual string, success bool) func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
 	return func(t *testing.T) {
 		t.Run("with JSONEq", testJSONEq(expected, actual, success))
 		t.Run("with JSONEqBytes", testJSONEqBytes(expected, actual, success))
@@ -81,7 +80,6 @@ func testJSONEqBytes(expected, actual string, success bool) func(*testing.T) {
 }
 
 func testJSONEqT[EDoc, ADoc Text](expected, actual string, success bool) func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
 	return func(t *testing.T) {
 		t.Parallel()
 
@@ -191,7 +189,6 @@ func jsonMarshalCases() iter.Seq[genericTestCase] {
 	})
 }
 
-//nolint:thelper // false positive: this is not a helper
 func testAllMarshalAs[Doc Text, Object any](value Object, jazon Doc, success bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Run("with JSONMarshalAsT", testJSONMarshalAsT(value, jazon, success))

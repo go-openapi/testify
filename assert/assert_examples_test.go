@@ -1002,9 +1002,9 @@ func ExampleZero() {
 	// Output: success: true
 }
 
-// Test helpers (also in the tests for package assert
+// Test helpers (also in the tests for package assert.
 //
-// This code is duplicated because the current test is run as a separate test package: assert_test
+// This code is duplicated because the current test is run as a separate test package: assert_test.
 
 func testDataPath() string {
 	return filepath.Join("..", "internal", "assertions", "testdata")

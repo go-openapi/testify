@@ -61,6 +61,9 @@ func FuncMap() template.FuncMap {
 		"titleize":         titleize,
 		"slugize":          slugize,
 		"blockquote":       blockquote,
+		"hopen":            hugoopen,
+		"hclose":           hugoclose,
+		"cr":               shouldLineFeed,
 	}
 }
 
@@ -377,4 +380,20 @@ func blockquote(in string) string {
 	}
 
 	return strings.Join(result, "\n")
+}
+
+func hugoopen() string {
+	return "{{"
+}
+
+func hugoclose() string {
+	return "}}"
+}
+
+func shouldLineFeed(dontFeed bool) string {
+	if dontFeed {
+		return ""
+	}
+
+	return "\n"
 }

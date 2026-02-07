@@ -11,9 +11,7 @@ import (
 )
 {{- end }}
 
-{{- range .Functions }} 
-  {{- if or (not .IsGeneric) ($.EnableGenerics) }}
-    {{- if and (not .IsHelper) (not .IsConstructor) }}
+{{- range .Functions.Scope "include-generics" . }} 
 
 {{ docStringFor "format" .Name }}
 //
@@ -22,8 +20,6 @@ func {{ .GenericName "f" }}(t T, {{ params .Params }}, msg string, args ...any) 
 	if h, ok := t.(H); ok { h.Helper() }
   return {{ .TargetPackage }}.{{ .GenericCallName }}(t, {{ forward .Params }}, forwardArgs(msg, args))
 }
-    {{- end }}
-  {{- end }}
 {{- end }}
 
 func forwardArgs(msg string, args []any) []any {

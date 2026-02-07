@@ -245,8 +245,6 @@ func testComparison(cmp func(T, any, any, ...any) bool, e1, e2 any, shouldPass b
 }
 
 // testAllComparisonT tests all four generic comparison functions with the same test data.
-//
-//nolint:thelper // linter false positive: this is not a helper
 func testAllComparisonT[V Ordered](tc comparisonTestCase) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
@@ -374,8 +372,6 @@ func testSign(sign func(T, any, ...any) bool, e any, shouldPass bool) func(*test
 }
 
 // testAllSignT tests both PositiveT and NegativeT functions with the same test data.
-//
-//nolint:thelper // linter false positive: this is not a helper
 func testAllSignT[V SignedNumeric](tc signTestCase) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()

@@ -35,7 +35,7 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### NotRegexp{#notregexp}
-
+  
 NotRegexp asserts that a specified regular expression does not match a string.
 
 See [Regexp](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Regexp).
@@ -88,6 +88,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -107,7 +108,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotRegexp(t T, rx any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotRegexp) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotRegexp](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L90)
@@ -115,7 +116,7 @@ func main() {
 {{< /tabs >}}
 
 ### NotRegexpT[Rex RegExp, ADoc Text] {{% icon icon="star" color=orange %}}{#notregexptrex-regexp-adoc-text}
-
+  
 NotRegexpT asserts that a specified regular expression does not match a string.
 
 See [RegexpT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#RegexpT).
@@ -168,6 +169,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -183,7 +185,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotRegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotRegexpT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotRegexpT](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L131)
@@ -191,7 +193,7 @@ func main() {
 {{< /tabs >}}
 
 ### Regexp{#regexp}
-
+  
 Regexp asserts that a specified regular expression matches a string.
 
 The regular expression may be passed as a [regexp.Regexp](https://pkg.go.dev/regexp#Regexp), a string or a []byte and will be compiled.
@@ -246,6 +248,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -265,7 +268,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Regexp(t T, rx any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Regexp) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Regexp](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L27)
@@ -273,7 +276,7 @@ func main() {
 {{< /tabs >}}
 
 ### RegexpT[Rex RegExp, ADoc Text] {{% icon icon="star" color=orange %}}{#regexptrex-regexp-adoc-text}
-
+  
 RegexpT asserts that a specified regular expression matches a string.
 
 The actual argument to be matched may be a string or []byte.
@@ -322,6 +325,7 @@ func main() {
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -337,7 +341,7 @@ func main() {
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.RegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#RegexpT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#RegexpT](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L63)

@@ -1,3 +1,89 @@
+{{- define "TOC" }}{{/* a tree-like TOC to introduce content */}}
+```tree
+{{- with .Package }}
+  {{- range .Functions.Scope "include-generics" . }}{{/* functions in internal/assertions annotated with "domain:" */}}
+- [{{ .GenericName }}](#{{ slugize .GenericName }}) | {{ if .IsGeneric}}star | orange{{ else }}angles-right{{ end }}
+  {{- end }}
+{{- end }}
+```
+{{- end }}
+
+{{- define "EXAMPLES-SUBSECTION" }}{{/* data: function */}}
+{{ mdformat .DocString . }}{{/* reformat inner markdown and reformat */}}
+{{- end }}
+
+{{- define "TAB-INTERNAL" }}{{/* tab internal discloses internal maintainers notes */}}
+  {{- $godoc := .Context.PkgGoDevURL }}
+  {{- $pkg := .Context.Package.Package }}
+  {{- $github := .Context.GitHubURL }}
+{{ hopen }}% tab title="internal" style="accent" icon="wrench" %{{ hclose }}
+| Signature | Usage |
+|--|--|
+| [`{{ $pkg }}.{{ .GenericName }}({{ params .AllParams }}) {{ returns .Returns }}`]({{ $godoc }}/internal/{{ $pkg }}#{{ .Name }}) | internal implementation |
+
+**Source:** [{{ .SourcePackage }}#{{ .Name }}]({{ sourceLink $github .SourceLink }})
+
+  {{- range .ExtraComments }}
+    {{- if .IsTagMaintainer }}{{/* maintainers section */}}
+
+> **Maintainer Note**
+>
+{{ blockquote .Text }}
+    {{- else if .IsTagNote }}{{/* notes section */}}
+
+> **Note**
+>
+{{ blockquote .Text }}
+    {{- end }}
+  {{- end }}
+{{ hopen }}% /tab %{{ hclose }}
+{{- end }}
+
+{{- define "SIGNATURES-SUBSECTION" }}{{/* render the signatures of all variant in a tab for each package */}}
+  {{- $extraPackages := .Context.ExtraPackages }}
+  {{- $godoc := .Context.PkgGoDevURL }}
+  {{- $funcName := .Name }}
+
+  {{- with $extraPackages }}
+    {{- range .LookupFunction $funcName }}
+{{ hopen }}% tab title="{{ .Package }}" style="secondary" %{{ hclose }}
+| Signature | Usage |
+|--|--|
+| [`{{.Package }}.{{ .GenericName }}({{ params .AllParams }}) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Name }}) | package-level function |
+      {{- if .EnableFormat }}
+| [`{{ .Package }}.{{ .GenericName "f" }}(t T, {{ params .Params }}, msg string, args ...any) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Name }}f) | formatted variant |
+      {{- end }}
+      {{- if and .EnableForward (not .IsGeneric) }}
+| [`{{ .Package}}.(*{{ .Receiver }}).{{ .Name }}({{ params .Params }}) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Receiver }}.{{ .Name }}) | method variant |
+      {{- end }}
+      {{- if and .EnableForward .EnableFormat (not .IsGeneric) }}
+| [`{{ .Package }}.(*{{ .Receiver }}).{{ .Name }}f({{ params .Params }}, msg string, args ..any)`]({{ $godoc }}/{{ .Package }}#{{ .Receiver }}.{{ .Name }}f) | method formatted variant |
+      {{- end }}
+{{ hopen }}% /tab %{{ hclose }}
+    {{- end }}
+  {{- end }}
+{{ template "TAB-INTERNAL" . }}
+{{- end }}
+
+{{- define "FUNC-SECTION" }}{{/* data: Function ; complete description of an assertion function */}}
+### {{ .GenericName }}{{ if .IsGeneric }} {{ hopen }}% icon icon="star" color=orange %{{ hclose }}{{ end }}{#{{ slugize .GenericName }}}
+
+  {{- if .IsDeprecated }}
+
+{{ hopen }}% expand title="{{ .Name }} [DEPRECATED]" %{{ hclose }}
+<div style="background-color: #fceea5;">{{/* like godoc TODO: use css */}}
+  {{- end }}
+  {{ template "EXAMPLES-SUBSECTION" . }}
+
+{{ hopen }}< tabs >{{ hclose }}
+  {{ template "SIGNATURES-SUBSECTION" . }}
+{{ hopen }}< /tabs >{{ hclose }}
+
+  {{- if .IsDeprecated }}
+</div>
+{{ hopen }}% /expand %{{ hclose }}
+  {{- end }}
+{{- end -}}
 ---
 title: {{ .Title | quote }}
 description: {{ titleize .Description | quote }}
@@ -6,12 +92,8 @@ domains:
   - {{ .Domain | quote }}
 keywords:
 {{- with .Package }}
-  {{- $enableFormat := .EnableFormat }}
-  {{- range .Functions }}
-  - {{ .Name | quote }}
-    {{- if $enableFormat }}
-  - {{ printf "%sf" .Name | quote }}
-    {{- end }}
+  {{- range .Names }}
+  - {{ . | quote }}
   {{- end }}
 {{- end }}
 ---
@@ -23,162 +105,31 @@ keywords:
 [![GoDoc][godoc-badge]][godoc-url]
 {class="inline-badge"}
 
-{{- $extraPackages := .ExtraPackages }}
-{{- $github := .GitHubURL }}
-{{- $godoc := .PkgGoDevURL }}
-
-_All links point to <{{ $godoc }}>_
+_All links point to <{{ .PkgGoDevURL }}>_
 
 This domain exposes {{ .RefCount }} functionalities.
 {{- if .HasGenerics }}
-Generic assertions are marked with a {{ print "{{" }}% icon icon="star" color=orange %{{ print "}}" }}.
+Generic assertions are marked with a {{ hopen }}% icon icon="star" color=orange %{{ hclose }}.
 {{- end }}
-
-```tree
-{{- with .Package }}
-  {{- $enableGenerics := .EnableGenerics }}
-  {{- range .Functions }}{{/* functions in internal/assertions annotated with "domain:" */}}
-    {{- if or (not .IsGeneric) ($enableGenerics) }}
-      {{- if and (not .IsHelper) (not .IsConstructor) }}
-- [{{ .GenericName }}](#{{ slugize .GenericName }}) | {{ if .IsGeneric}}star | orange{{ else }}angles-right{{ end }}
-      {{- end }}
-    {{- end }}
-  {{- end }}
-{{- end }}
-```
+{{ template "TOC" . }}
 
 {{- with .Package }}
-  {{- $enableGenerics := .EnableGenerics }}
-  {{- range .Functions }}{{/* functions in internal/assertions annotated with "domain:" */}}
-    {{- if or (not .IsGeneric) ($enableGenerics) }}
-      {{- if and (not .IsHelper) (not .IsConstructor) }}
-
-### {{ .GenericName }}{{ if .IsGeneric }} {{ print "{{" }}% icon icon="star" color=orange %{{ print "}}" }}{{ end }}{#{{ slugize .GenericName }}}
-        {{- if .IsDeprecated }}
-
-{{ print "{{" }}% expand title="{{ .Name }} [DEPRECATED]" %{{ print "}}" }}
-<div style="background-color: #fceea5;">{{/* like godoc TODO: use css */}}
-        {{- end }}
-
-{{ mdformat .DocString . }}{{/* reformat inner markdown and reformat */}}
-
-        {{- $funcName := .Name }}
-        {{- with $extraPackages }}
-
-{{ print "{{" }}< tabs >{{ print "}}" }}
-          {{- range .LookupFunction $funcName }}
-{{ print "{{" }}% tab title="{{ .Package }}" style="secondary" %{{ print "}}" }}
-| Signature | Usage |
-|--|--|
-| [`{{.Package }}.{{ .GenericName }}({{ params .AllParams }}) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Name }}) | package-level function |
-            {{- if .EnableFormat }}
-| [`{{ .Package }}.{{ .GenericName "f" }}(t T, {{ params .Params }}, msg string, args ...any) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Name }}f) | formatted variant |
-            {{- end }}
-            {{- if and .EnableForward (not .IsGeneric) }}
-| [`{{ .Package}}.(*{{ .Receiver }}).{{ .Name }}({{ params .Params }}) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Receiver }}.{{ .Name }}) | method variant |
-            {{- end }}
-            {{- if and .EnableForward .EnableFormat (not .IsGeneric) }}
-| [`{{ .Package }}.(*{{ .Receiver }}).{{ .Name }}f({{ params .Params }}, msg string, args ..any)`]({{ $godoc }}/{{ .Package }}#{{ .Receiver }}.{{ .Name }}f) | method formatted variant |
-            {{- end }}
-{{ print "{{" }}% /tab %{{ print "}}" }}
-          {{- end }}
-        {{- end }}
-
-{{ print "{{" }}% tab title="internal" style="accent" icon="wrench" %{{ print "}}" }}
-| Signature | Usage |
-|--|--|
-        {{- $pkg := $.Package.Package }} 
-| [`{{ $pkg }}.{{ .GenericName }}({{ params .AllParams }}) {{ returns .Returns }}`]({{ $godoc }}/internal/{{ $pkg }}#{{ .Name }}) | internal implementation |
-
-**Source:** [{{ .SourcePackage }}#{{ .Name }}]({{ sourceLink $github .SourceLink }})
-
-        {{- range .ExtraComments }}
-          {{- if eq .Tag 2 }}{{/* maintainers section */}}
-
-> **Maintainer Note**
->
-{{ blockquote .Text }}
-          {{- else if eq .Tag 4 }}{{/* notes section */}}
-
-> **Note**
->
-{{ blockquote .Text }}
-          {{- end }}
-        {{- end }}
-{{ print "{{" }}% /tab %{{ print "}}" }}
-{{ print "{{" }}< /tabs >{{ print "}}" }}
-        {{- if .IsDeprecated }}
-</div>
-{{ print "{{" }}% /expand %{{ print "}}" }}
-        {{- end }}
-      {{- end }}
-    {{- end }}
+  {{- range .Functions.Scope "include-generics" . }}{{/* functions in internal/assertions annotated with "domain:" */}}
+{{ template "FUNC-SECTION" . }}
   {{- end }}
 {{- end }}
 
 ---
 
-{{- with .Package }}{{ if .HasHelpers }}
-  {{- $enableGenerics := .EnableGenerics }}
+{{- with .Package }}
+  {{- if .HasHelpers }}
 
 ## Other helpers
-  {{- range .Functions }}{{/* functions in internal/assertions annotated with "domain:" */}}
-    {{- if or (not .IsGeneric) ($enableGenerics) }}
-      {{- if or .IsHelper .IsConstructor }}
-
-### {{ .Name }}
-        {{- if .IsDeprecated }}
-
-{{ print "{{" }}% expand title="{{ .Name }} [DEPRECATED]" %{{ print "}}" }}
-<div style="background-color: #fceea5;">{{/* like godoc */}}
-        {{- end }}
-
-{{ mdformat .DocString . }}
-
-        {{- $funcName := .Name }}
-        {{- with $extraPackages }}
-
-{{ print "{{" }}< tabs >{{ print "}}" }}
-          {{- range .LookupFunction $funcName }}
-{{ print "{{" }}% tab title="{{ .Package }}" style="secondary" %{{ print "}}" }}
-| Signature | Usage |
-|--|--|
-| [`{{.Package }}.{{ .Name }}({{ params .AllParams }}) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Name }}) | package-level function |
-{{ print "{{" }}% /tab %{{ print "}}" }}
-          {{- end }}
-        {{- end }}
-
-{{ print "{{" }}% tab title="internal" style="accent" icon="wrench" %{{ print "}}" }}
-| Signature | Usage |
-|--|--|
-        {{- $pkg := $.Package.Package }} 
-| [`{{ $pkg }}.{{ .Name }}({{ params .AllParams }}) {{ returns .Returns }}`]({{ $godoc }}/internal/{{ $pkg }}#{{ .Name }}) | internal implementation |
-
-**Source:** [{{ .SourcePackage }}#{{ .Name }}]({{ sourceLink $github .SourceLink }})
-
-        {{- range .ExtraComments }}
-          {{- if eq .Tag 2 }}{{/* maintainers section */}}
-
-> **Maintainer Note**
->
-{{ blockquote .Text }}
-          {{- else if eq .Tag 4 }}{{/* notes section */}}
-
-> **Note**
->
-{{ blockquote .Text }}
-          {{- end }}
-        {{- end }}
-{{ print "{{" }}% /tab %{{ print "}}" }}
-{{ print "{{" }}< /tabs >{{ print "}}" }}
-        {{- if .IsDeprecated }}
-</div>
-{{ print "{{" }}% /expand %{{ print "}}" }}
-        {{- end }}
-      {{- end }}
+    {{- range .Functions.Scope "only-helpers" . }}{{/* functions in internal/assertions annotated with "domain:" (removed constructor) */}}
+{{ template "FUNC-SECTION" . }}
     {{- end }}
   {{- end }}
-{{- end }}{{- end }}
+{{- end }}
 
 ---
 

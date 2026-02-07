@@ -40,10 +40,37 @@ Thanks to go's original design, we developers don't have to waste much time argu
 
 However, the number of available linters has been growing to the point that we need to pick a choice.
 
+### Our approach: evaluate, don't consume blindly
+
+As early adopters of `golangci-lint` (and its predecessors), we've watched linting orthodoxy
+shift back and forth over the years. Patterns that were idiomatic one year get flagged the next;
+rules that seemed reasonable in isolation produce noise at scale. Conversations with maintainers
+of other large Go projects confirmed what our own experience taught us:
+**the default linter set is a starting point, not a prescription**.
+
+Our stance is deliberate:
+
+- **Start from `default: all`**, then consciously disable what doesn't earn its keep.
+  This forces us to evaluate every linter and articulate why we reject it — the disabled list
+  is a design rationale, not technical debt.
+- **Tune thresholds rather than disable** when a linter's principle is sound but its defaults
+  are too aggressive for a mature codebase.
+- **Require justification for every `//nolint`** directive. Each one must carry an inline comment
+  explaining why it's there. We maintain a full audit in [`docs/LINTING.md`][linting-audit].
+- **Prefer disabling a linter over scattering `//nolint`** across the codebase. If a linter
+  produces systematic false positives on patterns we use intentionally, the linter goes —
+  not our code.
+- **Keep the configuration consistent** across all `go-openapi` repositories. Per-repo
+  divergence is a maintenance tax we don't want to pay.
+
+The result is a three-layer defense: the `.golangci.yml` config as a baseline, `//nolint` with
+mandatory justification for the rare exceptions, and `docs/LINTING.md` as an audit trail.
+Contributors should read the disabled list as a set of conscious choices, not gaps to fill.
+
 We enable all linters published by `golangci-lint` by default, then disable a few ones.
 
 {{% tab title="Disabled linters" %}}
-Here are the reasons why they are disabled (update: Nov. 2025, `golangci-lint v2.6.1`).
+Here are the reasons why they are disabled (update: Feb. 2026, `golangci-lint v2.8.0`).
 
 ```yaml
   disable:
@@ -57,6 +84,7 @@ Here are the reasons why they are disabled (update: Nov. 2025, `golangci-lint v2
     - paralleltest          # we like parallel tests. We just don't want them to be enforced everywhere
     - recvcheck             # we like the idea of having pointer and non-pointer receivers
     - testpackage           # we like test packages. We just don't want them to be enforced everywhere
+    - thelper               # too many false positives on test case factories returning func(*testing.T). See note below
     - tparallel             # see paralleltest
     - varnamelen            # sometimes, we like short variables. The linter doesn't catch cases when a short name is good
     - whitespace            # no added value
@@ -66,7 +94,14 @@ Here are the reasons why they are disabled (update: Nov. 2025, `golangci-lint v2
 ```
 
 As you may see, we agree with the objective of most linters, at least the principle they are supposed to enforce.
-But all linters do not support fine-grained tuning to tolerate some cases and not some others. 
+But all linters do not support fine-grained tuning to tolerate some cases and not some others.
+
+> **Note on `thelper`**: the only value we needed from this linter was checking for `t.Helper()` calls
+> inside genuine test helpers. Unfortunately, it produces persistent false positives on test case factories
+> (functions returning `func(*testing.T)`), which is a pattern we use extensively with our `iter.Seq`-based
+> table-driven tests. It also enforces naming conventions we don't subscribe to. The issue has been
+> reported upstream. We prefer disabling it entirely over maintaining `//nolint:thelper` directives
+> across every test file.
 {{< /tab >}}
 
 {{% tab title="Relaxed linter settings" %}}
@@ -98,3 +133,4 @@ we no longer benefit from the great `testifylint` linter for tests.
 
 [golangci-yml]: https://github.com/go-openapi/testify/blob/master/.golangci.yml
 [golangci-doc]: https://golangci-lint.run/docs/linters/configuration/
+[linting-audit]: https://github.com/go-openapi/testify/blob/master/docs/LINTING.md
