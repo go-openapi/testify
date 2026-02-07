@@ -80,7 +80,6 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### Contains{#contains}
-  
 Contains asserts that the specified string, list(array, slice...) or map contains the
 specified substring or element.
 
@@ -161,7 +160,6 @@ func main() {
 {{< /tabs >}}
 
 ### ElementsMatch{#elementsmatch}
-  
 ElementsMatch asserts that the specified listA(array, slice...) is equal to specified
 listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 the number of appearances of each of them in both lists should match.
@@ -241,7 +239,6 @@ func main() {
 {{< /tabs >}}
 
 ### ElementsMatchT[E comparable] {{% icon icon="star" color=orange %}}{#elementsmatchte-comparable}
-  
 ElementsMatchT asserts that the specified listA(array, slice...) is equal to specified
 listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 the number of appearances of each of them in both lists should match.
@@ -317,7 +314,6 @@ func main() {
 {{< /tabs >}}
 
 ### Len{#len}
-  
 Len asserts that the specified object has specific length.
 
 Len also fails if the object has a type that len() does not accept.
@@ -408,7 +404,6 @@ func main() {
 {{< /tabs >}}
 
 ### MapContainsT[Map ~map[K]V, K comparable, V any] {{% icon icon="star" color=orange %}}{#mapcontainstmap-mapkv-k-comparable-v-any}
-  
 MapContainsT asserts that the specified map contains a key.
 
 Go native comparable types are explained there: [comparable-types](https://go.dev/blog/comparable).
@@ -484,7 +479,6 @@ func main() {
 {{< /tabs >}}
 
 ### MapNotContainsT[Map ~map[K]V, K comparable, V any] {{% icon icon="star" color=orange %}}{#mapnotcontainstmap-mapkv-k-comparable-v-any}
-  
 MapNotContainsT asserts that the specified map does not contain a key.
 
 {{% expand title="Examples" %}}
@@ -558,7 +552,6 @@ func main() {
 {{< /tabs >}}
 
 ### NotContains{#notcontains}
-  
 NotContains asserts that the specified string, list(array, slice...) or map does NOT contain the
 specified substring or element.
 
@@ -639,7 +632,6 @@ func main() {
 {{< /tabs >}}
 
 ### NotElementsMatch{#notelementsmatch}
-  
 NotElementsMatch asserts that the specified listA(array, slice...) is NOT equal to specified
 listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 the number of appearances of each of them in both lists should not match.
@@ -722,7 +714,6 @@ func main() {
 {{< /tabs >}}
 
 ### NotElementsMatchT[E comparable] {{% icon icon="star" color=orange %}}{#notelementsmatchte-comparable}
-  
 NotElementsMatchT asserts that the specified listA(array, slice...) is NOT equal to specified
 listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 the number of appearances of each of them in both lists should not match.
@@ -801,7 +792,6 @@ func main() {
 {{< /tabs >}}
 
 ### NotSubset{#notsubset}
-  
 NotSubset asserts that the list (array, slice, or map) does NOT contain all
 elements given in the subset (array, slice, or map).
 Map elements are key-value pairs unless compared with an array or slice where
@@ -885,7 +875,6 @@ func main() {
 {{< /tabs >}}
 
 ### SeqContainsT[E comparable] {{% icon icon="star" color=orange %}}{#seqcontainste-comparable}
-  
 SeqContainsT asserts that the specified iterator contains a comparable element.
 
 The sequence may not be consumed entirely: the iteration stops as soon as the specified element is found.
@@ -964,7 +953,6 @@ func main() {
 {{< /tabs >}}
 
 ### SeqNotContainsT[E comparable] {{% icon icon="star" color=orange %}}{#seqnotcontainste-comparable}
-  
 SeqNotContainsT asserts that the specified iterator does not contain a comparable element.
 
 See [SeqContainsT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SeqContainsT).
@@ -1041,7 +1029,6 @@ func main() {
 {{< /tabs >}}
 
 ### SliceContainsT[Slice ~[]E, E comparable] {{% icon icon="star" color=orange %}}{#slicecontainstslice-e-e-comparable}
-  
 SliceContainsT asserts that the specified slice contains a comparable element.
 
 Go native comparable types are explained there: [comparable-types](https://go.dev/blog/comparable).
@@ -1117,7 +1104,6 @@ func main() {
 {{< /tabs >}}
 
 ### SliceNotContainsT[Slice ~[]E, E comparable] {{% icon icon="star" color=orange %}}{#slicenotcontainstslice-e-e-comparable}
-  
 SliceNotContainsT asserts that the specified slice does not contain a comparable element.
 
 See [SliceContainsT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceContainsT).
@@ -1193,7 +1179,6 @@ func main() {
 {{< /tabs >}}
 
 ### SliceNotSubsetT[Slice ~[]E, E comparable] {{% icon icon="star" color=orange %}}{#slicenotsubsettslice-e-e-comparable}
-  
 SliceNotSubsetT asserts that a slice of comparable elements does not contain all the elements given in the subset.
 
 {{% expand title="Examples" %}}
@@ -1267,7 +1252,6 @@ func main() {
 {{< /tabs >}}
 
 ### SliceSubsetT[Slice ~[]E, E comparable] {{% icon icon="star" color=orange %}}{#slicesubsettslice-e-e-comparable}
-  
 SliceSubsetT asserts that a slice of comparable elements contains all the elements given in the subset.
 
 {{% expand title="Examples" %}}
@@ -1341,7 +1325,6 @@ func main() {
 {{< /tabs >}}
 
 ### StringContainsT[ADoc, EDoc Text] {{% icon icon="star" color=orange %}}{#stringcontainstadoc-edoc-text}
-  
 StringContainsT asserts that a string contains the specified substring.
 
 Strings may be go strings or []byte according to the type constraint [Text](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Text).
@@ -1417,7 +1400,6 @@ func main() {
 {{< /tabs >}}
 
 ### StringNotContainsT[ADoc, EDoc Text] {{% icon icon="star" color=orange %}}{#stringnotcontainstadoc-edoc-text}
-  
 StringNotContainsT asserts that a string does not contain the specified substring.
 
 See [StringContainsT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#StringContainsT).
@@ -1493,7 +1475,6 @@ func main() {
 {{< /tabs >}}
 
 ### Subset{#subset}
-  
 Subset asserts that the list (array, slice, or map) contains all elements
 given in the subset (array, slice, or map).
 

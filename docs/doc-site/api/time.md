@@ -28,7 +28,6 @@ This domain exposes 2 functionalities.
 ```
 
 ### WithinDuration{#withinduration}
-  
 WithinDuration asserts that the two times are within duration delta of each other.
 
 {{% expand title="Examples" %}}
@@ -107,7 +106,6 @@ func main() {
 {{< /tabs >}}
 
 ### WithinRange{#withinrange}
-  
 WithinRange asserts that a time is within a time range (inclusive).
 
 {{% expand title="Examples" %}}

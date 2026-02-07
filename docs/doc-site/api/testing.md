@@ -28,7 +28,6 @@ This domain exposes 2 functionalities.
 ```
 
 ### Fail{#fail}
-  
 Fail reports a failure through.
 
 {{% expand title="Examples" %}}
@@ -75,7 +74,6 @@ Fail reports a failure through.
 {{< /tabs >}}
 
 ### FailNow{#failnow}
-  
 FailNow fails test.
 
 {{% expand title="Examples" %}}

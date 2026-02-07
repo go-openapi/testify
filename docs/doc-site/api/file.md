@@ -40,7 +40,6 @@ This domain exposes 6 functionalities.
 ```
 
 ### DirExists{#direxists}
-  
 DirExists checks whether a directory exists in the given path. It also fails
 if the path is a file rather a directory or there is an error checking whether it exists.
 
@@ -124,7 +123,6 @@ func testDataPath() string {
 {{< /tabs >}}
 
 ### DirNotExists{#dirnotexists}
-  
 DirNotExists checks whether a directory does not exist in the given path.
 It fails if the path points to an existing _directory_ only.
 
@@ -208,7 +206,6 @@ func testDataPath() string {
 {{< /tabs >}}
 
 ### FileEmpty{#fileempty}
-  
 FileEmpty checks whether a file exists in the given path and is empty.
 It fails if the file is not empty, if the path points to a directory or there is an error when trying to check the file.
 
@@ -292,7 +289,6 @@ func testDataPath() string {
 {{< /tabs >}}
 
 ### FileExists{#fileexists}
-  
 FileExists checks whether a file exists in the given path. It also fails if
 the path points to a directory or there is an error when trying to check the file.
 
@@ -376,7 +372,6 @@ func testDataPath() string {
 {{< /tabs >}}
 
 ### FileNotEmpty{#filenotempty}
-  
 FileNotEmpty checks whether a file exists in the given path and is not empty.
 It fails if the file is empty, if the path points to a directory or there is an error when trying to check the file.
 
@@ -460,7 +455,6 @@ func testDataPath() string {
 {{< /tabs >}}
 
 ### FileNotExists{#filenotexists}
-  
 FileNotExists checks whether a file does not exist in a given path. It fails
 if the path points to an existing _file_ only.
 

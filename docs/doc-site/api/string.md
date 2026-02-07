@@ -35,7 +35,6 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### NotRegexp{#notregexp}
-  
 NotRegexp asserts that a specified regular expression does not match a string.
 
 See [Regexp](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Regexp).
@@ -116,7 +115,6 @@ func main() {
 {{< /tabs >}}
 
 ### NotRegexpT[Rex RegExp, ADoc Text] {{% icon icon="star" color=orange %}}{#notregexptrex-regexp-adoc-text}
-  
 NotRegexpT asserts that a specified regular expression does not match a string.
 
 See [RegexpT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#RegexpT).
@@ -193,7 +191,6 @@ func main() {
 {{< /tabs >}}
 
 ### Regexp{#regexp}
-  
 Regexp asserts that a specified regular expression matches a string.
 
 The regular expression may be passed as a [regexp.Regexp](https://pkg.go.dev/regexp#Regexp), a string or a []byte and will be compiled.
@@ -276,7 +273,6 @@ func main() {
 {{< /tabs >}}
 
 ### RegexpT[Rex RegExp, ADoc Text] {{% icon icon="star" color=orange %}}{#regexptrex-regexp-adoc-text}
-  
 RegexpT asserts that a specified regular expression matches a string.
 
 The actual argument to be matched may be a string or []byte.

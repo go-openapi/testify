@@ -32,7 +32,6 @@ This domain exposes 3 functionalities.
 ## Other helpers
 
 ### CallerInfo{#callerinfo}
-  
 CallerInfo returns an array of strings containing the file and line number
 of each stack frame leading from the current test to the assert call that
 failed.
@@ -72,7 +71,6 @@ failed.
 {{< /tabs >}}
 
 ### ObjectsAreEqual{#objectsareequal}
-  
 ObjectsAreEqual determines if two objects are considered equal.
 
 This function does no assertion of any kind.
@@ -107,7 +105,6 @@ This function does no assertion of any kind.
 {{< /tabs >}}
 
 ### ObjectsAreEqualValues{#objectsareequalvalues}
-  
 ObjectsAreEqualValues gets whether two objects are equal, or if their
 values are equal.
 

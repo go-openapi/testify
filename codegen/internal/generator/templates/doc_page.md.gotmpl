@@ -8,11 +8,7 @@
 ```
 {{- end }}
 
-{{- define "EXAMPLES-SUBSECTION" }}{{/* data: function */}}
-{{ mdformat .DocString . }}{{/* reformat inner markdown and reformat */}}
-{{- end }}
-
-{{- define "TAB-INTERNAL" }}{{/* tab internal discloses internal maintainers notes */}}
+{{- define "TAB-INTERNAL" }}{{/* tab internal discloses internal maintainers notes - moved apart as this is heavier tab to construct */}}
   {{- $godoc := .Context.PkgGoDevURL }}
   {{- $pkg := .Context.Package.Package }}
   {{- $github := .Context.GitHubURL }}
@@ -39,7 +35,7 @@
 {{ hopen }}% /tab %{{ hclose }}
 {{- end }}
 
-{{- define "SIGNATURES-SUBSECTION" }}{{/* render the signatures of all variant in a tab for each package */}}
+{{- define "TABS-SUBSECTION" }}{{/* render the signatures of all variant in a tab for each package */}}
   {{- $extraPackages := .Context.ExtraPackages }}
   {{- $godoc := .Context.PkgGoDevURL }}
   {{- $funcName := .Name }}
@@ -73,10 +69,10 @@
 {{ hopen }}% expand title="{{ .Name }} [DEPRECATED]" %{{ hclose }}
 <div style="background-color: #fceea5;">{{/* like godoc TODO: use css */}}
   {{- end }}
-  {{ template "EXAMPLES-SUBSECTION" . }}
+{{ mdformat .DocString . }}{{/* reformat inner markdown and extract testable examples */}}
 
 {{ hopen }}< tabs >{{ hclose }}
-  {{ template "SIGNATURES-SUBSECTION" . }}
+  {{ template "TABS-SUBSECTION" . }}
 {{ hopen }}< /tabs >{{ hclose }}
 
   {{- if .IsDeprecated }}
@@ -124,7 +120,7 @@ Generic assertions are marked with a {{ hopen }}% icon icon="star" color=orange 
 {{- with .Package }}
   {{- if .HasHelpers }}
 
-## Other helpers
+## Other helpers{{/* we don't need the New() function to appear in this list */}}
     {{- range .Functions.Scope "only-helpers" . }}{{/* functions in internal/assertions annotated with "domain:" (removed constructor) */}}
 {{ template "FUNC-SECTION" . }}
     {{- end }}

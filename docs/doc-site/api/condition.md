@@ -34,7 +34,6 @@ This domain exposes 4 functionalities.
 ```
 
 ### Condition{#condition}
-  
 Condition uses a [Comparison](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Comparison) to assert a complex condition.
 
 {{% expand title="Examples" %}}
@@ -114,7 +113,6 @@ func main() {
 {{< /tabs >}}
 
 ### Eventually{#eventually}
-  
 Eventually asserts that the given condition will be met in waitFor time,
 periodically checking the target function on each tick.
 
@@ -212,7 +210,6 @@ func main() {
 {{< /tabs >}}
 
 ### EventuallyWith{#eventuallywith}
-  
 EventuallyWith asserts that the given condition will be met in waitFor time,
 periodically checking the target function at each tick.
 
@@ -323,7 +320,6 @@ func main() {
 {{< /tabs >}}
 
 ### Never{#never}
-  
 Never asserts that the given condition is never satisfied within waitFor time,
 periodically checking the target function at each tick.
 

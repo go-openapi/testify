@@ -46,7 +46,6 @@ This domain exposes 8 functionalities.
 ```
 
 ### EqualError{#equalerror}
-  
 EqualError asserts that a function returned a non-nil error (i.e. an error)
 and that it is equal to the provided error.
 
@@ -126,7 +125,6 @@ func main() {
 {{< /tabs >}}
 
 ### Error{#error}
-  
 Error asserts that a function returned a non-nil error (ie. an error).
 
 {{% expand title="Examples" %}}
@@ -205,7 +203,6 @@ func main() {
 {{< /tabs >}}
 
 ### ErrorAs{#erroras}
-  
 ErrorAs asserts that at least one of the errors in err's chain matches target, and if so, sets target to that error value.
 
 This is a wrapper for [errors.As](https://pkg.go.dev/errors#As).
@@ -292,7 +289,6 @@ func (d *dummyError) Error() string {
 {{< /tabs >}}
 
 ### ErrorContains{#errorcontains}
-  
 ErrorContains asserts that a function returned a non-nil error (i.e. an
 error) and that the error contains the specified substring.
 
@@ -372,7 +368,6 @@ func main() {
 {{< /tabs >}}
 
 ### ErrorIs{#erroris}
-  
 ErrorIs asserts that at least one of the errors in err's chain matches target.
 
 This is a wrapper for [errors.Is](https://pkg.go.dev/errors#Is).
@@ -453,7 +448,6 @@ func main() {
 {{< /tabs >}}
 
 ### NoError{#noerror}
-  
 NoError asserts that a function returned a nil error (ie. no error).
 
 {{% expand title="Examples" %}}
@@ -534,7 +528,6 @@ func main() {
 {{< /tabs >}}
 
 ### NotErrorAs{#noterroras}
-  
 NotErrorAs asserts that none of the errors in err's chain matches target,
 but if so, sets target to that error value.
 
@@ -620,7 +613,6 @@ func (d *dummyError) Error() string {
 {{< /tabs >}}
 
 ### NotErrorIs{#noterroris}
-  
 NotErrorIs asserts that none of the errors in err's chain matches target.
 
 This is a wrapper for [errors.Is](https://pkg.go.dev/errors#Is).

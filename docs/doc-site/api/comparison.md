@@ -59,7 +59,6 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### Greater{#greater}
-  
 Greater asserts that the first element is strictly greater than the second.
 
 Both elements must be of the same type in the [reflect.Kind](https://pkg.go.dev/reflect#Kind) sense.
@@ -142,7 +141,6 @@ func main() {
 {{< /tabs >}}
 
 ### GreaterOrEqual{#greaterorequal}
-  
 GreaterOrEqual asserts that the first element is greater than or equal to the second.
 
 See also [Greater](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Greater).
@@ -225,7 +223,6 @@ func main() {
 {{< /tabs >}}
 
 ### GreaterOrEqualT[Orderable Ordered] {{% icon icon="star" color=orange %}}{#greaterorequaltorderable-ordered}
-  
 GreaterOrEqualT asserts that for two elements of the same type,
 the first element is greater than or equal to the second.
 
@@ -313,7 +310,6 @@ func main() {
 {{< /tabs >}}
 
 ### GreaterT[Orderable Ordered] {{% icon icon="star" color=orange %}}{#greatertorderable-ordered}
-  
 GreaterT asserts that for two elements of the same type,
 the first element is strictly greater than the second.
 
@@ -400,7 +396,6 @@ func main() {
 {{< /tabs >}}
 
 ### Less{#less}
-  
 Less asserts that the first element is strictly less than the second.
 
 Both elements must be of the same type in the [reflect.Kind](https://pkg.go.dev/reflect#Kind) sense.
@@ -483,7 +478,6 @@ func main() {
 {{< /tabs >}}
 
 ### LessOrEqual{#lessorequal}
-  
 LessOrEqual asserts that the first element is less than or equal to the second.
 
 {{% expand title="Examples" %}}
@@ -564,7 +558,6 @@ func main() {
 {{< /tabs >}}
 
 ### LessOrEqualT[Orderable Ordered] {{% icon icon="star" color=orange %}}{#lessorequaltorderable-ordered}
-  
 LessOrEqualT asserts that for two elements of the same type, the first element is less than or equal to the second.
 
 The [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) type can be any of Go's [cmp.Ordered](https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
@@ -651,7 +644,6 @@ func main() {
 {{< /tabs >}}
 
 ### LessT[Orderable Ordered] {{% icon icon="star" color=orange %}}{#lesstorderable-ordered}
-  
 LessT asserts that for two elements of the same type, the first element is strictly less than the second.
 
 The [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) type can be any of Go's [cmp.Ordered](https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
@@ -737,7 +729,6 @@ func main() {
 {{< /tabs >}}
 
 ### Negative{#negative}
-  
 Negative asserts that the specified element is strictly negative.
 
 {{% expand title="Examples" %}}
@@ -816,7 +807,6 @@ func main() {
 {{< /tabs >}}
 
 ### NegativeT[SignedNumber SignedNumeric] {{% icon icon="star" color=orange %}}{#negativetsignednumber-signednumeric}
-  
 NegativeT asserts that the specified element of a signed numeric type is strictly negative.
 
 {{% expand title="Examples" %}}
@@ -891,7 +881,6 @@ func main() {
 {{< /tabs >}}
 
 ### Positive{#positive}
-  
 Positive asserts that the specified element is strictly positive.
 
 {{% expand title="Examples" %}}
@@ -970,7 +959,6 @@ func main() {
 {{< /tabs >}}
 
 ### PositiveT[SignedNumber SignedNumeric] {{% icon icon="star" color=orange %}}{#positivetsignednumber-signednumeric}
-  
 PositiveT asserts that the specified element of a signed numeric type is strictly positive.
 
 {{% expand title="Examples" %}}

@@ -44,7 +44,6 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### InDelta{#indelta}
-  
 InDelta asserts that the two numerals are within delta of each other.
 
 Delta must be greater than or equal to zero.
@@ -134,7 +133,6 @@ func main() {
 {{< /tabs >}}
 
 ### InDeltaMapValues{#indeltamapvalues}
-  
 InDeltaMapValues is the same as [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta), but it compares all values between two maps. Both maps must have exactly the same keys.
 
 See [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta).
@@ -214,7 +212,6 @@ func main() {
 {{< /tabs >}}
 
 ### InDeltaSlice{#indeltaslice}
-  
 InDeltaSlice is the same as [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta), except it compares two slices.
 
 See [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta).
@@ -294,7 +291,6 @@ func main() {
 {{< /tabs >}}
 
 ### InDeltaT[Number Measurable] {{% icon icon="star" color=orange %}}{#indeltatnumber-measurable}
-  
 InDeltaT asserts that the two numerals of the same type numerical type are within delta of each other.
 
 [InDeltaT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDeltaT) accepts any go numeric type, including integer types.
@@ -380,7 +376,6 @@ func main() {
 {{< /tabs >}}
 
 ### InEpsilon{#inepsilon}
-  
 InEpsilon asserts that expected and actual have a relative error less than epsilon.
 
 #### Behavior with IEEE floating point arithmetics
@@ -472,7 +467,6 @@ func main() {
 {{< /tabs >}}
 
 ### InEpsilonSlice{#inepsilonslice}
-  
 InEpsilonSlice is the same as [InEpsilon](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilon), except it compares each value from two slices.
 
 See [InEpsilon](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilon).
@@ -552,7 +546,6 @@ func main() {
 {{< /tabs >}}
 
 ### InEpsilonT[Number Measurable] {{% icon icon="star" color=orange %}}{#inepsilontnumber-measurable}
-  
 InEpsilonT asserts that expected and actual have a relative error less than epsilon.
 
 When expected is zero, epsilon is interpreted as an absolute error threshold,

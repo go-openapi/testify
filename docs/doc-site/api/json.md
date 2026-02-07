@@ -38,7 +38,6 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### JSONEq{#jsoneq}
-  
 JSONEq asserts that two JSON strings are semantically equivalent.
 
 Expected and actual must be valid JSON.
@@ -118,7 +117,6 @@ func main() {
 {{< /tabs >}}
 
 ### JSONEqBytes{#jsoneqbytes}
-  
 JSONEqBytes asserts that two JSON slices of bytes are semantically equivalent.
 
 Expected and actual must be valid JSON.
@@ -206,7 +204,6 @@ func main() {
 {{< /tabs >}}
 
 ### JSONEqT[EDoc, ADoc Text] {{% icon icon="star" color=orange %}}{#jsoneqtedoc-adoc-text}
-  
 JSONEqT asserts that two JSON documents are semantically equivalent.
 
 The expected and actual arguments may be string or []byte. They do not need to be of the same type.
@@ -284,7 +281,6 @@ func main() {
 {{< /tabs >}}
 
 ### JSONMarshalAsT[EDoc Text] {{% icon icon="star" color=orange %}}{#jsonmarshalastedoc-text}
-  
 JSONMarshalAsT wraps [JSONEq](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#JSONEq) after [json.Marshal](https://pkg.go.dev/json#Marshal).
 
 The input JSON may be a string or []byte.
@@ -373,7 +369,6 @@ type dummyStruct struct {
 {{< /tabs >}}
 
 ### JSONUnmarshalAsT[Object any, ADoc Text] {{% icon icon="star" color=orange %}}{#jsonunmarshalastobject-any-adoc-text}
-  
 JSONUnmarshalAsT wraps [Equal](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Equal) after [json.Unmarshal](https://pkg.go.dev/json#Unmarshal).
 
 The input JSON may be a string or []byte.

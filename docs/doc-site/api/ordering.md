@@ -53,7 +53,6 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### IsDecreasing{#isdecreasing}
-  
 IsDecreasing asserts that the collection is strictly decreasing.
 
 {{% expand title="Examples" %}}
@@ -133,7 +132,6 @@ func main() {
 {{< /tabs >}}
 
 ### IsDecreasingT[OrderedSlice ~[]E, E Ordered] {{% icon icon="star" color=orange %}}{#isdecreasingtorderedslice-e-e-ordered}
-  
 IsDecreasingT asserts that a slice of [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) is strictly decreasing.
 
 {{% expand title="Examples" %}}
@@ -209,7 +207,6 @@ func main() {
 {{< /tabs >}}
 
 ### IsIncreasing{#isincreasing}
-  
 IsIncreasing asserts that the collection is strictly increasing.
 
 {{% expand title="Examples" %}}
@@ -289,7 +286,6 @@ func main() {
 {{< /tabs >}}
 
 ### IsIncreasingT[OrderedSlice ~[]E, E Ordered] {{% icon icon="star" color=orange %}}{#isincreasingtorderedslice-e-e-ordered}
-  
 IsIncreasingT asserts that a slice of [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) is strictly increasing.
 
 {{% expand title="Examples" %}}
@@ -365,7 +361,6 @@ func main() {
 {{< /tabs >}}
 
 ### IsNonDecreasing{#isnondecreasing}
-  
 IsNonDecreasing asserts that the collection is not strictly decreasing.
 
 {{% expand title="Examples" %}}
@@ -445,7 +440,6 @@ func main() {
 {{< /tabs >}}
 
 ### IsNonDecreasingT[OrderedSlice ~[]E, E Ordered] {{% icon icon="star" color=orange %}}{#isnondecreasingtorderedslice-e-e-ordered}
-  
 IsNonDecreasingT asserts that a slice of [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) is not decreasing.
 
 {{% expand title="Examples" %}}
@@ -521,7 +515,6 @@ func main() {
 {{< /tabs >}}
 
 ### IsNonIncreasing{#isnonincreasing}
-  
 IsNonIncreasing asserts that the collection is not increasing.
 
 {{% expand title="Examples" %}}
@@ -601,7 +594,6 @@ func main() {
 {{< /tabs >}}
 
 ### IsNonIncreasingT[OrderedSlice ~[]E, E Ordered] {{% icon icon="star" color=orange %}}{#isnonincreasingtorderedslice-e-e-ordered}
-  
 IsNonIncreasingT asserts that a slice of [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) is NOT strictly increasing.
 
 {{% expand title="Examples" %}}
@@ -677,7 +669,6 @@ func main() {
 {{< /tabs >}}
 
 ### NotSortedT[OrderedSlice ~[]E, E Ordered] {{% icon icon="star" color=orange %}}{#notsortedtorderedslice-e-e-ordered}
-  
 NotSortedT asserts that the slice of [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) is NOT sorted (i.e. non-strictly increasing).
 
 Unlike [IsDecreasingT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsDecreasingT), it accepts slices that are neither increasing nor decreasing.
@@ -755,7 +746,6 @@ func main() {
 {{< /tabs >}}
 
 ### SortedT[OrderedSlice ~[]E, E Ordered] {{% icon icon="star" color=orange %}}{#sortedtorderedslice-e-e-ordered}
-  
 SortedT asserts that the slice of [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) is sorted (i.e. non-strictly increasing).
 
 Unlike [IsIncreasingT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsIncreasingT), it accepts elements to be equal.

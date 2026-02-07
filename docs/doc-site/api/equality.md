@@ -71,7 +71,6 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### Empty{#empty}
-  
 Empty asserts that the given value is "empty".
 
 Zero values are "empty".
@@ -159,7 +158,6 @@ func main() {
 {{< /tabs >}}
 
 ### Equal{#equal}
-  
 Equal asserts that two objects are equal.
 
 Pointer variable equality is determined based on the equality of the
@@ -242,7 +240,6 @@ func main() {
 {{< /tabs >}}
 
 ### EqualExportedValues{#equalexportedvalues}
-  
 EqualExportedValues asserts that the types of two objects are equal and their public
 fields are also equal.
 
@@ -335,7 +332,6 @@ type dummyStruct struct {
 {{< /tabs >}}
 
 ### EqualT[V comparable] {{% icon icon="star" color=orange %}}{#equaltv-comparable}
-  
 EqualT asserts that two objects of the same comparable type are equal.
 
 Pointer variable equality is determined based on the equality of the memory addresses (unlike [Equal](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Equal), but like [Same](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Same)).
@@ -416,7 +412,6 @@ func main() {
 {{< /tabs >}}
 
 ### EqualValues{#equalvalues}
-  
 EqualValues asserts that two objects are equal or convertible to the larger
 type and equal.
 
@@ -497,7 +492,6 @@ func main() {
 {{< /tabs >}}
 
 ### Exactly{#exactly}
-  
 Exactly asserts that two objects are equal in value and type.
 
 {{% expand title="Examples" %}}
@@ -575,7 +569,6 @@ func main() {
 {{< /tabs >}}
 
 ### Nil{#nil}
-  
 Nil asserts that the specified object is nil.
 
 {{% expand title="Examples" %}}
@@ -653,7 +646,6 @@ func main() {
 {{< /tabs >}}
 
 ### NotEmpty{#notempty}
-  
 NotEmpty asserts that the specified object is NOT [Empty](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Empty).
 
 {{% expand title="Examples" %}}
@@ -733,7 +725,6 @@ func main() {
 {{< /tabs >}}
 
 ### NotEqual{#notequal}
-  
 NotEqual asserts that the specified values are NOT equal.
 
 {{% expand title="Examples" %}}
@@ -814,7 +805,6 @@ func main() {
 {{< /tabs >}}
 
 ### NotEqualT[V comparable] {{% icon icon="star" color=orange %}}{#notequaltv-comparable}
-  
 NotEqualT asserts that the specified values of the same comparable type are NOT equal.
 
 See [EqualT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualT).
@@ -890,7 +880,6 @@ func main() {
 {{< /tabs >}}
 
 ### NotEqualValues{#notequalvalues}
-  
 NotEqualValues asserts that two objects are not equal even when converted to the same type.
 
 Function equality cannot be determined and will always fail.
@@ -970,7 +959,6 @@ func main() {
 {{< /tabs >}}
 
 ### NotNil{#notnil}
-  
 NotNil asserts that the specified object is not nil.
 
 {{% expand title="Examples" %}}
@@ -1048,7 +1036,6 @@ func main() {
 {{< /tabs >}}
 
 ### NotSame{#notsame}
-  
 NotSame asserts that two pointers do not reference the same object.
 
 See [Same](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Same).
@@ -1136,7 +1123,6 @@ func ptr[T any](value T) *T {
 {{< /tabs >}}
 
 ### NotSameT[P any] {{% icon icon="star" color=orange %}}{#notsametp-any}
-  
 NotSameT asserts that two pointers do not reference the same object.
 
 See [SameT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SameT).
@@ -1220,7 +1206,6 @@ func ptr[T any](value T) *T {
 {{< /tabs >}}
 
 ### Same{#same}
-  
 Same asserts that two pointers reference the same object.
 
 Both arguments must be pointer variables.
@@ -1309,7 +1294,6 @@ var (
 {{< /tabs >}}
 
 ### SameT[P any] {{% icon icon="star" color=orange %}}{#sametp-any}
-  
 SameT asserts that two pointers of the same type reference the same object.
 
 See [Same](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Same).

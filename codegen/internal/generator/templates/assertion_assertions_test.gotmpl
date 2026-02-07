@@ -12,20 +12,9 @@ import (
 )
 
 {{- range .Functions.Scope "include-generics" . }}
-  {{- /* setting the appropriate context to call the test template */}}
-  {{- $call := ( printf "%s%s(mock, " .Name .GenericSuffix ) }}
-  {{- $mock := ( printf "mock := new(%s)" .UseMock ) }}
-  {{- $errorPrefix := .Name }}
-  {{- $panic := "Panics(t, " }}
-  {{- $mockFailure := .FailMsg }}
-  {{- $context := .WithTestCall $call }}
-  {{- $context = $context.WithTestMock $mock }}
-  {{- $context = $context.WithTestErrorPrefix $errorPrefix }}
-  {{- $context = $context.WithTestPanicWrapper $panic }}
-  {{- $context = $context.WithTestMockFailure $mockFailure }}
 
 func Test{{ .Name }}(t *testing.T) {
-{{- template "test-case" $context }}
+{{- template "test-case" (testSetup . "assertions" "") }}
 }
 {{- end }}
 

@@ -42,7 +42,6 @@ This domain exposes 7 functionalities.
 ```
 
 ### HTTPBodyContains{#httpbodycontains}
-  
 HTTPBodyContains asserts that a specified handler returns a body that contains a string.
 
 Returns whether the assertion was successful (true) or not (false).
@@ -129,7 +128,6 @@ func httpBody(w http.ResponseWriter, r *http.Request) {
 {{< /tabs >}}
 
 ### HTTPBodyNotContains{#httpbodynotcontains}
-  
 HTTPBodyNotContains asserts that a specified handler returns a
 body that does not contain a string.
 
@@ -217,7 +215,6 @@ func httpBody(w http.ResponseWriter, r *http.Request) {
 {{< /tabs >}}
 
 ### HTTPError{#httperror}
-  
 HTTPError asserts that a specified handler returns an error status code.
 
 Returns whether the assertion was successful (true) or not (false).
@@ -302,7 +299,6 @@ func httpError(w http.ResponseWriter, _ *http.Request) {
 {{< /tabs >}}
 
 ### HTTPRedirect{#httpredirect}
-  
 HTTPRedirect asserts that a specified handler returns a redirect status code.
 
 Returns whether the assertion was successful (true) or not (false).
@@ -387,7 +383,6 @@ func httpRedirect(w http.ResponseWriter, _ *http.Request) {
 {{< /tabs >}}
 
 ### HTTPStatusCode{#httpstatuscode}
-  
 HTTPStatusCode asserts that a specified handler returns a specified status code.
 
 Returns whether the assertion was successful (true) or not (false).
@@ -472,7 +467,6 @@ func httpOK(w http.ResponseWriter, _ *http.Request) {
 {{< /tabs >}}
 
 ### HTTPSuccess{#httpsuccess}
-  
 HTTPSuccess asserts that a specified handler returns a success status code.
 
 Returns whether the assertion was successful (true) or not (false).
@@ -561,7 +555,6 @@ func httpOK(w http.ResponseWriter, _ *http.Request) {
 ## Other helpers
 
 ### HTTPBody{#httpbody}
-  
 HTTPBody is a helper that returns the HTTP body of the response.
 It returns the empty string if building a new request fails.
 

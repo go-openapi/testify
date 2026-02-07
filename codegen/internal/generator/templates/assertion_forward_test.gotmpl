@@ -13,38 +13,16 @@ import (
 {{- end }}
 
 {{- range .Functions.Scope "exclude-generics" . }}
-  {{- /* setting the appropriate context to call the test template */}}
-  {{- $call := ( printf "a.%s(" .Name ) }}
-  {{- $mock := ( printf "mock := new(%s)\na := New(mock)" .UseMock ) }}
-  {{- $errorPrefix := ( printf "%s.%s" $.Receiver .Name ) }}
-  {{- $panic := "a.Panics(" }}
-  {{- $mockFailure := .FailMsg $.Receiver "" }}
-  {{- $context := .WithTestCall $call }}
-  {{- $context = $context.WithTestMock $mock }}
-  {{- $context = $context.WithTestErrorPrefix $errorPrefix }}
-  {{- $context = $context.WithTestPanicWrapper $panic }}
-  {{- $context = $context.WithTestMockFailure $mockFailure }}
 
 func Test{{ $.Receiver }}{{ .Name }}(t *testing.T) {
-{{- template "test-case" $context }}
+{{- template "test-case" (testSetup . "forward" $.Receiver) }}
 }
 {{- end }}
 {{- if $.EnableFormat }}
   {{- range .Functions.Scope "exclude-generics" . }}
-    {{- $call := ( printf "a.%sf(" .Name ) }}
-    {{- $mock := ( printf "mock := new(%s)\na := New(mock)" .UseMock ) }}
-    {{- $errorPrefix := ( printf "%s.%sf" $.Receiver .Name ) }}
-    {{- $panic := "a.Panics(" }}
-    {{- $mockFailure :=  .FailMsg $.Receiver "f" }}
-    {{- $context := .WithTestCall $call }}
-    {{- $context = $context.WithTestMock $mock }}
-    {{- $context = $context.WithTestErrorPrefix $errorPrefix }}
-    {{- $context = $context.WithTestPanicWrapper $panic }}
-    {{- $context = $context.WithTestMockFailure $mockFailure }}
-    {{- $context = $context.WithTestMsg "test message" }}
 
 func Test{{ $.Receiver }}{{ .Name }}f(t *testing.T) {
-{{- template "test-case" $context }}
+{{- template "test-case" (testSetup . "forward-format" $.Receiver) }}
 }
   {{- end }}
 {{- end }}

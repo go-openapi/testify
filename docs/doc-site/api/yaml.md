@@ -38,7 +38,6 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### YAMLEq{#yamleq}
-  
 YAMLEq asserts that two YAML strings are equivalent.
 
 See [YAMLEqBytes](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLEqBytes).
@@ -83,7 +82,6 @@ See [YAMLEqBytes](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAM
 {{< /tabs >}}
 
 ### YAMLEqBytes{#yamleqbytes}
-  
 YAMLEqBytes asserts that two YAML slices of bytes are equivalent.
 
 Expected and actual must be valid YAML.
@@ -153,7 +151,6 @@ To enable it, you should add a blank import like so:
 {{< /tabs >}}
 
 ### YAMLEqT[EDoc, ADoc Text] {{% icon icon="star" color=orange %}}{#yamleqtedoc-adoc-text}
-  
 YAMLEqT asserts that two YAML documents are equivalent.
 
 The expected and actual arguments may be string or []byte. They do not need to be of the same type.
@@ -196,7 +193,6 @@ See [YAMLEqBytes](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAM
 {{< /tabs >}}
 
 ### YAMLMarshalAsT[EDoc Text] {{% icon icon="star" color=orange %}}{#yamlmarshalastedoc-text}
-  
 YAMLMarshalAsT wraps [YAMLEq](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLEq) after [yaml.Marshal](https://pkg.go.dev/yaml#Marshal).
 
 The input YAML may be a string or []byte.
@@ -250,7 +246,6 @@ from the expected ones.
 {{< /tabs >}}
 
 ### YAMLUnmarshalAsT[Object any, ADoc Text] {{% icon icon="star" color=orange %}}{#yamlunmarshalastobject-any-adoc-text}
-  
 YAMLUnmarshalAsT wraps [Equal](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Equal) after [yaml.Unmarshal](https://pkg.go.dev/yaml#Unmarshal).
 
 The input YAML may be a string or []byte.

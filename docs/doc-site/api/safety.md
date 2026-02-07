@@ -25,7 +25,6 @@ This domain exposes 1 functionalities.
 ```
 
 ### NoGoRoutineLeak{#nogoroutineleak}
-  
 NoGoRoutineLeak ensures that no goroutine did leak from inside the tested function.
 
 NOTE: only the go routines spawned from inside the tested function are checked for leaks.

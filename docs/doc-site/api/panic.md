@@ -34,7 +34,6 @@ This domain exposes 4 functionalities.
 ```
 
 ### NotPanics{#notpanics}
-  
 NotPanics asserts that the code inside the specified function does NOT panic.
 
 {{% expand title="Examples" %}}
@@ -113,7 +112,6 @@ func main() {
 {{< /tabs >}}
 
 ### Panics{#panics}
-  
 Panics asserts that the code inside the specified function panics.
 
 {{% expand title="Examples" %}}
@@ -193,7 +191,6 @@ func main() {
 {{< /tabs >}}
 
 ### PanicsWithError{#panicswitherror}
-  
 PanicsWithError asserts that the code inside the specified function panics,
 and that the recovered panic value is an error that satisfies the EqualError comparison.
 
@@ -275,7 +272,6 @@ func main() {
 {{< /tabs >}}
 
 ### PanicsWithValue{#panicswithvalue}
-  
 PanicsWithValue asserts that the code inside the specified function panics,
 and that the recovered panic value equals the expected panic value.
 

@@ -314,35 +314,6 @@ func (f Function) FailMsg(args ...string) string {
 	return prefix + f.Name + suffix + " should mark test as failed"
 }
 
-func (f Function) WithTestCall(in string) Function {
-	f.TestCall = in
-	return f
-}
-
-func (f Function) WithTestMock(in string) Function {
-	f.TestMock = in
-	return f
-}
-
-func (f Function) WithTestMockFailure(in string) Function {
-	f.TestMockFailure = in
-	return f
-}
-
-func (f Function) WithTestErrorPrefix(in string) Function {
-	f.TestErrorPrefix = in
-	return f
-}
-
-func (f Function) WithTestPanicWrapper(in string) Function {
-	f.TestPanicWrapper = in
-	return f
-}
-
-func (f Function) WithTestMsg(in string) Function {
-	f.TestMsg = in
-	return f
-}
 
 type Parameters []Parameter
 

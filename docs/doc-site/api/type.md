@@ -53,7 +53,6 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### Implements{#implements}
-  
 Implements asserts that an object is implemented by the specified interface.
 
 {{% expand title="Examples" %}}
@@ -143,7 +142,6 @@ func ptr[T any](value T) *T {
 {{< /tabs >}}
 
 ### IsNotOfTypeT[EType any] {{% icon icon="star" color=orange %}}{#isnotoftypetetype-any}
-  
 IsNotOfTypeT asserts that an object is not of a given type.
 
 {{% expand title="Examples" %}}
@@ -219,7 +217,6 @@ type myType float64
 {{< /tabs >}}
 
 ### IsNotType{#isnottype}
-  
 IsNotType asserts that the specified objects are not of the same type.
 
 {{% expand title="Examples" %}}
@@ -297,7 +294,6 @@ func main() {
 {{< /tabs >}}
 
 ### IsOfTypeT[EType any] {{% icon icon="star" color=orange %}}{#isoftypetetype-any}
-  
 IsOfTypeT asserts that an object is of a given type.
 
 {{% expand title="Examples" %}}
@@ -373,7 +369,6 @@ type myType float64
 {{< /tabs >}}
 
 ### IsType{#istype}
-  
 IsType asserts that the specified objects are of the same type.
 
 {{% expand title="Examples" %}}
@@ -451,7 +446,6 @@ func main() {
 {{< /tabs >}}
 
 ### Kind{#kind}
-  
 Kind asserts that the [reflect.Kind](https://pkg.go.dev/reflect#Kind) of a given object matches the expected [reflect.Kind](https://pkg.go.dev/reflect#Kind).
 
 Kind reflects the concrete value stored in the object. The nil value (or interface with nil value)
@@ -533,7 +527,6 @@ func main() {
 {{< /tabs >}}
 
 ### NotImplements{#notimplements}
-  
 NotImplements asserts that an object does not implement the specified interface.
 
 {{% expand title="Examples" %}}
@@ -611,7 +604,6 @@ func main() {
 {{< /tabs >}}
 
 ### NotKind{#notkind}
-  
 NotKind asserts that the [reflect.Kind](https://pkg.go.dev/reflect#Kind) of a given object does not match the expected [reflect.Kind](https://pkg.go.dev/reflect#Kind).
 
 Kind reflects the concrete value stored in the object. The nil value (or interface with nil value)
@@ -693,7 +685,6 @@ func main() {
 {{< /tabs >}}
 
 ### NotZero{#notzero}
-  
 NotZero asserts that i is not the zero value for its type.
 
 {{% expand title="Examples" %}}
@@ -771,7 +762,6 @@ func main() {
 {{< /tabs >}}
 
 ### Zero{#zero}
-  
 Zero asserts that i is the zero value for its type.
 
 {{% expand title="Examples" %}}

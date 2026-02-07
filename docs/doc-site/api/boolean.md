@@ -35,7 +35,6 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### False{#false}
-  
 False asserts that the specified value is false.
 
 {{% expand title="Examples" %}}
@@ -113,7 +112,6 @@ func main() {
 {{< /tabs >}}
 
 ### FalseT[B Boolean] {{% icon icon="star" color=orange %}}{#falsetb-boolean}
-  
 FalseT asserts that the specified value is false.
 
 The type constraint [Boolean](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Boolean) accepts any type which underlying type is bool.
@@ -191,7 +189,6 @@ func main() {
 {{< /tabs >}}
 
 ### True{#true}
-  
 True asserts that the specified value is true.
 
 {{% expand title="Examples" %}}
@@ -269,7 +266,6 @@ func main() {
 {{< /tabs >}}
 
 ### TrueT[B Boolean] {{% icon icon="star" color=orange %}}{#truetb-boolean}
-  
 TrueT asserts that the specified value is true.
 
 The type constraint [Boolean](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Boolean) accepts any type which underlying type is bool.
