@@ -235,26 +235,7 @@ func stripSections(in string, object any) (result, trailer []string) {
 	}
 
 	if hasTestableExamples {
-		for _, pe := range perPkgExamples {
-			trailer = append(trailer, fmt.Sprintf(`{{%% tab title="Testable Examples (%s)" %%}}`, pe.pkg))
-			trailer = append(trailer, `{{% cards %}}`)
-
-			for _, example := range pe.examples {
-				trailer = append(trailer, `{{% card href="https://go.dev/play/" %}}`)
-				trailer = append(trailer, "\n")
-				trailer = append(trailer, `*Copy and click to open Go Playground*`)
-				trailer = append(trailer, "\n")
-				trailer = append(trailer, "```go")
-				trailer = append(trailer, fmt.Sprintf("// real-world test would inject *testing.T from Test%s(t *testing.T)", funcName))
-				trailer = append(trailer, example.Render())
-				trailer = append(trailer, "```")
-				trailer = append(trailer, `{{% /card %}}`)
-				trailer = append(trailer, "\n")
-			}
-			trailer = append(trailer, `{{% /cards %}}`)
-			trailer = append(trailer, `{{< /tab >}}`)
-			trailer = append(trailer, "\n")
-		}
+		trailer = addExamples(trailer, funcName, perPkgExamples)
 	}
 
 	if tabsCollection {
@@ -263,4 +244,29 @@ func stripSections(in string, object any) (result, trailer []string) {
 	}
 
 	return result, trailer
+}
+
+func addExamples(trailer []string, funcName string, perPkgExamples []packageExamples) []string {
+	for _, pe := range perPkgExamples {
+		trailer = append(trailer, fmt.Sprintf(`{{%% tab title="Testable Examples (%s)" %%}}`, pe.pkg))
+		trailer = append(trailer, `{{% cards %}}`)
+
+		for _, example := range pe.examples {
+			trailer = append(trailer, `{{% card href="https://go.dev/play/" %}}`)
+			trailer = append(trailer, "\n")
+			trailer = append(trailer, `*Copy and click to open Go Playground*`)
+			trailer = append(trailer, "\n")
+			trailer = append(trailer, "```go")
+			trailer = append(trailer, fmt.Sprintf("// real-world test would inject *testing.T from Test%s(t *testing.T)", funcName))
+			trailer = append(trailer, example.Render())
+			trailer = append(trailer, "```")
+			trailer = append(trailer, `{{% /card %}}`)
+			trailer = append(trailer, "\n")
+		}
+		trailer = append(trailer, `{{% /cards %}}`)
+		trailer = append(trailer, `{{< /tab >}}`)
+		trailer = append(trailer, "\n")
+	}
+
+	return trailer
 }

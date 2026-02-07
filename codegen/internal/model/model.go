@@ -184,6 +184,8 @@ func (f Functions) iterScopeHelpers(yield func(Function) bool) {
 
 // Function represents an assertion function extracted from the source package.
 type Function struct {
+	TestData
+
 	ID            string
 	Name          string
 	SourcePackage string
@@ -205,10 +207,9 @@ type Function struct {
 	ExtraComments []ExtraComment
 	Examples      []Renderable // testable examples as a collection of [Renderable] examples
 	Context       *Document
-	TestData
 }
 
-// TestData holds test variabilization parameters for templates
+// TestData holds test variabilization parameters for templates.
 type TestData struct {
 	TestCall         string
 	TestMock         string
@@ -306,11 +307,15 @@ func (f Function) GenericSuffix() string {
 // Further passed args are ignored.
 func (f Function) FailMsg(args ...string) string {
 	var prefix, suffix string
+	const (
+		onlySuffix      = 1
+		prefixAndSuffix = 2
+	)
 
 	switch len(args) {
-	case 1:
+	case onlySuffix:
 		suffix = args[0]
-	case 2:
+	case prefixAndSuffix:
 		prefix = args[0] + "."
 		suffix = args[1]
 	}
@@ -321,7 +326,6 @@ func (f Function) FailMsg(args ...string) string {
 
 	return prefix + f.Name + suffix + " should mark test as failed"
 }
-
 
 type Parameters []Parameter
 
