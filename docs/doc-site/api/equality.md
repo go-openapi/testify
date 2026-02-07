@@ -92,7 +92,41 @@ Pointer values are "empty" if the pointer is nil or if the pointed value is "emp
 	failure: "not empty"
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEmpty(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.Empty(t, "")
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -174,7 +208,41 @@ Function equality cannot be determined and will always fail.
 	failure: 123, 456
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEqual(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.Equal(t, 123, 123)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -261,7 +329,46 @@ Function equality cannot be determined and will always fail.
 	failure:  &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "b", b: 1}
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEqualExportedValues(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.EqualExportedValues(t, &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "a", b: 2})
+	fmt.Printf("success: %t\n", success)
+
+}
+
+type dummyStruct struct {
+	A string
+	b int
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -350,7 +457,41 @@ use [Equal](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Equal) in
 	failure: 123, 456
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.EqualT(t, 123, 123)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -426,7 +567,41 @@ Function equality cannot be determined and will always fail.
 	failure: uint32(123), int32(456)
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEqualValues(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.EqualValues(t, uint32(123), int32(123))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -503,7 +678,41 @@ Exactly asserts that two objects are equal in value and type.
 	failure: int32(123), int64(123)
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestExactly(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.Exactly(t, int32(123), int32(123))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -580,7 +789,41 @@ Nil asserts that the specified object is nil.
 	failure: "not nil"
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNil(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.Nil(t, nil)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -659,7 +902,41 @@ NotEmpty asserts that the specified object is NOT [Empty](https://pkg.go.dev/git
 	failure: ""
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotEmpty(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.NotEmpty(t, "not empty")
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -739,7 +1016,41 @@ Function equality cannot be determined and will always fail.
 	failure: 123, 123
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotEqual(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.NotEqual(t, 123, 456)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -818,7 +1129,41 @@ See [EqualT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualT).
 	failure: 123, 123
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.NotEqualT(t, 123, 456)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -893,7 +1238,41 @@ Function equality cannot be determined and will always fail.
 	failure: uint32(123), int32(123)
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotEqualValues(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.NotEqualValues(t, uint32(123), int32(456))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -970,7 +1349,41 @@ assertions.NotNil(t, err)
 	failure: nil
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotNil(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.NotNil(t, "not nil")
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -1049,7 +1462,49 @@ See [Same](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Same).
 	failure: &staticVar, staticVarPtr
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotSame(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.NotSame(t, &staticVar, ptr("static string"))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+var staticVar = "static string"
+
+func ptr[T any](value T) *T {
+	p := value
+
+	return &p
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -1136,7 +1591,49 @@ See [SameT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SameT).
 	failure: &staticVar, staticVarPtr
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotSameT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.NotSameT(t, &staticVar, ptr("static string"))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+var staticVar = "static string"
+
+func ptr[T any](value T) *T {
+	p := value
+
+	return &p
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -1223,7 +1720,46 @@ Unlike [Equal](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Equal)
 	failure: &staticVar, ptr("static string")
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestSame(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.Same(t, &staticVar, staticVarPtr)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+var (
+	staticVar    = "static string"
+	staticVarPtr = &staticVar
+)
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -1307,7 +1843,46 @@ See [Same](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Same).
 	failure: &staticVar, ptr("static string")
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestSameT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.SameT(t, &staticVar, staticVarPtr)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+var (
+	staticVar    = "static string"
+	staticVarPtr = &staticVar
+)
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 

@@ -53,7 +53,12 @@ func moduleName() string {
 		return ""
 	}
 
-	return info.Main.Path
+	if info.Main.Path != "" {
+		return info.Main.Path
+	}
+
+	// default when not running in module mode, e.g. go run/go generate
+	return "github.com/go-openapi/testify/codegen/v2"
 }
 
 func moduleVersion() string {

@@ -138,6 +138,12 @@ func godocLinks(in string) string {
 	return strings.Join(lines, "\n")
 }
 
+// packageExamples groups testable examples by generated package (assert, require).
+type packageExamples struct {
+	pkg      string
+	examples []model.Renderable
+}
+
 // stripSections renders Usage and Examples sections with Hugo shortcodes.
 // These are rendered as tabs.
 //
@@ -147,12 +153,25 @@ func stripSections(in string, object any) (result, trailer []string) {
 	trailer = make([]string, 0, sensiblePrealloc)
 
 	var (
-		testableExamples []model.Renderable
-		funcName         string
+		perPkgExamples []packageExamples
+		funcName       string
 	)
 	if function, ok := (object).(model.Function); ok {
-		testableExamples = function.Examples
 		funcName = function.Name
+
+		// Testable examples live in the generated packages (assert, require),
+		// not in the source assertions package. Look them up via the document
+		// context which carries pointers to the generated packages.
+		if function.Context != nil {
+			for _, fwc := range function.Context.ExtraPackages.LookupFunction(funcName) {
+				if len(fwc.Examples) > 0 {
+					perPkgExamples = append(perPkgExamples, packageExamples{
+						pkg:      fwc.Package,
+						examples: fwc.Examples,
+					})
+				}
+			}
+		}
 	}
 
 	// parse state
@@ -195,7 +214,7 @@ func stripSections(in string, object any) (result, trailer []string) {
 			tabsCollection = true
 		}
 
-		if strings.EqualFold(section, "Examples") && len(testableExamples) > 0 {
+		if strings.EqualFold(section, "Examples") && len(perPkgExamples) > 0 {
 			hasTestableExamples = true
 			continue // skip : we'll add testable examples below
 		}
@@ -216,25 +235,26 @@ func stripSections(in string, object any) (result, trailer []string) {
 	}
 
 	if hasTestableExamples {
-		trailer = append(trailer, `{{% tab title="Testable Examples" %}}`)
-		trailer = append(trailer, `{{% cards %}}`)
-		tabsCollection = true
+		for _, pe := range perPkgExamples {
+			trailer = append(trailer, fmt.Sprintf(`{{%% tab title="Testable Examples (%s)" %%}}`, pe.pkg))
+			trailer = append(trailer, `{{% cards %}}`)
 
-		for _, example := range testableExamples {
-			trailer = append(trailer, `{{% card href="https://go.dev/play/" %}}`)
-			trailer = append(trailer, "\n")
-			trailer = append(trailer, `*Copy and click to open Go Playground*`)
-			trailer = append(trailer, "\n")
-			trailer = append(trailer, "```go")
-			trailer = append(trailer, fmt.Sprintf("// real-world test would inject *testing.T from Test%s(t *testing.T)", funcName))
-			trailer = append(trailer, example.Render())
-			trailer = append(trailer, "```")
-			trailer = append(trailer, `{{% /card %}}`)
+			for _, example := range pe.examples {
+				trailer = append(trailer, `{{% card href="https://go.dev/play/" %}}`)
+				trailer = append(trailer, "\n")
+				trailer = append(trailer, `*Copy and click to open Go Playground*`)
+				trailer = append(trailer, "\n")
+				trailer = append(trailer, "```go")
+				trailer = append(trailer, fmt.Sprintf("// real-world test would inject *testing.T from Test%s(t *testing.T)", funcName))
+				trailer = append(trailer, example.Render())
+				trailer = append(trailer, "```")
+				trailer = append(trailer, `{{% /card %}}`)
+				trailer = append(trailer, "\n")
+			}
+			trailer = append(trailer, `{{% /cards %}}`)
+			trailer = append(trailer, `{{< /tab >}}`)
 			trailer = append(trailer, "\n")
 		}
-		trailer = append(trailer, `{{% /cards %}}`)
-		trailer = append(trailer, `{{< /tab >}}`)
-		trailer = append(trailer, "\n")
 	}
 
 	if tabsCollection {

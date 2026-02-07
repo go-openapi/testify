@@ -82,6 +82,14 @@ func (a *AssertionPackage) Clone() *AssertionPackage {
 	b := *a
 	maps.Copy(b.Imports, a.Imports)
 
+	// Deep-copy slices so the clone has its own backing arrays.
+	// Without this, transformModel writes through the shared backing
+	// array and clobbers the source data used by other generators.
+	b.Functions = slices.Clone(a.Functions)
+	b.Types = slices.Clone(a.Types)
+	b.Consts = slices.Clone(a.Consts)
+	b.Vars = slices.Clone(a.Vars)
+
 	return &b
 }
 

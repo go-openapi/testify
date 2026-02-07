@@ -55,7 +55,48 @@ Returns whether the assertion was successful (true) or not (false).
 	failure: httpBody, "GET", "/", url.Values{"name": []string{"Bob"}}, "Hello, World!"
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestHTTPBodyContains(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"net/url"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.HTTPBodyContains(t, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, World!")
+	fmt.Printf("success: %t\n", success)
+
+}
+
+func httpBody(w http.ResponseWriter, r *http.Request) {
+	name := r.FormValue("name")
+	_, _ = fmt.Fprintf(w, "Hello, %s!", name)
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -142,7 +183,48 @@ Returns whether the assertion was successful (true) or not (false).
 	failure: httpBody, "GET", "/", url.Values{"name": []string{"Bob"}}, "Hello, Bob!"
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestHTTPBodyNotContains(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"net/url"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.HTTPBodyNotContains(t, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, Bob!")
+	fmt.Printf("success: %t\n", success)
+
+}
+
+func httpBody(w http.ResponseWriter, r *http.Request) {
+	name := r.FormValue("name")
+	_, _ = fmt.Fprintf(w, "Hello, %s!", name)
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -228,7 +310,46 @@ Returns whether the assertion was successful (true) or not (false).
 	failure: httpOK, "GET", "/", nil
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestHTTPError(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.HTTPError(t, httpError, "GET", "/", nil)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+func httpError(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusInternalServerError)
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -312,7 +433,46 @@ Returns whether the assertion was successful (true) or not (false).
 	failure: httpError, "GET", "/", nil
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestHTTPRedirect(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.HTTPRedirect(t, httpRedirect, "GET", "/", nil)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+func httpRedirect(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusTemporaryRedirect)
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -396,7 +556,46 @@ Returns whether the assertion was successful (true) or not (false).
 	failure: httpError, "GET", "/", nil, http.StatusOK
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestHTTPStatusCode(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.HTTPStatusCode(t, httpOK, "GET", "/", nil, http.StatusOK)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+func httpOK(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
@@ -480,7 +679,46 @@ Returns whether the assertion was successful (true) or not (false).
 	failure: httpError, "GET", "/", nil
 ```
 {{< /tab >}}
-{{% tab title="Testable Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestHTTPSuccess(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T)
+	success := assert.HTTPSuccess(t, httpOK, "GET", "/", nil)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+func httpOK(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
 {{% card href="https://go.dev/play/" %}}
 
