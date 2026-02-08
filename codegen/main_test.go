@@ -7,7 +7,6 @@ import (
 	"iter"
 	"os"
 	"os/exec"
-	"path"
 	"path/filepath"
 	"slices"
 	"testing"
@@ -194,7 +193,7 @@ func invalidConfigCases(dir string) iter.Seq[invalidConfigCase] {
 //nolint:gosec // "tainted" args exec is actually okay in tests
 func goModInit(t *testing.T, location, source string) {
 	t.Run("should init go.mod", func(t *testing.T) {
-		mod := exec.CommandContext(t.Context(), "go", "mod", "init", path.Base(location))
+		mod := exec.CommandContext(t.Context(), "go", "mod", "init", filepath.Base(location))
 		mod.Dir = location
 		output, err := mod.CombinedOutput()
 		if err != nil {
