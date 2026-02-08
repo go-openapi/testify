@@ -16,9 +16,11 @@ import (
 )
 
 const (
-	pkgRequire = "require"
-	pkgAssert  = "assert"
-	assertions = "assertions"
+	pkgRequire      = "require"
+	pkgAssert       = "assert"
+	assertions      = "assertions"
+	mockWithFailNow = "mockFailNowT"
+	mock            = "mockT"
 )
 
 const (
@@ -321,9 +323,9 @@ func (g *Generator) transformFunc(fn model.Function) model.Function {
 	fn.AllParams = g.transformArgs(fn.AllParams)
 	fn.Returns = g.transformArgs(fn.Returns)
 	if fn.Name == "FailNow" || g.ctx.targetBase == pkgRequire {
-		fn.UseMock = "mockFailNowT"
+		fn.UseMock = mockWithFailNow
 	} else {
-		fn.UseMock = "mockT"
+		fn.UseMock = mock
 	}
 
 	for i, test := range fn.Tests {

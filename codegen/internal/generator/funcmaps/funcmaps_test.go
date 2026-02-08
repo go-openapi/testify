@@ -813,3 +813,214 @@ func godocbadgeCases() iter.Seq[godocbadgeCase] {
 		},
 	})
 }
+
+// TestSlugize verifies slugize converts names to markdown slugs.
+func TestSlugize(t *testing.T) {
+	t.Parallel()
+
+	for tt := range slugizeCases() {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := slugize(tt.input); got != tt.expected {
+				t.Errorf("slugize(%q) = %q, want %q", tt.input, got, tt.expected)
+			}
+		})
+	}
+}
+
+type slugizeCase struct {
+	name     string
+	input    string
+	expected string
+}
+
+func slugizeCases() iter.Seq[slugizeCase] {
+	return slices.Values([]slugizeCase{
+		{
+			name:     "simple name",
+			input:    "Equal",
+			expected: "equal",
+		},
+		{
+			name:     "with dots",
+			input:    "assert.Equal",
+			expected: "assert-equal",
+		},
+		{
+			name:     "with underscores",
+			input:    "my_function",
+			expected: "my-function",
+		},
+		{
+			name:     "with spaces",
+			input:    "My Function",
+			expected: "my-function",
+		},
+		{
+			name:     "with brackets",
+			input:    "Greater[T cmp.Ordered]",
+			expected: "greatert-cmp-ordered",
+		},
+		{
+			name:     "with colons and tabs",
+			input:    "section:\ttitle",
+			expected: "section--title",
+		},
+		{
+			name:     "with commas and tildes",
+			input:    "A, B~C",
+			expected: "a-bc",
+		},
+	})
+}
+
+// TestBlockquote verifies blockquote formatting.
+func TestBlockquote(t *testing.T) {
+	t.Parallel()
+
+	for tt := range blockquoteCases() {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := blockquote(tt.input); got != tt.expected {
+				t.Errorf("blockquote(%q) = %q, want %q", tt.input, got, tt.expected)
+			}
+		})
+	}
+}
+
+type blockquoteCase struct {
+	name     string
+	input    string
+	expected string
+}
+
+func blockquoteCases() iter.Seq[blockquoteCase] {
+	return slices.Values([]blockquoteCase{
+		{
+			name:     "single line",
+			input:    "Hello world",
+			expected: "> Hello world",
+		},
+		{
+			name:     "line ending with period",
+			input:    "Hello world.",
+			expected: "> Hello world.\n>",
+		},
+		{
+			name:     "multi-line",
+			input:    "Line 1.\nLine 2",
+			expected: "> Line 1.\n>\n> Line 2",
+		},
+	})
+}
+
+// TestHugoDelimiters verifies Hugo template delimiter functions.
+func TestHugoDelimiters(t *testing.T) {
+	t.Parallel()
+
+	if got := hugoopen(); got != "{{" {
+		t.Errorf("hugoopen() = %q, want %q", got, "{{")
+	}
+	if got := hugoclose(); got != "}}" {
+		t.Errorf("hugoclose() = %q, want %q", got, "}}")
+	}
+}
+
+// TestShouldLineFeed verifies conditional line feed.
+func TestShouldLineFeed(t *testing.T) {
+	t.Parallel()
+
+	if got := shouldLineFeed(true); got != "" {
+		t.Errorf("shouldLineFeed(true) = %q, want empty", got)
+	}
+	if got := shouldLineFeed(false); got != "\n" {
+		t.Errorf(`shouldLineFeed(false) = %q, want "\n"`, got)
+	}
+}
+
+// TestTestSetup verifies test parameterization for all variants.
+func TestTestSetup(t *testing.T) {
+	t.Parallel()
+
+	for tt := range testSetupCases() {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			fn := model.Function{
+				Name:    "Equal",
+				UseMock: tt.useMock,
+			}
+
+			result := testSetup(fn, tt.variant, tt.receiver)
+
+			if result.TestCall != tt.expectedCall {
+				t.Errorf("TestCall = %q, want %q", result.TestCall, tt.expectedCall)
+			}
+			if result.TestMock != tt.expectedMock {
+				t.Errorf("TestMock = %q, want %q", result.TestMock, tt.expectedMock)
+			}
+			if result.TestErrorPrefix != tt.expectedPrefix {
+				t.Errorf("TestErrorPrefix = %q, want %q", result.TestErrorPrefix, tt.expectedPrefix)
+			}
+			if result.TestMsg != tt.expectedMsg {
+				t.Errorf("TestMsg = %q, want %q", result.TestMsg, tt.expectedMsg)
+			}
+		})
+	}
+}
+
+type testSetupCase struct {
+	name           string
+	variant        string
+	receiver       string
+	useMock        string
+	expectedCall   string
+	expectedMock   string
+	expectedPrefix string
+	expectedMsg    string
+}
+
+func testSetupCases() iter.Seq[testSetupCase] {
+	return slices.Values([]testSetupCase{
+		{
+			name:           "assertions variant",
+			variant:        "assertions",
+			useMock:        "mockT",
+			expectedCall:   "Equal(mock, ",
+			expectedMock:   "mock := new(mockT)",
+			expectedPrefix: "Equal",
+			expectedMsg:    "",
+		},
+		{
+			name:           "format variant",
+			variant:        "format",
+			useMock:        "mockT",
+			expectedCall:   "Equalf(mock, ",
+			expectedMock:   "mock := new(mockT)",
+			expectedPrefix: "Equalf",
+			expectedMsg:    "test message",
+		},
+		{
+			name:           "forward variant",
+			variant:        "forward",
+			receiver:       "Assertions",
+			useMock:        "mockT",
+			expectedCall:   "a.Equal(",
+			expectedMock:   "mock := new(mockT)\na := New(mock)",
+			expectedPrefix: "Assertions.Equal",
+			expectedMsg:    "",
+		},
+		{
+			name:           "forward-format variant",
+			variant:        "forward-format",
+			receiver:       "Assertions",
+			useMock:        "mockT",
+			expectedCall:   "a.Equalf(",
+			expectedMock:   "mock := new(mockT)\na := New(mock)",
+			expectedPrefix: "Assertions.Equalf",
+			expectedMsg:    "test message",
+		},
+	})
+}

@@ -8,11 +8,17 @@ import (
 	"slices"
 	"strings"
 	"testing"
+
+	"github.com/go-openapi/testify/codegen/v2/internal/model"
 )
 
 func TestMarkdownFormatEnhanced(t *testing.T) {
+	t.Parallel()
+
 	for tt := range markdownTestCases() {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			result := FormatMarkdown(tt.input, nil)
 
 			for _, want := range tt.contains {
@@ -30,7 +36,209 @@ func TestMarkdownFormatEnhanced(t *testing.T) {
 	}
 }
 
-func TestMarkdownFormatEnhanced_Output(t *testing.T) {
+// mockRenderable implements model.Renderable for testing.
+type mockRenderable struct {
+	content string
+}
+
+func (m mockRenderable) Render() string {
+	return m.content
+}
+
+// TestFormatMarkdownWithFunction verifies FormatMarkdown with a Function object
+// that has Context and testable examples - this exercises the stripSections
+// branch for Example sections and the addExamples path.
+func TestFormatMarkdownWithFunction(t *testing.T) {
+	t.Parallel()
+
+	// Build a Function with Context that has ExtraPackages containing examples
+	assertPkg := &model.AssertionPackage{
+		Package:  "assert",
+		Receiver: "Assertions",
+		Functions: model.Functions{
+			{
+				Name: "Equal",
+				Examples: []model.Renderable{
+					mockRenderable{content: "assert.Equal(t, 1, 1)"},
+				},
+			},
+		},
+	}
+
+	doc := &model.Document{
+		ExtraPackages: model.ExtraPackages{assertPkg},
+	}
+
+	fn := model.Function{
+		Name:    "Equal",
+		Context: doc,
+	}
+
+	input := `Equal asserts that two objects are equal.
+
+# Usage
+
+	assertions.Equal(t, expected, actual)
+
+# Examples
+
+	success: 123, 123
+	failure: 123, 456`
+
+	result := FormatMarkdown(input, fn)
+
+	// Should contain Hugo tab structure
+	if !strings.Contains(result, `{{% expand title="Examples" %}}`) {
+		t.Error("Expected expand shortcode in output")
+	}
+	if !strings.Contains(result, `{{< tabs >}}`) {
+		t.Error("Expected tabs shortcode in output")
+	}
+
+	// Should contain testable examples tab
+	if !strings.Contains(result, `Testable Examples (assert)`) {
+		t.Error("Expected Testable Examples tab in output")
+	}
+
+	// Should contain the rendered example
+	if !strings.Contains(result, "assert.Equal(t, 1, 1)") {
+		t.Error("Expected rendered example code in output")
+	}
+
+	// Should contain cards shortcode
+	if !strings.Contains(result, `{{% cards %}}`) {
+		t.Error("Expected cards shortcode in output")
+	}
+
+	// Should contain Go Playground link
+	if !strings.Contains(result, "go.dev/play") {
+		t.Error("Expected Go Playground link in output")
+	}
+}
+
+// TestFormatMarkdownWithFunctionNoExamples verifies the Examples section
+// is rendered as a regular code tab when no testable examples exist.
+func TestFormatMarkdownWithFunctionNoExamples(t *testing.T) {
+	t.Parallel()
+
+	fn := model.Function{
+		Name:    "Equal",
+		Context: nil, // no context
+	}
+
+	input := `Equal asserts that two objects are equal.
+
+# Examples
+
+	success: 123, 123`
+
+	result := FormatMarkdown(input, fn)
+
+	// Should still have tab structure
+	if !strings.Contains(result, `{{% expand title="Examples" %}}`) {
+		t.Error("Expected expand shortcode in output")
+	}
+
+	// Should NOT have testable examples (no context with packages)
+	if strings.Contains(result, "Testable Examples") {
+		t.Error("Should not have Testable Examples when no packages available")
+	}
+}
+
+// TestFormatMarkdownWithMultipleSections verifies sections beyond Usage/Examples
+// are rendered with increased heading depth.
+func TestFormatMarkdownWithMultipleSections(t *testing.T) {
+	t.Parallel()
+
+	input := `Some description.
+
+# Usage
+
+	assertions.Something(t)
+
+# Details
+
+More info about the function.
+
+# Examples
+
+	success: true`
+
+	result := FormatMarkdown(input, nil)
+
+	// "Details" is not a tab-captured section, it should stay in the result
+	// but with increased heading depth (# → ####)
+	if !strings.Contains(result, "#### Details") {
+		t.Error("Non-tab section should have increased heading depth")
+	}
+
+	// The description should be in the main body
+	if !strings.Contains(result, "Some description.") {
+		t.Error("Description should be in main body")
+	}
+}
+
+func TestFormatMarkdownWithMultiplePackages(t *testing.T) {
+	t.Parallel()
+
+	assertPkg := &model.AssertionPackage{
+		Package: "assert",
+		Functions: model.Functions{
+			{
+				Name: "Equal",
+				Examples: []model.Renderable{
+					mockRenderable{content: "assert.Equal(t, 1, 1)"},
+				},
+			},
+		},
+	}
+	requirePkg := &model.AssertionPackage{
+		Package: "require",
+		Functions: model.Functions{
+			{
+				Name: "Equal",
+				Examples: []model.Renderable{
+					mockRenderable{content: "require.Equal(t, 1, 1)"},
+				},
+			},
+		},
+	}
+
+	doc := &model.Document{
+		ExtraPackages: model.ExtraPackages{assertPkg, requirePkg},
+	}
+
+	fn := model.Function{
+		Name:    "Equal",
+		Context: doc,
+	}
+
+	input := `Equal asserts equality.
+
+# Examples
+
+	success: 123, 123`
+
+	result := FormatMarkdown(input, fn)
+
+	// Should have tabs for both packages
+	if !strings.Contains(result, `Testable Examples (assert)`) {
+		t.Error("Expected assert examples tab")
+	}
+	if !strings.Contains(result, `Testable Examples (require)`) {
+		t.Error("Expected require examples tab")
+	}
+
+	// Both rendered examples should appear
+	if !strings.Contains(result, "assert.Equal(t, 1, 1)") {
+		t.Error("Expected assert rendered example")
+	}
+	if !strings.Contains(result, "require.Equal(t, 1, 1)") {
+		t.Error("Expected require rendered example")
+	}
+}
+
+func TestFormatMarkdownOutput_Debug(t *testing.T) {
 	input := `Empty asserts that the given value is "empty".
 
 Zero values are "empty".
