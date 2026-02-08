@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 
 package assert
 
@@ -411,7 +410,7 @@ func Eventually(t T, condition func() bool, waitFor time.Duration, tick time.Dur
 	return assertions.Eventually(t, condition, waitFor, tick, msgAndArgs...)
 }
 
-// EventuallyWithT asserts that the given condition will be met in waitFor time,
+// EventuallyWith asserts that the given condition will be met in waitFor time,
 // periodically checking the target function at each tick.
 //
 // In contrast to [Eventually], the condition function is supplied with a [CollectT]
@@ -433,7 +432,7 @@ func Eventually(t T, condition func() bool, waitFor time.Duration, tick time.Dur
 //		externalValue = true
 //	}()
 //
-//	assertions.EventuallyWithT(t, func(c *assertions.CollectT) {
+//	assertions.EventuallyWith(t, func(c *assertions.CollectT) {
 //		// add assertions as needed; any assertion failure will fail the current tick
 //		assertions.True(c, externalValue, "expected 'externalValue' to be true")
 //	},
@@ -453,11 +452,11 @@ func Eventually(t T, condition func() bool, waitFor time.Duration, tick time.Dur
 //	failure: func(c *CollectT) { False(c,true) }, 100*time.Millisecond, 20*time.Millisecond
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func EventuallyWithT(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+func EventuallyWith(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.EventuallyWithT(t, condition, waitFor, tick, msgAndArgs...)
+	return assertions.EventuallyWith(t, condition, waitFor, tick, msgAndArgs...)
 }
 
 // Exactly asserts that two objects are equal in value and type.
@@ -1403,6 +1402,68 @@ func JSONEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any
 	return assertions.JSONEqT[EDoc, ADoc](t, expected, actual, msgAndArgs...)
 }
 
+// JSONMarshalAsT wraps [JSONEq] after [json.Marshal].
+//
+// The input JSON may be a string or []byte.
+//
+// It fails if the marshaling returns an error or if the expected JSON bytes differ semantically
+// from the expected ones.
+//
+// # Usage
+//
+//	actual := struct {
+//		A int `json:"a"`
+//	}{
+//		A: 10,
+//	}
+//
+//	assertions.JSONUnmarshalAsT(t,expected, `{"a": 10}`)
+//
+// # Examples
+//
+//	success: []byte(`{"A": "a"}`), dummyStruct{A: "a"}
+//	failure: `[{"foo": "bar"}, {"hello": "world"}]`, 1
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func JSONMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.JSONMarshalAsT[EDoc](t, expected, object, msgAndArgs...)
+}
+
+// JSONUnmarshalAsT wraps [Equal] after [json.Unmarshal].
+//
+// The input JSON may be a string or []byte.
+//
+// It fails if the unmarshaling returns an error or if the resulting object is not equal to the expected one.
+//
+// Be careful not to wrap the expected object into an "any" interface if this is not what you expected:
+// the unmarshaling would take this type to unmarshal as a map[string]any.
+//
+// # Usage
+//
+//	expected := struct {
+//		A int `json:"a"`
+//	}{
+//		A: 10,
+//	}
+//
+//	assertions.JSONUnmarshalAsT(t,expected, `{"a": 10}`)
+//
+// # Examples
+//
+//	success: dummyStruct{A: "a"} , []byte(`{"A": "a"}`)
+//	failure: 1, `[{"foo": "bar"}, {"hello": "world"}]`
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func JSONUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.JSONUnmarshalAsT[Object, ADoc](t, expected, jazon, msgAndArgs...)
+}
+
 // Kind asserts that the [reflect.Kind] of a given object matches the expected [reflect.Kind].
 //
 // Kind reflects the concrete value stored in the object. The nil value (or interface with nil value)
@@ -1714,6 +1775,46 @@ func NoError(t T, err error, msgAndArgs ...any) bool {
 		h.Helper()
 	}
 	return assertions.NoError(t, err, msgAndArgs...)
+}
+
+// NoGoRoutineLeak ensures that no goroutine did leak from inside the tested function.
+//
+// NOTE: only the go routines spawned from inside the tested function are checked for leaks.
+// No filter or configuration is needed to exclude "known go routines".
+//
+// Resource cleanup should be done inside the tested function, and not using [testing.T.Cleanup],
+// as t.Cleanup is called after the leak check.
+//
+// # Edge cases
+//
+//   - if the tested function panics leaving behind leaked goroutines, these are detected.
+//   - if the tested function calls runtime.Goexit (e.g. from [testing.T.FailNow]) leaving behind leaked goroutines,
+//     these are detected.
+//   - if a panic occurs in one of the leaked go routines, it cannot be recovered with certainty and
+//     the calling program will usually panic.
+//
+// # Concurrency
+//
+// [NoGoRoutineLeak] may be used safely in parallel tests.
+//
+// # Usage
+//
+//	NoGoRoutineLeak(t, func() {
+//		...
+//	},
+//	"should not leak any go routine",
+//	)
+//
+// # Examples
+//
+//	success: func() {}
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.NoGoRoutineLeak(t, tested, msgAndArgs...)
 }
 
 // NotContains asserts that the specified string, list(array, slice...) or map does NOT contain the
@@ -2711,6 +2812,68 @@ func YAMLEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any
 		h.Helper()
 	}
 	return assertions.YAMLEqT[EDoc, ADoc](t, expected, actual, msgAndArgs...)
+}
+
+// YAMLMarshalAsT wraps [YAMLEq] after [yaml.Marshal].
+//
+// The input YAML may be a string or []byte.
+//
+// It fails if the marshaling returns an error or if the expected YAML bytes differ semantically
+// from the expected ones.
+//
+// # Usage
+//
+//	actual := struct {
+//		A int `yaml:"a"`
+//	}{
+//		A: 10,
+//	}
+//
+//	assertions.YAMLUnmarshalAsT(t,expected, `{"a": 10}`)
+//
+// # Examples
+//
+//	panic: "key: value", "key: value"
+//	should panic without the yaml feature enabled.
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func YAMLMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.YAMLMarshalAsT[EDoc](t, expected, object, msgAndArgs...)
+}
+
+// YAMLUnmarshalAsT wraps [Equal] after [yaml.Unmarshal].
+//
+// The input YAML may be a string or []byte.
+//
+// It fails if the unmarshaling returns an error or if the resulting object is not equal to the expected one.
+//
+// Be careful not to wrap the expected object into an "any" interface if this is not what you expected:
+// the unmarshaling would take this type to unmarshal as a map[string]any.
+//
+// # Usage
+//
+//	expected := struct {
+//		A int `yaml:"a"`
+//	}{
+//		A: 10,
+//	}
+//
+//	assertions.YAMLUnmarshalAsT(t,expected, `{"a": 10}`)
+//
+// # Examples
+//
+//	panic: "key: value", "key: value"
+//	should panic without the yaml feature enabled.
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func YAMLUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.YAMLUnmarshalAsT[Object, ADoc](t, expected, jazon, msgAndArgs...)
 }
 
 // Zero asserts that i is the zero value for its type.

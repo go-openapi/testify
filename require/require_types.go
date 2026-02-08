@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 
 package require
 
@@ -29,7 +28,7 @@ type (
 
 	// CollectT implements the [T] interface and collects all errors.
 	//
-	// [CollectT] is specifically intended to be used with [EventuallyWithT] and
+	// [CollectT] is specifically intended to be used with [EventuallyWith] and
 	// should not be used outside of that context.
 	CollectT = assertions.CollectT
 

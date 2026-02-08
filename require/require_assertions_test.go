@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Code generated with github.com/go-openapi/testify/codegen/v2; DO NOT EDIT.
-// Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 
 package require
 
@@ -20,9 +19,12 @@ import (
 
 func TestCondition(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Condition(t, func() bool { return true })
+
+		mock := new(mockFailNowT)
+		Condition(mock, func() bool { return true })
 		// require functions don't return a value
 	})
 
@@ -40,9 +42,12 @@ func TestCondition(t *testing.T) {
 
 func TestContains(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Contains(t, []string{"A", "B"}, "A")
+
+		mock := new(mockFailNowT)
+		Contains(mock, []string{"A", "B"}, "A")
 		// require functions don't return a value
 	})
 
@@ -60,9 +65,12 @@ func TestContains(t *testing.T) {
 
 func TestDirExists(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		DirExists(t, filepath.Join(testDataPath(), "existing_dir"))
+
+		mock := new(mockFailNowT)
+		DirExists(mock, filepath.Join(testDataPath(), "existing_dir"))
 		// require functions don't return a value
 	})
 
@@ -80,9 +88,12 @@ func TestDirExists(t *testing.T) {
 
 func TestDirNotExists(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		DirNotExists(t, filepath.Join(testDataPath(), "non_existing_dir"))
+
+		mock := new(mockFailNowT)
+		DirNotExists(mock, filepath.Join(testDataPath(), "non_existing_dir"))
 		// require functions don't return a value
 	})
 
@@ -100,9 +111,12 @@ func TestDirNotExists(t *testing.T) {
 
 func TestElementsMatch(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		ElementsMatch(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
+
+		mock := new(mockFailNowT)
+		ElementsMatch(mock, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
 		// require functions don't return a value
 	})
 
@@ -120,9 +134,12 @@ func TestElementsMatch(t *testing.T) {
 
 func TestElementsMatchT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		ElementsMatchT(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
+
+		mock := new(mockFailNowT)
+		ElementsMatchT(mock, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
 		// require functions don't return a value
 	})
 
@@ -140,9 +157,12 @@ func TestElementsMatchT(t *testing.T) {
 
 func TestEmpty(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Empty(t, "")
+
+		mock := new(mockFailNowT)
+		Empty(mock, "")
 		// require functions don't return a value
 	})
 
@@ -160,9 +180,12 @@ func TestEmpty(t *testing.T) {
 
 func TestEqual(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Equal(t, 123, 123)
+
+		mock := new(mockFailNowT)
+		Equal(mock, 123, 123)
 		// require functions don't return a value
 	})
 
@@ -180,9 +203,12 @@ func TestEqual(t *testing.T) {
 
 func TestEqualError(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		EqualError(t, ErrTest, "assert.ErrTest general error for testing")
+
+		mock := new(mockFailNowT)
+		EqualError(mock, ErrTest, "assert.ErrTest general error for testing")
 		// require functions don't return a value
 	})
 
@@ -200,9 +226,12 @@ func TestEqualError(t *testing.T) {
 
 func TestEqualExportedValues(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		EqualExportedValues(t, &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "a", b: 2})
+
+		mock := new(mockFailNowT)
+		EqualExportedValues(mock, &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "a", b: 2})
 		// require functions don't return a value
 	})
 
@@ -220,9 +249,12 @@ func TestEqualExportedValues(t *testing.T) {
 
 func TestEqualT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		EqualT(t, 123, 123)
+
+		mock := new(mockFailNowT)
+		EqualT(mock, 123, 123)
 		// require functions don't return a value
 	})
 
@@ -240,9 +272,12 @@ func TestEqualT(t *testing.T) {
 
 func TestEqualValues(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		EqualValues(t, uint32(123), int32(123))
+
+		mock := new(mockFailNowT)
+		EqualValues(mock, uint32(123), int32(123))
 		// require functions don't return a value
 	})
 
@@ -260,9 +295,12 @@ func TestEqualValues(t *testing.T) {
 
 func TestError(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Error(t, ErrTest)
+
+		mock := new(mockFailNowT)
+		Error(mock, ErrTest)
 		// require functions don't return a value
 	})
 
@@ -280,9 +318,12 @@ func TestError(t *testing.T) {
 
 func TestErrorAs(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		ErrorAs(t, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
+
+		mock := new(mockFailNowT)
+		ErrorAs(mock, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
 		// require functions don't return a value
 	})
 
@@ -300,9 +341,12 @@ func TestErrorAs(t *testing.T) {
 
 func TestErrorContains(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		ErrorContains(t, ErrTest, "general error")
+
+		mock := new(mockFailNowT)
+		ErrorContains(mock, ErrTest, "general error")
 		// require functions don't return a value
 	})
 
@@ -320,9 +364,12 @@ func TestErrorContains(t *testing.T) {
 
 func TestErrorIs(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		ErrorIs(t, fmt.Errorf("wrap: %w", io.EOF), io.EOF)
+
+		mock := new(mockFailNowT)
+		ErrorIs(mock, fmt.Errorf("wrap: %w", io.EOF), io.EOF)
 		// require functions don't return a value
 	})
 
@@ -340,9 +387,12 @@ func TestErrorIs(t *testing.T) {
 
 func TestEventually(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Eventually(t, func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond)
+
+		mock := new(mockFailNowT)
+		Eventually(mock, func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond)
 		// require functions don't return a value
 	})
 
@@ -358,11 +408,14 @@ func TestEventually(t *testing.T) {
 	})
 }
 
-func TestEventuallyWithT(t *testing.T) {
+func TestEventuallyWith(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		EventuallyWithT(t, func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
+
+		mock := new(mockFailNowT)
+		EventuallyWith(mock, func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
 		// require functions don't return a value
 	})
 
@@ -370,19 +423,22 @@ func TestEventuallyWithT(t *testing.T) {
 		t.Parallel()
 
 		mock := new(mockFailNowT)
-		EventuallyWithT(mock, func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
+		EventuallyWith(mock, func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
 		// require functions don't return a value
 		if !mock.failed {
-			t.Error("EventuallyWithT should call FailNow()")
+			t.Error("EventuallyWith should call FailNow()")
 		}
 	})
 }
 
 func TestExactly(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Exactly(t, int32(123), int32(123))
+
+		mock := new(mockFailNowT)
+		Exactly(mock, int32(123), int32(123))
 		// require functions don't return a value
 	})
 
@@ -400,6 +456,7 @@ func TestExactly(t *testing.T) {
 
 func TestFail(t *testing.T) {
 	t.Parallel()
+
 	t.Run("failure", func(t *testing.T) {
 		t.Parallel()
 
@@ -414,6 +471,7 @@ func TestFail(t *testing.T) {
 
 func TestFailNow(t *testing.T) {
 	t.Parallel()
+
 	t.Run("failure", func(t *testing.T) {
 		t.Parallel()
 
@@ -428,9 +486,12 @@ func TestFailNow(t *testing.T) {
 
 func TestFalse(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		False(t, 1 == 0)
+
+		mock := new(mockFailNowT)
+		False(mock, 1 == 0)
 		// require functions don't return a value
 	})
 
@@ -448,9 +509,12 @@ func TestFalse(t *testing.T) {
 
 func TestFalseT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		FalseT(t, 1 == 0)
+
+		mock := new(mockFailNowT)
+		FalseT(mock, 1 == 0)
 		// require functions don't return a value
 	})
 
@@ -468,9 +532,12 @@ func TestFalseT(t *testing.T) {
 
 func TestFileEmpty(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		FileEmpty(t, filepath.Join(testDataPath(), "empty_file"))
+
+		mock := new(mockFailNowT)
+		FileEmpty(mock, filepath.Join(testDataPath(), "empty_file"))
 		// require functions don't return a value
 	})
 
@@ -488,9 +555,12 @@ func TestFileEmpty(t *testing.T) {
 
 func TestFileExists(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		FileExists(t, filepath.Join(testDataPath(), "existing_file"))
+
+		mock := new(mockFailNowT)
+		FileExists(mock, filepath.Join(testDataPath(), "existing_file"))
 		// require functions don't return a value
 	})
 
@@ -508,9 +578,12 @@ func TestFileExists(t *testing.T) {
 
 func TestFileNotEmpty(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		FileNotEmpty(t, filepath.Join(testDataPath(), "existing_file"))
+
+		mock := new(mockFailNowT)
+		FileNotEmpty(mock, filepath.Join(testDataPath(), "existing_file"))
 		// require functions don't return a value
 	})
 
@@ -528,9 +601,12 @@ func TestFileNotEmpty(t *testing.T) {
 
 func TestFileNotExists(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		FileNotExists(t, filepath.Join(testDataPath(), "non_existing_file"))
+
+		mock := new(mockFailNowT)
+		FileNotExists(mock, filepath.Join(testDataPath(), "non_existing_file"))
 		// require functions don't return a value
 	})
 
@@ -548,9 +624,12 @@ func TestFileNotExists(t *testing.T) {
 
 func TestGreater(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Greater(t, 2, 1)
+
+		mock := new(mockFailNowT)
+		Greater(mock, 2, 1)
 		// require functions don't return a value
 	})
 
@@ -568,9 +647,12 @@ func TestGreater(t *testing.T) {
 
 func TestGreaterOrEqual(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		GreaterOrEqual(t, 2, 1)
+
+		mock := new(mockFailNowT)
+		GreaterOrEqual(mock, 2, 1)
 		// require functions don't return a value
 	})
 
@@ -588,9 +670,12 @@ func TestGreaterOrEqual(t *testing.T) {
 
 func TestGreaterOrEqualT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		GreaterOrEqualT(t, 2, 1)
+
+		mock := new(mockFailNowT)
+		GreaterOrEqualT(mock, 2, 1)
 		// require functions don't return a value
 	})
 
@@ -608,9 +693,12 @@ func TestGreaterOrEqualT(t *testing.T) {
 
 func TestGreaterT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		GreaterT(t, 2, 1)
+
+		mock := new(mockFailNowT)
+		GreaterT(mock, 2, 1)
 		// require functions don't return a value
 	})
 
@@ -628,9 +716,12 @@ func TestGreaterT(t *testing.T) {
 
 func TestHTTPBodyContains(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		HTTPBodyContains(t, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, World!")
+
+		mock := new(mockFailNowT)
+		HTTPBodyContains(mock, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, World!")
 		// require functions don't return a value
 	})
 
@@ -648,9 +739,12 @@ func TestHTTPBodyContains(t *testing.T) {
 
 func TestHTTPBodyNotContains(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		HTTPBodyNotContains(t, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, Bob!")
+
+		mock := new(mockFailNowT)
+		HTTPBodyNotContains(mock, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, Bob!")
 		// require functions don't return a value
 	})
 
@@ -668,9 +762,12 @@ func TestHTTPBodyNotContains(t *testing.T) {
 
 func TestHTTPError(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		HTTPError(t, httpError, "GET", "/", nil)
+
+		mock := new(mockFailNowT)
+		HTTPError(mock, httpError, "GET", "/", nil)
 		// require functions don't return a value
 	})
 
@@ -688,9 +785,12 @@ func TestHTTPError(t *testing.T) {
 
 func TestHTTPRedirect(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		HTTPRedirect(t, httpRedirect, "GET", "/", nil)
+
+		mock := new(mockFailNowT)
+		HTTPRedirect(mock, httpRedirect, "GET", "/", nil)
 		// require functions don't return a value
 	})
 
@@ -708,9 +808,12 @@ func TestHTTPRedirect(t *testing.T) {
 
 func TestHTTPStatusCode(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		HTTPStatusCode(t, httpOK, "GET", "/", nil, http.StatusOK)
+
+		mock := new(mockFailNowT)
+		HTTPStatusCode(mock, httpOK, "GET", "/", nil, http.StatusOK)
 		// require functions don't return a value
 	})
 
@@ -728,9 +831,12 @@ func TestHTTPStatusCode(t *testing.T) {
 
 func TestHTTPSuccess(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		HTTPSuccess(t, httpOK, "GET", "/", nil)
+
+		mock := new(mockFailNowT)
+		HTTPSuccess(mock, httpOK, "GET", "/", nil)
 		// require functions don't return a value
 	})
 
@@ -748,9 +854,12 @@ func TestHTTPSuccess(t *testing.T) {
 
 func TestImplements(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Implements(t, ptr(dummyInterface), new(testing.T))
+
+		mock := new(mockFailNowT)
+		Implements(mock, ptr(dummyInterface), new(testing.T))
 		// require functions don't return a value
 	})
 
@@ -768,9 +877,12 @@ func TestImplements(t *testing.T) {
 
 func TestInDelta(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		InDelta(t, 1.0, 1.01, 0.02)
+
+		mock := new(mockFailNowT)
+		InDelta(mock, 1.0, 1.01, 0.02)
 		// require functions don't return a value
 	})
 
@@ -788,9 +900,12 @@ func TestInDelta(t *testing.T) {
 
 func TestInDeltaMapValues(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		InDeltaMapValues(t, map[string]float64{"a": 1.0}, map[string]float64{"a": 1.01}, 0.02)
+
+		mock := new(mockFailNowT)
+		InDeltaMapValues(mock, map[string]float64{"a": 1.0}, map[string]float64{"a": 1.01}, 0.02)
 		// require functions don't return a value
 	})
 
@@ -808,9 +923,12 @@ func TestInDeltaMapValues(t *testing.T) {
 
 func TestInDeltaSlice(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		InDeltaSlice(t, []float64{1.0, 2.0}, []float64{1.01, 2.01}, 0.02)
+
+		mock := new(mockFailNowT)
+		InDeltaSlice(mock, []float64{1.0, 2.0}, []float64{1.01, 2.01}, 0.02)
 		// require functions don't return a value
 	})
 
@@ -828,9 +946,12 @@ func TestInDeltaSlice(t *testing.T) {
 
 func TestInDeltaT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		InDeltaT(t, 1.0, 1.01, 0.02)
+
+		mock := new(mockFailNowT)
+		InDeltaT(mock, 1.0, 1.01, 0.02)
 		// require functions don't return a value
 	})
 
@@ -848,9 +969,12 @@ func TestInDeltaT(t *testing.T) {
 
 func TestInEpsilon(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		InEpsilon(t, 100.0, 101.0, 0.02)
+
+		mock := new(mockFailNowT)
+		InEpsilon(mock, 100.0, 101.0, 0.02)
 		// require functions don't return a value
 	})
 
@@ -868,9 +992,12 @@ func TestInEpsilon(t *testing.T) {
 
 func TestInEpsilonSlice(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		InEpsilonSlice(t, []float64{100.0, 200.0}, []float64{101.0, 202.0}, 0.02)
+
+		mock := new(mockFailNowT)
+		InEpsilonSlice(mock, []float64{100.0, 200.0}, []float64{101.0, 202.0}, 0.02)
 		// require functions don't return a value
 	})
 
@@ -888,9 +1015,12 @@ func TestInEpsilonSlice(t *testing.T) {
 
 func TestInEpsilonT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		InEpsilonT(t, 100.0, 101.0, 0.02)
+
+		mock := new(mockFailNowT)
+		InEpsilonT(mock, 100.0, 101.0, 0.02)
 		// require functions don't return a value
 	})
 
@@ -908,9 +1038,12 @@ func TestInEpsilonT(t *testing.T) {
 
 func TestIsDecreasing(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		IsDecreasing(t, []int{3, 2, 1})
+
+		mock := new(mockFailNowT)
+		IsDecreasing(mock, []int{3, 2, 1})
 		// require functions don't return a value
 	})
 
@@ -928,9 +1061,12 @@ func TestIsDecreasing(t *testing.T) {
 
 func TestIsDecreasingT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		IsDecreasingT(t, []int{3, 2, 1})
+
+		mock := new(mockFailNowT)
+		IsDecreasingT(mock, []int{3, 2, 1})
 		// require functions don't return a value
 	})
 
@@ -948,9 +1084,12 @@ func TestIsDecreasingT(t *testing.T) {
 
 func TestIsIncreasing(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		IsIncreasing(t, []int{1, 2, 3})
+
+		mock := new(mockFailNowT)
+		IsIncreasing(mock, []int{1, 2, 3})
 		// require functions don't return a value
 	})
 
@@ -968,9 +1107,12 @@ func TestIsIncreasing(t *testing.T) {
 
 func TestIsIncreasingT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		IsIncreasingT(t, []int{1, 2, 3})
+
+		mock := new(mockFailNowT)
+		IsIncreasingT(mock, []int{1, 2, 3})
 		// require functions don't return a value
 	})
 
@@ -988,9 +1130,12 @@ func TestIsIncreasingT(t *testing.T) {
 
 func TestIsNonDecreasing(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		IsNonDecreasing(t, []int{1, 1, 2})
+
+		mock := new(mockFailNowT)
+		IsNonDecreasing(mock, []int{1, 1, 2})
 		// require functions don't return a value
 	})
 
@@ -1008,9 +1153,12 @@ func TestIsNonDecreasing(t *testing.T) {
 
 func TestIsNonDecreasingT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		IsNonDecreasingT(t, []int{1, 1, 2})
+
+		mock := new(mockFailNowT)
+		IsNonDecreasingT(mock, []int{1, 1, 2})
 		// require functions don't return a value
 	})
 
@@ -1028,9 +1176,12 @@ func TestIsNonDecreasingT(t *testing.T) {
 
 func TestIsNonIncreasing(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		IsNonIncreasing(t, []int{2, 1, 1})
+
+		mock := new(mockFailNowT)
+		IsNonIncreasing(mock, []int{2, 1, 1})
 		// require functions don't return a value
 	})
 
@@ -1048,9 +1199,12 @@ func TestIsNonIncreasing(t *testing.T) {
 
 func TestIsNonIncreasingT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		IsNonIncreasingT(t, []int{2, 1, 1})
+
+		mock := new(mockFailNowT)
+		IsNonIncreasingT(mock, []int{2, 1, 1})
 		// require functions don't return a value
 	})
 
@@ -1068,9 +1222,12 @@ func TestIsNonIncreasingT(t *testing.T) {
 
 func TestIsNotOfTypeT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		IsNotOfTypeT[myType](t, 123.123)
+
+		mock := new(mockFailNowT)
+		IsNotOfTypeT[myType](mock, 123.123)
 		// require functions don't return a value
 	})
 
@@ -1088,9 +1245,12 @@ func TestIsNotOfTypeT(t *testing.T) {
 
 func TestIsNotType(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		IsNotType(t, int32(123), int64(456))
+
+		mock := new(mockFailNowT)
+		IsNotType(mock, int32(123), int64(456))
 		// require functions don't return a value
 	})
 
@@ -1108,9 +1268,12 @@ func TestIsNotType(t *testing.T) {
 
 func TestIsOfTypeT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		IsOfTypeT[myType](t, myType(123.123))
+
+		mock := new(mockFailNowT)
+		IsOfTypeT[myType](mock, myType(123.123))
 		// require functions don't return a value
 	})
 
@@ -1128,9 +1291,12 @@ func TestIsOfTypeT(t *testing.T) {
 
 func TestIsType(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		IsType(t, 123, 456)
+
+		mock := new(mockFailNowT)
+		IsType(mock, 123, 456)
 		// require functions don't return a value
 	})
 
@@ -1148,9 +1314,12 @@ func TestIsType(t *testing.T) {
 
 func TestJSONEq(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		JSONEq(t, `{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
+
+		mock := new(mockFailNowT)
+		JSONEq(mock, `{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
 		// require functions don't return a value
 	})
 
@@ -1168,9 +1337,12 @@ func TestJSONEq(t *testing.T) {
 
 func TestJSONEqBytes(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		JSONEqBytes(t, []byte(`{"hello": "world", "foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`))
+
+		mock := new(mockFailNowT)
+		JSONEqBytes(mock, []byte(`{"hello": "world", "foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`))
 		// require functions don't return a value
 	})
 
@@ -1188,9 +1360,12 @@ func TestJSONEqBytes(t *testing.T) {
 
 func TestJSONEqT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		JSONEqT(t, `{"hello": "world", "foo": "bar"}`, []byte(`{"foo": "bar", "hello": "world"}`))
+
+		mock := new(mockFailNowT)
+		JSONEqT(mock, `{"hello": "world", "foo": "bar"}`, []byte(`{"foo": "bar", "hello": "world"}`))
 		// require functions don't return a value
 	})
 
@@ -1206,11 +1381,60 @@ func TestJSONEqT(t *testing.T) {
 	})
 }
 
-func TestKind(t *testing.T) {
+func TestJSONMarshalAsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Kind(t, reflect.String, "hello")
+
+		mock := new(mockFailNowT)
+		JSONMarshalAsT(mock, []byte(`{"A": "a"}`), dummyStruct{A: "a"})
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		JSONMarshalAsT(mock, `[{"foo": "bar"}, {"hello": "world"}]`, 1)
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("JSONMarshalAsT should call FailNow()")
+		}
+	})
+}
+
+func TestJSONUnmarshalAsT(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		JSONUnmarshalAsT(mock, dummyStruct{A: "a"}, []byte(`{"A": "a"}`))
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		JSONUnmarshalAsT(mock, 1, `[{"foo": "bar"}, {"hello": "world"}]`)
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("JSONUnmarshalAsT should call FailNow()")
+		}
+	})
+}
+
+func TestKind(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		Kind(mock, reflect.String, "hello")
 		// require functions don't return a value
 	})
 
@@ -1228,9 +1452,12 @@ func TestKind(t *testing.T) {
 
 func TestLen(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Len(t, []string{"A", "B"}, 2)
+
+		mock := new(mockFailNowT)
+		Len(mock, []string{"A", "B"}, 2)
 		// require functions don't return a value
 	})
 
@@ -1248,9 +1475,12 @@ func TestLen(t *testing.T) {
 
 func TestLess(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Less(t, 1, 2)
+
+		mock := new(mockFailNowT)
+		Less(mock, 1, 2)
 		// require functions don't return a value
 	})
 
@@ -1268,9 +1498,12 @@ func TestLess(t *testing.T) {
 
 func TestLessOrEqual(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		LessOrEqual(t, 1, 2)
+
+		mock := new(mockFailNowT)
+		LessOrEqual(mock, 1, 2)
 		// require functions don't return a value
 	})
 
@@ -1288,9 +1521,12 @@ func TestLessOrEqual(t *testing.T) {
 
 func TestLessOrEqualT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		LessOrEqualT(t, 1, 2)
+
+		mock := new(mockFailNowT)
+		LessOrEqualT(mock, 1, 2)
 		// require functions don't return a value
 	})
 
@@ -1308,9 +1544,12 @@ func TestLessOrEqualT(t *testing.T) {
 
 func TestLessT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		LessT(t, 1, 2)
+
+		mock := new(mockFailNowT)
+		LessT(mock, 1, 2)
 		// require functions don't return a value
 	})
 
@@ -1328,9 +1567,12 @@ func TestLessT(t *testing.T) {
 
 func TestMapContainsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		MapContainsT(t, map[string]string{"A": "B"}, "A")
+
+		mock := new(mockFailNowT)
+		MapContainsT(mock, map[string]string{"A": "B"}, "A")
 		// require functions don't return a value
 	})
 
@@ -1348,9 +1590,12 @@ func TestMapContainsT(t *testing.T) {
 
 func TestMapNotContainsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		MapNotContainsT(t, map[string]string{"A": "B"}, "C")
+
+		mock := new(mockFailNowT)
+		MapNotContainsT(mock, map[string]string{"A": "B"}, "C")
 		// require functions don't return a value
 	})
 
@@ -1368,9 +1613,12 @@ func TestMapNotContainsT(t *testing.T) {
 
 func TestNegative(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Negative(t, -1)
+
+		mock := new(mockFailNowT)
+		Negative(mock, -1)
 		// require functions don't return a value
 	})
 
@@ -1388,9 +1636,12 @@ func TestNegative(t *testing.T) {
 
 func TestNegativeT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NegativeT(t, -1)
+
+		mock := new(mockFailNowT)
+		NegativeT(mock, -1)
 		// require functions don't return a value
 	})
 
@@ -1408,9 +1659,12 @@ func TestNegativeT(t *testing.T) {
 
 func TestNever(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Never(t, func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond)
+
+		mock := new(mockFailNowT)
+		Never(mock, func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond)
 		// require functions don't return a value
 	})
 
@@ -1428,9 +1682,12 @@ func TestNever(t *testing.T) {
 
 func TestNil(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Nil(t, nil)
+
+		mock := new(mockFailNowT)
+		Nil(mock, nil)
 		// require functions don't return a value
 	})
 
@@ -1448,9 +1705,12 @@ func TestNil(t *testing.T) {
 
 func TestNoError(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NoError(t, nil)
+
+		mock := new(mockFailNowT)
+		NoError(mock, nil)
 		// require functions don't return a value
 	})
 
@@ -1466,11 +1726,26 @@ func TestNoError(t *testing.T) {
 	})
 }
 
-func TestNotContains(t *testing.T) {
+func TestNoGoRoutineLeak(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotContains(t, []string{"A", "B"}, "C")
+
+		mock := new(mockFailNowT)
+		NoGoRoutineLeak(mock, func() {})
+		// require functions don't return a value
+	})
+}
+
+func TestNotContains(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NotContains(mock, []string{"A", "B"}, "C")
 		// require functions don't return a value
 	})
 
@@ -1488,9 +1763,12 @@ func TestNotContains(t *testing.T) {
 
 func TestNotElementsMatch(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotElementsMatch(t, []int{1, 2, 3}, []int{1, 2, 4})
+
+		mock := new(mockFailNowT)
+		NotElementsMatch(mock, []int{1, 2, 3}, []int{1, 2, 4})
 		// require functions don't return a value
 	})
 
@@ -1508,9 +1786,12 @@ func TestNotElementsMatch(t *testing.T) {
 
 func TestNotElementsMatchT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotElementsMatchT(t, []int{1, 2, 3}, []int{1, 2, 4})
+
+		mock := new(mockFailNowT)
+		NotElementsMatchT(mock, []int{1, 2, 3}, []int{1, 2, 4})
 		// require functions don't return a value
 	})
 
@@ -1528,9 +1809,12 @@ func TestNotElementsMatchT(t *testing.T) {
 
 func TestNotEmpty(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotEmpty(t, "not empty")
+
+		mock := new(mockFailNowT)
+		NotEmpty(mock, "not empty")
 		// require functions don't return a value
 	})
 
@@ -1548,9 +1832,12 @@ func TestNotEmpty(t *testing.T) {
 
 func TestNotEqual(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotEqual(t, 123, 456)
+
+		mock := new(mockFailNowT)
+		NotEqual(mock, 123, 456)
 		// require functions don't return a value
 	})
 
@@ -1568,9 +1855,12 @@ func TestNotEqual(t *testing.T) {
 
 func TestNotEqualT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotEqualT(t, 123, 456)
+
+		mock := new(mockFailNowT)
+		NotEqualT(mock, 123, 456)
 		// require functions don't return a value
 	})
 
@@ -1588,9 +1878,12 @@ func TestNotEqualT(t *testing.T) {
 
 func TestNotEqualValues(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotEqualValues(t, uint32(123), int32(456))
+
+		mock := new(mockFailNowT)
+		NotEqualValues(mock, uint32(123), int32(456))
 		// require functions don't return a value
 	})
 
@@ -1608,9 +1901,12 @@ func TestNotEqualValues(t *testing.T) {
 
 func TestNotErrorAs(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotErrorAs(t, ErrTest, new(*dummyError))
+
+		mock := new(mockFailNowT)
+		NotErrorAs(mock, ErrTest, new(*dummyError))
 		// require functions don't return a value
 	})
 
@@ -1628,9 +1924,12 @@ func TestNotErrorAs(t *testing.T) {
 
 func TestNotErrorIs(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotErrorIs(t, ErrTest, io.EOF)
+
+		mock := new(mockFailNowT)
+		NotErrorIs(mock, ErrTest, io.EOF)
 		// require functions don't return a value
 	})
 
@@ -1648,9 +1947,12 @@ func TestNotErrorIs(t *testing.T) {
 
 func TestNotImplements(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotImplements(t, (*error)(nil), new(testing.T))
+
+		mock := new(mockFailNowT)
+		NotImplements(mock, (*error)(nil), new(testing.T))
 		// require functions don't return a value
 	})
 
@@ -1668,9 +1970,12 @@ func TestNotImplements(t *testing.T) {
 
 func TestNotKind(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotKind(t, reflect.String, 0)
+
+		mock := new(mockFailNowT)
+		NotKind(mock, reflect.String, 0)
 		// require functions don't return a value
 	})
 
@@ -1688,9 +1993,12 @@ func TestNotKind(t *testing.T) {
 
 func TestNotNil(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotNil(t, "not nil")
+
+		mock := new(mockFailNowT)
+		NotNil(mock, "not nil")
 		// require functions don't return a value
 	})
 
@@ -1708,9 +2016,12 @@ func TestNotNil(t *testing.T) {
 
 func TestNotPanics(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotPanics(t, func() {})
+
+		mock := new(mockFailNowT)
+		NotPanics(mock, func() {})
 		// require functions don't return a value
 	})
 
@@ -1728,9 +2039,12 @@ func TestNotPanics(t *testing.T) {
 
 func TestNotRegexp(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotRegexp(t, "^start", "not starting")
+
+		mock := new(mockFailNowT)
+		NotRegexp(mock, "^start", "not starting")
 		// require functions don't return a value
 	})
 
@@ -1748,9 +2062,12 @@ func TestNotRegexp(t *testing.T) {
 
 func TestNotRegexpT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotRegexpT(t, "^start", "not starting")
+
+		mock := new(mockFailNowT)
+		NotRegexpT(mock, "^start", "not starting")
 		// require functions don't return a value
 	})
 
@@ -1768,9 +2085,12 @@ func TestNotRegexpT(t *testing.T) {
 
 func TestNotSame(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotSame(t, &staticVar, ptr("static string"))
+
+		mock := new(mockFailNowT)
+		NotSame(mock, &staticVar, ptr("static string"))
 		// require functions don't return a value
 	})
 
@@ -1788,9 +2108,12 @@ func TestNotSame(t *testing.T) {
 
 func TestNotSameT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotSameT(t, &staticVar, ptr("static string"))
+
+		mock := new(mockFailNowT)
+		NotSameT(mock, &staticVar, ptr("static string"))
 		// require functions don't return a value
 	})
 
@@ -1808,9 +2131,12 @@ func TestNotSameT(t *testing.T) {
 
 func TestNotSortedT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotSortedT(t, []int{3, 1, 3})
+
+		mock := new(mockFailNowT)
+		NotSortedT(mock, []int{3, 1, 3})
 		// require functions don't return a value
 	})
 
@@ -1828,9 +2154,12 @@ func TestNotSortedT(t *testing.T) {
 
 func TestNotSubset(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotSubset(t, []int{1, 2, 3}, []int{4, 5})
+
+		mock := new(mockFailNowT)
+		NotSubset(mock, []int{1, 2, 3}, []int{4, 5})
 		// require functions don't return a value
 	})
 
@@ -1848,9 +2177,12 @@ func TestNotSubset(t *testing.T) {
 
 func TestNotZero(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		NotZero(t, 1)
+
+		mock := new(mockFailNowT)
+		NotZero(mock, 1)
 		// require functions don't return a value
 	})
 
@@ -1868,9 +2200,12 @@ func TestNotZero(t *testing.T) {
 
 func TestPanics(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Panics(t, func() { panic("panicking") })
+
+		mock := new(mockFailNowT)
+		Panics(mock, func() { panic("panicking") })
 		// require functions don't return a value
 	})
 
@@ -1888,9 +2223,12 @@ func TestPanics(t *testing.T) {
 
 func TestPanicsWithError(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		PanicsWithError(t, ErrTest.Error(), func() { panic(ErrTest) })
+
+		mock := new(mockFailNowT)
+		PanicsWithError(mock, ErrTest.Error(), func() { panic(ErrTest) })
 		// require functions don't return a value
 	})
 
@@ -1908,9 +2246,12 @@ func TestPanicsWithError(t *testing.T) {
 
 func TestPanicsWithValue(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		PanicsWithValue(t, "panicking", func() { panic("panicking") })
+
+		mock := new(mockFailNowT)
+		PanicsWithValue(mock, "panicking", func() { panic("panicking") })
 		// require functions don't return a value
 	})
 
@@ -1928,9 +2269,12 @@ func TestPanicsWithValue(t *testing.T) {
 
 func TestPositive(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Positive(t, 1)
+
+		mock := new(mockFailNowT)
+		Positive(mock, 1)
 		// require functions don't return a value
 	})
 
@@ -1948,9 +2292,12 @@ func TestPositive(t *testing.T) {
 
 func TestPositiveT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		PositiveT(t, 1)
+
+		mock := new(mockFailNowT)
+		PositiveT(mock, 1)
 		// require functions don't return a value
 	})
 
@@ -1968,9 +2315,12 @@ func TestPositiveT(t *testing.T) {
 
 func TestRegexp(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Regexp(t, "^start", "starting")
+
+		mock := new(mockFailNowT)
+		Regexp(mock, "^start", "starting")
 		// require functions don't return a value
 	})
 
@@ -1988,9 +2338,12 @@ func TestRegexp(t *testing.T) {
 
 func TestRegexpT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		RegexpT(t, "^start", "starting")
+
+		mock := new(mockFailNowT)
+		RegexpT(mock, "^start", "starting")
 		// require functions don't return a value
 	})
 
@@ -2008,9 +2361,12 @@ func TestRegexpT(t *testing.T) {
 
 func TestSame(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Same(t, &staticVar, staticVarPtr)
+
+		mock := new(mockFailNowT)
+		Same(mock, &staticVar, staticVarPtr)
 		// require functions don't return a value
 	})
 
@@ -2028,9 +2384,12 @@ func TestSame(t *testing.T) {
 
 func TestSameT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		SameT(t, &staticVar, staticVarPtr)
+
+		mock := new(mockFailNowT)
+		SameT(mock, &staticVar, staticVarPtr)
 		// require functions don't return a value
 	})
 
@@ -2048,9 +2407,12 @@ func TestSameT(t *testing.T) {
 
 func TestSeqContainsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		SeqContainsT(t, slices.Values([]string{"A", "B"}), "A")
+
+		mock := new(mockFailNowT)
+		SeqContainsT(mock, slices.Values([]string{"A", "B"}), "A")
 		// require functions don't return a value
 	})
 
@@ -2068,9 +2430,12 @@ func TestSeqContainsT(t *testing.T) {
 
 func TestSeqNotContainsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		SeqNotContainsT(t, slices.Values([]string{"A", "B"}), "C")
+
+		mock := new(mockFailNowT)
+		SeqNotContainsT(mock, slices.Values([]string{"A", "B"}), "C")
 		// require functions don't return a value
 	})
 
@@ -2088,9 +2453,12 @@ func TestSeqNotContainsT(t *testing.T) {
 
 func TestSliceContainsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		SliceContainsT(t, []string{"A", "B"}, "A")
+
+		mock := new(mockFailNowT)
+		SliceContainsT(mock, []string{"A", "B"}, "A")
 		// require functions don't return a value
 	})
 
@@ -2108,9 +2476,12 @@ func TestSliceContainsT(t *testing.T) {
 
 func TestSliceNotContainsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		SliceNotContainsT(t, []string{"A", "B"}, "C")
+
+		mock := new(mockFailNowT)
+		SliceNotContainsT(mock, []string{"A", "B"}, "C")
 		// require functions don't return a value
 	})
 
@@ -2128,9 +2499,12 @@ func TestSliceNotContainsT(t *testing.T) {
 
 func TestSliceNotSubsetT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		SliceNotSubsetT(t, []int{1, 2, 3}, []int{4, 5})
+
+		mock := new(mockFailNowT)
+		SliceNotSubsetT(mock, []int{1, 2, 3}, []int{4, 5})
 		// require functions don't return a value
 	})
 
@@ -2148,9 +2522,12 @@ func TestSliceNotSubsetT(t *testing.T) {
 
 func TestSliceSubsetT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		SliceSubsetT(t, []int{1, 2, 3}, []int{1, 2})
+
+		mock := new(mockFailNowT)
+		SliceSubsetT(mock, []int{1, 2, 3}, []int{1, 2})
 		// require functions don't return a value
 	})
 
@@ -2168,9 +2545,12 @@ func TestSliceSubsetT(t *testing.T) {
 
 func TestSortedT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		SortedT(t, []int{1, 1, 3})
+
+		mock := new(mockFailNowT)
+		SortedT(mock, []int{1, 1, 3})
 		// require functions don't return a value
 	})
 
@@ -2188,9 +2568,12 @@ func TestSortedT(t *testing.T) {
 
 func TestStringContainsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		StringContainsT(t, "AB", "A")
+
+		mock := new(mockFailNowT)
+		StringContainsT(mock, "AB", "A")
 		// require functions don't return a value
 	})
 
@@ -2208,9 +2591,12 @@ func TestStringContainsT(t *testing.T) {
 
 func TestStringNotContainsT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		StringNotContainsT(t, "AB", "C")
+
+		mock := new(mockFailNowT)
+		StringNotContainsT(mock, "AB", "C")
 		// require functions don't return a value
 	})
 
@@ -2228,9 +2614,12 @@ func TestStringNotContainsT(t *testing.T) {
 
 func TestSubset(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Subset(t, []int{1, 2, 3}, []int{1, 2})
+
+		mock := new(mockFailNowT)
+		Subset(mock, []int{1, 2, 3}, []int{1, 2})
 		// require functions don't return a value
 	})
 
@@ -2248,9 +2637,12 @@ func TestSubset(t *testing.T) {
 
 func TestTrue(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		True(t, 1 == 1)
+
+		mock := new(mockFailNowT)
+		True(mock, 1 == 1)
 		// require functions don't return a value
 	})
 
@@ -2268,9 +2660,12 @@ func TestTrue(t *testing.T) {
 
 func TestTrueT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		TrueT(t, 1 == 1)
+
+		mock := new(mockFailNowT)
+		TrueT(mock, 1 == 1)
 		// require functions don't return a value
 	})
 
@@ -2288,9 +2683,12 @@ func TestTrueT(t *testing.T) {
 
 func TestWithinDuration(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		WithinDuration(t, time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 12, 0, 1, 0, time.UTC), 2*time.Second)
+
+		mock := new(mockFailNowT)
+		WithinDuration(mock, time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 12, 0, 1, 0, time.UTC), 2*time.Second)
 		// require functions don't return a value
 	})
 
@@ -2308,9 +2706,12 @@ func TestWithinDuration(t *testing.T) {
 
 func TestWithinRange(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		WithinRange(t, time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 11, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 13, 0, 0, 0, time.UTC))
+
+		mock := new(mockFailNowT)
+		WithinRange(mock, time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 11, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 13, 0, 0, 0, time.UTC))
 		// require functions don't return a value
 	})
 
@@ -2328,42 +2729,92 @@ func TestWithinRange(t *testing.T) {
 
 func TestYAMLEq(t *testing.T) {
 	t.Parallel()
+
 	t.Run("panic", func(t *testing.T) {
 		t.Parallel()
 
+		mock := new(mockFailNowT)
 		Panics(t, func() {
-			YAMLEq(t, "key: value", "key: value")
+			YAMLEq(mock, "key: value", "key: value")
 		}, "should panic without the yaml feature enabled.")
+		if mock.failed {
+			t.Error("YAMLEq should panic as expected")
+		}
 	})
 }
 
 func TestYAMLEqBytes(t *testing.T) {
 	t.Parallel()
+
 	t.Run("panic", func(t *testing.T) {
 		t.Parallel()
 
+		mock := new(mockFailNowT)
 		Panics(t, func() {
-			YAMLEqBytes(t, []byte("key: value"), []byte("key: value"))
+			YAMLEqBytes(mock, []byte("key: value"), []byte("key: value"))
 		}, "should panic without the yaml feature enabled.")
+		if mock.failed {
+			t.Error("YAMLEqBytes should panic as expected")
+		}
 	})
 }
 
 func TestYAMLEqT(t *testing.T) {
 	t.Parallel()
+
 	t.Run("panic", func(t *testing.T) {
 		t.Parallel()
 
+		mock := new(mockFailNowT)
 		Panics(t, func() {
-			YAMLEqT(t, "key: value", "key: value")
+			YAMLEqT(mock, "key: value", "key: value")
 		}, "should panic without the yaml feature enabled.")
+		if mock.failed {
+			t.Error("YAMLEqT should panic as expected")
+		}
+	})
+}
+
+func TestYAMLMarshalAsT(t *testing.T) {
+	t.Parallel()
+
+	t.Run("panic", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		Panics(t, func() {
+			YAMLMarshalAsT(mock, "key: value", "key: value")
+		}, "should panic without the yaml feature enabled.")
+		if mock.failed {
+			t.Error("YAMLMarshalAsT should panic as expected")
+		}
+	})
+}
+
+func TestYAMLUnmarshalAsT(t *testing.T) {
+	t.Parallel()
+
+	t.Run("panic", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		Panics(t, func() {
+			YAMLUnmarshalAsT(mock, "key: value", "key: value")
+		}, "should panic without the yaml feature enabled.")
+		if mock.failed {
+			t.Error("YAMLUnmarshalAsT should panic as expected")
+		}
 	})
 }
 
 func TestZero(t *testing.T) {
 	t.Parallel()
+
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		Zero(t, 0)
+
+		mock := new(mockFailNowT)
+		Zero(mock, 0)
 		// require functions don't return a value
 	})
 
