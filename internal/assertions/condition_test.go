@@ -86,7 +86,7 @@ func TestConditionEventuallyTimeout(t *testing.T) {
 		mock := new(errorsCapturingT)
 		// A condition function that returns after the Eventually timeout
 		condition := func() bool {
-			time.Sleep(5 * time.Millisecond)
+			time.Sleep(100 * time.Millisecond)
 			return true
 		}
 
