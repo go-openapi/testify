@@ -39,7 +39,7 @@ import (
 //
 // # Examples
 //
-//   - success: NOT IMPLEMENTED
+//   - success: func() {}
 func NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any) bool {
 	// Domain: safety
 	if h, ok := t.(H); ok {
@@ -47,9 +47,11 @@ func NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any) bool {
 	}
 
 	var ctx context.Context
-	if c, ok := t.(contextualizer); ok {
+	c, ok := t.(contextualizer)
+	if ok {
 		ctx = c.Context()
-	} else {
+	}
+	if ctx == nil {
 		ctx = context.Background()
 	}
 
