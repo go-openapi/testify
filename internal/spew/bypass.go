@@ -39,6 +39,7 @@ const (
 
 type flag uintptr
 
+//nolint:gochecknoglobals // reflect internals, set once during init
 var (
 	// flagRO indicates whether the value field of a reflect.Value
 	// is read-only.
@@ -54,21 +55,33 @@ var (
 // it is in the lower 5 bits.
 const flagKindMask = flag(0x1f)
 
+// Bit positions for the reflect.Value flags field.
+// Different Go versions use different layouts.
+const (
+	flagROBit     = 5 // read-only bit position
+	flagROBit2    = 6 // secondary read-only bit (Go 1.5+)
+	flagAddrBit14 = 7 // addressable bit position (Go 1.4)
+	flagAddrBit15 = 8 // addressable bit position (Go 1.5+)
+)
+
 // Different versions of Go have used different
 // bit layouts for the flags type. This table
 // records the known combinations.
+//
+//nolint:gochecknoglobals // immutable reflect flag lookup table
 var okFlags = []struct {
 	ro, addr flag
 }{{
 	// From Go 1.4 to 1.5
-	ro:   1 << 5,
-	addr: 1 << 7,
+	ro:   1 << flagROBit,
+	addr: 1 << flagAddrBit14,
 }, {
 	// Up to Go tip.
-	ro:   1<<5 | 1<<6,
-	addr: 1 << 8,
+	ro:   1<<flagROBit | 1<<flagROBit2,
+	addr: 1 << flagAddrBit15,
 }}
 
+//nolint:gochecknoglobals // computed once at init from reflect internals
 var flagValOffset = func() uintptr {
 	field, ok := reflect.TypeOf(reflect.Value{}).FieldByName("flag")
 	if !ok {
@@ -79,7 +92,7 @@ var flagValOffset = func() uintptr {
 
 // flagField returns a pointer to the flag field of a reflect.Value.
 func flagField(v *reflect.Value) *flag {
-	return (*flag)(unsafe.Pointer(uintptr(unsafe.Pointer(v)) + flagValOffset))
+	return (*flag)(unsafe.Add(unsafe.Pointer(v), flagValOffset))
 }
 
 // unsafeReflectValue converts the passed reflect.Value into a one that bypasses
@@ -103,6 +116,8 @@ func unsafeReflectValue(v reflect.Value) reflect.Value {
 
 // Sanity checks against future reflect package changes
 // to the type or semantics of the Value.flag field.
+//
+//nolint:gochecknoinits // validates reflect internals at startup
 func init() {
 	field, ok := reflect.TypeOf(reflect.Value{}).FieldByName("flag")
 	if !ok {

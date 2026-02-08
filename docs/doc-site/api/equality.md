@@ -1,7 +1,6 @@
 ---
 title: "Equality"
 description: "Asserting Two Things Are Equal"
-modified: 2026-01-27
 weight: 5
 domains:
   - "equality"
@@ -72,7 +71,6 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### Empty{#empty}
-
 Empty asserts that the given value is "empty".
 
 Zero values are "empty".
@@ -90,18 +88,83 @@ Pointer values are "empty" if the pointer is nil or if the pointed value is "emp
 {{% tab title="Usage" %}}
 ```go
 	assertions.Empty(t, obj)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: ""
 	failure: "not empty"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEmpty(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestEmpty(t *testing.T)
+	success := assert.Empty(t, "")
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEmpty(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestEmpty(t *testing.T)
+	require.Empty(t, "")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -121,7 +184,7 @@ Pointer values are "empty" if the pointer is nil or if the pointed value is "emp
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Empty(t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Empty) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Empty](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal_unary.go#L73)
@@ -129,7 +192,6 @@ Pointer values are "empty" if the pointer is nil or if the pointed value is "emp
 {{< /tabs >}}
 
 ### Equal{#equal}
-
 Equal asserts that two objects are equal.
 
 Pointer variable equality is determined based on the equality of the
@@ -142,18 +204,83 @@ Function equality cannot be determined and will always fail.
 {{% tab title="Usage" %}}
 ```go
 	assertions.Equal(t, 123, 123)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 123, 123
 	failure: 123, 456
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEqual(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestEqual(t *testing.T)
+	success := assert.Equal(t, 123, 123)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEqual(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestEqual(t *testing.T)
+	require.Equal(t, 123, 123)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -173,7 +300,7 @@ Function equality cannot be determined and will always fail.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Equal(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Equal) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Equal](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L30)
@@ -181,7 +308,6 @@ Function equality cannot be determined and will always fail.
 {{< /tabs >}}
 
 ### EqualExportedValues{#equalexportedvalues}
-
 EqualExportedValues asserts that the types of two objects are equal and their public
 fields are also equal.
 
@@ -199,18 +325,93 @@ Function equality cannot be determined and will always fail.
 	 }
 	assertions.EqualExportedValues(t, S{1, 2}, S{1, 3}) => true
 	assertions.EqualExportedValues(t, S{1, 2}, S{2, 3}) => false
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "a", b: 2}
 	failure:  &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "b", b: 1}
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEqualExportedValues(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestEqualExportedValues(t *testing.T)
+	success := assert.EqualExportedValues(t, &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "a", b: 2})
+	fmt.Printf("success: %t\n", success)
+
+}
+
+type dummyStruct struct {
+	A string
+	b int
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEqualExportedValues(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestEqualExportedValues(t *testing.T)
+	require.EqualExportedValues(t, &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "a", b: 2})
+	fmt.Println("passed")
+
+}
+
+type dummyStruct struct {
+	A string
+	b int
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -230,7 +431,7 @@ Function equality cannot be determined and will always fail.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.EqualExportedValues(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EqualExportedValues) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualExportedValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L214)
@@ -238,7 +439,6 @@ Function equality cannot be determined and will always fail.
 {{< /tabs >}}
 
 ### EqualT[V comparable] {{% icon icon="star" color=orange %}}{#equaltv-comparable}
-
 EqualT asserts that two objects of the same comparable type are equal.
 
 Pointer variable equality is determined based on the equality of the memory addresses (unlike [Equal](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Equal), but like [Same](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Same)).
@@ -253,18 +453,83 @@ use [Equal](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Equal) in
 {{% tab title="Usage" %}}
 ```go
 	assertions.EqualT(t, 123, 123)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 123, 123
 	failure: 123, 456
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestEqualT(t *testing.T)
+	success := assert.EqualT(t, 123, 123)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestEqualT(t *testing.T)
+	require.EqualT(t, 123, 123)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -280,15 +545,14 @@ use [Equal](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Equal) in
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
-| [`assertions.EqualT(t T, expected V, actual V, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EqualT) | internal implementation |
+|--|--|
+| [`assertions.EqualT[V comparable](t T, expected V, actual V, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EqualT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L67)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### EqualValues{#equalvalues}
-
 EqualValues asserts that two objects are equal or convertible to the larger
 type and equal.
 
@@ -299,18 +563,83 @@ Function equality cannot be determined and will always fail.
 {{% tab title="Usage" %}}
 ```go
 	assertions.EqualValues(t, uint32(123), int32(123))
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: uint32(123), int32(123)
 	failure: uint32(123), int32(456)
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEqualValues(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestEqualValues(t *testing.T)
+	success := assert.EqualValues(t, uint32(123), int32(123))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestEqualValues(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestEqualValues(t *testing.T)
+	require.EqualValues(t, uint32(123), int32(123))
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -330,7 +659,7 @@ Function equality cannot be determined and will always fail.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.EqualValues(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EqualValues) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L142)
@@ -338,7 +667,6 @@ Function equality cannot be determined and will always fail.
 {{< /tabs >}}
 
 ### Exactly{#exactly}
-
 Exactly asserts that two objects are equal in value and type.
 
 {{% expand title="Examples" %}}
@@ -346,18 +674,83 @@ Exactly asserts that two objects are equal in value and type.
 {{% tab title="Usage" %}}
 ```go
 	assertions.Exactly(t, int32(123), int64(123))
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: int32(123), int32(123)
 	failure: int32(123), int64(123)
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestExactly(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestExactly(t *testing.T)
+	success := assert.Exactly(t, int32(123), int32(123))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestExactly(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestExactly(t *testing.T)
+	require.Exactly(t, int32(123), int32(123))
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -377,7 +770,7 @@ Exactly asserts that two objects are equal in value and type.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Exactly(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Exactly) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Exactly](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L256)
@@ -385,7 +778,6 @@ Exactly asserts that two objects are equal in value and type.
 {{< /tabs >}}
 
 ### Nil{#nil}
-
 Nil asserts that the specified object is nil.
 
 {{% expand title="Examples" %}}
@@ -393,18 +785,83 @@ Nil asserts that the specified object is nil.
 {{% tab title="Usage" %}}
 ```go
 	assertions.Nil(t, err)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: nil
 	failure: "not nil"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNil(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNil(t *testing.T)
+	success := assert.Nil(t, nil)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNil(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNil(t *testing.T)
+	require.Nil(t, nil)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -424,7 +881,7 @@ Nil asserts that the specified object is nil.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Nil(t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Nil) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Nil](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal_unary.go#L21)
@@ -432,7 +889,6 @@ Nil asserts that the specified object is nil.
 {{< /tabs >}}
 
 ### NotEmpty{#notempty}
-
 NotEmpty asserts that the specified object is NOT [Empty](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Empty).
 
 {{% expand title="Examples" %}}
@@ -442,18 +898,83 @@ NotEmpty asserts that the specified object is NOT [Empty](https://pkg.go.dev/git
 	if assert.NotEmpty(t, obj) {
 		assertions.Equal(t, "two", obj[1](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#1))
 	}
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: "not empty"
 	failure: ""
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotEmpty(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotEmpty(t *testing.T)
+	success := assert.NotEmpty(t, "not empty")
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotEmpty(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotEmpty(t *testing.T)
+	require.NotEmpty(t, "not empty")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -473,7 +994,7 @@ NotEmpty asserts that the specified object is NOT [Empty](https://pkg.go.dev/git
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotEmpty(t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotEmpty) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal_unary.go#L98)
@@ -481,7 +1002,6 @@ NotEmpty asserts that the specified object is NOT [Empty](https://pkg.go.dev/git
 {{< /tabs >}}
 
 ### NotEqual{#notequal}
-
 NotEqual asserts that the specified values are NOT equal.
 
 {{% expand title="Examples" %}}
@@ -492,18 +1012,83 @@ NotEqual asserts that the specified values are NOT equal.
 Pointer variable equality is determined based on the equality of the
 referenced values (as opposed to the memory addresses).
 Function equality cannot be determined and will always fail.
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 123, 456
 	failure: 123, 123
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotEqual(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotEqual(t *testing.T)
+	success := assert.NotEqual(t, 123, 456)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotEqual(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotEqual(t *testing.T)
+	require.NotEqual(t, 123, 456)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -523,7 +1108,7 @@ Function equality cannot be determined and will always fail.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotEqual(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotEqual) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEqual](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L91)
@@ -531,7 +1116,6 @@ Function equality cannot be determined and will always fail.
 {{< /tabs >}}
 
 ### NotEqualT[V comparable] {{% icon icon="star" color=orange %}}{#notequaltv-comparable}
-
 NotEqualT asserts that the specified values of the same comparable type are NOT equal.
 
 See [EqualT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualT).
@@ -541,18 +1125,83 @@ See [EqualT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualT).
 {{% tab title="Usage" %}}
 ```go
 	assertions.NotEqualT(t, obj1, obj2)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 123, 456
 	failure: 123, 123
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotEqualT(t *testing.T)
+	success := assert.NotEqualT(t, 123, 456)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotEqualT(t *testing.T)
+	require.NotEqualT(t, 123, 456)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -568,15 +1217,14 @@ See [EqualT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualT).
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
-| [`assertions.NotEqualT(t T, expected V, actual V, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotEqualT) | internal implementation |
+|--|--|
+| [`assertions.NotEqualT[V comparable](t T, expected V, actual V, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotEqualT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L120)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### NotEqualValues{#notequalvalues}
-
 NotEqualValues asserts that two objects are not equal even when converted to the same type.
 
 Function equality cannot be determined and will always fail.
@@ -586,18 +1234,83 @@ Function equality cannot be determined and will always fail.
 {{% tab title="Usage" %}}
 ```go
 	assertions.NotEqualValues(t, obj1, obj2)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: uint32(123), int32(456)
 	failure: uint32(123), int32(123)
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotEqualValues(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotEqualValues(t *testing.T)
+	success := assert.NotEqualValues(t, uint32(123), int32(456))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotEqualValues(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotEqualValues(t *testing.T)
+	require.NotEqualValues(t, uint32(123), int32(456))
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -617,7 +1330,7 @@ Function equality cannot be determined and will always fail.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotEqualValues(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotEqualValues) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEqualValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L176)
@@ -625,7 +1338,6 @@ Function equality cannot be determined and will always fail.
 {{< /tabs >}}
 
 ### NotNil{#notnil}
-
 NotNil asserts that the specified object is not nil.
 
 {{% expand title="Examples" %}}
@@ -633,18 +1345,83 @@ NotNil asserts that the specified object is not nil.
 {{% tab title="Usage" %}}
 ```go
 assertions.NotNil(t, err)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: "not nil"
 	failure: nil
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotNil(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotNil(t *testing.T)
+	success := assert.NotNil(t, "not nil")
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotNil(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotNil(t *testing.T)
+	require.NotNil(t, "not nil")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -664,7 +1441,7 @@ assertions.NotNil(t, err)
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotNil(t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotNil) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotNil](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal_unary.go#L42)
@@ -672,7 +1449,6 @@ assertions.NotNil(t, err)
 {{< /tabs >}}
 
 ### NotSame{#notsame}
-
 NotSame asserts that two pointers do not reference the same object.
 
 See [Same](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Same).
@@ -682,18 +1458,101 @@ See [Same](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Same).
 {{% tab title="Usage" %}}
 ```go
 	assertions.NotSame(t, ptr1, ptr2)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: &staticVar, ptr("static string")
 	failure: &staticVar, staticVarPtr
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotSame(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotSame(t *testing.T)
+	success := assert.NotSame(t, &staticVar, ptr("static string"))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
+var staticVar = "static string"
+
+func ptr[T any](value T) *T {
+	p := value
+
+	return &p
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotSame(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotSame(t *testing.T)
+	require.NotSame(t, &staticVar, ptr("static string"))
+	fmt.Println("passed")
+
+}
+
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
+var staticVar = "static string"
+
+func ptr[T any](value T) *T {
+	p := value
+
+	return &p
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -713,7 +1572,7 @@ See [Same](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Same).
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotSame(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotSame) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSame](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal_pointer.go#L84)
@@ -721,7 +1580,6 @@ See [Same](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Same).
 {{< /tabs >}}
 
 ### NotSameT[P any] {{% icon icon="star" color=orange %}}{#notsametp-any}
-
 NotSameT asserts that two pointers do not reference the same object.
 
 See [SameT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SameT).
@@ -731,18 +1589,101 @@ See [SameT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SameT).
 {{% tab title="Usage" %}}
 ```go
 	assertions.NotSameT(t, ptr1, ptr2)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: &staticVar, ptr("static string")
 	failure: &staticVar, staticVarPtr
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotSameT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotSameT(t *testing.T)
+	success := assert.NotSameT(t, &staticVar, ptr("static string"))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
+var staticVar = "static string"
+
+func ptr[T any](value T) *T {
+	p := value
+
+	return &p
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotSameT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotSameT(t *testing.T)
+	require.NotSameT(t, &staticVar, ptr("static string"))
+	fmt.Println("passed")
+
+}
+
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
+var staticVar = "static string"
+
+func ptr[T any](value T) *T {
+	p := value
+
+	return &p
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -758,15 +1699,14 @@ See [SameT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SameT).
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
-| [`assertions.NotSameT(t T, expected *P, actual *P, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotSameT) | internal implementation |
+|--|--|
+| [`assertions.NotSameT[P any](t T, expected *P, actual *P, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotSameT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSameT](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal_pointer.go#L116)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### Same{#same}
-
 Same asserts that two pointers reference the same object.
 
 Both arguments must be pointer variables.
@@ -780,18 +1720,95 @@ Unlike [Equal](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Equal)
 {{% tab title="Usage" %}}
 ```go
 	assertions.Same(t, ptr1, ptr2)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: &staticVar, staticVarPtr
 	failure: &staticVar, ptr("static string")
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestSame(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestSame(t *testing.T)
+	success := assert.Same(t, &staticVar, staticVarPtr)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
+var (
+	staticVar    = "static string"
+	staticVarPtr = &staticVar
+)
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestSame(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestSame(t *testing.T)
+	require.Same(t, &staticVar, staticVarPtr)
+	fmt.Println("passed")
+
+}
+
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
+var (
+	staticVar    = "static string"
+	staticVarPtr = &staticVar
+)
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -811,7 +1828,7 @@ Unlike [Equal](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Equal)
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Same(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Same) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Same](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal_pointer.go#L24)
@@ -819,7 +1836,6 @@ Unlike [Equal](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Equal)
 {{< /tabs >}}
 
 ### SameT[P any] {{% icon icon="star" color=orange %}}{#sametp-any}
-
 SameT asserts that two pointers of the same type reference the same object.
 
 See [Same](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Same).
@@ -829,18 +1845,95 @@ See [Same](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Same).
 {{% tab title="Usage" %}}
 ```go
 	assertions.SameT(t, ptr1, ptr2)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: &staticVar, staticVarPtr
 	failure: &staticVar, ptr("static string")
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestSameT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestSameT(t *testing.T)
+	success := assert.SameT(t, &staticVar, staticVarPtr)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
+var (
+	staticVar    = "static string"
+	staticVarPtr = &staticVar
+)
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestSameT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestSameT(t *testing.T)
+	require.SameT(t, &staticVar, staticVarPtr)
+	fmt.Println("passed")
+
+}
+
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
+var (
+	staticVar    = "static string"
+	staticVarPtr = &staticVar
+)
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -856,8 +1949,8 @@ See [Same](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Same).
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
-| [`assertions.SameT(t T, expected *P, actual *P, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SameT) | internal implementation |
+|--|--|
+| [`assertions.SameT[P any](t T, expected *P, actual *P, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SameT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#SameT](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal_pointer.go#L57)
 {{% /tab %}}
@@ -878,6 +1971,4 @@ SPDX-License-Identifier: Apache-2.0
 
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
-
-Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 -->

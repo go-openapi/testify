@@ -1,7 +1,6 @@
 {{ comment .Copyright }}
 
 // Code generated with {{ .Tool }}; DO NOT EDIT.
-// {{ .Header }}
 
 package {{ .Package }}
 
@@ -13,7 +12,7 @@ import (
 )
 {{- end }}
 
-{{- range .Functions }} 
+{{- range .Functions }}
   {{- if .IsHelper }}
 
 func Test{{ .Name }}f(t *testing.T) {

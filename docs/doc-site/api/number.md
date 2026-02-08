@@ -1,7 +1,6 @@
 ---
 title: "Number"
 description: "Asserting Numbers"
-modified: 2026-01-27
 weight: 10
 domains:
   - "number"
@@ -45,7 +44,6 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### InDelta{#indelta}
-
 InDelta asserts that the two numerals are within delta of each other.
 
 Delta must be greater than or equal to zero.
@@ -65,18 +63,83 @@ prefer [InDeltaT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InD
 {{% tab title="Usage" %}}
 ```go
 assertions.InDelta(t, math.Pi, 22/7.0, 0.01)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1.0, 1.01, 0.02
 	failure: 1.0, 1.1, 0.05
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestInDelta(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestInDelta(t *testing.T)
+	success := assert.InDelta(t, 1.0, 1.01, 0.02)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestInDelta(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestInDelta(t *testing.T)
+	require.InDelta(t, 1.0, 1.01, 0.02)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -96,7 +159,7 @@ assertions.InDelta(t, math.Pi, 22/7.0, 0.01)
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.InDelta(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InDelta) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDelta](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L35)
@@ -104,7 +167,6 @@ assertions.InDelta(t, math.Pi, 22/7.0, 0.01)
 {{< /tabs >}}
 
 ### InDeltaMapValues{#indeltamapvalues}
-
 InDeltaMapValues is the same as [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta), but it compares all values between two maps. Both maps must have exactly the same keys.
 
 See [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta).
@@ -114,18 +176,83 @@ See [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta
 {{% tab title="Usage" %}}
 ```go
 	assertions.InDeltaMapValues(t, map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)float64{"a": 1.0}, map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)float64{"a": 1.01}, 0.02)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)float64{"a": 1.0}, map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)float64{"a": 1.01}, 0.02
 	failure: map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)float64{"a": 1.0}, map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)float64{"a": 1.1}, 0.05
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestInDeltaMapValues(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestInDeltaMapValues(t *testing.T)
+	success := assert.InDeltaMapValues(t, map[string]float64{"a": 1.0}, map[string]float64{"a": 1.01}, 0.02)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestInDeltaMapValues(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestInDeltaMapValues(t *testing.T)
+	require.InDeltaMapValues(t, map[string]float64{"a": 1.0}, map[string]float64{"a": 1.01}, 0.02)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -145,7 +272,7 @@ See [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.InDeltaMapValues(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InDeltaMapValues) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaMapValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L271)
@@ -153,7 +280,6 @@ See [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta
 {{< /tabs >}}
 
 ### InDeltaSlice{#indeltaslice}
-
 InDeltaSlice is the same as [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta), except it compares two slices.
 
 See [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta).
@@ -163,18 +289,83 @@ See [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta
 {{% tab title="Usage" %}}
 ```go
 	assertions.InDeltaSlice(t, []float64{1.0, 2.0}, []float64{1.01, 2.01}, 0.02)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []float64{1.0, 2.0}, []float64{1.01, 2.01}, 0.02
 	failure: []float64{1.0, 2.0}, []float64{1.1, 2.1}, 0.05
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestInDeltaSlice(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestInDeltaSlice(t *testing.T)
+	success := assert.InDeltaSlice(t, []float64{1.0, 2.0}, []float64{1.01, 2.01}, 0.02)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestInDeltaSlice(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestInDeltaSlice(t *testing.T)
+	require.InDeltaSlice(t, []float64{1.0, 2.0}, []float64{1.01, 2.01}, 0.02)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -194,7 +385,7 @@ See [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.InDeltaSlice(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InDeltaSlice) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaSlice](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L235)
@@ -202,7 +393,6 @@ See [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta
 {{< /tabs >}}
 
 ### InDeltaT[Number Measurable] {{% icon icon="star" color=orange %}}{#indeltatnumber-measurable}
-
 InDeltaT asserts that the two numerals of the same type numerical type are within delta of each other.
 
 [InDeltaT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDeltaT) accepts any go numeric type, including integer types.
@@ -222,18 +412,83 @@ Delta must be greater than or equal to zero.
 {{% tab title="Usage" %}}
 ```go
 assertions.InDeltaT(t, math.Pi, 22/7.0, 0.01)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1.0, 1.01, 0.02
 	failure: 1.0, 1.1, 0.05
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestInDeltaT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestInDeltaT(t *testing.T)
+	success := assert.InDeltaT(t, 1.0, 1.01, 0.02)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestInDeltaT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestInDeltaT(t *testing.T)
+	require.InDeltaT(t, 1.0, 1.01, 0.02)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -249,15 +504,14 @@ assertions.InDeltaT(t, math.Pi, 22/7.0, 0.01)
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
-| [`assertions.InDeltaT(t T, expected Number, actual Number, delta Number, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InDeltaT) | internal implementation |
+|--|--|
+| [`assertions.InDeltaT[Number Measurable](t T, expected Number, actual Number, delta Number, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InDeltaT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaT](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L85)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### InEpsilon{#inepsilon}
-
 InEpsilon asserts that expected and actual have a relative error less than epsilon.
 
 #### Behavior with IEEE floating point arithmetics
@@ -279,18 +533,83 @@ This allows [InEpsilonT](https://pkg.go.dev/github.com/go-openapi/testify/v2/ass
 {{% tab title="Usage" %}}
 ```go
 	assertions.InEpsilon(t, 100.0, 101.0, 0.02)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 100.0, 101.0, 0.02
 	failure: 100.0, 110.0, 0.05
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestInEpsilon(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilon(t *testing.T)
+	success := assert.InEpsilon(t, 100.0, 101.0, 0.02)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestInEpsilon(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilon(t *testing.T)
+	require.InEpsilon(t, 100.0, 101.0, 0.02)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -310,7 +629,7 @@ This allows [InEpsilonT](https://pkg.go.dev/github.com/go-openapi/testify/v2/ass
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.InEpsilon(t T, expected any, actual any, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InEpsilon) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilon](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L142)
@@ -318,7 +637,6 @@ This allows [InEpsilonT](https://pkg.go.dev/github.com/go-openapi/testify/v2/ass
 {{< /tabs >}}
 
 ### InEpsilonSlice{#inepsilonslice}
-
 InEpsilonSlice is the same as [InEpsilon](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilon), except it compares each value from two slices.
 
 See [InEpsilon](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilon).
@@ -328,18 +646,83 @@ See [InEpsilon](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEps
 {{% tab title="Usage" %}}
 ```go
 	assertions.InEpsilonSlice(t, []float64{100.0, 200.0}, []float64{101.0, 202.0}, 0.02)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: []float64{100.0, 200.0}, []float64{101.0, 202.0}, 0.02
 	failure: []float64{100.0, 200.0}, []float64{110.0, 220.0}, 0.05
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestInEpsilonSlice(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonSlice(t *testing.T)
+	success := assert.InEpsilonSlice(t, []float64{100.0, 200.0}, []float64{101.0, 202.0}, 0.02)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestInEpsilonSlice(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonSlice(t *testing.T)
+	require.InEpsilonSlice(t, []float64{100.0, 200.0}, []float64{101.0, 202.0}, 0.02)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -359,7 +742,7 @@ See [InEpsilon](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEps
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.InEpsilonSlice(t T, expected any, actual any, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InEpsilonSlice) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilonSlice](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L326)
@@ -367,7 +750,6 @@ See [InEpsilon](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEps
 {{< /tabs >}}
 
 ### InEpsilonT[Number Measurable] {{% icon icon="star" color=orange %}}{#inepsilontnumber-measurable}
-
 InEpsilonT asserts that expected and actual have a relative error less than epsilon.
 
 When expected is zero, epsilon is interpreted as an absolute error threshold,
@@ -395,18 +777,83 @@ This allows [InEpsilonT](https://pkg.go.dev/github.com/go-openapi/testify/v2/ass
 {{% tab title="Usage" %}}
 ```go
 	assertions.InEpsilon(t, 100.0, 101.0, 0.02)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 100.0, 101.0, 0.02
 	failure: 100.0, 110.0, 0.05
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestInEpsilonT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonT(t *testing.T)
+	success := assert.InEpsilonT(t, 100.0, 101.0, 0.02)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestInEpsilonT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonT(t *testing.T)
+	require.InEpsilonT(t, 100.0, 101.0, 0.02)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -422,8 +869,8 @@ This allows [InEpsilonT](https://pkg.go.dev/github.com/go-openapi/testify/v2/ass
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
-| [`assertions.InEpsilonT(t T, expected Number, actual Number, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InEpsilonT) | internal implementation |
+|--|--|
+| [`assertions.InEpsilonT[Number Measurable](t T, expected Number, actual Number, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InEpsilonT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilonT](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L199)
 {{% /tab %}}
@@ -444,6 +891,4 @@ SPDX-License-Identifier: Apache-2.0
 
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
-
-Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 -->

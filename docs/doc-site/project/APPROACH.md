@@ -391,7 +391,7 @@ Go's testing ecosystem reflects the broader assertion-vs-BDD divide:
 | **Integration** | Works with `go test` directly | Requires `ginkgo` CLI tool |
 | **Learning curve** | Immediate (standard Go) | Moderate (new DSL) |
 | **Dependencies** | Zero external packages | Multiple framework packages |
-| **Type safety** | 38 generic assertions | Reflection-based matchers |
+| **Type safety** | Generic assertions | Reflection-based matchers |
 | **Organization** | Standard Go subtests | Narrative hierarchy (Describe/Context/It) |
 | **Go philosophy** | Aligns with Go values | Different priorities |
 

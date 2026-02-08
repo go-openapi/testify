@@ -8,7 +8,7 @@ weight: 15
 
 **Key Changes:**
 - ✅ **Zero Dependencies**: Completely self-contained
-- ✅ **New functions**: 51 additional assertions (38 generic + 13 reflection-based)
+- ✅ **New functions**: 56 additional assertions (42 generic + 14 reflection-based)
 - ✅ **Performance**: ~10x for generic variants (from 1.2x to 81x, your mileage may vary)
 - ✅ **Breaking changes**: Requires go1.24, removed suites, mocks, http tooling, and deprecated functions. YAMLEq becomes optional (panics by default).
 
@@ -16,7 +16,7 @@ weight: 15
 
 **Testify v2 represents a comprehensive modernization**
 
-- ✅ **Type Safety**: 38 generic assertions catch errors at compile time
+- ✅ **Type Safety**: generic assertions catch errors at compile time
 - ✅ **Documentation**: compelling documentation site to search the API by use-case domain
 - ✅ **Maintainability**: 100% code generation from single source
 - ✅ **Quality**: 96% test coverage, use unified test scenarios, extensive fuzzing & benchmarking
@@ -211,9 +211,10 @@ See also a quick [migration guide](./MIGRATION.md).
 
 | Change | Origin | Description |
 |--------|--------|-------------|
-| Fixed goroutine leak | [#1611] | Consolidated `Eventually`, `Never`, and `EventuallyWithT` into single `pollCondition` function |
+| Fixed goroutine leak | [#1611] | Consolidated `Eventually`, `Never`, and `EventuallyWith` into single `pollCondition` function |
 | Context-based polling | Internal refactoring | Reimplemented with context-based approach for better resource management |
 | Unified implementation | Internal refactoring | Single implementation eliminates code duplication and prevents resource leaks |
+| **Renaming** | `EventuallyWithT` renamed into `EventuallyWith` (conflicted with the convention adopted for generics) |
 
 **Impact**: This fix eliminates goroutine leaks that could occur when using `Eventually` or `Never` assertions. The new implementation uses a context-based approach that properly manages resources and provides a cleaner shutdown mechanism. Callers should **NOT** assume that the call to `Eventually` or `Never` exits before the condition is evaluated. Callers should **NOT** assume that the call to `Eventually` or `Never` exits before the condition is evaluated.
 
@@ -277,11 +278,13 @@ See also a quick [migration guide](./MIGRATION.md).
 
 {{% expand title="Generics" %}}
 
-#### New Generic Function (1)
+#### New Generic Functions (3)
 
 | Function | Type Parameters | Description |
 |----------|-----------------|-------------|
 | `JSONEqT[S Text]` | String or []byte | Type-safe JSON semantic equality |
+| `JSONMarshalAsT[EDoc Text]` | String or []byte | Type-safe JSON marshal and equality check |
+| `JSONUnmarshalAsT[ADoc Text, Object any]` | String or []byte | Type-safe JSON unmarshal and equality check |
 
 **Performance**: Comparable (JSON parsing dominates)
 {{% /expand %}}
@@ -357,6 +360,24 @@ See also a quick [migration guide](./MIGRATION.md).
 #### ⚠️ Behavior Changes
 
 Removed extraneous type declaration `PanicTestFunc` (`func()`).
+
+### Safety
+
+**New domain** for resource leak detection.
+
+| Function | Type | Description |
+|----------|------|-------------|
+| `NoGoRoutineLeak` | Reflection | Assert that no goroutines leak from a tested function |
+
+#### Implementation
+
+Uses **pprof labels** instead of stack-trace heuristics (like `go.uber.org/goleak`):
+- Only goroutines spawned by the tested function are checked
+- Pre-existing goroutines (runtime, pools, parallel tests) are ignored automatically
+- No configuration or filter lists needed
+- Works safely with `t.Parallel()`
+
+See [Examples](./EXAMPLES.md#goroutine-leak-detection) for usage patterns.
 
 ### String
 
@@ -436,11 +457,13 @@ Removed extraneous type declaration `PanicTestFunc` (`func()`).
 
 {{% expand title="Generics" %}}
 
-#### New Generic Function (1)
+#### New Generic Functions (3)
 
 | Function | Type Parameters | Description |
 |----------|-----------------|-------------|
 | `YAMLEqT[S Text]` | String or []byte | Type-safe YAML semantic equality |
+| `YAMLMarshalAsT[EDoc Text]` | String or []byte | Type-safe YAML marshal and equality check |
+| `YAMLUnmarshalAsT[ADoc Text, Object any]` | String or []byte | Type-safe YAML unmarshal and equality check |
 
 **Performance**: Comparable (YAML parsing dominates)
 {{% /expand %}}
@@ -458,6 +481,7 @@ Removed extraneous type declaration `PanicTestFunc` (`func()`).
 #### ⚠️ Behavior Changes
 
 **Architecture change**: YAML support is now opt-in via `import _ "github.com/go-openapi/testify/v2/enable/yaml"`
+
 **Behavior changes**: None
 
 ## Other changes
@@ -487,8 +511,8 @@ These affect the way the project is maintained, but not how it is used.
 #### Code Generation
 
 All assert and require packages are 100% generated from a single source:
-- **Source**: `internal/assertions/` (~5,000 LOC)
-- **Generated**: ~600+ functions across assert/require packages
+- **Source**: `internal/assertions/` (~6,000 LOC)
+- **Generated**: ~800+ functions across assert/require packages
 - **Variants**: 8 variants per assertion (assert/require x standard/format/forward/forward+format),
   4 variants for generic assertions (assert/require x standard/format)
 
@@ -519,7 +543,7 @@ github.com/go-openapi/testify/v2           # Core (zero deps) [go.mod]
 ### Documentation
 
 - Hugo-based documentation site
-- Domain-organized API reference (18 domains)
+- Domain-organized API reference (19 domains)
 - Comprehensive examples and tutorials
 - Performance benchmarks
 
@@ -527,14 +551,15 @@ github.com/go-openapi/testify/v2           # Core (zero deps) [go.mod]
 
 | Metric | Value |
 |--------|-------|
-| **New functions** | 51 (38 generic + 13 reflection) |
-| **Total assertions** | 76 base assertions |
-| **Generated functions** | ~600 (76 × 8 variants - generics get 4 variants only) |
-| **Generic coverage** | 10 domains |
+| **New functions** | 56 (42 generic + 14 reflection) |
+| **Total assertions** | 128 base assertions |
+| **Generated functions** | ~800 (see [the
+maths](../project/maintainers/ARCHITECTURE.md#the-maths-with-assertion-variants)
+| **Generic coverage** | 10 domains (10/19) |
 | **Performance improvement** | 1.2x to 81x faster |
 | **Dependencies** | 0 external (was 2 required) |
-| **Test coverage** | 96% overall, 100% on public APIs |
-| **Documentation domains** | 18 logical categories |
+| **Test coverage** | 96% overall, 99% on public APIs |
+| **Documentation domains** | 19 logical categories |
 
 ---
 

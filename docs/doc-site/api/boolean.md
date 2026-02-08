@@ -1,7 +1,6 @@
 ---
 title: "Boolean"
 description: "Asserting Boolean Values"
-modified: 2026-01-27
 weight: 1
 domains:
   - "boolean"
@@ -36,7 +35,6 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### False{#false}
-
 False asserts that the specified value is false.
 
 {{% expand title="Examples" %}}
@@ -44,18 +42,83 @@ False asserts that the specified value is false.
 {{% tab title="Usage" %}}
 ```go
 	assertions.False(t, myBool)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1 == 0
 	failure: 1 == 1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestFalse(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestFalse(t *testing.T)
+	success := assert.False(t, 1 == 0)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestFalse(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestFalse(t *testing.T)
+	require.False(t, 1 == 0)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -75,7 +138,7 @@ False asserts that the specified value is false.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.False(t T, value bool, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#False) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#False](https://github.com/go-openapi/testify/blob/master/internal/assertions/boolean.go#L65)
@@ -83,7 +146,6 @@ False asserts that the specified value is false.
 {{< /tabs >}}
 
 ### FalseT[B Boolean] {{% icon icon="star" color=orange %}}{#falsetb-boolean}
-
 FalseT asserts that the specified value is false.
 
 The type constraint [Boolean](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Boolean) accepts any type which underlying type is bool.
@@ -95,18 +157,83 @@ The type constraint [Boolean](https://pkg.go.dev/github.com/go-openapi/testify/v
 	 type B bool
 	 var b B = true
 		assertions.FalseT(t, b)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1 == 0
 	failure: 1 == 1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestFalseT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestFalseT(t *testing.T)
+	success := assert.FalseT(t, 1 == 0)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestFalseT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestFalseT(t *testing.T)
+	require.FalseT(t, 1 == 0)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -122,15 +249,14 @@ The type constraint [Boolean](https://pkg.go.dev/github.com/go-openapi/testify/v
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
-| [`assertions.FalseT(t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FalseT) | internal implementation |
+|--|--|
+| [`assertions.FalseT[B Boolean](t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FalseT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#FalseT](https://github.com/go-openapi/testify/blob/master/internal/assertions/boolean.go#L92)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### True{#true}
-
 True asserts that the specified value is true.
 
 {{% expand title="Examples" %}}
@@ -138,18 +264,83 @@ True asserts that the specified value is true.
 {{% tab title="Usage" %}}
 ```go
 	assertions.True(t, myBool)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1 == 1
 	failure: 1 == 0
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestTrue(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestTrue(t *testing.T)
+	success := assert.True(t, 1 == 1)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestTrue(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestTrue(t *testing.T)
+	require.True(t, 1 == 1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -169,7 +360,7 @@ True asserts that the specified value is true.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.True(t T, value bool, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#True) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#True](https://github.com/go-openapi/testify/blob/master/internal/assertions/boolean.go#L16)
@@ -177,7 +368,6 @@ True asserts that the specified value is true.
 {{< /tabs >}}
 
 ### TrueT[B Boolean] {{% icon icon="star" color=orange %}}{#truetb-boolean}
-
 TrueT asserts that the specified value is true.
 
 The type constraint [Boolean](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Boolean) accepts any type which underlying type is bool.
@@ -189,18 +379,83 @@ The type constraint [Boolean](https://pkg.go.dev/github.com/go-openapi/testify/v
 	type B bool
 	var b B = true
 	assertions.True(t, b)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1 == 1
 	failure: 1 == 0
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestTrueT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestTrueT(t *testing.T)
+	success := assert.TrueT(t, 1 == 1)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestTrueT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestTrueT(t *testing.T)
+	require.TrueT(t, 1 == 1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -216,8 +471,8 @@ The type constraint [Boolean](https://pkg.go.dev/github.com/go-openapi/testify/v
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
-| [`assertions.TrueT(t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#TrueT) | internal implementation |
+|--|--|
+| [`assertions.TrueT[B Boolean](t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#TrueT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#TrueT](https://github.com/go-openapi/testify/blob/master/internal/assertions/boolean.go#L43)
 {{% /tab %}}
@@ -238,6 +493,4 @@ SPDX-License-Identifier: Apache-2.0
 
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
-
-Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 -->

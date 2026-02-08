@@ -17,9 +17,26 @@ func TestJSONEq(t *testing.T) {
 	}
 }
 
+func TestJSONMarshalUnmarshalAs(t *testing.T) {
+	t.Parallel()
+
+	for tc := range jsonMarshalCases() {
+		t.Run(tc.name, tc.test)
+	}
+}
+
+func TestJSONErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, jsonFailCases())
+}
+
+// =======================================
+// Test JSONEq variants
+// =======================================
+
 // test all JSONEq variants with the same input (possibly converted).
 func testAllJSONEq(expected, actual string, success bool) func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
 	return func(t *testing.T) {
 		t.Run("with JSONEq", testJSONEq(expected, actual, success))
 		t.Run("with JSONEqBytes", testJSONEqBytes(expected, actual, success))
@@ -34,7 +51,7 @@ func testJSONEq(expected, actual string, success bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		res := JSONEq(mock, expected, actual)
 		if res != success {
 			if success {
@@ -50,7 +67,7 @@ func testJSONEqBytes(expected, actual string, success bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		res := JSONEqBytes(mock, []byte(expected), []byte(actual))
 		if res != success {
 			if success {
@@ -63,11 +80,10 @@ func testJSONEqBytes(expected, actual string, success bool) func(*testing.T) {
 }
 
 func testJSONEqT[EDoc, ADoc Text](expected, actual string, success bool) func(*testing.T) {
-	//nolint:thelper // linter false positive: this is not a helper
 	return func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		res := JSONEqT(mock, EDoc(expected), ADoc(actual))
 		if res != success {
 			if success {
@@ -143,5 +159,120 @@ func jsonCases() iter.Seq[genericTestCase] {
 			"Not JSON",
 			false,
 		)},
+	})
+}
+
+// =======================================
+// Test JSONMarshalAsT / JSONUnmarshalAsT
+// =======================================
+
+func jsonMarshalCases() iter.Seq[genericTestCase] {
+	type canMarshalJSON struct {
+		A string `json:"a"`
+		B int    `json:"b"`
+		C int    `json:"c,omitempty"`
+	}
+	type cantMarshalJSON struct {
+		A string `json:"a"`
+		B int    `json:"b"`
+		C func() `json:"c,omitempty"` // this fails when marshaling
+	}
+
+	const jazon = `{"a":"x","b":1}`
+	valueCanDo := canMarshalJSON{A: "x", B: 1}
+	valueCantDo := cantMarshalJSON{A: "x", B: 1, C: func() {}}
+
+	return slices.Values([]genericTestCase{
+		{"can JSON", testAllMarshalAs(valueCanDo, jazon, true)},
+		{"can't JSON/marshal-fails", testAllMarshalAs(valueCantDo, jazon, false)},
+		{"can JSON/different-values", testAllMarshalAs(valueCanDo, `{"a": 1,"b":"x"}`, false)},
+	})
+}
+
+func testAllMarshalAs[Doc Text, Object any](value Object, jazon Doc, success bool) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Run("with JSONMarshalAsT", testJSONMarshalAsT(value, jazon, success))
+
+		t.Run("with JSONUnmarshalAsT", testJSONUnmarshalAsT(value, jazon, success))
+	}
+}
+
+func testJSONMarshalAsT[Doc Text, Object any](value Object, jazon Doc, success bool) func(*testing.T) {
+	if success {
+		return func(t *testing.T) {
+			t.Run("should marshal JSON", func(t *testing.T) {
+				t.Parallel()
+
+				mock := new(mockT)
+				res := JSONMarshalAsT(mock, jazon, value)
+				if !res {
+					t.Errorf("expected struct to marshal correctly as JSON: %#v <=> %s.Got %s", value, jazon, mock.errorString())
+				}
+			})
+		}
+	}
+
+	return func(t *testing.T) {
+		t.Run("should not marshal JSON", func(t *testing.T) {
+			t.Parallel()
+
+			mock := new(mockT)
+			res := JSONMarshalAsT(mock, jazon, value)
+			if res {
+				t.Errorf("expected struct NOT to marshal correctly as JSON: %#v != %s", value, jazon)
+			}
+		})
+	}
+}
+
+func testJSONUnmarshalAsT[Doc Text, Object any](value Object, jazon Doc, success bool) func(*testing.T) {
+	if success {
+		return func(t *testing.T) {
+			t.Run("should unmarshal JSON", func(t *testing.T) {
+				t.Parallel()
+
+				mock := new(mockT)
+				res := JSONUnmarshalAsT(mock, value, jazon)
+				if !res {
+					t.Errorf("expected json string to unmarshal correctly from JSON: %#v <=> %s. Got %s", value, jazon, mock.errorString())
+				}
+			})
+		}
+	}
+
+	return func(t *testing.T) {
+		t.Run("should not unmarshal JSON", func(t *testing.T) {
+			t.Parallel()
+
+			mock := new(mockT)
+			res := JSONUnmarshalAsT(mock, value, jazon)
+			if res {
+				t.Errorf("expected json string NOT to unmarshal correctly from JSON: %#v != %s", value, jazon)
+			}
+		})
+	}
+}
+
+// =======================================
+// Test JSONErrorMessages
+// =======================================
+
+func jsonFailCases() iter.Seq[failCase] {
+	return slices.Values([]failCase{
+		{
+			name:         "JSONEq/not-equal",
+			assertion:    func(t T) bool { return JSONEq(t, `{"a":1}`, `{"a":2}`) },
+			wantContains: []string{"Not equal"},
+		},
+		{
+			name:         "JSONEq/invalid-expected",
+			assertion:    func(t T) bool { return JSONEq(t, "not json", `{"a":1}`) },
+			wantContains: []string{"is not valid json"},
+		},
+		{
+			name:         "JSONEq/invalid-actual",
+			assertion:    func(t T) bool { return JSONEq(t, `{"a":1}`, "not json") },
+			wantContains: []string{"needs to be valid json"},
+		},
 	})
 }

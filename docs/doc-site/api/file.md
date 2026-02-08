@@ -1,7 +1,6 @@
 ---
 title: "File"
 description: "Asserting OS Files"
-modified: 2026-01-27
 weight: 7
 domains:
   - "file"
@@ -41,7 +40,6 @@ This domain exposes 6 functionalities.
 ```
 
 ### DirExists{#direxists}
-
 DirExists checks whether a directory exists in the given path. It also fails
 if the path is a file rather a directory or there is an error checking whether it exists.
 
@@ -50,18 +48,93 @@ if the path is a file rather a directory or there is an error checking whether i
 {{% tab title="Usage" %}}
 ```go
 	assertions.DirExists(t, "path/to/directory")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: filepath.Join(testDataPath(),"existing_dir")
 	failure: filepath.Join(testDataPath(),"non_existing_dir")
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestDirExists(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"path/filepath"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestDirExists(t *testing.T)
+	success := assert.DirExists(t, filepath.Join(testDataPath(), "existing_dir"))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+func testDataPath() string {
+	return filepath.Join("..", "internal", "assertions", "testdata")
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestDirExists(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"path/filepath"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestDirExists(t *testing.T)
+	require.DirExists(t, filepath.Join(testDataPath(), "existing_dir"))
+	fmt.Println("passed")
+
+}
+
+func testDataPath() string {
+	return filepath.Join("..", "internal", "assertions", "testdata")
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -81,15 +154,14 @@ if the path is a file rather a directory or there is an error checking whether i
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.DirExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#DirExists) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#DirExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L78)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#DirExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L81)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### DirNotExists{#dirnotexists}
-
 DirNotExists checks whether a directory does not exist in the given path.
 It fails if the path points to an existing _directory_ only.
 
@@ -98,18 +170,93 @@ It fails if the path points to an existing _directory_ only.
 {{% tab title="Usage" %}}
 ```go
 	assertions.DirNotExists(t, "path/to/directory")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: filepath.Join(testDataPath(),"non_existing_dir")
 	failure: filepath.Join(testDataPath(),"existing_dir")
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestDirNotExists(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"path/filepath"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestDirNotExists(t *testing.T)
+	success := assert.DirNotExists(t, filepath.Join(testDataPath(), "non_existing_dir"))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+func testDataPath() string {
+	return filepath.Join("..", "internal", "assertions", "testdata")
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestDirNotExists(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"path/filepath"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestDirNotExists(t *testing.T)
+	require.DirNotExists(t, filepath.Join(testDataPath(), "non_existing_dir"))
+	fmt.Println("passed")
+
+}
+
+func testDataPath() string {
+	return filepath.Join("..", "internal", "assertions", "testdata")
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -129,15 +276,14 @@ It fails if the path points to an existing _directory_ only.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.DirNotExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#DirNotExists) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#DirNotExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L107)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#DirNotExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L110)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### FileEmpty{#fileempty}
-
 FileEmpty checks whether a file exists in the given path and is empty.
 It fails if the file is not empty, if the path points to a directory or there is an error when trying to check the file.
 
@@ -146,18 +292,93 @@ It fails if the file is not empty, if the path points to a directory or there is
 {{% tab title="Usage" %}}
 ```go
 	assertions.FileEmpty(t, "path/to/file")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: filepath.Join(testDataPath(),"empty_file")
 	failure: filepath.Join(testDataPath(),"existing_file")
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestFileEmpty(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"path/filepath"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestFileEmpty(t *testing.T)
+	success := assert.FileEmpty(t, filepath.Join(testDataPath(), "empty_file"))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+func testDataPath() string {
+	return filepath.Join("..", "internal", "assertions", "testdata")
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestFileEmpty(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"path/filepath"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestFileEmpty(t *testing.T)
+	require.FileEmpty(t, filepath.Join(testDataPath(), "empty_file"))
+	fmt.Println("passed")
+
+}
+
+func testDataPath() string {
+	return filepath.Join("..", "internal", "assertions", "testdata")
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -177,15 +398,14 @@ It fails if the file is not empty, if the path points to a directory or there is
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.FileEmpty(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FileEmpty) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L136)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L139)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### FileExists{#fileexists}
-
 FileExists checks whether a file exists in the given path. It also fails if
 the path points to a directory or there is an error when trying to check the file.
 
@@ -194,18 +414,93 @@ the path points to a directory or there is an error when trying to check the fil
 {{% tab title="Usage" %}}
 ```go
 	assertions.FileExists(t, "path/to/file")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: filepath.Join(testDataPath(),"existing_file")
 	failure: filepath.Join(testDataPath(),"non_existing_file")
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestFileExists(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"path/filepath"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestFileExists(t *testing.T)
+	success := assert.FileExists(t, filepath.Join(testDataPath(), "existing_file"))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+func testDataPath() string {
+	return filepath.Join("..", "internal", "assertions", "testdata")
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestFileExists(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"path/filepath"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestFileExists(t *testing.T)
+	require.FileExists(t, filepath.Join(testDataPath(), "existing_file"))
+	fmt.Println("passed")
+
+}
+
+func testDataPath() string {
+	return filepath.Join("..", "internal", "assertions", "testdata")
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -225,7 +520,7 @@ the path points to a directory or there is an error when trying to check the fil
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.FileExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FileExists) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L23)
@@ -233,7 +528,6 @@ the path points to a directory or there is an error when trying to check the fil
 {{< /tabs >}}
 
 ### FileNotEmpty{#filenotempty}
-
 FileNotEmpty checks whether a file exists in the given path and is not empty.
 It fails if the file is empty, if the path points to a directory or there is an error when trying to check the file.
 
@@ -242,18 +536,93 @@ It fails if the file is empty, if the path points to a directory or there is an 
 {{% tab title="Usage" %}}
 ```go
 	assertions.FileNotEmpty(t, "path/to/file")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: filepath.Join(testDataPath(),"existing_file")
 	failure: filepath.Join(testDataPath(),"empty_file")
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestFileNotEmpty(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"path/filepath"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestFileNotEmpty(t *testing.T)
+	success := assert.FileNotEmpty(t, filepath.Join(testDataPath(), "existing_file"))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+func testDataPath() string {
+	return filepath.Join("..", "internal", "assertions", "testdata")
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestFileNotEmpty(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"path/filepath"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestFileNotEmpty(t *testing.T)
+	require.FileNotEmpty(t, filepath.Join(testDataPath(), "existing_file"))
+	fmt.Println("passed")
+
+}
+
+func testDataPath() string {
+	return filepath.Join("..", "internal", "assertions", "testdata")
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -273,15 +642,14 @@ It fails if the file is empty, if the path points to a directory or there is an 
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.FileNotEmpty(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FileNotEmpty) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileNotEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L177)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileNotEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L180)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### FileNotExists{#filenotexists}
-
 FileNotExists checks whether a file does not exist in a given path. It fails
 if the path points to an existing _file_ only.
 
@@ -290,18 +658,93 @@ if the path points to an existing _file_ only.
 {{% tab title="Usage" %}}
 ```go
 	assertions.FileNotExists(t, "path/to/file")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: filepath.Join(testDataPath(),"non_existing_file")
 	failure: filepath.Join(testDataPath(),"existing_file")
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestFileNotExists(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"path/filepath"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestFileNotExists(t *testing.T)
+	success := assert.FileNotExists(t, filepath.Join(testDataPath(), "non_existing_file"))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+func testDataPath() string {
+	return filepath.Join("..", "internal", "assertions", "testdata")
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestFileNotExists(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"path/filepath"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestFileNotExists(t *testing.T)
+	require.FileNotExists(t, filepath.Join(testDataPath(), "non_existing_file"))
+	fmt.Println("passed")
+
+}
+
+func testDataPath() string {
+	return filepath.Join("..", "internal", "assertions", "testdata")
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -321,7 +764,7 @@ if the path points to an existing _file_ only.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.FileNotExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FileNotExists) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileNotExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L52)
@@ -343,6 +786,4 @@ SPDX-License-Identifier: Apache-2.0
 
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
-
-Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 -->

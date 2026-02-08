@@ -233,7 +233,6 @@ type makeDomainIndexCase struct {
 	checkDomains  func(*testing.T, Index)
 }
 
-//nolint:gocognit,gocyclo,cyclop // this is temporary accepted extra complexity. Should refactor with externalized asserting functions
 func makeDomainIndexCases() iter.Seq[makeDomainIndexCase] {
 	return slices.Values([]makeDomainIndexCase{
 		{
@@ -291,83 +290,8 @@ func makeDomainIndexCases() iter.Seq[makeDomainIndexCase] {
 					testPackage: {Package: assertPkg},
 				}
 			}(),
-			checkMetadata: func(t *testing.T, index Index) {
-				t.Helper()
-
-				if index.Tool() != "testify-codegen" {
-					t.Errorf("Expected tool 'testify-codegen', got %q", index.Tool())
-				}
-				if index.Copyright() != "Copyright 2025" {
-					t.Errorf("Expected copyright 'Copyright 2025', got %q", index.Copyright())
-				}
-				if index.Receiver() != "Assertions" {
-					t.Errorf("Expected receiver 'Assertions', got %q", index.Receiver())
-				}
-				if index.RootPackage() != testRepo {
-					t.Errorf("Expected root package '%s', got %q", testRepo, index.RootPackage())
-				}
-			},
-			checkDomains: func(t *testing.T, index Index) {
-				t.Helper()
-
-				domainCount := 0
-				for domain, entry := range index.Entries() {
-					domainCount++
-
-					switch domain {
-					case "equal":
-						if entry.Description() != "Equality assertions" {
-							t.Errorf("Expected description 'Equality assertions', got %q", entry.Description())
-						}
-						if len(entry.Functions()) != 1 || entry.Functions()[0].Name != "Equal" {
-							t.Error("Expected Equal function in equal domain")
-						}
-						if len(entry.Consts()) != 1 || entry.Consts()[0].Name != "SomeConst" {
-							t.Error("Expected SomeConst in equal domain")
-						}
-
-					case "boolean":
-						if entry.Description() != "Boolean assertions" {
-							t.Errorf("Expected description 'Boolean assertions', got %q", entry.Description())
-						}
-						if len(entry.Functions()) != 1 || entry.Functions()[0].Name != "True" {
-							t.Error("Expected True function in boolean domain")
-						}
-						if len(entry.Vars()) != 1 || entry.Vars()[0].Name != "SomeVar" {
-							t.Error("Expected SomeVar in boolean domain")
-						}
-
-					case "testing":
-						if len(entry.Types()) != 1 || entry.Types()[0].Name != "TestingT" {
-							t.Error("Expected TestingT type in testing domain")
-						}
-
-					case "common":
-						if entry.Description() != "Other uncategorized helpers" {
-							t.Errorf("Expected description 'Other uncategorized helpers', got %q", entry.Description())
-						}
-						if len(entry.Functions()) != 1 || entry.Functions()[0].Name != "Helper" {
-							t.Error("Expected Helper function in common domain")
-						}
-						if len(entry.Types()) != 1 || entry.Types()[0].Name != "H" {
-							t.Error("Expected H type in common domain")
-						}
-						if len(entry.Vars()) != 1 || entry.Vars()[0].Name != "SomeOtherVar" {
-							t.Error("Expected SomeOtherVar in common domain")
-						}
-						if len(entry.Consts()) != 1 || entry.Consts()[0].Name != "SomeOtherConst" {
-							t.Error("Expected SomeOtherConst in common domain")
-						}
-
-					default:
-						t.Errorf("Unexpected domain: %s", domain)
-					}
-				}
-
-				if domainCount != 4 {
-					t.Errorf("Expected 4 domains, got %d", domainCount)
-				}
-			},
+			checkMetadata: checkCompleteIndexMetadata,
+			checkDomains:  checkCompleteIndexDomains,
 		},
 		{
 			name: "dangling domain description without declarations",
@@ -399,23 +323,126 @@ func makeDomainIndexCases() iter.Seq[makeDomainIndexCase] {
 					testPackage: {Package: pkg},
 				}
 			}(),
-			checkDomains: func(t *testing.T, index Index) {
-				t.Helper()
-
-				domainCount := 0
-				for domain := range index.Entries() {
-					domainCount++
-					if domain == "phantom" {
-						t.Error("Dangling domain 'phantom' should not appear in entries")
-					}
-				}
-
-				if domainCount != 1 {
-					t.Errorf("Expected 1 domain (equal), got %d", domainCount)
-				}
-			},
+			checkDomains: checkDanglingDomainExclusion,
 		},
 	})
+}
+
+/* Domain index assertion helpers */
+
+func checkCompleteIndexMetadata(t *testing.T, index Index) {
+	t.Helper()
+
+	if index.Tool() != "testify-codegen" {
+		t.Errorf("Expected tool 'testify-codegen', got %q", index.Tool())
+	}
+	if index.Copyright() != "Copyright 2025" {
+		t.Errorf("Expected copyright 'Copyright 2025', got %q", index.Copyright())
+	}
+	if index.Receiver() != "Assertions" {
+		t.Errorf("Expected receiver 'Assertions', got %q", index.Receiver())
+	}
+	if index.RootPackage() != testRepo {
+		t.Errorf("Expected root package '%s', got %q", testRepo, index.RootPackage())
+	}
+}
+
+func checkCompleteIndexDomains(t *testing.T, index Index) {
+	t.Helper()
+
+	checkers := map[string]func(*testing.T, Entry){
+		"equal":   checkEqualDomain,
+		"boolean": checkBooleanDomain,
+		"testing": checkTestingDomain,
+		"common":  checkCommonDomain,
+	}
+
+	domainCount := 0
+	for domain, entry := range index.Entries() {
+		domainCount++
+
+		if checker, ok := checkers[domain]; ok {
+			checker(t, entry)
+		} else {
+			t.Errorf("Unexpected domain: %s", domain)
+		}
+	}
+
+	if domainCount != 4 {
+		t.Errorf("Expected 4 domains, got %d", domainCount)
+	}
+}
+
+func checkEqualDomain(t *testing.T, entry Entry) {
+	t.Helper()
+
+	if entry.Description() != "Equality assertions" {
+		t.Errorf("Expected description 'Equality assertions', got %q", entry.Description())
+	}
+	if len(entry.Functions()) != 1 || entry.Functions()[0].Name != "Equal" {
+		t.Error("Expected Equal function in equal domain")
+	}
+	if len(entry.Consts()) != 1 || entry.Consts()[0].Name != "SomeConst" {
+		t.Error("Expected SomeConst in equal domain")
+	}
+}
+
+func checkBooleanDomain(t *testing.T, entry Entry) {
+	t.Helper()
+
+	if entry.Description() != "Boolean assertions" {
+		t.Errorf("Expected description 'Boolean assertions', got %q", entry.Description())
+	}
+	if len(entry.Functions()) != 1 || entry.Functions()[0].Name != "True" {
+		t.Error("Expected True function in boolean domain")
+	}
+	if len(entry.Vars()) != 1 || entry.Vars()[0].Name != "SomeVar" {
+		t.Error("Expected SomeVar in boolean domain")
+	}
+}
+
+func checkTestingDomain(t *testing.T, entry Entry) {
+	t.Helper()
+
+	if len(entry.Types()) != 1 || entry.Types()[0].Name != "TestingT" {
+		t.Error("Expected TestingT type in testing domain")
+	}
+}
+
+func checkCommonDomain(t *testing.T, entry Entry) {
+	t.Helper()
+
+	if entry.Description() != "Other uncategorized helpers" {
+		t.Errorf("Expected description 'Other uncategorized helpers', got %q", entry.Description())
+	}
+	if len(entry.Functions()) != 1 || entry.Functions()[0].Name != "Helper" {
+		t.Error("Expected Helper function in common domain")
+	}
+	if len(entry.Types()) != 1 || entry.Types()[0].Name != "H" {
+		t.Error("Expected H type in common domain")
+	}
+	if len(entry.Vars()) != 1 || entry.Vars()[0].Name != "SomeOtherVar" {
+		t.Error("Expected SomeOtherVar in common domain")
+	}
+	if len(entry.Consts()) != 1 || entry.Consts()[0].Name != "SomeOtherConst" {
+		t.Error("Expected SomeOtherConst in common domain")
+	}
+}
+
+func checkDanglingDomainExclusion(t *testing.T, index Index) {
+	t.Helper()
+
+	domainCount := 0
+	for domain := range index.Entries() {
+		domainCount++
+		if domain == "phantom" {
+			t.Error("Dangling domain 'phantom' should not appear in entries")
+		}
+	}
+
+	if domainCount != 1 {
+		t.Errorf("Expected 1 domain (equal), got %d", domainCount)
+	}
 }
 
 type domainIndexSortingCase struct {

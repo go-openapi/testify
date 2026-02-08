@@ -1,7 +1,7 @@
 ---
 title: "Roadmap"
 description: "Let's share our plans."
-weight: 4
+weight: 5
 ---
 
 ## What's next with this project?
@@ -20,24 +20,24 @@ timeline
                     : documentation site
                     : panic handling fixes
                     : removed deprecated
-    📝 v2.2 (Fev 2026) : Generics
+    ✅ v2.2 (Fev 2026) : Generics
                     : Kind/NotKind
                     : SortedT, NotSortedT
                     : complete test refactoring
                     : more benchmarks. Perf improvements
                     : optional dependencies (colorized)
-    ⏳ v2.3 (Fev 2026) : Other extensions
+    ✅ v2.3 (Fev 2026) : Other extensions
                     : Extensible Assertion type
                     : JSON & YAML assertions: JSONMarshalsAs...
                     : NoGoroutineLeak
                     : more documentation and examples
-    📝 v2.4 (Mar 2026) : Stabilize API (no more removals)
+    ⏳v2.4 (Mar 2026) : Stabilize API (no more removals)
                     : NoFileDescriptorLeak (unix)
                     : async: Eventually/Never to accept error and context
                     : JSONPointerT
                     : export internal tools (spew, difflib,
     section Q2 2026
-    v2.5 (May 2026) : New candidate features from upstream
+    📝 v2.5 (May 2026) : New candidate features from upstream
                     : NoFileDescriptorLeak (windows port)
                     : export internal tools (blackbox)
 {{< /mermaid >}}
@@ -52,7 +52,7 @@ timeline
 6. [x] Introduces colorization (opt-in)
 7. [x] Introduces generics
 8. [x] Realign behavior re quirks, bugs, unexpected logics ... (e.g. IsNonDecreasing, EventuallyWithT...)
-10. [ ] Unclear assertions might be provided an alternative verb (e.g. `EventuallyWithT`)
+10. [x] Unclear assertions might be provided an alternative verb (e.g. `EventuallyWithT`)
 
 ### Adoption timeline at go-openapi
 

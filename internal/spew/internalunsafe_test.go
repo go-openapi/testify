@@ -32,24 +32,12 @@ import (
 	"testing"
 )
 
-// changeKind uses unsafe to intentionally change the kind of a reflect.Value to
-// the maximum kind value which does not exist.  This is needed to test the
-// fallback code which punts to the standard fmt library for new types that
-// might get added to the language.
-func changeKind(v *reflect.Value, readOnly bool) {
-	flags := flagField(v)
-	if readOnly {
-		*flags |= flagRO
-	} else {
-		*flags &^= flagRO
-	}
-	*flags |= flagKindMask
-}
-
 // TestAddedReflectValue tests functionally of the dump and formatter code which
 // falls back to the standard fmt library for new types that might get added to
 // the language.
 func TestAddedReflectValue(t *testing.T) {
+	t.Parallel()
+
 	i := 1
 
 	// Dump using a reflect.Value that is exported.
@@ -98,4 +86,18 @@ func TestAddedReflectValue(t *testing.T) {
 	if s != want {
 		t.Errorf("TestAddedReflectValue #%d got: %s want: %s", i, s, want)
 	}
+}
+
+// changeKind uses unsafe to intentionally change the kind of a reflect.Value to
+// the maximum kind value which does not exist.  This is needed to test the
+// fallback code which punts to the standard fmt library for new types that
+// might get added to the language.
+func changeKind(v *reflect.Value, readOnly bool) {
+	flags := flagField(v)
+	if readOnly {
+		*flags |= flagRO
+	} else {
+		*flags &^= flagRO
+	}
+	*flags |= flagKindMask
 }

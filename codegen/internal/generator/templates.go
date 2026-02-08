@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"path"
 	"sort"
+	"strings"
 	"text/template"
 
 	"github.com/go-openapi/testify/codegen/v2/internal/generator/funcmaps"
@@ -47,7 +48,11 @@ func loadTemplatesFromIndex(
 	templates := make(map[string]*template.Template, len(needed))
 	for _, name := range needed {
 		file := name + tplExt
-		tpl, err := template.New(file).Funcs(funcmaps.FuncMap()).ParseFS(fs, path.Join("templates", file))
+		files := []string{path.Join("templates", file)}
+		if strings.Contains(name, "_test") { // test templates use a set of shared definitions
+			files = append(files, path.Join("templates", "assertion_test_shared.gotmpl"))
+		}
+		tpl, err := template.New(file).Funcs(funcmaps.FuncMap()).ParseFS(fs, files...)
 		if err != nil {
 			return nil, fmt.Errorf("failed to load template %q from %q: %w", name, file, err)
 		}
