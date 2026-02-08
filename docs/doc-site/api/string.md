@@ -1,8 +1,7 @@
 ---
 title: "String"
 description: "Asserting Strings"
-modified: 2026-01-27
-weight: 13
+weight: 14
 domains:
   - "string"
 keywords:
@@ -36,7 +35,6 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### NotRegexp{#notregexp}
-
 NotRegexp asserts that a specified regular expression does not match a string.
 
 See [Regexp](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Regexp).
@@ -47,18 +45,83 @@ See [Regexp](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Regexp).
 ```go
 	assertions.NotRegexp(t, regexp.MustCompile("starts"), "it's starting")
 	assertions.NotRegexp(t, "^start", "it's not starting")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: "^start", "not starting"
 	failure: "^start", "starting"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotRegexp(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotRegexp(t *testing.T)
+	success := assert.NotRegexp(t, "^start", "not starting")
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotRegexp(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotRegexp(t *testing.T)
+	require.NotRegexp(t, "^start", "not starting")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -78,7 +141,7 @@ See [Regexp](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Regexp).
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotRegexp(t T, rx any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotRegexp) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotRegexp](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L90)
@@ -86,7 +149,6 @@ See [Regexp](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Regexp).
 {{< /tabs >}}
 
 ### NotRegexpT[Rex RegExp, ADoc Text] {{% icon icon="star" color=orange %}}{#notregexptrex-regexp-adoc-text}
-
 NotRegexpT asserts that a specified regular expression does not match a string.
 
 See [RegexpT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#RegexpT).
@@ -97,18 +159,83 @@ See [RegexpT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#RegexpT
 ```go
 	assertions.NotRegexp(t, regexp.MustCompile("starts"), "it's starting")
 	assertions.NotRegexp(t, "^start", "it's not starting")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: "^start", "not starting"
 	failure: "^start", "starting"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotRegexpT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotRegexpT(t *testing.T)
+	success := assert.NotRegexpT(t, "^start", "not starting")
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotRegexpT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotRegexpT(t *testing.T)
+	require.NotRegexpT(t, "^start", "not starting")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -124,15 +251,14 @@ See [RegexpT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#RegexpT
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
-| [`assertions.NotRegexpT(t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotRegexpT) | internal implementation |
+|--|--|
+| [`assertions.NotRegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotRegexpT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotRegexpT](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L131)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### Regexp{#regexp}
-
 Regexp asserts that a specified regular expression matches a string.
 
 The regular expression may be passed as a [regexp.Regexp](https://pkg.go.dev/regexp#Regexp), a string or a []byte and will be compiled.
@@ -145,18 +271,83 @@ The actual argument to be matched may be a string, []byte or anything that print
 ```go
 	assertions.Regexp(t, regexp.MustCompile("start"), "it's starting")
 	assertions.Regexp(t, "start...$", "it's not starting")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: "^start", "starting"
 	failure: "^start", "not starting"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestRegexp(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestRegexp(t *testing.T)
+	success := assert.Regexp(t, "^start", "starting")
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestRegexp(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestRegexp(t *testing.T)
+	require.Regexp(t, "^start", "starting")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -176,7 +367,7 @@ The actual argument to be matched may be a string, []byte or anything that print
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Regexp(t T, rx any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Regexp) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Regexp](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L27)
@@ -184,7 +375,6 @@ The actual argument to be matched may be a string, []byte or anything that print
 {{< /tabs >}}
 
 ### RegexpT[Rex RegExp, ADoc Text] {{% icon icon="star" color=orange %}}{#regexptrex-regexp-adoc-text}
-
 RegexpT asserts that a specified regular expression matches a string.
 
 The actual argument to be matched may be a string or []byte.
@@ -193,16 +383,81 @@ See [Regexp](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Regexp).
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
-{{% tab title="Examples" %}}
-```go
 	success: "^start", "starting"
 	failure: "^start", "not starting"
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestRegexpT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestRegexpT(t *testing.T)
+	success := assert.RegexpT(t, "^start", "starting")
+	fmt.Printf("success: %t\n", success)
+
+}
+
 ```
+{{% /card %}}
+
+
+{{% /cards %}}
 {{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestRegexpT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestRegexpT(t *testing.T)
+	require.RegexpT(t, "^start", "starting")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -218,8 +473,8 @@ See [Regexp](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Regexp).
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
-| [`assertions.RegexpT(t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#RegexpT) | internal implementation |
+|--|--|
+| [`assertions.RegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#RegexpT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#RegexpT](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L63)
 {{% /tab %}}
@@ -240,6 +495,4 @@ SPDX-License-Identifier: Apache-2.0
 
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
-
-Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 -->

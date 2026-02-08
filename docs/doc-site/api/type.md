@@ -1,8 +1,7 @@
 ---
 title: "Type"
 description: "Asserting Types Rather Than Values"
-modified: 2026-01-27
-weight: 16
+weight: 17
 domains:
   - "type"
 keywords:
@@ -54,7 +53,6 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### Implements{#implements}
-
 Implements asserts that an object is implemented by the specified interface.
 
 {{% expand title="Examples" %}}
@@ -62,18 +60,109 @@ Implements asserts that an object is implemented by the specified interface.
 {{% tab title="Usage" %}}
 ```go
 	assertions.Implements(t, (*MyInterface)(nil), new(MyObject))
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: ptr(dummyInterface), new(testing.T)
 	failure: (*error)(nil), new(testing.T)
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestImplements(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestImplements(t *testing.T)
+	success := assert.Implements(t, ptr(dummyInterface), new(testing.T))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
+var (
+	staticVar = "static string"
+
+	dummyInterface assert.T
+)
+
+func ptr[T any](value T) *T {
+	p := value
+
+	return &p
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestImplements(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestImplements(t *testing.T)
+	require.Implements(t, ptr(dummyInterface), new(testing.T))
+	fmt.Println("passed")
+
+}
+
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
+var (
+	staticVar = "static string"
+
+	dummyInterface require.T
+)
+
+func ptr[T any](value T) *T {
+	p := value
+
+	return &p
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -93,7 +182,7 @@ Implements asserts that an object is implemented by the specified interface.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Implements(t T, interfaceObject any, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Implements) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Implements](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L21)
@@ -101,7 +190,6 @@ Implements asserts that an object is implemented by the specified interface.
 {{< /tabs >}}
 
 ### IsNotOfTypeT[EType any] {{% icon icon="star" color=orange %}}{#isnotoftypetetype-any}
-
 IsNotOfTypeT asserts that an object is not of a given type.
 
 {{% expand title="Examples" %}}
@@ -109,18 +197,87 @@ IsNotOfTypeT asserts that an object is not of a given type.
 {{% tab title="Usage" %}}
 ```go
 	assertions.IsOfType[MyType](t,myVar)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 123.123
 	failure: myType(123.123)
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestIsNotOfTypeT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestIsNotOfTypeT(t *testing.T)
+	success := assert.IsNotOfTypeT[myType](t, 123.123)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+type myType float64
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestIsNotOfTypeT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestIsNotOfTypeT(t *testing.T)
+	require.IsNotOfTypeT[myType](t, 123.123)
+	fmt.Println("passed")
+
+}
+
+type myType float64
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -136,15 +293,14 @@ IsNotOfTypeT asserts that an object is not of a given type.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
-| [`assertions.IsNotOfTypeT(t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNotOfTypeT) | internal implementation |
+|--|--|
+| [`assertions.IsNotOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNotOfTypeT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNotOfTypeT](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L141)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### IsNotType{#isnottype}
-
 IsNotType asserts that the specified objects are not of the same type.
 
 {{% expand title="Examples" %}}
@@ -152,18 +308,83 @@ IsNotType asserts that the specified objects are not of the same type.
 {{% tab title="Usage" %}}
 ```go
 	assertions.IsNotType(t, &NotMyStruct{}, &MyStruct{})
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: int32(123), int64(456)
 	failure: 123, 456
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestIsNotType(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestIsNotType(t *testing.T)
+	success := assert.IsNotType(t, int32(123), int64(456))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestIsNotType(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestIsNotType(t *testing.T)
+	require.IsNotType(t, int32(123), int64(456))
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -183,7 +404,7 @@ IsNotType asserts that the specified objects are not of the same type.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.IsNotType(t T, theType any, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNotType) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNotType](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L120)
@@ -191,7 +412,6 @@ IsNotType asserts that the specified objects are not of the same type.
 {{< /tabs >}}
 
 ### IsOfTypeT[EType any] {{% icon icon="star" color=orange %}}{#isoftypetetype-any}
-
 IsOfTypeT asserts that an object is of a given type.
 
 {{% expand title="Examples" %}}
@@ -199,18 +419,87 @@ IsOfTypeT asserts that an object is of a given type.
 {{% tab title="Usage" %}}
 ```go
 	assertions.IsOfTypeT[MyType](t,myVar)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: myType(123.123)
 	failure: 123.123
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestIsOfTypeT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestIsOfTypeT(t *testing.T)
+	success := assert.IsOfTypeT[myType](t, myType(123.123))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+type myType float64
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestIsOfTypeT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestIsOfTypeT(t *testing.T)
+	require.IsOfTypeT[myType](t, myType(123.123))
+	fmt.Println("passed")
+
+}
+
+type myType float64
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -226,15 +515,14 @@ IsOfTypeT asserts that an object is of a given type.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
-| [`assertions.IsOfTypeT(t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsOfTypeT) | internal implementation |
+|--|--|
+| [`assertions.IsOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsOfTypeT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsOfTypeT](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L96)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### IsType{#istype}
-
 IsType asserts that the specified objects are of the same type.
 
 {{% expand title="Examples" %}}
@@ -242,18 +530,83 @@ IsType asserts that the specified objects are of the same type.
 {{% tab title="Usage" %}}
 ```go
 	assertions.IsType(t, &MyStruct{}, &MyStruct{})
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 123, 456
 	failure: int32(123), int64(456)
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestIsType(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestIsType(t *testing.T)
+	success := assert.IsType(t, 123, 456)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestIsType(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestIsType(t *testing.T)
+	require.IsType(t, 123, 456)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -273,7 +626,7 @@ IsType asserts that the specified objects are of the same type.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.IsType(t T, expectedType any, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsType) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsType](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L75)
@@ -281,7 +634,6 @@ IsType asserts that the specified objects are of the same type.
 {{< /tabs >}}
 
 ### Kind{#kind}
-
 Kind asserts that the [reflect.Kind](https://pkg.go.dev/reflect#Kind) of a given object matches the expected [reflect.Kind](https://pkg.go.dev/reflect#Kind).
 
 Kind reflects the concrete value stored in the object. The nil value (or interface with nil value)
@@ -292,18 +644,85 @@ are comparable to [reflect.Invalid](https://pkg.go.dev/reflect#Invalid). See als
 {{% tab title="Usage" %}}
 ```go
 	assertions.Kind(t, reflect.String, "Hello World")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: reflect.String, "hello"
 	failure: reflect.String, 0
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestKind(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"reflect"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestKind(t *testing.T)
+	success := assert.Kind(t, reflect.String, "hello")
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestKind(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"reflect"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestKind(t *testing.T)
+	require.Kind(t, reflect.String, "hello")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -323,7 +742,7 @@ are comparable to [reflect.Invalid](https://pkg.go.dev/reflect#Invalid). See als
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Kind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Kind) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Kind](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L210)
@@ -331,7 +750,6 @@ are comparable to [reflect.Invalid](https://pkg.go.dev/reflect#Invalid). See als
 {{< /tabs >}}
 
 ### NotImplements{#notimplements}
-
 NotImplements asserts that an object does not implement the specified interface.
 
 {{% expand title="Examples" %}}
@@ -339,18 +757,83 @@ NotImplements asserts that an object does not implement the specified interface.
 {{% tab title="Usage" %}}
 ```go
 	assertions.NotImplements(t, (*MyInterface)(nil), new(MyObject))
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: (*error)(nil), new(testing.T)
 	failure: ptr(dummyInterface), new(testing.T)
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotImplements(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotImplements(t *testing.T)
+	success := assert.NotImplements(t, (*error)(nil), new(testing.T))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotImplements(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotImplements(t *testing.T)
+	require.NotImplements(t, (*error)(nil), new(testing.T))
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -370,7 +853,7 @@ NotImplements asserts that an object does not implement the specified interface.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotImplements(t T, interfaceObject any, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotImplements) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotImplements](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L48)
@@ -378,7 +861,6 @@ NotImplements asserts that an object does not implement the specified interface.
 {{< /tabs >}}
 
 ### NotKind{#notkind}
-
 NotKind asserts that the [reflect.Kind](https://pkg.go.dev/reflect#Kind) of a given object does not match the expected [reflect.Kind](https://pkg.go.dev/reflect#Kind).
 
 Kind reflects the concrete value stored in the object. The nil value (or interface with nil value)
@@ -389,18 +871,85 @@ are comparable to [reflect.Invalid](https://pkg.go.dev/reflect#Invalid). See als
 {{% tab title="Usage" %}}
 ```go
 	assertions.NotKind(t, reflect.Int, "Hello World")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: reflect.String, 0
 	failure: reflect.String, "hello"
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotKind(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"reflect"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotKind(t *testing.T)
+	success := assert.NotKind(t, reflect.String, 0)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotKind(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"reflect"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotKind(t *testing.T)
+	require.NotKind(t, reflect.String, 0)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -420,7 +969,7 @@ are comparable to [reflect.Invalid](https://pkg.go.dev/reflect#Invalid). See als
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotKind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotKind) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotKind](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L243)
@@ -428,7 +977,6 @@ are comparable to [reflect.Invalid](https://pkg.go.dev/reflect#Invalid). See als
 {{< /tabs >}}
 
 ### NotZero{#notzero}
-
 NotZero asserts that i is not the zero value for its type.
 
 {{% expand title="Examples" %}}
@@ -436,18 +984,83 @@ NotZero asserts that i is not the zero value for its type.
 {{% tab title="Usage" %}}
 ```go
 	assertions.NotZero(t, obj)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1
 	failure: 0
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotZero(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotZero(t *testing.T)
+	success := assert.NotZero(t, 1)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotZero(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotZero(t *testing.T)
+	require.NotZero(t, 1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -467,7 +1080,7 @@ NotZero asserts that i is not the zero value for its type.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotZero(t T, i any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotZero) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotZero](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L186)
@@ -475,7 +1088,6 @@ NotZero asserts that i is not the zero value for its type.
 {{< /tabs >}}
 
 ### Zero{#zero}
-
 Zero asserts that i is the zero value for its type.
 
 {{% expand title="Examples" %}}
@@ -483,18 +1095,83 @@ Zero asserts that i is the zero value for its type.
 {{% tab title="Usage" %}}
 ```go
 	assertions.Zero(t, obj)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 0
 	failure: 1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestZero(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestZero(t *testing.T)
+	success := assert.Zero(t, 0)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestZero(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestZero(t *testing.T)
+	require.Zero(t, 0)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -514,7 +1191,7 @@ Zero asserts that i is the zero value for its type.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Zero(t T, i any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Zero) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Zero](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L165)
@@ -536,6 +1213,4 @@ SPDX-License-Identifier: Apache-2.0
 
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
-
-Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 -->

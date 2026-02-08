@@ -1,7 +1,6 @@
 ---
 title: "Panic"
 description: "Asserting A Panic Behavior"
-modified: 2026-01-27
 weight: 12
 domains:
   - "panic"
@@ -35,7 +34,6 @@ This domain exposes 4 functionalities.
 ```
 
 ### NotPanics{#notpanics}
-
 NotPanics asserts that the code inside the specified function does NOT panic.
 
 {{% expand title="Examples" %}}
@@ -43,18 +41,85 @@ NotPanics asserts that the code inside the specified function does NOT panic.
 {{% tab title="Usage" %}}
 ```go
 	assertions.NotPanics(t, func(){ RemainCalm() })
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: func() { }
 	failure: func() { panic("panicking") }
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotPanics(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotPanics(t *testing.T)
+	success := assert.NotPanics(t, func() {
+	})
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNotPanics(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotPanics(t *testing.T)
+	require.NotPanics(t, func() {
+	})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -74,7 +139,7 @@ NotPanics asserts that the code inside the specified function does NOT panic.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.NotPanics(t T, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotPanics) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotPanics](https://github.com/go-openapi/testify/blob/master/internal/assertions/panic.go#L111)
@@ -82,7 +147,6 @@ NotPanics asserts that the code inside the specified function does NOT panic.
 {{< /tabs >}}
 
 ### Panics{#panics}
-
 Panics asserts that the code inside the specified function panics.
 
 {{% expand title="Examples" %}}
@@ -90,18 +154,87 @@ Panics asserts that the code inside the specified function panics.
 {{% tab title="Usage" %}}
 ```go
 	assertions.Panics(t, func(){ GoCrazy() })
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: func() { panic("panicking") }
 	failure: func() { }
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestPanics(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestPanics(t *testing.T)
+	success := assert.Panics(t, func() {
+		panic("panicking")
+	})
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestPanics(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestPanics(t *testing.T)
+	require.Panics(t, func() {
+		panic("panicking")
+	})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -121,7 +254,7 @@ Panics asserts that the code inside the specified function panics.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Panics(t T, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Panics) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Panics](https://github.com/go-openapi/testify/blob/master/internal/assertions/panic.go#L25)
@@ -129,7 +262,6 @@ Panics asserts that the code inside the specified function panics.
 {{< /tabs >}}
 
 ### PanicsWithError{#panicswitherror}
-
 PanicsWithError asserts that the code inside the specified function panics,
 and that the recovered panic value is an error that satisfies the EqualError comparison.
 
@@ -138,18 +270,88 @@ and that the recovered panic value is an error that satisfies the EqualError com
 {{% tab title="Usage" %}}
 ```go
 	assertions.PanicsWithError(t, "crazy error", func(){ GoCrazy() })
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: ErrTest.Error(), func() { panic(ErrTest) }
 	failure: ErrTest.Error(), func() { }
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestPanicsWithError(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestPanicsWithError(t *testing.T)
+	success := assert.PanicsWithError(t, assert.ErrTest.Error(), func() {
+		panic(assert.ErrTest)
+	})
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestPanicsWithError(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestPanicsWithError(t *testing.T)
+	require.PanicsWithError(t, assert.ErrTest.Error(), func() {
+		panic(assert.ErrTest)
+	})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -169,7 +371,7 @@ and that the recovered panic value is an error that satisfies the EqualError com
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.PanicsWithError(t T, errString string, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#PanicsWithError) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#PanicsWithError](https://github.com/go-openapi/testify/blob/master/internal/assertions/panic.go#L77)
@@ -177,7 +379,6 @@ and that the recovered panic value is an error that satisfies the EqualError com
 {{< /tabs >}}
 
 ### PanicsWithValue{#panicswithvalue}
-
 PanicsWithValue asserts that the code inside the specified function panics,
 and that the recovered panic value equals the expected panic value.
 
@@ -186,18 +387,87 @@ and that the recovered panic value equals the expected panic value.
 {{% tab title="Usage" %}}
 ```go
 	assertions.PanicsWithValue(t, "crazy error", func(){ GoCrazy() })
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: "panicking", func() { panic("panicking") }
 	failure: "panicking", func() { }
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestPanicsWithValue(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestPanicsWithValue(t *testing.T)
+	success := assert.PanicsWithValue(t, "panicking", func() {
+		panic("panicking")
+	})
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestPanicsWithValue(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestPanicsWithValue(t *testing.T)
+	require.PanicsWithValue(t, "panicking", func() {
+		panic("panicking")
+	})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -217,7 +487,7 @@ and that the recovered panic value equals the expected panic value.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.PanicsWithValue(t T, expected any, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#PanicsWithValue) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#PanicsWithValue](https://github.com/go-openapi/testify/blob/master/internal/assertions/panic.go#L49)
@@ -239,6 +509,4 @@ SPDX-License-Identifier: Apache-2.0
 
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
-
-Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 -->

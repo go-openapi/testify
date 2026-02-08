@@ -1,8 +1,7 @@
 ---
 title: "Time"
 description: "Asserting Times And Durations"
-modified: 2026-01-27
-weight: 15
+weight: 16
 domains:
   - "time"
 keywords:
@@ -29,7 +28,6 @@ This domain exposes 2 functionalities.
 ```
 
 ### WithinDuration{#withinduration}
-
 WithinDuration asserts that the two times are within duration delta of each other.
 
 {{% expand title="Examples" %}}
@@ -37,18 +35,85 @@ WithinDuration asserts that the two times are within duration delta of each othe
 {{% tab title="Usage" %}}
 ```go
 	assertions.WithinDuration(t, time.Now(), 10*time.Second)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 12, 0, 1, 0, time.UTC), 2*time.Second
 	failure: time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 12, 0, 10, 0, time.UTC), 1*time.Second
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestWithinDuration(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestWithinDuration(t *testing.T)
+	success := assert.WithinDuration(t, time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 12, 0, 1, 0, time.UTC), 2*time.Second)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestWithinDuration(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestWithinDuration(t *testing.T)
+	require.WithinDuration(t, time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 12, 0, 1, 0, time.UTC), 2*time.Second)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -68,7 +133,7 @@ WithinDuration asserts that the two times are within duration delta of each othe
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.WithinDuration(t T, expected time.Time, actual time.Time, delta time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#WithinDuration) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#WithinDuration](https://github.com/go-openapi/testify/blob/master/internal/assertions/time.go#L21)
@@ -76,7 +141,6 @@ WithinDuration asserts that the two times are within duration delta of each othe
 {{< /tabs >}}
 
 ### WithinRange{#withinrange}
-
 WithinRange asserts that a time is within a time range (inclusive).
 
 {{% expand title="Examples" %}}
@@ -84,18 +148,85 @@ WithinRange asserts that a time is within a time range (inclusive).
 {{% tab title="Usage" %}}
 ```go
 	assertions.WithinRange(t, time.Now(), time.Now().Add(-time.Second), time.Now().Add(time.Second))
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 11, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 13, 0, 0, 0, time.UTC)
 	failure: time.Date(2024, 1, 1, 14, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 11, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 13, 0, 0, 0, time.UTC)
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestWithinRange(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestWithinRange(t *testing.T)
+	success := assert.WithinRange(t, time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 11, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 13, 0, 0, 0, time.UTC))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestWithinRange(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestWithinRange(t *testing.T)
+	require.WithinRange(t, time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 11, 0, 0, 0, time.UTC), time.Date(2024, 1, 1, 13, 0, 0, 0, time.UTC))
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -115,7 +246,7 @@ WithinRange asserts that a time is within a time range (inclusive).
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.WithinRange(t T, actual time.Time, start time.Time, end time.Time, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#WithinRange) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#WithinRange](https://github.com/go-openapi/testify/blob/master/internal/assertions/time.go#L45)
@@ -137,6 +268,4 @@ SPDX-License-Identifier: Apache-2.0
 
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
-
-Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 -->

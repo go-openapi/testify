@@ -1,7 +1,6 @@
 ---
 title: "Comparison"
 description: "Comparing Ordered Values"
-modified: 2026-01-27
 weight: 3
 domains:
   - "comparison"
@@ -60,7 +59,6 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```
 
 ### Greater{#greater}
-
 Greater asserts that the first element is strictly greater than the second.
 
 Both elements must be of the same type in the [reflect.Kind](https://pkg.go.dev/reflect#Kind) sense.
@@ -73,18 +71,83 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 	assertions.Greater(t, 2, 1)
 	assertions.Greater(t, float64(2), float64(1))
 	assertions.Greater(t, "b", "a")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 2, 1
 	failure: 1, 2
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestGreater(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestGreater(t *testing.T)
+	success := assert.Greater(t, 2, 1)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestGreater(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestGreater(t *testing.T)
+	require.Greater(t, 2, 1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -104,7 +167,7 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Greater(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Greater) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Greater](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L30)
@@ -112,7 +175,6 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 {{< /tabs >}}
 
 ### GreaterOrEqual{#greaterorequal}
-
 GreaterOrEqual asserts that the first element is greater than or equal to the second.
 
 See also [Greater](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Greater).
@@ -125,18 +187,83 @@ See also [Greater](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Gr
 	assertions.GreaterOrEqual(t, 2, 2)
 	assertions.GreaterOrEqual(t, "b", "a")
 	assertions.GreaterOrEqual(t, "b", "b")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 2, 1
 	failure: 1, 2
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestGreaterOrEqual(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestGreaterOrEqual(t *testing.T)
+	success := assert.GreaterOrEqual(t, 2, 1)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestGreaterOrEqual(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestGreaterOrEqual(t *testing.T)
+	require.GreaterOrEqual(t, 2, 1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -156,7 +283,7 @@ See also [Greater](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Gr
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.GreaterOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#GreaterOrEqual) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#GreaterOrEqual](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L91)
@@ -164,7 +291,6 @@ See also [Greater](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Gr
 {{< /tabs >}}
 
 ### GreaterOrEqualT[Orderable Ordered] {{% icon icon="star" color=orange %}}{#greaterorequaltorderable-ordered}
-
 GreaterOrEqualT asserts that for two elements of the same type,
 the first element is greater than or equal to the second.
 
@@ -186,18 +312,83 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 	assertions.GreaterOrEqualT(t, 2, 2)
 	assertions.GreaterOrEqualT(t, "b", "a")
 	assertions.GreaterOrEqualT(t, "b", "b")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 2, 1
 	failure: 1, 2
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestGreaterOrEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestGreaterOrEqualT(t *testing.T)
+	success := assert.GreaterOrEqualT(t, 2, 1)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestGreaterOrEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestGreaterOrEqualT(t *testing.T)
+	require.GreaterOrEqualT(t, 2, 1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -213,15 +404,14 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
-| [`assertions.GreaterOrEqualT(t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#GreaterOrEqualT) | internal implementation |
+|--|--|
+| [`assertions.GreaterOrEqualT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#GreaterOrEqualT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#GreaterOrEqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L124)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### GreaterT[Orderable Ordered] {{% icon icon="star" color=orange %}}{#greatertorderable-ordered}
-
 GreaterT asserts that for two elements of the same type,
 the first element is strictly greater than the second.
 
@@ -242,18 +432,83 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 	assertions.GreaterT(t, float64(2), float64(1))
 	assertions.GreaterT(t, "b", "a")
 	assertions.GreaterT(t, time.Date(2026,1,1,0,0,0,0,nil), time.Now())
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 2, 1
 	failure: 1, 2
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestGreaterT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestGreaterT(t *testing.T)
+	success := assert.GreaterT(t, 2, 1)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestGreaterT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestGreaterT(t *testing.T)
+	require.GreaterT(t, 2, 1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -269,15 +524,14 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
-| [`assertions.GreaterT(t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#GreaterT) | internal implementation |
+|--|--|
+| [`assertions.GreaterT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#GreaterT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#GreaterT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L62)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### Less{#less}
-
 Less asserts that the first element is strictly less than the second.
 
 Both elements must be of the same type in the [reflect.Kind](https://pkg.go.dev/reflect#Kind) sense.
@@ -290,18 +544,83 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 	assertions.Less(t, 1, 2)
 	assertions.Less(t, float64(1), float64(2))
 	assertions.Less(t, "a", "b")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1, 2
 	failure: 2, 1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestLess(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestLess(t *testing.T)
+	success := assert.Less(t, 1, 2)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestLess(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestLess(t *testing.T)
+	require.Less(t, 1, 2)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -321,7 +640,7 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Less(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Less) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Less](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L153)
@@ -329,7 +648,6 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 {{< /tabs >}}
 
 ### LessOrEqual{#lessorequal}
-
 LessOrEqual asserts that the first element is less than or equal to the second.
 
 {{% expand title="Examples" %}}
@@ -340,18 +658,83 @@ LessOrEqual asserts that the first element is less than or equal to the second.
 	assertions.LessOrEqual(t, 2, 2)
 	assertions.LessOrEqual(t, "a", "b")
 	assertions.LessOrEqual(t, "b", "b")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1, 2
 	failure: 2, 1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestLessOrEqual(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestLessOrEqual(t *testing.T)
+	success := assert.LessOrEqual(t, 1, 2)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestLessOrEqual(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestLessOrEqual(t *testing.T)
+	require.LessOrEqual(t, 1, 2)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -371,7 +754,7 @@ LessOrEqual asserts that the first element is less than or equal to the second.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.LessOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#LessOrEqual) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#LessOrEqual](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L211)
@@ -379,7 +762,6 @@ LessOrEqual asserts that the first element is less than or equal to the second.
 {{< /tabs >}}
 
 ### LessOrEqualT[Orderable Ordered] {{% icon icon="star" color=orange %}}{#lessorequaltorderable-ordered}
-
 LessOrEqualT asserts that for two elements of the same type, the first element is less than or equal to the second.
 
 The [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) type can be any of Go's [cmp.Ordered](https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
@@ -400,18 +782,83 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 	assertions.LessOrEqualT(t, 2, 2)
 	assertions.LessOrEqualT(t, "a", "b")
 	assertions.LessOrEqualT(t, "b", "b")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1, 2
 	failure: 2, 1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestLessOrEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestLessOrEqualT(t *testing.T)
+	success := assert.LessOrEqualT(t, 1, 2)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestLessOrEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestLessOrEqualT(t *testing.T)
+	require.LessOrEqualT(t, 1, 2)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -427,15 +874,14 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
-| [`assertions.LessOrEqualT(t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#LessOrEqualT) | internal implementation |
+|--|--|
+| [`assertions.LessOrEqualT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#LessOrEqualT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#LessOrEqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L243)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### LessT[Orderable Ordered] {{% icon icon="star" color=orange %}}{#lesstorderable-ordered}
-
 LessT asserts that for two elements of the same type, the first element is strictly less than the second.
 
 The [Ordered](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Ordered) type can be any of Go's [cmp.Ordered](https://pkg.go.dev/cmp#Ordered) (strings, numeric types),
@@ -455,18 +901,83 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 	assertions.LessT(t, 1, 2)
 	assertions.LessT(t, float64(1), float64(2))
 	assertions.LessT(t, "a", "b")
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1, 2
 	failure: 2, 1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestLessT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestLessT(t *testing.T)
+	success := assert.LessT(t, 1, 2)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestLessT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestLessT(t *testing.T)
+	require.LessT(t, 1, 2)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -482,15 +993,14 @@ To compare values that need a type conversion (e.g. float32 against float64), yo
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
-| [`assertions.LessT(t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#LessT) | internal implementation |
+|--|--|
+| [`assertions.LessT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#LessT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#LessT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L184)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### Negative{#negative}
-
 Negative asserts that the specified element is strictly negative.
 
 {{% expand title="Examples" %}}
@@ -499,18 +1009,83 @@ Negative asserts that the specified element is strictly negative.
 ```go
 	assertions.Negative(t, -1)
 	assertions.Negative(t, -1.23)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: -1
 	failure: 1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNegative(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNegative(t *testing.T)
+	success := assert.Negative(t, -1)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNegative(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNegative(t *testing.T)
+	require.Negative(t, -1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -530,7 +1105,7 @@ Negative asserts that the specified element is strictly negative.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Negative(t T, e any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Negative) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Negative](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L314)
@@ -538,7 +1113,6 @@ Negative asserts that the specified element is strictly negative.
 {{< /tabs >}}
 
 ### NegativeT[SignedNumber SignedNumeric] {{% icon icon="star" color=orange %}}{#negativetsignednumber-signednumeric}
-
 NegativeT asserts that the specified element of a signed numeric type is strictly negative.
 
 {{% expand title="Examples" %}}
@@ -547,18 +1121,83 @@ NegativeT asserts that the specified element of a signed numeric type is strictl
 ```go
 	assertions.NegativeT(t, -1)
 	assertions.NegativeT(t, -1.23)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: -1
 	failure: 1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNegativeT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNegativeT(t *testing.T)
+	success := assert.NegativeT(t, -1)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNegativeT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNegativeT(t *testing.T)
+	require.NegativeT(t, -1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -574,15 +1213,14 @@ NegativeT asserts that the specified element of a signed numeric type is strictl
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
-| [`assertions.NegativeT(t T, e SignedNumber, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NegativeT) | internal implementation |
+|--|--|
+| [`assertions.NegativeT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NegativeT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NegativeT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L335)
 {{% /tab %}}
 {{< /tabs >}}
 
 ### Positive{#positive}
-
 Positive asserts that the specified element is strictly positive.
 
 {{% expand title="Examples" %}}
@@ -591,18 +1229,83 @@ Positive asserts that the specified element is strictly positive.
 ```go
 	assertions.Positive(t, 1)
 	assertions.Positive(t, 1.23)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1
 	failure: -1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestPositive(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestPositive(t *testing.T)
+	success := assert.Positive(t, 1)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestPositive(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestPositive(t *testing.T)
+	require.Positive(t, 1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -622,7 +1325,7 @@ Positive asserts that the specified element is strictly positive.
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
+|--|--|
 | [`assertions.Positive(t T, e any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Positive) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#Positive](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L268)
@@ -630,7 +1333,6 @@ Positive asserts that the specified element is strictly positive.
 {{< /tabs >}}
 
 ### PositiveT[SignedNumber SignedNumeric] {{% icon icon="star" color=orange %}}{#positivetsignednumber-signednumeric}
-
 PositiveT asserts that the specified element of a signed numeric type is strictly positive.
 
 {{% expand title="Examples" %}}
@@ -639,18 +1341,83 @@ PositiveT asserts that the specified element of a signed numeric type is strictl
 ```go
 	assertions.PositiveT(t, 1)
 	assertions.PositiveT(t, 1.23)
-```
-{{< /tab >}}
-{{% tab title="Examples" %}}
-```go
 	success: 1
 	failure: -1
 ```
 {{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestPositiveT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestPositiveT(t *testing.T)
+	success := assert.PositiveT(t, 1)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestPositiveT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestPositiveT(t *testing.T)
+	require.PositiveT(t, 1)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 
 {{< tabs >}}
+  
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
@@ -666,8 +1433,8 @@ PositiveT asserts that the specified element of a signed numeric type is strictl
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
-|--|--| 
-| [`assertions.PositiveT(t T, e SignedNumber, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#PositiveT) | internal implementation |
+|--|--|
+| [`assertions.PositiveT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#PositiveT) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#PositiveT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L289)
 {{% /tab %}}
@@ -688,6 +1455,4 @@ SPDX-License-Identifier: Apache-2.0
 
 
 Document generated by github.com/go-openapi/testify/codegen/v2 DO NOT EDIT.
-
-Generated on 2026-01-27 (version 98658ef) using codegen version v2.2.1-0.20260127181549-98658ef85ebb [sha: 98658ef85ebb5f0990ed1c8408af6defef6c6d5c]
 -->
