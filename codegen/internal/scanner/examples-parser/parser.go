@@ -8,13 +8,13 @@ import (
 	"fmt"
 	"go/ast"
 	"go/doc"
+	"go/format"
 	"go/printer"
 	"go/token"
 	"strings"
 	"unicode"
 
 	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/imports"
 )
 
 const tabWidth = 4
@@ -281,7 +281,7 @@ type TestableExample struct {
 //
 // For regular examples, only the function body is rendered.
 //
-// In both cases, the code is formatted with [imports.Process] (goimports).
+// In both cases, the code is formatted with [format.Source].
 func (x TestableExample) Render() string {
 	// Render the full Play file as a standalone main program when available.
 	if x.play != nil {
@@ -309,10 +309,7 @@ func (x TestableExample) renderPlay() string {
 	raw := buf.String()
 
 	// make sure the output is well formatted
-	formatted, err := imports.Process("example.go", []byte(raw), &imports.Options{
-		Fragment:   true,
-		FormatOnly: true,
-	})
+	formatted, err := format.Source([]byte(raw))
 	if err != nil {
 		return raw
 	}
@@ -344,13 +341,10 @@ func (x TestableExample) renderBody() string {
 	// Remove trailing "// Output:" comment lines before formatting.
 	body = stripOutputComments(body)
 
-	// Wrap in a synthetic file so imports.Process can handle formatting.
+	// Wrap in a synthetic file so format.Source can handle formatting.
 	synthetic := "package p\n\nfunc f() {\n" + body + "\n}\n"
 
-	formatted, err := imports.Process("example.go", []byte(synthetic), &imports.Options{
-		Fragment:   true,
-		FormatOnly: true,
-	})
+	formatted, err := format.Source([]byte(synthetic))
 	if err != nil {
 		return strings.TrimSpace(body)
 	}
