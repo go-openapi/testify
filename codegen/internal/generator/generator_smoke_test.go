@@ -305,7 +305,7 @@ func TestGenerateDocSmokeTest(t *testing.T) {
 	assertDocs.Merge(requireDocs)
 
 	// Run doc generator
-	docDir := filepath.Join(tmpDir, "docs")
+	docDir := "docs" // relative to targetDir
 	docGen := NewDocGenerator(assertDocs)
 	err = docGen.Generate(
 		WithTargetDoc(docDir),
