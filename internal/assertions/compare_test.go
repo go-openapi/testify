@@ -4,131 +4,11 @@
 package assertions
 
 import (
-	"bytes"
 	"iter"
 	"slices"
 	"testing"
 	"time"
 )
-
-func TestCompareErrorMessages(t *testing.T) {
-	// Error message validation
-	t.Parallel()
-
-	t.Run("with Greater", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		Greater(mock, 1, 2)
-
-		if !mock.Failed() {
-			t.Error("Expected test to fail but it passed")
-		}
-
-		errorMsg := mock.errorString()
-		if !Contains(t, errorMsg, `"1" is not greater than "2"`) {
-			t.Errorf("Error message should contain comparison details, got: %s", errorMsg)
-		}
-	})
-
-	t.Run("with GreaterOrEqual", func(t *testing.T) {
-		mock := new(mockT)
-		GreaterOrEqual(mock, 1, 2)
-
-		if !mock.Failed() {
-			t.Error("Expected test to fail but it passed")
-		}
-
-		errorMsg := mock.errorString()
-		if !Contains(t, errorMsg, `"1" is not greater than or equal to "2"`) {
-			t.Errorf("Error message should contain comparison details, got: %s", errorMsg)
-		}
-	})
-
-	t.Run("with Less", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		Less(mock, 2, 1)
-
-		if !mock.Failed() {
-			t.Error("Expected test to fail but it passed")
-		}
-
-		errorMsg := mock.errorString()
-		if !Contains(t, errorMsg, `"2" is not less than "1"`) {
-			t.Errorf("Error message should contain comparison details, got: %s", errorMsg)
-		}
-	})
-
-	t.Run("with LessOrEqual", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		LessOrEqual(mock, 2, 1)
-
-		if !mock.Failed() {
-			t.Error("Expected test to fail but it passed")
-		}
-
-		errorMsg := mock.errorString()
-		if !Contains(t, errorMsg, `"2" is not less than or equal to "1"`) {
-			t.Errorf("Error message should contain comparison details, got: %s", errorMsg)
-		}
-	})
-
-	t.Run("with Positive", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		Positive(mock, -1)
-
-		if !mock.Failed() {
-			t.Error("Expected test to fail but it passed")
-		}
-
-		errorMsg := mock.errorString()
-		if !Contains(t, errorMsg, `"-1" is not positive`) {
-			t.Errorf("Error message should contain sign check details, got: %s", errorMsg)
-		}
-	})
-
-	t.Run("with Negative", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		Negative(mock, 1)
-
-		if !mock.Failed() {
-			t.Error("Expected test to fail but it passed")
-		}
-
-		errorMsg := mock.errorString()
-		if !Contains(t, errorMsg, `"1" is not negative`) {
-			t.Errorf("Error message should contain sign check details, got: %s", errorMsg)
-		}
-	})
-
-	t.Run("with forwarded args", func(t *testing.T) {
-		msgAndArgs := []any{"format %s %x", "this", 0xc001}
-		const expectedOutput = "format this c001\n"
-
-		funcs := []func(t T){
-			func(t T) { Greater(t, 1, 2, msgAndArgs...) },
-			func(t T) { GreaterOrEqual(t, 1, 2, msgAndArgs...) },
-			func(t T) { Less(t, 2, 1, msgAndArgs...) },
-			func(t T) { LessOrEqual(t, 2, 1, msgAndArgs...) },
-			func(t T) { Positive(t, 0, msgAndArgs...) },
-			func(t T) { Negative(t, 0, msgAndArgs...) },
-		}
-
-		for _, f := range funcs {
-			mock := &outputT{buf: bytes.NewBuffer(nil)}
-			f(mock)
-			Contains(t, mock.buf.String(), expectedOutput)
-		}
-	})
-}
 
 func TestCompareGreaterAndLess(t *testing.T) {
 	t.Parallel()
@@ -226,6 +106,12 @@ func TestComparePositive(t *testing.T) {
 	}
 }
 
+func TestCompareErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, compareFailCases())
+}
+
 // genericTestCase wraps a test function with its name for table-driven tests of generic functions.
 // Kept for compatibility with existing special-case tests.
 type genericTestCase struct {
@@ -241,8 +127,12 @@ func testGreaterTCustomInt() func(*testing.T) {
 		mock := new(mockT)
 
 		type MyInt int
-		True(t, GreaterT(mock, MyInt(2), MyInt(1)))
-		False(t, GreaterT(mock, MyInt(1), MyInt(2)))
+		if !GreaterT(mock, MyInt(2), MyInt(1)) {
+			t.Error("expected GreaterT(2, 1) to pass")
+		}
+		if GreaterT(mock, MyInt(1), MyInt(2)) {
+			t.Error("expected GreaterT(1, 2) to fail")
+		}
 	}
 }
 
@@ -350,22 +240,11 @@ func testComparison(cmp func(T, any, any, ...any) bool, e1, e2 any, shouldPass b
 
 		mock := new(mockT)
 		result := cmp(mock, e1, e2)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-
-			return
-		}
-
-		False(t, result)
-		True(t, mock.Failed())
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 
 // testAllComparisonT tests all four generic comparison functions with the same test data.
-//
-//nolint:thelper // linter false positive: this is not a helper
 func testAllComparisonT[V Ordered](tc comparisonTestCase) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
@@ -421,16 +300,7 @@ func testComparisonT[V Ordered](cmp func(T, V, V, ...any) bool, e1, e2 V, should
 
 		mock := new(mockT)
 		result := cmp(mock, e1, e2)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-
-			return
-		}
-
-		False(t, result)
-		True(t, mock.Failed())
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 
@@ -497,22 +367,11 @@ func testSign(sign func(T, any, ...any) bool, e any, shouldPass bool) func(*test
 
 		mock := new(mockT)
 		result := sign(mock, e)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-
-			return
-		}
-
-		False(t, result)
-		True(t, mock.Failed())
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 
 // testAllSignT tests both PositiveT and NegativeT functions with the same test data.
-//
-//nolint:thelper // linter false positive: this is not a helper
 func testAllSignT[V SignedNumeric](tc signTestCase) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
@@ -555,15 +414,45 @@ func testSignT[V SignedNumeric](sign func(T, V, ...any) bool, e V, shouldPass bo
 
 		mock := new(mockT)
 		result := sign(mock, e)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-
-			return
-		}
-
-		False(t, result)
-		True(t, mock.Failed())
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
+}
+
+// ============================================================================
+// TestCompareErrorMessages
+// ============================================================================
+
+func compareFailCases() iter.Seq[failCase] {
+	return slices.Values([]failCase{
+		{
+			name:         "Greater/int",
+			assertion:    func(t T) bool { return Greater(t, 1, 2) },
+			wantContains: []string{`"1" is not greater than "2"`},
+		},
+		{
+			name:         "GreaterOrEqual/int",
+			assertion:    func(t T) bool { return GreaterOrEqual(t, 1, 2) },
+			wantContains: []string{`"1" is not greater than or equal to "2"`},
+		},
+		{
+			name:         "Less/int",
+			assertion:    func(t T) bool { return Less(t, 2, 1) },
+			wantContains: []string{`"2" is not less than "1"`},
+		},
+		{
+			name:         "LessOrEqual/int",
+			assertion:    func(t T) bool { return LessOrEqual(t, 2, 1) },
+			wantContains: []string{`"2" is not less than or equal to "1"`},
+		},
+		{
+			name:         "Positive/negative-value",
+			assertion:    func(t T) bool { return Positive(t, -1) },
+			wantContains: []string{`"-1" is not positive`},
+		},
+		{
+			name:         "Negative/positive-value",
+			assertion:    func(t T) bool { return Negative(t, 1) },
+			wantContains: []string{`"1" is not negative`},
+		},
+	})
 }

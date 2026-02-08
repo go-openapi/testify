@@ -7,85 +7,30 @@ import (
 	"iter"
 	"math"
 	"slices"
-	"strings"
 	"testing"
+	"time"
 )
 
-func TestNumberInDeltaTErrorMessage(t *testing.T) {
+type customFloat float64
+
+func TestNumberEdgeCases(t *testing.T) {
 	t.Parallel()
 
-	mock := new(mockT)
-
-	// Test that error message shows correct difference
-	result := InDeltaT(mock, 10, 1, 5)
-	if result || !mock.Failed() {
-		t.Error("Expected test to fail but it passed")
-	}
-
-	// Verify the error message contains the actual difference (9)
-	errorMsg := mock.errorString()
-	if !strings.Contains(errorMsg, "difference was 9") {
-		t.Errorf("Error message should contain 'difference was 9', got: %s", errorMsg)
-	}
-}
-
-func TestNumberInEpsilonTErrorMessage(t *testing.T) {
-	t.Parallel()
-
-	t.Run("relative error message", func(t *testing.T) {
+	t.Run("InDelta reflect-specific (type conversion)", func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(mockT)
-
-		// Test relative error: 100 vs 110 has 10% error, exceeds 5% epsilon
-		result := InEpsilonT(mock, 100.0, 110.0, 0.05)
-		if result || !mock.Failed() {
-			t.Error("Expected test to fail but it passed")
-		}
-
-		// Verify the error message contains relative error
-		errorMsg := mock.errorString()
-		if !strings.Contains(errorMsg, "Relative error is too high") {
-			t.Errorf("Error message should contain 'Relative error is too high', got: %s", errorMsg)
-		}
-
-		// Should show actual relative error of 0.1 (10%)
-		if !Contains(t, errorMsg, "0.1") {
-			t.Errorf("Error message should contain '0.1' (10%% relative error), got: %s", errorMsg)
-		}
-	})
-
-	t.Run("absolute error message for zero expected", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-
-		// Test absolute error: expected=0, actual=0.5, epsilon=0.1
-		result := InEpsilonT(mock, 0.0, 0.5, 0.1)
-		if result || !mock.Failed() {
-			t.Error("Expected test to fail but it passed")
-		}
-
-		// Verify the error message mentions absolute error
-		errorMsg := mock.errorString()
-		if !strings.Contains(errorMsg, "Expected value is zero, using absolute error comparison") {
-			t.Errorf("Error message should mention absolute error comparison, got: %s", errorMsg)
-		}
-		// Should show actual absolute difference of 0.5
-		if !strings.Contains(errorMsg, "0.5") {
-			t.Errorf("Error message should contain '0.5' (absolute difference), got: %s", errorMsg)
-		}
-	})
-}
-
-func TestNumberInDeltaEdgeCases(t *testing.T) {
-	t.Parallel()
-
-	t.Run("InDelta specific (type conversion)", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(testing.T)
 		result := InDelta(mock, "", nil, 1)
+		if result {
+			t.Errorf("Expected non numerals to fail")
+		}
+	})
+
+	t.Run("InEpsilon reflect-specific (type conversion)", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := InEpsilon(mock, "", nil, 1)
 		if result {
 			t.Errorf("Expected non numerals to fail")
 		}
@@ -119,11 +64,14 @@ func TestNumberInDeltaSlice(t *testing.T) {
 
 func TestNumberInDeltaMapValues(t *testing.T) {
 	t.Parallel()
-	mock := new(testing.T)
+	mock := new(mockT)
 
 	// only have a reflection-based assertion here
 	for tc := range numberInDeltaMapCases() {
-		tc.f(t, InDeltaMapValues(mock, tc.expect, tc.actual, tc.delta), tc.name+"\n"+diff(tc.expect, tc.actual))
+		result := InDeltaMapValues(mock, tc.expect, tc.actual, tc.delta)
+		if result != tc.shouldPass {
+			t.Errorf("%s: expected result=%v, got %v\n%s", tc.name, tc.shouldPass, result, diff(tc.expect, tc.actual))
+		}
 	}
 }
 
@@ -144,7 +92,15 @@ func TestNumberInEpsilonSlice(t *testing.T) {
 	}
 }
 
-// Helper functions and test data for InDelta/InDeltaT
+func TestNumberErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, numberFailCases())
+}
+
+// =======================================
+// Test NumberInDelta variants
+// =======================================
 
 func deltaCases() iter.Seq[genericTestCase] {
 	return slices.Values([]genericTestCase{
@@ -281,12 +237,18 @@ func deltaCases() iter.Seq[genericTestCase] {
 		{"int/commutative-2", testAllDelta(int(5), int(10), int(6), true)},
 		{"float64/commutative-1", testAllDelta(10.0, 5.0, 6.0, true)},
 		{"float64/commutative-2", testAllDelta(5.0, 10.0, 6.0, true)},
+
+		// time.Duration (covers toFloat time.Duration case)
+		{"duration/success", testAllDelta(time.Second, time.Second+time.Millisecond, time.Millisecond, true)},
+		{"duration/failure", testAllDelta(time.Second, time.Second+10*time.Millisecond, time.Millisecond, false)},
+
+		// custom float type (covers toFloat reflect conversion)
+		{"custom-float/success", testAllDelta(customFloat(2.0), customFloat(1.0), customFloat(1.0), true)},
+		{"custom-float/failure", testAllDelta(customFloat(10.0), customFloat(1.0), customFloat(5.0), false)},
 	})
 }
 
 // testAllDelta tests both InDelta and InDeltaT with the same input.
-//
-//nolint:thelper // linter false positive: this is not a helper
 func testAllDelta[Number Measurable](expected, actual, delta Number, shouldPass bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
@@ -312,14 +274,7 @@ func testDelta[Number Measurable](expected, actual, delta Number, shouldPass boo
 		mock := new(mockT)
 		// InDelta requires delta as float64, so convert it
 		result := InDelta(mock, expected, actual, float64(delta))
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-		} else {
-			False(t, result)
-			True(t, mock.Failed())
-		}
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 
@@ -329,25 +284,18 @@ func testDeltaT[Number Measurable](expected, actual, delta Number, shouldPass bo
 
 		mock := new(mockT)
 		result := InDeltaT(mock, expected, actual, delta)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-		} else {
-			False(t, result)
-			True(t, mock.Failed())
-		}
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 
 // Helper functions and test data for InDeltaMapValues
 
 type numberInDeltaMapCase struct {
-	name   string
-	expect any
-	actual any
-	f      func(T, bool, ...any) bool
-	delta  float64
+	name       string
+	expect     any
+	actual     any
+	shouldPass bool
+	delta      float64
 }
 
 func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
@@ -367,8 +315,8 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 				"bar": 1.99,
 				"baz": math.NaN(),
 			},
-			delta: 0.1,
-			f:     True,
+			delta:      0.1,
+			shouldPass: true,
 		},
 		{
 			name: "Within delta",
@@ -380,8 +328,8 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 				1: 1.0,
 				2: 1.99,
 			},
-			delta: 0.1,
-			f:     True,
+			delta:      0.1,
+			shouldPass: true,
 		},
 		{
 			name: "Different number of keys",
@@ -392,8 +340,8 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 			actual: map[int]float64{
 				1: 1.0,
 			},
-			delta: 0.1,
-			f:     False,
+			delta:      0.1,
+			shouldPass: false,
 		},
 		{
 			name: "Within delta with zero value",
@@ -403,8 +351,8 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 			actual: map[string]float64{
 				"zero": 0,
 			},
-			delta: 0.1,
-			f:     True,
+			delta:      0.1,
+			shouldPass: true,
 		},
 		{
 			name: "With missing key with zero value",
@@ -416,25 +364,25 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 				"zero": 0,
 				"bar":  0,
 			},
-			f: False,
+			shouldPass: false,
 		},
 		{
-			name:   "With nil maps",
-			expect: map[string]float64(nil),
-			actual: map[string]float64(nil),
-			f:      True,
+			name:       "With nil maps",
+			expect:     map[string]float64(nil),
+			actual:     map[string]float64(nil),
+			shouldPass: true,
 		},
 		{
-			name:   "With nil values (not a map)",
-			expect: map[string]float64(nil),
-			actual: []float64(nil),
-			f:      False,
+			name:       "With nil values (not a map)",
+			expect:     map[string]float64(nil),
+			actual:     []float64(nil),
+			shouldPass: false,
 		},
 		{
-			name:   "With nil values (not a map)",
-			expect: []float64(nil),
-			actual: map[string]float64(nil),
-			f:      False,
+			name:       "With nil values (not a map)",
+			expect:     []float64(nil),
+			actual:     map[string]float64(nil),
+			shouldPass: false,
 		},
 		{
 			name: "With expected nil keys",
@@ -446,7 +394,7 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 				&keyA:          1.00,
 				(*string)(nil): 2.00,
 			},
-			f: True,
+			shouldPass: true,
 		},
 		{
 			name: "With expected invalid value",
@@ -456,12 +404,14 @@ func numberInDeltaMapCases() iter.Seq[numberInDeltaMapCase] {
 			actual: map[string]any{
 				keyA: &iface,
 			},
-			f: False,
+			shouldPass: false,
 		},
 	})
 }
 
-// Helper functions and test data for InEpsilon/InEpsilonT
+// =======================================
+// Test NumberInEpsilon variants
+// =======================================
 
 func epsilonCases() iter.Seq[genericTestCase] {
 	return slices.Values([]genericTestCase{
@@ -585,12 +535,18 @@ func epsilonCases() iter.Seq[genericTestCase] {
 		{"float64/zero-epsilon-different", testAllEpsilon(100.0, 100.1, 0.0, false)}, // Zero epsilon, different
 		{"int/large-epsilon", testAllEpsilon(int(100), int(200), 1.5, true)},         // 100% error < 150% epsilon
 		{"float64/boundary", testAllEpsilon(100.0, 102.0, 0.02, true)},               // Exactly 2% error with 2% epsilon
+
+		// time.Duration (covers toFloat time.Duration case)
+		{"duration/success", testAllEpsilon(100*time.Millisecond, 101*time.Millisecond, 0.02, true)},  // 1% error < 2% epsilon
+		{"duration/failure", testAllEpsilon(100*time.Millisecond, 110*time.Millisecond, 0.05, false)}, // 10% error > 5% epsilon
+
+		// custom float type (covers toFloat reflect conversion)
+		{"custom-float/success", testAllEpsilon(customFloat(100.0), customFloat(101.0), 0.02, true)},  // 1% error < 2% epsilon
+		{"custom-float/failure", testAllEpsilon(customFloat(100.0), customFloat(110.0), 0.05, false)}, // 10% error > 5% epsilon
 	})
 }
 
 // testAllEpsilon tests both InEpsilon and InEpsilonT with the same input.
-//
-//nolint:thelper // linter false positive: this is not a helper
 func testAllEpsilon[Number Measurable](expected, actual Number, epsilon float64, shouldPass bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
@@ -615,14 +571,7 @@ func testEpsilon[Number Measurable](expected, actual Number, epsilon float64, sh
 
 		mock := new(mockT)
 		result := InEpsilon(mock, expected, actual, epsilon)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-		} else {
-			False(t, result)
-			True(t, mock.Failed())
-		}
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 
@@ -632,14 +581,7 @@ func testEpsilonT[Number Measurable](expected, actual Number, epsilon float64, s
 
 		mock := new(mockT)
 		result := InEpsilonT(mock, expected, actual, epsilon)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-		} else {
-			False(t, result)
-			True(t, mock.Failed())
-		}
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 
@@ -686,21 +628,13 @@ func deltaSliceCases() iter.Seq[genericTestCase] {
 	})
 }
 
-//nolint:thelper // linter false positive: this is not a helper
 func testDeltaSlice(expected, actual any, delta float64, shouldPass bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(mockT)
 		result := InDeltaSlice(mock, expected, actual, delta)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-		} else {
-			False(t, result)
-			True(t, mock.Failed())
-		}
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
 }
 
@@ -758,20 +692,46 @@ func epsilonSliceCases() iter.Seq[genericTestCase] {
 	})
 }
 
-//nolint:thelper // linter false positive: this is not a helper
 func testEpsilonSlice(expected, actual any, epsilon float64, shouldPass bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(mockT)
 		result := InEpsilonSlice(mock, expected, actual, epsilon)
-
-		if shouldPass {
-			True(t, result)
-			False(t, mock.Failed())
-		} else {
-			False(t, result)
-			True(t, mock.Failed())
-		}
+		shouldPassOrFail(t, mock, result, shouldPass)
 	}
+}
+
+// =======================================
+// Test NumberErrorMessages
+// =======================================
+
+func numberFailCases() iter.Seq[failCase] {
+	return slices.Values([]failCase{
+		{
+			name:         "InDeltaT/shows-difference",
+			assertion:    func(t T) bool { return InDeltaT(t, 10, 1, 5) },
+			wantContains: []string{"difference was 9"},
+		},
+		{
+			name:         "InEpsilonT/relative-error",
+			assertion:    func(t T) bool { return InEpsilonT(t, 100.0, 110.0, 0.05) },
+			wantContains: []string{"Relative error is too high", "0.1"},
+		},
+		{
+			name:         "InEpsilonT/absolute-error-for-zero",
+			assertion:    func(t T) bool { return InEpsilonT(t, 0.0, 0.5, 0.1) },
+			wantContains: []string{"Expected value is zero, using absolute error comparison", "0.5"},
+		},
+		{
+			name:         "InDelta/non-numeric-types",
+			assertion:    func(t T) bool { return InDelta(t, "", 0.5, 0.1) },
+			wantContains: []string{"Parameters must be numerical"},
+		},
+		{
+			name:         "InEpsilon/non-numeric-types",
+			assertion:    func(t T) bool { return InEpsilon(t, "", 0.5, 0.1) },
+			wantContains: []string{"Parameters must be numerical"},
+		},
+	})
 }

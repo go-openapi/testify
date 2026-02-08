@@ -7,57 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"iter"
-	"path/filepath"
 	"reflect"
-	"runtime"
 	"slices"
 	"strings"
 	"testing"
 )
-
-// TestCollectionErrorMessages tests error message formatting for collection assertions.
-func TestCollectionErrorMessages(t *testing.T) {
-	t.Parallel()
-
-	t.Run("should render when value is too long to print", testCollectionTooLongToPrint())
-
-	// Test specific error messages for Contains/NotContains failures
-	t.Run("should fail with error message", func(t *testing.T) {
-		t.Parallel()
-
-		for c := range containsFailMessageCases() {
-			name := filepath.Base(runtime.FuncForPC(reflect.ValueOf(c.assertion).Pointer()).Name())
-			t.Run(fmt.Sprintf("%v(%T, %T)", name, c.container, c.instance), func(t *testing.T) {
-				t.Parallel()
-				mock := new(mockT)
-
-				c.assertion(mock, c.container, c.instance)
-				actualFail := mock.errorString()
-				if !strings.Contains(actualFail, c.expected) {
-					t.Errorf("failure should include %q but was %q", c.expected, actualFail)
-				}
-			})
-		}
-	})
-
-	// Test nil container error message
-	t.Run("with Contains on nil value", func(t *testing.T) {
-		t.Parallel()
-		mock := new(mockT)
-
-		Contains(mock, nil, "key")
-		expectedFail := "<nil> could not be applied builtin len()"
-		actualFail := mock.errorString()
-		if !strings.Contains(actualFail, expectedFail) {
-			t.Errorf("Contains failure should include %q but was %q", expectedFail, actualFail)
-		}
-
-		NotContains(mock, nil, "key")
-		if !strings.Contains(actualFail, expectedFail) {
-			t.Errorf("NotContains failure should include %q but was %q", expectedFail, actualFail)
-		}
-	})
-}
 
 // TestCollectionLen tests the Len assertion.
 func TestCollectionLen(t *testing.T) {
@@ -158,6 +112,13 @@ func TestCollectionElementsMatch(t *testing.T) {
 			}
 		})
 	}
+}
+
+// TestCollectionErrorMessages tests error message formatting for collection assertions.
+func TestCollectionErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, collectionErrorMessageCases())
 }
 
 // ============================================================================
@@ -946,127 +907,115 @@ func unifiedElementsMatchCases() iter.Seq[elementsMatchTestCase] {
 // TestCollectionErrorMessages
 // ============================================================================
 
-func testCollectionTooLongToPrint() func(*testing.T) {
-	longSlice := make([]int, 1_000_000)
-
-	return func(t *testing.T) {
-		t.Run("with Nil", func(t *testing.T) {
-			t.Parallel()
-			mock := new(mockT)
-
-			Nil(mock, &longSlice)
-			Contains(t, mock.errorString(), `Expected nil, but got: &[]int{0, 0, 0,`)
-			Contains(t, mock.errorString(), `<... truncated>`)
-		})
-
-		t.Run("with Empty", func(t *testing.T) {
-			t.Parallel()
-			mock := new(mockT)
-
-			Empty(mock, longSlice)
-			Contains(t, mock.errorString(), `Should be empty, but was [0 0 0`)
-			Contains(t, mock.errorString(), `<... truncated>`)
-		})
-
-		t.Run("with Contains", func(t *testing.T) {
-			t.Parallel()
-			mock := new(mockT)
-
-			Contains(mock, longSlice, 1)
-			Contains(t, mock.errorString(), `[]int{0, 0, 0,`)
-			Contains(t, mock.errorString(), `<... truncated> does not contain 1`)
-		})
-
-		t.Run("with NotContains", func(t *testing.T) {
-			t.Parallel()
-			mock := new(mockT)
-
-			NotContains(mock, longSlice, 0)
-			Contains(t, mock.errorString(), `[]int{0, 0, 0,`)
-			Contains(t, mock.errorString(), `<... truncated> should not contain 0`)
-		})
-
-		t.Run("with Subset/slice", func(t *testing.T) {
-			t.Parallel()
-			mock := new(mockT)
-
-			Subset(mock, longSlice, []int{1})
-			Contains(t, mock.errorString(), `[]int{0, 0, 0,`)
-			Contains(t, mock.errorString(), `<... truncated> does not contain 1`)
-		})
-
-		t.Run("with Subset/map", func(t *testing.T) {
-			t.Parallel()
-			mock := new(mockT)
-
-			Subset(mock, map[bool][]int{true: longSlice}, map[bool][]int{false: longSlice})
-			Contains(t, mock.errorString(), `map[bool][]int{true:[]int{0, 0, 0,`)
-			Contains(t, mock.errorString(), `<... truncated> does not contain map[bool][]int{false:[]int{0, 0, 0,`)
-		})
-
-		t.Run("with NotSubset/slice", func(t *testing.T) {
-			t.Parallel()
-			mock := new(mockT)
-
-			NotSubset(mock, longSlice, longSlice)
-			Contains(t, mock.errorString(), `['\x00' '\x00' '\x00'`)
-			Contains(t, mock.errorString(), `<... truncated> is a subset of ['\x00' '\x00' '\x00'`)
-		})
-
-		t.Run("with NotSubset/map", func(t *testing.T) {
-			t.Parallel()
-			mock := new(mockT)
-
-			NotSubset(mock, map[int][]int{1: longSlice}, map[int][]int{1: longSlice})
-			Contains(t, mock.errorString(), `map['\x01':['\x00' '\x00' '\x00'`)
-			Contains(t, mock.errorString(), `<... truncated> is a subset of map['\x01':['\x00' '\x00' '\x00'`)
-		})
-	}
-}
-
-type containsFailMessageCase struct {
-	assertion func(t T, s, contains any, msgAndArgs ...any) bool
-	container any
-	instance  any
-	expected  string
-}
-
-func containsFailMessageCases() iter.Seq[containsFailMessageCase] {
+func collectionErrorMessageCases() iter.Seq[failCase] {
 	const pkg = "assertions"
 	type nonContainer struct {
 		Value string
 	}
+	longSlice := make([]int, 1_000_000)
 
-	return slices.Values([]containsFailMessageCase{
+	return slices.Values([]failCase{
+		// Contains/NotContains fail messages
 		{
-			assertion: Contains,
-			container: "Hello World",
-			instance:  errors.New("Hello"),
-			expected:  `"Hello World" does not contain &errors.errorString{s:"Hello"}`,
+			name:         "Contains(string, error)",
+			assertion:    func(t T) bool { return Contains(t, "Hello World", errors.New("Hello")) },
+			wantContains: []string{`"Hello World" does not contain &errors.errorString{s:"Hello"}`},
 		},
 		{
-			assertion: Contains,
-			container: map[string]int{"one": 1},
-			instance:  "two",
-			expected:  `map[string]int{"one":1} does not contain "two"` + "\n",
+			name:         "Contains(map, missing-key)",
+			assertion:    func(t T) bool { return Contains(t, map[string]int{"one": 1}, "two") },
+			wantContains: []string{`map[string]int{"one":1} does not contain "two"`},
 		},
 		{
-			assertion: NotContains,
-			container: map[string]int{"one": 1},
-			instance:  "one",
-			expected:  `map[string]int{"one":1} should not contain "one"`,
+			name:         "NotContains(map, present-key)",
+			assertion:    func(t T) bool { return NotContains(t, map[string]int{"one": 1}, "one") },
+			wantContains: []string{`map[string]int{"one":1} should not contain "one"`},
 		},
 		{
-			assertion: Contains,
-			container: nonContainer{Value: "Hello"},
-			instance:  "Hello",
-			expected:  pkg + `.nonContainer{Value:"Hello"} could not be applied builtin len()` + "\n",
+			name: "Contains(nonContainer, string)",
+			assertion: func(t T) bool {
+				return Contains(t, nonContainer{Value: "Hello"}, "Hello")
+			},
+			wantContains: []string{pkg + `.nonContainer{Value:"Hello"} could not be applied builtin len()`},
 		},
 		{
-			assertion: NotContains,
-			container: nonContainer{Value: "Hello"},
-			instance:  "Hello",
-			expected:  pkg + `.nonContainer{Value:"Hello"} could not be applied builtin len()` + "\n",
+			name: "NotContains(nonContainer, string)",
+			assertion: func(t T) bool {
+				return NotContains(t, nonContainer{Value: "Hello"}, "Hello")
+			},
+			wantContains: []string{pkg + `.nonContainer{Value:"Hello"} could not be applied builtin len()`},
+		},
+
+		// nil container
+		{
+			name:         "Contains(nil, key)",
+			assertion:    func(t T) bool { return Contains(t, nil, "key") },
+			wantContains: []string{"<nil> could not be applied builtin len()"},
+		},
+		{
+			name:         "NotContains(nil, key)",
+			assertion:    func(t T) bool { return NotContains(t, nil, "key") },
+			wantContains: []string{"<nil> could not be applied builtin len()"},
+		},
+
+		// truncation: too long to print
+		truncationCase("truncation/Nil(longSlice)", func(t T) bool {
+			return Nil(t, &longSlice)
+		}),
+		truncationCase("truncation/Empty(longSlice)", func(t T) bool {
+			return Empty(t, longSlice)
+		}),
+		{
+			name:      "truncation/Contains(longSlice, 1)",
+			assertion: func(t T) bool { return Contains(t, longSlice, 1) },
+			wantContains: []string{
+				`[]int{0, 0, 0,`,
+				`<... truncated> does not contain 1`,
+			},
+		},
+		{
+			name:      "truncation/NotContains(longSlice, 0)",
+			assertion: func(t T) bool { return NotContains(t, longSlice, 0) },
+			wantContains: []string{
+				`[]int{0, 0, 0,`,
+				`<... truncated> should not contain 0`,
+			},
+		},
+		{
+			name:      "truncation/Subset(longSlice, [1])",
+			assertion: func(t T) bool { return Subset(t, longSlice, []int{1}) },
+			wantContains: []string{
+				`[]int{0, 0, 0,`,
+				`<... truncated> does not contain 1`,
+			},
+		},
+		{
+			name: "truncation/Subset(map-longSlice)",
+			assertion: func(t T) bool {
+				return Subset(t, map[bool][]int{true: longSlice}, map[bool][]int{false: longSlice})
+			},
+			wantContains: []string{
+				`map[bool][]int{true:[]int{0, 0, 0,`,
+				`<... truncated> does not contain map[bool][]int{false:[]int{0, 0, 0,`,
+			},
+		},
+		{
+			name:      "truncation/NotSubset(longSlice)",
+			assertion: func(t T) bool { return NotSubset(t, longSlice, longSlice) },
+			wantContains: []string{
+				`['\x00' '\x00' '\x00'`,
+				`<... truncated> is a subset of ['\x00' '\x00' '\x00'`,
+			},
+		},
+		{
+			name: "truncation/NotSubset(map-longSlice)",
+			assertion: func(t T) bool {
+				return NotSubset(t, map[int][]int{1: longSlice}, map[int][]int{1: longSlice})
+			},
+			wantContains: []string{
+				`map['\x01':['\x00' '\x00' '\x00'`,
+				`<... truncated> is a subset of map['\x01':['\x00' '\x00' '\x00'`,
+			},
 		},
 	})
 }

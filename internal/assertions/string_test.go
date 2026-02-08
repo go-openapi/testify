@@ -29,6 +29,16 @@ func TestStringRegexp(t *testing.T) {
 	}
 }
 
+func TestStringErrorMessages(t *testing.T) {
+	t.Parallel()
+
+	runFailCases(t, stringFailCases())
+}
+
+// =======================================
+// TestStringRegexp
+// =======================================
+
 // Values to populate the test harness:
 //
 // - valid and invalid patterns
@@ -93,8 +103,6 @@ func stringRegexpCases() iter.Seq[genericTestCase] {
 }
 
 // test all Regexp variants with the same input (possibly converted).
-//
-//nolint:thelper // linter false positive: this is not a helper
 func testAllRegexpWithTypes(regString, str string, success, valid bool) func(*testing.T) {
 	type (
 		// redefined types to check for ~string and ~[]byte type constraints
@@ -134,8 +142,6 @@ func testAllRegexpWithTypes(regString, str string, success, valid bool) func(*te
 }
 
 // testRegexpWithAny tests edge cases that are specific to the reflection-based variants.
-//
-//nolint:thelper // linter false positive: this is not a helper
 func testRegexpWithAny(rx any, actual any, success, valid bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
@@ -169,7 +175,6 @@ func testRegexpWithAny(rx any, actual any, success, valid bool) func(*testing.T)
 	}
 }
 
-//nolint:thelper // linter false positive: this is not a helper
 func testAllRegexp[Rex RegExp, ADoc Text](rx Rex, actual ADoc, success, valid bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
@@ -217,7 +222,7 @@ func testRegexp(rx any, str any, success bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		res := Regexp(mock, rx, str)
 		if res != success {
 			if success {
@@ -233,7 +238,7 @@ func testNotRegexp(rx any, str any, success bool) func(*testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		res := NotRegexp(mock, rx, str)
 		if res != success {
 			if success {
@@ -249,7 +254,7 @@ func testRegexpT[Rex RegExp, ADoc Text](rx Rex, str ADoc, success bool) func(*te
 	return func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		res := RegexpT(mock, rx, str)
 		if res != success {
 			if success {
@@ -265,7 +270,7 @@ func testNotRegexpT[Rex RegExp, ADoc Text](rx Rex, str ADoc, success bool) func(
 	return func(t *testing.T) {
 		t.Parallel()
 
-		mock := new(testing.T)
+		mock := new(mockT)
 		res := NotRegexpT(mock, rx, str)
 		if res != success {
 			if success {
@@ -290,4 +295,33 @@ func croakWantNotMatch(t *testing.T, rx, str any) {
 func testRex(rex string) *regexp.Regexp {
 	rx, _ := compileRegex(rex)
 	return rx
+}
+
+// =======================================
+// TestStringErrorMessages
+// =======================================
+
+func stringFailCases() iter.Seq[failCase] {
+	return slices.Values([]failCase{
+		{
+			name:         "Regexp/no-match",
+			assertion:    func(t T) bool { return Regexp(t, "^start", "no match") },
+			wantContains: []string{"Expect", "to match"},
+		},
+		{
+			name:         "NotRegexp/unexpected-match",
+			assertion:    func(t T) bool { return NotRegexp(t, "^start", "starting") },
+			wantContains: []string{"Expect", "to NOT match"},
+		},
+		{
+			name:         "Regexp/invalid-regexp",
+			assertion:    func(t T) bool { return Regexp(t, "\\C", "whatever") },
+			wantContains: []string{"invalid error expression"},
+		},
+		{
+			name:         "Regexp/invalid-type",
+			assertion:    func(t T) bool { return Regexp(t, struct{ a string }{a: "x"}, "whatever") },
+			wantContains: []string{"type for regexp is not supported"},
+		},
+	})
 }
