@@ -24,21 +24,24 @@ import (
 
 type Flag int
 
+func (f Flag) String() string {
+	if s, ok := flagStrings()[f]; ok {
+		return s
+	}
+
+	return fmt.Sprintf("Unknown flag (%d)", int(f))
+}
+
 const (
 	flagOne Flag = iota
 	flagTwo
 )
 
-var flagStrings = map[Flag]string{
-	flagOne: "flagOne",
-	flagTwo: "flagTwo",
-}
-
-func (f Flag) String() string {
-	if s, ok := flagStrings[f]; ok {
-		return s
+func flagStrings() map[Flag]string {
+	return map[Flag]string{
+		flagOne: "flagOne",
+		flagTwo: "flagTwo",
 	}
-	return fmt.Sprintf("Unknown flag (%d)", int(f))
 }
 
 type Bar struct {
@@ -61,16 +64,18 @@ func ExampleDump() {
 			flagTwo
 		)
 
-		var flagStrings = map[Flag]string{
-			flagOne: "flagOne",
-			flagTwo: "flagTwo",
-		}
-
 		func (f Flag) String() string {
-			if s, ok := flagStrings[f]; ok {
+			if s, ok := flagStrings()[f]; ok {
 				return s
 			}
 			return fmt.Sprintf("Unknown flag (%d)", int(f))
+		}
+
+		func flagStrings() map[Flag]string {
+			return map[Flag]string{
+				flagOne: "flagOne",
+				flagTwo: "flagTwo",
+			}
 		}
 
 		type Bar struct {

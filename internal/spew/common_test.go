@@ -27,136 +27,6 @@ import (
 	"github.com/go-openapi/testify/v2/internal/spew"
 )
 
-// custom type to test Stinger interface on non-pointer receiver.
-type stringer string
-
-// String implements the Stringer interface for testing invocation of custom
-// stringers on types with non-pointer receivers.
-func (s stringer) String() string {
-	return "stringer " + string(s)
-}
-
-// custom type to test Stinger interface on pointer receiver.
-type pstringer string
-
-// String implements the Stringer interface for testing invocation of custom
-// stringers on types with only pointer receivers.
-func (s *pstringer) String() string {
-	return "stringer " + string(*s)
-}
-
-// xref1 and xref2 are cross referencing structs for testing circular reference
-// detection.
-type xref1 struct {
-	ps2 *xref2
-}
-type xref2 struct {
-	ps1 *xref1
-}
-
-// indirCir1, indirCir2, and indirCir3 are used to generate an indirect circular
-// reference for testing detection.
-type indirCir1 struct {
-	ps2 *indirCir2
-}
-type indirCir2 struct {
-	ps3 *indirCir3
-}
-type indirCir3 struct {
-	ps1 *indirCir1
-}
-
-// embed is used to test embedded structures.
-type embed struct {
-	a string
-}
-
-// embedwrap is used to test embedded structures.
-type embedwrap struct {
-	*embed
-
-	e *embed
-}
-
-// panicer is used to intentionally cause a panic for testing spew properly
-// handles them.
-type panicer int
-
-func (p panicer) String() string {
-	panic("test panic")
-}
-
-// customError is used to test custom error interface invocation.
-type customError int
-
-func (e customError) Error() string {
-	return fmt.Sprintf("error: %d", int(e))
-}
-
-// stringizeWants verts a slice of wanted test output into a format suitable
-// for a test error message.
-func stringizeWants(wants []string) string {
-	s := ""
-	var sSb97 strings.Builder
-	for i, want := range wants {
-		if i > 0 {
-			sSb97.WriteString(fmt.Sprintf("want%d: %s", i+1, want))
-		} else {
-			sSb97.WriteString("want: " + want)
-		}
-	}
-	s += sSb97.String()
-	return s
-}
-
-// testFailed returns whether or not a test failed by checking if the result
-// of the test is in the slice of wanted strings.
-func testFailed(result string, wants []string) bool {
-	return !slices.Contains(wants, result)
-}
-
-type sortableStruct struct {
-	x int
-}
-
-func (ss sortableStruct) String() string {
-	return fmt.Sprintf("ss.%d", ss.x)
-}
-
-type unsortableStruct struct {
-	x int
-}
-
-type sortTestCase struct {
-	input    []reflect.Value
-	expected []reflect.Value
-}
-
-func helpTestSortValues(t *testing.T, tests []sortTestCase, cs *spew.ConfigState) {
-	t.Helper()
-
-	getInterfaces := func(values []reflect.Value) []any {
-		interfaces := []any{}
-		for _, v := range values {
-			interfaces = append(interfaces, v.Interface())
-		}
-		return interfaces
-	}
-
-	for _, test := range tests {
-		spew.SortValues(test.input, cs)
-		// reflect.DeepEqual cannot really make sense of reflect.Value,
-		// probably because of all the pointer tricks. For instance,
-		// v(2.0) != v(2.0) on a 32-bits system. Turn them into interface{}
-		// instead.
-		input := getInterfaces(test.input)
-		expected := getInterfaces(test.expected)
-		if !reflect.DeepEqual(input, expected) {
-			t.Errorf("Sort mismatch:\n %v != %v\n\n%#v != %#v", input, expected, input, expected)
-		}
-	}
-}
-
 // TestSortValues ensures the sort functionality for relect.Value based sorting
 // works as intended.
 func TestSortValues(t *testing.T) {
@@ -273,6 +143,7 @@ func TestSortValues(t *testing.T) {
 		},
 	}
 	cs := spew.ConfigState{DisableMethods: true, SpewKeys: false}
+
 	helpTestSortValues(t, tests, &cs)
 }
 
@@ -380,6 +251,136 @@ func TestSortTimeValuesWithString(t *testing.T) {
 	}
 	cs := spew.ConfigState{DisableMethods: true, EnableTimeStringer: true}
 	helpTestSortValues(t, tests, &cs)
+}
+
+// custom type to test Stinger interface on non-pointer receiver.
+type stringer string
+
+// String implements the Stringer interface for testing invocation of custom
+// stringers on types with non-pointer receivers.
+func (s stringer) String() string {
+	return "stringer " + string(s)
+}
+
+// custom type to test Stinger interface on pointer receiver.
+type pstringer string
+
+// String implements the Stringer interface for testing invocation of custom
+// stringers on types with only pointer receivers.
+func (s *pstringer) String() string {
+	return "stringer " + string(*s)
+}
+
+// xref1 and xref2 are cross referencing structs for testing circular reference
+// detection.
+type xref1 struct {
+	ps2 *xref2
+}
+type xref2 struct {
+	ps1 *xref1
+}
+
+// indirCir1, indirCir2, and indirCir3 are used to generate an indirect circular
+// reference for testing detection.
+type indirCir1 struct {
+	ps2 *indirCir2
+}
+type indirCir2 struct {
+	ps3 *indirCir3
+}
+type indirCir3 struct {
+	ps1 *indirCir1
+}
+
+// embed is used to test embedded structures.
+type embed struct {
+	a string
+}
+
+// embedwrap is used to test embedded structures.
+type embedwrap struct {
+	*embed
+
+	e *embed
+}
+
+// panicer is used to intentionally cause a panic for testing spew properly
+// handles them.
+type panicer int
+
+func (p panicer) String() string {
+	panic("test panic")
+}
+
+// customError is used to test custom error interface invocation.
+type customError int
+
+func (e customError) Error() string {
+	return fmt.Sprintf("error: %d", int(e))
+}
+
+// stringizeWants verts a slice of wanted test output into a format suitable
+// for a test error message.
+func stringizeWants(wants []string) string {
+	s := ""
+	var sSb97 strings.Builder
+	for i, want := range wants {
+		if i > 0 {
+			sSb97.WriteString(fmt.Sprintf("want%d: %s", i+1, want))
+		} else {
+			sSb97.WriteString("want: " + want)
+		}
+	}
+	s += sSb97.String()
+	return s
+}
+
+// testFailed returns whether or not a test failed by checking if the result
+// of the test is in the slice of wanted strings.
+func testFailed(result string, wants []string) bool {
+	return !slices.Contains(wants, result)
+}
+
+type sortableStruct struct {
+	x int
+}
+
+func (ss sortableStruct) String() string {
+	return fmt.Sprintf("ss.%d", ss.x)
+}
+
+type unsortableStruct struct {
+	x int
+}
+
+type sortTestCase struct {
+	input    []reflect.Value
+	expected []reflect.Value
+}
+
+func helpTestSortValues(t *testing.T, tests []sortTestCase, cs *spew.ConfigState) {
+	t.Helper()
+
+	getInterfaces := func(values []reflect.Value) []any {
+		interfaces := make([]any, 0, len(values))
+		for _, v := range values {
+			interfaces = append(interfaces, v.Interface())
+		}
+		return interfaces
+	}
+
+	for _, test := range tests {
+		spew.SortValues(test.input, cs)
+		// reflect.DeepEqual cannot really make sense of reflect.Value,
+		// probably because of all the pointer tricks. For instance,
+		// v(2.0) != v(2.0) on a 32-bits system. Turn them into interface{}
+		// instead.
+		input := getInterfaces(test.input)
+		expected := getInterfaces(test.expected)
+		if !reflect.DeepEqual(input, expected) {
+			t.Errorf("Sort mismatch:\n %v != %v\n\n%#v != %#v", input, expected, input, expected)
+		}
+	}
 }
 
 func testTimings() (t0, t1, t2 time.Time) {
