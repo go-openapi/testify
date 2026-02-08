@@ -10,13 +10,16 @@ weight: 20
 
 ```go
 // Old
+```go
+import "github.com/stretchr/testify/v2"
 
 // New
+import "github.com/go-openapi/testify/v2"
 ```
 
 ### 2. Optional: Enable YAML Support
 
-If you use `YAMLEq` assertions:
+If you use `YAMLEq` assertions: this feature is now opt-in.
 
 ```go
 import _ "github.com/go-openapi/testify/enable/yaml/v2"

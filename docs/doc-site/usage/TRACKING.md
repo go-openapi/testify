@@ -19,19 +19,23 @@ We continue to monitor and selectively adopt changes from the upstream repositor
 ### Monitoring
 - 🔍 [#1087] - Consistently assertion
 - 🔍 [#1601] - NoFieldIsZero
+- 🔍 [#1840] - JSON presence check without exact values
 
 ### Superseded by Our Implementation
+- ⛔ [#1845] - Fix Eventually/Never regression (superseded by context-based pollCondition)
 - ⛔ [#1830] - CollectT.Halt() (superseded by context-based pollCondition)
 - ⛔ [#1819] - Handle unexpected exits (superseded by context-based pollCondition)
 - ⛔ [#1824] - Spew testing (superseded by property-based fuzzing)
 
 [#1087]: https://github.com/stretchr/testify/pull/1087
 [#1601]: https://github.com/stretchr/testify/issues/1601
+[#1840]: https://github.com/stretchr/testify/issues/1840
 [#1830]: https://github.com/stretchr/testify/pull/1830
 [#1824]: https://github.com/stretchr/testify/pull/1824
 [#1819]: https://github.com/stretchr/testify/pull/1819
+[#1845]: https://github.com/stretchr/testify/pull/1845
 
-**Review frequency**: Quarterly (next review: April 2026)
+**Review frequency**: Quarterly (next review: May 2026)
 
 ---
 [#1223]: https://github.com/stretchr/testify/pull/1223
@@ -92,11 +96,13 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 
 | Reference | Type | Summary | Why Superseded |
 |-----------|------|---------|----------------|
+| [#1845] | PR | Fix Eventually/Never regression | Superseded by context-based pollCondition implementation (we don't have this bug) |
 | [#1819] | PR | Handle unexpected exits in Eventually | Superseded by context-based pollCondition implementation |
 | [#1824] | PR | Spew testing improvements | Superseded by property-based fuzzing with random type generator |
 | [#1830] | PR | CollectT.Halt() for stopping tests | Superseded by context-based pollCondition implementation |
 
 [#1819]: https://github.com/stretchr/testify/pull/1819
+[#1845]: https://github.com/stretchr/testify/pull/1845
 
 ### Under Consideration (Monitoring)
 
@@ -104,6 +110,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 |-----------|------|---------|--------|
 | [#1087] | PR | Consistently assertion | 🔍 Monitoring - Evaluating usefulness |
 | [#1601] | Issue | NoFieldIsZero assertion | 🔍 Monitoring - Considering implementation |
+| [#1840] | Issue | JSON presence check without exact values | 🔍 Monitoring - Interesting for testing APIs with generated IDs |
 
 ### Informational (Not Implemented)
 
@@ -120,10 +127,10 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | Category | Count |
 |----------|-------|
 | **Implemented/Merged** | 21 |
-| **Superseded** | 3 |
-| **Monitoring** | 2 |
+| **Superseded** | 4 |
+| **Monitoring** | 3 |
 | **Informational** | 2 |
-| **Total Processed** | 28 |
+| **Total Processed** | 30 |
 
 **Note**: This fork maintains an active relationship with upstream, regularly reviewing new PRs and issues. The quarterly review process ensures we stay informed about upstream developments while maintaining our architectural independence.
 
