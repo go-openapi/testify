@@ -4,6 +4,7 @@
 package scanner
 
 import (
+	"cmp"
 	"errors"
 	"fmt"
 	"go/ast"
@@ -11,6 +12,7 @@ import (
 	"go/types"
 	"path/filepath"
 	"regexp"
+	"slices"
 
 	"golang.org/x/tools/go/packages"
 
@@ -180,6 +182,17 @@ func (s *Scanner) addFunction(object *types.Func) {
 	function.TargetPackage = object.Pkg().Name() // short package name
 	function.DocString = docComment.Text()
 	function.Tests = parser.ParseTestExamples(docComment.Text())
+
+	slices.SortStableFunc(function.Tests, func(t1, t2 model.Test) int {
+		return cmp.Compare(t1.ExpectedOutcome, t2.ExpectedOutcome) // sort tests with success first
+	})
+
+	for i, test := range function.Tests {
+		test.Pkg = function.TargetPackage // add context of the parent package
+		test.IsFirst = i == 0
+		function.Tests[i] = test
+	}
+
 	if s.collectDoc {
 		function.ExtraComments = s.commentExtractor.ExtractExtraComments(object)
 		pos := s.fileSet.Position(object.Pos())

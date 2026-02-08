@@ -61,6 +61,10 @@ func FuncMap() template.FuncMap {
 		"titleize":         titleize,
 		"slugize":          slugize,
 		"blockquote":       blockquote,
+		"hopen":            hugoopen,
+		"hclose":           hugoclose,
+		"cr":               shouldLineFeed,
+		"testSetup":        testSetup,
 	}
 }
 
@@ -377,4 +381,60 @@ func blockquote(in string) string {
 	}
 
 	return strings.Join(result, "\n")
+}
+
+func hugoopen() string {
+	return "{{"
+}
+
+func hugoclose() string {
+	return "}}"
+}
+
+func shouldLineFeed(dontFeed bool) string {
+	if dontFeed {
+		return ""
+	}
+
+	return "\n"
+}
+
+// testSetup computes the test parameterization for a function variant.
+//
+// Supported variants:
+//   - "assertions": package-level test (e.g., TestEqual)
+//   - "format": format variant test (e.g., TestEqualf)
+//   - "forward": forwarded method test (e.g., TestAssertionsEqual)
+//   - "forward-format": forwarded format method test (e.g., TestAssertionsEqualf)
+func testSetup(fn model.Function, variant string, receiver string) model.Function {
+	switch variant {
+	case "assertions":
+		fn.TestCall = fn.Name + fn.GenericSuffix() + "(mock, "
+		fn.TestMock = fmt.Sprintf("mock := new(%s)", fn.UseMock)
+		fn.TestErrorPrefix = fn.Name
+		fn.TestPanicWrapper = "Panics(t, "
+		fn.TestMockFailure = fn.FailMsg()
+	case "format":
+		fn.TestCall = fn.Name + "f" + fn.GenericSuffix() + "(mock, "
+		fn.TestMock = fmt.Sprintf("mock := new(%s)", fn.UseMock)
+		fn.TestErrorPrefix = fn.Name + "f"
+		fn.TestPanicWrapper = "Panics(t, "
+		fn.TestMockFailure = fn.FailMsg("f")
+		fn.TestMsg = "test message"
+	case "forward":
+		fn.TestCall = "a." + fn.Name + "("
+		fn.TestMock = fmt.Sprintf("mock := new(%s)\na := New(mock)", fn.UseMock)
+		fn.TestErrorPrefix = receiver + "." + fn.Name
+		fn.TestPanicWrapper = "a.Panics("
+		fn.TestMockFailure = fn.FailMsg(receiver, "")
+	case "forward-format":
+		fn.TestCall = "a." + fn.Name + "f("
+		fn.TestMock = fmt.Sprintf("mock := new(%s)\na := New(mock)", fn.UseMock)
+		fn.TestErrorPrefix = receiver + "." + fn.Name + "f"
+		fn.TestPanicWrapper = "a.Panics("
+		fn.TestMockFailure = fn.FailMsg(receiver, "f")
+		fn.TestMsg = "test message"
+	}
+
+	return fn
 }

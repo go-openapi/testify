@@ -16,9 +16,11 @@ import (
 )
 
 const (
-	pkgRequire = "require"
-	pkgAssert  = "assert"
-	assertions = "assertions"
+	pkgRequire      = "require"
+	pkgAssert       = "assert"
+	assertions      = "assertions"
+	mockWithFailNow = "mockFailNowT"
+	mock            = "mockT"
 )
 
 const (
@@ -268,7 +270,7 @@ func (g *Generator) transformModel() error {
 	tgt.EnableForward = g.ctx.enableForward
 	tgt.EnableGenerics = g.ctx.enableGenerics
 	tgt.EnableExamples = g.ctx.generateExamples
-	tgt.RunnableExamples = g.ctx.runnableExamples
+	tgt.RunnableExamples = g.ctx.runnableExamples /// instructs the doc generator to scan the generated packages to collect runnable examples
 	if tgt.Imports == nil {
 		tgt.Imports = make(model.ImportMap, 1)
 	}
@@ -321,9 +323,14 @@ func (g *Generator) transformFunc(fn model.Function) model.Function {
 	fn.AllParams = g.transformArgs(fn.AllParams)
 	fn.Returns = g.transformArgs(fn.Returns)
 	if fn.Name == "FailNow" || g.ctx.targetBase == pkgRequire {
-		fn.UseMock = "mockFailNowT"
+		fn.UseMock = mockWithFailNow
 	} else {
-		fn.UseMock = "mockT"
+		fn.UseMock = mock
+	}
+
+	for i, test := range fn.Tests {
+		test.Pkg = g.ctx.targetBase // override the target package for this test
+		fn.Tests[i] = test
 	}
 
 	return fn

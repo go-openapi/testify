@@ -1,7 +1,6 @@
 {{ comment .Copyright }}
 
 // Code generated with {{ .Tool }}; DO NOT EDIT.
-// {{ .Header }}
 
 package {{ .Package }}
 
@@ -13,136 +12,17 @@ import (
 )
 {{- end }}
 
-{{- range .Functions }}
-  {{- if and (not .IsGeneric) (not .IsHelper) (not .IsConstructor) }}{{/* generics can't be added to the receiver */}}
+{{- range .Functions.Scope "exclude-generics" . }}
 
 func Test{{ $.Receiver }}{{ .Name }}(t *testing.T) {
-  t.Parallel()
-
-    {{- if (not .HasTest) }}{{/* no testcases captured from the Example section of the original function */}}
-	t.Skip() // this function doesn't have tests yet: feed the original function with examples to test.
-    {{- else }}
-      {{- $fn := . }}
-      {{- $isRequire := (eq $.Package "require") }}
-      {{- $first := true }}
-      {{- range .Tests }}
-        {{- if eq .ExpectedOutcome 1 }}{{/* TestSuccess */}}
-          {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
-	t.Run("success", func(t *testing.T) {
-    t.Parallel()
-
-		a := New(t)
-{{- if $isRequire }}
-		a.{{ $fn.Name }}({{ .TestedValue }})
-		// require functions don't return a value
-{{- else }}
-		result := a.{{ $fn.Name }}({{ .TestedValue }})
-		if !result {
-			t.Error("{{ $.Receiver }}.{{ $fn.Name }} should return true on success")
-		}
-{{- end }}
-	})
-        {{- else if eq .ExpectedOutcome 2 }}{{/* TestFailure */}}
-          {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
-	t.Run("failure", func(t *testing.T) {
-    t.Parallel()
-
-		mock := new({{ $fn.UseMock }})
-		a := New(mock)
-          {{- if $isRequire }}
-		a.{{ $fn.Name }}({{ .TestedValue }})
-		// require functions don't return a value
-          {{- else }}
-		result := a.{{ $fn.Name }}({{ .TestedValue }})
-		if result {
-			t.Error("{{ $.Receiver }}.{{ $fn.Name }} should return false on failure")
-		}
-          {{- end }}
-		if !mock.failed {
-      			t.Error("{{ $fn.Name }} {{ if eq $fn.UseMock "mockFailNowT" }}should call FailNow(){{ else }}should mark test as failed{{ end }}")
-		}
-	})
-        {{- else if eq .ExpectedOutcome 3 }}{{/* TestPanic */}}
-          {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
-	t.Run("panic", func(t *testing.T) {
-    t.Parallel()
-
-		a := New(t)
-		a.Panics(func() {
-			a.{{ $fn.Name }}({{ .TestedValue }})
-		}, "{{ .AssertionMessage }}")
-	})
-        {{- end }}
-      {{- end }}
-    {{- end }}
+{{- template "test-case" (testSetup . "forward" $.Receiver) }}
 }
-    {{- if $.EnableFormat }}
+{{- end }}
+{{- if $.EnableFormat }}
+  {{- range .Functions.Scope "exclude-generics" . }}
 
 func Test{{ $.Receiver }}{{ .Name }}f(t *testing.T) {
-  t.Parallel()
-
-    {{- if (not .HasTest) }}{{/* no testcases captured from the Example section of the original function */}}
-	t.Skip() // this function doesn't have tests yet: feed the original function with examples to test.
-    {{- else }}
-      {{- $fn := . }}
-      {{- $isRequire := (eq $.Package "require") }}
-      {{- $first := true }}
-      {{- range .Tests }}
-        {{- if eq .ExpectedOutcome 1 }}{{/* TestSuccess */}}
-          {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
-	t.Run("success", func(t *testing.T) {
-    t.Parallel()
-
-		a := New(t)
-{{- if $isRequire }}
-		a.{{ $fn.Name }}f({{ .TestedValue }}, "test message")
-		// require functions don't return a value
-{{- else }}
-		result := a.{{ $fn.Name }}f({{ .TestedValue }}, "test message")
-		if !result {
-			t.Error("{{ $.Receiver }}.{{ $fn.Name }} should return true on success")
-		}
-{{- end }}
-	})
-        {{- else if eq .ExpectedOutcome 2 }}{{/* TestFailure */}}
-          {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
-	t.Run("failure", func(t *testing.T) {
-    t.Parallel()
-
-		mock := new({{ $fn.UseMock }})
-		a := New(mock)
-{{- if $isRequire }}
-		a.{{ $fn.Name }}f({{ .TestedValue }}, "test message")
-		// require functions don't return a value
-{{- else }}
-		result := a.{{ $fn.Name }}f({{ .TestedValue }}, "test message")
-		if result {
-			t.Error("{{ $.Receiver }}.{{ $fn.Name }} should return false on failure")
-		}
-{{- end }}
-		if !mock.failed {
-			t.Error("{{ $.Receiver }}.{{ $fn.Name }} should mark test as failed")
-		}
-{{- if eq $fn.UseMock "mockFailNowT" }}
-		if !mock.failed {
-			t.Error("{{ $.Receiver }}.{{ $fn.Name }}f should call FailNow()")
-		}
-{{- end }}
-	})
-        {{- else if eq .ExpectedOutcome 3 }}{{/* TestPanic */}}
-          {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
-	t.Run("panic", func(t *testing.T) {
-    t.Parallel()
-
-		a := New(t)
-		a.Panics(func() {
-			a.{{ $fn.Name }}f({{ .TestedValue }}, "test message")
-		}, "{{ .AssertionMessage }}")
-	})
-        {{- end }}
-      {{- end }}
-    {{- end }}
+{{- template "test-case" (testSetup . "forward-format" $.Receiver) }}
 }
-    {{- end }}
   {{- end }}
 {{- end }}

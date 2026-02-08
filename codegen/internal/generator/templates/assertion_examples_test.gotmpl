@@ -1,7 +1,6 @@
 {{ comment .Copyright }}
 
 // Code generated with {{ .Tool }}; DO NOT EDIT.
-// {{ .Header }}
 
 package {{ .Package }}_test
 
@@ -16,96 +15,44 @@ import (
 
 {{- $pkg := .Package }}
 {{- $runnable := .RunnableExamples }}
-{{- range .Functions }}
-  {{- if or (not .IsGeneric) ($.EnableGenerics) }}
-    {{- if and (not .IsHelper) (not .IsConstructor) }}
-      {{- if not .HasSuccessTest }}
+{{- range .Functions.Scope "include-generics" . }}
+  {{- if not .HasSuccessTest }}
 
 // func Example{{ .Name }}() {
 // no success example available. Please add some examples to produce a testable example.
 // }
-      {{- else }}
+  {{- else }}
 
 func Example{{ .Name }}() {
-        {{- $fn := . }}
-        {{- $isRequire := (eq $.Package "require") }}
-        {{- $first := true }}
-        {{- range .Tests }}
-          {{- if eq .ExpectedOutcome 1 }}{{/* TestSuccess */}}
-            {{- if (not $first) }}{{ println "" }}{{- end }}{{ $first = false }}
-    t := new(testing.T)
-            {{- if $isRequire }}
-    {{ $pkg }}.{{ $fn.Name }}{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(t, {{ relocate .TestedValues $pkg }})
+    {{- $fn := . }}
+    {{- range .Tests }}
+      {{- if .IsSuccess }}
+        {{- cr .IsFirst }}
+    t := new(testing.T) // should come from testing, e.g. func Test{{ $fn.Name }}(t *testing.T)
+        {{- if .IsKindRequire }}
+    {{ $pkg }}.{{ $fn.Name }}{{ $fn.GenericSuffix }}(t, {{ relocate .TestedValues $pkg }})
     fmt.Println("passed")
-              {{- if $runnable }}
+          {{- if $runnable }}
 
     // Output: passed
-              {{- end }}
-            {{- else }}
-    success := {{ $pkg }}.{{ $fn.Name }}{{ if hasSuffix $fn.Name "OfTypeT" }}[myType]{{ end }}(t, {{ relocate .TestedValues $pkg }})
+          {{- end }}
+        {{- else }}
+    success := {{ $pkg }}.{{ $fn.Name }}{{ $fn.GenericSuffix }}(t, {{ relocate .TestedValues $pkg }})
     fmt.Printf("success: %t\n", success)
-              {{- if $runnable }}
+          {{- if $runnable }}
 
     // Output: success: true
-              {{- end }}
-            {{- end }}
           {{- end }}
-          {{- break }}{{/* just produce one single example, in case there are multiple success examples */}}
         {{- end }}
-}
       {{- end }}
+
+      {{- break }}{{/* just produce one single example, in case there are multiple success examples */}}
     {{- end }}
+}
   {{- end }}
 {{- end }}
 
-// Test helpers (also in the tests for package {{ .Package }}
+// Test helpers (also in the tests for package {{ .Package }}.
 //
-// This code is duplicated because the current test is run as a separate test package: {{ .Package }}_test
-
-func testDataPath() string {
-  return filepath.Join({{ pathparts .TestDataPath }})
-}
-
-func httpOK(w http.ResponseWriter, _ *http.Request) {
-	w.WriteHeader(http.StatusOK)
-}
-
-func httpError(w http.ResponseWriter, _ *http.Request) {
-	w.WriteHeader(http.StatusInternalServerError)
-}
-
-func httpRedirect(w http.ResponseWriter, _ *http.Request) {
-	w.WriteHeader(http.StatusTemporaryRedirect)
-}
-
-func httpBody(w http.ResponseWriter, r *http.Request) {
-	name := r.FormValue("name")
-	_, _ = fmt.Fprintf(w, "Hello, %s!", name)
-}
-
-//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
-var (
-  staticVar = "static string" 
-  staticVarPtr = &staticVar
-  dummyInterface {{ .Package }}.T
-)
-
-func ptr[T any](value T) *T {
-  p := value
-
-  return &p
-}
-
-type dummyStruct struct {
-  A string
-  b int
-}
-
-type dummyError struct {
-}
-
-func (d *dummyError) Error() string {
-  return "dummy error"
-}
-
-type myType float64
+// This code is duplicated because the current test is run as a separate test package: {{ .Package }}_test.
+{{ template "test-helpers" .WithTestPackage }}

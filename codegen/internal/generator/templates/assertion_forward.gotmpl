@@ -1,7 +1,6 @@
 {{ comment .Copyright }}
 
 // Code generated with {{ .Tool }}; DO NOT EDIT.
-// {{ .Header }}
 
 package {{ .Package }}
 
@@ -18,35 +17,33 @@ import (
 //
 {{ docStringPackage .Package }}
 type {{ .Receiver }} struct {
-  t T
+  T
 }
 
 // New makes a new [{{ .Receiver }}] object for the specified [T] (e.g. [testing.T]).
 func New(t T) *{{ .Receiver }} {
   return &{{ .Receiver }}{
-    t: t,
+    T: t,
   }
 }
 
-{{- range .Functions }} 
-  {{- if and (not .IsGeneric) (not .IsHelper) (not .IsConstructor) }}{{/* generics can't be added to the receiver */}}
+{{- range .Functions.Scope "exclude-generics" . }}{{/* generics can't be added to the receiver */}}
 
 {{ docStringFor "forward" .Name }}
 //
 {{ docStringPackage $.Package }}
 func (a *{{ $.Receiver }}) {{.Name}}({{ params .Params }}, msgAndArgs ...any) {{ returns .Returns }} {
-	if h, ok := a.t.(H); ok { h.Helper() }
-	return {{ .TargetPackage }}.{{.Name}}(a.t, {{ forward .Params }}, msgAndArgs...)
+	if h, ok := a.T.(H); ok { h.Helper() }
+	return {{ .TargetPackage }}.{{.Name}}(a.T, {{ forward .Params }}, msgAndArgs...)
 }
-    {{- if $.EnableFormat }}
+  {{- if $.EnableFormat }}
 
 {{ docStringFor "format" (concat $.Receiver "." .Name ) }}
 //
 {{ docStringPackage $.Package }}
 func (a *{{ $.Receiver }}){{ .Name }}f({{ params .Params }}, msg string, args ...any) {{ returns .Returns }} {
-	if h, ok := a.t.(H); ok { h.Helper() }
-  return {{ .TargetPackage }}.{{ .Name }}(a.t, {{ forward .Params }}, forwardArgs(msg, args))
+	if h, ok := a.T.(H); ok { h.Helper() }
+  return {{ .TargetPackage }}.{{ .Name }}(a.T, {{ forward .Params }}, forwardArgs(msg, args))
 }
-    {{- end }}
   {{- end }}
 {{- end }}

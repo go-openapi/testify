@@ -1,0 +1,129 @@
+{{- define "test-helpers" }}{{/* common test helpers that need to be duplicated between the "x" and "x_test" packages */}}
+func testDataPath() string {
+  return filepath.Join({{ pathparts .TestDataPath }})
+}
+
+func httpOK(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
+
+func httpError(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusInternalServerError)
+}
+
+func httpRedirect(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusTemporaryRedirect)
+}
+
+func httpBody(w http.ResponseWriter, r *http.Request) {
+	name := r.FormValue("name")
+	_, _ = fmt.Fprintf(w, "Hello, %s!", name)
+}
+
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
+var (
+  staticVar = "static string"
+  staticVarPtr = &staticVar
+  dummyInterface {{ if .TestPackage }}{{ .Package }}.{{ end }}T
+)
+
+func ptr[T any](value T) *T {
+  p := value
+
+  return &p
+}
+
+type dummyStruct struct {
+  A string
+  b int
+}
+
+type dummyError struct {
+}
+
+func (d *dummyError) Error() string {
+  return "dummy error"
+}
+
+type myType float64
+{{- end }}
+
+{{- define "test-case" }}{{/* data: Function */}}
+  {{- $mock := .TestMock }}
+  {{- $prefix := .TestErrorPrefix }}
+  {{- $panic := .TestPanicWrapper }}
+  {{- $mockFailure := .TestMockFailure }}
+  {{- $msg := .TestMsg }}
+	t.Parallel()
+  {{ if (not .HasTest) }}{{/* no testcases captured from the Example section of the original function */}}
+	t.Skip() // this function doesn't have tests yet: feed the original function with examples to test.
+  {{- else }}
+    {{- $fn := . }}
+    {{- range .Tests }}
+      {{ $call := $fn.TestCall }}
+      {{- if $msg }}
+        {{- $call = ( printf "%s%v,%q)" $call .TestedValue $msg ) }}
+      {{- else }}
+        {{- $call = ( printf "%s%v)" $call .TestedValue ) }}
+      {{- end }}
+      {{- if .IsSuccess }}
+        {{- cr .IsFirst }}
+	t.Run("success", func(t *testing.T) {
+    		t.Parallel()
+
+		{{ $mock }}
+        {{- if .IsKindRequire }}
+		{{ $call }}
+		// require functions don't return a value
+        {{- else }}
+		result := {{ $call }}
+		if !result {
+			t.Error("{{ $prefix }} should return true on success")
+		}
+        {{- end }}
+	})
+      {{- else if .IsFailure }}
+        {{- cr .IsFirst }}
+	t.Run("failure", func(t *testing.T) {
+    		t.Parallel()
+
+		{{ $mock }}
+        {{- if .IsKindRequire }}
+		{{ $call }}
+		// require functions don't return a value
+        {{- else }}
+		result := {{ $call }}
+		if result {
+			t.Error("{{ $prefix }} should return false on failure")
+		}
+        {{- end }}
+		if !mock.failed {
+      			t.Error("{{ $mockFailure }}")
+		}
+	})
+      {{- else if .IsPanic }}
+        {{- cr .IsFirst }}
+	t.Run("panic", func(t *testing.T) {
+    		t.Parallel()
+
+		{{ $mock }}
+        {{- if .IsKindRequire }}
+    		{{ $panic }}func() {
+      			{{ $call }}
+		}, "{{ .AssertionMessage }}")
+        {{- else }}
+    		result := {{ $panic }}func() {
+      			{{ $call }}
+		}, "{{ .AssertionMessage }}")
+		if !result {
+			t.Error("{{ $prefix }} should return true on panic")
+		}
+        {{- end }}
+		if mock.failed {
+      			t.Error("{{ $prefix }} should panic as expected")
+		}
+	})
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}

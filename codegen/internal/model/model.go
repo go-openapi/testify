@@ -4,12 +4,19 @@
 package model
 
 import (
+	"errors"
+	"fmt"
 	"go/ast"
 	"go/token"
+	"iter"
 	"maps"
 	"slices"
 	"strings"
 )
+
+type Renderable interface {
+	Render() string
+}
 
 // AssertionPackage describes the internal/assertions package.
 type AssertionPackage struct {
@@ -19,7 +26,6 @@ type AssertionPackage struct {
 	DocString        string
 	Copyright        string
 	Receiver         string
-	TestDataPath     string
 	Imports          ImportMap
 	EnableFormat     bool
 	EnableForward    bool
@@ -27,13 +33,23 @@ type AssertionPackage struct {
 	EnableExamples   bool
 	RunnableExamples bool
 
-	Functions []Function
+	Functions Functions
 	Types     []Ident
 	Consts    []Ident
 	Vars      []Ident
 
 	// extraneous information when scanning in collectDoc mode
 	ExtraComments []ExtraComment
+	Context       *Document
+
+	// Overridable context for test generation
+	TestDataPath string
+	TestPackage  bool
+}
+
+func (a *AssertionPackage) WithTestPackage() *AssertionPackage {
+	a.TestPackage = true
+	return a
 }
 
 func (a *AssertionPackage) HasHelpers() (ok bool) {
@@ -55,7 +71,7 @@ func New() *AssertionPackage {
 
 	return &AssertionPackage{
 		// preallocate with sensible defaults for our package
-		Functions: make([]Function, 0, allocatedFuncs),
+		Functions: make(Functions, 0, allocatedFuncs),
 		Types:     make([]Ident, 0, allocatedIdents),
 		Consts:    make([]Ident, 0, allocatedIdents),
 		Vars:      make([]Ident, 0, allocatedIdents),
@@ -66,7 +82,33 @@ func (a *AssertionPackage) Clone() *AssertionPackage {
 	b := *a
 	maps.Copy(b.Imports, a.Imports)
 
+	// Deep-copy slices so the clone has its own backing arrays.
+	// Without this, transformModel writes through the shared backing
+	// array and clobbers the source data used by other generators.
+	b.Functions = slices.Clone(a.Functions)
+	b.Types = slices.Clone(a.Types)
+	b.Consts = slices.Clone(a.Consts)
+	b.Vars = slices.Clone(a.Vars)
+
 	return &b
+}
+
+func (a *AssertionPackage) Names() iter.Seq[string] {
+	return func(yield func(string) bool) {
+		for _, fn := range a.Functions {
+			if !yield(fn.Name) {
+				return
+			}
+
+			if !a.EnableFormat {
+				continue
+			}
+
+			if !yield(fn.Name + "f") {
+				return
+			}
+		}
+	}
 }
 
 // ImportMap represents the imports for the analyzed package.
@@ -76,8 +118,74 @@ func (m ImportMap) HasImports() bool {
 	return len(m) > 0
 }
 
+type ScopeKind string
+
+const (
+	ScopeKindWithGenerics    ScopeKind = "include-generics"
+	ScopeKindWithoutGenerics ScopeKind = "exclude-generics"
+	ScopeKindHelpers         ScopeKind = "only-helpers"
+)
+
+type Functions []Function
+
+func (f Functions) Scope(scope ScopeKind, ctx *AssertionPackage) (iter.Seq[Function], error) {
+	switch scope {
+	case ScopeKindWithGenerics:
+		if ctx == nil {
+			return nil, errors.New(`nil package context passed to scope: please pass "." as context to the Scope function`)
+		}
+		return f.iterScopeWithGenerics(ctx), nil
+	case ScopeKindWithoutGenerics:
+		return f.iterScopeWithoutGenerics, nil
+	case ScopeKindHelpers:
+		return f.iterScopeHelpers, nil
+	default:
+		return nil, fmt.Errorf("invalid scope kind in template. Expected one of include-generics, only-helpers, but got %q", scope)
+	}
+}
+
+func (f Functions) iterScopeWithGenerics(ctx *AssertionPackage) func(func(Function) bool) {
+	return func(yield func(Function) bool) {
+		for _, fn := range f {
+			if fn.IsConstructor || fn.IsHelper || (fn.IsGeneric && !ctx.EnableGenerics) {
+				continue
+			}
+
+			if !yield(fn) {
+				return
+			}
+		}
+	}
+}
+
+func (f Functions) iterScopeWithoutGenerics(yield func(Function) bool) {
+	for _, fn := range f {
+		if fn.IsConstructor || fn.IsHelper || fn.IsGeneric {
+			continue
+		}
+
+		if !yield(fn) {
+			return
+		}
+	}
+}
+
+func (f Functions) iterScopeHelpers(yield func(Function) bool) {
+	for _, fn := range f {
+		if !fn.IsHelper {
+			continue
+		}
+
+		if !yield(fn) {
+			return
+		}
+	}
+}
+
 // Function represents an assertion function extracted from the source package.
 type Function struct {
+	TestData
+
 	ID            string
 	Name          string
 	SourcePackage string
@@ -97,6 +205,18 @@ type Function struct {
 	Domain        string
 	SourceLink    *token.Position
 	ExtraComments []ExtraComment
+	Examples      []Renderable // testable examples as a collection of [Renderable] examples
+	Context       *Document
+}
+
+// TestData holds test variabilization parameters for templates.
+type TestData struct {
+	TestCall         string
+	TestMock         string
+	TestErrorPrefix  string
+	TestMockFailure  string
+	TestPanicWrapper string
+	TestMsg          string
 }
 
 // GenericName renders the function name with one or more suffixes,
@@ -166,6 +286,47 @@ func (f Function) HasSuccessTest() bool {
 	})
 }
 
+// GenericSuffix provides a type parameter instantiation for methods which cannot infer
+// type parameters from their arguments. At this moment, only one such case exists: OfTypeT().
+func (f Function) GenericSuffix() string {
+	if strings.HasSuffix(f.Name, "OfTypeT") {
+		return "[myType]"
+	}
+
+	return ""
+}
+
+// FailMsg returns an error message to report in tests.
+//
+// If the function should use the "mockFailNowT" mock, we should report that [testing.FailNow] should be
+// called, not just marking the test as failed.
+//
+// An optional suffix may be used to apply to the function name and express a formatted variant.
+//
+// If to arguments are passed, the first one is interpreted as a prefix, followed by "." and the second as a suffix.
+// Further passed args are ignored.
+func (f Function) FailMsg(args ...string) string {
+	var prefix, suffix string
+	const (
+		onlySuffix      = 1
+		prefixAndSuffix = 2
+	)
+
+	switch len(args) {
+	case onlySuffix:
+		suffix = args[0]
+	case prefixAndSuffix:
+		prefix = args[0] + "."
+		suffix = args[1]
+	}
+
+	if f.UseMock == "mockFailNowT" {
+		return prefix + f.Name + suffix + " should call FailNow()"
+	}
+
+	return prefix + f.Name + suffix + " should mark test as failed"
+}
+
 type Parameters []Parameter
 
 // Parameter represents a function parameter or return value.
@@ -198,6 +359,7 @@ type Ident struct {
 	Domain        string
 	SourceLink    *token.Position
 	ExtraComments []ExtraComment
+	Examples      []Renderable // testable examples as a collection of [Renderable] examples
 }
 
 // TestValue represents a single parsed test value expression.
@@ -213,10 +375,28 @@ type TestValue struct {
 //
 // Test values are parsed as Go expressions and stored with their AST representation.
 type Test struct {
-	TestedValue      string              // DEPRECATED: Original raw string, kept for backward compatibility
 	TestedValues     []TestValue         // Parsed test value expressions
+	TestedValue      string              // Original raw string, kept for auditability
 	ExpectedOutcome  TestExpectedOutcome // Expected test outcome (success/failure/panic)
 	AssertionMessage string              // Optional assertion message for panic tests
+	IsFirst          bool
+	Pkg              string
+}
+
+func (t Test) IsSuccess() bool {
+	return t.ExpectedOutcome == TestSuccess
+}
+
+func (t Test) IsFailure() bool {
+	return t.ExpectedOutcome == TestFailure
+}
+
+func (t Test) IsPanic() bool {
+	return t.ExpectedOutcome == TestPanic
+}
+
+func (t Test) IsKindRequire() bool {
+	return t.Pkg == "require"
 }
 
 type TestExpectedOutcome uint8
@@ -263,4 +443,16 @@ type ExtraComment struct {
 	Tag  CommentTag
 	Key  string
 	Text string
+}
+
+func (c ExtraComment) IsTagMaintainer() bool {
+	return c.Tag == CommentTagMaintainer
+}
+
+func (c ExtraComment) IsTagMention() bool {
+	return c.Tag == CommentTagMention
+}
+
+func (c ExtraComment) IsTagNote() bool {
+	return c.Tag == CommentTagNote
 }
