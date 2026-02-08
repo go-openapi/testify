@@ -114,7 +114,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestContains(t *testing.T)
 	success := assert.Contains(t, []string{"A", "B"}, "A")
 	fmt.Printf("success: %t\n", success)
 
@@ -148,7 +148,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestContains(t *testing.T)
 	require.Contains(t, []string{"A", "B"}, "A")
 	fmt.Println("passed")
 
@@ -227,7 +227,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestElementsMatch(t *testing.T)
 	success := assert.ElementsMatch(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
 	fmt.Printf("success: %t\n", success)
 
@@ -261,7 +261,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestElementsMatch(t *testing.T)
 	require.ElementsMatch(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
 	fmt.Println("passed")
 
@@ -340,7 +340,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestElementsMatchT(t *testing.T)
 	success := assert.ElementsMatchT(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
 	fmt.Printf("success: %t\n", success)
 
@@ -374,7 +374,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestElementsMatchT(t *testing.T)
 	require.ElementsMatchT(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
 	fmt.Println("passed")
 
@@ -455,7 +455,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestLen(t *testing.T)
 	success := assert.Len(t, []string{"A", "B"}, 2)
 	fmt.Printf("success: %t\n", success)
 
@@ -489,7 +489,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestLen(t *testing.T)
 	require.Len(t, []string{"A", "B"}, 2)
 	fmt.Println("passed")
 
@@ -573,7 +573,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestMapContainsT(t *testing.T)
 	success := assert.MapContainsT(t, map[string]string{"A": "B"}, "A")
 	fmt.Printf("success: %t\n", success)
 
@@ -607,7 +607,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestMapContainsT(t *testing.T)
 	require.MapContainsT(t, map[string]string{"A": "B"}, "A")
 	fmt.Println("passed")
 
@@ -680,7 +680,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestMapNotContainsT(t *testing.T)
 	success := assert.MapNotContainsT(t, map[string]string{"A": "B"}, "C")
 	fmt.Printf("success: %t\n", success)
 
@@ -714,7 +714,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestMapNotContainsT(t *testing.T)
 	require.MapNotContainsT(t, map[string]string{"A": "B"}, "C")
 	fmt.Println("passed")
 
@@ -790,7 +790,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotContains(t *testing.T)
 	success := assert.NotContains(t, []string{"A", "B"}, "C")
 	fmt.Printf("success: %t\n", success)
 
@@ -824,7 +824,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotContains(t *testing.T)
 	require.NotContains(t, []string{"A", "B"}, "C")
 	fmt.Println("passed")
 
@@ -906,7 +906,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotElementsMatch(t *testing.T)
 	success := assert.NotElementsMatch(t, []int{1, 2, 3}, []int{1, 2, 4})
 	fmt.Printf("success: %t\n", success)
 
@@ -940,7 +940,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotElementsMatch(t *testing.T)
 	require.NotElementsMatch(t, []int{1, 2, 3}, []int{1, 2, 4})
 	fmt.Println("passed")
 
@@ -1022,7 +1022,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotElementsMatchT(t *testing.T)
 	success := assert.NotElementsMatchT(t, []int{1, 2, 3}, []int{1, 2, 4})
 	fmt.Printf("success: %t\n", success)
 
@@ -1056,7 +1056,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotElementsMatchT(t *testing.T)
 	require.NotElementsMatchT(t, []int{1, 2, 3}, []int{1, 2, 4})
 	fmt.Println("passed")
 
@@ -1135,7 +1135,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotSubset(t *testing.T)
 	success := assert.NotSubset(t, []int{1, 2, 3}, []int{4, 5})
 	fmt.Printf("success: %t\n", success)
 
@@ -1169,7 +1169,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotSubset(t *testing.T)
 	require.NotSubset(t, []int{1, 2, 3}, []int{4, 5})
 	fmt.Println("passed")
 
@@ -1251,7 +1251,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSeqContainsT(t *testing.T)
 	success := assert.SeqContainsT(t, slices.Values([]string{"A", "B"}), "A")
 	fmt.Printf("success: %t\n", success)
 
@@ -1286,7 +1286,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSeqContainsT(t *testing.T)
 	require.SeqContainsT(t, slices.Values([]string{"A", "B"}), "A")
 	fmt.Println("passed")
 
@@ -1362,7 +1362,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSeqNotContainsT(t *testing.T)
 	success := assert.SeqNotContainsT(t, slices.Values([]string{"A", "B"}), "C")
 	fmt.Printf("success: %t\n", success)
 
@@ -1397,7 +1397,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSeqNotContainsT(t *testing.T)
 	require.SeqNotContainsT(t, slices.Values([]string{"A", "B"}), "C")
 	fmt.Println("passed")
 
@@ -1472,7 +1472,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSliceContainsT(t *testing.T)
 	success := assert.SliceContainsT(t, []string{"A", "B"}, "A")
 	fmt.Printf("success: %t\n", success)
 
@@ -1506,7 +1506,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSliceContainsT(t *testing.T)
 	require.SliceContainsT(t, []string{"A", "B"}, "A")
 	fmt.Println("passed")
 
@@ -1581,7 +1581,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSliceNotContainsT(t *testing.T)
 	success := assert.SliceNotContainsT(t, []string{"A", "B"}, "C")
 	fmt.Printf("success: %t\n", success)
 
@@ -1615,7 +1615,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSliceNotContainsT(t *testing.T)
 	require.SliceNotContainsT(t, []string{"A", "B"}, "C")
 	fmt.Println("passed")
 
@@ -1688,7 +1688,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSliceNotSubsetT(t *testing.T)
 	success := assert.SliceNotSubsetT(t, []int{1, 2, 3}, []int{4, 5})
 	fmt.Printf("success: %t\n", success)
 
@@ -1722,7 +1722,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSliceNotSubsetT(t *testing.T)
 	require.SliceNotSubsetT(t, []int{1, 2, 3}, []int{4, 5})
 	fmt.Println("passed")
 
@@ -1795,7 +1795,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSliceSubsetT(t *testing.T)
 	success := assert.SliceSubsetT(t, []int{1, 2, 3}, []int{1, 2})
 	fmt.Printf("success: %t\n", success)
 
@@ -1829,7 +1829,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSliceSubsetT(t *testing.T)
 	require.SliceSubsetT(t, []int{1, 2, 3}, []int{1, 2})
 	fmt.Println("passed")
 
@@ -1904,7 +1904,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestStringContainsT(t *testing.T)
 	success := assert.StringContainsT(t, "AB", "A")
 	fmt.Printf("success: %t\n", success)
 
@@ -1938,7 +1938,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestStringContainsT(t *testing.T)
 	require.StringContainsT(t, "AB", "A")
 	fmt.Println("passed")
 
@@ -2013,7 +2013,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestStringNotContainsT(t *testing.T)
 	success := assert.StringNotContainsT(t, "AB", "C")
 	fmt.Printf("success: %t\n", success)
 
@@ -2047,7 +2047,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestStringNotContainsT(t *testing.T)
 	require.StringNotContainsT(t, "AB", "C")
 	fmt.Println("passed")
 
@@ -2129,7 +2129,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSubset(t *testing.T)
 	success := assert.Subset(t, []int{1, 2, 3}, []int{1, 2})
 	fmt.Printf("success: %t\n", success)
 
@@ -2163,7 +2163,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSubset(t *testing.T)
 	require.Subset(t, []int{1, 2, 3}, []int{1, 2})
 	fmt.Println("passed")
 

@@ -71,7 +71,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestJSONEq(t *testing.T)
 	success := assert.JSONEq(t, `{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
 	fmt.Printf("success: %t\n", success)
 
@@ -105,7 +105,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestJSONEq(t *testing.T)
 	require.JSONEq(t, `{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
 	fmt.Println("passed")
 
@@ -184,7 +184,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestJSONEqBytes(t *testing.T)
 	success := assert.JSONEqBytes(t, []byte(`{"hello": "world", "foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`))
 	fmt.Printf("success: %t\n", success)
 
@@ -218,7 +218,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestJSONEqBytes(t *testing.T)
 	require.JSONEqBytes(t, []byte(`{"hello": "world", "foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`))
 	fmt.Println("passed")
 
@@ -307,7 +307,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestJSONEqT(t *testing.T)
 	success := assert.JSONEqT(t, `{"hello": "world", "foo": "bar"}`, []byte(`{"foo": "bar", "hello": "world"}`))
 	fmt.Printf("success: %t\n", success)
 
@@ -341,7 +341,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestJSONEqT(t *testing.T)
 	require.JSONEqT(t, `{"hello": "world", "foo": "bar"}`, []byte(`{"foo": "bar", "hello": "world"}`))
 	fmt.Println("passed")
 
@@ -424,7 +424,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestJSONMarshalAsT(t *testing.T)
 	success := assert.JSONMarshalAsT(t, []byte(`{"A": "a"}`), dummyStruct{A: "a"})
 	fmt.Printf("success: %t\n", success)
 
@@ -463,7 +463,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestJSONMarshalAsT(t *testing.T)
 	require.JSONMarshalAsT(t, []byte(`{"A": "a"}`), dummyStruct{A: "a"})
 	fmt.Println("passed")
 
@@ -553,7 +553,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestJSONUnmarshalAsT(t *testing.T)
 	success := assert.JSONUnmarshalAsT(t, dummyStruct{A: "a"}, []byte(`{"A": "a"}`))
 	fmt.Printf("success: %t\n", success)
 
@@ -592,7 +592,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestJSONUnmarshalAsT(t *testing.T)
 	require.JSONUnmarshalAsT(t, dummyStruct{A: "a"}, []byte(`{"A": "a"}`))
 	fmt.Println("passed")
 

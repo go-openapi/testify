@@ -69,7 +69,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotRegexp(t *testing.T)
 	success := assert.NotRegexp(t, "^start", "not starting")
 	fmt.Printf("success: %t\n", success)
 
@@ -103,7 +103,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotRegexp(t *testing.T)
 	require.NotRegexp(t, "^start", "not starting")
 	fmt.Println("passed")
 
@@ -183,7 +183,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotRegexpT(t *testing.T)
 	success := assert.NotRegexpT(t, "^start", "not starting")
 	fmt.Printf("success: %t\n", success)
 
@@ -217,7 +217,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotRegexpT(t *testing.T)
 	require.NotRegexpT(t, "^start", "not starting")
 	fmt.Println("passed")
 
@@ -295,7 +295,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestRegexp(t *testing.T)
 	success := assert.Regexp(t, "^start", "starting")
 	fmt.Printf("success: %t\n", success)
 
@@ -329,7 +329,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestRegexp(t *testing.T)
 	require.Regexp(t, "^start", "starting")
 	fmt.Println("passed")
 
@@ -405,7 +405,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestRegexpT(t *testing.T)
 	success := assert.RegexpT(t, "^start", "starting")
 	fmt.Printf("success: %t\n", success)
 
@@ -439,7 +439,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestRegexpT(t *testing.T)
 	require.RegexpT(t, "^start", "starting")
 	fmt.Println("passed")
 

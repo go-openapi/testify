@@ -87,7 +87,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInDelta(t *testing.T)
 	success := assert.InDelta(t, 1.0, 1.01, 0.02)
 	fmt.Printf("success: %t\n", success)
 
@@ -121,7 +121,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInDelta(t *testing.T)
 	require.InDelta(t, 1.0, 1.01, 0.02)
 	fmt.Println("passed")
 
@@ -200,7 +200,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInDeltaMapValues(t *testing.T)
 	success := assert.InDeltaMapValues(t, map[string]float64{"a": 1.0}, map[string]float64{"a": 1.01}, 0.02)
 	fmt.Printf("success: %t\n", success)
 
@@ -234,7 +234,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInDeltaMapValues(t *testing.T)
 	require.InDeltaMapValues(t, map[string]float64{"a": 1.0}, map[string]float64{"a": 1.01}, 0.02)
 	fmt.Println("passed")
 
@@ -313,7 +313,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInDeltaSlice(t *testing.T)
 	success := assert.InDeltaSlice(t, []float64{1.0, 2.0}, []float64{1.01, 2.01}, 0.02)
 	fmt.Printf("success: %t\n", success)
 
@@ -347,7 +347,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInDeltaSlice(t *testing.T)
 	require.InDeltaSlice(t, []float64{1.0, 2.0}, []float64{1.01, 2.01}, 0.02)
 	fmt.Println("passed")
 
@@ -436,7 +436,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInDeltaT(t *testing.T)
 	success := assert.InDeltaT(t, 1.0, 1.01, 0.02)
 	fmt.Printf("success: %t\n", success)
 
@@ -470,7 +470,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInDeltaT(t *testing.T)
 	require.InDeltaT(t, 1.0, 1.01, 0.02)
 	fmt.Println("passed")
 
@@ -557,7 +557,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilon(t *testing.T)
 	success := assert.InEpsilon(t, 100.0, 101.0, 0.02)
 	fmt.Printf("success: %t\n", success)
 
@@ -591,7 +591,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilon(t *testing.T)
 	require.InEpsilon(t, 100.0, 101.0, 0.02)
 	fmt.Println("passed")
 
@@ -670,7 +670,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonSlice(t *testing.T)
 	success := assert.InEpsilonSlice(t, []float64{100.0, 200.0}, []float64{101.0, 202.0}, 0.02)
 	fmt.Printf("success: %t\n", success)
 
@@ -704,7 +704,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonSlice(t *testing.T)
 	require.InEpsilonSlice(t, []float64{100.0, 200.0}, []float64{101.0, 202.0}, 0.02)
 	fmt.Println("passed")
 
@@ -801,7 +801,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonT(t *testing.T)
 	success := assert.InEpsilonT(t, 100.0, 101.0, 0.02)
 	fmt.Printf("success: %t\n", success)
 
@@ -835,7 +835,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonT(t *testing.T)
 	require.InEpsilonT(t, 100.0, 101.0, 0.02)
 	fmt.Println("passed")
 

@@ -1807,7 +1807,7 @@ func NoError(t T, err error, msgAndArgs ...any) bool {
 //
 // # Examples
 //
-//   - success: NOT IMPLEMENTED
+//	success: func() {}
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
 func NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any) bool {

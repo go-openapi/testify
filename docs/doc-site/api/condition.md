@@ -65,7 +65,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestCondition(t *testing.T)
 	success := assert.Condition(t, func() bool {
 		return true
 	})
@@ -101,7 +101,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestCondition(t *testing.T)
 	require.Condition(t, func() bool {
 		return true
 	})
@@ -198,7 +198,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEventually(t *testing.T)
 	success := assert.Eventually(t, func() bool {
 		return true
 	}, 100*time.Millisecond, 20*time.Millisecond)
@@ -235,7 +235,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEventually(t *testing.T)
 	require.Eventually(t, func() bool {
 		return true
 	}, 100*time.Millisecond, 20*time.Millisecond)
@@ -344,7 +344,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEventuallyWith(t *testing.T)
 	success := assert.EventuallyWith(t, func(c *assert.CollectT) {
 		assert.True(c, true)
 	}, 100*time.Millisecond, 20*time.Millisecond)
@@ -382,7 +382,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEventuallyWith(t *testing.T)
 	require.EventuallyWith(t, func(c *assert.CollectT) {
 		assert.True(c, true)
 	}, 100*time.Millisecond, 20*time.Millisecond)
@@ -475,7 +475,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNever(t *testing.T)
 	success := assert.Never(t, func() bool {
 		return false
 	}, 100*time.Millisecond, 20*time.Millisecond)
@@ -512,7 +512,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNever(t *testing.T)
 	require.Never(t, func() bool {
 		return false
 	}, 100*time.Millisecond, 20*time.Millisecond)

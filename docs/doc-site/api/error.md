@@ -79,7 +79,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEqualError(t *testing.T)
 	success := assert.EqualError(t, assert.ErrTest, "assert.ErrTest general error for testing")
 	fmt.Printf("success: %t\n", success)
 
@@ -113,7 +113,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEqualError(t *testing.T)
 	require.EqualError(t, require.ErrTest, "assert.ErrTest general error for testing")
 	fmt.Println("passed")
 
@@ -191,7 +191,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestError(t *testing.T)
 	success := assert.Error(t, assert.ErrTest)
 	fmt.Printf("success: %t\n", success)
 
@@ -225,7 +225,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestError(t *testing.T)
 	require.Error(t, require.ErrTest)
 	fmt.Println("passed")
 
@@ -304,7 +304,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestErrorAs(t *testing.T)
 	success := assert.ErrorAs(t, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
 	fmt.Printf("success: %t\n", success)
 
@@ -345,7 +345,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestErrorAs(t *testing.T)
 	require.ErrorAs(t, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
 	fmt.Println("passed")
 
@@ -431,7 +431,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestErrorContains(t *testing.T)
 	success := assert.ErrorContains(t, assert.ErrTest, "general error")
 	fmt.Printf("success: %t\n", success)
 
@@ -465,7 +465,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestErrorContains(t *testing.T)
 	require.ErrorContains(t, require.ErrTest, "general error")
 	fmt.Println("passed")
 
@@ -545,7 +545,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestErrorIs(t *testing.T)
 	success := assert.ErrorIs(t, fmt.Errorf("wrap: %w", io.EOF), io.EOF)
 	fmt.Printf("success: %t\n", success)
 
@@ -580,7 +580,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestErrorIs(t *testing.T)
 	require.ErrorIs(t, fmt.Errorf("wrap: %w", io.EOF), io.EOF)
 	fmt.Println("passed")
 
@@ -660,7 +660,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNoError(t *testing.T)
 	success := assert.NoError(t, nil)
 	fmt.Printf("success: %t\n", success)
 
@@ -694,7 +694,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNoError(t *testing.T)
 	require.NoError(t, nil)
 	fmt.Println("passed")
 
@@ -772,7 +772,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotErrorAs(t *testing.T)
 	success := assert.NotErrorAs(t, assert.ErrTest, new(*dummyError))
 	fmt.Printf("success: %t\n", success)
 
@@ -813,7 +813,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotErrorAs(t *testing.T)
 	require.NotErrorAs(t, require.ErrTest, new(*dummyError))
 	fmt.Println("passed")
 
@@ -900,7 +900,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotErrorIs(t *testing.T)
 	success := assert.NotErrorIs(t, assert.ErrTest, io.EOF)
 	fmt.Printf("success: %t\n", success)
 
@@ -935,7 +935,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotErrorIs(t *testing.T)
 	require.NotErrorIs(t, require.ErrTest, io.EOF)
 	fmt.Println("passed")
 

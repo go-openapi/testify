@@ -39,7 +39,7 @@ import (
 //
 // # Examples
 //
-//   - success: func() {}
+//	success: func() {}
 func NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any) bool {
 	// Domain: safety
 	if h, ok := t.(H); ok {

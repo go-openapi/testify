@@ -77,7 +77,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestHTTPBodyContains(t *testing.T)
 	success := assert.HTTPBodyContains(t, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, World!")
 	fmt.Printf("success: %t\n", success)
 
@@ -118,7 +118,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestHTTPBodyContains(t *testing.T)
 	require.HTTPBodyContains(t, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, World!")
 	fmt.Println("passed")
 
@@ -205,7 +205,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestHTTPBodyNotContains(t *testing.T)
 	success := assert.HTTPBodyNotContains(t, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, Bob!")
 	fmt.Printf("success: %t\n", success)
 
@@ -246,7 +246,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestHTTPBodyNotContains(t *testing.T)
 	require.HTTPBodyNotContains(t, httpBody, "GET", "/", url.Values{"name": []string{"World"}}, "Hello, Bob!")
 	fmt.Println("passed")
 
@@ -331,7 +331,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestHTTPError(t *testing.T)
 	success := assert.HTTPError(t, httpError, "GET", "/", nil)
 	fmt.Printf("success: %t\n", success)
 
@@ -370,7 +370,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestHTTPError(t *testing.T)
 	require.HTTPError(t, httpError, "GET", "/", nil)
 	fmt.Println("passed")
 
@@ -454,7 +454,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestHTTPRedirect(t *testing.T)
 	success := assert.HTTPRedirect(t, httpRedirect, "GET", "/", nil)
 	fmt.Printf("success: %t\n", success)
 
@@ -493,7 +493,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestHTTPRedirect(t *testing.T)
 	require.HTTPRedirect(t, httpRedirect, "GET", "/", nil)
 	fmt.Println("passed")
 
@@ -577,7 +577,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestHTTPStatusCode(t *testing.T)
 	success := assert.HTTPStatusCode(t, httpOK, "GET", "/", nil, http.StatusOK)
 	fmt.Printf("success: %t\n", success)
 
@@ -616,7 +616,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestHTTPStatusCode(t *testing.T)
 	require.HTTPStatusCode(t, httpOK, "GET", "/", nil, http.StatusOK)
 	fmt.Println("passed")
 
@@ -700,7 +700,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestHTTPSuccess(t *testing.T)
 	success := assert.HTTPSuccess(t, httpOK, "GET", "/", nil)
 	fmt.Printf("success: %t\n", success)
 
@@ -739,7 +739,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestHTTPSuccess(t *testing.T)
 	require.HTTPSuccess(t, httpOK, "GET", "/", nil)
 	fmt.Println("passed")
 

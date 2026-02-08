@@ -65,7 +65,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotPanics(t *testing.T)
 	success := assert.NotPanics(t, func() {
 	})
 	fmt.Printf("success: %t\n", success)
@@ -100,7 +100,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotPanics(t *testing.T)
 	require.NotPanics(t, func() {
 	})
 	fmt.Println("passed")
@@ -178,7 +178,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestPanics(t *testing.T)
 	success := assert.Panics(t, func() {
 		panic("panicking")
 	})
@@ -214,7 +214,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestPanics(t *testing.T)
 	require.Panics(t, func() {
 		panic("panicking")
 	})
@@ -294,7 +294,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestPanicsWithError(t *testing.T)
 	success := assert.PanicsWithError(t, assert.ErrTest.Error(), func() {
 		panic(assert.ErrTest)
 	})
@@ -331,7 +331,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestPanicsWithError(t *testing.T)
 	require.PanicsWithError(t, assert.ErrTest.Error(), func() {
 		panic(assert.ErrTest)
 	})
@@ -411,7 +411,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestPanicsWithValue(t *testing.T)
 	success := assert.PanicsWithValue(t, "panicking", func() {
 		panic("panicking")
 	})
@@ -447,7 +447,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestPanicsWithValue(t *testing.T)
 	require.PanicsWithValue(t, "panicking", func() {
 		panic("panicking")
 	})

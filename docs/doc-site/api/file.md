@@ -73,7 +73,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestDirExists(t *testing.T)
 	success := assert.DirExists(t, filepath.Join(testDataPath(), "existing_dir"))
 	fmt.Printf("success: %t\n", success)
 
@@ -112,7 +112,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestDirExists(t *testing.T)
 	require.DirExists(t, filepath.Join(testDataPath(), "existing_dir"))
 	fmt.Println("passed")
 
@@ -195,7 +195,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestDirNotExists(t *testing.T)
 	success := assert.DirNotExists(t, filepath.Join(testDataPath(), "non_existing_dir"))
 	fmt.Printf("success: %t\n", success)
 
@@ -234,7 +234,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestDirNotExists(t *testing.T)
 	require.DirNotExists(t, filepath.Join(testDataPath(), "non_existing_dir"))
 	fmt.Println("passed")
 
@@ -317,7 +317,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestFileEmpty(t *testing.T)
 	success := assert.FileEmpty(t, filepath.Join(testDataPath(), "empty_file"))
 	fmt.Printf("success: %t\n", success)
 
@@ -356,7 +356,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestFileEmpty(t *testing.T)
 	require.FileEmpty(t, filepath.Join(testDataPath(), "empty_file"))
 	fmt.Println("passed")
 
@@ -439,7 +439,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestFileExists(t *testing.T)
 	success := assert.FileExists(t, filepath.Join(testDataPath(), "existing_file"))
 	fmt.Printf("success: %t\n", success)
 
@@ -478,7 +478,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestFileExists(t *testing.T)
 	require.FileExists(t, filepath.Join(testDataPath(), "existing_file"))
 	fmt.Println("passed")
 
@@ -561,7 +561,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestFileNotEmpty(t *testing.T)
 	success := assert.FileNotEmpty(t, filepath.Join(testDataPath(), "existing_file"))
 	fmt.Printf("success: %t\n", success)
 
@@ -600,7 +600,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestFileNotEmpty(t *testing.T)
 	require.FileNotEmpty(t, filepath.Join(testDataPath(), "existing_file"))
 	fmt.Println("passed")
 
@@ -683,7 +683,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestFileNotExists(t *testing.T)
 	success := assert.FileNotExists(t, filepath.Join(testDataPath(), "non_existing_file"))
 	fmt.Printf("success: %t\n", success)
 
@@ -722,7 +722,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestFileNotExists(t *testing.T)
 	require.FileNotExists(t, filepath.Join(testDataPath(), "non_existing_file"))
 	fmt.Println("passed")
 

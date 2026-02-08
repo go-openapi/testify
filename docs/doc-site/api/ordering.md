@@ -86,7 +86,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsDecreasing(t *testing.T)
 	success := assert.IsDecreasing(t, []int{3, 2, 1})
 	fmt.Printf("success: %t\n", success)
 
@@ -120,7 +120,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsDecreasing(t *testing.T)
 	require.IsDecreasing(t, []int{3, 2, 1})
 	fmt.Println("passed")
 
@@ -199,7 +199,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsDecreasingT(t *testing.T)
 	success := assert.IsDecreasingT(t, []int{3, 2, 1})
 	fmt.Printf("success: %t\n", success)
 
@@ -233,7 +233,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsDecreasingT(t *testing.T)
 	require.IsDecreasingT(t, []int{3, 2, 1})
 	fmt.Println("passed")
 
@@ -308,7 +308,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsIncreasing(t *testing.T)
 	success := assert.IsIncreasing(t, []int{1, 2, 3})
 	fmt.Printf("success: %t\n", success)
 
@@ -342,7 +342,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsIncreasing(t *testing.T)
 	require.IsIncreasing(t, []int{1, 2, 3})
 	fmt.Println("passed")
 
@@ -421,7 +421,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsIncreasingT(t *testing.T)
 	success := assert.IsIncreasingT(t, []int{1, 2, 3})
 	fmt.Printf("success: %t\n", success)
 
@@ -455,7 +455,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsIncreasingT(t *testing.T)
 	require.IsIncreasingT(t, []int{1, 2, 3})
 	fmt.Println("passed")
 
@@ -530,7 +530,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsNonDecreasing(t *testing.T)
 	success := assert.IsNonDecreasing(t, []int{1, 1, 2})
 	fmt.Printf("success: %t\n", success)
 
@@ -564,7 +564,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsNonDecreasing(t *testing.T)
 	require.IsNonDecreasing(t, []int{1, 1, 2})
 	fmt.Println("passed")
 
@@ -643,7 +643,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsNonDecreasingT(t *testing.T)
 	success := assert.IsNonDecreasingT(t, []int{1, 1, 2})
 	fmt.Printf("success: %t\n", success)
 
@@ -677,7 +677,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsNonDecreasingT(t *testing.T)
 	require.IsNonDecreasingT(t, []int{1, 1, 2})
 	fmt.Println("passed")
 
@@ -752,7 +752,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsNonIncreasing(t *testing.T)
 	success := assert.IsNonIncreasing(t, []int{2, 1, 1})
 	fmt.Printf("success: %t\n", success)
 
@@ -786,7 +786,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsNonIncreasing(t *testing.T)
 	require.IsNonIncreasing(t, []int{2, 1, 1})
 	fmt.Println("passed")
 
@@ -865,7 +865,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsNonIncreasingT(t *testing.T)
 	success := assert.IsNonIncreasingT(t, []int{2, 1, 1})
 	fmt.Printf("success: %t\n", success)
 
@@ -899,7 +899,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsNonIncreasingT(t *testing.T)
 	require.IsNonIncreasingT(t, []int{2, 1, 1})
 	fmt.Println("passed")
 
@@ -976,7 +976,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotSortedT(t *testing.T)
 	success := assert.NotSortedT(t, []int{3, 1, 3})
 	fmt.Printf("success: %t\n", success)
 
@@ -1010,7 +1010,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotSortedT(t *testing.T)
 	require.NotSortedT(t, []int{3, 1, 3})
 	fmt.Println("passed")
 
@@ -1087,7 +1087,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSortedT(t *testing.T)
 	success := assert.SortedT(t, []int{1, 1, 3})
 	fmt.Printf("success: %t\n", success)
 
@@ -1121,7 +1121,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSortedT(t *testing.T)
 	require.SortedT(t, []int{1, 1, 3})
 	fmt.Println("passed")
 

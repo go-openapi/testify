@@ -1729,7 +1729,13 @@ func TestNoError(t *testing.T) {
 func TestNoGoRoutineLeak(t *testing.T) {
 	t.Parallel()
 
-	t.Skip() // this function doesn't have tests yet: feed the original function with examples to test.
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NoGoRoutineLeak(mock, func() {})
+		// require functions don't return a value
+	})
 }
 
 func TestNotContains(t *testing.T) {

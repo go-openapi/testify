@@ -1351,7 +1351,14 @@ func TestAssertionsNoError(t *testing.T) {
 func TestAssertionsNoGoRoutineLeak(t *testing.T) {
 	t.Parallel()
 
-	t.Skip() // this function doesn't have tests yet: feed the original function with examples to test.
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.NoGoRoutineLeak(func() {})
+		// require functions don't return a value
+	})
 }
 
 func TestAssertionsNotContains(t *testing.T) {
@@ -3373,7 +3380,14 @@ func TestAssertionsNoErrorf(t *testing.T) {
 func TestAssertionsNoGoRoutineLeakf(t *testing.T) {
 	t.Parallel()
 
-	t.Skip() // this function doesn't have tests yet: feed the original function with examples to test.
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.NoGoRoutineLeakf(func() {}, "test message")
+		// require functions don't return a value
+	})
 }
 
 func TestAssertionsNotContainsf(t *testing.T) {

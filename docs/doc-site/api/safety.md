@@ -54,13 +54,200 @@ as t.Cleanup is called after the leak check.
 	},
 	"should not leak any go routine",
 	)
+	success: func() {}
 ```
 {{< /tab >}}
-{{% tab title="Examples" %}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
 ```go
-  - success: NOT IMPLEMENTED
+// real-world test would inject *testing.T from TestNoGoRoutineLeak(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNoGoRoutineLeak(t *testing.T)
+	success := assert.NoGoRoutineLeak(t, func() {
+	})
+	fmt.Printf("success: %t\n", success)
+
+}
+
 ```
+{{% /card %}}
+
+
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNoGoRoutineLeak(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"sync"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // normally provided by test
+
+	blocker := make(chan struct{})
+	var wg sync.WaitGroup
+
+	defer func() {
+		// clean resources _after_ the test
+		close(blocker)
+		wg.Wait()
+	}()
+
+	wg.Add(1)
+	// This examplifies how a function that leaks a goroutine is detected.
+	result := assert.NoGoRoutineLeak(t, func() { // true when there is no leak
+		go func() {
+			defer wg.Done()
+			<-blocker // leaked: blocks until cleanup
+		}()
+	})
+
+	// Error message from test would typically return the leaked goroutine, e.g.:
+	// #	0x69c8e8	github.com/go-openapi/testify/v2/assert_test.ExampleNoGoRoutineLeak.func2.1+0x48	.../assert_adhoc_example_7_test.go:30
+	fmt.Printf("has leak: %t", !result)
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
 {{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNoGoRoutineLeak(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNoGoRoutineLeak(t *testing.T)
+	require.NoGoRoutineLeak(t, func() {
+	})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% card href="https://go.dev/play/" %}}
+
+
+*Copy and click to open Go Playground*
+
+
+```go
+// real-world test would inject *testing.T from TestNoGoRoutineLeak(t *testing.T)
+// SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
+// SPDX-License-Identifier: Apache-2.0
+
+package main
+
+import (
+	"fmt"
+	"sync"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(mockFailNowT) // normally provided by test
+	// Since this test is failing and calls [runtime.Goexit], we need a mock to
+	// avoid the example trigger a panick.
+
+	blocker := make(chan struct{})
+	var wg sync.WaitGroup
+
+	defer func() {
+		// clean resources _after_ the test
+		close(blocker)
+		wg.Wait()
+	}()
+
+	wg.Add(1)
+	// This examplifies how a function that leaks a goroutine is detected.
+	require.NoGoRoutineLeak(t, func() { // true when there is no leak
+		go func() {
+			defer wg.Done()
+			<-blocker // leaked: blocks until cleanup
+		}()
+	})
+
+	// Error message from test would typically return the leaked goroutine, e.g.:
+	// #	0x69c8e8	github.com/go-openapi/testify/v2/assert_test.ExampleNoGoRoutineLeak.func2.1+0x48	.../assert_adhoc_example_7_test.go:30
+	fmt.Printf("passed: %t", !t.Failed())
+
+}
+
+type mockFailNowT struct {
+	failed bool
+}
+
+// Helper is like [testing.T.Helper] but does nothing.
+func (mockFailNowT) Helper() {}
+
+func (m *mockFailNowT) Errorf(format string, args ...any) {
+	_ = format
+	_ = args
+}
+
+func (m *mockFailNowT) FailNow() {
+	m.failed = true
+}
+
+func (m *mockFailNowT) Failed() bool {
+	return m.failed
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
 {{< /tabs >}}
 {{% /expand %}}
 

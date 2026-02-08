@@ -95,7 +95,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestGreater(t *testing.T)
 	success := assert.Greater(t, 2, 1)
 	fmt.Printf("success: %t\n", success)
 
@@ -129,7 +129,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestGreater(t *testing.T)
 	require.Greater(t, 2, 1)
 	fmt.Println("passed")
 
@@ -211,7 +211,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestGreaterOrEqual(t *testing.T)
 	success := assert.GreaterOrEqual(t, 2, 1)
 	fmt.Printf("success: %t\n", success)
 
@@ -245,7 +245,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestGreaterOrEqual(t *testing.T)
 	require.GreaterOrEqual(t, 2, 1)
 	fmt.Println("passed")
 
@@ -336,7 +336,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestGreaterOrEqualT(t *testing.T)
 	success := assert.GreaterOrEqualT(t, 2, 1)
 	fmt.Printf("success: %t\n", success)
 
@@ -370,7 +370,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestGreaterOrEqualT(t *testing.T)
 	require.GreaterOrEqualT(t, 2, 1)
 	fmt.Println("passed")
 
@@ -456,7 +456,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestGreaterT(t *testing.T)
 	success := assert.GreaterT(t, 2, 1)
 	fmt.Printf("success: %t\n", success)
 
@@ -490,7 +490,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestGreaterT(t *testing.T)
 	require.GreaterT(t, 2, 1)
 	fmt.Println("passed")
 
@@ -568,7 +568,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestLess(t *testing.T)
 	success := assert.Less(t, 1, 2)
 	fmt.Printf("success: %t\n", success)
 
@@ -602,7 +602,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestLess(t *testing.T)
 	require.Less(t, 1, 2)
 	fmt.Println("passed")
 
@@ -682,7 +682,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestLessOrEqual(t *testing.T)
 	success := assert.LessOrEqual(t, 1, 2)
 	fmt.Printf("success: %t\n", success)
 
@@ -716,7 +716,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestLessOrEqual(t *testing.T)
 	require.LessOrEqual(t, 1, 2)
 	fmt.Println("passed")
 
@@ -806,7 +806,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestLessOrEqualT(t *testing.T)
 	success := assert.LessOrEqualT(t, 1, 2)
 	fmt.Printf("success: %t\n", success)
 
@@ -840,7 +840,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestLessOrEqualT(t *testing.T)
 	require.LessOrEqualT(t, 1, 2)
 	fmt.Println("passed")
 
@@ -925,7 +925,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestLessT(t *testing.T)
 	success := assert.LessT(t, 1, 2)
 	fmt.Printf("success: %t\n", success)
 
@@ -959,7 +959,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestLessT(t *testing.T)
 	require.LessT(t, 1, 2)
 	fmt.Println("passed")
 
@@ -1033,7 +1033,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNegative(t *testing.T)
 	success := assert.Negative(t, -1)
 	fmt.Printf("success: %t\n", success)
 
@@ -1067,7 +1067,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNegative(t *testing.T)
 	require.Negative(t, -1)
 	fmt.Println("passed")
 
@@ -1145,7 +1145,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNegativeT(t *testing.T)
 	success := assert.NegativeT(t, -1)
 	fmt.Printf("success: %t\n", success)
 
@@ -1179,7 +1179,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNegativeT(t *testing.T)
 	require.NegativeT(t, -1)
 	fmt.Println("passed")
 
@@ -1253,7 +1253,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestPositive(t *testing.T)
 	success := assert.Positive(t, 1)
 	fmt.Printf("success: %t\n", success)
 
@@ -1287,7 +1287,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestPositive(t *testing.T)
 	require.Positive(t, 1)
 	fmt.Println("passed")
 
@@ -1365,7 +1365,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestPositiveT(t *testing.T)
 	success := assert.PositiveT(t, 1)
 	fmt.Printf("success: %t\n", success)
 
@@ -1399,7 +1399,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestPositiveT(t *testing.T)
 	require.PositiveT(t, 1)
 	fmt.Println("passed")
 

@@ -84,12 +84,13 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestImplements(t *testing.T)
 	success := assert.Implements(t, ptr(dummyInterface), new(testing.T))
 	fmt.Printf("success: %t\n", success)
 
 }
 
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
 var (
 	staticVar = "static string"
 
@@ -130,12 +131,13 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestImplements(t *testing.T)
 	require.Implements(t, ptr(dummyInterface), new(testing.T))
 	fmt.Println("passed")
 
 }
 
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
 var (
 	staticVar = "static string"
 
@@ -219,7 +221,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsNotOfTypeT(t *testing.T)
 	success := assert.IsNotOfTypeT[myType](t, 123.123)
 	fmt.Printf("success: %t\n", success)
 
@@ -255,7 +257,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsNotOfTypeT(t *testing.T)
 	require.IsNotOfTypeT[myType](t, 123.123)
 	fmt.Println("passed")
 
@@ -330,7 +332,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsNotType(t *testing.T)
 	success := assert.IsNotType(t, int32(123), int64(456))
 	fmt.Printf("success: %t\n", success)
 
@@ -364,7 +366,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsNotType(t *testing.T)
 	require.IsNotType(t, int32(123), int64(456))
 	fmt.Println("passed")
 
@@ -441,7 +443,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsOfTypeT(t *testing.T)
 	success := assert.IsOfTypeT[myType](t, myType(123.123))
 	fmt.Printf("success: %t\n", success)
 
@@ -477,7 +479,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsOfTypeT(t *testing.T)
 	require.IsOfTypeT[myType](t, myType(123.123))
 	fmt.Println("passed")
 
@@ -552,7 +554,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsType(t *testing.T)
 	success := assert.IsType(t, 123, 456)
 	fmt.Printf("success: %t\n", success)
 
@@ -586,7 +588,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestIsType(t *testing.T)
 	require.IsType(t, 123, 456)
 	fmt.Println("passed")
 
@@ -667,7 +669,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestKind(t *testing.T)
 	success := assert.Kind(t, reflect.String, "hello")
 	fmt.Printf("success: %t\n", success)
 
@@ -702,7 +704,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestKind(t *testing.T)
 	require.Kind(t, reflect.String, "hello")
 	fmt.Println("passed")
 
@@ -779,7 +781,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotImplements(t *testing.T)
 	success := assert.NotImplements(t, (*error)(nil), new(testing.T))
 	fmt.Printf("success: %t\n", success)
 
@@ -813,7 +815,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotImplements(t *testing.T)
 	require.NotImplements(t, (*error)(nil), new(testing.T))
 	fmt.Println("passed")
 
@@ -894,7 +896,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotKind(t *testing.T)
 	success := assert.NotKind(t, reflect.String, 0)
 	fmt.Printf("success: %t\n", success)
 
@@ -929,7 +931,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotKind(t *testing.T)
 	require.NotKind(t, reflect.String, 0)
 	fmt.Println("passed")
 
@@ -1006,7 +1008,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotZero(t *testing.T)
 	success := assert.NotZero(t, 1)
 	fmt.Printf("success: %t\n", success)
 
@@ -1040,7 +1042,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotZero(t *testing.T)
 	require.NotZero(t, 1)
 	fmt.Println("passed")
 
@@ -1117,7 +1119,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestZero(t *testing.T)
 	success := assert.Zero(t, 0)
 	fmt.Printf("success: %t\n", success)
 
@@ -1151,7 +1153,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestZero(t *testing.T)
 	require.Zero(t, 0)
 	fmt.Println("passed")
 

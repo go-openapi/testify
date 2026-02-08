@@ -619,9 +619,14 @@ func ExampleNoError() {
 	// Output: success: true
 }
 
-// func ExampleNoGoRoutineLeak() {
-// no success example available. Please add some examples to produce a testable example.
-// }
+func ExampleNoGoRoutineLeak() {
+	t := new(testing.T) // should come from testing, e.g. func TestNoGoRoutineLeak(t *testing.T)
+	success := assert.NoGoRoutineLeak(t, func() {
+	})
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
 
 func ExampleNotContains() {
 	t := new(testing.T) // should come from testing, e.g. func TestNotContains(t *testing.T)

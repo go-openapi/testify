@@ -112,7 +112,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEmpty(t *testing.T)
 	success := assert.Empty(t, "")
 	fmt.Printf("success: %t\n", success)
 
@@ -146,7 +146,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEmpty(t *testing.T)
 	require.Empty(t, "")
 	fmt.Println("passed")
 
@@ -228,7 +228,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEqual(t *testing.T)
 	success := assert.Equal(t, 123, 123)
 	fmt.Printf("success: %t\n", success)
 
@@ -262,7 +262,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEqual(t *testing.T)
 	require.Equal(t, 123, 123)
 	fmt.Println("passed")
 
@@ -349,7 +349,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEqualExportedValues(t *testing.T)
 	success := assert.EqualExportedValues(t, &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "a", b: 2})
 	fmt.Printf("success: %t\n", success)
 
@@ -388,7 +388,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEqualExportedValues(t *testing.T)
 	require.EqualExportedValues(t, &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "a", b: 2})
 	fmt.Println("passed")
 
@@ -477,7 +477,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEqualT(t *testing.T)
 	success := assert.EqualT(t, 123, 123)
 	fmt.Printf("success: %t\n", success)
 
@@ -511,7 +511,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEqualT(t *testing.T)
 	require.EqualT(t, 123, 123)
 	fmt.Println("passed")
 
@@ -587,7 +587,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEqualValues(t *testing.T)
 	success := assert.EqualValues(t, uint32(123), int32(123))
 	fmt.Printf("success: %t\n", success)
 
@@ -621,7 +621,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestEqualValues(t *testing.T)
 	require.EqualValues(t, uint32(123), int32(123))
 	fmt.Println("passed")
 
@@ -698,7 +698,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestExactly(t *testing.T)
 	success := assert.Exactly(t, int32(123), int32(123))
 	fmt.Printf("success: %t\n", success)
 
@@ -732,7 +732,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestExactly(t *testing.T)
 	require.Exactly(t, int32(123), int32(123))
 	fmt.Println("passed")
 
@@ -809,7 +809,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNil(t *testing.T)
 	success := assert.Nil(t, nil)
 	fmt.Printf("success: %t\n", success)
 
@@ -843,7 +843,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNil(t *testing.T)
 	require.Nil(t, nil)
 	fmt.Println("passed")
 
@@ -922,7 +922,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotEmpty(t *testing.T)
 	success := assert.NotEmpty(t, "not empty")
 	fmt.Printf("success: %t\n", success)
 
@@ -956,7 +956,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotEmpty(t *testing.T)
 	require.NotEmpty(t, "not empty")
 	fmt.Println("passed")
 
@@ -1036,7 +1036,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotEqual(t *testing.T)
 	success := assert.NotEqual(t, 123, 456)
 	fmt.Printf("success: %t\n", success)
 
@@ -1070,7 +1070,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotEqual(t *testing.T)
 	require.NotEqual(t, 123, 456)
 	fmt.Println("passed")
 
@@ -1149,7 +1149,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotEqualT(t *testing.T)
 	success := assert.NotEqualT(t, 123, 456)
 	fmt.Printf("success: %t\n", success)
 
@@ -1183,7 +1183,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotEqualT(t *testing.T)
 	require.NotEqualT(t, 123, 456)
 	fmt.Println("passed")
 
@@ -1258,7 +1258,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotEqualValues(t *testing.T)
 	success := assert.NotEqualValues(t, uint32(123), int32(456))
 	fmt.Printf("success: %t\n", success)
 
@@ -1292,7 +1292,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotEqualValues(t *testing.T)
 	require.NotEqualValues(t, uint32(123), int32(456))
 	fmt.Println("passed")
 
@@ -1369,7 +1369,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotNil(t *testing.T)
 	success := assert.NotNil(t, "not nil")
 	fmt.Printf("success: %t\n", success)
 
@@ -1403,7 +1403,7 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotNil(t *testing.T)
 	require.NotNil(t, "not nil")
 	fmt.Println("passed")
 
@@ -1482,12 +1482,13 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotSame(t *testing.T)
 	success := assert.NotSame(t, &staticVar, ptr("static string"))
 	fmt.Printf("success: %t\n", success)
 
 }
 
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
 var staticVar = "static string"
 
 func ptr[T any](value T) *T {
@@ -1524,12 +1525,13 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotSame(t *testing.T)
 	require.NotSame(t, &staticVar, ptr("static string"))
 	fmt.Println("passed")
 
 }
 
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
 var staticVar = "static string"
 
 func ptr[T any](value T) *T {
@@ -1611,12 +1613,13 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotSameT(t *testing.T)
 	success := assert.NotSameT(t, &staticVar, ptr("static string"))
 	fmt.Printf("success: %t\n", success)
 
 }
 
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
 var staticVar = "static string"
 
 func ptr[T any](value T) *T {
@@ -1653,12 +1656,13 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestNotSameT(t *testing.T)
 	require.NotSameT(t, &staticVar, ptr("static string"))
 	fmt.Println("passed")
 
 }
 
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
 var staticVar = "static string"
 
 func ptr[T any](value T) *T {
@@ -1740,12 +1744,13 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSame(t *testing.T)
 	success := assert.Same(t, &staticVar, staticVarPtr)
 	fmt.Printf("success: %t\n", success)
 
 }
 
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
 var (
 	staticVar    = "static string"
 	staticVarPtr = &staticVar
@@ -1779,12 +1784,13 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSame(t *testing.T)
 	require.Same(t, &staticVar, staticVarPtr)
 	fmt.Println("passed")
 
 }
 
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
 var (
 	staticVar    = "static string"
 	staticVarPtr = &staticVar
@@ -1863,12 +1869,13 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSameT(t *testing.T)
 	success := assert.SameT(t, &staticVar, staticVarPtr)
 	fmt.Printf("success: %t\n", success)
 
 }
 
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
 var (
 	staticVar    = "static string"
 	staticVarPtr = &staticVar
@@ -1902,12 +1909,13 @@ import (
 )
 
 func main() {
-	t := new(testing.T)
+	t := new(testing.T) // should come from testing, e.g. func TestSameT(t *testing.T)
 	require.SameT(t, &staticVar, staticVarPtr)
 	fmt.Println("passed")
 
 }
 
+//nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
 var (
 	staticVar    = "static string"
 	staticVarPtr = &staticVar
