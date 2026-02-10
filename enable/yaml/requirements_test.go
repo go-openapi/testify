@@ -211,6 +211,97 @@ func TestRequireYAMLEqT(t *testing.T) {
 	})
 }
 
+func TestRequireYAMLEqBytes(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqBytes(mock, []byte(expectedYAML), []byte(actualYAML))
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqBytes(mock, []byte(`{"foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`))
+		if !mock.Failed {
+			t.Error("Check should fail")
+		}
+	})
+}
+
+func TestRequireYAMLEqTf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqTf(mock, []byte(expectedYAML), actualYAML, yamlCheckMsg, "equivalent")
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqTf(mock, []byte(`{"foo": "bar"}`), `{"foo": "bar", "hello": "world"}`, yamlCheckMsg, "not equivalent")
+		if !mock.Failed {
+			t.Error("Check should fail")
+		}
+	})
+}
+
+func TestRequireYAMLMarshalUnmarshalAsTf(t *testing.T) {
+	t.Parallel()
+
+	type dummy struct {
+		Hello string `yaml:"hello"`
+		Foo   string `yaml:"foo"`
+	}
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+
+		value := dummy{Hello: "world", Foo: "bar"}
+		target.YAMLUnmarshalAsTf(mock, value, `{"hello": "world", "foo": "bar"}`, yamlCheckMsg, "unmarshal")
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+
+		target.YAMLMarshalAsTf(mock, `{"hello": "world", "foo": "bar"}`, value, yamlCheckMsg, "marshal")
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+
+		value := dummy{Hello: "world", Foo: "bar"}
+		target.YAMLUnmarshalAsTf(mock, value, `{"hello": "world", "foo": "yay"}`, yamlCheckMsg, "unmarshal")
+		if !mock.Failed {
+			t.Error("Check should fail with FailNow")
+		}
+
+		target.YAMLMarshalAsTf(mock, `{"hello": "world", "foo": "yay"}`, value, yamlCheckMsg, "marshal")
+		if !mock.Failed {
+			t.Error("Check should fail with FailNow")
+		}
+	})
+}
+
 func TestRequireYAMLUnmarshalAsWrapper(t *testing.T) {
 	t.Parallel()
 

@@ -155,6 +155,34 @@ func TestRequireYAMLEqWrapper_ArraysOfDifferentOrder(t *testing.T) {
 	}
 }
 
+func TestRequireYAMLEqBytesWrapper(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		mockRequire := target.New(mock)
+
+		mockRequire.YAMLEqBytes([]byte(expectedYAML), []byte(actualYAML))
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		mockRequire := target.New(mock)
+
+		mockRequire.YAMLEqBytes([]byte(`{"foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`))
+		if !mock.Failed {
+			t.Error("Check should fail")
+		}
+	})
+}
+
 func TestRequireYAMLEqfWrapper(t *testing.T) {
 	t.Parallel()
 
