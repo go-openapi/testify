@@ -12,7 +12,7 @@ import (
 func TestRequireYAMLEqWrapper_EqualYAMLString(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	mockRequire := target.New(mock)
 
 	mockRequire.YAMLEq(`{"hello": "world", "foo": "bar"}`, `{"hello": "world", "foo": "bar"}`)
@@ -24,7 +24,7 @@ func TestRequireYAMLEqWrapper_EqualYAMLString(t *testing.T) {
 func TestRequireYAMLEqWrapper_EquivalentButNotEqual(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	mockRequire := target.New(mock)
 
 	mockRequire.YAMLEq(`{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
@@ -36,7 +36,7 @@ func TestRequireYAMLEqWrapper_EquivalentButNotEqual(t *testing.T) {
 func TestRequireYAMLEqWrapper_HashOfArraysAndHashes(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	mockRequire := target.New(mock)
 
 	expected := `
@@ -74,7 +74,7 @@ array:
 func TestRequireYAMLEqWrapper_Array(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	mockRequire := target.New(mock)
 
 	mockRequire.YAMLEq(`["foo", {"hello": "world", "nested": "hash"}]`, `["foo", {"nested": "hash", "hello": "world"}]`)
@@ -86,7 +86,7 @@ func TestRequireYAMLEqWrapper_Array(t *testing.T) {
 func TestRequireYAMLEqWrapper_HashAndArrayNotEquivalent(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	mockRequire := target.New(mock)
 
 	mockRequire.YAMLEq(`["foo", {"hello": "world", "nested": "hash"}]`, `{"foo": "bar", {"nested": "hash", "hello": "world"}}`)
@@ -98,7 +98,7 @@ func TestRequireYAMLEqWrapper_HashAndArrayNotEquivalent(t *testing.T) {
 func TestRequireYAMLEqWrapper_HashesNotEquivalent(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	mockRequire := target.New(mock)
 
 	mockRequire.YAMLEq(`{"foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
@@ -110,7 +110,7 @@ func TestRequireYAMLEqWrapper_HashesNotEquivalent(t *testing.T) {
 func TestRequireYAMLEqWrapper_ActualIsSimpleString(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	mockRequire := target.New(mock)
 
 	mockRequire.YAMLEq(`{"foo": "bar"}`, "Simple String")
@@ -122,7 +122,7 @@ func TestRequireYAMLEqWrapper_ActualIsSimpleString(t *testing.T) {
 func TestRequireYAMLEqWrapper_ExpectedIsSimpleString(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	mockRequire := target.New(mock)
 
 	mockRequire.YAMLEq("Simple String", `{"foo": "bar", "hello": "world"}`)
@@ -134,7 +134,7 @@ func TestRequireYAMLEqWrapper_ExpectedIsSimpleString(t *testing.T) {
 func TestRequireYAMLEqWrapper_ExpectedAndActualSimpleString(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	mockRequire := target.New(mock)
 
 	mockRequire.YAMLEq("Simple String", "Simple String")
@@ -146,11 +146,95 @@ func TestRequireYAMLEqWrapper_ExpectedAndActualSimpleString(t *testing.T) {
 func TestRequireYAMLEqWrapper_ArraysOfDifferentOrder(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	mockRequire := target.New(mock)
 
 	mockRequire.YAMLEq(`["foo", {"hello": "world", "nested": "hash"}]`, `[{ "hello": "world", "nested": "hash"}, "foo"]`)
 	if !mock.Failed {
 		t.Error("Check should fail")
 	}
+}
+
+func TestRequireYAMLEqBytesWrapper(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		mockRequire := target.New(mock)
+
+		mockRequire.YAMLEqBytes([]byte(expectedYAML), []byte(actualYAML))
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		mockRequire := target.New(mock)
+
+		mockRequire.YAMLEqBytes([]byte(`{"foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`))
+		if !mock.Failed {
+			t.Error("Check should fail")
+		}
+	})
+}
+
+func TestRequireYAMLEqfWrapper(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		mockRequire := target.New(mock)
+
+		mockRequire.YAMLEqf(`{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`, yamlCheckMsg, "equivalent")
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		mockRequire := target.New(mock)
+
+		mockRequire.YAMLEqf(`{"foo": "bar"}`, `{"foo": "bar", "hello": "world"}`, yamlCheckMsg, "not equivalent")
+		if !mock.Failed {
+			t.Error("Check should fail")
+		}
+	})
+}
+
+func TestRequireYAMLEqBytesfWrapper(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		mockRequire := target.New(mock)
+
+		mockRequire.YAMLEqBytesf([]byte(expectedYAML), []byte(actualYAML), yamlCheckMsg, "equivalent bytes")
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		mockRequire := target.New(mock)
+
+		mockRequire.YAMLEqBytesf([]byte(`{"foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`), yamlCheckMsg, "not equivalent bytes")
+		if !mock.Failed {
+			t.Error("Check should fail")
+		}
+	})
 }

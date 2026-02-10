@@ -35,12 +35,14 @@ array:
   - "string"
   - ["nested", "array", 5.5]
 `
+
+	yamlCheckMsg = "yaml check: %s"
 )
 
 func TestRequireYAMLEq_EqualYAMLString(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	target.YAMLEq(mock, `{"hello": "world", "foo": "bar"}`, `{"hello": "world", "foo": "bar"}`)
 	if mock.Failed {
 		t.Error("Check should pass")
@@ -50,7 +52,7 @@ func TestRequireYAMLEq_EqualYAMLString(t *testing.T) {
 func TestRequireYAMLEq_EquivalentButNotEqual(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	target.YAMLEq(mock, `{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
 	if mock.Failed {
 		t.Error("Check should pass")
@@ -60,7 +62,7 @@ func TestRequireYAMLEq_EquivalentButNotEqual(t *testing.T) {
 func TestRequireYAMLEq_HashOfArraysAndHashes(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	target.YAMLEq(mock, expectedYAML, actualYAML)
 	if mock.Failed {
 		t.Error("Check should pass")
@@ -70,7 +72,7 @@ func TestRequireYAMLEq_HashOfArraysAndHashes(t *testing.T) {
 func TestRequireYAMLEq_Array(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	target.YAMLEq(mock, `["foo", {"hello": "world", "nested": "hash"}]`, `["foo", {"nested": "hash", "hello": "world"}]`)
 	if mock.Failed {
 		t.Error("Check should pass")
@@ -80,7 +82,7 @@ func TestRequireYAMLEq_Array(t *testing.T) {
 func TestRequireYAMLEq_HashAndArrayNotEquivalent(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	target.YAMLEq(mock, `["foo", {"hello": "world", "nested": "hash"}]`, `{"foo": "bar", {"nested": "hash", "hello": "world"}}`)
 	if !mock.Failed {
 		t.Error("Check should fail")
@@ -90,7 +92,7 @@ func TestRequireYAMLEq_HashAndArrayNotEquivalent(t *testing.T) {
 func TestRequireYAMLEq_HashesNotEquivalent(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	target.YAMLEq(mock, `{"foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
 	if !mock.Failed {
 		t.Error("Check should fail")
@@ -100,7 +102,7 @@ func TestRequireYAMLEq_HashesNotEquivalent(t *testing.T) {
 func TestRequireYAMLEq_ActualIsSimpleString(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	target.YAMLEq(mock, `{"foo": "bar"}`, "Simple String")
 	if !mock.Failed {
 		t.Error("Check should fail")
@@ -110,7 +112,7 @@ func TestRequireYAMLEq_ActualIsSimpleString(t *testing.T) {
 func TestRequireYAMLEq_ExpectedIsSimpleString(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	target.YAMLEq(mock, "Simple String", `{"foo": "bar", "hello": "world"}`)
 	if !mock.Failed {
 		t.Error("Check should fail")
@@ -120,7 +122,7 @@ func TestRequireYAMLEq_ExpectedIsSimpleString(t *testing.T) {
 func TestRequireYAMLEq_ExpectedAndActualSimpleString(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	target.YAMLEq(mock, "Simple String", "Simple String")
 	if mock.Failed {
 		t.Error("Check should pass")
@@ -130,38 +132,230 @@ func TestRequireYAMLEq_ExpectedAndActualSimpleString(t *testing.T) {
 func TestRequireYAMLEq_ArraysOfDifferentOrder(t *testing.T) {
 	t.Parallel()
 
-	mock := new(MockT)
+	mock := new(mockT)
 	target.YAMLEq(mock, `["foo", {"hello": "world", "nested": "hash"}]`, `[{ "hello": "world", "nested": "hash"}, "foo"]`)
 	if !mock.Failed {
 		t.Error("Check should fail")
 	}
 }
 
-func TestRequireYAMLUnmarshalAsWrapper(t *testing.T) {
+func TestRequireYAMLEqf(t *testing.T) {
 	t.Parallel()
 
-	mock := new(testing.T)
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqf(mock, `{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`, yamlCheckMsg, "equivalent")
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqf(mock, `{"foo": "bar"}`, `{"foo": "bar", "hello": "world"}`, yamlCheckMsg, "not equivalent")
+		if !mock.Failed {
+			t.Error("Check should fail")
+		}
+	})
+}
+
+func TestRequireYAMLEqBytesf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqBytesf(mock, []byte(expectedYAML), []byte(actualYAML), yamlCheckMsg, "equivalent bytes")
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqBytesf(mock, []byte(`{"foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`), yamlCheckMsg, "not equivalent bytes")
+		if !mock.Failed {
+			t.Error("Check should fail")
+		}
+	})
+}
+
+func TestRequireYAMLEqT(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqT(mock, []byte(expectedYAML), actualYAML)
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqT(mock, []byte(`{"foo": "bar"}`), `{"foo": "bar", "hello": "world"}`)
+		if !mock.Failed {
+			t.Error("Check should fail")
+		}
+	})
+}
+
+func TestRequireYAMLEqBytes(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqBytes(mock, []byte(expectedYAML), []byte(actualYAML))
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqBytes(mock, []byte(`{"foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`))
+		if !mock.Failed {
+			t.Error("Check should fail")
+		}
+	})
+}
+
+func TestRequireYAMLEqTf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqTf(mock, []byte(expectedYAML), actualYAML, yamlCheckMsg, "equivalent")
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqTf(mock, []byte(`{"foo": "bar"}`), `{"foo": "bar", "hello": "world"}`, yamlCheckMsg, "not equivalent")
+		if !mock.Failed {
+			t.Error("Check should fail")
+		}
+	})
+}
+
+func TestRequireYAMLMarshalUnmarshalAsTf(t *testing.T) {
+	t.Parallel()
+
 	type dummy struct {
 		Hello string `yaml:"hello"`
 		Foo   string `yaml:"foo"`
 	}
 
-	value := dummy{Hello: "world", Foo: "bar"}
-	target.YAMLUnmarshalAsT(mock, value, `{"hello": "world", "foo": "bar"}`)
-	target.YAMLMarshalAsT(mock, `{"hello": "world", "foo": "bar"}`, value)
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+
+		value := dummy{Hello: "world", Foo: "bar"}
+		target.YAMLUnmarshalAsTf(mock, value, `{"hello": "world", "foo": "bar"}`, yamlCheckMsg, "unmarshal")
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+
+		target.YAMLMarshalAsTf(mock, `{"hello": "world", "foo": "bar"}`, value, yamlCheckMsg, "marshal")
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+
+		value := dummy{Hello: "world", Foo: "bar"}
+		target.YAMLUnmarshalAsTf(mock, value, `{"hello": "world", "foo": "yay"}`, yamlCheckMsg, "unmarshal")
+		if !mock.Failed {
+			t.Error("Check should fail with FailNow")
+		}
+
+		target.YAMLMarshalAsTf(mock, `{"hello": "world", "foo": "yay"}`, value, yamlCheckMsg, "marshal")
+		if !mock.Failed {
+			t.Error("Check should fail with FailNow")
+		}
+	})
 }
 
-type MockT struct {
+func TestRequireYAMLUnmarshalAsWrapper(t *testing.T) {
+	t.Parallel()
+
+	type dummy struct {
+		Hello string `yaml:"hello"`
+		Foo   string `yaml:"foo"`
+	}
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+
+		value := dummy{Hello: "world", Foo: "bar"}
+		target.YAMLUnmarshalAsT(mock, value, `{"hello": "world", "foo": "bar"}`)
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+
+		target.YAMLMarshalAsT(mock, `{"hello": "world", "foo": "bar"}`, value)
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+
+		value := dummy{Hello: "world", Foo: "bar"}
+		target.YAMLUnmarshalAsT(mock, value, `{"hello": "world", "foo": "yay"}`)
+		if !mock.Failed {
+			t.Error("Check should fail with FailNow")
+		}
+
+		target.YAMLMarshalAsT(mock, `{"hello": "world", "foo": "yay"}`, value)
+		if !mock.Failed {
+			t.Error("Check should fail with FailNow")
+		}
+	})
+}
+
+type mockT struct {
 	Failed bool
 }
 
 // Helper is like [testing.T.Helper] but does nothing.
-func (MockT) Helper() {}
+func (mockT) Helper() {}
 
-func (t *MockT) FailNow() {
+func (t *mockT) FailNow() {
 	t.Failed = true
 }
 
-func (t *MockT) Errorf(format string, args ...any) {
+func (t *mockT) Errorf(format string, args ...any) {
 	_, _ = format, args
 }

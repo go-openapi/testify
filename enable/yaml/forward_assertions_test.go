@@ -123,3 +123,69 @@ func TestYAMLEqWrapper_ArraysOfDifferentOrder(t *testing.T) {
 		t.Error("YAMLEq should return false")
 	}
 }
+
+func TestYAMLEqBytesWrapper(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		assert := target.New(new(testing.T))
+		if !assert.YAMLEqBytes([]byte(expectedYAML), []byte(actualYAML)) {
+			t.Error("YAMLEqBytes should return true")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		assert := target.New(new(testing.T))
+		if assert.YAMLEqBytes([]byte(`{"foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`)) {
+			t.Error("YAMLEqBytes should return false")
+		}
+	})
+}
+
+func TestYAMLEqfWrapper(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		assert := target.New(new(testing.T))
+		if !assert.YAMLEqf(`{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`, yamlCheckMsg, "equivalent") {
+			t.Error("YAMLEqf should return true")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		assert := target.New(new(testing.T))
+		if assert.YAMLEqf(`{"foo": "bar"}`, `{"foo": "bar", "hello": "world"}`, yamlCheckMsg, "not equivalent") {
+			t.Error("YAMLEqf should return false")
+		}
+	})
+}
+
+func TestYAMLEqBytesfWrapper(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		assert := target.New(new(testing.T))
+		if !assert.YAMLEqBytesf([]byte(expectedYAML), []byte(actualYAML), yamlCheckMsg, "equivalent bytes") {
+			t.Error("YAMLEqBytesf should return true")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		assert := target.New(new(testing.T))
+		if assert.YAMLEqBytesf([]byte(`{"foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`), yamlCheckMsg, "not equivalent bytes") {
+			t.Error("YAMLEqBytesf should return false")
+		}
+	})
+}
