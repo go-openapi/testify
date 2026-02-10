@@ -49,10 +49,10 @@ InDelta asserts that the two numerals are within delta of each other.
 Delta must be greater than or equal to zero.
 
 Expected and actual values should convert to float64.
-To compare large integers that can't be represented accurately as float64 (eg. uint64),
+To compare large integers that can't be represented accurately as float64 (e.g. uint64),
 prefer [InDeltaT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDeltaT) to preserve the original type.
 
-#### Behavior with IEEE floating point arithmetics
+#### Behavior with IEEE floating point arithmetic
 
   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
   - expected +Inf is matched only by a +Inf
@@ -69,10 +69,10 @@ assertions.InDelta(t, math.Pi, 22/7.0, 0.01)
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -103,10 +103,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -182,10 +182,10 @@ See [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -216,10 +216,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -295,10 +295,10 @@ See [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -329,10 +329,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -401,7 +401,7 @@ The main difference with [InDelta](https://pkg.go.dev/github.com/go-openapi/test
 
 Delta must be greater than or equal to zero.
 
-#### Behavior with IEEE floating point arithmetics
+#### Behavior with IEEE floating point arithmetic
 
   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
   - expected +Inf is matched only by a +Inf
@@ -418,10 +418,10 @@ assertions.InDeltaT(t, math.Pi, 22/7.0, 0.01)
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -452,10 +452,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -514,7 +514,7 @@ func main() {
 ### InEpsilon{#inepsilon}
 InEpsilon asserts that expected and actual have a relative error less than epsilon.
 
-#### Behavior with IEEE floating point arithmetics
+#### Behavior with IEEE floating point arithmetic
 
   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
   - expected +Inf is matched only by a +Inf
@@ -539,10 +539,10 @@ This allows [InEpsilonT](https://pkg.go.dev/github.com/go-openapi/testify/v2/ass
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -573,10 +573,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -652,10 +652,10 @@ See [InEpsilon](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEps
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -686,10 +686,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -758,7 +758,7 @@ since relative error is mathematically undefined for zero values.
 Unlike [InDeltaT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDeltaT), which preserves the original type, [InEpsilonT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilonT) converts the expected and actual
 numbers to float64, since the relative error doesn't make sense as an integer.
 
-#### Behavior with IEEE floating point arithmetics
+#### Behavior with IEEE floating point arithmetic
 
   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
   - expected +Inf is matched only by a +Inf
@@ -783,10 +783,10 @@ This allows [InEpsilonT](https://pkg.go.dev/github.com/go-openapi/testify/v2/ass
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -817,10 +817,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go

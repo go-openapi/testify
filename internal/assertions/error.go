@@ -26,7 +26,7 @@ func (e TestExampleError) Error() string {
 // the test code more readable.
 const ErrTest TestExampleError = "assert.ErrTest general error for testing"
 
-// NoError asserts that a function returned a nil error (ie. no error).
+// NoError asserts that a function returned a nil error (i.e. no error).
 //
 // # Usage
 //
@@ -51,7 +51,7 @@ func NoError(t T, err error, msgAndArgs ...any) bool {
 	return true
 }
 
-// Error asserts that a function returned a non-nil error (ie. an error).
+// Error asserts that a function returned a non-nil error (i.e. an error).
 //
 // # Usage
 //

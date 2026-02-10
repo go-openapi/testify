@@ -15,10 +15,10 @@ import (
 // Delta must be greater than or equal to zero.
 //
 // Expected and actual values should convert to float64.
-// To compare large integers that can't be represented accurately as float64 (eg. uint64),
+// To compare large integers that can't be represented accurately as float64 (e.g. uint64),
 // prefer [InDeltaT] to preserve the original type.
 //
-// # Behavior with IEEE floating point arithmetics
+// # Behavior with IEEE floating point arithmetic
 //
 //   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
 //   - expected +Inf is matched only by a +Inf
@@ -68,7 +68,7 @@ func InDelta(t T, expected, actual any, delta float64, msgAndArgs ...any) bool {
 //
 // Delta must be greater than or equal to zero.
 //
-// # Behavior with IEEE floating point arithmetics
+// # Behavior with IEEE floating point arithmetic
 //
 //   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
 //   - expected +Inf is matched only by a +Inf
@@ -117,7 +117,7 @@ func InDeltaT[Number Measurable](t T, expected, actual, delta Number, msgAndArgs
 
 // InEpsilon asserts that expected and actual have a relative error less than epsilon.
 //
-// # Behavior with IEEE floating point arithmetics
+// # Behavior with IEEE floating point arithmetic
 //
 //   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
 //   - expected +Inf is matched only by a +Inf
@@ -174,7 +174,7 @@ func InEpsilon(t T, expected, actual any, epsilon float64, msgAndArgs ...any) bo
 // Unlike [InDeltaT], which preserves the original type, [InEpsilonT] converts the expected and actual
 // numbers to float64, since the relative error doesn't make sense as an integer.
 //
-// # Behavior with IEEE floating point arithmetics
+// # Behavior with IEEE floating point arithmetic
 //
 //   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
 //   - expected +Inf is matched only by a +Inf
