@@ -339,7 +339,7 @@ func EqualValues(t T, expected any, actual any, msgAndArgs ...any) {
 	t.FailNow()
 }
 
-// Error asserts that a function returned a non-nil error (ie. an error).
+// Error asserts that a function returned a non-nil error (i.e. an error).
 //
 // # Usage
 //
@@ -1049,10 +1049,10 @@ func Implements(t T, interfaceObject any, object any, msgAndArgs ...any) {
 // Delta must be greater than or equal to zero.
 //
 // Expected and actual values should convert to float64.
-// To compare large integers that can't be represented accurately as float64 (eg. uint64),
+// To compare large integers that can't be represented accurately as float64 (e.g. uint64),
 // prefer [InDeltaT] to preserve the original type.
 //
-// # Behavior with IEEE floating point arithmetics
+// # Behavior with IEEE floating point arithmetic
 //
 //   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
 //   - expected +Inf is matched only by a +Inf
@@ -1137,7 +1137,7 @@ func InDeltaSlice(t T, expected any, actual any, delta float64, msgAndArgs ...an
 //
 // Delta must be greater than or equal to zero.
 //
-// # Behavior with IEEE floating point arithmetics
+// # Behavior with IEEE floating point arithmetic
 //
 //   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
 //   - expected +Inf is matched only by a +Inf
@@ -1166,7 +1166,7 @@ func InDeltaT[Number Measurable](t T, expected Number, actual Number, delta Numb
 
 // InEpsilon asserts that expected and actual have a relative error less than epsilon.
 //
-// # Behavior with IEEE floating point arithmetics
+// # Behavior with IEEE floating point arithmetic
 //
 //   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
 //   - expected +Inf is matched only by a +Inf
@@ -1234,7 +1234,7 @@ func InEpsilonSlice(t T, expected any, actual any, epsilon float64, msgAndArgs .
 // Unlike [InDeltaT], which preserves the original type, [InEpsilonT] converts the expected and actual
 // numbers to float64, since the relative error doesn't make sense as an integer.
 //
-// # Behavior with IEEE floating point arithmetics
+// # Behavior with IEEE floating point arithmetic
 //
 //   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
 //   - expected +Inf is matched only by a +Inf
@@ -2047,7 +2047,7 @@ func Nil(t T, object any, msgAndArgs ...any) {
 	t.FailNow()
 }
 
-// NoError asserts that a function returned a nil error (ie. no error).
+// NoError asserts that a function returned a nil error (i.e. no error).
 //
 // # Usage
 //

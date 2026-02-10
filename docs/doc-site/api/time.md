@@ -41,10 +41,10 @@ WithinDuration asserts that the two times are within duration delta of each othe
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -76,10 +76,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -154,10 +154,10 @@ WithinRange asserts that a time is within a time range (inclusive).
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -189,10 +189,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go

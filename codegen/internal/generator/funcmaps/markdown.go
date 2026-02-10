@@ -252,9 +252,9 @@ func addExamples(trailer []string, funcName string, perPkgExamples []packageExam
 		trailer = append(trailer, `{{% cards %}}`)
 
 		for _, example := range pe.examples {
-			trailer = append(trailer, `{{% card href="https://go.dev/play/" %}}`)
+			trailer = append(trailer, `{{% card %}}`)
 			trailer = append(trailer, "\n")
-			trailer = append(trailer, `*Copy and click to open Go Playground*`)
+			trailer = append(trailer, `*[Copy and click to open Go Playground](https://go.dev/play/)*`)
 			trailer = append(trailer, "\n")
 			trailer = append(trailer, "```go")
 			trailer = append(trailer, fmt.Sprintf("// real-world test would inject *testing.T from Test%s(t *testing.T)", funcName))

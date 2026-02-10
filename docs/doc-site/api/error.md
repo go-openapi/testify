@@ -61,10 +61,10 @@ and that it is equal to the provided error.
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -95,10 +95,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -159,7 +159,7 @@ func main() {
 {{< /tabs >}}
 
 ### Error{#error}
-Error asserts that a function returned a non-nil error (ie. an error).
+Error asserts that a function returned a non-nil error (i.e. an error).
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -173,10 +173,10 @@ Error asserts that a function returned a non-nil error (ie. an error).
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -207,10 +207,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -286,10 +286,10 @@ This is a wrapper for [errors.As](https://pkg.go.dev/errors#As).
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -327,10 +327,10 @@ func (d *dummyError) Error() string {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -413,10 +413,10 @@ error) and that the error contains the specified substring.
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -447,10 +447,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -526,10 +526,10 @@ This is a wrapper for [errors.Is](https://pkg.go.dev/errors#Is).
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -561,10 +561,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -626,7 +626,7 @@ func main() {
 {{< /tabs >}}
 
 ### NoError{#noerror}
-NoError asserts that a function returned a nil error (ie. no error).
+NoError asserts that a function returned a nil error (i.e. no error).
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -642,10 +642,10 @@ NoError asserts that a function returned a nil error (ie. no error).
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -676,10 +676,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -754,10 +754,10 @@ but if so, sets target to that error value.
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -795,10 +795,10 @@ func (d *dummyError) Error() string {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -881,10 +881,10 @@ This is a wrapper for [errors.Is](https://pkg.go.dev/errors#Is).
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -916,10 +916,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go

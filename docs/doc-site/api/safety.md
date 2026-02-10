@@ -59,10 +59,10 @@ as t.Cleanup is called after the leak check.
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -88,10 +88,10 @@ func main() {
 {{% /card %}}
 
 
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -142,10 +142,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -171,10 +171,10 @@ func main() {
 {{% /card %}}
 
 
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go

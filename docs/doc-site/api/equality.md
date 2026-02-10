@@ -94,10 +94,10 @@ Pointer values are "empty" if the pointer is nil or if the pointed value is "emp
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -128,10 +128,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -210,10 +210,10 @@ Function equality cannot be determined and will always fail.
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -244,10 +244,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -331,10 +331,10 @@ Function equality cannot be determined and will always fail.
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -370,10 +370,10 @@ type dummyStruct struct {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -459,10 +459,10 @@ use [Equal](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Equal) in
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -493,10 +493,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -569,10 +569,10 @@ Function equality cannot be determined and will always fail.
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -603,10 +603,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -680,10 +680,10 @@ Exactly asserts that two objects are equal in value and type.
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -714,10 +714,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -791,10 +791,10 @@ Nil asserts that the specified object is nil.
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -825,10 +825,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -904,10 +904,10 @@ NotEmpty asserts that the specified object is NOT [Empty](https://pkg.go.dev/git
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -938,10 +938,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -1018,10 +1018,10 @@ Function equality cannot be determined and will always fail.
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -1052,10 +1052,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -1131,10 +1131,10 @@ See [EqualT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualT).
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -1165,10 +1165,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -1240,10 +1240,10 @@ Function equality cannot be determined and will always fail.
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -1274,10 +1274,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -1351,10 +1351,10 @@ assertions.NotNil(t, err)
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -1385,10 +1385,10 @@ func main() {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -1464,10 +1464,10 @@ See [Same](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Same).
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -1507,10 +1507,10 @@ func ptr[T any](value T) *T {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -1595,10 +1595,10 @@ See [SameT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SameT).
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -1638,10 +1638,10 @@ func ptr[T any](value T) *T {
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -1726,10 +1726,10 @@ Unlike [Equal](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Equal)
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -1766,10 +1766,10 @@ var (
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -1851,10 +1851,10 @@ See [Same](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Same).
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
@@ -1891,10 +1891,10 @@ var (
 
 {{% tab title="Testable Examples (require)" %}}
 {{% cards %}}
-{{% card href="https://go.dev/play/" %}}
+{{% card %}}
 
 
-*Copy and click to open Go Playground*
+*[Copy and click to open Go Playground](https://go.dev/play/)*
 
 
 ```go
