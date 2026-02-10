@@ -124,6 +124,28 @@ func TestYAMLEqWrapper_ArraysOfDifferentOrder(t *testing.T) {
 	}
 }
 
+func TestYAMLEqBytesWrapper(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		assert := target.New(new(testing.T))
+		if !assert.YAMLEqBytes([]byte(expectedYAML), []byte(actualYAML)) {
+			t.Error("YAMLEqBytes should return true")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		assert := target.New(new(testing.T))
+		if assert.YAMLEqBytes([]byte(`{"foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`)) {
+			t.Error("YAMLEqBytes should return false")
+		}
+	})
+}
+
 func TestYAMLEqfWrapper(t *testing.T) {
 	t.Parallel()
 
