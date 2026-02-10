@@ -35,6 +35,8 @@ array:
   - "string"
   - ["nested", "array", 5.5]
 `
+
+	yamlCheckMsg = "yaml check: %s"
 )
 
 func TestRequireYAMLEq_EqualYAMLString(t *testing.T) {
@@ -135,6 +137,78 @@ func TestRequireYAMLEq_ArraysOfDifferentOrder(t *testing.T) {
 	if !mock.Failed {
 		t.Error("Check should fail")
 	}
+}
+
+func TestRequireYAMLEqf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqf(mock, `{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`, yamlCheckMsg, "equivalent")
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqf(mock, `{"foo": "bar"}`, `{"foo": "bar", "hello": "world"}`, yamlCheckMsg, "not equivalent")
+		if !mock.Failed {
+			t.Error("Check should fail")
+		}
+	})
+}
+
+func TestRequireYAMLEqBytesf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqBytesf(mock, []byte(expectedYAML), []byte(actualYAML), yamlCheckMsg, "equivalent bytes")
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqBytesf(mock, []byte(`{"foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`), yamlCheckMsg, "not equivalent bytes")
+		if !mock.Failed {
+			t.Error("Check should fail")
+		}
+	})
+}
+
+func TestRequireYAMLEqT(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqT(mock, []byte(expectedYAML), actualYAML)
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		target.YAMLEqT(mock, []byte(`{"foo": "bar"}`), `{"foo": "bar", "hello": "world"}`)
+		if !mock.Failed {
+			t.Error("Check should fail")
+		}
+	})
 }
 
 func TestRequireYAMLUnmarshalAsWrapper(t *testing.T) {

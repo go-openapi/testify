@@ -154,3 +154,59 @@ func TestRequireYAMLEqWrapper_ArraysOfDifferentOrder(t *testing.T) {
 		t.Error("Check should fail")
 	}
 }
+
+func TestRequireYAMLEqfWrapper(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		mockRequire := target.New(mock)
+
+		mockRequire.YAMLEqf(`{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`, yamlCheckMsg, "equivalent")
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		mockRequire := target.New(mock)
+
+		mockRequire.YAMLEqf(`{"foo": "bar"}`, `{"foo": "bar", "hello": "world"}`, yamlCheckMsg, "not equivalent")
+		if !mock.Failed {
+			t.Error("Check should fail")
+		}
+	})
+}
+
+func TestRequireYAMLEqBytesfWrapper(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should pass", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		mockRequire := target.New(mock)
+
+		mockRequire.YAMLEqBytesf([]byte(expectedYAML), []byte(actualYAML), yamlCheckMsg, "equivalent bytes")
+		if mock.Failed {
+			t.Error("Check should pass")
+		}
+	})
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		mockRequire := target.New(mock)
+
+		mockRequire.YAMLEqBytesf([]byte(`{"foo": "bar"}`), []byte(`{"foo": "bar", "hello": "world"}`), yamlCheckMsg, "not equivalent bytes")
+		if !mock.Failed {
+			t.Error("Check should fail")
+		}
+	})
+}
