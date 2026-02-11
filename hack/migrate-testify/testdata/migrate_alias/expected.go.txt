@@ -1,0 +1,12 @@
+package example
+
+import (
+	"testing"
+
+	ta "github.com/go-openapi/testify/v2/assert"
+)
+
+func TestAlias(t *testing.T) {
+	ta.Equal(t, 1, 1)
+	ta.DirNotExists(t, "/nonexistent")
+}

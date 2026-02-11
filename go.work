@@ -3,6 +3,7 @@ use (
 	./codegen
 	./enable/colors
 	./enable/yaml
+	./hack/migrate-testify
 	./internal/testintegration
 )
 

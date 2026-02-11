@@ -1,0 +1,12 @@
+package example
+
+import (
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func TestPanicFunc(t *testing.T) {
+	var f func() = func() { panic("boom") }
+	assert.Panics(t, f)
+}
