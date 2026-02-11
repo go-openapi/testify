@@ -2022,6 +2022,20 @@ func TestNoErrorf(t *testing.T) {
 	})
 }
 
+func TestNoFileDescriptorLeakf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := NoFileDescriptorLeakf(mock, func() {}, "test message")
+		if !result {
+			t.Error("NoFileDescriptorLeakf should return true on success")
+		}
+	})
+}
+
 func TestNoGoRoutineLeakf(t *testing.T) {
 	t.Parallel()
 

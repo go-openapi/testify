@@ -12,6 +12,7 @@ import (
 	"net/url"
 	"path/filepath"
 	"reflect"
+	"runtime"
 	"slices"
 	"testing"
 	"time"
@@ -614,6 +615,23 @@ func ExampleNil() {
 func ExampleNoError() {
 	t := new(testing.T) // should come from testing, e.g. func TestNoError(t *testing.T)
 	success := assert.NoError(t, nil)
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleNoFileDescriptorLeak() {
+	if runtime.GOOS != "linux" {
+		// This example is only runnable on linux. On other platforms, the assertion skips the test.
+		// We force the expected output below, so that tests don't fail on other platforms.
+		fmt.Println("success: true")
+
+		return
+	}
+
+	t := new(testing.T) // should come from testing, e.g. func TestNoFileDescriptorLeak(t *testing.T)
+	success := assert.NoFileDescriptorLeak(t, func() {
+	})
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true

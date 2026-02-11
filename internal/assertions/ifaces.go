@@ -48,3 +48,7 @@ type namer interface {
 type contextualizer interface {
 	Context() context.Context
 }
+
+type skipper interface {
+	Skip(args ...any)
+}

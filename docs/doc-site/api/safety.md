@@ -1,15 +1,17 @@
 ---
 title: "Safety"
-description: "Checks Against Leaked Resources"
+description: "Checks Against Leaked Resources (Goroutines, File Descriptors)"
 weight: 13
 domains:
   - "safety"
 keywords:
+  - "NoFileDescriptorLeak"
+  - "NoFileDescriptorLeakf"
   - "NoGoRoutineLeak"
   - "NoGoRoutineLeakf"
 ---
 
-Checks Against Leaked Resources
+Checks Against Leaked Resources (Goroutines, File Descriptors)
 
 ## Assertions
 
@@ -18,11 +20,163 @@ Checks Against Leaked Resources
 
 _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
-This domain exposes 1 functionalities.
+This domain exposes 2 functionalities.
 
 ```tree
+- [NoFileDescriptorLeak](#nofiledescriptorleak) | angles-right
 - [NoGoRoutineLeak](#nogoroutineleak) | angles-right
 ```
+
+### NoFileDescriptorLeak{#nofiledescriptorleak}
+NoFileDescriptorLeak ensures that no file descriptor leaks from inside the tested function.
+
+This assertion works on Linux only (via /proc/self/fd).
+On other platforms, the test is skipped.
+
+NOTE: this assertion is not compatible with parallel tests.
+File descriptors are a process-wide resource; concurrent tests
+opening files would cause false positives.
+
+Sockets, pipes, and anonymous inodes are filtered out by default,
+as these are typically managed by the Go runtime.
+
+#### Concurrency
+
+[NoFileDescriptorLeak](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoFileDescriptorLeak) is not compatible with parallel tests.
+File descriptors are a process-wide resource; any concurrent I/O
+from other goroutines may cause false positives.
+
+Calls to [NoFileDescriptorLeak](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoFileDescriptorLeak) are serialized with a mutex
+to prevent multiple leak checks from interfering with each other.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	NoFileDescriptorLeak(t, func() {
+		// code that should not leak file descriptors
+	})
+	success: func() {}
+```
+{{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestNoFileDescriptorLeak(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"runtime"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	if runtime.GOOS != "linux" {
+		// This example is only runnable on linux. On other platforms, the assertion skips the test.
+		// We force the expected output below, so that tests don't fail on other platforms.
+		fmt.Println("success: true")
+
+		return
+	}
+
+	t := new(testing.T) // should come from testing, e.g. func TestNoFileDescriptorLeak(t *testing.T)
+	success := assert.NoFileDescriptorLeak(t, func() {
+	})
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestNoFileDescriptorLeak(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"runtime"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	if runtime.GOOS != "linux" {
+		// This example is only runnable on linux. On other platforms, the assertion skips the test.
+		// We force the expected output below, so that tests don't fail on other platforms.
+		fmt.Println("passed")
+
+		return
+	}
+
+	t := new(testing.T) // should come from testing, e.g. func TestNoFileDescriptorLeak(t *testing.T)
+	require.NoFileDescriptorLeak(t, func() {
+	})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+  
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.NoFileDescriptorLeak(t T, tested func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoFileDescriptorLeak) | package-level function |
+| [`assert.NoFileDescriptorLeakf(t T, tested func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoFileDescriptorLeakf) | formatted variant |
+| [`assert.(*Assertions).NoFileDescriptorLeak(tested func()) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoFileDescriptorLeak) | method variant |
+| [`assert.(*Assertions).NoFileDescriptorLeakf(tested func(), msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoFileDescriptorLeakf) | method formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.NoFileDescriptorLeak(t T, tested func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoFileDescriptorLeak) | package-level function |
+| [`require.NoFileDescriptorLeakf(t T, tested func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoFileDescriptorLeakf) | formatted variant |
+| [`require.(*Assertions).NoFileDescriptorLeak(tested func()) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoFileDescriptorLeak) | method variant |
+| [`require.(*Assertions).NoFileDescriptorLeakf(tested func(), msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoFileDescriptorLeakf) | method formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--|
+| [`assertions.NoFileDescriptorLeak(t T, tested func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NoFileDescriptorLeak) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoFileDescriptorLeak](https://github.com/go-openapi/testify/blob/master/internal/assertions/safety.go#L98)
+{{% /tab %}}
+{{< /tabs >}}
 
 ### NoGoRoutineLeak{#nogoroutineleak}
 NoGoRoutineLeak ensures that no goroutine did leak from inside the tested function.
@@ -275,7 +429,7 @@ func (m *mockFailNowT) Failed() bool {
 |--|--|
 | [`assertions.NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NoGoRoutineLeak) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoGoRoutineLeak](https://github.com/go-openapi/testify/blob/master/internal/assertions/safety.go#L43)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoGoRoutineLeak](https://github.com/go-openapi/testify/blob/master/internal/assertions/safety.go#L45)
 {{% /tab %}}
 {{< /tabs >}}
 

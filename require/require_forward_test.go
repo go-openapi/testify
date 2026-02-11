@@ -1348,6 +1348,19 @@ func TestAssertionsNoError(t *testing.T) {
 	})
 }
 
+func TestAssertionsNoFileDescriptorLeak(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.NoFileDescriptorLeak(func() {})
+		// require functions don't return a value
+	})
+}
+
 func TestAssertionsNoGoRoutineLeak(t *testing.T) {
 	t.Parallel()
 
@@ -3374,6 +3387,19 @@ func TestAssertionsNoErrorf(t *testing.T) {
 		if !mock.failed {
 			t.Error("Assertions.NoErrorf should call FailNow()")
 		}
+	})
+}
+
+func TestAssertionsNoFileDescriptorLeakf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.NoFileDescriptorLeakf(func() {}, "test message")
+		// require functions don't return a value
 	})
 }
 

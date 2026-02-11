@@ -1726,6 +1726,18 @@ func TestNoErrorf(t *testing.T) {
 	})
 }
 
+func TestNoFileDescriptorLeakf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NoFileDescriptorLeakf(mock, func() {}, "test message")
+		// require functions don't return a value
+	})
+}
+
 func TestNoGoRoutineLeakf(t *testing.T) {
 	t.Parallel()
 

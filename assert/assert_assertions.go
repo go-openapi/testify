@@ -1777,6 +1777,45 @@ func NoError(t T, err error, msgAndArgs ...any) bool {
 	return assertions.NoError(t, err, msgAndArgs...)
 }
 
+// NoFileDescriptorLeak ensures that no file descriptor leaks from inside the tested function.
+//
+// This assertion works on Linux only (via /proc/self/fd).
+// On other platforms, the test is skipped.
+//
+// NOTE: this assertion is not compatible with parallel tests.
+// File descriptors are a process-wide resource; concurrent tests
+// opening files would cause false positives.
+//
+// Sockets, pipes, and anonymous inodes are filtered out by default,
+// as these are typically managed by the Go runtime.
+//
+// # Concurrency
+//
+// [NoFileDescriptorLeak] is not compatible with parallel tests.
+// File descriptors are a process-wide resource; any concurrent I/O
+// from other goroutines may cause false positives.
+//
+// Calls to [NoFileDescriptorLeak] are serialized with a mutex
+// to prevent multiple leak checks from interfering with each other.
+//
+// # Usage
+//
+//	NoFileDescriptorLeak(t, func() {
+//		// code that should not leak file descriptors
+//	})
+//
+// # Examples
+//
+//	success: func() {}
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func NoFileDescriptorLeak(t T, tested func(), msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.NoFileDescriptorLeak(t, tested, msgAndArgs...)
+}
+
 // NoGoRoutineLeak ensures that no goroutine did leak from inside the tested function.
 //
 // NOTE: only the go routines spawned from inside the tested function are checked for leaks.
