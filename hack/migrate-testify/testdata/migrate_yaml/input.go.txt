@@ -1,0 +1,11 @@
+package example
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func TestYAML(t *testing.T) {
+	assert.YAMLEq(t, `name: foo`, `name: foo`)
+}

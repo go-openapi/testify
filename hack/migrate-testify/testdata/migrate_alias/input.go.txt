@@ -1,0 +1,12 @@
+package example
+
+import (
+	"testing"
+
+	ta "github.com/stretchr/testify/assert"
+)
+
+func TestAlias(t *testing.T) {
+	ta.Equal(t, 1, 1)
+	ta.NoDirExists(t, "/nonexistent")
+}

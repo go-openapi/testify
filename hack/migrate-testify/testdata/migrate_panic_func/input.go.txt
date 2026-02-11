@@ -1,0 +1,12 @@
+package example
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func TestPanicFunc(t *testing.T) {
+	var f assert.PanicTestFunc = func() { panic("boom") }
+	assert.Panics(t, f)
+}
