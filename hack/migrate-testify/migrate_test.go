@@ -4,6 +4,7 @@
 package main
 
 import (
+	"bytes"
 	"go/parser"
 	"go/printer"
 	"go/token"
@@ -137,5 +138,5 @@ func readTestdata(path string) string {
 	if err != nil {
 		panic("reading testdata: " + err.Error())
 	}
-	return string(data)
+	return string(bytes.ReplaceAll(data, []byte{'\r'}, []byte{})) // on windows, remove the \r from \n\r sequences
 }
