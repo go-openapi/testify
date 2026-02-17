@@ -765,6 +765,16 @@ func NoErrorf(t T, err error, msg string, args ...any) bool {
 	return assertions.NoError(t, err, forwardArgs(msg, args))
 }
 
+// NoFileDescriptorLeakf is the same as [NoFileDescriptorLeak], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func NoFileDescriptorLeakf(t T, tested func(), msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.NoFileDescriptorLeak(t, tested, forwardArgs(msg, args))
+}
+
 // NoGoRoutineLeakf is the same as [NoGoRoutineLeak], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.

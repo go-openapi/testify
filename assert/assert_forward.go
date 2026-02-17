@@ -1110,6 +1110,26 @@ func (a *Assertions) NoErrorf(err error, msg string, args ...any) bool {
 	return assertions.NoError(a.T, err, forwardArgs(msg, args))
 }
 
+// NoFileDescriptorLeak is the same as [NoFileDescriptorLeak], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func (a *Assertions) NoFileDescriptorLeak(tested func(), msgAndArgs ...any) bool {
+	if h, ok := a.T.(H); ok {
+		h.Helper()
+	}
+	return assertions.NoFileDescriptorLeak(a.T, tested, msgAndArgs...)
+}
+
+// NoFileDescriptorLeakf is the same as [Assertions.NoFileDescriptorLeak], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func (a *Assertions) NoFileDescriptorLeakf(tested func(), msg string, args ...any) bool {
+	if h, ok := a.T.(H); ok {
+		h.Helper()
+	}
+	return assertions.NoFileDescriptorLeak(a.T, tested, forwardArgs(msg, args))
+}
+
 // NoGoRoutineLeak is the same as [NoGoRoutineLeak], as a method rather than a package-level function.
 //
 // Upon failure, the test [T] is marked as failed and continues execution.

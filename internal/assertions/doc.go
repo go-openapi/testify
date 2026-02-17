@@ -25,7 +25,7 @@
 //   - number: asserting numbers
 //   - ordering: asserting how collections are ordered
 //   - panic: asserting a panic behavior
-//   - safety: checks against leaked resources
+//   - safety: checks against leaked resources (goroutines, file descriptors)
 //   - string: asserting strings
 //   - testing: mimics methods from the testing standard library
 //   - time: asserting times and durations

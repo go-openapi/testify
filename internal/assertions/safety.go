@@ -5,7 +5,9 @@ package assertions
 
 import (
 	"context"
+	"runtime"
 
+	"github.com/go-openapi/testify/v2/internal/fdleak"
 	"github.com/go-openapi/testify/v2/internal/leak"
 )
 
@@ -61,4 +63,60 @@ func NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any) bool {
 	}
 
 	return Fail(t, "found leaked go routines: "+signature, msgAndArgs...)
+}
+
+// NoFileDescriptorLeak ensures that no file descriptor leaks from inside the tested function.
+//
+// This assertion works on Linux only (via /proc/self/fd).
+// On other platforms, the test is skipped.
+//
+// NOTE: this assertion is not compatible with parallel tests.
+// File descriptors are a process-wide resource; concurrent tests
+// opening files would cause false positives.
+//
+// Sockets, pipes, and anonymous inodes are filtered out by default,
+// as these are typically managed by the Go runtime.
+//
+// # Concurrency
+//
+// [NoFileDescriptorLeak] is not compatible with parallel tests.
+// File descriptors are a process-wide resource; any concurrent I/O
+// from other goroutines may cause false positives.
+//
+// Calls to [NoFileDescriptorLeak] are serialized with a mutex
+// to prevent multiple leak checks from interfering with each other.
+//
+// # Usage
+//
+//	NoFileDescriptorLeak(t, func() {
+//		// code that should not leak file descriptors
+//	})
+//
+// # Examples
+//
+//	success: func() {}
+func NoFileDescriptorLeak(t T, tested func(), msgAndArgs ...any) bool {
+	// Domain: safety
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	if runtime.GOOS != "linux" { //nolint:goconst // well-known runtime value
+		if s, ok := t.(skipper); ok {
+			s.Skip("NoFileDescriptorLeak requires Linux (/proc/self/fd)")
+		}
+
+		return true
+	}
+
+	msg, err := fdleak.Leaked(tested)
+	if err != nil {
+		return Fail(t, "file descriptor snapshot failed: "+err.Error(), msgAndArgs...)
+	}
+
+	if msg == "" {
+		return true
+	}
+
+	return Fail(t, msg, msgAndArgs...)
 }
