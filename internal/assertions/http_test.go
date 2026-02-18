@@ -253,7 +253,7 @@ func httpFailCases() iter.Seq[failCase] {
 
 func httpHelloName(w http.ResponseWriter, r *http.Request) {
 	name := r.FormValue("name")
-	_, _ = fmt.Fprintf(w, "Hello, %s!", name)
+	_, _ = fmt.Fprintf(w, "Hello, %s!", name) //nolint:gosec // gosec false positive: G705: XSS via taint analysis
 }
 
 func httpOK(w http.ResponseWriter, _ *http.Request) {

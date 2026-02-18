@@ -40,6 +40,29 @@ func TestCondition(t *testing.T) {
 	})
 }
 
+func TestConsistently(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		Consistently(mock, func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond)
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		Consistently(mock, func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond)
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("Consistently should call FailNow()")
+		}
+	})
+}
+
 func TestContains(t *testing.T) {
 	t.Parallel()
 

@@ -42,9 +42,9 @@ internal/testintegration/
 
 ## Dependencies
 
-- **pgregory.net/rapid** - Property-based testing library with fuzzing capabilities
-- **go.yaml.in/yaml/v3** - YAML parsing (for YAML assertion integration tests)
-- **github.com/go-openapi/testify/enable/colors/v2** - Colorized output activation
+- **`pgregory.net/rapid`** - Property-based testing library with fuzzing capabilities
+- **`go.yaml.in/yaml/v3`** - YAML parsing (for YAML assertion integration tests)
+- **`github.com/go-openapi/testify/enable/colors/v2`** - Colorized output activation
 
 ## Test Packages
 

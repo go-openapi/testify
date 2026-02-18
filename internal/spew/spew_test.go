@@ -382,5 +382,5 @@ func redirStdout(f func()) ([]byte, error) {
 	os.Stdout = origStdout
 	tempFile.Close()
 
-	return os.ReadFile(fileName)
+	return os.ReadFile(fileName) //nolint:gosec // false positive: G703: Path traversal via taint analysis
 }

@@ -92,7 +92,7 @@ codegen/
 7. `r.Equal(...)` - fatal forward method
 8. `r.Equalf(..., "msg")` - fatal forward format variant
 
-With 76 assertion functions, this generates 608 functions automatically.
+With 127 assertion functions, this generates 840 functions automatically.
 
 ### Dependency Isolation Strategy
 - **internal/spew**: Internalized copy of go-spew for pretty-printing values
@@ -141,7 +141,7 @@ cd codegen && go run . -output-packages assert,require -include-doc
 
 # Preview documentation site locally
 cd hack/doc-site/hugo
-./gendoc.sh
+go run gendoc.go
 # Visit http://localhost:1313/testify/
 
 # The Hugo site auto-reloads on changes to docs/doc-site/
@@ -278,7 +278,7 @@ The codegen also generates domain-organized documentation for a Hugo static site
 **Hugo static site setup:**
 Located in `hack/doc-site/hugo/`:
 - **hugo.yaml** - Main Hugo configuration
-- **gendoc.sh** - Development server script
+- **gendoc.go** - Development server script
 - **themes/hugo-relearn** - Documentation theme
 - Mounts generated content from `docs/doc-site/`
 
@@ -289,7 +289,7 @@ go generate ./...
 
 # Then start the Hugo dev server
 cd hack/doc-site/hugo
-./gendoc.sh
+go run gendoc.go
 
 # Visit http://localhost:1313/testify/
 ```
@@ -489,10 +489,10 @@ func TestParseTestExamples(t *testing.T) {
 - Drop-in replacement for stretchr/testify
 
 **The Math:**
-- 76 assertion functions × 8 variants = 608 functions
-- Old model: Manually maintain 608 functions across multiple packages
-- New model: Write 76 functions once, generate the rest
-- Result: 87% reduction in manual code maintenance
+- 127 assertion functions × 4-8 variants = 840 functions
+- Old model: Manually maintain 840 functions across multiple packages
+- New model: Write 127 functions once, generate the rest
+- Result: 85% reduction in manual code maintenance
 
 ### Technical Innovations
 
@@ -555,7 +555,7 @@ hack/doc-site/hugo/           # Note: Temporary location
 ├── hugo.yaml                 # Main Hugo configuration
 ├── testify.yaml              # Generated config with version info
 ├── testify.yaml.template     # Template for testify.yaml
-├── gendoc.sh                 # Development server launcher
+├── gendoc.go                 # Development server launcher
 ├── README.md, TODO.md        # Documentation and planning
 ├── themes/
 │   └── hugo-relearn/         # Documentation theme

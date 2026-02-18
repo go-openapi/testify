@@ -15,9 +15,9 @@ We continue to monitor and selectively adopt changes from the upstream repositor
 - ✅ [#1685] - Partial iterator support (SeqContainsT variants)
 - ✅ [#1828] - Spew panic fixes
 - ✅ [#1825], [#1818], [#1223], [#1813], [#1611], [#1822], [#1829] - Various bug fixes
+- ✅ [#1606], [#1087] - Consistently assertion
 
 ### Monitoring
-- 🔍 [#1087] - Consistently assertion
 - 🔍 [#1601] - NoFieldIsZero
 - 🔍 [#1840] - JSON presence check without exact values
 
@@ -80,6 +80,8 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | [#1829] | Issue | Fix time.Time rendering in diffs | ✅ Fixed in internalized go-spew |
 | [#1611] | Issue | Goroutine leak in Eventually/Never | ✅ Fixed by using context.Context (consolidation into single pollCondition function) |
 | [#1813] | Issue | Panic with unexported fields | ✅ Fixed via #1828 in internalized spew |
+| [#1087] | Issue | Consistently assertion | ✅ Adapted |
+| [#1606] | PR | Consistently assertion | ✅ Adapted |
 
 [#994]: https://github.com/stretchr/testify/pull/994
 [#1232]: https://github.com/stretchr/testify/pull/1232
@@ -91,6 +93,8 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 [#1816]: https://github.com/stretchr/testify/issues/1816
 [#1826]: https://github.com/stretchr/testify/issues/1826
 [#1829]: https://github.com/stretchr/testify/issues/1829
+[#1087]: https://github.com/stretchr/testify/issues/1087
+[#1606]: https://github.com/stretchr/testify/pull/1606
 
 ### Superseded by Our Implementation
 
@@ -108,7 +112,6 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 
 | Reference | Type | Summary | Status |
 |-----------|------|---------|--------|
-| [#1087] | PR | Consistently assertion | 🔍 Monitoring - Evaluating usefulness |
 | [#1601] | Issue | NoFieldIsZero assertion | 🔍 Monitoring - Considering implementation |
 | [#1840] | Issue | JSON presence check without exact values | 🔍 Monitoring - Interesting for testing APIs with generated IDs |
 
@@ -116,7 +119,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 
 | Reference | Type | Summary | Outcome |
 |-----------|------|---------|---------|
-| [#1147] | Issue | General discussion about generics adoption | ℹ️ Marked "Not Planned" upstream - We implemented our own generics approach (38 functions) |
+| [#1147] | Issue | General discussion about generics adoption | ℹ️ Marked "Not Planned" upstream - We implemented our own generics approach (42 functions) |
 | [#1308] | PR | Comprehensive refactor with generic type parameters | ℹ️ Draft for v2.0.0 upstream - We took a different approach with the same objective |
 
 [#1147]: https://github.com/stretchr/testify/issues/1147
@@ -126,11 +129,11 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 
 | Category | Count |
 |----------|-------|
-| **Implemented/Merged** | 21 |
+| **Implemented/Merged** | 23 |
 | **Superseded** | 4 |
-| **Monitoring** | 3 |
+| **Monitoring** | 2 |
 | **Informational** | 2 |
-| **Total Processed** | 30 |
+| **Total Processed** | 31 |
 
 **Note**: This fork maintains an active relationship with upstream, regularly reviewing new PRs and issues. The quarterly review process ensures we stay informed about upstream developments while maintaining our architectural independence.
 

@@ -31,6 +31,16 @@ func ExampleCondition() {
 	// Output: passed
 }
 
+func ExampleConsistently() {
+	t := new(testing.T) // should come from testing, e.g. func TestConsistently(t *testing.T)
+	require.Consistently(t, func() bool {
+		return true
+	}, 100*time.Millisecond, 20*time.Millisecond)
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleContains() {
 	t := new(testing.T) // should come from testing, e.g. func TestContains(t *testing.T)
 	require.Contains(t, []string{"A", "B"}, "A")

@@ -8,7 +8,7 @@ This directory contains the Hugo configuration for the Testify documentation sit
 hugo/
 ├── hugo.yaml                   # Main Hugo configuration
 ├── testify.yaml.template       # Dynamic config template (version info)
-├── gendoc.sh                   # Local development server script
+├── gendoc.go                    # Local development server (go run gendoc.go)
 ├── themes/
 │   ├── hugo-relearn/          # Relearn theme (extracted from zip)
 │   ├── testify-assets/        # Custom SCSS and assets
@@ -33,13 +33,13 @@ This directory is mounted as Hugo's content directory via module mounts in `hugo
 
 ```bash
 # Run local Hugo server
-./gendoc.sh
+go run gendoc.go
 
 # Site will be available at:
 # http://localhost:1313/testify/
 ```
 
-The `gendoc.sh` script:
+The `gendoc.go` program:
 1. Extracts version info from git tags and go.mod
 2. Generates `testify.yaml` from template
 3. Starts Hugo server with both config files

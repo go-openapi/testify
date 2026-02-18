@@ -15,7 +15,7 @@ import (
 	"github.com/go-openapi/testify/v2/internal/assertions"
 )
 
-// Condition uses a [Comparison] to assert a complex condition.
+// Condition uses a comparison function to assert a complex condition.
 //
 // # Usage
 //
@@ -27,11 +27,64 @@ import (
 //	failure:  func() bool { return false }
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func Condition(t T, comp Comparison, msgAndArgs ...any) bool {
+func Condition(t T, comp func() bool, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 	return assertions.Condition(t, comp, msgAndArgs...)
+}
+
+// Consistently asserts that the given condition is always satisfied until timeout,
+// periodically checking the target function at each tick.
+//
+// [Consistently] ("always") imposes a stronger constraint than [Eventually] ("at least once"):
+// it checks at every tick that every occurrence of the condition is satisfied, whereas
+// [Eventually] succeeds on the first occurrence of a successful condition.
+//
+// # Usage
+//
+//	assertions.Consistently(t, func() bool { return true }, time.Second, 10*time.Millisecond)
+//
+// See also [Eventually] for details about using context and concurrency.
+//
+// # Alternative condition signature
+//
+// The simplest form of condition is:
+//
+//	func() bool
+//
+// The semantics of the assertion are "always returns true".
+//
+// To build more complex cases, a condition may also be defined as:
+//
+//	func(context.Context) error
+//
+// It fails as soon as an error is returned before timeout expressing "always returns no error (nil)"
+//
+// This is consistent with [Eventually] expressing "eventually returns no error (nil)".
+//
+// It will be executed with the context of the assertion, which inherits the [testing.T.Context] and
+// is cancelled on timeout.
+//
+// # Concurrency
+//
+// See [Eventually].
+//
+// # Attention point
+//
+// See [Eventually].
+//
+// # Examples
+//
+//	success:  func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond
+//	failure:  func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func Consistently[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.Consistently[C](t, condition, timeout, tick, msgAndArgs...)
 }
 
 // Contains asserts that the specified string, list(array, slice...) or map contains the
@@ -374,13 +427,13 @@ func ErrorIs(t T, err error, target error, msgAndArgs ...any) bool {
 	return assertions.ErrorIs(t, err, target, msgAndArgs...)
 }
 
-// Eventually asserts that the given condition will be met in waitFor time,
+// Eventually asserts that the given condition will be met before timeout,
 // periodically checking the target function on each tick.
 //
-// [Eventually] waits until the condition returns true, for at most waitFor,
+// [Eventually] waits until the condition returns true, at most until timeout,
 // or until the parent context of the test is cancelled.
 //
-// If the condition takes longer than waitFor to complete, [Eventually] fails
+// If the condition takes longer than the timeout to complete, [Eventually] fails
 // but waits for the current condition execution to finish before returning.
 //
 // For long-running conditions to be interrupted early, check [testing.T.Context]
@@ -390,12 +443,53 @@ func ErrorIs(t T, err error, target error, msgAndArgs ...any) bool {
 //
 //	assertions.Eventually(t, func() bool { return true }, time.Second, 10*time.Millisecond)
 //
+// # Alternative condition signature
+//
+// The simplest form of condition is:
+//
+//	func() bool
+//
+// To build more complex cases, a condition may also be defined as:
+//
+//	func(context.Context) error
+//
+// It fails when an error has always been returned up to timeout (equivalent semantics to func() bool returns false),
+// expressing "eventually returns no error (nil)".
+//
+// It will be executed with the context of the assertion, which inherits the [testing.T.Context] and
+// is cancelled on timeout.
+//
+// The semantics of the three available async assertions read as follows.
+//
+//   - [Eventually] (func() bool) : "eventually returns true"
+//
+//   - [Never] (func() bool) : "never returns true"
+//
+//   - [Consistently] (func() bool): "always returns true"
+//
+//   - [Eventually] (func(ctx) error) : "eventually returns nil"
+//
+//   - [Never] (func(ctx) error) : not supported, use [Consistently] instead (avoids confusion with double negation)
+//
+//   - [Consistently] (func(ctx) error): "always returns nil"
+//
 // # Concurrency
 //
-// The condition function is never executed in parallel: only one goroutine executes it.
-// It may write to variables outside its scope without triggering race conditions.
+// The condition function is always executed serially by a single goroutine. It is always executed at least once.
+//
+// It may thus write to variables outside its scope without triggering race conditions.
 //
 // A blocking condition will cause [Eventually] to hang until it returns.
+//
+// Notice that time ticks may be skipped if the condition takes longer than the tick interval.
+//
+// # Attention point
+//
+// Time-based tests may be flaky in a resource-constrained environment such as a CI runner and may produce
+// counter-intuitive results, such as ticks or timeouts not firing in time as expected.
+//
+// To avoid flaky tests, always make sure that ticks and timeouts differ by at least an order of magnitude (tick <<
+// timeout).
 //
 // # Examples
 //
@@ -403,14 +497,14 @@ func ErrorIs(t T, err error, target error, msgAndArgs ...any) bool {
 //	failure:  func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func Eventually(t T, condition func() bool, waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+func Eventually[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.Eventually(t, condition, waitFor, tick, msgAndArgs...)
+	return assertions.Eventually[C](t, condition, timeout, tick, msgAndArgs...)
 }
 
-// EventuallyWith asserts that the given condition will be met in waitFor time,
+// EventuallyWith asserts that the given condition will be met before the timeout,
 // periodically checking the target function at each tick.
 //
 // In contrast to [Eventually], the condition function is supplied with a [CollectT]
@@ -419,10 +513,10 @@ func Eventually(t T, condition func() bool, waitFor time.Duration, tick time.Dur
 // The condition is considered "met" if no errors are raised in a tick.
 // The supplied [CollectT] collects all errors from one tick.
 //
-// If the condition is not met before waitFor, the collected errors from the
+// If the condition is not met before the timeout, the collected errors from the
 // last tick are copied to t.
 //
-// Calling [CollectT.FailNow] cancels the condition immediately and fails the assertion.
+// Calling [CollectT.FailNow] cancels the condition immediately and causes the assertion to fail.
 //
 // # Usage
 //
@@ -452,11 +546,11 @@ func Eventually(t T, condition func() bool, waitFor time.Duration, tick time.Dur
 //	failure: func(c *CollectT) { False(c,true) }, 100*time.Millisecond, 20*time.Millisecond
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func EventuallyWith(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+func EventuallyWith[C CollectibleConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.EventuallyWith(t, condition, waitFor, tick, msgAndArgs...)
+	return assertions.EventuallyWith[C](t, condition, timeout, tick, msgAndArgs...)
 }
 
 // Exactly asserts that two objects are equal in value and type.
@@ -1704,11 +1798,11 @@ func NegativeT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...an
 	return assertions.NegativeT[SignedNumber](t, e, msgAndArgs...)
 }
 
-// Never asserts that the given condition is never satisfied within waitFor time,
+// Never asserts that the given condition is never satisfied until timeout,
 // periodically checking the target function at each tick.
 //
-// [Never] is the opposite of [Eventually]. It succeeds if the waitFor timeout
-// is reached without the condition ever returning true.
+// [Never] is the opposite of [Eventually] ("at least once").
+// It succeeds if the timeout is reached without the condition ever returning true.
 //
 // If the parent context is cancelled before the timeout, [Never] fails.
 //
@@ -1716,12 +1810,23 @@ func NegativeT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...an
 //
 //	assertions.Never(t, func() bool { return false }, time.Second, 10*time.Millisecond)
 //
+// See also [Eventually] for details about using context and concurrency.
+//
+// # Alternative condition signature
+//
+// The simplest form of condition is:
+//
+//	func() bool
+//
+// Use [Consistently] instead if you want to use a condition returning an error.
+//
 // # Concurrency
 //
-// The condition function is never executed in parallel: only one goroutine executes it.
-// It may write to variables outside its scope without triggering race conditions.
+// See [Eventually].
 //
-// A blocking condition will cause [Never] to hang until it returns.
+// # Attention point
+//
+// See [Eventually].
 //
 // # Examples
 //
@@ -1729,11 +1834,11 @@ func NegativeT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...an
 //	failure:  func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func Never(t T, condition func() bool, waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+func Never(t T, condition func() bool, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.Never(t, condition, waitFor, tick, msgAndArgs...)
+	return assertions.Never(t, condition, timeout, tick, msgAndArgs...)
 }
 
 // Nil asserts that the specified object is nil.

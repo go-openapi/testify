@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-// Condition uses a [Comparison] to assert a complex condition.
+// Condition uses a comparison function to assert a complex condition.
 //
 // # Usage
 //
@@ -23,7 +23,7 @@ import (
 //
 //	success:  func() bool { return true }
 //	failure:  func() bool { return false }
-func Condition(t T, comp Comparison, msgAndArgs ...any) bool {
+func Condition(t T, comp func() bool, msgAndArgs ...any) bool {
 	// Domain: condition
 	if h, ok := t.(H); ok {
 		h.Helper()
@@ -37,13 +37,13 @@ func Condition(t T, comp Comparison, msgAndArgs ...any) bool {
 	return result
 }
 
-// Eventually asserts that the given condition will be met in waitFor time,
+// Eventually asserts that the given condition will be met before timeout,
 // periodically checking the target function on each tick.
 //
-// [Eventually] waits until the condition returns true, for at most waitFor,
+// [Eventually] waits until the condition returns true, at most until timeout,
 // or until the parent context of the test is cancelled.
 //
-// If the condition takes longer than waitFor to complete, [Eventually] fails
+// If the condition takes longer than the timeout to complete, [Eventually] fails
 // but waits for the current condition execution to finish before returning.
 //
 // For long-running conditions to be interrupted early, check [testing.T.Context]
@@ -53,31 +53,72 @@ func Condition(t T, comp Comparison, msgAndArgs ...any) bool {
 //
 //	assertions.Eventually(t, func() bool { return true }, time.Second, 10*time.Millisecond)
 //
+// # Alternative condition signature
+//
+// The simplest form of condition is:
+//
+//	func() bool
+//
+// To build more complex cases, a condition may also be defined as:
+//
+//	func(context.Context) error
+//
+// It fails when an error has always been returned up to timeout (equivalent semantics to func() bool returns false),
+// expressing "eventually returns no error (nil)".
+//
+// It will be executed with the context of the assertion, which inherits the [testing.T.Context] and
+// is cancelled on timeout.
+//
+// The semantics of the three available async assertions read as follows.
+//
+//   - [Eventually] (func() bool) : "eventually returns true"
+//
+//   - [Never] (func() bool) : "never returns true"
+//
+//   - [Consistently] (func() bool): "always returns true"
+//
+//   - [Eventually] (func(ctx) error) : "eventually returns nil"
+//
+//   - [Never] (func(ctx) error) : not supported, use [Consistently] instead (avoids confusion with double negation)
+//
+//   - [Consistently] (func(ctx) error): "always returns nil"
+//
 // # Concurrency
 //
-// The condition function is never executed in parallel: only one goroutine executes it.
-// It may write to variables outside its scope without triggering race conditions.
+// The condition function is always executed serially by a single goroutine. It is always executed at least once.
+//
+// It may thus write to variables outside its scope without triggering race conditions.
 //
 // A blocking condition will cause [Eventually] to hang until it returns.
+//
+// Notice that time ticks may be skipped if the condition takes longer than the tick interval.
+//
+// # Attention point
+//
+// Time-based tests may be flaky in a resource-constrained environment such as a CI runner and may produce
+// counter-intuitive results, such as ticks or timeouts not firing in time as expected.
+//
+// To avoid flaky tests, always make sure that ticks and timeouts differ by at least an order of magnitude (tick <<
+// timeout).
 //
 // # Examples
 //
 //	success:  func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond
 //	failure:  func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond
-func Eventually(t T, condition func() bool, waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+func Eventually[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
 	// Domain: condition
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 
-	return eventually(t, condition, waitFor, tick, msgAndArgs...)
+	return eventually(t, condition, timeout, tick, msgAndArgs...)
 }
 
-// Never asserts that the given condition is never satisfied within waitFor time,
+// Never asserts that the given condition is never satisfied until timeout,
 // periodically checking the target function at each tick.
 //
-// [Never] is the opposite of [Eventually]. It succeeds if the waitFor timeout
-// is reached without the condition ever returning true.
+// [Never] is the opposite of [Eventually] ("at least once").
+// It succeeds if the timeout is reached without the condition ever returning true.
 //
 // If the parent context is cancelled before the timeout, [Never] fails.
 //
@@ -85,27 +126,91 @@ func Eventually(t T, condition func() bool, waitFor time.Duration, tick time.Dur
 //
 //	assertions.Never(t, func() bool { return false }, time.Second, 10*time.Millisecond)
 //
+// See also [Eventually] for details about using context and concurrency.
+//
+// # Alternative condition signature
+//
+// The simplest form of condition is:
+//
+//	func() bool
+//
+// Use [Consistently] instead if you want to use a condition returning an error.
+//
 // # Concurrency
 //
-// The condition function is never executed in parallel: only one goroutine executes it.
-// It may write to variables outside its scope without triggering race conditions.
+// See [Eventually].
 //
-// A blocking condition will cause [Never] to hang until it returns.
+// # Attention point
+//
+// See [Eventually].
 //
 // # Examples
 //
 //	success:  func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond
 //	failure:  func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond
-func Never(t T, condition func() bool, waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+func Never(t T, condition func() bool, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
 	// Domain: condition
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 
-	return never(t, condition, waitFor, tick, msgAndArgs...)
+	return never(t, condition, timeout, tick, msgAndArgs...)
 }
 
-// EventuallyWith asserts that the given condition will be met in waitFor time,
+// Consistently asserts that the given condition is always satisfied until timeout,
+// periodically checking the target function at each tick.
+//
+// [Consistently] ("always") imposes a stronger constraint than [Eventually] ("at least once"):
+// it checks at every tick that every occurrence of the condition is satisfied, whereas
+// [Eventually] succeeds on the first occurrence of a successful condition.
+//
+// # Usage
+//
+//	assertions.Consistently(t, func() bool { return true }, time.Second, 10*time.Millisecond)
+//
+// See also [Eventually] for details about using context and concurrency.
+//
+// # Alternative condition signature
+//
+// The simplest form of condition is:
+//
+//	func() bool
+//
+// The semantics of the assertion are "always returns true".
+//
+// To build more complex cases, a condition may also be defined as:
+//
+//	func(context.Context) error
+//
+// It fails as soon as an error is returned before timeout expressing "always returns no error (nil)"
+//
+// This is consistent with [Eventually] expressing "eventually returns no error (nil)".
+//
+// It will be executed with the context of the assertion, which inherits the [testing.T.Context] and
+// is cancelled on timeout.
+//
+// # Concurrency
+//
+// See [Eventually].
+//
+// # Attention point
+//
+// See [Eventually].
+//
+// # Examples
+//
+//	success:  func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond
+//	failure:  func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond
+func Consistently[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+	// Domain: condition
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	return consistently(t, condition, timeout, tick, msgAndArgs...)
+}
+
+// EventuallyWith asserts that the given condition will be met before the timeout,
 // periodically checking the target function at each tick.
 //
 // In contrast to [Eventually], the condition function is supplied with a [CollectT]
@@ -114,10 +219,10 @@ func Never(t T, condition func() bool, waitFor time.Duration, tick time.Duration
 // The condition is considered "met" if no errors are raised in a tick.
 // The supplied [CollectT] collects all errors from one tick.
 //
-// If the condition is not met before waitFor, the collected errors from the
+// If the condition is not met before the timeout, the collected errors from the
 // last tick are copied to t.
 //
-// Calling [CollectT.FailNow] cancels the condition immediately and fails the assertion.
+// Calling [CollectT.FailNow] cancels the condition immediately and causes the assertion to fail.
 //
 // # Usage
 //
@@ -145,16 +250,16 @@ func Never(t T, condition func() bool, waitFor time.Duration, tick time.Duration
 //
 //	success: func(c *CollectT) { True(c,true) }, 100*time.Millisecond, 20*time.Millisecond
 //	failure: func(c *CollectT) { False(c,true) }, 100*time.Millisecond, 20*time.Millisecond
-func EventuallyWith(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+func EventuallyWith[C CollectibleConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
 	// Domain: condition
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 
-	return eventuallyWithT(t, condition, waitFor, tick, msgAndArgs...)
+	return eventuallyWithT(t, condition, timeout, tick, msgAndArgs...)
 }
 
-func eventually(t T, condition func() bool, waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+func eventually[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -164,10 +269,10 @@ func eventually(t T, condition func() bool, waitFor time.Duration, tick time.Dur
 		failMessage: "condition never satisfied",
 	})
 
-	return p.pollCondition(t, condition, waitFor, tick, msgAndArgs...)
+	return p.pollCondition(t, makeCondition(condition, false), timeout, tick, msgAndArgs...)
 }
 
-func never(t T, condition func() bool, waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+func never(t T, condition func() bool, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -177,26 +282,40 @@ func never(t T, condition func() bool, waitFor time.Duration, tick time.Duration
 		failMessage: "condition satisfied",
 	})
 
-	return p.pollCondition(t, condition, waitFor, tick, msgAndArgs...)
+	return p.pollCondition(t, makeCondition(condition, true), timeout, tick, msgAndArgs...)
 }
 
-func eventuallyWithT(t T, collectCondition func(collector *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+func consistently[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	p := newConditionPoller(pollOptions{
+		mode:        pollUntilTimeout,
+		failMessage: "condition failed once",
+	})
+
+	return p.pollCondition(t, makeCondition(condition, false), timeout, tick, msgAndArgs...)
+}
+
+func eventuallyWithT[C CollectibleConditioner](t T, collectCondition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 
 	var lastCollectedErrors []error
 	var cancelFunc func() // will be set by pollCondition via onSetup
+	fn := makeCollectibleCondition(collectCondition)
 
-	condition := func() bool {
+	condition := func(ctx context.Context) error {
 		collector := new(CollectT).withCancelFunc(cancelFunc)
-		collectCondition(collector)
+		fn(ctx, collector)
 		if collector.failed() {
 			lastCollectedErrors = collector.collected()
-			return false
+			return collector.last()
 		}
 
-		return true
+		return nil
 	}
 
 	copyCollected := func(tt T) {
@@ -212,7 +331,70 @@ func eventuallyWithT(t T, collectCondition func(collector *CollectT), waitFor ti
 		onSetup:     func(cancel func()) { cancelFunc = cancel },
 	})
 
-	return p.pollCondition(t, condition, waitFor, tick, msgAndArgs...)
+	return p.pollCondition(t, condition, timeout, tick, msgAndArgs...)
+}
+
+func makeCondition[C Conditioner](condition C, reverse bool) func(context.Context) error {
+	fn := any(condition)
+
+	switch typed := fn.(type) {
+	case func() bool:
+		if !reverse {
+			return func(ctx context.Context) error {
+				select {
+				case <-ctx.Done():
+					return ctx.Err()
+				default:
+					if res := typed(); !res {
+						return errors.New("condition returned false")
+					}
+
+					return nil
+				}
+			}
+		}
+
+		// inverse bool <-> error logic for Never
+		return func(ctx context.Context) error {
+			select {
+			case <-ctx.Done():
+				return nil
+			default:
+				if res := typed(); res {
+					return errors.New("condition returned true")
+				}
+
+				return nil
+			}
+		}
+	case func(context.Context) error:
+		// No reversal needed: the poller already uses err != nil as "condition happened".
+		// For Eventually: err == nil = success. For Never: err != nil = failure.
+		// Both align with the natural error semantics without inversion.
+		return typed
+	default: // unreachable
+		panic(fmt.Errorf("unsupported Conditioner type. Mismatch with type constraint: %T", condition))
+	}
+}
+
+func makeCollectibleCondition[C CollectibleConditioner](condition C) func(context.Context, *CollectT) {
+	fn := any(condition)
+
+	switch typed := fn.(type) {
+	case func(*CollectT):
+		return func(ctx context.Context, collector *CollectT) {
+			select {
+			case <-ctx.Done():
+				collector.Errorf("%v", ctx.Err())
+			default:
+				typed(collector)
+			}
+		}
+	case func(context.Context, *CollectT):
+		return typed
+	default: // unreachable
+		panic(fmt.Errorf("unsupported CollectibleConditioner type. Mismatch with type constraint: %T", condition))
+	}
 }
 
 type conditionPoller struct {
@@ -220,8 +402,16 @@ type conditionPoller struct {
 
 	ticker        *time.Ticker
 	reported      atomic.Bool
-	conditionChan chan func() bool
+	conditionChan chan func(context.Context) error
 	doneChan      chan struct{}
+}
+
+func newConditionPoller(o pollOptions) *conditionPoller {
+	return &conditionPoller{
+		pollOptions:   o,
+		conditionChan: make(chan func(context.Context) error, 1),
+		doneChan:      make(chan struct{}),
+	}
 }
 
 // pollMode determines how the condition polling should behave.
@@ -230,7 +420,7 @@ type pollMode int
 const (
 	// pollUntilTrue succeeds when condition returns true (for Eventually).
 	pollUntilTrue pollMode = iota
-	// pollUntilTimeout succeeds when timeout is reached without condition being true (for Never).
+	// pollUntilTimeout succeeds when timeout is reached without condition being true (for Never/Consistently).
 	pollUntilTimeout
 )
 
@@ -242,24 +432,16 @@ type pollOptions struct {
 	onSetup     func(cancel func()) // called after context setup to expose cancel function
 }
 
-func newConditionPoller(o pollOptions) *conditionPoller {
-	return &conditionPoller{
-		pollOptions:   o,
-		conditionChan: make(chan func() bool, 1),
-		doneChan:      make(chan struct{}),
-	}
-}
-
 // pollCondition is the common implementation for eventually, never, and eventuallyWithT.
 //
 // It polls a condition function at regular intervals until success or timeout.
-func (p *conditionPoller) pollCondition(t T, condition func() bool, waitFor, tick time.Duration, msgAndArgs ...any) bool {
+func (p *conditionPoller) pollCondition(t T, condition func(context.Context) error, timeout, tick time.Duration, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 
 	parentCtx := p.parentContextFromT(t)
-	ctx, cancel := p.cancellableContext(parentCtx, waitFor)
+	ctx, cancel := p.cancellableContext(parentCtx, timeout)
 	defer cancel()
 
 	failFunc := p.failFunc(t, msgAndArgs...)
@@ -302,7 +484,7 @@ func (p *conditionPoller) failFunc(t T, msgAndArgs ...any) func(string) {
 	}
 }
 
-func (p *conditionPoller) pollAtTickFunc(parentCtx, ctx context.Context, condition func() bool, failFunc func(string), wg *sync.WaitGroup) func() {
+func (p *conditionPoller) pollAtTickFunc(parentCtx, ctx context.Context, condition func(context.Context) error, failFunc func(string), wg *sync.WaitGroup) func() {
 	if p.mode == pollUntilTimeout {
 		// For Never: check parent context separately
 		return func() {
@@ -364,7 +546,7 @@ func (p *conditionPoller) pollAtTickFunc(parentCtx, ctx context.Context, conditi
 
 func (p *conditionPoller) executeCondition(parentCtx, ctx context.Context, failFunc func(string), wg *sync.WaitGroup) func() {
 	if p.mode == pollUntilTimeout {
-		// For Never
+		// For Never and Consistently
 		return func() {
 			defer wg.Done()
 
@@ -376,8 +558,8 @@ func (p *conditionPoller) executeCondition(parentCtx, ctx context.Context, failF
 				case <-ctx.Done():
 					return // timeout = success
 				case fn := <-p.conditionChan:
-					if fn() {
-						close(p.doneChan) // condition true = failure for Never
+					if err := fn(ctx); err != nil {
+						close(p.doneChan) // (condition true <=> returns error) = failure for Never and Consistently
 						return
 					}
 				}
@@ -395,8 +577,8 @@ func (p *conditionPoller) executeCondition(parentCtx, ctx context.Context, failF
 				failFunc(ctx.Err().Error())
 				return
 			case fn := <-p.conditionChan:
-				if fn() {
-					close(p.doneChan) // condition true = success
+				if err := fn(ctx); err == nil {
+					close(p.doneChan) // (condition true <=> err == nil) = success for Eventually
 					return
 				}
 			}
@@ -464,15 +646,15 @@ func (p *conditionPoller) parentContextFromT(t T) context.Context {
 	return parentCtx
 }
 
-func (p *conditionPoller) cancellableContext(parentCtx context.Context, waitFor time.Duration) (context.Context, func()) {
+func (p *conditionPoller) cancellableContext(parentCtx context.Context, timeout time.Duration) (context.Context, func()) {
 	// For pollUntilTimeout (Never), we detach from parent cancellation
 	// so that timeout reaching is a success, not a failure.
 	var ctx context.Context
 	var cancel context.CancelFunc
 	if p.mode == pollUntilTimeout {
-		ctx, cancel = context.WithTimeout(context.WithoutCancel(parentCtx), waitFor)
+		ctx, cancel = context.WithTimeout(context.WithoutCancel(parentCtx), timeout)
 	} else {
-		ctx, cancel = context.WithTimeout(parentCtx, waitFor)
+		ctx, cancel = context.WithTimeout(parentCtx, timeout)
 	}
 
 	return ctx, cancel
@@ -523,6 +705,14 @@ func (c *CollectT) failed() bool {
 
 func (c *CollectT) collected() []error {
 	return c.errors
+}
+
+func (c *CollectT) last() error {
+	if len(c.errors) == 0 {
+		return nil
+	}
+
+	return c.errors[len(c.errors)-1]
 }
 
 func (c *CollectT) withCancelFunc(cancel func()) *CollectT {

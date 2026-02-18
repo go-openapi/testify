@@ -32,9 +32,6 @@ type (
 	// ErrorAssertionFunc is a common function prototype when validating an error value.  Can be useful
 	// for table driven tests.
 	ErrorAssertionFunc func(T, error, ...any) bool
-
-	// Comparison is a custom function that returns true on success and false on failure.
-	Comparison func() (success bool)
 )
 
 type failNower interface {

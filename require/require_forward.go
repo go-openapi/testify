@@ -33,7 +33,7 @@ func New(t T) *Assertions {
 // Condition is the same as [Condition], as a method rather than a package-level function.
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func (a *Assertions) Condition(comp Comparison, msgAndArgs ...any) {
+func (a *Assertions) Condition(comp func() bool, msgAndArgs ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
@@ -47,7 +47,7 @@ func (a *Assertions) Condition(comp Comparison, msgAndArgs ...any) {
 // Conditionf is the same as [Assertions.Condition], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func (a *Assertions) Conditionf(comp Comparison, msg string, args ...any) {
+func (a *Assertions) Conditionf(comp func() bool, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
@@ -416,62 +416,6 @@ func (a *Assertions) ErrorIsf(err error, target error, msg string, args ...any) 
 		h.Helper()
 	}
 	if assertions.ErrorIs(a.T, err, target, forwardArgs(msg, args)) {
-		return
-	}
-
-	a.T.FailNow()
-}
-
-// Eventually is the same as [Eventually], as a method rather than a package-level function.
-//
-// Upon failure, the test [T] is marked as failed and stops execution.
-func (a *Assertions) Eventually(condition func() bool, waitFor time.Duration, tick time.Duration, msgAndArgs ...any) {
-	if h, ok := a.T.(H); ok {
-		h.Helper()
-	}
-	if assertions.Eventually(a.T, condition, waitFor, tick, msgAndArgs...) {
-		return
-	}
-
-	a.T.FailNow()
-}
-
-// Eventuallyf is the same as [Assertions.Eventually], but it accepts a format msg string to format arguments like [fmt.Printf].
-//
-// Upon failure, the test [T] is marked as failed and stops execution.
-func (a *Assertions) Eventuallyf(condition func() bool, waitFor time.Duration, tick time.Duration, msg string, args ...any) {
-	if h, ok := a.T.(H); ok {
-		h.Helper()
-	}
-	if assertions.Eventually(a.T, condition, waitFor, tick, forwardArgs(msg, args)) {
-		return
-	}
-
-	a.T.FailNow()
-}
-
-// EventuallyWith is the same as [EventuallyWith], as a method rather than a package-level function.
-//
-// Upon failure, the test [T] is marked as failed and stops execution.
-func (a *Assertions) EventuallyWith(condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msgAndArgs ...any) {
-	if h, ok := a.T.(H); ok {
-		h.Helper()
-	}
-	if assertions.EventuallyWith(a.T, condition, waitFor, tick, msgAndArgs...) {
-		return
-	}
-
-	a.T.FailNow()
-}
-
-// EventuallyWithf is the same as [Assertions.EventuallyWith], but it accepts a format msg string to format arguments like [fmt.Printf].
-//
-// Upon failure, the test [T] is marked as failed and stops execution.
-func (a *Assertions) EventuallyWithf(condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msg string, args ...any) {
-	if h, ok := a.T.(H); ok {
-		h.Helper()
-	}
-	if assertions.EventuallyWith(a.T, condition, waitFor, tick, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1453,11 +1397,11 @@ func (a *Assertions) Negativef(e any, msg string, args ...any) {
 // Never is the same as [Never], as a method rather than a package-level function.
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func (a *Assertions) Never(condition func() bool, waitFor time.Duration, tick time.Duration, msgAndArgs ...any) {
+func (a *Assertions) Never(condition func() bool, timeout time.Duration, tick time.Duration, msgAndArgs ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Never(a.T, condition, waitFor, tick, msgAndArgs...) {
+	if assertions.Never(a.T, condition, timeout, tick, msgAndArgs...) {
 		return
 	}
 
@@ -1467,11 +1411,11 @@ func (a *Assertions) Never(condition func() bool, waitFor time.Duration, tick ti
 // Neverf is the same as [Assertions.Never], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func (a *Assertions) Neverf(condition func() bool, waitFor time.Duration, tick time.Duration, msg string, args ...any) {
+func (a *Assertions) Neverf(condition func() bool, timeout time.Duration, tick time.Duration, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Never(a.T, condition, waitFor, tick, forwardArgs(msg, args)) {
+	if assertions.Never(a.T, condition, timeout, tick, forwardArgs(msg, args)) {
 		return
 	}
 

@@ -30,6 +30,16 @@ func ExampleCondition() {
 	// Output: success: true
 }
 
+func ExampleConsistently() {
+	t := new(testing.T) // should come from testing, e.g. func TestConsistently(t *testing.T)
+	success := assert.Consistently(t, func() bool {
+		return true
+	}, 100*time.Millisecond, 20*time.Millisecond)
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleContains() {
 	t := new(testing.T) // should come from testing, e.g. func TestContains(t *testing.T)
 	success := assert.Contains(t, []string{"A", "B"}, "A")

@@ -8,7 +8,7 @@ weight: 15
 
 **Key Changes:**
 - ✅ **Zero Dependencies**: Completely self-contained
-- ✅ **New functions**: 56 additional assertions (42 generic + 14 reflection-based)
+- ✅ **New functions**: 58 additional assertions (43 generic + 15 reflection-based)
 - ✅ **Performance**: ~10x for generic variants (from 1.2x to 81x, your mileage may vary)
 - ✅ **Breaking changes**: Requires go1.24, removed suites, mocks, http tooling, and deprecated functions. YAMLEq becomes optional (panics by default).
 
@@ -54,7 +54,7 @@ See also a quick [migration guide](./MIGRATION.md).
 
 | Change | Origin | Description |
 |--------|--------|-------------|
-| **Code generation** | Design goal | 100% generated assert/require packages (608+ functions from 76 assertions) |
+| **Code generation** | Design goal | 100% generated assert/require packages (840 functions from 127 assertions) |
 | **Code modernization** | Design goal | Relinted, refactored and modernized the code base, including internalized difflib and go-spew|
 | **Refactored tests** | Design goal | Full refactoring of tests on assertion functions, with unified test scenarios for reflection-based/generic assertions |
 
@@ -205,7 +205,14 @@ See also a quick [migration guide](./MIGRATION.md).
 
 ### Condition
 
-**New functions**: None
+#### New Function (1)
+
+| Function | Type Parameters | Description |
+|----------|-----------------|-------------|
+| `Consistently[C Conditioner]` | `func() bool` or `func(context.Context) error` | async assertion to express "always true" (adapted proposal [#1606], [#1087]) |
+
+[#1087]: https://github.com/stretchr/testify/issues/1087
+[#1606]: https://github.com/stretchr/testify/pulls/1606
 
 #### ⚠️ Behavior Changes
 
@@ -214,15 +221,23 @@ See also a quick [migration guide](./MIGRATION.md).
 | Fixed goroutine leak | [#1611] | Consolidated `Eventually`, `Never`, and `EventuallyWith` into single `pollCondition` function |
 | Context-based polling | Internal refactoring | Reimplemented with context-based approach for better resource management |
 | Unified implementation | Internal refactoring | Single implementation eliminates code duplication and prevents resource leaks |
-| **Renaming** | `EventuallyWithT` renamed into `EventuallyWith` (conflicted with the convention adopted for generics) |
+| `func(context.Context) error` conditions | extensions to the async domain | control over context allows for more complex cases to be supported |
+| Type parameter | Internal refactoring | `Eventually` now accepts several signatures for its condition and uses a type parameter (non-breaking) |
 
 **Impact**: This fix eliminates goroutine leaks that could occur when using `Eventually` or `Never` assertions. The new implementation uses a context-based approach that properly manages resources and provides a cleaner shutdown mechanism. Callers should **NOT** assume that the call to `Eventually` or `Never` exits before the condition is evaluated. Callers should **NOT** assume that the call to `Eventually` or `Never` exits before the condition is evaluated.
 
-**Supersedes**: This implementation also supersedes upstream proposals [#1819] (handle unexpected exits) and [#1830] (CollectT.Halt) with a more comprehensive solution.
+**Supersedes**: This implementation also supersedes upstream proposals [#1819] (handle unexpected exits) and [#1830] (`CollectT.Halt`) with a more comprehensive solution.
 
 [#1611]: https://github.com/stretchr/testify/issues/1611
 [#1819]: https://github.com/stretchr/testify/pull/1819
 [#1830]: https://github.com/stretchr/testify/pull/1830
+
+### Breaking Changes
+
+| Change | Origin | Description |
+|--------|--------|-------------|
+| **Renaming** | Internal refactorting | `EventuallyWithT` renamed into `EventuallyWith` (conflicted with the convention adopted for generics) |
+| **Removal**  | API simplification    | `Comparison` type is removed as a mere alias to `func() bool` |
 
 ### Equality
 
@@ -368,14 +383,17 @@ Removed extraneous type declaration `PanicTestFunc` (`func()`).
 | Function | Type | Description |
 |----------|------|-------------|
 | `NoGoRoutineLeak` | Reflection | Assert that no goroutines leak from a tested function |
+| `NoFileDescriptorLeak` | Reflection | Assert that no file descriptors leak from a tested function (Linux) |
 
 #### Implementation
 
-Uses **pprof labels** instead of stack-trace heuristics (like `go.uber.org/goleak`):
+`NoGoRoutineLeak` uses **pprof labels** instead of stack-trace heuristics (like `go.uber.org/goleak`):
 - Only goroutines spawned by the tested function are checked
 - Pre-existing goroutines (runtime, pools, parallel tests) are ignored automatically
 - No configuration or filter lists needed
 - Works safely with `t.Parallel()`
+
+`NoFileDescriptorLeak` compares open file descriptors before and after the tested function (Linux only, via `/proc/self/fd`).
 
 See [Examples](./EXAMPLES.md#goroutine-leak-detection) for usage patterns.
 
@@ -551,10 +569,9 @@ github.com/go-openapi/testify/v2           # Core (zero deps) [go.mod]
 
 | Metric | Value |
 |--------|-------|
-| **New functions** | 56 (42 generic + 14 reflection) |
-| **Total assertions** | 128 base assertions |
-| **Generated functions** | ~800 (see [the
-maths](../project/maintainers/ARCHITECTURE.md#the-maths-with-assertion-variants)
+| **New functions** | 58 (43 generic + 15 reflection) |
+| **Total assertions** | 127 base assertions |
+| **Generated functions** | 840 (see [the maths](../project/maintainers/ARCHITECTURE.md#the-maths-with-assertion-variants)) |
 | **Generic coverage** | 10 domains (10/19) |
 | **Performance improvement** | 1.2x to 81x faster |
 | **Dependencies** | 0 external (was 2 required) |
@@ -566,7 +583,7 @@ maths](../project/maintainers/ARCHITECTURE.md#the-maths-with-assertion-variants)
 ## See Also
 
 - [Migration Guide](./MIGRATION.md) - Step-by-step guide to migrating from testify v1
-- [Generics Guide](./GENERICS.md) - Detailed documentation of all 38 generic assertions
+- [Generics Guide](./GENERICS.md) - Detailed documentation of all 43 generic assertions
 - [Performance Benchmarks](../project/maintainers/BENCHMARKS.md) - Comprehensive performance analysis
 - [Examples](./EXAMPLES.md) - Practical usage examples showing new features
 - [Tutorial](./TUTORIAL.md) - Best practices for writing tests with testify v2
