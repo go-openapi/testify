@@ -17,10 +17,10 @@ type (
 )
 
 type (
-	// FormatterBuilder is a function that builds a [Formatter] given a bufferized [bufio.Writer].
+	// FormatterBuilder is a function that builds a [Formatter] given a buffered [bufio.Writer].
 	FormatterBuilder func(*bufio.Writer) Formatter
 
-	// PrinterBuilder is a function that builds a [Printer] given a bufferized [bufio.Writer].
+	// PrinterBuilder is a function that builds a [Printer] given a buffered [bufio.Writer].
 	PrinterBuilder func(*bufio.Writer) Printer
 )
 

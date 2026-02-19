@@ -21,10 +21,10 @@ import (
 	"io"
 )
 
-// Errorf is a wrapper for fmt.Errorf that treats each argument as if it were
-// passed with a default Formatter interface returned by NewFormatter.  It
+// Errorf is a wrapper for [fmt.Errorf] that treats each argument as if it were
+// passed with a default [fmt.Formatter] interface returned by [NewFormatter].  It
 // returns the formatted string as a value that satisfies error.  See
-// NewFormatter for formatting details.
+// [NewFormatter] for formatting details.
 //
 // This function is shorthand for the following syntax:
 //
@@ -33,10 +33,10 @@ func Errorf(format string, a ...any) (err error) {
 	return fmt.Errorf(format, convertArgs(a)...)
 }
 
-// Fprint is a wrapper for fmt.Fprint that treats each argument as if it were
-// passed with a default Formatter interface returned by NewFormatter.  It
+// Fprint is a wrapper for [fmt.Fprint] that treats each argument as if it were
+// passed with a default [fmt.Formatter] interface returned by [NewFormatter].  It
 // returns the number of bytes written and any write error encountered.  See
-// NewFormatter for formatting details.
+// [NewFormatter] for formatting details.
 //
 // This function is shorthand for the following syntax:
 //
@@ -45,10 +45,10 @@ func Fprint(w io.Writer, a ...any) (n int, err error) {
 	return fmt.Fprint(w, convertArgs(a)...)
 }
 
-// Fprintf is a wrapper for fmt.Fprintf that treats each argument as if it were
-// passed with a default Formatter interface returned by NewFormatter.  It
+// Fprintf is a wrapper for [fmt.Fprintf] that treats each argument as if it were
+// passed with a default [fmt.Formatter] interface returned by [NewFormatter].  It
 // returns the number of bytes written and any write error encountered.  See
-// NewFormatter for formatting details.
+// [NewFormatter] for formatting details.
 //
 // This function is shorthand for the following syntax:
 //
@@ -57,9 +57,9 @@ func Fprintf(w io.Writer, format string, a ...any) (n int, err error) {
 	return fmt.Fprintf(w, format, convertArgs(a)...)
 }
 
-// Fprintln is a wrapper for fmt.Fprintln that treats each argument as if it
-// passed with a default Formatter interface returned by NewFormatter.  See
-// NewFormatter for formatting details.
+// Fprintln is a wrapper for [fmt.Fprintln] that treats each argument as if it
+// passed with a default [fmt.Formatter] interface returned by [NewFormatter].  See
+// [NewFormatter] for formatting details.
 //
 // This function is shorthand for the following syntax:
 //
@@ -68,10 +68,10 @@ func Fprintln(w io.Writer, a ...any) (n int, err error) {
 	return fmt.Fprintln(w, convertArgs(a)...)
 }
 
-// Print is a wrapper for fmt.Print that treats each argument as if it were
-// passed with a default Formatter interface returned by NewFormatter.  It
+// Print is a wrapper for [fmt.Print] that treats each argument as if it were
+// passed with a default [fmt.Formatter] interface returned by [NewFormatter].  It
 // returns the number of bytes written and any write error encountered.  See
-// NewFormatter for formatting details.
+// [NewFormatter] for formatting details.
 //
 // This function is shorthand for the following syntax:
 //
@@ -80,10 +80,10 @@ func Print(a ...any) (n int, err error) {
 	return fmt.Print(convertArgs(a)...) //nolint:forbidigo // public API wrapping fmt.Print
 }
 
-// Printf is a wrapper for fmt.Printf that treats each argument as if it were
-// passed with a default Formatter interface returned by NewFormatter.  It
+// Printf is a wrapper for [fmt.Printf] that treats each argument as if it were
+// passed with a default [fmt.Formatter] interface returned by [NewFormatter].  It
 // returns the number of bytes written and any write error encountered.  See
-// NewFormatter for formatting details.
+// [NewFormatter] for formatting details.
 //
 // This function is shorthand for the following syntax:
 //
@@ -92,10 +92,10 @@ func Printf(format string, a ...any) (n int, err error) {
 	return fmt.Printf(format, convertArgs(a)...) //nolint:forbidigo // public API wrapping fmt.Printf
 }
 
-// Println is a wrapper for fmt.Println that treats each argument as if it were
-// passed with a default Formatter interface returned by NewFormatter.  It
+// Println is a wrapper for [fmt.Println] that treats each argument as if it were
+// passed with a default [fmt.Formatter] interface returned by [NewFormatter].  It
 // returns the number of bytes written and any write error encountered.  See
-// NewFormatter for formatting details.
+// [NewFormatter] for formatting details.
 //
 // This function is shorthand for the following syntax:
 //
@@ -104,9 +104,9 @@ func Println(a ...any) (n int, err error) {
 	return fmt.Println(convertArgs(a)...) //nolint:forbidigo // public API wrapping fmt.Println
 }
 
-// Sprint is a wrapper for fmt.Sprint that treats each argument as if it were
-// passed with a default Formatter interface returned by NewFormatter.  It
-// returns the resulting string.  See NewFormatter for formatting details.
+// Sprint is a wrapper for [fmt.Sprint] that treats each argument as if it were
+// passed with a default [fmt.Formatter] interface returned by [NewFormatter].  It
+// returns the resulting string.  See [NewFormatter] for formatting details.
 //
 // This function is shorthand for the following syntax:
 //
@@ -115,9 +115,9 @@ func Sprint(a ...any) string {
 	return fmt.Sprint(convertArgs(a)...)
 }
 
-// Sprintf is a wrapper for fmt.Sprintf that treats each argument as if it were
-// passed with a default Formatter interface returned by NewFormatter.  It
-// returns the resulting string.  See NewFormatter for formatting details.
+// Sprintf is a wrapper for [fmt.Sprintf] that treats each argument as if it were
+// passed with a default [fmt.Formatter] interface returned by [NewFormatter].  It
+// returns the resulting string.  See [NewFormatter] for formatting details.
 //
 // This function is shorthand for the following syntax:
 //
@@ -126,9 +126,9 @@ func Sprintf(format string, a ...any) string {
 	return fmt.Sprintf(format, convertArgs(a)...)
 }
 
-// Sprintln is a wrapper for fmt.Sprintln that treats each argument as if it
-// were passed with a default Formatter interface returned by NewFormatter.  It
-// returns the resulting string.  See NewFormatter for formatting details.
+// Sprintln is a wrapper for [fmt.Sprintln] that treats each argument as if it
+// were passed with a default [fmt.Formatter] interface returned by [NewFormatter].  It
+// returns the resulting string.  See [NewFormatter] for formatting details.
 //
 // This function is shorthand for the following syntax:
 //
@@ -138,7 +138,7 @@ func Sprintln(a ...any) string {
 }
 
 // convertArgs accepts a slice of arguments and returns a slice of the same
-// length with each argument converted to a default spew Formatter interface.
+// length with each argument converted to a default spew [fmt.Formatter] interface.
 func convertArgs(args []any) (formatters []any) {
 	formatters = make([]any, len(args))
 	for index, arg := range args {

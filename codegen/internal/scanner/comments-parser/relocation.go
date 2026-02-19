@@ -22,6 +22,7 @@ const (
 // RelocateTestValue relocates a test value expression from one package to another.
 //
 // It walks the AST and:
+//
 //  1. Changes qualified identifiers: fromPkg.X → toPkg.X (except exceptions)
 //  2. Qualifies unqualified exported identifiers: X → toPkg.X
 //

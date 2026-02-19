@@ -200,17 +200,17 @@ func NotEqualValues(t T, expected, actual any, msgAndArgs ...any) bool {
 //
 // # Usage
 //
-//	 type S struct {
+//	type S struct {
 //		Exported     	int
 //		notExported   	int
-//	 }
+//	}
 //	assertions.EqualExportedValues(t, S{1, 2}, S{1, 3}) => true
 //	assertions.EqualExportedValues(t, S{1, 2}, S{2, 3}) => false
 //
 // # Examples
 //
 //	success: &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "a", b: 2}
-//	failure:  &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "b", b: 1}
+//	failure: &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "b", b: 1}
 func EqualExportedValues(t T, expected, actual any, msgAndArgs ...any) bool {
 	// Domain: equality
 	if h, ok := t.(H); ok {

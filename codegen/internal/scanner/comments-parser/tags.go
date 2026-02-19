@@ -13,6 +13,7 @@ import (
 // ParseTaggedComments extracts tagged comments from text.
 //
 // Recognized tags:
+//
 //   - domain: <value>           - single-line domain tag
 //   - maintainer: <value>       - multi-line maintainer note
 //   - note: <value>             - multi-line note
@@ -87,6 +88,7 @@ func ParseTaggedComments(text string) []model.ExtraComment {
 // ParseDomainDescriptions extracts domain descriptions from package-level comment text.
 //
 // It looks for a "Domains:" or "Domain:" section with entries like:
+//
 //   - string: assertions on strings
 //   - json: assertions on JSON documents
 //

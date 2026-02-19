@@ -3,21 +3,22 @@
 
 // Package difflib is a partial port of [Python difflib module].
 //
-// It provides tools to compare sequences of strings and generate textual diffs.
+// It provides tools to compare sequences of strings and generate textual differences.
 //
 // The following class and functions have been ported:
 //
-//   - SequenceMatcher
-//   - unified_diff
+//   - [SequenceMatcher]
+//   - [UnifiedDiff]
 //
 // Getting unified diffs was the main goal of the port.
 //
 // Keep in mind that this code is mostly suitable to output text differences in a human friendly way,
-// there are no guarantees that the generated diffs are consumable by patch(1).
+// there are no guarantees that the generated diffs are consumable by [patch(1)].
 //
 // This package was adopted from [github.com/pmezard/go-difflib] which
 // is no longer maintained.
 //
 // [github.com/pmezard/go-difflib]: https://github.com/pmezard/go-difflib
 // [Python difflib module]: https://docs.python.org/3/library/difflib.html#module-difflib
+// [patch(1)]: https://www.unix.com/man_page/linux/1/patch
 package difflib

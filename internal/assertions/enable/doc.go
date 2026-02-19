@@ -5,6 +5,6 @@
 //
 // # Available extensions
 //
-// - yaml: enable the YAML assertions
-// - colors: enable colorization of diff output
+//   - yaml: enable the YAML assertions
+//   - colors: enable colorization of diff output
 package enable

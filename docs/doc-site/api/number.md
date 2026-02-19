@@ -54,7 +54,7 @@ prefer [InDeltaT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InD
 
 #### Behavior with IEEE floating point arithmetic
 
-  - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+  - expected NaN is matched only by a NaN, e.g. this works: [InDeltaT]([math.Sqrt](-1), [math.Sqrt](-1), 0.0)
   - expected +Inf is matched only by a +Inf
   - expected -Inf is matched only by a -Inf
 
@@ -62,7 +62,7 @@ prefer [InDeltaT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InD
 {{< tabs >}}
 {{% tab title="Usage" %}}
 ```go
-assertions.InDelta(t, math.Pi, 22/7.0, 0.01)
+	assertions.InDelta(t, math.Pi, 22/7.0, 0.01)
 	success: 1.0, 1.01, 0.02
 	failure: 1.0, 1.1, 0.05
 ```
@@ -275,7 +275,7 @@ func main() {
 |--|--|
 | [`assertions.InDeltaMapValues(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InDeltaMapValues) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaMapValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L271)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaMapValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L273)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -388,7 +388,7 @@ func main() {
 |--|--|
 | [`assertions.InDeltaSlice(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InDeltaSlice) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaSlice](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L235)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaSlice](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L237)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -403,7 +403,7 @@ Delta must be greater than or equal to zero.
 
 #### Behavior with IEEE floating point arithmetic
 
-  - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+  - expected NaN is matched only by a NaN, e.g. this works: InDeltaT([math.NaN](), [math.Sqrt](-1), 0.0)
   - expected +Inf is matched only by a +Inf
   - expected -Inf is matched only by a -Inf
 
@@ -411,7 +411,7 @@ Delta must be greater than or equal to zero.
 {{< tabs >}}
 {{% tab title="Usage" %}}
 ```go
-assertions.InDeltaT(t, math.Pi, 22/7.0, 0.01)
+	assertions.InDeltaT(t, math.Pi, 22/7.0, 0.01)
 	success: 1.0, 1.01, 0.02
 	failure: 1.0, 1.1, 0.05
 ```
@@ -516,13 +516,14 @@ InEpsilon asserts that expected and actual have a relative error less than epsil
 
 #### Behavior with IEEE floating point arithmetic
 
-  - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+  - expected NaN is matched only by a NaN, e.g. this works: [InDeltaT]([math.NaN](), [math.Sqrt](-1), 0.0)
   - expected +Inf is matched only by a +Inf
   - expected -Inf is matched only by a -Inf
 
 Edge case: for very large integers that do not convert accurately to a float64 (e.g. uint64), prefer [InDeltaT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDeltaT).
 
 Formula:
+
   - If expected == 0: fail if |actual - expected| > epsilon
   - If expected != 0: fail if |actual - expected| > epsilon * |expected|
 
@@ -632,7 +633,7 @@ func main() {
 |--|--|
 | [`assertions.InEpsilon(t T, expected any, actual any, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InEpsilon) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilon](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L142)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilon](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L143)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -745,7 +746,7 @@ func main() {
 |--|--|
 | [`assertions.InEpsilonSlice(t T, expected any, actual any, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InEpsilonSlice) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilonSlice](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L326)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilonSlice](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L328)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -760,13 +761,14 @@ numbers to float64, since the relative error doesn't make sense as an integer.
 
 #### Behavior with IEEE floating point arithmetic
 
-  - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+  - expected NaN is matched only by a NaN, e.g. this works: [InDeltaT]([math.NaN](), [math.Sqrt](-1), 0.0)
   - expected +Inf is matched only by a +Inf
   - expected -Inf is matched only by a -Inf
 
 Edge case: for very large integers that do not convert accurately to a float64 (e.g. uint64), prefer [InDeltaT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDeltaT).
 
 Formula:
+
   - If expected == 0: fail if |actual - expected| > epsilon
   - If expected != 0: fail if |actual - expected| > epsilon * |expected|
 
@@ -872,7 +874,7 @@ func main() {
 |--|--|
 | [`assertions.InEpsilonT[Number Measurable](t T, expected Number, actual Number, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InEpsilonT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilonT](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L199)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilonT](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L201)
 {{% /tab %}}
 {{< /tabs >}}
 

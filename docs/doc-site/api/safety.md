@@ -190,7 +190,7 @@ as t.Cleanup is called after the leak check.
 #### Edge cases
 
   - if the tested function panics leaving behind leaked goroutines, these are detected.
-  - if the tested function calls runtime.Goexit (e.g. from [testing.T.FailNow](https://pkg.go.dev/testing#T.FailNow)) leaving behind leaked goroutines,
+  - if the tested function calls [runtime.Goexit](https://pkg.go.dev/runtime#Goexit) (e.g. from [testing.T.FailNow](https://pkg.go.dev/testing#T.FailNow)) leaving behind leaked goroutines,
     these are detected.
   - if a panic occurs in one of the leaked go routines, it cannot be recovered with certainty and
     the calling program will usually panic.

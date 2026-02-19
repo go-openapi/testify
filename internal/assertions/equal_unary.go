@@ -33,7 +33,7 @@ func Nil(t T, object any, msgAndArgs ...any) bool {
 //
 // # Usage
 //
-// assertions.NotNil(t, err)
+//	assertions.NotNil(t, err)
 //
 // # Examples
 //

@@ -3,7 +3,7 @@
 
 // Package comments provides utilities for extracting comments from Go source code.
 //
-// This package handles the bridge between go/types (semantic view) and go/ast (syntactic view)
+// This package handles the bridge between go/types (semantic view) and go/[ast] (syntactic view)
 // using position-based lookup. It extracts:
 //
 //   - Package-level comments and copyright headers

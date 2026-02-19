@@ -88,10 +88,10 @@ func NoPanicProp(ctx context.Context, g *rapid.Generator[any]) func(*rapid.T) {
 //
 // Limitations:
 //
-// * does not generate generic types
-// * does not generate type declarations: all types are anonymous
-// * does not generate structs with unexported fields
-// * does not generate embedded fields in structs with methods
+//   - does not generate generic types
+//   - does not generate type declarations: all types are anonymous
+//   - does not generate structs with unexported fields
+//   - does not generate embedded fields in structs with methods
 //
 // These limitations are partially mitigated by the edgecase generator,
 // which is not dependent on the [reflect] package.

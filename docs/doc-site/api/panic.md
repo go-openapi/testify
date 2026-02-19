@@ -263,7 +263,7 @@ func main() {
 
 ### PanicsWithError{#panicswitherror}
 PanicsWithError asserts that the code inside the specified function panics,
-and that the recovered panic value is an error that satisfies the EqualError comparison.
+and that the recovered panic value is an error that satisfies the [EqualError](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualError) comparison.
 
 {{% expand title="Examples" %}}
 {{< tabs >}}

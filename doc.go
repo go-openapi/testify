@@ -21,10 +21,11 @@
 // # Key Differences from stretchr/testify
 //
 // This fork prioritizes:
-//   - Zero external dependencies (go-spew and difflib are internalized)
-//   - Removed mock and suite packages (favor the use mockery or similar specialized tools instead)
+//
+//   - Zero external dependencies: [spew] and [difflib] are internalized
+//   - Removed mock and suite packages (favor the use [mockery] or similar specialized tools instead)
 //   - Optional features via enable packages (e.g., enable/yaml for YAML assertions)
-//   - Code generation ensures consistency across 76 assertion functions × 8 variants
+//   - Code generation ensures consistency across many assertion functions × 4 to 8 variants
 //
 // # Optional Features
 //
@@ -32,15 +33,20 @@
 //
 //	import _ "github.com/go-openapi/testify/v2/enable/yaml"
 //
-// Without this import, YAMLEq and YAMLEqf will panic loudly with a helpful error message.
+// Without this import, [assert.YAMLEq] and [require.YAMLEq] will panic loudly with a helpful error message.
 //
 // # Note on testifylint
 //
-// The golangci-lint compatible linter [testifylint] is designed for stretchr/testify
-// and will not work with this fork as it checks only for the original dependency.
+// [testifylint] is a linter compatible with golangci-lint.
+// It is designed for stretchr/testify and will not work with this fork as it checks only for the original dependency.
 //
 // [assert]: https://pkg.go.dev/github.com/go-openapi/testify/v2/assert
+// [assert.YAMLEq]: https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLEq
+// [difflib]: https://github.com/go-openapi/testify/tree/master/internal/difflib
+// [mockery]: https://github.com/vektra/mockery
 // [require]: https://pkg.go.dev/github.com/go-openapi/testify/v2/require
+// [require.YAMLEq]: https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLEq
+// [spew]: https://github.com/go-openapi/testify/tree/master/internal/spew
 // [testifylint]: https://github.com/Antonboom/testifylint
 package testify
 

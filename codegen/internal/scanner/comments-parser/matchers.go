@@ -12,6 +12,7 @@ import (
 // StartSectionFunc creates a matcher function for section headers.
 //
 // A section header can be:
+//
 //   - "# Placeholder" or "# Placeholders" (markdown-style)
 //   - "Placeholder:" or "Placeholders:" (simple colon-style)
 //
@@ -46,6 +47,7 @@ func StartValueFunc(placeholder string) func(string) (string, bool) {
 // StartAnotherSection checks if a line starts a new section.
 //
 // A line starts a new section if it either:
+//
 //   - Starts with a capital letter and ends with a colon (e.g., "Usage:")
 //   - Starts with "# " (markdown header)
 func StartAnotherSection(text string) bool {

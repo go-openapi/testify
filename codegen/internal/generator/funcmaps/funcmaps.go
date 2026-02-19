@@ -210,7 +210,7 @@ func docStringFor(usage, name string) string {
 	case "format":
 		return comment(
 			fmt.Sprintf(
-				"%sf is the same as [%s], but it accepts a format msg string to format arguments like [fmt.Printf].",
+				"%sf is the same as [%s], but it accepts a format string to format arguments like [fmt.Printf].",
 				basename,
 				name,
 			),

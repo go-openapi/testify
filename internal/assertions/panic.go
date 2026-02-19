@@ -64,7 +64,7 @@ func PanicsWithValue(t T, expected any, f func(), msgAndArgs ...any) bool {
 }
 
 // PanicsWithError asserts that the code inside the specified function panics,
-// and that the recovered panic value is an error that satisfies the EqualError comparison.
+// and that the recovered panic value is an error that satisfies the [EqualError] comparison.
 //
 // # Usage
 //

@@ -154,9 +154,9 @@ The type constraint [Boolean](https://pkg.go.dev/github.com/go-openapi/testify/v
 {{< tabs >}}
 {{% tab title="Usage" %}}
 ```go
-	 type B bool
-	 var b B = true
-		assertions.FalseT(t, b)
+	type B bool
+	var b B = true
+	assertions.FalseT(t, b)
 	success: 1 == 0
 	failure: 1 == 1
 ```

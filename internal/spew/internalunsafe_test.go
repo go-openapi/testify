@@ -64,7 +64,7 @@ func TestAddedReflectValue(t *testing.T) {
 	}
 	i++
 
-	// Formatter using a reflect.Value that is exported.
+	// [fmt.Formatter] using a reflect.Value that is exported.
 	changeKind(&v, false)
 	buf2 := new(dummyFmtState)
 	f := formatState{value: v, cs: &Config, fs: buf2}
@@ -76,7 +76,7 @@ func TestAddedReflectValue(t *testing.T) {
 	}
 	i++
 
-	// Formatter using a reflect.Value that is not exported.
+	// [fmt.Formatter] using a reflect.Value that is not exported.
 	changeKind(&v, true)
 	buf2.Reset()
 	f = formatState{value: v, cs: &Config, fs: buf2}

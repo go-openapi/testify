@@ -12,9 +12,9 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-// BuildFilesMap constructs a lookup index to help bridge token position vs ast.File.
+// BuildFilesMap constructs a lookup index to help bridge token position vs [ast.File].
 //
-// This creates a map from token.File (file metadata) to ast.File (syntax tree),
+// This creates a map from [token.File] (file metadata) to [ast.File] (syntax tree),
 // enabling O(1) lookup after O(n) construction.
 func BuildFilesMap(pkg *packages.Package) map[*token.File]*ast.File {
 	filesMap := make(map[*token.File]*ast.File, len(pkg.Syntax))

@@ -5,7 +5,7 @@
 //
 // This package handles:
 //
-//   - Extracting function signatures from types.Signature
+//   - Extracting function signatures from [types.Signature]
 //   - Type qualification using import aliases
 //   - Converting types to strings with proper package selectors
 //

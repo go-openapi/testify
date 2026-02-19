@@ -13,6 +13,7 @@ import (
 // ParseTestExamples extracts test examples from doc comment text.
 //
 // It looks for an "Examples:" or "Example:" section and parses lines like:
+//
 //   - success: <test values>
 //   - failure: <test values>
 //   - panic: <assertion message>
