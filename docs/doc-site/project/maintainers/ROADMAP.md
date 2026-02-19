@@ -33,9 +33,8 @@ timeline
                     : more documentation and examples
     ⏳v2.4 (Mar 2026) : Stabilize API (no more removals)
                     : NoFileDescriptorLeak (unix)
-                    : async: Eventually/Never to accept error and context
-                    : JSONPointerT
-                    : export internal tools (spew, difflib,
+                    : async: Eventually/Never to accept error and context, Consistently
+                    : export internal tools (spew, difflib)
     section Q2 2026
     📝 v2.5 (May 2026) : New candidate features from upstream
                     : NoFileDescriptorLeak (windows port)
@@ -72,7 +71,7 @@ We actively monitor [github.com/stretchr/testify](https://github.com/stretchr/te
 
 **Review frequency**: Quarterly (next review: April 2026)
 
-**Processed items**: 28 upstream PRs and issues have been reviewed, with 21 implemented/merged, 5 superseded by our implementation or merely marked as informational, and 2 currently under consideration.
+**Processed items**: 31 upstream PRs and issues have been reviewed, with 23 implemented/merged, 4 superseded by our implementation, 2 informational, and 2 currently under consideration.
 
 For a complete catalog of all upstream PRs and issues we've processed (implemented, adapted, superseded, or monitoring), see the [Upstream Tracking](../../usage/TRACKING.md).
 

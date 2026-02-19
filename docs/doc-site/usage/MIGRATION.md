@@ -154,7 +154,8 @@ go test -v -testify.colorized -testify.theme=light .
 
 #### 4. Optional: Adopt Generic Assertions
 
-For better type safety and performance, consider migrating to generic assertion variants. This is entirely optional—reflection-based assertions continue to work as before.
+For better type safety and performance, consider migrating to generic assertion variants.
+This is entirely optional: reflection-based assertions continue to work as before.
 
 ##### Identify Generic-Capable Assertions
 
@@ -311,6 +312,6 @@ Make sure to check the [behavior changes](./CHANGES.md) as we have fixed a few q
 
 - [Changes from v1](./CHANGES.md) - Complete list of all changes, fixes, and new features
 - [Examples](./EXAMPLES.md) - Practical examples showing v2 usage patterns
-- [Generics Guide](./GENERICS.md) - Learn about the 38 new type-safe generic assertions
+- [Generics Guide](./GENERICS.md) - Learn about the 43 new type-safe generic assertions
 - [Usage Guide](./USAGE.md) - API conventions and how to navigate the documentation
 - [Tutorial](./TUTORIAL.md) - Best practices for writing tests with testify v2

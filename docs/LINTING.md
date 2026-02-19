@@ -21,7 +21,7 @@ All directives are justified. No actionable items remain.
 
 ## Internalized Third-Party: `internal/spew/`
 
-The `internal/spew/` package is an internalized copy of `go-spew`. Its 17 nolint directives
+The `internal/spew/` package is an internalized copy of `go-spew`. Its 17 `nolint` directives
 are inherited and appropriate for a low-level reflection library:
 
 - `bypass.go:42,71,84` - `gochecknoglobals` - reflect internals, set once during init
@@ -75,8 +75,8 @@ generated test cases. The 4 output files all originate from one template:
 |---|---|---|
 | `internal/assertions/error.go:273` | `errorlint` | Type switch checks for interfaces, not unwrapping errors |
 | `internal/assertions/compare.go:496` | `ireturn` | Generic function returning `V`; linter doesn't understand type parameter |
-| `codegen/.../examples-parser/parser_test.go:15` | `gochecknoglobals` | `sync.Once` cache for parsed testdata |
-| `codegen/.../comments/extractor_test.go:16` | `gochecknoglobals` | `sync.Once` cache for parsed testdata |
+| `codegen/.../examples-parser/parser_test.go:15` | `gochecknoglobals` | `sync.Once` cache for parsed test data |
+| `codegen/.../comments/extractor_test.go:16` | `gochecknoglobals` | `sync.Once` cache for parsed test data |
 
 Note: the `thelper` linter was disabled entirely (see History) — it previously accounted
 for 12 false positives on test case factories returning `func(*testing.T)`.
@@ -111,8 +111,8 @@ locale-specific or escape-sequence behavior.
 
 | File | Directive | Reason |
 |---|---|---|
-| `codegen/.../examples-parser/parser_test.go:15` | `gochecknoglobals` | `sync.Once` cache for parsed testdata |
-| `codegen/.../comments/extractor_test.go:16` | `gochecknoglobals` | `sync.Once` cache for parsed testdata |
+| `codegen/.../examples-parser/parser_test.go:15` | `gochecknoglobals` | `sync.Once` cache for parsed test data |
+| `codegen/.../comments/extractor_test.go:16` | `gochecknoglobals` | `sync.Once` cache for parsed test data |
 | `codegen/.../testdata/examplespkg/examplespkg.go:21` | `unused` | Fixture: verifies unexported symbols are skipped |
 
 ## Inherent Type-Switch Complexity

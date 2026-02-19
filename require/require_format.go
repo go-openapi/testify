@@ -18,11 +18,25 @@ import (
 // Conditionf is the same as [Condition], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func Conditionf(t T, comp Comparison, msg string, args ...any) {
+func Conditionf(t T, comp func() bool, msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 	if assertions.Condition(t, comp, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// Consistentlyf is the same as [Consistently], but it accepts a format msg string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func Consistentlyf[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.Consistently[C](t, condition, timeout, tick, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -242,11 +256,11 @@ func ErrorIsf(t T, err error, target error, msg string, args ...any) {
 // Eventuallyf is the same as [Eventually], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func Eventuallyf(t T, condition func() bool, waitFor time.Duration, tick time.Duration, msg string, args ...any) {
+func Eventuallyf[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.Eventually(t, condition, waitFor, tick, forwardArgs(msg, args)) {
+	if assertions.Eventually[C](t, condition, timeout, tick, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -256,11 +270,11 @@ func Eventuallyf(t T, condition func() bool, waitFor time.Duration, tick time.Du
 // EventuallyWithf is the same as [EventuallyWith], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func EventuallyWithf(t T, condition func(collect *CollectT), waitFor time.Duration, tick time.Duration, msg string, args ...any) {
+func EventuallyWithf[C CollectibleConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.EventuallyWith(t, condition, waitFor, tick, forwardArgs(msg, args)) {
+	if assertions.EventuallyWith[C](t, condition, timeout, tick, forwardArgs(msg, args)) {
 		return
 	}
 
@@ -1022,11 +1036,11 @@ func NegativeTf[SignedNumber SignedNumeric](t T, e SignedNumber, msg string, arg
 // Neverf is the same as [Never], but it accepts a format msg string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func Neverf(t T, condition func() bool, waitFor time.Duration, tick time.Duration, msg string, args ...any) {
+func Neverf(t T, condition func() bool, timeout time.Duration, tick time.Duration, msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.Never(t, condition, waitFor, tick, forwardArgs(msg, args)) {
+	if assertions.Never(t, condition, timeout, tick, forwardArgs(msg, args)) {
 		return
 	}
 

@@ -58,10 +58,10 @@ This internalized copy has been modernized from the original go-spew codebase wi
 The internalized copy maintains API compatibility with the original while incorporating targeted improvements:
 
 - **Deterministic map sorting:** The `SpewKeys` configuration option enables sorted map key output for consistent diffs (relevant for testify's assertion output)
-  - [x] Additional optimizations for deterministic diff generation (stretchr/testify#1822)
-- **time.Time rendering:** Enhanced handling of `time.Time` values in nested structures (applied from stretchr/testify#1829)
+  - [x] Additional optimizations for deterministic diff generation (`stretchr/testify#1822`)
+- **time.Time rendering:** Enhanced handling of `time.Time` values in nested structures (applied from `stretchr/testify#1829`)
 - **panic/hang** Reinforced input checking to avoid edge cases
-  - [x] Proper fix for panic on unexported struct keys in maps (stretchr/testify#1816)
+  - [x] Proper fix for panic on unexported struct keys in maps (`stretchr/testify#1816`)
   - [x] Fix for circular map references (runtime stack overflow)
 
 ## Future Enhancements

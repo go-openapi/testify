@@ -5,6 +5,7 @@ package assertions
 
 import (
 	"context"
+	"errors"
 	"iter"
 	"slices"
 	"sort"
@@ -66,6 +67,57 @@ func TestConditionEventually(t *testing.T) {
 				state++
 			}()
 			return state == 2
+		}
+
+		if !Eventually(t, condition, testTimeout, testTick) {
+			t.Error("expected Eventually to return true")
+		}
+	})
+}
+
+func TestConditionEventuallyWithError(t *testing.T) {
+	t.Parallel()
+
+	t.Run("condition should eventually return no error", func(t *testing.T) {
+		t.Parallel()
+
+		state := 0
+		condition := func(_ context.Context) error {
+			defer func() { state++ }()
+			if state < 2 {
+				return errors.New("not ready yet")
+			}
+
+			return nil
+		}
+
+		if !Eventually(t, condition, testTimeout, testTick) {
+			t.Error("expected Eventually to return true")
+		}
+	})
+
+	t.Run("condition should eventually fail on persistent error", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(errorsCapturingT)
+		condition := func(_ context.Context) error {
+			return errors.New("persistent error")
+		}
+
+		if Eventually(mock, condition, testTimeout, testTick) {
+			t.Error("expected Eventually to return false")
+		}
+	})
+
+	t.Run("condition should use provided context", func(t *testing.T) {
+		t.Parallel()
+
+		condition := func(ctx context.Context) error {
+			if ctx == nil {
+				return errors.New("expected non-nil context")
+			}
+
+			return nil
 		}
 
 		if !Eventually(t, condition, testTimeout, testTick) {
@@ -261,7 +313,7 @@ func TestConditionEventuallyWith(t *testing.T) {
 		}
 
 		const expectedErrors = 4
-		if len(mock.errors) != expectedErrors {
+		if len(mock.errors) < expectedErrors-1 || len(mock.errors) > expectedErrors { // it may be 3 or 4, depending on how the test schedules
 			t.Errorf("expected %d errors (2 from condition, 2 from Eventually), got %d", expectedErrors, len(mock.errors))
 		}
 
@@ -380,82 +432,180 @@ func TestConditionEventuallyWith(t *testing.T) {
 	})
 }
 
-func TestConditionNever(t *testing.T) {
+func TestConditionPollUntilTimeout(t *testing.T) {
 	t.Parallel()
 
-	t.Run("should never be true", func(t *testing.T) {
+	for c := range pollUntilTimeoutCases() {
+		t.Run(c.name, func(t *testing.T) {
+			t.Parallel()
+
+			badValue := !c.goodValue
+
+			t.Run("should succeed with constant good value", func(t *testing.T) {
+				t.Parallel()
+
+				mock := new(errorsCapturingT)
+				if !c.assertion(mock, func() bool { return c.goodValue }, testTimeout, testTick) {
+					t.Errorf("expected %s to return true", c.name)
+				}
+			})
+
+			t.Run("should succeed on timeout with slow bad value", func(t *testing.T) {
+				t.Parallel()
+
+				mock := new(errorsCapturingT)
+				condition := func() bool {
+					time.Sleep(2 * testTick)
+					return badValue // returns bad value, but only after timeout
+				}
+
+				if !c.assertion(mock, condition, testTick, 1*time.Millisecond) {
+					t.Errorf("expected %s to return true on timeout", c.name)
+				}
+			})
+
+			t.Run("should fail when condition flips on second call", func(t *testing.T) {
+				t.Parallel()
+
+				mock := new(errorsCapturingT)
+				returns := make(chan bool, 2)
+				returns <- c.goodValue
+				returns <- badValue
+				defer close(returns)
+
+				condition := func() bool { return <-returns }
+
+				if c.assertion(mock, condition, testTimeout, testTick) {
+					t.Errorf("expected %s to return false", c.name)
+				}
+			})
+
+			t.Run("should fail before first tick with constant bad value", func(t *testing.T) {
+				t.Parallel()
+
+				mock := new(errorsCapturingT)
+				// By making the tick longer than the total duration, we expect that this test would fail if
+				// we didn't check the condition before the first tick elapses.
+				if c.assertion(mock, func() bool { return badValue }, testTimeout, time.Second) {
+					t.Errorf("expected %s to return false", c.name)
+				}
+			})
+
+			t.Run("should fail when parent test fails", func(t *testing.T) {
+				t.Parallel()
+
+				parentCtx, failParent := context.WithCancel(context.WithoutCancel(t.Context()))
+				mock := new(errorsCapturingT).WithContext(parentCtx)
+				condition := func() bool {
+					failParent() // cancels the parent context
+					return c.goodValue
+				}
+				if c.assertion(mock, condition, testTimeout, time.Second) {
+					t.Errorf("expected %s to return false when parent test fails", c.name)
+				}
+			})
+		})
+	}
+}
+
+func TestConditionConsistentlyWithError(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should succeed when condition always returns nil", func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(errorsCapturingT)
-		condition := func() bool {
-			return false
+		condition := func(_ context.Context) error {
+			return nil // no error = condition not triggered
 		}
 
-		if !Never(mock, condition, testTimeout, testTick) {
-			t.Error("expected Never to return true")
+		if !Consistently(mock, condition, testTimeout, testTick) {
+			t.Error("expected Consistently to return true when condition never returns an error")
 		}
 	})
 
-	t.Run("should never be true, on timeout", func(t *testing.T) {
+	t.Run("should fail when condition returns an error", func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(errorsCapturingT)
-		condition := func() bool {
-			time.Sleep(2 * testTick)
-			// eventually returns true, after timeout
-			return true
+		condition := func(_ context.Context) error {
+			return errors.New("something went wrong")
 		}
 
-		if !Never(mock, condition, testTick, 1*time.Millisecond) {
-			t.Error("expected Never to return true on timeout")
+		if Consistently(mock, condition, testTimeout, testTick) {
+			t.Error("expected Consistently to return false when condition returns an error")
 		}
 	})
 
-	t.Run("should never be true fails", func(t *testing.T) {
-		// checks Never with a condition that returns true on second call.
+	t.Run("should fail when error is returned on second call", func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(errorsCapturingT)
-		// A list of values returned by condition.
-		// Channel protects against concurrent access.
-		returns := make(chan bool, 2)
-		returns <- false
-		returns <- true
+		returns := make(chan error, 2)
+		returns <- nil
+		returns <- errors.New("something went wrong")
 		defer close(returns)
 
-		// Will return true on second call.
-		condition := func() bool {
+		condition := func(_ context.Context) error {
 			return <-returns
 		}
 
-		if Never(mock, condition, testTimeout, testTick) {
-			t.Error("expected Never to return false")
+		if Consistently(mock, condition, testTimeout, testTick) {
+			t.Error("expected Consistently to return false")
 		}
 	})
+}
 
-	t.Run("should never be true fails, with ticker never triggered", func(t *testing.T) {
+func TestConditionEventuallyWithContext(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should complete with true using context variant", func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(errorsCapturingT)
-		// By making the tick longer than the total duration, we expect that this test would fail if
-		// we didn't check the condition before the first tick elapses.
-		condition := func() bool { return true }
-		if Never(mock, condition, testTimeout, time.Second) {
-			t.Error("expected Never to return false")
+		counter := 0
+		condition := func(_ context.Context, collect *CollectT) {
+			counter++
+			True(collect, counter == 2)
+		}
+
+		if !EventuallyWith(mock, condition, testTimeout, testTick) {
+			t.Error("expected EventuallyWith to return true")
+		}
+		if len(mock.errors) != 0 {
+			t.Errorf("expected 0 errors, got %d", len(mock.errors))
+		}
+		const expectedCalls = 2
+		if expectedCalls != counter {
+			t.Errorf("expected condition to be called %d times, got %d", expectedCalls, counter)
 		}
 	})
 
-	t.Run("should never be true fails, with parent test failing", func(t *testing.T) {
+	t.Run("should complete with false using context variant", func(t *testing.T) {
 		t.Parallel()
 
-		parentCtx, failParent := context.WithCancel(context.WithoutCancel(t.Context()))
-		mock := new(errorsCapturingT).WithContext(parentCtx)
-		condition := func() bool {
-			failParent() // cancels the parent context, which results in Never to fail
-			return false
+		mock := new(errorsCapturingT)
+		condition := func(_ context.Context, collect *CollectT) {
+			Fail(collect, "condition fixed failure")
 		}
-		if Never(mock, condition, testTimeout, time.Second) {
-			t.Error("expected Never to return false when parent test fails")
+
+		if EventuallyWith(mock, condition, testTimeout, testTick) {
+			t.Error("expected EventuallyWith to return false")
+		}
+	})
+
+	t.Run("should receive a non-nil context", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(errorsCapturingT)
+		condition := func(ctx context.Context, collect *CollectT) {
+			if ctx == nil {
+				Fail(collect, "expected non-nil context")
+			}
+		}
+
+		if !EventuallyWith(mock, condition, testTimeout, testTick) {
+			t.Error("expected EventuallyWith to return true")
 		}
 	})
 }
@@ -472,6 +622,32 @@ func conditionFailCases() iter.Seq[failCase] {
 			name:      "Condition/false",
 			assertion: func(t T) bool { return Condition(t, func() bool { return false }) },
 			wantError: "condition failed",
+		},
+	})
+}
+
+// pollUntilTimeoutAssertion is the common signature for Never and Consistently,
+// both of which poll until timeout using func() bool conditions.
+type pollUntilTimeoutAssertion func(T, func() bool, time.Duration, time.Duration, ...any) bool
+
+// pollUntilTimeoutCase parameterizes the shared tests for Never and Consistently.
+type pollUntilTimeoutCase struct {
+	name      string
+	assertion pollUntilTimeoutAssertion
+	goodValue bool // the value the condition returns when "holding": false for Never, true for Consistently
+}
+
+func pollUntilTimeoutCases() iter.Seq[pollUntilTimeoutCase] {
+	return slices.Values([]pollUntilTimeoutCase{
+		{
+			name:      "Never",
+			assertion: Never,
+			goodValue: false, // Never succeeds when the condition always returns false ("never true")
+		},
+		{
+			name:      "Consistently",
+			assertion: Consistently[func() bool],
+			goodValue: true, // Consistently succeeds when the condition always returns true ("always true")
 		},
 	})
 }

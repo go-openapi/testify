@@ -296,10 +296,11 @@ func buildErrorChainString(err error, withType bool) string {
 		if i != 0 {
 			chain.WriteString("\n\t")
 		}
-		chain.WriteString(fmt.Sprintf("%q", errs[i].Error()))
+		fmt.Fprintf(&chain, "%q", errs[i].Error())
 		if withType {
-			chain.WriteString(fmt.Sprintf(" (%T)", errs[i]))
+			fmt.Fprintf(&chain, " (%T)", errs[i])
 		}
 	}
+
 	return chain.String()
 }

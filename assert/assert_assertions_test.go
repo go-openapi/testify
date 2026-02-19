@@ -44,6 +44,33 @@ func TestCondition(t *testing.T) {
 	})
 }
 
+func TestConsistently(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := Consistently(mock, func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond)
+		if !result {
+			t.Error("Consistently should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := Consistently(mock, func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond)
+		if result {
+			t.Error("Consistently should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("Consistently should mark test as failed")
+		}
+	})
+}
+
 func TestContains(t *testing.T) {
 	t.Parallel()
 

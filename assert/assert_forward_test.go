@@ -422,64 +422,6 @@ func TestAssertionsErrorIs(t *testing.T) {
 	})
 }
 
-func TestAssertionsEventually(t *testing.T) {
-	t.Parallel()
-
-	t.Run("success", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		a := New(mock)
-		result := a.Eventually(func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond)
-		if !result {
-			t.Error("Assertions.Eventually should return true on success")
-		}
-	})
-
-	t.Run("failure", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		a := New(mock)
-		result := a.Eventually(func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond)
-		if result {
-			t.Error("Assertions.Eventually should return false on failure")
-		}
-		if !mock.failed {
-			t.Error("Assertions.Eventually should mark test as failed")
-		}
-	})
-}
-
-func TestAssertionsEventuallyWith(t *testing.T) {
-	t.Parallel()
-
-	t.Run("success", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		a := New(mock)
-		result := a.EventuallyWith(func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
-		if !result {
-			t.Error("Assertions.EventuallyWith should return true on success")
-		}
-	})
-
-	t.Run("failure", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		a := New(mock)
-		result := a.EventuallyWith(func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond)
-		if result {
-			t.Error("Assertions.EventuallyWith should return false on failure")
-		}
-		if !mock.failed {
-			t.Error("Assertions.EventuallyWith should mark test as failed")
-		}
-	})
-}
-
 func TestAssertionsExactly(t *testing.T) {
 	t.Parallel()
 
@@ -2786,64 +2728,6 @@ func TestAssertionsErrorIsf(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("Assertions.ErrorIsf should mark test as failed")
-		}
-	})
-}
-
-func TestAssertionsEventuallyf(t *testing.T) {
-	t.Parallel()
-
-	t.Run("success", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		a := New(mock)
-		result := a.Eventuallyf(func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond, "test message")
-		if !result {
-			t.Error("Assertions.Eventuallyf should return true on success")
-		}
-	})
-
-	t.Run("failure", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		a := New(mock)
-		result := a.Eventuallyf(func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond, "test message")
-		if result {
-			t.Error("Assertions.Eventuallyf should return false on failure")
-		}
-		if !mock.failed {
-			t.Error("Assertions.Eventuallyf should mark test as failed")
-		}
-	})
-}
-
-func TestAssertionsEventuallyWithf(t *testing.T) {
-	t.Parallel()
-
-	t.Run("success", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		a := New(mock)
-		result := a.EventuallyWithf(func(c *CollectT) { True(c, true) }, 100*time.Millisecond, 20*time.Millisecond, "test message")
-		if !result {
-			t.Error("Assertions.EventuallyWithf should return true on success")
-		}
-	})
-
-	t.Run("failure", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		a := New(mock)
-		result := a.EventuallyWithf(func(c *CollectT) { False(c, true) }, 100*time.Millisecond, 20*time.Millisecond, "test message")
-		if result {
-			t.Error("Assertions.EventuallyWithf should return false on failure")
-		}
-		if !mock.failed {
-			t.Error("Assertions.EventuallyWithf should mark test as failed")
 		}
 	})
 }

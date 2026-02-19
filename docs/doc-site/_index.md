@@ -155,7 +155,7 @@ See also our [CONTRIBUTING guidelines](./project/contributing/CONTRIBUTING.md).
 - [Examples](./usage/EXAMPLES.md) - Practical code examples for common testing scenarios
 
 **Advanced Topics:**
-- [Generics Guide](./usage/GENERICS.md) - Type-safe assertions with 38 generic functions
+- [Generics Guide](./usage/GENERICS.md) - Type-safe assertions with generic functions
 - [Migration Guide](./usage/MIGRATION.md) - Migrating from stretchr/testify v1
 - [Changes from v1](./usage/CHANGES.md) - All changes and improvements in v2
 - [Benchmarks](./project/maintainers/benchmarks.md) - Performance improvements in v2

@@ -319,20 +319,22 @@ func (e customError) Error() string {
 	return fmt.Sprintf("error: %d", int(e))
 }
 
-// stringizeWants verts a slice of wanted test output into a format suitable
+// stringizeWants converts a slice of wanted test output into a format suitable
 // for a test error message.
 func stringizeWants(wants []string) string {
-	s := ""
-	var sSb97 strings.Builder
+	var b strings.Builder
+
 	for i, want := range wants {
 		if i > 0 {
-			sSb97.WriteString(fmt.Sprintf("want%d: %s", i+1, want))
-		} else {
-			sSb97.WriteString("want: " + want)
+			fmt.Fprintf(&b, "want%d: %s", i+1, want)
+
+			continue
 		}
+
+		b.WriteString("want: " + want)
 	}
-	s += sSb97.String()
-	return s
+
+	return b.String()
 }
 
 // testFailed returns whether or not a test failed by checking if the result

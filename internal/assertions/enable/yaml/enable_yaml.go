@@ -24,7 +24,7 @@ func EnableYAMLWithMarshal(marshaler func(any) ([]byte, error)) {
 	enableYAMLMarshal = marshaler
 }
 
-// Unmarshal is a wrapper to some exernal library to unmarshal YAML documents.
+// Unmarshal is a wrapper to some external library to unmarshal YAML documents.
 func Unmarshal(in []byte, out any) error {
 	if enableYAMLUnmarshal == nil {
 		// fail early and loud
@@ -43,7 +43,7 @@ import (
 	return enableYAMLUnmarshal(in, out)
 }
 
-// Marshal is a wrapper to some exernal library to marshal YAML documents.
+// Marshal is a wrapper to some external library to marshal YAML documents.
 func Marshal(in any) ([]byte, error) {
 	if enableYAMLMarshal == nil {
 		// fail early and loud

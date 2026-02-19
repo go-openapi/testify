@@ -32,12 +32,19 @@ type (
 	// should not be used outside of that context.
 	CollectT = assertions.CollectT
 
-	// Comparison is a custom function that returns true on success and false on failure.
-	Comparison = assertions.Comparison
+	// CollectibleConditioner is a function used in asynchronous condition assertions that use [CollectT].
+	//
+	// This type constraint allows for "overloaded" versions of the condition assertions ([EventuallyWith]).
+	CollectibleConditioner = assertions.CollectibleConditioner
 
 	// ComparisonAssertionFunc is a common function prototype when comparing two values.  Can be useful
 	// for table driven tests.
 	ComparisonAssertionFunc = assertions.ComparisonAssertionFunc
+
+	// Conditioner is a function used in asynchronous condition assertions.
+	//
+	// This type constraint allows for "overloaded" versions of the condition assertions ([Eventually], [Consistently]).
+	Conditioner = assertions.Conditioner
 
 	// ErrorAssertionFunc is a common function prototype when validating an error value.  Can be useful
 	// for table driven tests.

@@ -1,7 +1,7 @@
 # Testify/v2
 
 <!-- Badges: s[roadmap]tatus  -->
-[![Tests][test-badge]][test-url] [![Coverage][cov-badge]][cov-url] [![CI vuln scan][vuln-scan-badge]][vuln-scan-url] [![CodeQL][codeql-badge]][codeql-url]
+[![Tests][test-badge]][test-url] [![Coverage][cov-badge]][cov-url] [![CI vulnerability scan][vuln-scan-badge]][vuln-scan-url] [![CodeQL][codeql-badge]][codeql-url]
 <!-- Badges: release & docker images  -->
 <!-- Badges: code quality  -->
 <!-- Badges: license & compliance -->

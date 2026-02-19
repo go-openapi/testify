@@ -5,6 +5,7 @@ package assertions
 
 import (
 	"cmp"
+	"context"
 	"regexp"
 	"time"
 )
@@ -61,5 +62,19 @@ type (
 	// This is used by [RegexpT] and [NotRegexpT].
 	RegExp interface {
 		Text | *regexp.Regexp
+	}
+
+	// Conditioner is a function used in asynchronous condition assertions.
+	//
+	// This type constraint allows for "overloaded" versions of the condition assertions ([Eventually], [Consistently]).
+	Conditioner interface {
+		func() bool | func(context.Context) error
+	}
+
+	// CollectibleConditioner is a function used in asynchronous condition assertions that use [CollectT].
+	//
+	// This type constraint allows for "overloaded" versions of the condition assertions ([EventuallyWith]).
+	CollectibleConditioner interface {
+		func(*CollectT) | func(context.Context, *CollectT)
 	}
 )
