@@ -1,5 +1,5 @@
 // Package leak provide goroutine leak detection
-// using pprof labels instead of stack-trace heuristics.
+// using [pprof] labels instead of stack-trace heuristics.
 //
 // Instead of parsing [runtime.Stack] and filtering known
 // system goroutines, we label the tested function's goroutine using

@@ -68,7 +68,7 @@ func TestInvalidReflectValue(t *testing.T) {
 	}
 	i++
 
-	// Formatter invalid reflect value.
+	// [fmt.Formatter] invalid reflect value.
 	buf2 := new(dummyFmtState)
 	f := formatState{value: *v, cs: &Config, fs: buf2}
 	f.format(*v)

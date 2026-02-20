@@ -49,7 +49,7 @@ func init() { //nolint:gochecknoinits // this init check is justify by the use o
 	}
 }
 
-// Leaked instruments the tested function with a pprof label.
+// Leaked instruments the tested function with a [pprof] label.
 //
 // It waits briefly for goroutines to settle, then checks the goroutine profile
 // for any goroutines still carrying our label.

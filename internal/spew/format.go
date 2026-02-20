@@ -29,7 +29,7 @@ const supportedFlags = "0-+# "
 
 // formatState implements the fmt.Formatter interface and contains information
 // about the state of a formatting operation.  The NewFormatter function can
-// be used to get a new Formatter which can be used directly as arguments
+// be used to get a new [fmt.Formatter] which can be used directly as arguments
 // in standard fmt package printing calls.
 type formatState struct {
 	value          any
@@ -183,7 +183,7 @@ func (f *formatState) formatPtr(v reflect.Value) {
 	}
 }
 
-// format is the main workhorse for providing the Formatter interface.  It
+// format is the main workhorse for providing the [fmt.Formatter] interface.  It
 // uses the passed reflect value to figure out what kind of object we are
 // dealing with and formats it appropriately.  It is a recursive function,
 // however circular data structures are detected and handled properly.
@@ -379,24 +379,22 @@ func newFormatter(cs *ConfigState, v any) fmt.Formatter {
 	return fs
 }
 
-/*
-NewFormatter returns a custom formatter that satisfies the fmt.Formatter
-interface.  As a result, it integrates cleanly with standard fmt package
-printing functions.  The formatter is useful for inline printing of smaller data
-types similar to the standard %v format specifier.
-
-The custom formatter only responds to the %v (most compact), %+v (adds pointer
-addresses), %#v (adds types), or %#+v (adds types and pointer addresses) verb
-combinations.
-
-Any other verbs such as %x and %q will be sent to the standard fmt package for formatting.
-In addition, the custom formatter ignores the width and precision arguments
-(however they will still work on the format specifiers not handled by the custom formatter).
-
-Typically this function shouldn't be called directly.  It is much easier to make
-use of the custom formatter by calling one of the convenience functions such as
-Printf, Println, or Fprintf.
-*/
+// NewFormatter returns a custom formatter that satisfies the [fmt.Formatter]
+// interface.  As a result, it integrates cleanly with standard [fmt] package
+// printing functions.  The formatter is useful for inline printing of smaller data
+// types similar to the standard %v format specifier.
+//
+// The custom formatter only responds to the %v (most compact), %+v (adds pointer
+// addresses), %#v (adds types), or %#+v (adds types and pointer addresses) verb
+// combinations.
+//
+// Any other verbs such as %x and %q will be sent to the standard [fmt] package for formatting.
+// In addition, the custom formatter ignores the width and precision arguments
+// (however they will still work on the format specifiers not handled by the custom formatter).
+//
+// Typically this function shouldn't be called directly.  It is much easier to make
+// use of the custom formatter by calling one of the convenience functions such as
+// [Printf], [Println], or [Fprintf].
 func NewFormatter(v any) fmt.Formatter {
 	return newFormatter(&Config, v)
 }

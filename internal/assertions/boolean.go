@@ -80,10 +80,10 @@ func False(t T, value bool, msgAndArgs ...any) bool {
 //
 // # Usage
 //
-//	 type B bool
-//	 var b B = true
+//	type B bool
+//	var b B = true
 //
-//		assertions.FalseT(t, b)
+//	assertions.FalseT(t, b)
 //
 // # Examples
 //

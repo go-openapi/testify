@@ -319,14 +319,14 @@ Function equality cannot be determined and will always fail.
 {{< tabs >}}
 {{% tab title="Usage" %}}
 ```go
-	 type S struct {
+	type S struct {
 		Exported     	int
 		notExported   	int
-	 }
+	}
 	assertions.EqualExportedValues(t, S{1, 2}, S{1, 3}) => true
 	assertions.EqualExportedValues(t, S{1, 2}, S{2, 3}) => false
 	success: &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "a", b: 2}
-	failure:  &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "b", b: 1}
+	failure: &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "b", b: 1}
 ```
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
@@ -1344,7 +1344,7 @@ NotNil asserts that the specified object is not nil.
 {{< tabs >}}
 {{% tab title="Usage" %}}
 ```go
-assertions.NotNil(t, err)
+	assertions.NotNil(t, err)
 	success: "not nil"
 	failure: nil
 ```

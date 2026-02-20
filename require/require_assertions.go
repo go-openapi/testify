@@ -314,17 +314,17 @@ func EqualError(t T, err error, errString string, msgAndArgs ...any) {
 //
 // # Usage
 //
-//	 type S struct {
+//	type S struct {
 //		Exported     	int
 //		notExported   	int
-//	 }
+//	}
 //	assertions.EqualExportedValues(t, S{1, 2}, S{1, 3}) => true
 //	assertions.EqualExportedValues(t, S{1, 2}, S{2, 3}) => false
 //
 // # Examples
 //
 //	success: &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "a", b: 2}
-//	failure:  &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "b", b: 1}
+//	failure: &dummyStruct{A: "a", b: 1}, &dummyStruct{A: "b", b: 1}
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 func EqualExportedValues(t T, expected any, actual any, msgAndArgs ...any) {
@@ -721,10 +721,10 @@ func False(t T, value bool, msgAndArgs ...any) {
 //
 // # Usage
 //
-//	 type B bool
-//	 var b B = true
+//	type B bool
+//	var b B = true
 //
-//		assertions.FalseT(t, b)
+//	assertions.FalseT(t, b)
 //
 // # Examples
 //
@@ -1152,13 +1152,13 @@ func Implements(t T, interfaceObject any, object any, msgAndArgs ...any) {
 //
 // # Behavior with IEEE floating point arithmetic
 //
-//   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+//   - expected NaN is matched only by a NaN, e.g. this works: [InDeltaT]([math.Sqrt](-1), [math.Sqrt](-1), 0.0)
 //   - expected +Inf is matched only by a +Inf
 //   - expected -Inf is matched only by a -Inf
 //
 // # Usage
 //
-// assertions.InDelta(t, math.Pi, 22/7.0, 0.01)
+//	assertions.InDelta(t, math.Pi, 22/7.0, 0.01)
 //
 // # Examples
 //
@@ -1237,13 +1237,13 @@ func InDeltaSlice(t T, expected any, actual any, delta float64, msgAndArgs ...an
 //
 // # Behavior with IEEE floating point arithmetic
 //
-//   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+//   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT([math.NaN](), [math.Sqrt](-1), 0.0)
 //   - expected +Inf is matched only by a +Inf
 //   - expected -Inf is matched only by a -Inf
 //
 // # Usage
 //
-// assertions.InDeltaT(t, math.Pi, 22/7.0, 0.01)
+//	assertions.InDeltaT(t, math.Pi, 22/7.0, 0.01)
 //
 // # Examples
 //
@@ -1266,13 +1266,14 @@ func InDeltaT[Number Measurable](t T, expected Number, actual Number, delta Numb
 //
 // # Behavior with IEEE floating point arithmetic
 //
-//   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+//   - expected NaN is matched only by a NaN, e.g. this works: [InDeltaT]([math.NaN](), [math.Sqrt](-1), 0.0)
 //   - expected +Inf is matched only by a +Inf
 //   - expected -Inf is matched only by a -Inf
 //
 // Edge case: for very large integers that do not convert accurately to a float64 (e.g. uint64), prefer [InDeltaT].
 //
 // Formula:
+//
 //   - If expected == 0: fail if |actual - expected| > epsilon
 //   - If expected != 0: fail if |actual - expected| > epsilon * |expected|
 //
@@ -1334,13 +1335,14 @@ func InEpsilonSlice(t T, expected any, actual any, epsilon float64, msgAndArgs .
 //
 // # Behavior with IEEE floating point arithmetic
 //
-//   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+//   - expected NaN is matched only by a NaN, e.g. this works: [InDeltaT]([math.NaN](), [math.Sqrt](-1), 0.0)
 //   - expected +Inf is matched only by a +Inf
 //   - expected -Inf is matched only by a -Inf
 //
 // Edge case: for very large integers that do not convert accurately to a float64 (e.g. uint64), prefer [InDeltaT].
 //
 // Formula:
+//
 //   - If expected == 0: fail if |actual - expected| > epsilon
 //   - If expected != 0: fail if |actual - expected| > epsilon * |expected|
 //
@@ -1838,8 +1840,6 @@ func Kind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) {
 //
 // The asserted object can be a string, a slice, a map, an array, pointer to array or a channel.
 //
-// See also [reflect.Len].
-//
 // # Usage
 //
 //	assertions.Len(t, mySlice, 3)
@@ -2236,7 +2236,7 @@ func NoFileDescriptorLeak(t T, tested func(), msgAndArgs ...any) {
 // # Edge cases
 //
 //   - if the tested function panics leaving behind leaked goroutines, these are detected.
-//   - if the tested function calls runtime.Goexit (e.g. from [testing.T.FailNow]) leaving behind leaked goroutines,
+//   - if the tested function calls [runtime.Goexit] (e.g. from [testing.T.FailNow]) leaving behind leaked goroutines,
 //     these are detected.
 //   - if a panic occurs in one of the leaked go routines, it cannot be recovered with certainty and
 //     the calling program will usually panic.
@@ -2298,7 +2298,7 @@ func NotContains(t T, s any, contains any, msgAndArgs ...any) {
 // NotElementsMatch asserts that the specified listA(array, slice...) is NOT equal to specified
 // listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 // the number of appearances of each of them in both lists should not match.
-// This is an inverse of ElementsMatch.
+// This is an inverse of [ElementsMatch].
 //
 // # Usage
 //
@@ -2326,7 +2326,7 @@ func NotElementsMatch(t T, listA any, listB any, msgAndArgs ...any) {
 // NotElementsMatchT asserts that the specified listA(array, slice...) is NOT equal to specified
 // listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 // the number of appearances of each of them in both lists should not match.
-// This is an inverse of ElementsMatch.
+// This is an inverse of [ElementsMatch].
 //
 // # Usage
 //
@@ -2556,7 +2556,7 @@ func NotKind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) {
 //
 // # Usage
 //
-// assertions.NotNil(t, err)
+//	assertions.NotNil(t, err)
 //
 // # Examples
 //
@@ -2803,7 +2803,7 @@ func Panics(t T, f func(), msgAndArgs ...any) {
 }
 
 // PanicsWithError asserts that the code inside the specified function panics,
-// and that the recovered panic value is an error that satisfies the EqualError comparison.
+// and that the recovered panic value is an error that satisfies the [EqualError] comparison.
 //
 // # Usage
 //

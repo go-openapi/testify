@@ -17,6 +17,7 @@ import (
 // ParseTestValues parses a comma-separated list of Go expressions.
 //
 // Examples:
+//
 //   - "123, 456" → two integer literals
 //   - "assertions.ErrTest, nil" → selector expression and nil
 //   - "[]int{1,2,3}, []int{4,5,6}" → two composite literals
@@ -84,7 +85,7 @@ func ParseTestValues(input string) []model.TestValue {
 	return result
 }
 
-// ParseExprWithFileSet is like ParseTestValues but uses a provided FileSet
+// ParseExprWithFileSet is like [ParseTestValues] but uses a provided FileSet
 // for better error reporting with file/line/column information.
 //
 // The filename parameter is used for error messages (e.g., "assertion.go:42").

@@ -20,13 +20,13 @@ import (
 //
 // # Behavior with IEEE floating point arithmetic
 //
-//   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+//   - expected NaN is matched only by a NaN, e.g. this works: [InDeltaT]([math.Sqrt](-1), [math.Sqrt](-1), 0.0)
 //   - expected +Inf is matched only by a +Inf
 //   - expected -Inf is matched only by a -Inf
 //
 // # Usage
 //
-// assertions.InDelta(t, math.Pi, 22/7.0, 0.01)
+//	assertions.InDelta(t, math.Pi, 22/7.0, 0.01)
 //
 // # Examples
 //
@@ -70,13 +70,13 @@ func InDelta(t T, expected, actual any, delta float64, msgAndArgs ...any) bool {
 //
 // # Behavior with IEEE floating point arithmetic
 //
-//   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+//   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT([math.NaN](), [math.Sqrt](-1), 0.0)
 //   - expected +Inf is matched only by a +Inf
 //   - expected -Inf is matched only by a -Inf
 //
 // # Usage
 //
-// assertions.InDeltaT(t, math.Pi, 22/7.0, 0.01)
+//	assertions.InDeltaT(t, math.Pi, 22/7.0, 0.01)
 //
 // # Examples
 //
@@ -119,13 +119,14 @@ func InDeltaT[Number Measurable](t T, expected, actual, delta Number, msgAndArgs
 //
 // # Behavior with IEEE floating point arithmetic
 //
-//   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+//   - expected NaN is matched only by a NaN, e.g. this works: [InDeltaT]([math.NaN](), [math.Sqrt](-1), 0.0)
 //   - expected +Inf is matched only by a +Inf
 //   - expected -Inf is matched only by a -Inf
 //
 // Edge case: for very large integers that do not convert accurately to a float64 (e.g. uint64), prefer [InDeltaT].
 //
 // Formula:
+//
 //   - If expected == 0: fail if |actual - expected| > epsilon
 //   - If expected != 0: fail if |actual - expected| > epsilon * |expected|
 //
@@ -176,13 +177,14 @@ func InEpsilon(t T, expected, actual any, epsilon float64, msgAndArgs ...any) bo
 //
 // # Behavior with IEEE floating point arithmetic
 //
-//   - expected NaN is matched only by a NaN, e.g. this works: InDeltaT(math.NaN(), math.Sqrt(-1), 0.0)
+//   - expected NaN is matched only by a NaN, e.g. this works: [InDeltaT]([math.NaN](), [math.Sqrt](-1), 0.0)
 //   - expected +Inf is matched only by a +Inf
 //   - expected -Inf is matched only by a -Inf
 //
 // Edge case: for very large integers that do not convert accurately to a float64 (e.g. uint64), prefer [InDeltaT].
 //
 // Formula:
+//
 //   - If expected == 0: fail if |actual - expected| > epsilon
 //   - If expected != 0: fail if |actual - expected| > epsilon * |expected|
 //

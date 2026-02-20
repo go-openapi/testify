@@ -29,7 +29,7 @@ type OpCode struct {
 // of the matching subsequence.  This does not yield minimal edit
 // sequences, but does tend to yield matches that "look right" to people.
 //
-// The SequenceMatcher tries to compute a "human-friendly diff" between two
+// The [SequenceMatcher] tries to compute a "human-friendly diff" between two
 // sequences. Unlike e.g. UNIX(tm) diff, the fundamental notion is the
 // longest *contiguous* & junk-free matching subsequence.  That's what
 // catches peoples' eyes.  The Windows(tm) windiff has another interesting
@@ -37,13 +37,13 @@ type OpCode struct {
 //
 // That, and the method here, appear to yield more intuitive difference
 // reports than does diff.  This method appears to be the least vulnerable
-// to synching up on blocks of "junk lines", though (like blank lines in
+// to syncing up on blocks of "junk lines", though (like blank lines in
 // ordinary text files, or maybe "<P>" lines in HTML files).  That may be
 // because this is the only method of the 3 that has a *concept* of
 // "junk" <wink>.
 //
 // Timing:  Basic R-O is cubic time worst case and quadratic time expected
-// case.  SequenceMatcher is quadratic time for the worst case and has
+// case.  [SequenceMatcher] is quadratic time for the worst case and has
 // expected-case behavior dependent in a complicated way on how many
 // elements the sequences have in common; best case time is linear.
 //
@@ -61,6 +61,7 @@ type SequenceMatcher struct {
 	opCodes        []OpCode
 }
 
+// NewMatcher builds a new [SequenceMatcher] comparing 2 sequences of strings.
 func NewMatcher(a, b []string) *SequenceMatcher {
 	m := SequenceMatcher{autoJunk: true}
 	m.SetSeqs(a, b)
@@ -73,15 +74,14 @@ func (m *SequenceMatcher) SetSeqs(a, b []string) {
 	m.SetSeq2(b)
 }
 
-// SetSeq1 sets the first sequence to be compared. The second sequence to be compared is
-// not changed.
+// SetSeq1 sets the first sequence to be compared. The second sequence to be compared is not changed.
 //
-// SequenceMatcher computes and caches detailed information about the second
+// [SequenceMatcher] computes and caches detailed information about the second
 // sequence, so if you want to compare one sequence S against many sequences,
 // use .SetSeq2(s) once and call .SetSeq1(x) repeatedly for each of the other
 // sequences.
 //
-// See also SetSeqs() and SetSeq2().
+// See also [SequenceMatcher.SetSeqs] and [SequenceMatcher.SetSeq2].
 func (m *SequenceMatcher) SetSeq1(a []string) {
 	if &a == &m.a {
 		return
@@ -91,8 +91,7 @@ func (m *SequenceMatcher) SetSeq1(a []string) {
 	m.opCodes = nil
 }
 
-// SetSeq2 sets the second sequence to be compared. The first sequence to be compared is
-// not changed.
+// SetSeq2 sets the second sequence to be compared. The first sequence to be compared is not changed.
 func (m *SequenceMatcher) SetSeq2(b []string) {
 	if &b == &m.b {
 		return

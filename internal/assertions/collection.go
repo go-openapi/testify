@@ -18,8 +18,6 @@ import (
 //
 // The asserted object can be a string, a slice, a map, an array, pointer to array or a channel.
 //
-// See also [reflect.Len].
-//
 // # Usage
 //
 //	assertions.Len(t, mySlice, 3)
@@ -562,7 +560,7 @@ func ElementsMatch(t T, listA, listB any, msgAndArgs ...any) (ok bool) {
 // NotElementsMatch asserts that the specified listA(array, slice...) is NOT equal to specified
 // listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 // the number of appearances of each of them in both lists should not match.
-// This is an inverse of ElementsMatch.
+// This is an inverse of [ElementsMatch].
 //
 // # Usage
 //
@@ -634,7 +632,7 @@ func ElementsMatchT[E comparable](t T, listA, listB []E, msgAndArgs ...any) bool
 // NotElementsMatchT asserts that the specified listA(array, slice...) is NOT equal to specified
 // listB(array, slice...) ignoring the order of the elements. If there are duplicate elements,
 // the number of appearances of each of them in both lists should not match.
-// This is an inverse of ElementsMatch.
+// This is an inverse of [ElementsMatch].
 //
 // # Usage
 //

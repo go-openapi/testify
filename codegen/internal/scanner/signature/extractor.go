@@ -28,7 +28,7 @@ func New(currentPackage *types.Package, importAliases map[string]string) *Extrac
 	}
 }
 
-// ExtractFunctionSignature extracts function signature details from a types.Signature.
+// ExtractFunctionSignature extracts function signature details from a [types.Signature].
 //
 // This is used for both regular functions and function types (var/type declarations).
 func (e *Extractor) ExtractFunctionSignature(signature *types.Signature, name string) model.Function {

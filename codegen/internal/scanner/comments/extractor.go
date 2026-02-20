@@ -32,7 +32,7 @@ type Extractor struct {
 // New creates a comment extractor.
 //
 // The syntaxPackage provides access to all AST files in the package.
-// The fileSet and filesMap enable position-based lookup to bridge types.Object to ast.Decl.
+// The fileSet and filesMap enable position-based lookup to bridge [types.Object] to [ast.Decl].
 func New(syntaxPackage []*ast.File, fileSet *token.FileSet, filesMap map[*token.File]*ast.File) *Extractor {
 	return &Extractor{
 		syntaxPackage: syntaxPackage,
@@ -96,6 +96,7 @@ FILE:
 // Never returns nil: if no comment is present an empty but valid [ast.CommentGroup] is returned.
 //
 // NOTE: comment prioritization rule is:
+//
 //  1. GenDecl.Doc = leading comment for the entire declaration block
 //  2. Spec.Doc = individual doc for that specific spec
 func (e *Extractor) ExtractComments(object types.Object) *ast.CommentGroup {

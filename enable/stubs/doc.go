@@ -7,6 +7,7 @@
 // maintaining a clean separation between internal implementation and public API.
 //
 // Subpackages:
+//
 //   - yaml: API for enabling YAML assertions
 //   - colors: API for enabling colorized output
 //
