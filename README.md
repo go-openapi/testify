@@ -46,23 +46,28 @@ Design and exploration phase. Feedback, contributions and proposals are welcome.
 >
 > ✅ Fully refactored how assertions are generated and documented.
 >
-> ✅ Fixed hangs & panics when using `spew`. Fuzzed `spew`.
 >
-> ✅  Fixed go routine leaks with `EventuallyWithT` and co.
+> Fixes
 >
-> ✅ Added `Kind` & `NotKind`
+> ✅ Fixed hangs & panics when using `spew`. Fuzzed `spew`. Fixed deterministic order of keys in diff.
 >
-> ✅ Fix deterministic order of keys in diff
+> ✅ Fixed go routine leaks with `EventuallyWith` and co.
+>
+> ✅ Fixed wrong logic with `IsNonIncreasing`, `InNonDecreasing`
 >
 > ✅ Fixed edge cases with `InDelta`, `InEpsilon`
 >
 > ✅ Fixed edge cases with `EqualValues`
 >
-> ✅ Fixed wrong logic with `IsNonIncreasing`, `InNonDecreasing`
+> Additions
+>
+> ✅ Introduced generics: ~ 40 new type-safe assertions with generic types (doc: added usage guide, examples and benchmark)
+>
+> ✅ Added `Kind` & `NotKind`, `Consistently`, `NoGoRoutineLeak`, `NoFileDescriptorLeak`
 >
 > ✅ Added opt-in support for colorized output
 >
-> ✅ Introduced generics: 38 new type-safe assertions with generic types (doc: added usage guide, examples and benchmark)
+> ✅ Added migration tool
 >
 > See also our [ROADMAP][doc-roadmap].
 

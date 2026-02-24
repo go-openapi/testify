@@ -18,7 +18,7 @@ We continue to monitor and selectively adopt changes from the upstream repositor
 - ✅ [#1606], [#1087] - Consistently assertion
 
 ### Monitoring
-- 🔍 [#1601] - NoFieldIsZero
+- 🔍 [#1601] - `NoFieldIsZero`
 - 🔍 [#1840] - JSON presence check without exact values
 
 ### Superseded by Our Implementation
@@ -74,7 +74,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | [#1816] | Issue | Fix panic on unexported struct key in map | ✅ Fixed in internalized go-spew |
 | [#1818] | PR | Fix panic on invalid regex in Regexp/NotRegexp | ✅ Merged - Added graceful error handling |
 | [#1822] | Issue | Deterministic map ordering in diffs | ✅ Fixed in internalized go-spew |
-| [#1825] | PR | Fix panic using EqualValues with uncomparable types | ✅ Merged - Enhanced type safety in EqualValues |
+| [#1825] | PR | Fix panic using EqualValues with incomparable types | ✅ Merged - Enhanced type safety in EqualValues |
 | [#1826] | Issue | Type safety with spew (meta-issue) | ✅ Addressed through comprehensive fuzzing and fixes |
 | [#1828] | PR | Fixed panic with unexported fields in maps | ✅ Merged into internalized go-spew |
 | [#1829] | Issue | Fix time.Time rendering in diffs | ✅ Fixed in internalized go-spew |
@@ -112,7 +112,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 
 | Reference | Type | Summary | Status |
 |-----------|------|---------|--------|
-| [#1601] | Issue | NoFieldIsZero assertion | 🔍 Monitoring - Considering implementation |
+| [#1601] | Issue | `NoFieldIsZero` assertion | 🔍 Monitoring - Considering implementation |
 | [#1840] | Issue | JSON presence check without exact values | 🔍 Monitoring - Interesting for testing APIs with generated IDs |
 
 ### Informational (Not Implemented)

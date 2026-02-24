@@ -8,9 +8,9 @@ weight: 2
 
 ### Goals
 
-We want the maintainance of dozens of test assertions, times many variants, to remain reasonably low.
+We want the maintenance of dozens of test assertions, times many variants, to remain reasonably low.
 
-The maintainance flow is intended to require different activities and levels of understanding,
+The maintenance flow is intended to require different activities and levels of understanding,
 dependending on the complexity of a planned evolution.
 
 {{< mermaid align="center" zoom="true" >}}
@@ -51,7 +51,7 @@ one "forward" variant and one "forward formatted" variant (as methods).
 **For every "helper" function (not an assertion): 2 variants.**
 
 
-All these variants make up several hundreds functions, which poses a challenge for maintainance and documentation.
+All these variants make up several hundreds functions, which poses a challenge for maintenance and documentation.
 
 We have adopted code and documentation generation as a mean to mitigate this issue.
 
