@@ -87,7 +87,7 @@ This allows for minimal test dependencies.
   * all updates from "trusted" dependencies (github actions, golang.org packages, go-openapi packages
     are auto-merged if they successfully pass CI.
 
-* go version udpates
+* go version updates
 
   Principle:
 

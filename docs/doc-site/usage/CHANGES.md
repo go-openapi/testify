@@ -50,7 +50,7 @@ See also a quick [migration guide](./MIGRATION.md).
 
 [#1829]: https://github.com/stretchr/testify/issues/1829
 
-#### Maintenability
+#### Maintainability
 
 | Change | Origin | Description |
 |--------|--------|-------------|
@@ -89,6 +89,8 @@ See also a quick [migration guide](./MIGRATION.md).
 {{% /tab %}}
 {{% /tabs %}}
 
+
+
 ## Bug Fixes and Safety Improvements
 
 {{% tabs %}}
@@ -103,7 +105,7 @@ See also a quick [migration guide](./MIGRATION.md).
 | [#1813] | Internal (spew) | Fixed panic with unexported fields (via #1828) |
 | [#1818] | String | Fixed panic on invalid regex in Regexp/NotRegexp |
 | [#1822] | Internal (spew) | Deterministic map ordering in diffs |
-| [#1825] | Equality | Fixed panic when using EqualValues with uncomparable types |
+| [#1825] | Equality | Fixed panic when using EqualValues with incomparable types |
 | [#1828] | Internal (spew) | Fixed panic with unexported fields in maps |
 
 [#1223]: https://github.com/stretchr/testify/pull/1223
@@ -236,7 +238,7 @@ See also a quick [migration guide](./MIGRATION.md).
 
 | Change | Origin | Description |
 |--------|--------|-------------|
-| **Renaming** | Internal refactorting | `EventuallyWithT` renamed into `EventuallyWith` (conflicted with the convention adopted for generics) |
+| **Renaming** | Internal refactoring | `EventuallyWithT` renamed into `EventuallyWith` (conflicted with the convention adopted for generics) |
 | **Removal**  | API simplification    | `Comparison` type is removed as a mere alias to `func() bool` |
 
 ### Equality
@@ -541,7 +543,7 @@ All assert and require packages are 100% generated from a single source:
 
 The project adopts a mono-repo structure (with the appropriate changes made in CI).
 
-This means that the github repo exposes several independant go modules.
+This means that the github repo exposes several independent go modules.
 
 ```
 github.com/go-openapi/testify/v2           # Core (zero deps) [go.mod]

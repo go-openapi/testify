@@ -29,16 +29,17 @@ timeline
     ✅ v2.3 (Fev 2026) : Other extensions
                     : Extensible Assertion type
                     : JSON & YAML assertions: JSONMarshalsAs...
-                    : NoGoroutineLeak
+                    : NoGoRoutineLeak
                     : more documentation and examples
     ⏳v2.4 (Mar 2026) : Stabilize API (no more removals)
                     : NoFileDescriptorLeak (unix)
-                    : async: Eventually/Never to accept error and context, Consistently
-                    : export internal tools (spew, difflib)
+                    : Eventually, Eventually (with context), Consistently
+                    : Migration tool
     section Q2 2026
-    📝 v2.5 (May 2026) : New candidate features from upstream
-                    : NoFileDescriptorLeak (windows port)
-                    : export internal tools (blackbox)
+    📝 v2.5 (May 2026) : synctest for Eventually/Consistently
+                    : NoFileDescriptorLeak (macOS, Windows)
+                    : New candidate features from upstream
+                    : export internal tools (spew, difflib)
 {{< /mermaid >}}
 
 ## Notes
@@ -50,7 +51,7 @@ timeline
 5. [x] More testing and bug fixes (from upstream or detected during our testing)
 6. [x] Introduces colorization (opt-in)
 7. [x] Introduces generics
-8. [x] Realign behavior re quirks, bugs, unexpected logics ... (e.g. IsNonDecreasing, EventuallyWithT...)
+8. [x] Realign behavior re quirks, bugs, unexpected logics ... (e.g. `IsNonDecreasing`, `EventuallyWithT`...)
 10. [x] Unclear assertions might be provided an alternative verb (e.g. `EventuallyWithT`)
 
 ### Adoption timeline at go-openapi
@@ -61,7 +62,7 @@ timeline
 
 ### What won't come anytime soon
 
-* mocks: we use [mockery](https://https://github.com/vektra/mockery) and prefer the simpler `matryer` mocking-style.
+* mocks: we use [mockery](https://github.com/vektra/mockery) and prefer the simpler `matryer` mocking-style.
   testify-style mocks are thus not going to be supported anytime soon.
 * extra convoluted stuff in the like of `InDeltaSlice` (more likely to be removed)
 

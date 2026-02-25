@@ -248,7 +248,7 @@ Include documentation changes in the same commit so that a revert would remove a
 {{% tab title="Sign Your Work" %}}
 #### Sign your work
 
-Software is developped by real people.
+Software is developed by real people.
 
 The sign-off is a simple line at the end of your commit message,
 which certifies that you wrote it or otherwise have the right to

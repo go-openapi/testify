@@ -41,8 +41,8 @@ Collection operations see the most dramatic improvements due to elimination of p
 | **ElementsMatch (10 items)** | **21x faster** | 568 B → 320 B (44% reduction) | Common test operation |
 | **ElementsMatch (100 items)** | **39x faster** | 41 KB → 3.6 KB (91% reduction) | Scales superlinearly |
 | **ElementsMatch (1000 items)** | **81x faster** | 4 MB → 33 KB (99% reduction) | Large collection testing |
-| **SliceContains** | **16x faster** | 4 allocs → 0 | Membership testing |
-| **SeqContains (iter.Seq)** | **25x faster** | 55 allocs → 9 | Go 1.23+ iterators |
+| **SliceContainsT** | **16x faster** | 4 allocs → 0 | Membership testing |
+| **SeqContainsT (iter.Seq)** | **25x faster** | 55 allocs → 9 | Go 1.23+ iterators |
 | **SliceSubset** | **43x faster** | 17 allocs → 0 | Subset verification |
 
 **Key insight**: ElementsMatch's O(n²) complexity amplifies the benefits—the speedup **increases** with collection size (21x → 39x → 81x).
@@ -78,8 +78,8 @@ Generic type checks eliminate reflection and provide a cleaner API:
 
 | Function | Speedup | Notes |
 |----------|---------|-------|
-| **IsOfType** | **9-11x faster** | No dummy value needed with generics |
-| **IsNotOfType** | **Similar gains** | Type parameter makes intent explicit |
+| **IsOfTypeT** | **9-11x faster** | No dummy value needed with generics |
+| **IsNotOfTypeT** | **Similar gains** | Type parameter makes intent explicit |
 
 ### ⚖️ Modest Gains: Where Processing Dominates
 
