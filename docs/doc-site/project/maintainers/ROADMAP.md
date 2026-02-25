@@ -31,7 +31,7 @@ timeline
                     : JSON & YAML assertions: JSONMarshalsAs...
                     : NoGoRoutineLeak
                     : more documentation and examples
-    ⏳v2.4 (Mar 2026) : Stabilize API (no more removals)
+    ✅ v2.4 (Mar 2026) : Stabilize API (no more removals)
                     : NoFileDescriptorLeak (unix)
                     : Eventually, Eventually (with context), Consistently
                     : Migration tool
