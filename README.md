@@ -40,12 +40,18 @@ Or join our Slack channel: [![Slack Channel][slack-logo]![slack-badge]][slack-ur
 
 ### Status
 
-Design and exploration phase. Feedback, contributions and proposals are welcome.
+Design and exploration phase completed. The published API is now stable:
+moving forward, API changes will remain backward-compatible with v2.4.0.
+
+Feedback, contributions and proposals are welcome.
 
 > **Recent news**
 >
-> ✅ Fully refactored how assertions are generated and documented.
+> ✅ Stabibilized API
 >
+> ✅ Migration tool
+>
+> ✅ Fully refactored how assertions are generated and documented. Opt-in features with their dependencies.
 >
 > Fixes
 >
@@ -66,8 +72,6 @@ Design and exploration phase. Feedback, contributions and proposals are welcome.
 > ✅ Added `Kind` & `NotKind`, `Consistently`, `NoGoRoutineLeak`, `NoFileDescriptorLeak`
 >
 > ✅ Added opt-in support for colorized output
->
-> ✅ Added migration tool
 >
 > See also our [ROADMAP][doc-roadmap].
 
@@ -125,9 +129,9 @@ import (
 This fork now fully replaces the original project for all go-openapi projects,
 thus reducing their dependencies footprint.
 
-Go-swagger will be adapted over Q1 2026.
+Go-swagger has also adopted it. Now the work is to generalize the use of generics (leveraging our migration tool).
 
-Features will be added to support our main use cases there.
+Features might be added to support our main use cases there.
 
 ## Change log
 
