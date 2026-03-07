@@ -99,9 +99,6 @@ UUID
 Unmarshalers
 XYZ
 YAML
-- "dependending" - should be "depending"
-- "logics" - should be "logic" (uncountable noun)
-- "maintainance" - should be "maintenance"
 ad'hoc
 agentic
 allocs
