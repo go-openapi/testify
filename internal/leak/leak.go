@@ -19,6 +19,12 @@ import (
 
 const labelKey = "testify-leak-check"
 
+const (
+	maxAttempts = 20
+	maxWait     = 100 * time.Millisecond
+	waitFactor  = 2
+)
+
 func init() { //nolint:gochecknoinits // this init check is justify by the use of an internal volatile API.
 	// check that the profile API behaves as expected or panic.
 	//
@@ -42,6 +48,24 @@ func init() { //nolint:gochecknoinits // this init check is justify by the use o
 	needle := buildNeedle(id)
 	profile := captureProfile()
 	match := extractLabeledBlocks(profile, needle)
+	if match == "" {
+		// goroutine may not be scheduled yet: wait a bit before taking a decision
+
+		wait := time.Microsecond
+		for range maxAttempts {
+			time.Sleep(wait) // brief retry: goroutines may be mid-exit.
+			profile = captureProfile()
+			match = extractLabeledBlocks(profile, needle)
+			if match != "" {
+				break
+			}
+
+			// retry — goroutine might still be exiting
+			// wait exponential backoff, capped to maxWait
+			wait = min(wait*waitFactor, maxWait)
+		}
+	}
+
 	close(blocker)
 	wg.Wait()
 	if match == "" {
@@ -69,16 +93,11 @@ func Leaked(ctx context.Context, tested func()) string {
 		return "" // early exit: clean state
 	}
 
-	const (
-		maxAttempts = 20
-		maxWait     = 100 * time.Millisecond
-		waitFactor  = 2
-	)
 	wait := time.Microsecond
 	for range maxAttempts {
 		time.Sleep(wait) // brief retry: goroutines may be mid-exit.
-		profile := captureProfile()
-		match := extractLabeledBlocks(profile, needle)
+		profile = captureProfile()
+		match = extractLabeledBlocks(profile, needle)
 		if match == "" {
 			return "" // clean
 		}
