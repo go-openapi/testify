@@ -4,11 +4,11 @@
 
 | Total Contributors | Total Contributions |
 | --- | --- |
-| 257  | 1210  |
+| 257  | 1212  |
 
 | Username | All Time Contribution Count | All Commits |
 | --- | --- | --- |
-| @fredbi | 150 | https://github.com/go-openapi/testify/commits?author=fredbi |
+| @fredbi | 152 | https://github.com/go-openapi/testify/commits?author=fredbi |
 | @ernesto-jimenez | 129 | https://github.com/go-openapi/testify/commits?author=ernesto-jimenez |
 | @brackendawson | 110 | https://github.com/go-openapi/testify/commits?author=brackendawson |
 | @dolmen | 103 | https://github.com/go-openapi/testify/commits?author=dolmen |
@@ -183,7 +183,7 @@
 | @marshall-lee | 1 | https://github.com/go-openapi/testify/commits?author=marshall-lee |
 | @willogden | 1 | https://github.com/go-openapi/testify/commits?author=willogden |
 | @ybrustin | 1 | https://github.com/go-openapi/testify/commits?author=ybrustin |
-| @yarikk | 1 | https://github.com/go-openapi/testify/commits?author=yarikk |
+| @yrk-lab | 1 | https://github.com/go-openapi/testify/commits?author=yrk-lab |
 | @ac7 | 1 | https://github.com/go-openapi/testify/commits?author=ac7 |
 | @cuishuang | 1 | https://github.com/go-openapi/testify/commits?author=cuishuang |
 | @bogdandrutu | 1 | https://github.com/go-openapi/testify/commits?author=bogdandrutu |
