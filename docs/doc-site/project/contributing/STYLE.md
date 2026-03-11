@@ -74,12 +74,12 @@ Here are the reasons why they are disabled (update: Feb. 2026, `golangci-lint v2
 
 ```yaml
   disable:
-    - depguard              # we don't want to configure rules to constrain import. That's the reviewer's job
+    - depguard              # we don't want to configure rules to constrain imports. That's the reviewer's job
     - exhaustruct           # we don't want to configure regexp's to check type name. That's the reviewer's job
-    - funlen                # we accept cognitive complexity as a meaningful metric, but function length is relevant
+    - funlen                # we accept cognitive complexity as a meaningful metric, but function length is not relevant
     - godox                 # we don't see any value in forbidding TODO's etc in code
     - nlreturn              # we usually apply this "blank line" rule to make code less compact. We just don't want to enforce it
-    - nonamedreturns        # we don't see any valid reason why we couldn't used named returns
+    - nonamedreturns        # we don't see any valid reason why we couldn't use named returns
     - noinlineerr           # there is no value added forbidding inlined err
     - paralleltest          # we like parallel tests. We just don't want them to be enforced everywhere
     - recvcheck             # we like the idea of having pointer and non-pointer receivers
