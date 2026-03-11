@@ -21,12 +21,25 @@ This is the go-openapi fork of the great [testify](https://github.com/stretchr/t
 > [!NOTE]
 > This is the home of `github.com/go-openapi/testify/v2`, an active, opinionated fork of `github.com/stretchr/testify`.
 
-Main features:
+## Why choose `go-openapi/testify/v2`
 
-* zero external dependencies
-* opt-in dependencies for extra features (e.g. asserting YAML, colorized output)
-* assertions using generic types (see [a basic example][example-with-generics-url]). [Read the fully story with generics][doc-generics]
-* [searchable documentation][doc-url]
+* 95% compatible with `stretchr/testify` — if you already use it, our migration tool automates the switch
+* Actively maintained: regular fixes and evolutions, many PRs proposed upstream are already in
+* Zero external dependencies — you import what you need, with opt-in modules for extras (e.g. YAML, colorized output)
+* Modernized codebase targeting go1.24+
+* Go routine leak detection built in: zero-setup, no false positives, works with parallel tests (unlike `go.uber.org/goleak`)
+* File descriptor leak detection (linux-only)
+* Type-safe assertions with generics (see [a basic example][example-with-generics-url]) — migration to generics can be automated too. [Read the full story][doc-generics]
+* Safe async assertions, extended JSON & YAML assertions
+* Coming in `v2.5.0`: non-flaky async assertions using `synctest`, and internal tools exposed as standalone modules (spew, unified diff, goleak)
+* We take documentation seriously: [searchable doc site][doc-url] with testable examples and a complete tutorial, plus detailed [godoc][godoc-url] for every assertion
+
+### This fork isn't for everyone
+
+* You need the `mock` package — we removed it and won't bring it back. For suites, we're [open to discussion][suite-discussion] about a redesigned approach
+* Your project must support Go versions older than 1.24
+* You rely on `testifylint` or other tooling that expects the `stretchr/testify` import path
+* You need 100% API compatibility — we're at 95%, and the remaining 5% are intentional removals
 
 ## Announcements
 
@@ -174,6 +187,7 @@ Maintainers can cut a new release by either:
 
 <!-- Doc links -->
 [doc-roadmap]: https://go-openapi.github.io/testify/project/maintainers/roadmap
+[suite-discussion]: https://github.com/go-openapi/testify/discussions/75
 <!-- Badges: status  -->
 [test-badge]: https://github.com/go-openapi/testify/actions/workflows/go-test.yml/badge.svg
 [test-url]: https://github.com/go-openapi/testify/actions/workflows/go-test.yml

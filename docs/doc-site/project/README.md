@@ -3,6 +3,7 @@ title: README
 description: |
   Introducing go-openapi/testify/v2.
 
+  - Why choose testify/v2
   - Approach
   - Main features
   - Differences with v1
@@ -10,6 +11,26 @@ weight: 2
 ---
 
 **The v2 our tests wanted**
+
+## Why choose `go-openapi/testify/v2`
+
+* 95% compatible with `stretchr/testify` — if you already use it, our migration tool automates the switch
+* Actively maintained: regular fixes and evolutions, many PRs proposed upstream are already in
+* Zero external dependencies — you import what you need, with opt-in modules for extras (e.g. YAML, colorized output)
+* Modernized codebase targeting go1.24+
+* Go routine leak detection built in: zero-setup, no false positives, works with parallel tests (unlike `go.uber.org/goleak`)
+* File descriptor leak detection (linux-only)
+* Type-safe assertions with generics (see [a basic example](../usage/EXAMPLES.md)) — migration to generics can be automated too. [Read the full story](../usage/GENERICS.md)
+* Safe async assertions, extended JSON & YAML assertions
+* Coming in `v2.5.0`: non-flaky async assertions using `synctest`, and internal tools exposed as standalone modules (spew, unified diff, goleak)
+* We take documentation seriously: [searchable doc site](../../api/) with testable examples and a complete tutorial, plus detailed [godoc][godoc-url] for every assertion
+
+### This fork isn't for everyone
+
+* You need the `mock` package — we removed it and won't bring it back. For suites, we're [open to discussion](https://github.com/go-openapi/testify/discussions/75) about a redesigned approach
+* Your project must support Go versions older than 1.24
+* You rely on `testifylint` or other tooling that expects the `stretchr/testify` import path
+* You need 100% API compatibility — we're at 95%, and the remaining 5% are intentional removals
 
 ## Motivation
 
