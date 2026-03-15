@@ -4,5 +4,3 @@ Godeps
 .idea
 *.out
 .mcp.json
-.claude/**.md
-!.claude/CLAUDE.md
