@@ -9,4 +9,4 @@ require golang.org/x/sys v0.41.0 // indirect
 
 replace github.com/go-openapi/testify/v2 => ../..
 
-go 1.24.0
+go 1.25.0

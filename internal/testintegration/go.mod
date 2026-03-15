@@ -1,6 +1,6 @@
 module github.com/go-openapi/testify/v2/internal/testintegration/v2
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/go-openapi/testify/enable/colors/v2 v2.4.0
