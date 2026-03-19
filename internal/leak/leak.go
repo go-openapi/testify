@@ -25,7 +25,7 @@ const (
 	waitFactor  = 2
 )
 
-var compatOnce sync.Once
+var compatOnce sync.Once //nolint:gochecknoglobals // lazy guard for undocumented pprof label format
 
 // ensureCompatible checks that the pprof goroutine profile labels
 // are formatted as expected. It runs at most once and panics if the
@@ -43,11 +43,9 @@ func ensureCompatible() {
 		id := uniqueLabel()
 		labels := pprof.Labels(labelKey, id)
 		pprof.Do(context.Background(), labels, func(_ context.Context) {
-			wg.Add(1)
-			go func() {
-				defer wg.Done()
+			wg.Go(func() {
 				<-blocker // leaked: blocks forever until cleanup
-			}()
+			})
 		})
 		needle := buildNeedle(id)
 		profile := captureProfile()
