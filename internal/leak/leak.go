@@ -25,52 +25,57 @@ const (
 	waitFactor  = 2
 )
 
-func init() { //nolint:gochecknoinits // this init check is justify by the use of an internal volatile API.
-	// check that the profile API behaves as expected or panic.
-	//
-	// The exact format of the labels reported in the profile stack is not documented and not guaranteed
-	// to remain stable across go versions. We panic here to detect as early as possible any go API change
-	// so we can quickly adapt to a new format.
-	//
-	// Even though we don't parse the complete stack, our detection method remains sentitive to labels formatting,
-	// e.g. "labels: {key:value}".
-	var wg sync.WaitGroup
-	blocker := make(chan struct{})
-	id := uniqueLabel()
-	labels := pprof.Labels(labelKey, id)
-	pprof.Do(context.Background(), labels, func(_ context.Context) {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			<-blocker // leaked: blocks forever until cleanup
-		}()
-	})
-	needle := buildNeedle(id)
-	profile := captureProfile()
-	match := extractLabeledBlocks(profile, needle)
-	if match == "" {
-		// goroutine may not be scheduled yet: wait a bit before taking a decision
+var compatOnce sync.Once
 
-		wait := time.Microsecond
-		for range maxAttempts {
-			time.Sleep(wait) // brief retry: goroutines may be mid-exit.
-			profile = captureProfile()
-			match = extractLabeledBlocks(profile, needle)
-			if match != "" {
-				break
+// ensureCompatible checks that the pprof goroutine profile labels
+// are formatted as expected. It runs at most once and panics if the
+// format has changed.
+//
+// The exact format of the labels reported in the profile stack is not
+// documented and not guaranteed to remain stable across Go versions.
+// This lazy guard detects any Go API change at the point of first use
+// so we can quickly adapt to a new format, without imposing overhead
+// on programs that never call [Leaked].
+func ensureCompatible() {
+	compatOnce.Do(func() {
+		var wg sync.WaitGroup
+		blocker := make(chan struct{})
+		id := uniqueLabel()
+		labels := pprof.Labels(labelKey, id)
+		pprof.Do(context.Background(), labels, func(_ context.Context) {
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				<-blocker // leaked: blocks forever until cleanup
+			}()
+		})
+		needle := buildNeedle(id)
+		profile := captureProfile()
+		match := extractLabeledBlocks(profile, needle)
+		if match == "" {
+			// goroutine may not be scheduled yet: wait a bit before taking a decision
+
+			wait := time.Microsecond
+			for range maxAttempts {
+				time.Sleep(wait) // brief retry: goroutines may be mid-exit.
+				profile = captureProfile()
+				match = extractLabeledBlocks(profile, needle)
+				if match != "" {
+					break
+				}
+
+				// retry — goroutine might still be exiting
+				// wait exponential backoff, capped to maxWait
+				wait = min(wait*waitFactor, maxWait)
 			}
-
-			// retry — goroutine might still be exiting
-			// wait exponential backoff, capped to maxWait
-			wait = min(wait*waitFactor, maxWait)
 		}
-	}
 
-	close(blocker)
-	wg.Wait()
-	if match == "" {
-		panic("unrecognized goroutine profile format: go API has changed unexpectedly")
-	}
+		close(blocker)
+		wg.Wait()
+		if match == "" {
+			panic("unrecognized goroutine profile format: go API has changed unexpectedly")
+		}
+	})
 }
 
 // Leaked instruments the tested function with a [pprof] label.
@@ -81,6 +86,8 @@ func init() { //nolint:gochecknoinits // this init check is justify by the use o
 // Returns the matching portion of the profile text if leaks are found,
 // or the empty string if clean.
 func Leaked(ctx context.Context, tested func()) string {
+	ensureCompatible()
+
 	id := uniqueLabel()
 	labels := pprof.Labels(labelKey, id)
 
