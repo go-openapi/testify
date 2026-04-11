@@ -76,7 +76,7 @@ We thank these members for their service to this community.
 | @spirin | 3 | <https://github.com/go-openapi/testify/commits?author=spirin> |
 | @zjx20 | 3 | <https://github.com/go-openapi/testify/commits?author=zjx20> |
 | @redachl | 3 | <https://github.com/go-openapi/testify/commits?author=redachl> |
-| @senyast4745 | 3 | <https://github.com/go-openapi/testify/commits?author=senyast4745> |
+| @senyasdt | 3 | <https://github.com/go-openapi/testify/commits?author=senyasdt> |
 | @reynieroz | 3 | <https://github.com/go-openapi/testify/commits?author=reynieroz> |
 | @obeattie | 3 | <https://github.com/go-openapi/testify/commits?author=obeattie> |
 | @nmiyake | 3 | <https://github.com/go-openapi/testify/commits?author=nmiyake> |
