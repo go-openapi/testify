@@ -158,9 +158,9 @@ go test -run=^$ -bench=. -benchmem ./internal/assertions
 
 ## Benchmark Coverage
 
-**38/42 generic functions benchmarked across 10 domains:**
+**38/46 generic functions benchmarked across 10 domains:**
 - Boolean (2): TrueT, FalseT
-- Collection (12): StringContainsT, SliceContainsT, MapContainsT, SeqContainsT, ElementsMatchT, SliceSubsetT, and negative variants
+- Collection (16): StringContainsT, SliceContainsT, MapContainsT, SeqContainsT, ElementsMatchT, SliceSubsetT, SliceEqualT, MapEqualT, and negative variants
 - Comparison (6): GreaterT, LessT, GreaterOrEqualT, LessOrEqualT, PositiveT, NegativeT
 - Equality (4): EqualT, NotEqualT, SameT, NotSameT
 - JSON (1): JSONEqT

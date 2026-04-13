@@ -57,7 +57,7 @@ We have adopted code and documentation generation as a mean to mitigate this iss
 
 #### Current (v2.3.0-unreleased)
 
- 1. Generic assertions (with type parameters): 42 functions
+ 1. Generic assertions (with type parameters): 46 functions
  2. Non-generic assertions (with t T parameter, no type parameters): 82 functions
  3. Helper functions (no t T parameter): 4 functions
 

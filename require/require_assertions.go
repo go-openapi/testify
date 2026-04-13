@@ -2015,6 +2015,34 @@ func MapContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndAr
 	t.FailNow()
 }
 
+// MapEqualT asserts that 2 maps of comparable elements are equal,
+// that is have the same length and contain the keys with the same elements.
+//
+// See also [maps.Equal].
+//
+// # Usage
+//
+//	assertions.MapEqualT(t, map[string]string{"1": "Hello", "2": "World"}, map[string]string{"1": "Hello", "2": "World"})
+//
+// # Examples
+//
+//	success: map[string]string{"1": "Hello", "2": "World"}, map[string]string{"1": "Hello", "2": "World"}
+//	failure: map[string]string{"2": "Hello", "1": "World"}, map[string]string{"1": "Hello", "2": "World"}
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+//
+// [comparable-types]: https://go.dev/blog/comparable
+func MapEqualT[K, V comparable](t T, listA map[K]V, listB map[K]V, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.MapEqualT[K, V](t, listA, listB, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
 // MapNotContainsT asserts that the specified map does not contain a key.
 //
 // # Usage
@@ -2032,6 +2060,33 @@ func MapNotContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAn
 		h.Helper()
 	}
 	if assertions.MapNotContainsT[Map, K, V](t, m, key, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// MapNotEqualT asserts that 2 maps of comparable elements are not equal.
+//
+// See also [MapEqualT].
+//
+// # Usage
+//
+//	assertions.MapNotEqualT(t, map[string]string{"2": "Hello", "1": "World"}, map[string]string{"1": "Hello", "2": "World"})
+//
+// # Examples
+//
+//	success: map[string]string{"2": "Hello", "1": "World"}, map[string]string{"1": "Hello", "2": "World"}
+//	failure: map[string]string{"1": "Hello", "2": "World"}, map[string]string{"1": "Hello", "2": "World"}
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+//
+// [comparable-types]: https://go.dev/blog/comparable
+func MapNotEqualT[K, V comparable](t T, listA map[K]V, listB map[K]V, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.MapNotEqualT[K, V](t, listA, listB, msgAndArgs...) {
 		return
 	}
 
@@ -3084,6 +3139,34 @@ func SliceContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArg
 	t.FailNow()
 }
 
+// SliceEqualT asserts that 2 slices of comparable elements are equal,
+// that is have the same length and contain the same elements in the same order.
+//
+// See also [slices.Equal].
+//
+// # Usage
+//
+//	assertions.SliceEqualT(t, []string{"Hello","World"}, []string{"Hello","World"})
+//
+// # Examples
+//
+//	success: []string{"Hello","World"}, []string{"Hello","World"}
+//	failure: []string{"Hello","World"}, []string{"Hello"}
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+//
+// [comparable-types]: https://go.dev/blog/comparable
+func SliceEqualT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.SliceEqualT[E](t, listA, listB, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
 // SliceNotContainsT asserts that the specified slice does not contain a comparable element.
 //
 // See [SliceContainsT].
@@ -3103,6 +3186,33 @@ func SliceNotContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAnd
 		h.Helper()
 	}
 	if assertions.SliceNotContainsT[Slice, E](t, s, element, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// SliceNotEqualT asserts that 2 slices of comparable elements are not equal.
+//
+// See also [SliceEqualT].
+//
+// # Usage
+//
+//	assertions.SliceNotEqualT(t, []string{"Hello","World"}, []string{"Hello"})
+//
+// # Examples
+//
+//	success: []string{"Hello","World"}, []string{"Hello"}
+//	failure: []string{"Hello","World"}, []string{"Hello","World"}
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+//
+// [comparable-types]: https://go.dev/blog/comparable
+func SliceNotEqualT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.SliceNotEqualT[E](t, listA, listB, msgAndArgs...) {
 		return
 	}
 

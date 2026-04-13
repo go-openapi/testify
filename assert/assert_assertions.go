@@ -1739,6 +1739,30 @@ func MapContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndAr
 	return assertions.MapContainsT[Map, K, V](t, m, key, msgAndArgs...)
 }
 
+// MapEqualT asserts that 2 maps of comparable elements are equal,
+// that is have the same length and contain the keys with the same elements.
+//
+// See also [maps.Equal].
+//
+// # Usage
+//
+//	assertions.MapEqualT(t, map[string]string{"1": "Hello", "2": "World"}, map[string]string{"1": "Hello", "2": "World"})
+//
+// # Examples
+//
+//	success: map[string]string{"1": "Hello", "2": "World"}, map[string]string{"1": "Hello", "2": "World"}
+//	failure: map[string]string{"2": "Hello", "1": "World"}, map[string]string{"1": "Hello", "2": "World"}
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+//
+// [comparable-types]: https://go.dev/blog/comparable
+func MapEqualT[K, V comparable](t T, listA map[K]V, listB map[K]V, msgAndArgs ...any) (ok bool) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.MapEqualT[K, V](t, listA, listB, msgAndArgs...)
+}
+
 // MapNotContainsT asserts that the specified map does not contain a key.
 //
 // # Usage
@@ -1756,6 +1780,29 @@ func MapNotContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAn
 		h.Helper()
 	}
 	return assertions.MapNotContainsT[Map, K, V](t, m, key, msgAndArgs...)
+}
+
+// MapNotEqualT asserts that 2 maps of comparable elements are not equal.
+//
+// See also [MapEqualT].
+//
+// # Usage
+//
+//	assertions.MapNotEqualT(t, map[string]string{"2": "Hello", "1": "World"}, map[string]string{"1": "Hello", "2": "World"})
+//
+// # Examples
+//
+//	success: map[string]string{"2": "Hello", "1": "World"}, map[string]string{"1": "Hello", "2": "World"}
+//	failure: map[string]string{"1": "Hello", "2": "World"}, map[string]string{"1": "Hello", "2": "World"}
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+//
+// [comparable-types]: https://go.dev/blog/comparable
+func MapNotEqualT[K, V comparable](t T, listA map[K]V, listB map[K]V, msgAndArgs ...any) (ok bool) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.MapNotEqualT[K, V](t, listA, listB, msgAndArgs...)
 }
 
 // Negative asserts that the specified element is strictly negative.
@@ -2648,6 +2695,30 @@ func SliceContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArg
 	return assertions.SliceContainsT[Slice, E](t, s, element, msgAndArgs...)
 }
 
+// SliceEqualT asserts that 2 slices of comparable elements are equal,
+// that is have the same length and contain the same elements in the same order.
+//
+// See also [slices.Equal].
+//
+// # Usage
+//
+//	assertions.SliceEqualT(t, []string{"Hello","World"}, []string{"Hello","World"})
+//
+// # Examples
+//
+//	success: []string{"Hello","World"}, []string{"Hello","World"}
+//	failure: []string{"Hello","World"}, []string{"Hello"}
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+//
+// [comparable-types]: https://go.dev/blog/comparable
+func SliceEqualT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) (ok bool) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.SliceEqualT[E](t, listA, listB, msgAndArgs...)
+}
+
 // SliceNotContainsT asserts that the specified slice does not contain a comparable element.
 //
 // See [SliceContainsT].
@@ -2667,6 +2738,29 @@ func SliceNotContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAnd
 		h.Helper()
 	}
 	return assertions.SliceNotContainsT[Slice, E](t, s, element, msgAndArgs...)
+}
+
+// SliceNotEqualT asserts that 2 slices of comparable elements are not equal.
+//
+// See also [SliceEqualT].
+//
+// # Usage
+//
+//	assertions.SliceNotEqualT(t, []string{"Hello","World"}, []string{"Hello"})
+//
+// # Examples
+//
+//	success: []string{"Hello","World"}, []string{"Hello"}
+//	failure: []string{"Hello","World"}, []string{"Hello","World"}
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+//
+// [comparable-types]: https://go.dev/blog/comparable
+func SliceNotEqualT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) (ok bool) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.SliceNotEqualT[E](t, listA, listB, msgAndArgs...)
 }
 
 // SliceNotSubsetT asserts that a slice of comparable elements does not contain all the elements given in the subset.

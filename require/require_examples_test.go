@@ -581,9 +581,25 @@ func ExampleMapContainsT() {
 	// Output: passed
 }
 
+func ExampleMapEqualT() {
+	t := new(testing.T) // should come from testing, e.g. func TestMapEqualT(t *testing.T)
+	require.MapEqualT(t, map[string]string{"1": "Hello", "2": "World"}, map[string]string{"1": "Hello", "2": "World"})
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleMapNotContainsT() {
 	t := new(testing.T) // should come from testing, e.g. func TestMapNotContainsT(t *testing.T)
 	require.MapNotContainsT(t, map[string]string{"A": "B"}, "C")
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleMapNotEqualT() {
+	t := new(testing.T) // should come from testing, e.g. func TestMapNotEqualT(t *testing.T)
+	require.MapNotEqualT(t, map[string]string{"2": "Hello", "1": "World"}, map[string]string{"1": "Hello", "2": "World"})
 	fmt.Println("passed")
 
 	// Output: passed
@@ -920,9 +936,25 @@ func ExampleSliceContainsT() {
 	// Output: passed
 }
 
+func ExampleSliceEqualT() {
+	t := new(testing.T) // should come from testing, e.g. func TestSliceEqualT(t *testing.T)
+	require.SliceEqualT(t, []string{"Hello", "World"}, []string{"Hello", "World"})
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleSliceNotContainsT() {
 	t := new(testing.T) // should come from testing, e.g. func TestSliceNotContainsT(t *testing.T)
 	require.SliceNotContainsT(t, []string{"A", "B"}, "C")
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleSliceNotEqualT() {
+	t := new(testing.T) // should come from testing, e.g. func TestSliceNotEqualT(t *testing.T)
+	require.SliceNotEqualT(t, []string{"Hello", "World"}, []string{"Hello"})
 	fmt.Println("passed")
 
 	// Output: passed

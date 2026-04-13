@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"fmt"
 	"iter"
+	"maps"
 	"reflect"
 	"slices"
 	"strings"
@@ -660,6 +661,104 @@ func NotElementsMatchT[E comparable](t T, listA, listB []E, msgAndArgs ...any) (
 	extraA, extraB := diffListsT(listA, listB)
 	if len(extraA) == 0 && len(extraB) == 0 {
 		return Fail(t, "listA and listB contain the same elements", msgAndArgs)
+	}
+
+	return true
+}
+
+// SliceEqualT asserts that 2 slices of comparable elements are equal,
+// that is have the same length and contain the same elements in the same order.
+//
+// See also [slices.Equal].
+//
+// # Usage
+//
+//	assertions.SliceEqualT(t, []string{"Hello","World"}, []string{"Hello","World"})
+//
+// # Examples
+//
+//	success: []string{"Hello","World"}, []string{"Hello","World"}
+//	failure: []string{"Hello","World"}, []string{"Hello"}
+//
+// [comparable-types]: https://go.dev/blog/comparable
+func SliceEqualT[E comparable](t T, listA, listB []E, msgAndArgs ...any) (ok bool) {
+	// Domain: collection
+	ok = slices.Equal(listA, listB)
+	if !ok {
+		return Fail(t, "listA and listB are not equal", msgAndArgs)
+	}
+
+	return true
+}
+
+// SliceNotEqualT asserts that 2 slices of comparable elements are not equal.
+//
+// See also [SliceEqualT].
+//
+// # Usage
+//
+//	assertions.SliceNotEqualT(t, []string{"Hello","World"}, []string{"Hello"})
+//
+// # Examples
+//
+//	success: []string{"Hello","World"}, []string{"Hello"}
+//	failure: []string{"Hello","World"}, []string{"Hello","World"}
+//
+// [comparable-types]: https://go.dev/blog/comparable
+func SliceNotEqualT[E comparable](t T, listA, listB []E, msgAndArgs ...any) (ok bool) {
+	// Domain: collection
+	ok = slices.Equal(listA, listB)
+	if ok {
+		return Fail(t, "listA and listB are equal", msgAndArgs)
+	}
+
+	return true
+}
+
+// MapEqualT asserts that 2 maps of comparable elements are equal,
+// that is have the same length and contain the keys with the same elements.
+//
+// See also [maps.Equal].
+//
+// # Usage
+//
+//	assertions.MapEqualT(t, map[string]string{"1": "Hello", "2": "World"}, map[string]string{"1": "Hello", "2": "World"})
+//
+// # Examples
+//
+//	success: map[string]string{"1": "Hello", "2": "World"}, map[string]string{"1": "Hello", "2": "World"}
+//	failure: map[string]string{"2": "Hello", "1": "World"}, map[string]string{"1": "Hello", "2": "World"}
+//
+// [comparable-types]: https://go.dev/blog/comparable
+func MapEqualT[K, V comparable](t T, listA, listB map[K]V, msgAndArgs ...any) (ok bool) {
+	// Domain: collection
+	ok = maps.Equal(listA, listB)
+	if !ok {
+		return Fail(t, "listA and listB are not equal", msgAndArgs)
+	}
+
+	return true
+}
+
+// MapNotEqualT asserts that 2 maps of comparable elements are not equal.
+//
+// See also [MapEqualT].
+//
+// # Usage
+//
+//	assertions.MapNotEqualT(t, map[string]string{"2": "Hello", "1": "World"}, map[string]string{"1": "Hello", "2": "World"})
+//
+// # Examples
+//
+//	success: map[string]string{"2": "Hello", "1": "World"}, map[string]string{"1": "Hello", "2": "World"}
+//	failure: map[string]string{"1": "Hello", "2": "World"}, map[string]string{"1": "Hello", "2": "World"}
+//
+// [comparable-types]: https://go.dev/blog/comparable
+func MapNotEqualT[K, V comparable](t T, listA, listB map[K]V, msgAndArgs ...any) (ok bool) {
+	// Domain: collection
+	ok = maps.Equal(listA, listB)
+	if ok {
+		return Fail(t, "listA and listB are equal", msgAndArgs)
 	}
 
 	return true

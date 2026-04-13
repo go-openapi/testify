@@ -15,8 +15,12 @@ keywords:
   - "Lenf"
   - "MapContainsT"
   - "MapContainsTf"
+  - "MapEqualT"
+  - "MapEqualTf"
   - "MapNotContainsT"
   - "MapNotContainsTf"
+  - "MapNotEqualT"
+  - "MapNotEqualTf"
   - "NotContains"
   - "NotContainsf"
   - "NotElementsMatch"
@@ -31,8 +35,12 @@ keywords:
   - "SeqNotContainsTf"
   - "SliceContainsT"
   - "SliceContainsTf"
+  - "SliceEqualT"
+  - "SliceEqualTf"
   - "SliceNotContainsT"
   - "SliceNotContainsTf"
+  - "SliceNotEqualT"
+  - "SliceNotEqualTf"
   - "SliceNotSubsetT"
   - "SliceNotSubsetTf"
   - "SliceSubsetT"
@@ -54,7 +62,7 @@ Asserting Slices And Maps
 
 _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
-This domain exposes 19 functionalities.
+This domain exposes 23 functionalities.
 Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 
 ```tree
@@ -63,7 +71,9 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 - [ElementsMatchT[E comparable]](#elementsmatchte-comparable) | star | orange
 - [Len](#len) | angles-right
 - [MapContainsT[Map ~map[K]V, K comparable, V any]](#mapcontainstmap-mapkv-k-comparable-v-any) | star | orange
+- [MapEqualT[K, V comparable]](#mapequaltk-v-comparable) | star | orange
 - [MapNotContainsT[Map ~map[K]V, K comparable, V any]](#mapnotcontainstmap-mapkv-k-comparable-v-any) | star | orange
+- [MapNotEqualT[K, V comparable]](#mapnotequaltk-v-comparable) | star | orange
 - [NotContains](#notcontains) | angles-right
 - [NotElementsMatch](#notelementsmatch) | angles-right
 - [NotElementsMatchT[E comparable]](#notelementsmatchte-comparable) | star | orange
@@ -71,7 +81,9 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 - [SeqContainsT[E comparable]](#seqcontainste-comparable) | star | orange
 - [SeqNotContainsT[E comparable]](#seqnotcontainste-comparable) | star | orange
 - [SliceContainsT[Slice ~[]E, E comparable]](#slicecontainstslice-e-e-comparable) | star | orange
+- [SliceEqualT[E comparable]](#sliceequalte-comparable) | star | orange
 - [SliceNotContainsT[Slice ~[]E, E comparable]](#slicenotcontainstslice-e-e-comparable) | star | orange
+- [SliceNotEqualT[E comparable]](#slicenotequalte-comparable) | star | orange
 - [SliceNotSubsetT[Slice ~[]E, E comparable]](#slicenotsubsettslice-e-e-comparable) | star | orange
 - [SliceSubsetT[Slice ~[]E, E comparable]](#slicesubsettslice-e-e-comparable) | star | orange
 - [StringContainsT[ADoc, EDoc Text]](#stringcontainstadoc-edoc-text) | star | orange
@@ -189,7 +201,7 @@ func main() {
 |--|--|
 | [`assertions.Contains(t T, s any, contains any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Contains) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Contains](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L63)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Contains](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L64)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -302,7 +314,7 @@ func main() {
 |--|--|
 | [`assertions.ElementsMatch(t T, listA any, listB any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ElementsMatch) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ElementsMatch](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L538)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ElementsMatch](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L539)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -411,7 +423,7 @@ func main() {
 |--|--|
 | [`assertions.ElementsMatchT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ElementsMatchT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ElementsMatchT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L611)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ElementsMatchT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L612)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -528,7 +540,7 @@ func main() {
 |--|--|
 | [`assertions.Len(t T, object any, length int, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Len) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Len](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L31)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Len](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L32)
 
 > **Note**
 >
@@ -642,7 +654,119 @@ func main() {
 |--|--|
 | [`assertions.MapContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#MapContainsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#MapContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L177)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#MapContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L178)
+{{% /tab %}}
+{{< /tabs >}}
+
+### MapEqualT[K, V comparable] {{% icon icon="star" color=orange %}}{#mapequaltk-v-comparable}
+MapEqualT asserts that 2 maps of comparable elements are equal,
+that is have the same length and contain the keys with the same elements.
+
+See also [maps.Equal](https://pkg.go.dev/maps#Equal).
+
+
+[comparable-types]: https://go.dev/blog/comparable
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.MapEqualT(t, map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"1": "Hello", "2": "World"}, map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"1": "Hello", "2": "World"})
+	success: map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"1": "Hello", "2": "World"}, map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"1": "Hello", "2": "World"}
+	failure: map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"2": "Hello", "1": "World"}, map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"1": "Hello", "2": "World"}
+```
+{{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestMapEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestMapEqualT(t *testing.T)
+	success := assert.MapEqualT(t, map[string]string{"1": "Hello", "2": "World"}, map[string]string{"1": "Hello", "2": "World"})
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestMapEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestMapEqualT(t *testing.T)
+	require.MapEqualT(t, map[string]string{"1": "Hello", "2": "World"}, map[string]string{"1": "Hello", "2": "World"})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+  
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.MapEqualT[K, V comparable](t T, listA map[K]V, listB map[K]V, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#MapEqualT) | package-level function |
+| [`assert.MapEqualTf[K, V comparable](t T, listA map[K]V, listB map[K]V, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#MapEqualTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.MapEqualT[K, V comparable](t T, listA map[K]V, listB map[K]V, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapEqualT) | package-level function |
+| [`require.MapEqualTf[K, V comparable](t T, listA map[K]V, listB map[K]V, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapEqualTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--|
+| [`assertions.MapEqualT[K, V comparable](t T, listA map[K]V, listB map[K]V, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#MapEqualT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#MapEqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L733)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -749,7 +873,118 @@ func main() {
 |--|--|
 | [`assertions.MapNotContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#MapNotContainsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#MapNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L308)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#MapNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L309)
+{{% /tab %}}
+{{< /tabs >}}
+
+### MapNotEqualT[K, V comparable] {{% icon icon="star" color=orange %}}{#mapnotequaltk-v-comparable}
+MapNotEqualT asserts that 2 maps of comparable elements are not equal.
+
+See also [MapEqualT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#MapEqualT).
+
+
+[comparable-types]: https://go.dev/blog/comparable
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.MapNotEqualT(t, map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"2": "Hello", "1": "World"}, map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"1": "Hello", "2": "World"})
+	success: map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"2": "Hello", "1": "World"}, map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"1": "Hello", "2": "World"}
+	failure: map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"1": "Hello", "2": "World"}, map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)string{"1": "Hello", "2": "World"}
+```
+{{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestMapNotEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestMapNotEqualT(t *testing.T)
+	success := assert.MapNotEqualT(t, map[string]string{"2": "Hello", "1": "World"}, map[string]string{"1": "Hello", "2": "World"})
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestMapNotEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestMapNotEqualT(t *testing.T)
+	require.MapNotEqualT(t, map[string]string{"2": "Hello", "1": "World"}, map[string]string{"1": "Hello", "2": "World"})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+  
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.MapNotEqualT[K, V comparable](t T, listA map[K]V, listB map[K]V, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#MapNotEqualT) | package-level function |
+| [`assert.MapNotEqualTf[K, V comparable](t T, listA map[K]V, listB map[K]V, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#MapNotEqualTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.MapNotEqualT[K, V comparable](t T, listA map[K]V, listB map[K]V, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapNotEqualT) | package-level function |
+| [`require.MapNotEqualTf[K, V comparable](t T, listA map[K]V, listB map[K]V, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapNotEqualTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--|
+| [`assertions.MapNotEqualT[K, V comparable](t T, listA map[K]V, listB map[K]V, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#MapNotEqualT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#MapNotEqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L757)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -863,7 +1098,7 @@ func main() {
 |--|--|
 | [`assertions.NotContains(t T, s any, contains any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotContains) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L204)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L205)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -979,7 +1214,7 @@ func main() {
 |--|--|
 | [`assertions.NotElementsMatch(t T, listA any, listB any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatch) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatch](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L575)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatch](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L576)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1091,7 +1326,7 @@ func main() {
 |--|--|
 | [`assertions.NotElementsMatchT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatchT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatchT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L647)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotElementsMatchT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L648)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1208,7 +1443,7 @@ func main() {
 |--|--|
 | [`assertions.NotSubset(t T, list any, subset any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotSubset) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSubset](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L444)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSubset](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L445)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1321,7 +1556,7 @@ func main() {
 |--|--|
 | [`assertions.SeqContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SeqContainsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SeqContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L148)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SeqContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L149)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1432,7 +1667,7 @@ func main() {
 |--|--|
 | [`assertions.SeqNotContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SeqNotContainsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SeqNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L283)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SeqNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L284)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1541,7 +1776,119 @@ func main() {
 |--|--|
 | [`assertions.SliceContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SliceContainsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L119)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L120)
+{{% /tab %}}
+{{< /tabs >}}
+
+### SliceEqualT[E comparable] {{% icon icon="star" color=orange %}}{#sliceequalte-comparable}
+SliceEqualT asserts that 2 slices of comparable elements are equal,
+that is have the same length and contain the same elements in the same order.
+
+See also [slices.Equal](https://pkg.go.dev/slices#Equal).
+
+
+[comparable-types]: https://go.dev/blog/comparable
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.SliceEqualT(t, []string{"Hello","World"}, []string{"Hello","World"})
+	success: []string{"Hello","World"}, []string{"Hello","World"}
+	failure: []string{"Hello","World"}, []string{"Hello"}
+```
+{{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestSliceEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestSliceEqualT(t *testing.T)
+	success := assert.SliceEqualT(t, []string{"Hello", "World"}, []string{"Hello", "World"})
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestSliceEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestSliceEqualT(t *testing.T)
+	require.SliceEqualT(t, []string{"Hello", "World"}, []string{"Hello", "World"})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+  
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.SliceEqualT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceEqualT) | package-level function |
+| [`assert.SliceEqualTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceEqualTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.SliceEqualT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceEqualT) | package-level function |
+| [`require.SliceEqualTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceEqualTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--|
+| [`assertions.SliceEqualT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SliceEqualT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceEqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L684)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1650,7 +1997,118 @@ func main() {
 |--|--|
 | [`assertions.SliceNotContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SliceNotContainsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L258)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L259)
+{{% /tab %}}
+{{< /tabs >}}
+
+### SliceNotEqualT[E comparable] {{% icon icon="star" color=orange %}}{#slicenotequalte-comparable}
+SliceNotEqualT asserts that 2 slices of comparable elements are not equal.
+
+See also [SliceEqualT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceEqualT).
+
+
+[comparable-types]: https://go.dev/blog/comparable
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.SliceNotEqualT(t, []string{"Hello","World"}, []string{"Hello"})
+	success: []string{"Hello","World"}, []string{"Hello"}
+	failure: []string{"Hello","World"}, []string{"Hello","World"}
+```
+{{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestSliceNotEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestSliceNotEqualT(t *testing.T)
+	success := assert.SliceNotEqualT(t, []string{"Hello", "World"}, []string{"Hello"})
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestSliceNotEqualT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestSliceNotEqualT(t *testing.T)
+	require.SliceNotEqualT(t, []string{"Hello", "World"}, []string{"Hello"})
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+  
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.SliceNotEqualT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceNotEqualT) | package-level function |
+| [`assert.SliceNotEqualTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceNotEqualTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.SliceNotEqualT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceNotEqualT) | package-level function |
+| [`require.SliceNotEqualTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceNotEqualTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--|
+| [`assertions.SliceNotEqualT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SliceNotEqualT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceNotEqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L708)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1757,7 +2215,7 @@ func main() {
 |--|--|
 | [`assertions.SliceNotSubsetT[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SliceNotSubsetT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceNotSubsetT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L511)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceNotSubsetT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L512)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1864,7 +2322,7 @@ func main() {
 |--|--|
 | [`assertions.SliceSubsetT[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SliceSubsetT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceSubsetT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L413)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SliceSubsetT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L414)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1973,7 +2431,7 @@ func main() {
 |--|--|
 | [`assertions.StringContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#StringContainsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#StringContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L92)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#StringContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L93)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -2082,7 +2540,7 @@ func main() {
 |--|--|
 | [`assertions.StringNotContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#StringNotContainsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#StringNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L233)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#StringNotContainsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L234)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -2202,7 +2660,7 @@ func main() {
 |--|--|
 | [`assertions.Subset(t T, list any, subset any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Subset) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Subset](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L343)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Subset](https://github.com/go-openapi/testify/blob/master/internal/assertions/collection.go#L344)
 {{% /tab %}}
 {{< /tabs >}}
 

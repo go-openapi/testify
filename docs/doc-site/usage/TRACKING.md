@@ -119,7 +119,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 
 | Reference | Type | Summary | Outcome |
 |-----------|------|---------|---------|
-| [#1147] | Issue | General discussion about generics adoption | ℹ️ Marked "Not Planned" upstream - We implemented our own generics approach (42 functions) |
+| [#1147] | Issue | General discussion about generics adoption | ℹ️ Marked "Not Planned" upstream - We implemented our own generics approach (46 functions) |
 | [#1308] | PR | Comprehensive refactor with generic type parameters | ℹ️ Draft for v2.0.0 upstream - We took a different approach with the same objective |
 
 [#1147]: https://github.com/stretchr/testify/issues/1147

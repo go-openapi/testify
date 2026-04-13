@@ -580,9 +580,25 @@ func ExampleMapContainsT() {
 	// Output: success: true
 }
 
+func ExampleMapEqualT() {
+	t := new(testing.T) // should come from testing, e.g. func TestMapEqualT(t *testing.T)
+	success := assert.MapEqualT(t, map[string]string{"1": "Hello", "2": "World"}, map[string]string{"1": "Hello", "2": "World"})
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleMapNotContainsT() {
 	t := new(testing.T) // should come from testing, e.g. func TestMapNotContainsT(t *testing.T)
 	success := assert.MapNotContainsT(t, map[string]string{"A": "B"}, "C")
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleMapNotEqualT() {
+	t := new(testing.T) // should come from testing, e.g. func TestMapNotEqualT(t *testing.T)
+	success := assert.MapNotEqualT(t, map[string]string{"2": "Hello", "1": "World"}, map[string]string{"1": "Hello", "2": "World"})
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true
@@ -919,9 +935,25 @@ func ExampleSliceContainsT() {
 	// Output: success: true
 }
 
+func ExampleSliceEqualT() {
+	t := new(testing.T) // should come from testing, e.g. func TestSliceEqualT(t *testing.T)
+	success := assert.SliceEqualT(t, []string{"Hello", "World"}, []string{"Hello", "World"})
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleSliceNotContainsT() {
 	t := new(testing.T) // should come from testing, e.g. func TestSliceNotContainsT(t *testing.T)
 	success := assert.SliceNotContainsT(t, []string{"A", "B"}, "C")
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleSliceNotEqualT() {
+	t := new(testing.T) // should come from testing, e.g. func TestSliceNotEqualT(t *testing.T)
+	success := assert.SliceNotEqualT(t, []string{"Hello", "World"}, []string{"Hello"})
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true

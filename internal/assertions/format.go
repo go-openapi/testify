@@ -43,7 +43,7 @@ func indentMessageLines(message string, longestLabelLen int) string {
 		if !firstLine {
 			fmt.Fprint(outBuf, "\n\t"+strings.Repeat(" ", longestLabelLen+1)+"\t")
 		}
-		fmt.Fprint(outBuf, scanner.Text()) //nolint:gosec // gosec false positive: G705: XSS via taint analysis
+		fmt.Fprint(outBuf, scanner.Text())
 	}
 
 	return outBuf.String()
