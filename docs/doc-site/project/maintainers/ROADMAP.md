@@ -56,8 +56,8 @@ timeline
 
 ### Adoption timeline at go-openapi
 
-1. [x]  Jan 2026: all go-openapi projects adopts the forked testify
-2. [ ] Feb 2026: all go-openapi projects transition to generics
+1. [x] Jan 2026: all go-openapi projects adopts the forked testify
+2. [x] Feb 2026: all go-openapi projects transition to generics
 3. [x] Mar 2026: go-swagger transitions to the forked testify
 
 ### What won't come anytime soon
