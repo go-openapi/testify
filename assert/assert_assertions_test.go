@@ -1887,6 +1887,33 @@ func TestMapContainsT(t *testing.T) {
 	})
 }
 
+func TestMapEqualT(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := MapEqualT(mock, map[string]string{"1": "Hello", "2": "World"}, map[string]string{"1": "Hello", "2": "World"})
+		if !result {
+			t.Error("MapEqualT should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := MapEqualT(mock, map[string]string{"2": "Hello", "1": "World"}, map[string]string{"1": "Hello", "2": "World"})
+		if result {
+			t.Error("MapEqualT should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("MapEqualT should mark test as failed")
+		}
+	})
+}
+
 func TestMapNotContainsT(t *testing.T) {
 	t.Parallel()
 
@@ -1910,6 +1937,33 @@ func TestMapNotContainsT(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("MapNotContainsT should mark test as failed")
+		}
+	})
+}
+
+func TestMapNotEqualT(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := MapNotEqualT(mock, map[string]string{"2": "Hello", "1": "World"}, map[string]string{"1": "Hello", "2": "World"})
+		if !result {
+			t.Error("MapNotEqualT should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := MapNotEqualT(mock, map[string]string{"1": "Hello", "2": "World"}, map[string]string{"1": "Hello", "2": "World"})
+		if result {
+			t.Error("MapNotEqualT should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("MapNotEqualT should mark test as failed")
 		}
 	})
 }
@@ -2941,6 +2995,33 @@ func TestSliceContainsT(t *testing.T) {
 	})
 }
 
+func TestSliceEqualT(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := SliceEqualT(mock, []string{"Hello", "World"}, []string{"Hello", "World"})
+		if !result {
+			t.Error("SliceEqualT should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := SliceEqualT(mock, []string{"Hello", "World"}, []string{"Hello"})
+		if result {
+			t.Error("SliceEqualT should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("SliceEqualT should mark test as failed")
+		}
+	})
+}
+
 func TestSliceNotContainsT(t *testing.T) {
 	t.Parallel()
 
@@ -2964,6 +3045,33 @@ func TestSliceNotContainsT(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("SliceNotContainsT should mark test as failed")
+		}
+	})
+}
+
+func TestSliceNotEqualT(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := SliceNotEqualT(mock, []string{"Hello", "World"}, []string{"Hello"})
+		if !result {
+			t.Error("SliceNotEqualT should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := SliceNotEqualT(mock, []string{"Hello", "World"}, []string{"Hello", "World"})
+		if result {
+			t.Error("SliceNotEqualT should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("SliceNotEqualT should mark test as failed")
 		}
 	})
 }

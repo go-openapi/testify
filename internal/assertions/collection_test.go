@@ -114,6 +114,36 @@ func TestCollectionElementsMatch(t *testing.T) {
 	}
 }
 
+// TestCollectionSliceEqual tests SliceEqualT and SliceNotEqualT.
+func TestCollectionSliceEqual(t *testing.T) {
+	t.Parallel()
+
+	for tc := range sliceEqualCases() {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			listA, listB := tc.makeValues()
+			t.Run("with SliceEqualT", testSliceEqualAssertion(tc, sliceEqualKind, listA, listB))
+			t.Run("with SliceNotEqualT", testSliceEqualAssertion(tc, sliceNotEqualKind, listA, listB))
+		})
+	}
+}
+
+// TestCollectionMapEqual tests MapEqualT and MapNotEqualT.
+func TestCollectionMapEqual(t *testing.T) {
+	t.Parallel()
+
+	for tc := range mapEqualCases() {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			listA, listB := tc.makeValues()
+			t.Run("with MapEqualT", testMapEqualAssertion(tc, mapEqualKind, listA, listB))
+			t.Run("with MapNotEqualT", testMapEqualAssertion(tc, mapNotEqualKind, listA, listB))
+		})
+	}
+}
+
 // TestCollectionErrorMessages tests error message formatting for collection assertions.
 func TestCollectionErrorMessages(t *testing.T) {
 	t.Parallel()
@@ -900,6 +930,245 @@ func unifiedElementsMatchCases() iter.Seq[elementsMatchTestCase] {
 		// Invalid types (reflection only)
 		{"invalid type/[]int-invalid", func() (any, any) { return []int{}, 1 }, emInvalidType, true},
 		{"invalid type/invalid-[]int", func() (any, any) { return 1, []int{} }, emInvalidType, true},
+	})
+}
+
+// ============================================================================
+// TestCollectionSliceEqual
+// ============================================================================
+
+// sliceEqualRelationship describes the equality relationship between two slices.
+type sliceEqualRelationship int
+
+const (
+	seEqual sliceEqualRelationship = iota
+	seNotEqual
+)
+
+type sliceEqualAssertionKind int
+
+const (
+	sliceEqualKind sliceEqualAssertionKind = iota
+	sliceNotEqualKind
+)
+
+type sliceEqualTestCase struct {
+	name         string
+	makeValues   func() (listA, listB any)
+	relationship sliceEqualRelationship
+}
+
+func testSliceEqualAssertion(tc sliceEqualTestCase, kind sliceEqualAssertionKind, listA, listB any) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+
+		var result bool
+		switch a := listA.(type) {
+		case []int:
+			b, ok := listB.([]int)
+			if !ok {
+				t.Fatalf("test case error: []int listA requires []int listB, got %T", listB)
+			}
+			result = testSliceEqualGeneric(mock, kind, a, b)
+		case []string:
+			b, ok := listB.([]string)
+			if !ok {
+				t.Fatalf("test case error: []string listA requires []string listB, got %T", listB)
+			}
+			result = testSliceEqualGeneric(mock, kind, a, b)
+		case []float64:
+			b, ok := listB.([]float64)
+			if !ok {
+				t.Fatalf("test case error: []float64 listA requires []float64 listB, got %T", listB)
+			}
+			result = testSliceEqualGeneric(mock, kind, a, b)
+		default:
+			t.Fatalf("unsupported type for SliceEqualT: %T", listA)
+		}
+
+		shouldPass := expectedStatusForSliceEqualAssertion(kind, tc.relationship)
+		shouldPassOrFail(t, mock, result, shouldPass)
+	}
+}
+
+func testSliceEqualGeneric[E comparable](mock T, kind sliceEqualAssertionKind, listA, listB []E) bool {
+	switch kind {
+	case sliceEqualKind:
+		return SliceEqualT(mock, listA, listB)
+	case sliceNotEqualKind:
+		return SliceNotEqualT(mock, listA, listB)
+	default:
+		panic(fmt.Errorf("test case configuration error: invalid sliceEqualAssertionKind: %d", kind))
+	}
+}
+
+func expectedStatusForSliceEqualAssertion(kind sliceEqualAssertionKind, relationship sliceEqualRelationship) bool {
+	positive := kind == sliceEqualKind
+
+	switch relationship {
+	case seEqual:
+		return positive
+	case seNotEqual:
+		return !positive
+	default:
+		panic(fmt.Errorf("test case configuration error: invalid sliceEqualRelationship: %d", relationship))
+	}
+}
+
+func sliceEqualCases() iter.Seq[sliceEqualTestCase] {
+	return slices.Values([]sliceEqualTestCase{
+		// Equal cases
+		{"empty-empty", func() (any, any) { return []int{}, []int{} }, seEqual},
+		{"single-element", func() (any, any) { return []int{1}, []int{1} }, seEqual},
+		{"multiple-elements", func() (any, any) { return []int{1, 2, 3}, []int{1, 2, 3} }, seEqual},
+		{"strings-equal", func() (any, any) { return []string{"a", "b"}, []string{"a", "b"} }, seEqual},
+		{"nil-nil", func() (any, any) { return []int(nil), []int(nil) }, seEqual},
+		{"nil-empty", func() (any, any) { return []int(nil), []int{} }, seEqual},
+		{"empty-nil", func() (any, any) { return []int{}, []int(nil) }, seEqual},
+		{"duplicates", func() (any, any) { return []int{1, 1, 1}, []int{1, 1, 1} }, seEqual},
+		{"floats-equal", func() (any, any) { return []float64{1.1, 2.2}, []float64{1.1, 2.2} }, seEqual},
+
+		// Not equal cases
+		{"different-length", func() (any, any) { return []int{1, 2}, []int{1} }, seNotEqual},
+		{"different-values", func() (any, any) { return []int{1, 2}, []int{1, 3} }, seNotEqual},
+		{"different-order", func() (any, any) { return []int{1, 2}, []int{2, 1} }, seNotEqual},
+		{"strings-different", func() (any, any) { return []string{"a", "b"}, []string{"a", "c"} }, seNotEqual},
+		{"one-empty", func() (any, any) { return []int{1}, []int{} }, seNotEqual},
+		{"empty-one", func() (any, any) { return []int{}, []int{1} }, seNotEqual},
+		{"different-duplicates", func() (any, any) { return []int{1, 1}, []int{1, 2} }, seNotEqual},
+	})
+}
+
+// ============================================================================
+// TestCollectionMapEqual
+// ============================================================================
+
+// mapEqualRelationship describes the equality relationship between two maps.
+type mapEqualRelationship int
+
+const (
+	meEqual mapEqualRelationship = iota
+	meNotEqual
+)
+
+type mapEqualAssertionKind int
+
+const (
+	mapEqualKind mapEqualAssertionKind = iota
+	mapNotEqualKind
+)
+
+type mapEqualTestCase struct {
+	name         string
+	makeValues   func() (listA, listB any)
+	relationship mapEqualRelationship
+}
+
+func testMapEqualAssertion(tc mapEqualTestCase, kind mapEqualAssertionKind, listA, listB any) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+
+		var result bool
+		switch a := listA.(type) {
+		case map[string]int:
+			b, ok := listB.(map[string]int)
+			if !ok {
+				t.Fatalf("test case error: map[string]int listA requires map[string]int listB, got %T", listB)
+			}
+			result = testMapEqualGeneric(mock, kind, a, b)
+		case map[int]string:
+			b, ok := listB.(map[int]string)
+			if !ok {
+				t.Fatalf("test case error: map[int]string listA requires map[int]string listB, got %T", listB)
+			}
+			result = testMapEqualGeneric(mock, kind, a, b)
+		case map[string]string:
+			b, ok := listB.(map[string]string)
+			if !ok {
+				t.Fatalf("test case error: map[string]string listA requires map[string]string listB, got %T", listB)
+			}
+			result = testMapEqualGeneric(mock, kind, a, b)
+		default:
+			t.Fatalf("unsupported type for MapEqualT: %T", listA)
+		}
+
+		shouldPass := expectedStatusForMapEqualAssertion(kind, tc.relationship)
+		shouldPassOrFail(t, mock, result, shouldPass)
+	}
+}
+
+func testMapEqualGeneric[K, V comparable](mock T, kind mapEqualAssertionKind, listA, listB map[K]V) bool {
+	switch kind {
+	case mapEqualKind:
+		return MapEqualT(mock, listA, listB)
+	case mapNotEqualKind:
+		return MapNotEqualT(mock, listA, listB)
+	default:
+		panic(fmt.Errorf("test case configuration error: invalid mapEqualAssertionKind: %d", kind))
+	}
+}
+
+func expectedStatusForMapEqualAssertion(kind mapEqualAssertionKind, relationship mapEqualRelationship) bool {
+	positive := kind == mapEqualKind
+
+	switch relationship {
+	case meEqual:
+		return positive
+	case meNotEqual:
+		return !positive
+	default:
+		panic(fmt.Errorf("test case configuration error: invalid mapEqualRelationship: %d", relationship))
+	}
+}
+
+func mapEqualCases() iter.Seq[mapEqualTestCase] {
+	return slices.Values([]mapEqualTestCase{
+		// Equal cases
+		{"empty-empty", func() (any, any) { return map[string]int{}, map[string]int{} }, meEqual},
+		{"single-entry", func() (any, any) { return map[string]int{"a": 1}, map[string]int{"a": 1} }, meEqual},
+		{
+			"multiple-entries",
+			func() (any, any) {
+				return map[string]int{"a": 1, "b": 2, "c": 3}, map[string]int{"a": 1, "b": 2, "c": 3}
+			},
+			meEqual,
+		},
+		{"nil-nil", func() (any, any) { return map[string]int(nil), map[string]int(nil) }, meEqual},
+		{"nil-empty", func() (any, any) { return map[string]int(nil), map[string]int{} }, meEqual},
+		{"empty-nil", func() (any, any) { return map[string]int{}, map[string]int(nil) }, meEqual},
+		{
+			"string-values",
+			func() (any, any) {
+				return map[int]string{1: "a", 2: "b"}, map[int]string{1: "a", 2: "b"}
+			},
+			meEqual,
+		},
+		{
+			"string-string",
+			func() (any, any) {
+				return map[string]string{"k1": "v1", "k2": "v2"}, map[string]string{"k1": "v1", "k2": "v2"}
+			},
+			meEqual,
+		},
+
+		// Not equal cases
+		{"different-values", func() (any, any) { return map[string]int{"a": 1}, map[string]int{"a": 2} }, meNotEqual},
+		{"different-keys", func() (any, any) { return map[string]int{"a": 1}, map[string]int{"b": 1} }, meNotEqual},
+		{"different-length", func() (any, any) { return map[string]int{"a": 1, "b": 2}, map[string]int{"a": 1} }, meNotEqual},
+		{"one-empty", func() (any, any) { return map[string]int{"a": 1}, map[string]int{} }, meNotEqual},
+		{"empty-one", func() (any, any) { return map[string]int{}, map[string]int{"a": 1} }, meNotEqual},
+		{"extra-key", func() (any, any) { return map[string]int{"a": 1}, map[string]int{"a": 1, "b": 2} }, meNotEqual},
+		{
+			"string-different-values",
+			func() (any, any) {
+				return map[string]string{"k": "v1"}, map[string]string{"k": "v2"}
+			},
+			meNotEqual,
+		},
 	})
 }
 

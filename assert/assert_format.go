@@ -715,6 +715,16 @@ func MapContainsTf[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msg str
 	return assertions.MapContainsT[Map, K, V](t, m, key, forwardArgs(msg, args))
 }
 
+// MapEqualTf is the same as [MapEqualT], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func MapEqualTf[K, V comparable](t T, listA map[K]V, listB map[K]V, msg string, args ...any) (ok bool) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.MapEqualT[K, V](t, listA, listB, forwardArgs(msg, args))
+}
+
 // MapNotContainsTf is the same as [MapNotContainsT], but it accepts a format string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
@@ -723,6 +733,16 @@ func MapNotContainsTf[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msg 
 		h.Helper()
 	}
 	return assertions.MapNotContainsT[Map, K, V](t, m, key, forwardArgs(msg, args))
+}
+
+// MapNotEqualTf is the same as [MapNotEqualT], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func MapNotEqualTf[K, V comparable](t T, listA map[K]V, listB map[K]V, msg string, args ...any) (ok bool) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.MapNotEqualT[K, V](t, listA, listB, forwardArgs(msg, args))
 }
 
 // Negativef is the same as [Negative], but it accepts a format string to format arguments like [fmt.Printf].
@@ -1115,6 +1135,16 @@ func SliceContainsTf[Slice ~[]E, E comparable](t T, s Slice, element E, msg stri
 	return assertions.SliceContainsT[Slice, E](t, s, element, forwardArgs(msg, args))
 }
 
+// SliceEqualTf is the same as [SliceEqualT], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func SliceEqualTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) (ok bool) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.SliceEqualT[E](t, listA, listB, forwardArgs(msg, args))
+}
+
 // SliceNotContainsTf is the same as [SliceNotContainsT], but it accepts a format string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
@@ -1123,6 +1153,16 @@ func SliceNotContainsTf[Slice ~[]E, E comparable](t T, s Slice, element E, msg s
 		h.Helper()
 	}
 	return assertions.SliceNotContainsT[Slice, E](t, s, element, forwardArgs(msg, args))
+}
+
+// SliceNotEqualTf is the same as [SliceNotEqualT], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func SliceNotEqualTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) (ok bool) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.SliceNotEqualT[E](t, listA, listB, forwardArgs(msg, args))
 }
 
 // SliceNotSubsetTf is the same as [SliceNotSubsetT], but it accepts a format string to format arguments like [fmt.Printf].

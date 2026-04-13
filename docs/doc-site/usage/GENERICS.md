@@ -4,7 +4,7 @@ description: Using generic assertions.
 weight: 10
 ---
 
-Testify v2 provides **42 generic assertion functions** that offer compile-time type safety alongside
+Testify v2 provides **46 generic assertion functions** that offer compile-time type safety alongside
 the traditional reflection-based assertions. Generic variants are identified by the `T` suffix
 (e.g., `EqualT`, `GreaterT`, `ElementsMatchT`).
 
@@ -201,14 +201,16 @@ Testify v2 provides generic variants across all major domains:
 - `PositiveT[V SignedNumeric]` - Assert value > 0
 - `NegativeT[V SignedNumeric]` - Assert value < 0
 
-### Collection (12 functions)
+### Collection (16 functions)
 - `StringContainsT[S Text]` - String/byte slice contains substring
 - `SliceContainsT[E comparable]` - Slice contains element
 - `MapContainsT[K comparable, V any]` - Map contains key
 - `SeqContainsT[E comparable]` - Iterator contains element (Go 1.23+)
 - `ElementsMatchT[E comparable]` - Slices have same elements (any order)
 - `SliceSubsetT[E comparable]` - Slice is subset of another
-- Plus negative variants: `*NotContainsT`, `NotElementsMatchT`, `SliceNotSubsetT`
+- `SliceEqualT[E comparable]` - Slices are equal (same order)
+- `MapEqualT[K, V comparable]` - Maps are equal (same keys and values)
+- Plus negative variants: `*NotContainsT`, `NotElementsMatchT`, `SliceNotSubsetT`, `SliceNotEqualT`, `MapNotEqualT`
 
 ### Ordering (6 functions)
 - `IsIncreasingT[E Ordered]` - Slice elements strictly increasing
