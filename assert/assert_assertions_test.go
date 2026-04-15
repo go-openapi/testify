@@ -528,6 +528,19 @@ func TestEventuallyWith(t *testing.T) {
 			t.Error("EventuallyWith should mark test as failed")
 		}
 	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := EventuallyWith(mock, func(c *CollectT) { c.Cancel() }, 100*time.Millisecond, 20*time.Millisecond)
+		if result {
+			t.Error("EventuallyWith should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("EventuallyWith should mark test as failed")
+		}
+	})
 }
 
 func TestExactly(t *testing.T) {

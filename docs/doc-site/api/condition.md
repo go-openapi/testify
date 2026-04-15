@@ -798,12 +798,22 @@ The supplied [CollectT](https://pkg.go.dev/github.com/go-openapi/testify/v2/asse
 If the condition is not met before the timeout, the collected errors from the
 last tick are copied to t.
 
-Calling [CollectT.FailNow](https://pkg.go.dev/CollectT#FailNow) cancels the condition immediately and causes the assertion to fail.
+Calling [CollectT.FailNow](https://pkg.go.dev/CollectT#FailNow) (directly, or transitively through [require](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#require) assertions)
+fails the current tick only: the poller will retry on the next tick. This means
+[require](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#require)-style assertions inside [EventuallyWith](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EventuallyWith) behave naturally — they abort
+the current evaluation and let the polling loop converge.
+
+To abort the whole assertion immediately (e.g. when the condition can no longer
+be expected to succeed), call [CollectT.Cancel](https://pkg.go.dev/CollectT#Cancel).
 
 #### Concurrency
 
 The condition function is never executed in parallel: only one goroutine executes it.
 It may write to variables outside its scope without triggering race conditions.
+
+The condition is wrapped in its own goroutine, so a call to [runtime.Goexit](https://pkg.go.dev/runtime#Goexit)
+(e.g. via [require](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#require) assertions or [CollectT.FailNow](https://pkg.go.dev/CollectT#FailNow)) cleanly aborts only the
+current tick.
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -824,6 +834,7 @@ It may write to variables outside its scope without triggering race conditions.
 	)
 	success: func(c *CollectT) { True(c,true) }, 100*time.Millisecond, 20*time.Millisecond
 	failure: func(c *CollectT) { False(c,true) }, 100*time.Millisecond, 20*time.Millisecond
+	failure: func(c *CollectT) { c.Cancel() }, 100*time.Millisecond, 20*time.Millisecond
 ```
 {{< /tab >}}
 {{% tab title="Testable Examples (assert)" %}}
@@ -924,7 +935,7 @@ func main() {
 |--|--|
 | [`assertions.EventuallyWith[C CollectibleConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L253)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L264)
 {{% /tab %}}
 {{< /tabs >}}
 

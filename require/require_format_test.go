@@ -452,6 +452,17 @@ func TestEventuallyWithf(t *testing.T) {
 			t.Error("EventuallyWithf should call FailNow()")
 		}
 	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		EventuallyWithf(mock, func(c *CollectT) { c.Cancel() }, 100*time.Millisecond, 20*time.Millisecond, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("EventuallyWithf should call FailNow()")
+		}
+	})
 }
 
 func TestExactlyf(t *testing.T) {

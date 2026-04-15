@@ -516,7 +516,13 @@ func Eventually[C Conditioner](t T, condition C, timeout time.Duration, tick tim
 // If the condition is not met before the timeout, the collected errors from the
 // last tick are copied to t.
 //
-// Calling [CollectT.FailNow] cancels the condition immediately and causes the assertion to fail.
+// Calling [CollectT.FailNow] (directly, or transitively through [require] assertions)
+// fails the current tick only: the poller will retry on the next tick. This means
+// [require]-style assertions inside [EventuallyWith] behave naturally — they abort
+// the current evaluation and let the polling loop converge.
+//
+// To abort the whole assertion immediately (e.g. when the condition can no longer
+// be expected to succeed), call [CollectT.Cancel].
 //
 // # Usage
 //
@@ -540,10 +546,15 @@ func Eventually[C Conditioner](t T, condition C, timeout time.Duration, tick tim
 // The condition function is never executed in parallel: only one goroutine executes it.
 // It may write to variables outside its scope without triggering race conditions.
 //
+// The condition is wrapped in its own goroutine, so a call to [runtime.Goexit]
+// (e.g. via [require] assertions or [CollectT.FailNow]) cleanly aborts only the
+// current tick.
+//
 // # Examples
 //
 //	success: func(c *CollectT) { True(c,true) }, 100*time.Millisecond, 20*time.Millisecond
 //	failure: func(c *CollectT) { False(c,true) }, 100*time.Millisecond, 20*time.Millisecond
+//	failure: func(c *CollectT) { c.Cancel() }, 100*time.Millisecond, 20*time.Millisecond
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
 func EventuallyWith[C CollectibleConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {

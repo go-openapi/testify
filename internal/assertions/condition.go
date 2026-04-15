@@ -222,7 +222,13 @@ func Consistently[C Conditioner](t T, condition C, timeout time.Duration, tick t
 // If the condition is not met before the timeout, the collected errors from the
 // last tick are copied to t.
 //
-// Calling [CollectT.FailNow] cancels the condition immediately and causes the assertion to fail.
+// Calling [CollectT.FailNow] (directly, or transitively through [require] assertions)
+// fails the current tick only: the poller will retry on the next tick. This means
+// [require]-style assertions inside [EventuallyWith] behave naturally — they abort
+// the current evaluation and let the polling loop converge.
+//
+// To abort the whole assertion immediately (e.g. when the condition can no longer
+// be expected to succeed), call [CollectT.Cancel].
 //
 // # Usage
 //
@@ -246,10 +252,15 @@ func Consistently[C Conditioner](t T, condition C, timeout time.Duration, tick t
 // The condition function is never executed in parallel: only one goroutine executes it.
 // It may write to variables outside its scope without triggering race conditions.
 //
+// The condition is wrapped in its own goroutine, so a call to [runtime.Goexit]
+// (e.g. via [require] assertions or [CollectT.FailNow]) cleanly aborts only the
+// current tick.
+//
 // # Examples
 //
 //	success: func(c *CollectT) { True(c,true) }, 100*time.Millisecond, 20*time.Millisecond
 //	failure: func(c *CollectT) { False(c,true) }, 100*time.Millisecond, 20*time.Millisecond
+//	failure: func(c *CollectT) { c.Cancel() }, 100*time.Millisecond, 20*time.Millisecond
 func EventuallyWith[C CollectibleConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
 	// Domain: condition
 	if h, ok := t.(H); ok {
@@ -558,9 +569,19 @@ func (p *conditionPoller) executeCondition(parentCtx, ctx context.Context, failF
 				case <-ctx.Done():
 					return // timeout = success
 				case fn := <-p.conditionChan:
-					if err := fn(ctx); err != nil {
-						close(p.doneChan) // (condition true <=> returns error) = failure for Never and Consistently
+					var conditionWg sync.WaitGroup
+					conditionWg.Go(func() { // guards against the condition issue an early GoExit
+
+						if err := fn(ctx); err != nil {
+							close(p.doneChan) // (condition true <=> returns error) = failure for Never and Consistently
+						}
+					})
+					conditionWg.Wait()
+
+					select {
+					case <-p.doneChan: // done: early exit
 						return
+					default:
 					}
 				}
 			}
@@ -577,9 +598,19 @@ func (p *conditionPoller) executeCondition(parentCtx, ctx context.Context, failF
 				failFunc(ctx.Err().Error())
 				return
 			case fn := <-p.conditionChan:
-				if err := fn(ctx); err == nil {
-					close(p.doneChan) // (condition true <=> err == nil) = success for Eventually
+				var conditionWg sync.WaitGroup
+				conditionWg.Go(func() { // guards against the condition issue an early GoExit
+
+					if err := fn(ctx); err == nil {
+						close(p.doneChan) // (condition true <=> err == nil) = success for Eventually
+					}
+				})
+				conditionWg.Wait()
+
+				select {
+				case <-p.doneChan: // done: early exit
 					return
+				default:
 				}
 			}
 		}
@@ -660,6 +691,15 @@ func (p *conditionPoller) cancellableContext(parentCtx context.Context, timeout 
 	return ctx, cancel
 }
 
+// Sentinel errors recorded by [CollectT.FailNow] and [CollectT.Cancel].
+// Kept package-private: callers should rely on observable behavior, not on
+// the marker shape. They are distinguishable so future tooling can tell apart
+// "tick aborted by require" from "user explicitly cancelled the assertion".
+var (
+	errFailNow   = errors.New("collect: failed now (tick aborted)")
+	errCancelled = errors.New("collect: cancelled (assertion aborted)")
+)
+
 // CollectT implements the [T] interface and collects all errors.
 //
 // [CollectT] is specifically intended to be used with [EventuallyWith] and
@@ -668,16 +708,20 @@ type CollectT struct {
 	// Domain: condition
 	//
 	// Maintainer:
-	//   1. FailNow() no longer just exits the go routine, but cancels the context of the caller instead before exiting.
-	//   2. We no longer establish the distinction between c.error nil or empty. Non-empty is an error, full stop.
-	//   2. Deprecated methods have been removed.
+	//   1. FailNow() exits the current tick goroutine via runtime.Goexit (matching
+	//      stretchr/testify semantics): require-style assertions abort the current
+	//      evaluation and the poller retries on the next tick. It does NOT cancel
+	//      the EventuallyWith context.
+	//   2. Cancel() is the explicit escape hatch: it cancels the EventuallyWith
+	//      context before exiting via runtime.Goexit, aborting the whole assertion.
+	//   3. We no longer establish the distinction between c.errors nil or empty.
+	//      Non-empty is an error, full stop.
+	//   4. Deprecated methods have been removed.
 
 	// A slice of errors. Non-empty slice denotes a failure.
-	// NOTE: When c.FailNow() is called, it cancels the context and exits the goroutine.
-	// The "failed now" error is appended but may be lost if the goroutine exits before collection.
 	errors []error
 
-	// cancelContext cancels the parent context on FailNow()
+	// cancelContext cancels the parent EventuallyWith context on Cancel().
 	cancelContext func()
 }
 
@@ -689,13 +733,33 @@ func (c *CollectT) Errorf(format string, args ...any) {
 	c.errors = append(c.errors, fmt.Errorf(format, args...))
 }
 
-// FailNow records a failure and cancels the parent [EventuallyWith] context,
-// before exiting the current go routine with [runtime.Goexit].
+// FailNow records a failure for the current tick and exits the condition
+// goroutine via [runtime.Goexit].
 //
-// This causes the assertion to fail immediately without waiting for a timeout.
+// It does NOT cancel the [EventuallyWith] context: the poller will retry on
+// the next tick. If a later tick succeeds, the assertion succeeds. If no tick
+// ever succeeds before the timeout, the errors collected during the LAST tick
+// (the one which most recently called FailNow) are reported on the parent t.
+//
+// To abort the whole assertion immediately, use [CollectT.Cancel].
 func (c *CollectT) FailNow() {
+	c.errors = append(c.errors, errFailNow)
+	runtime.Goexit()
+}
+
+// Cancel records a failure, cancels the [EventuallyWith] context, then exits
+// the condition goroutine via [runtime.Goexit].
+//
+// This aborts the whole assertion immediately, without waiting for the timeout.
+// The errors collected during the cancelled tick are reported on the parent t.
+//
+// Use this when the condition can no longer be expected to succeed (e.g. an
+// upstream resource has been observed in an unrecoverable state). For ordinary
+// per-tick failures (e.g. "value not yet ready"), use [CollectT.FailNow]
+// directly or transitively through [require] assertions.
+func (c *CollectT) Cancel() {
+	c.errors = append(c.errors, errCancelled)
 	c.cancelContext()
-	c.errors = append(c.errors, errors.New("failed now")) // so c.failed() is true (currently lost as not owned by another go routine)
 	runtime.Goexit()
 }
 
