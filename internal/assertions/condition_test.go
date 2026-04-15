@@ -294,6 +294,7 @@ func TestConditionEventuallyNoLeak(t *testing.T) {
 	})
 }
 
+//nolint:gocognit,gocyclo,cyclop // subtests are actually not complex
 func TestConditionEventuallyWith(t *testing.T) {
 	t.Parallel()
 
@@ -406,28 +407,88 @@ func TestConditionEventuallyWith(t *testing.T) {
 		}
 	})
 
-	t.Run("should fail with a call to collect.FailNow", func(t *testing.T) {
+	t.Run("collect.FailNow only fails the current tick (poller retries)", func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(errorsCapturingT)
-		counter := 0
+		var counter int
+		var mu sync.Mutex
 
-		// The call to FailNow cancels the execution context of EventuallyWith.
-		// so we don't have to wait for the timeout.
+		// FailNow on every tick: the poller must keep retrying until the timeout.
 		condition := func(collect *CollectT) {
+			mu.Lock()
 			counter++
+			mu.Unlock()
 			collect.FailNow()
 		}
 
+		if EventuallyWith(mock, condition, testTimeout, testTick) {
+			t.Error("expected EventuallyWith to return false")
+		}
+		mu.Lock()
+		got := counter
+		mu.Unlock()
+		if got < 2 {
+			t.Errorf("expected the condition to be retried multiple times, got %d call(s)", got)
+		}
+	})
+
+	t.Run("collect.FailNow allows convergence on a later tick", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(errorsCapturingT)
+		var counter int
+		var mu sync.Mutex
+
+		// First few ticks fail via FailNow, then converge.
+		condition := func(collect *CollectT) {
+			mu.Lock()
+			counter++
+			n := counter
+			mu.Unlock()
+			if n < 3 {
+				collect.FailNow()
+			}
+		}
+
+		if !EventuallyWith(mock, condition, testTimeout, testTick) {
+			t.Error("expected EventuallyWith to eventually return true")
+		}
+		if len(mock.errors) != 0 {
+			t.Errorf("expected no errors reported on parent t after success, got %d: %v", len(mock.errors), mock.errors)
+		}
+	})
+
+	t.Run("collect.Cancel aborts the whole assertion immediately", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(errorsCapturingT)
+		var counter int
+		var mu sync.Mutex
+
+		// Cancel must short-circuit: a 30-minute timeout must NOT be waited on.
+		condition := func(collect *CollectT) {
+			mu.Lock()
+			counter++
+			mu.Unlock()
+			collect.Cancel()
+		}
+
+		start := time.Now()
 		if EventuallyWith(mock, condition, 30*time.Minute, testTick) {
 			t.Error("expected EventuallyWith to return false")
 		}
-		const expectedErrors = 2
-		if len(mock.errors) != expectedErrors {
-			t.Errorf("expected %d errors (0 accumulated + 2 from EventuallyWith), got %d", expectedErrors, len(mock.errors))
+		if elapsed := time.Since(start); elapsed > 5*time.Second {
+			t.Errorf("expected Cancel to short-circuit, but EventuallyWith took %s", elapsed)
 		}
-		if counter != 1 {
-			t.Errorf("expected the condition function to have been called only once, but got: %d", counter)
+		mu.Lock()
+		got := counter
+		mu.Unlock()
+		if got != 1 {
+			t.Errorf("expected the condition function to have been called only once, but got: %d", got)
+		}
+		if len(mock.errors) == 0 {
+			t.Error("expected at least one error reported on parent t after Cancel")
 		}
 	})
 }
