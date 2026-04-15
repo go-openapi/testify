@@ -306,6 +306,40 @@ We won't reintroduce this package ever.
 Make sure to check the [behavior changes](./CHANGES.md) as we have fixed a few quirks in the existing API
 (mostly edge cases handling).
 
+#### `CollectT.FailNow` vs `Cancel` {#collectt-failnow-vs-cancel}
+
+In `stretchr/testify`, `CollectT.FailNow()` aborts the current tick and lets
+`EventuallyWithT` retry on the next tick. Early versions of this fork changed
+that to "cancel the whole assertion immediately", which effectively broke the
+most common pattern (`require.X(collect, …)` inside `EventuallyWith`).
+
+As of v2.4, `CollectT` exposes two distinct methods, matching what users
+actually want:
+
+| Method                  | Effect                                                                                |
+|-------------------------|---------------------------------------------------------------------------------------|
+| `collect.FailNow()`     | Fails the **current tick** only. Poller retries on the next tick. Matches stretchr.   |
+| `collect.Cancel()`      | Cancels the polling context and aborts the **whole assertion** immediately. New API.  |
+
+**Migration from stretchr/testify**: no code change is required — `FailNow`
+behaves the same as upstream.
+
+**Migration from earlier versions of this fork**: if you wrote
+`collect.FailNow()` relying on the whole-assertion-abort behavior, switch the
+call to `collect.Cancel()`. The migration tool emits an advisory warning for
+every `collect.FailNow()` call it finds; review each one and switch to
+`Cancel()` where you want the old behavior. The safe default (keeping
+`FailNow()`) matches the stretchr semantics that most users expect.
+
+**Why the split**: `require`-style assertions inside a polling loop are only
+useful if they abort the current evaluation and let the loop converge.
+Cancelling the whole loop on the first failing tick defeats the purpose of
+`EventuallyWith`. See [TRACKING](./TRACKING.md) entries for [#1819] and
+[#1830] for the upstream discussions.
+
+[#1819]: https://github.com/stretchr/testify/pull/1819
+[#1830]: https://github.com/stretchr/testify/pull/1830
+
 ---
 
 ## See Also

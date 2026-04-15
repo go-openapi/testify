@@ -23,8 +23,8 @@ We continue to monitor and selectively adopt changes from the upstream repositor
 
 ### Superseded by Our Implementation
 - ⛔ [#1845] - Fix Eventually/Never regression (superseded by context-based pollCondition)
-- ⛔ [#1830] - CollectT.Halt() (superseded by context-based pollCondition)
-- ⛔ [#1819] - Handle unexpected exits (superseded by context-based pollCondition)
+- ✅ [#1830] - CollectT.Halt() (implemented as `CollectT.Cancel()` in v2.4 — see [CHANGES](./CHANGES.md))
+- ✅ [#1819] - Handle unexpected exits (handled by per-tick goroutine wrap in v2.4)
 - ⛔ [#1824] - Spew testing (superseded by property-based fuzzing)
 
 [#1087]: https://github.com/stretchr/testify/pull/1087
@@ -101,9 +101,9 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | Reference | Type | Summary | Why Superseded |
 |-----------|------|---------|----------------|
 | [#1845] | PR | Fix Eventually/Never regression | Superseded by context-based pollCondition implementation (we don't have this bug) |
-| [#1819] | PR | Handle unexpected exits in Eventually | Superseded by context-based pollCondition implementation |
+| [#1819] | PR | Handle unexpected exits in Eventually | Implemented in v2.4 via per-tick goroutine wrap — a `runtime.Goexit` in the condition only aborts the current tick |
 | [#1824] | PR | Spew testing improvements | Superseded by property-based fuzzing with random type generator |
-| [#1830] | PR | CollectT.Halt() for stopping tests | Superseded by context-based pollCondition implementation |
+| [#1830] | PR | CollectT.Halt() for stopping tests | Implemented in v2.4 as `CollectT.Cancel()` — see [CHANGES](./CHANGES.md) |
 
 [#1819]: https://github.com/stretchr/testify/pull/1819
 [#1845]: https://github.com/stretchr/testify/pull/1845
