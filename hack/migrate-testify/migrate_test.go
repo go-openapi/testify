@@ -48,6 +48,11 @@ func migrateTestCases() iter.Seq[migrateTestCase] {
 			warnContains: "mock package is not available",
 		},
 		{
+			name:         "EventuallyWith advisory",
+			input:        readTestdata("migrate_eventuallywith/input.go.txt"),
+			warnContains: "CollectT.Cancel()",
+		},
+		{
 			name:     "PanicTestFunc replacement",
 			input:    readTestdata("migrate_panic_func/input.go.txt"),
 			expected: readTestdata("migrate_panic_func/expected.go.txt"),
@@ -91,6 +96,9 @@ func runMigrateSubtest(t *testing.T, c migrateTestCase) {
 	for old, replacement := range importRewrites {
 		astutil.RewriteImport(fset, f, old, replacement)
 	}
+
+	// Advisory: note CollectT.Cancel semantics for EventuallyWith-family calls.
+	noteEventuallyWithCancel(f, aliases, fset, rpt, "test.go")
 
 	// Rename functions.
 	renameFunctions(f, aliases, fset, rpt, "test.go", true)

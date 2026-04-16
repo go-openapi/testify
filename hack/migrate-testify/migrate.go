@@ -104,7 +104,12 @@ func migrateFile(fset *token.FileSet, filename string, opts *options, rpt *repor
 		}
 	}
 
-	// 4. Rename functions and replace PanicTestFunc.
+	// 4. Advisory: note the new CollectT.Cancel() semantics for every
+	// EventuallyWith-family call. Runs BEFORE rename so stretchr spellings
+	// (EventuallyWithT) are also picked up in the diagnostic position.
+	_ = noteEventuallyWithCancel(f, aliases, fset, rpt, filename)
+
+	// 5. Rename functions and replace PanicTestFunc.
 	changes := renameFunctions(f, aliases, fset, rpt, filename, opts.verbose)
 	if changes > 0 {
 		changed = true

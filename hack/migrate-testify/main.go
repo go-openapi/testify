@@ -57,6 +57,8 @@ func main() {
 		fmt.Fprintf(os.Stderr, "\nPost-migration checklist:\n")
 		fmt.Fprintf(os.Stderr, "  - Run your linter: the migration may surface pre-existing unchecked linting issues.\n")
 		fmt.Fprintf(os.Stderr, "  - Run your test suite to verify all tests still pass.\n")
+		fmt.Fprintf(os.Stderr, "  - Review any 'advisory:' warnings — no rewrite is applied, but they may require manual attention\n")
+		fmt.Fprintf(os.Stderr, "    (e.g. EventuallyWith advisory: v2.4 splits CollectT.FailNow and CollectT.Cancel).\n")
 	}
 
 	flag.Parse()
