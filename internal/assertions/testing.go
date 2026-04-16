@@ -92,6 +92,10 @@ func isTest(name, prefix string) bool {
 }
 
 func errorWithCallerInfo(t T, offset int, failureMessage string, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
 	content := []labeledContent{
 		{"Error Trace", strings.Join(callerInfo(offset), "\n\t\t\t")},
 		{"Error", failureMessage},
