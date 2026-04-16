@@ -36,6 +36,7 @@ This is a mono-repo with multiple Go modules tied together by `go.work`.
 | `internal/difflib/` | Internalized go-difflib for generating diffs |
 | `internal/fdleak/` | File descriptor leak detection |
 | `internal/leak/` | Goroutine leak detection |
+| `internal/tools` | Internal tools exposed |
 | `enable/stubs/` | Public API for enabling optional features (yaml, colors) |
 
 ### Code generation architecture
