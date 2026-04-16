@@ -207,11 +207,12 @@ See also a quick [migration guide](./MIGRATION.md).
 
 ### Condition
 
-#### New Function (1)
+#### New Functions (2)
 
 | Function | Type Parameters | Description |
 |----------|-----------------|-------------|
 | `Consistently[C Conditioner]` | `func() bool` or `func(context.Context) error` | async assertion to express "always true" (adapted proposal [#1606], [#1087]) |
+| `(*CollectT).Cancel` | — | explicit escape hatch to abort an `EventuallyWith` assertion immediately (adapted proposal [#1830]) |
 
 [#1087]: https://github.com/stretchr/testify/issues/1087
 [#1606]: https://github.com/stretchr/testify/pulls/1606
@@ -225,10 +226,17 @@ See also a quick [migration guide](./MIGRATION.md).
 | Unified implementation | Internal refactoring | Single implementation eliminates code duplication and prevents resource leaks |
 | `func(context.Context) error` conditions | extensions to the async domain | control over context allows for more complex cases to be supported |
 | Type parameter | Internal refactoring | `Eventually` now accepts several signatures for its condition and uses a type parameter (non-breaking) |
+| `CollectT.FailNow` now per-tick | aligns with [stretchr/testify] semantics and [#1819] | `FailNow` aborts the current tick only; the poller retries on the next tick. This makes `require`-style assertions inside `EventuallyWith` behave naturally (was: cancel the whole assertion immediately) |
+| New `CollectT.Cancel` | implements [#1830] | Explicit escape hatch to abort the whole `EventuallyWith` assertion immediately, cancelling the polling context before exiting via `runtime.Goexit` |
+| Per-tick goroutine wrap | implements [#1819] | The condition function is evaluated in its own goroutine so that `runtime.Goexit` (including transitively via `require`) only aborts the current tick and not the surrounding poll loop |
 
-**Impact**: This fix eliminates goroutine leaks that could occur when using `Eventually` or `Never` assertions. The new implementation uses a context-based approach that properly manages resources and provides a cleaner shutdown mechanism. Callers should **NOT** assume that the call to `Eventually` or `Never` exits before the condition is evaluated. Callers should **NOT** assume that the call to `Eventually` or `Never` exits before the condition is evaluated.
+**Impact**: This fix eliminates goroutine leaks that could occur when using `Eventually` or `Never` assertions. The new implementation uses a context-based approach that properly manages resources and provides a cleaner shutdown mechanism. Callers should **NOT** assume that the call to `Eventually` or `Never` exits before the condition is evaluated.
 
-**Supersedes**: This implementation also supersedes upstream proposals [#1819] (handle unexpected exits) and [#1830] (`CollectT.Halt`) with a more comprehensive solution.
+**⚠️ Breaking behavior change for `EventuallyWith`**: Existing code that relied on `collect.FailNow()` aborting the whole assertion must switch to `collect.Cancel()`. Code that used `require.*(collect, …)` inside `EventuallyWith` expecting retry semantics now works as intended (previously it short-circuited on the first failure). See [MIGRATION](./MIGRATION.md#collectt-failnow-vs-cancel).
+
+**Supersedes**: This implementation honors upstream proposals [#1819] (handle unexpected exits, via the per-tick goroutine wrap) and [#1830] (`CollectT.Halt`, exposed as `CollectT.Cancel`).
+
+[stretchr/testify]: https://github.com/stretchr/testify
 
 [#1611]: https://github.com/stretchr/testify/issues/1611
 [#1819]: https://github.com/stretchr/testify/pull/1819

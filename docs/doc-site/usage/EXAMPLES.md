@@ -721,24 +721,48 @@ func TestDistributedCacheSync(t *testing.T) {
 		"cache value should replicate to all nodes with correct TTL")
 }
 
-// Advanced: Using require in EventuallyWith to fail fast
+// Advanced: Using require to abort the current tick cleanly
+//
+// require.X(collect, …) fails the current tick via runtime.Goexit;
+// the poller retries on the next tick. This keeps the "eventually
+// converges" semantics while letting you short-circuit nil-pointer
+// and other cascading checks safely.
 func TestEventuallyWithRequire(t *testing.T) {
 	api := NewAPI()
 
 	assert.EventuallyWith(t, func(c *assert.CollectT) {
 		resp, err := api.HealthCheck()
 
-		// Use require to stop checking this tick if request fails
-		// This prevents nil pointer panics on subsequent assertions
-		assert.NoError(c, err, "health check should not error")
-		if err != nil {
-			return // Skip remaining checks this tick
-		}
+		// If err != nil, require aborts THIS tick — the poller retries next tick.
+		// No manual `return` needed; no risk of nil-pointer on resp below.
+		require.NoError(c, err, "health check should not error")
 
-		// Now safe to check response fields
 		assert.EqualT(c, "healthy", resp.Status)
 		assert.Greater(c, resp.Uptime, 0)
 		assert.NotEmpty(c, resp.Version)
+	}, 30*time.Second, 1*time.Second,
+		"API should become healthy")
+}
+
+// Advanced: Using collect.Cancel() to abort the whole assertion immediately
+//
+// Cancel() is the escape hatch for situations where retrying is pointless —
+// e.g. the upstream resource has been observed in an unrecoverable state and
+// waiting for the timeout only delays the failure report.
+func TestEventuallyWithCancel(t *testing.T) {
+	api := NewAPI()
+
+	assert.EventuallyWith(t, func(c *assert.CollectT) {
+		resp, err := api.HealthCheck()
+		require.NoError(c, err) // retry on transient errors
+
+		if resp.Status == "dead" {
+			// Permanent failure: no retry will help. Abort the whole assertion.
+			assert.Fail(c, "API reported unrecoverable state: dead")
+			c.Cancel()
+		}
+
+		assert.EqualT(c, "healthy", resp.Status)
 	}, 30*time.Second, 1*time.Second,
 		"API should become healthy")
 }
