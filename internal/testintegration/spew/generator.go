@@ -43,9 +43,7 @@ func NoPanicProp(ctx context.Context, g *rapid.Generator[any]) func(*rapid.T) {
 		var w sync.WaitGroup
 		done := make(chan struct{})
 
-		w.Add(1)
-		go func() {
-			defer w.Done()
+		w.Go(func() {
 			select {
 			case <-done:
 				cancel()
@@ -56,7 +54,7 @@ func NoPanicProp(ctx context.Context, g *rapid.Generator[any]) func(*rapid.T) {
 
 				return
 			}
-		}()
+		})
 
 		go func() { // this go routine may leak if timeout kicks
 			// Sdump should never panic

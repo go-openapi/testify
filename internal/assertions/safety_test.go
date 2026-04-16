@@ -70,7 +70,7 @@ func TestNoFileDescriptorLeak_Success(t *testing.T) {
 }
 
 func TestNoFileDescriptorLeak_Failure(t *testing.T) {
-	if runtime.GOOS != "linux" {
+	if runtime.GOOS != linuxOS {
 		t.Skip("file descriptor leak detection requires Linux")
 	}
 
@@ -103,7 +103,7 @@ func TestNoFileDescriptorLeak_Failure(t *testing.T) {
 }
 
 func TestNoFileDescriptorLeak_SocketFiltered(t *testing.T) {
-	if runtime.GOOS != "linux" {
+	if runtime.GOOS != linuxOS {
 		t.Skip("file descriptor leak detection requires Linux")
 	}
 

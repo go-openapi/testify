@@ -67,7 +67,7 @@ func TestLeaked_WithLeak(t *testing.T) {
 	t.Cleanup(func() {
 		if leakedFile != nil {
 			leakedFile.Close()
-			os.Remove(leakedFile.Name()) //nolint:gosec // G703 path traversal is ok: this is a test.
+			os.Remove(leakedFile.Name())
 		}
 	})
 

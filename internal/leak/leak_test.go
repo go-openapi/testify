@@ -154,11 +154,9 @@ func TestLeaked_PreExistingGoroutineNotLabeled(t *testing.T) {
 	})
 
 	// Start a goroutine before the instrumented call.
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
+	wg.Go(func() {
 		<-blocker
-	}()
+	})
 
 	tested := func() {
 		// Does nothing — the pre-existing goroutine is not ours.
@@ -178,10 +176,7 @@ func TestLeaked_ParallelIsolation(t *testing.T) {
 	results := make([]string, workers)
 
 	for i := range workers {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-
+		wg.Go(func() {
 			blocker := make(chan struct{})
 			tested := func() {
 				go func() {
@@ -191,7 +186,7 @@ func TestLeaked_ParallelIsolation(t *testing.T) {
 
 			results[i] = Leaked(t.Context(), tested)
 			close(blocker) // clean up
-		}()
+		})
 	}
 
 	wg.Wait()

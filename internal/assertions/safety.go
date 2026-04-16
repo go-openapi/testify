@@ -11,6 +11,8 @@ import (
 	"github.com/go-openapi/testify/v2/internal/leak"
 )
 
+const linuxOS = "linux"
+
 // NoGoRoutineLeak ensures that no goroutine did leak from inside the tested function.
 //
 // NOTE: only the go routines spawned from inside the tested function are checked for leaks.
@@ -101,7 +103,7 @@ func NoFileDescriptorLeak(t T, tested func(), msgAndArgs ...any) bool {
 		h.Helper()
 	}
 
-	if runtime.GOOS != "linux" { //nolint:goconst // well-known runtime value
+	if runtime.GOOS != linuxOS {
 		if s, ok := t.(skipper); ok {
 			s.Skip("NoFileDescriptorLeak requires Linux (/proc/self/fd)")
 		}
