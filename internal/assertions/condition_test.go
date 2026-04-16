@@ -295,11 +295,25 @@ func TestConditionEventuallyNoLeak(t *testing.T) {
 	})
 }
 
-//nolint:gocognit,gocyclo,cyclop,maintidx // subtests are actually not complex
 func TestConditionEventuallyWith(t *testing.T) {
 	t.Parallel()
 
-	t.Run("should complete with false", func(t *testing.T) {
+	t.Run("should complete with false", testEventuallyWithShouldCompleteWithFalse())
+	t.Run("should complete with true", testEventuallyWithShouldCompleteWithTrue())
+	t.Run("should complete with fail, on a nanosecond tick", testEventuallyWithShouldCompleteWithFail())
+	t.Run("should complete with fail, with latest failed condition", testEventuallyWithShouldCompleteWithFailLatest())
+	t.Run("should complete with success, with the ticker never used", testEventuallyWithShouldCompleteWithSuccess())
+	t.Run("collect.FailNow only fails the current tick (poller retries)", testEventuallyWithFailNowRetries())
+	t.Run("collect.FailNow allows convergence on a later tick", testEventuallyWithFailNowConverges())
+	t.Run("collect.Cancel aborts the whole assertion immediately", testEventuallyWithCancelAborts())
+	t.Run("collect.Cancelf aborts with a custom message", testEventuallyWithCancelfAborts())
+}
+
+// =====================================================
+// Sub tests EventuallyWith
+// =====================================================.
+func testEventuallyWithShouldCompleteWithFalse() func(*testing.T) {
+	return func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(errorsCapturingT)
@@ -323,9 +337,11 @@ func TestConditionEventuallyWith(t *testing.T) {
 		if counter < expectedCalls-1 || counter > expectedCalls+1 { // it may be 4, 5 or 6 depending on how the test schedules
 			t.Errorf("expected %d calls to the condition, but got %d", expectedCalls, counter)
 		}
-	})
+	}
+}
 
-	t.Run("should complete with true", func(t *testing.T) {
+func testEventuallyWithShouldCompleteWithTrue() func(*testing.T) {
+	return func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(errorsCapturingT)
@@ -345,9 +361,11 @@ func TestConditionEventuallyWith(t *testing.T) {
 		if expectedCalls != counter {
 			t.Errorf("expected condition to be called %d times, got %d", expectedCalls, counter)
 		}
-	})
+	}
+}
 
-	t.Run("should complete with fail, on a nanosecond tick", func(t *testing.T) {
+func testEventuallyWithShouldCompleteWithFail() func(*testing.T) {
+	return func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(errorsCapturingT)
@@ -363,9 +381,11 @@ func TestConditionEventuallyWith(t *testing.T) {
 		if len(mock.errors) != expectedErrors {
 			t.Errorf("expected %d errors (1 from condition, 2 from Eventually), got %d", expectedErrors, len(mock.errors))
 		}
-	})
+	}
+}
 
-	t.Run("should complete with fail, with latest failed condition", func(t *testing.T) {
+func testEventuallyWithShouldCompleteWithFailLatest() func(*testing.T) {
+	return func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(errorsCapturingT)
@@ -393,9 +413,11 @@ func TestConditionEventuallyWith(t *testing.T) {
 		if len(mock.errors) != expectedErrors {
 			t.Errorf("expected %d errors (1 from condition, 2 from Eventually), got %d", expectedErrors, len(mock.errors))
 		}
-	})
+	}
+}
 
-	t.Run("should complete with success, with the ticker never used", func(t *testing.T) {
+func testEventuallyWithShouldCompleteWithSuccess() func(*testing.T) {
+	return func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(errorsCapturingT)
@@ -406,9 +428,11 @@ func TestConditionEventuallyWith(t *testing.T) {
 		if !EventuallyWith(mock, condition, testTimeout, time.Second) {
 			t.Error("expected EventuallyWith to return true")
 		}
-	})
+	}
+}
 
-	t.Run("collect.FailNow only fails the current tick (poller retries)", func(t *testing.T) {
+func testEventuallyWithFailNowRetries() func(*testing.T) {
+	return func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(errorsCapturingT)
@@ -432,9 +456,11 @@ func TestConditionEventuallyWith(t *testing.T) {
 		if got < 2 {
 			t.Errorf("expected the condition to be retried multiple times, got %d call(s)", got)
 		}
-	})
+	}
+}
 
-	t.Run("collect.FailNow allows convergence on a later tick", func(t *testing.T) {
+func testEventuallyWithFailNowConverges() func(*testing.T) {
+	return func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(errorsCapturingT)
@@ -458,9 +484,11 @@ func TestConditionEventuallyWith(t *testing.T) {
 		if len(mock.errors) != 0 {
 			t.Errorf("expected no errors reported on parent t after success, got %d: %v", len(mock.errors), mock.errors)
 		}
-	})
+	}
+}
 
-	t.Run("collect.Cancel aborts the whole assertion immediately", func(t *testing.T) {
+func testEventuallyWithCancelAborts() func(*testing.T) {
+	return func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(errorsCapturingT)
@@ -491,9 +519,11 @@ func TestConditionEventuallyWith(t *testing.T) {
 		if len(mock.errors) == 0 {
 			t.Error("expected at least one error reported on parent t after Cancel")
 		}
-	})
+	}
+}
 
-	t.Run("collect.Cancelf aborts with a custom message", func(t *testing.T) {
+func testEventuallyWithCancelfAborts() func(*testing.T) {
+	return func(t *testing.T) {
 		t.Parallel()
 
 		mock := new(errorsCapturingT)
@@ -532,7 +562,7 @@ func TestConditionEventuallyWith(t *testing.T) {
 		if !foundCustom {
 			t.Errorf("expected custom Cancelf message in errors, got: %v", mock.errors)
 		}
-	})
+	}
 }
 
 func TestConditionPollUntilTimeout(t *testing.T) {
