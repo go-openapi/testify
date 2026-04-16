@@ -1,0 +1,37 @@
+---
+title: {{ .Title | quote }}
+description: |
+  {{ titleize .Description }}.
+weight: -1
+---
+
+{{- with .Metrics }}
+
+## Domains
+
+All assertions are classified into **{{ .Domains }}** domains to help navigate the API, depending on your use case.
+
+## API metrics
+
+Counts for core functionality, excluding variants (formatted, forward, forward-formatted).
+
+| Kind                     | Count             |
+| ------------------------ | ----------------- |
+| All functions            | {{ .Functions }}  |
+| All core assertions      | {{ .Assertions }} |
+| Generic assertions       | {{ .Generics }}   |
+| Helpers (not assertions) | {{ .Helpers }}    |
+| Others                   | {{ .Others }}     |
+
+{{- end }}
+
+## Quick index
+
+Table of core assertions, excluding variants. Each function is side by side with its logical opposite (when available).
+
+| Assertion                | Opposite          | Domain | Kind |
+| ------------------------ | ----------------- | ------ | ---- |
+{{- range .QuickIndex }}
+| [{{ .Name }}]({{ .Domain }}/#{{ .Anchor }}){{ if .IsGeneric }} {{ hopen }}% icon icon="star" color=orange %{{ hclose }}{{ end }} | {{ if .Opposite }}[{{ .Opposite }}]({{ .Domain }}/#{{ .OppositeAnchor }}){{ end }} | {{ .Domain }} | {{ if .IsHelper }}helper{{ end }} |
+{{- end }}
+

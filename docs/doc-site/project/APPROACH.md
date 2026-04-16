@@ -443,7 +443,7 @@ question for Go developers is: **which style aligns with the values that drew yo
 
 ## See also
 
-- [API Reference](../api/) - Browse all 120 assertions by domain
+- [API Reference](../api/) - Browse all {{% siteparam "metrics.assertions" %}} assertions by domain
 - [Generics Guide](../usage/GENERICS.md) - Leverage type-safe assertions
 - [Migration Guide](../usage/MIGRATION.md) - Switch from stretchr/testify
 - [Examples](../usage/EXAMPLES.md) - See testify in action

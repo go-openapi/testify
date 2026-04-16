@@ -449,7 +449,7 @@ func main() {
 |--|--|
 | [`assertions.Consistently[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Consistently) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Consistently](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L225)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Consistently](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L226)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -960,7 +960,7 @@ func main() {
 |--|--|
 | [`assertions.EventuallyWith[C CollectibleConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L294)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L295)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1187,7 +1187,7 @@ func main() {
 |--|--|
 | [`assertions.Never(t T, condition func() bool, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Never) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Never](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L167)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Never](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L168)
 {{% /tab %}}
 {{< /tabs >}}
 

@@ -144,7 +144,7 @@ func main() {
 |--|--|
 | [`assertions.NotRegexp(t T, rx any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotRegexp) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotRegexp](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L90)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotRegexp](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L92)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -254,7 +254,7 @@ func main() {
 |--|--|
 | [`assertions.NotRegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotRegexpT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotRegexpT](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L131)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotRegexpT](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L133)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -476,7 +476,7 @@ func main() {
 |--|--|
 | [`assertions.RegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#RegexpT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#RegexpT](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L63)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#RegexpT](https://github.com/go-openapi/testify/blob/master/internal/assertions/string.go#L64)
 {{% /tab %}}
 {{< /tabs >}}
 

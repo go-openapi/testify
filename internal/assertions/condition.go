@@ -118,6 +118,7 @@ func Condition(t T, comp func() bool, msgAndArgs ...any) bool {
 //	failure:  func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond
 func Eventually[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
 	// Domain: condition
+	// Opposite: Never
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}

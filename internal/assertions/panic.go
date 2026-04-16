@@ -24,6 +24,7 @@ type PanicAssertionFunc func(t T, f func(), msgAndArgs ...any) bool
 //	failure: func() { }
 func Panics(t T, f func(), msgAndArgs ...any) bool {
 	// Domain: panic
+	// Opposite: NotPanics
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}

@@ -15,6 +15,7 @@ package assertions
 //	failure: 1 == 0
 func True(t T, value bool, msgAndArgs ...any) bool {
 	// Domain: boolean
+	// Opposite: False
 	if !value {
 		if h, ok := t.(H); ok {
 			h.Helper()
@@ -42,6 +43,7 @@ func True(t T, value bool, msgAndArgs ...any) bool {
 //	failure: 1 == 0
 func TrueT[B Boolean](t T, value B, msgAndArgs ...any) bool {
 	// Domain: boolean
+	// Opposite: FalseT
 	if !bool(value) {
 		if h, ok := t.(H); ok {
 			h.Helper()

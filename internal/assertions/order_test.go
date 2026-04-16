@@ -31,6 +31,30 @@ func TestOrder(t *testing.T) {
 	}
 }
 
+func TestOrderOppositePairs(t *testing.T) {
+	t.Parallel()
+
+	pairs := [][2]orderAssertionKind{
+		{increasingKind, notIncreasingKind},
+		{decreasingKind, notDecreasingKind},
+		{sortedKind, notSortedKind},
+	}
+
+	for tc := range unifiedOrderCases() {
+		if tc.kind == errorCase {
+			continue
+		}
+		for _, pair := range pairs {
+			a := expectedStatusForAssertion(pair[0], tc.kind)
+			b := expectedStatusForAssertion(pair[1], tc.kind)
+			if a == b {
+				t.Errorf("%s: opposite pair (%d, %d) both returned %v for kind %d",
+					tc.name, pair[0], pair[1], a, tc.kind)
+			}
+		}
+	}
+}
+
 func TestOrderErrorMessages(t *testing.T) {
 	t.Parallel()
 

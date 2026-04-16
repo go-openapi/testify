@@ -29,6 +29,7 @@ import (
 //	failure: 123, 456
 func Equal(t T, expected, actual any, msgAndArgs ...any) bool {
 	// Domain: equality
+	// Opposite: NotEqual
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -66,6 +67,7 @@ func Equal(t T, expected, actual any, msgAndArgs ...any) bool {
 // [ComparisonOperators]: https://go.dev/ref/spec#Comparison_operators.
 func EqualT[V comparable](t T, expected, actual V, msgAndArgs ...any) bool {
 	// Domain: equality
+	// Opposite: NotEqualT
 	if expected != actual {
 		return failWithDiff(t, expected, actual, msgAndArgs...)
 	}
@@ -141,6 +143,7 @@ func NotEqualT[V comparable](t T, expected, actual V, msgAndArgs ...any) bool {
 //	failure: uint32(123), int32(456)
 func EqualValues(t T, expected, actual any, msgAndArgs ...any) bool {
 	// Domain: equality
+	// Opposite: NotEqualValues
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}

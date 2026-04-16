@@ -26,6 +26,7 @@ import (
 //	failure: "^start", "not starting"
 func Regexp(t T, rx any, actual any, msgAndArgs ...any) bool {
 	// Domain: string
+	// Opposite: NotRegexp
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -62,6 +63,7 @@ func Regexp(t T, rx any, actual any, msgAndArgs ...any) bool {
 //	failure: "^start", "not starting"
 func RegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool {
 	// Domain: string
+	// Opposite: NotRegexpT
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}

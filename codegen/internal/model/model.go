@@ -437,6 +437,7 @@ const (
 	CommentTagMention
 	CommentTagNote
 	CommentTagDomainDescription
+	CommentTagOpposite
 )
 
 type ExtraComment struct {
@@ -455,4 +456,12 @@ func (c ExtraComment) IsTagMention() bool {
 
 func (c ExtraComment) IsTagNote() bool {
 	return c.Tag == CommentTagNote
+}
+
+func (c ExtraComment) Opposite() string {
+	if c.Tag != CommentTagOpposite {
+		return ""
+	}
+
+	return c.Text
 }

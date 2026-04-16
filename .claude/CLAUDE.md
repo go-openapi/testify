@@ -77,5 +77,5 @@ that require external deps.
 ## Module Information
 
 - Module path: `github.com/go-openapi/testify/v2`
-- Go version: 1.24.0
+- Go version: 1.25.0
 - License: Apache-2.0

@@ -69,7 +69,7 @@ func main() {
 
 	// Start Hugo server with both configs.
 	cmd := exec.CommandContext(ctx, "hugo", "server",
-		"--config", "hugo.yaml,testify.yaml",
+		"--config", "hugo.yaml,testify.yaml,metrics.yaml",
 		"--buildDrafts",
 		"--disableFastRender",
 		"--navigateToChanged",

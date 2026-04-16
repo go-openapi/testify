@@ -10,7 +10,7 @@ weight: 15
 - ✅ **Zero Dependencies**: Completely self-contained
 - ✅ **New functions**: 58 additional assertions (43 generic + 15 reflection-based)
 - ✅ **Performance**: ~10x for generic variants (from 1.2x to 81x, your mileage may vary)
-- ✅ **Breaking changes**: Requires go1.24, removed suites, mocks, http tooling, and deprecated functions. YAMLEq becomes optional (panics by default).
+- ✅ **Breaking changes**: Requires go1.25, removed suites, mocks, http tooling, and deprecated functions. YAMLEq becomes optional (panics by default).
 
 ---
 
@@ -54,7 +54,7 @@ See also a quick [migration guide](./MIGRATION.md).
 
 | Change | Origin | Description |
 |--------|--------|-------------|
-| **Code generation** | Design goal | 100% generated assert/require packages (840 functions from 127 assertions) |
+| **Code generation** | Design goal | 100% generated assert/require packages from {{% siteparam "metrics.functions" %}} core functions (see [API metrics](../api/metrics.md)) |
 | **Code modernization** | Design goal | Relinted, refactored and modernized the code base, including internalized difflib and go-spew|
 | **Refactored tests** | Design goal | Full refactoring of tests on assertion functions, with unified test scenarios for reflection-based/generic assertions |
 
@@ -571,7 +571,7 @@ github.com/go-openapi/testify/v2           # Core (zero deps) [go.mod]
 ### Documentation
 
 - Hugo-based documentation site
-- Domain-organized API reference (19 domains)
+- Domain-organized API reference ({{% siteparam "metrics.domains" %}} domains)
 - Comprehensive examples and tutorials
 - Performance benchmarks
 
@@ -579,21 +579,20 @@ github.com/go-openapi/testify/v2           # Core (zero deps) [go.mod]
 
 | Metric | Value |
 |--------|-------|
-| **New functions** | 58 (43 generic + 15 reflection) |
-| **Total assertions** | 127 base assertions |
-| **Generated functions** | 840 (see [the maths](../project/maintainers/ARCHITECTURE.md#the-maths-with-assertion-variants)) |
-| **Generic coverage** | 10 domains (10/19) |
+| **Total functions** | {{% siteparam "metrics.functions" %}} (see [API metrics](../api/metrics.md)) |
+| **Total assertions** | {{% siteparam "metrics.assertions" %}} base assertions |
+| **Generic assertions** | {{% siteparam "metrics.generics" %}} |
 | **Performance improvement** | 1.2x to 81x faster |
 | **Dependencies** | 0 external (was 2 required) |
 | **Test coverage** | 96% overall, 99% on public APIs |
-| **Documentation domains** | 19 logical categories |
+| **Documentation domains** | {{% siteparam "metrics.domains" %}} logical categories |
 
 ---
 
 ## See Also
 
 - [Migration Guide](./MIGRATION.md) - Step-by-step guide to migrating from testify v1
-- [Generics Guide](./GENERICS.md) - Detailed documentation of all 43 generic assertions
+- [Generics Guide](./GENERICS.md) - Detailed documentation of all {{% siteparam "metrics.generics" %}} generic assertions
 - [Performance Benchmarks](../project/maintainers/BENCHMARKS.md) - Comprehensive performance analysis
 - [Examples](./EXAMPLES.md) - Practical usage examples showing new features
 - [Tutorial](./TUTORIAL.md) - Best practices for writing tests with testify v2

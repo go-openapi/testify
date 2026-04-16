@@ -20,6 +20,7 @@ import (
 //	failure: "not nil"
 func Nil(t T, object any, msgAndArgs ...any) bool {
 	// Domain: equality
+	// Opposite: NotNil
 	if isNil(object) {
 		return true
 	}
@@ -72,6 +73,7 @@ func NotNil(t T, object any, msgAndArgs ...any) bool {
 // [Zero values]: https://go.dev/ref/spec#The_zero_value
 func Empty(t T, object any, msgAndArgs ...any) bool {
 	// Domain: equality
+	// Opposite: NotEmpty
 	pass := isEmpty(object)
 	if !pass {
 		if h, ok := t.(H); ok {

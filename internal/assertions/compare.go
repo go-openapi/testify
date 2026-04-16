@@ -29,6 +29,7 @@ import (
 //	failure: 1, 2
 func Greater(t T, e1 any, e2 any, msgAndArgs ...any) bool {
 	// Domain: comparison
+	// Opposite: LessOrEqual
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -61,6 +62,7 @@ func Greater(t T, e1 any, e2 any, msgAndArgs ...any) bool {
 //	failure: 1, 2
 func GreaterT[Orderable Ordered](t T, e1, e2 Orderable, msgAndArgs ...any) bool {
 	// Domain: comparison
+	// Opposite: LessOrEqualT
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -90,6 +92,7 @@ func GreaterT[Orderable Ordered](t T, e1, e2 Orderable, msgAndArgs ...any) bool 
 //	failure: 1, 2
 func GreaterOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) bool {
 	// Domain: comparison
+	// Opposite: Less
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -123,6 +126,7 @@ func GreaterOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) bool {
 //	failure: 1, 2
 func GreaterOrEqualT[Orderable Ordered](t T, e1, e2 Orderable, msgAndArgs ...any) bool {
 	// Domain: comparison
+	// Opposite: LessT
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -267,6 +271,7 @@ func LessOrEqualT[Orderable Ordered](t T, e1, e2 Orderable, msgAndArgs ...any) b
 //	failure: -1
 func Positive(t T, e any, msgAndArgs ...any) bool {
 	// Domain: comparison
+	// Opposite: Negative
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -288,6 +293,7 @@ func Positive(t T, e any, msgAndArgs ...any) bool {
 //	failure: -1
 func PositiveT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any) bool {
 	// Domain: comparison
+	// Opposite: NegativeT
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}

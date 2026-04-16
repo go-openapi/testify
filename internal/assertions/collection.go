@@ -63,6 +63,7 @@ func Len(t T, object any, length int, msgAndArgs ...any) bool {
 //	failure: []string{"A","B"}, "C"
 func Contains(t T, s, contains any, msgAndArgs ...any) bool {
 	// Domain: collection
+	// Opposite: NotContains
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -92,6 +93,7 @@ func Contains(t T, s, contains any, msgAndArgs ...any) bool {
 //	failure: "AB", "C"
 func StringContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs ...any) bool {
 	// Domain: collection
+	// Opposite: StringNotContainsT
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -119,6 +121,7 @@ func StringContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs 
 // [comparable-types]: https://go.dev/blog/comparable
 func SliceContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArgs ...any) bool {
 	// Domain: collection
+	// Opposite: SliceNotContainsT
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -148,6 +151,7 @@ func SliceContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArg
 // [comparable-types]: https://go.dev/blog/comparable
 func SeqContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool {
 	// Domain: collection
+	// Opposite: SeqNotContainsT
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -177,6 +181,7 @@ func SeqContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...
 // [comparable-types]: https://go.dev/blog/comparable
 func MapContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndArgs ...any) bool {
 	// Domain: collection
+	// Opposite: MapNotContainsT
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -343,6 +348,7 @@ const unsupportedCollectionType = "%q has an unsupported type %s"
 //	failure: []int{1, 2, 3}, []int{4, 5}
 func Subset(t T, list, subset any, msgAndArgs ...any) (ok bool) {
 	// Domain: collection
+	// Opposite: NotSubset
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -413,6 +419,7 @@ func Subset(t T, list, subset any, msgAndArgs ...any) (ok bool) {
 //	failure: []int{1, 2, 3}, []int{4, 5}
 func SliceSubsetT[Slice ~[]E, E comparable](t T, list, subset Slice, msgAndArgs ...any) (ok bool) {
 	// Domain: collection
+	// Opposite: SliceNotSubsetT
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -538,6 +545,7 @@ func SliceNotSubsetT[Slice ~[]E, E comparable](t T, list, subset Slice, msgAndAr
 //	failure: []int{1, 2, 3}, []int{1, 2, 4}
 func ElementsMatch(t T, listA, listB any, msgAndArgs ...any) (ok bool) {
 	// Domain: collection
+	// Opposite: NotElementsMatch
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -611,6 +619,7 @@ func NotElementsMatch(t T, listA, listB any, msgAndArgs ...any) (ok bool) {
 //	failure: []int{1, 2, 3}, []int{1, 2, 4}
 func ElementsMatchT[E comparable](t T, listA, listB []E, msgAndArgs ...any) bool {
 	// Domain: collection
+	// Opposite: NotElementsMatchT
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -683,6 +692,7 @@ func NotElementsMatchT[E comparable](t T, listA, listB []E, msgAndArgs ...any) (
 // [comparable-types]: https://go.dev/blog/comparable
 func SliceEqualT[E comparable](t T, listA, listB []E, msgAndArgs ...any) (ok bool) {
 	// Domain: collection
+	// Opposite: SliceNotEqualT
 	ok = slices.Equal(listA, listB)
 	if !ok {
 		return Fail(t, "listA and listB are not equal", msgAndArgs)
@@ -732,6 +742,7 @@ func SliceNotEqualT[E comparable](t T, listA, listB []E, msgAndArgs ...any) (ok 
 // [comparable-types]: https://go.dev/blog/comparable
 func MapEqualT[K, V comparable](t T, listA, listB map[K]V, msgAndArgs ...any) (ok bool) {
 	// Domain: collection
+	// Opposite: MapNotEqualT
 	ok = maps.Equal(listA, listB)
 	if !ok {
 		return Fail(t, "listA and listB are not equal", msgAndArgs)
