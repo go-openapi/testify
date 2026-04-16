@@ -295,7 +295,7 @@ func TestConditionEventuallyNoLeak(t *testing.T) {
 	})
 }
 
-//nolint:gocognit,gocyclo,cyclop // subtests are actually not complex
+//nolint:gocognit,gocyclo,cyclop,maintidx // subtests are actually not complex
 func TestConditionEventuallyWith(t *testing.T) {
 	t.Parallel()
 
@@ -490,6 +490,47 @@ func TestConditionEventuallyWith(t *testing.T) {
 		}
 		if len(mock.errors) == 0 {
 			t.Error("expected at least one error reported on parent t after Cancel")
+		}
+	})
+
+	t.Run("collect.Cancelf aborts with a custom message", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(errorsCapturingT)
+		var counter int
+		var mu sync.Mutex
+
+		condition := func(collect *CollectT) {
+			mu.Lock()
+			counter++
+			mu.Unlock()
+			collect.Cancelf("upstream %s is gone", "service-x")
+		}
+
+		start := time.Now()
+		if EventuallyWith(mock, condition, 30*time.Minute, testTick) {
+			t.Error("expected EventuallyWith to return false")
+		}
+		if elapsed := time.Since(start); elapsed > 5*time.Second {
+			t.Errorf("expected Cancelf to short-circuit, but EventuallyWith took %s", elapsed)
+		}
+		mu.Lock()
+		got := counter
+		mu.Unlock()
+		if got != 1 {
+			t.Errorf("expected the condition to be called once, got %d", got)
+		}
+
+		foundCustom := false
+		for _, err := range mock.errors {
+			if strings.Contains(err.Error(), "upstream service-x is gone") {
+				foundCustom = true
+
+				break
+			}
+		}
+		if !foundCustom {
+			t.Errorf("expected custom Cancelf message in errors, got: %v", mock.errors)
 		}
 	})
 }
