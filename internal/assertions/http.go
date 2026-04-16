@@ -146,6 +146,7 @@ func HTTPBody(handler http.HandlerFunc, method, url string, values url.Values) s
 //	failure: httpBody, "GET", "/", url.Values{"name": []string{"Bob"}}, "Hello, World!"
 func HTTPBodyContains(t T, handler http.HandlerFunc, method, url string, values url.Values, str any, msgAndArgs ...any) bool {
 	// Domain: http
+	// Opposite: HTTPBodyNotContains
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}

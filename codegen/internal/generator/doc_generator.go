@@ -4,12 +4,16 @@
 package generator
 
 import (
+	"cmp"
 	"errors"
 	"fmt"
 	"iter"
 	"os"
 	"path"
 	"path/filepath"
+	"slices"
+
+	yaml "go.yaml.in/yaml/v3"
 
 	"github.com/go-openapi/testify/codegen/v2/internal/generator/domains"
 	"github.com/go-openapi/testify/codegen/v2/internal/generator/funcmaps"
@@ -19,9 +23,12 @@ import (
 
 const (
 	// index page metadata.
-	indexTitle       = "Assertions index"
-	indexDescription = "Index of assertion domains"
-	indexFile        = "_index.md"
+	indexTitle         = "Assertions index"
+	indexDescription   = "Index of assertion domains"
+	indexFile          = "_index.md"
+	metricsTitle       = "Quick API index"
+	metricsDescription = "API quick index & metrics"
+	metricsFile        = "metrics.md"
 
 	// sensible default preallocated slots.
 	allocatedEntries = 15
@@ -78,7 +85,11 @@ func (d *DocGenerator) Generate(opts ...GenerateOption) error {
 		}
 	}
 
-	return nil
+	if err := d.generateMetricsPage(indexDoc); err != nil {
+		return err
+	}
+
+	return d.writeYAMLMetrics(indexDoc.Metrics)
 }
 
 type uniqueValues struct {
@@ -173,6 +184,8 @@ func (d *DocGenerator) buildIndexDocument(docsByDomain iter.Seq2[string, model.D
 	}
 
 	doc.RefCount = len(doc.Index)
+	doc.Metrics = buildMetrics(docsByDomain)
+	doc.QuickIndex = buildQuickIndex(docsByDomain)
 
 	return doc
 }
@@ -196,6 +209,95 @@ func buildIndexEntries(docsByDomain iter.Seq2[string, model.Document]) []model.I
 	return entries
 }
 
+func buildMetrics(docsByDomain iter.Seq2[string, model.Document]) (metrics model.Metrics) {
+	metrics.ByDomain = make(map[string]model.DomainMetrics)
+
+	for domain, doc := range docsByDomain {
+		metrics.Domains++
+		var domainMetrics model.DomainMetrics
+		domainMetrics.Name = doc.Title
+		for _, fn := range doc.Package.Functions {
+			metrics.Functions++
+
+			if fn.IsHelper {
+				metrics.Helpers++
+				continue
+			}
+
+			if fn.IsConstructor {
+				metrics.Others++
+				continue
+			}
+
+			metrics.Assertions++
+			domainMetrics.Count++
+
+			if fn.IsGeneric {
+				metrics.Generics++
+			}
+		}
+
+		metrics.ByDomain[domain] = domainMetrics
+	}
+
+	metrics.NonGenerics = metrics.Functions - metrics.Generics
+
+	return metrics
+}
+
+func buildQuickIndex(docsByDomain iter.Seq2[string, model.Document]) model.QuickIndex {
+	const sensibleAlloc = 150
+	index := make(model.QuickIndex, 0, sensibleAlloc)
+	seen := make(map[string]struct{}, sensibleAlloc)
+	opposites := make(map[string]string, sensibleAlloc)
+
+	genericNames := make(map[string]string, sensibleAlloc)
+	for _, doc := range docsByDomain {
+		for _, fn := range doc.Package.Functions {
+			genericNames[fn.Name] = fn.GenericName()
+			for _, tag := range fn.ExtraComments {
+				opposite := tag.Opposite()
+				if opposite != "" {
+					seen[opposite] = struct{}{}
+					opposites[fn.Name] = opposite
+					break
+				}
+			}
+		}
+	}
+
+	for domain, doc := range docsByDomain {
+		for _, fn := range doc.Package.Functions {
+			_, isOpposite := seen[fn.Name]
+			if isOpposite {
+				continue
+			}
+
+			opposite := opposites[fn.Name]
+			entry := model.QuickIndexEntry{
+				Name:      fn.GenericName(),
+				Anchor:    funcmaps.Slugize(fn.GenericName()),
+				Opposite:  opposite,
+				Domain:    domain,
+				IsGeneric: fn.IsGeneric,
+				IsHelper:  fn.IsHelper,
+			}
+			if opposite != "" {
+				if gn, ok := genericNames[opposite]; ok {
+					entry.OppositeAnchor = funcmaps.Slugize(gn)
+				}
+			}
+
+			index = append(index, entry)
+		}
+	}
+
+	slices.SortFunc(index, func(a, b model.QuickIndexEntry) int {
+		return cmp.Compare(a.Name, b.Name)
+	})
+	return index
+}
+
 func (d *DocGenerator) generateDomainIndex(document model.Document) error {
 	base := filepath.Join(d.ctx.targetRoot, d.ctx.targetDoc, document.Path)
 	if err := os.MkdirAll(base, dirPermissions); err != nil {
@@ -213,6 +315,19 @@ func (d *DocGenerator) generateDomainPage(document model.Document) error {
 	return d.render("doc_page", filepath.Join(base, document.File), document)
 }
 
+func (d *DocGenerator) generateMetricsPage(document model.Document) error {
+	document.File = metricsFile
+	document.Title = metricsTitle
+	document.Description = metricsDescription
+
+	base := filepath.Join(d.ctx.targetRoot, d.ctx.targetDoc, document.Path)
+	if err := os.MkdirAll(base, dirPermissions); err != nil {
+		return fmt.Errorf("can't make target folder: %w", err)
+	}
+
+	return d.render("doc_metrics", filepath.Join(base, document.File), document)
+}
+
 func (d *DocGenerator) loadTemplates() error {
 	const (
 		tplExt            = ".md.gotmpl"
@@ -222,6 +337,7 @@ func (d *DocGenerator) loadTemplates() error {
 	index := make(map[string]string, expectedTemplates)
 	index["doc_index"] = "doc_index"
 	index["doc_page"] = "doc_page"
+	index["doc_metrics"] = "doc_metrics"
 
 	templates, err := loadTemplatesFromIndex(index, tplExt, templatesFS)
 	if err != nil {
@@ -330,4 +446,29 @@ func (d *DocGenerator) render(name string, target string, data any) error {
 		data,
 		renderMD,
 	)
+}
+
+// writeYAMLMetrics writes the Metrics structure as a YAML file in the hugo generation folder.
+//
+// This allows doc pages to use metrics directly with shortcodes.
+func (d *DocGenerator) writeYAMLMetrics(metrics model.Metrics) error {
+	base := filepath.Join(d.ctx.targetRoot, "hack", "doc-site", "hugo")
+	if err := os.MkdirAll(base, dirPermissions); err != nil {
+		return fmt.Errorf("can't make target folder: %w", err)
+	}
+	target := filepath.Join(base, "metrics.yaml")
+
+	type containerT struct {
+		Params struct {
+			Metrics model.Metrics `yaml:"metrics"`
+		} `yaml:"params"`
+	}
+	var container containerT
+	container.Params.Metrics = metrics
+	buf, err := yaml.Marshal(container)
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(target, buf, filePermissions)
 }

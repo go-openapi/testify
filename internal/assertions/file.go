@@ -22,6 +22,7 @@ import (
 //	failure: filepath.Join(testDataPath(),"non_existing_file")
 func FileExists(t T, path string, msgAndArgs ...any) bool {
 	// Domain: file
+	// Opposite: FileNotExists
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -80,6 +81,7 @@ func FileNotExists(t T, path string, msgAndArgs ...any) bool {
 //	failure: filepath.Join(testDataPath(),"non_existing_dir")
 func DirExists(t T, path string, msgAndArgs ...any) bool {
 	// Domain: file
+	// Opposite: DirNotExists
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -138,6 +140,7 @@ func DirNotExists(t T, path string, msgAndArgs ...any) bool {
 //	failure: filepath.Join(testDataPath(),"existing_file")
 func FileEmpty(t T, path string, msgAndArgs ...any) bool {
 	// Domain: file
+	// Opposite: FileNotEmpty
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}

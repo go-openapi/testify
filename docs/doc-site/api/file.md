@@ -157,7 +157,7 @@ func testDataPath() string {
 |--|--|
 | [`assertions.DirExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#DirExists) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#DirExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L81)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#DirExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L82)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -279,7 +279,7 @@ func testDataPath() string {
 |--|--|
 | [`assertions.DirNotExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#DirNotExists) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#DirNotExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L110)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#DirNotExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L112)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -401,7 +401,7 @@ func testDataPath() string {
 |--|--|
 | [`assertions.FileEmpty(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FileEmpty) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L139)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L141)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -645,7 +645,7 @@ func testDataPath() string {
 |--|--|
 | [`assertions.FileNotEmpty(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FileNotEmpty) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileNotEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L180)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileNotEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L183)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -767,7 +767,7 @@ func testDataPath() string {
 |--|--|
 | [`assertions.FileNotExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FileNotExists) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileNotExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L52)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileNotExists](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L53)
 {{% /tab %}}
 {{< /tabs >}}
 

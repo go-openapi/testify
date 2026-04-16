@@ -1311,6 +1311,12 @@ func IsIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, m
 
 // IsNonDecreasing asserts that the collection is not strictly decreasing.
 //
+// This is the logical negation of [IsDecreasing]: it succeeds whenever
+// [IsDecreasing] would fail, including for sequences that are neither
+// increasing nor decreasing (e.g. [3, 1, 2]).
+//
+// It is NOT the same as "weakly increasing" (a[i] <= a[i+1] for all i).
+//
 // # Usage
 //
 //	assertions.IsNonDecreasing(t, []int{1, 1, 2})
@@ -1330,7 +1336,13 @@ func IsNonDecreasing(t T, collection any, msgAndArgs ...any) bool {
 	return assertions.IsNonDecreasing(t, collection, msgAndArgs...)
 }
 
-// IsNonDecreasingT asserts that a slice of [Ordered] is not decreasing.
+// IsNonDecreasingT asserts that a slice of [Ordered] is NOT strictly decreasing.
+//
+// This is the logical negation of [IsDecreasingT]: it succeeds whenever
+// [IsDecreasingT] would fail, including for sequences that are neither
+// increasing nor decreasing (e.g. [3, 1, 2]).
+//
+// It is NOT the same as "weakly increasing" (a[i] <= a[i+1] for all i).
 //
 // # Usage
 //
@@ -1351,7 +1363,13 @@ func IsNonDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice
 	return assertions.IsNonDecreasingT[OrderedSlice, E](t, collection, msgAndArgs...)
 }
 
-// IsNonIncreasing asserts that the collection is not increasing.
+// IsNonIncreasing asserts that the collection is not strictly increasing.
+//
+// This is the logical negation of [IsIncreasing]: it succeeds whenever
+// [IsIncreasing] would fail, including for sequences that are neither
+// increasing nor decreasing (e.g. [1, 3, 2]).
+//
+// It is NOT the same as "weakly decreasing" (a[i] >= a[i+1] for all i).
 //
 // # Usage
 //
@@ -1374,11 +1392,17 @@ func IsNonIncreasing(t T, collection any, msgAndArgs ...any) bool {
 
 // IsNonIncreasingT asserts that a slice of [Ordered] is NOT strictly increasing.
 //
+// This is the logical negation of [IsIncreasingT]: it succeeds whenever
+// [IsIncreasingT] would fail, including for sequences that are neither
+// increasing nor decreasing (e.g. [1, 3, 2]).
+//
+// It is NOT the same as "weakly decreasing" (a[i] >= a[i+1] for all i).
+//
 // # Usage
 //
-//	assertions.IsNonIncreasing(t, []int{2, 1, 1})
-//	assertions.IsNonIncreasing(t, []float{2, 1})
-//	assertions.IsNonIncreasing(t, []string{"b", "a"})
+//	assertions.IsNonIncreasingT(t, []int{2, 1, 1})
+//	assertions.IsNonIncreasingT(t, []float{2, 1})
+//	assertions.IsNonIncreasingT(t, []string{"b", "a"})
 //
 // # Examples
 //

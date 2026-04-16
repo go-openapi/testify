@@ -64,6 +64,7 @@ func NoError(t T, err error, msgAndArgs ...any) bool {
 //	failure: nil
 func Error(t T, err error, msgAndArgs ...any) bool {
 	// Domain: error
+	// Opposite: NoError
 	if err == nil {
 		if h, ok := t.(H); ok {
 			h.Helper()
@@ -148,6 +149,7 @@ func ErrorContains(t T, err error, contains string, msgAndArgs ...any) bool {
 //	failure: ErrTest, io.EOF
 func ErrorIs(t T, err, target error, msgAndArgs ...any) bool {
 	// Domain: error
+	// Opposite: NotErrorIs
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -219,6 +221,7 @@ func NotErrorIs(t T, err, target error, msgAndArgs ...any) bool {
 //	failure: ErrTest, new(*dummyError)
 func ErrorAs(t T, err error, target any, msgAndArgs ...any) bool {
 	// Domain: error
+	// Opposite: NotErrorAs
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}

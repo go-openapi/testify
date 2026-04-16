@@ -18,6 +18,7 @@ import (
 //   - maintainer: <value>       - multi-line maintainer note
 //   - note: <value>             - multi-line note
 //   - mention: <value>          - single-line mention
+//   - opposite: <value>         - name of the logical opposite assertion (if any)
 //
 // Multi-line tags continue until the next tagged line or end of text.
 func ParseTaggedComments(text string) []model.ExtraComment {
@@ -26,6 +27,7 @@ func ParseTaggedComments(text string) []model.ExtraComment {
 		maintainerPrefix = "maintainer"
 		notePrefix       = "note"
 		mentionPrefix    = "mention"
+		oppositePrefix   = "opposite"
 	)
 
 	inValue := false
@@ -33,6 +35,7 @@ func ParseTaggedComments(text string) []model.ExtraComment {
 	startValueMaintainer := StartValueFunc(maintainerPrefix)
 	startValueNote := StartValueFunc(notePrefix)
 	startValueMention := StartValueFunc(mentionPrefix)
+	startValueOpposite := StartValueFunc(oppositePrefix)
 
 	startTaggedValue := func(line string) (key string, val string, tag model.CommentTag, multiline bool, ok bool) {
 		val, ok = startValueDomain(line)
@@ -50,6 +53,10 @@ func ParseTaggedComments(text string) []model.ExtraComment {
 		val, ok = startValueMention(line)
 		if ok {
 			return "", val, model.CommentTagMention, false, true
+		}
+		val, ok = startValueOpposite(line)
+		if ok {
+			return "", val, model.CommentTagOpposite, false, true
 		}
 
 		return "", "", model.CommentTagNone, false, false

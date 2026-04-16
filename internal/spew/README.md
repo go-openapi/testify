@@ -21,7 +21,7 @@ custom Stringer/error interface handling, and hexdump-style byte array output.
 
 This fork of testify maintains **zero external dependencies** for its core assertion packages.
 By internalizing go-spew, we eliminate the external dependency while gaining full control over the code
-to apply modernizations aligned with our go1.24 target.
+to apply modernizations aligned with our go1.25 target.
 
 ## Modernizations Applied
 
@@ -71,7 +71,7 @@ The linting effort is still going on...
 ## Maintenance
 
 This internalized copy is maintained as part of github.com/go-openapi/testify/v2 and follows
-the same Go version requirements (currently go1.24).
+the same Go version requirements (currently go1.25).
 It does not track upstream go-spew releases, as it has diverged through modernization.
 
 For issues or improvements specific to this internalized version, please file issues at:

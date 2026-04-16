@@ -822,8 +822,8 @@ func TestSlugize(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := slugize(tt.input); got != tt.expected {
-				t.Errorf("slugize(%q) = %q, want %q", tt.input, got, tt.expected)
+			if got := Slugize(tt.input); got != tt.expected {
+				t.Errorf("Slugize(%q) = %q, want %q", tt.input, got, tt.expected)
 			}
 		})
 	}

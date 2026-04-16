@@ -117,6 +117,15 @@ params:
     versionMessage: ''
     buildTime: ''
 
+  # Generated metrics (populated by metrics.yaml)
+  metrics:
+    domains: 0
+    functions: 0
+    assertions: 0
+    generics: 0
+    helpers: 0
+    others: 0
+
 # Menu configuration
 menu:
   shortcuts:

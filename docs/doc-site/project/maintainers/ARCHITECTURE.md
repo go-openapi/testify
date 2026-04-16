@@ -57,20 +57,20 @@ We have adopted code and documentation generation as a mean to mitigate this iss
 
 #### Current (v2.3.0-unreleased)
 
- 1. Generic assertions (with type parameters): 46 functions
- 2. Non-generic assertions (with t T parameter, no type parameters): 82 functions
- 3. Helper functions (no t T parameter): 4 functions
+ 1. Generic assertions (with type parameters): {{% siteparam "metrics.generics" %}} functions
+ 2. Non-generic assertions (with t T parameter, no type parameters): {{% siteparam "metrics.nongeneric_assertions" %}} functions
+ 3. Helper functions (no t T parameter): {{% siteparam "metrics.helpers" %}} functions
 
- Total: 128 functions to _maintain_
+ Total: {{% siteparam "metrics.functions" %}} functions to _maintain_
 
  **Generated Functions**
 
- 1. Generic assertions: 168
- 2. Non-generic assertions: 656
- 3. Helper functions: 8
+ 1. Generic assertions: {{% siteparam "metrics.generated_generic" %}}
+ 2. Non-generic assertions: {{% siteparam "metrics.generated_nongeneric" %}}
+ 3. Helper functions: {{% siteparam "metrics.generated_helpers" %}}
  4. Constructors: 2
 
- Total: 834 functions
+ Total: {{% siteparam "metrics.generated_total" %}} functions
 
 ## Architecture Overview
 

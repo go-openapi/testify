@@ -20,6 +20,7 @@ timeline
                     : documentation site
                     : panic handling fixes
                     : removed deprecated
+                    : go1.24+
     ✅ v2.2 (Fev 2026) : Generics
                     : Kind/NotKind
                     : SortedT, NotSortedT
@@ -40,6 +41,7 @@ timeline
                     : NoFileDescriptorLeak (macOS, Windows)
                     : New candidate features from upstream
                     : export internal tools (spew, difflib)
+                    : go1.25+
 {{< /mermaid >}}
 
 ## Notes

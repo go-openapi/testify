@@ -6,10 +6,10 @@ weight: 1
 
 {{% notice primary "TL;DR" "meteor" %}}
 > Learn testify's naming conventions (assert vs require, format variants, generic `T` suffix), argument order patterns, and how to navigate
-> 76+ assertions organized into 18 domains. Start here to understand the API structure.
+> {{% siteparam "metrics.assertions" %}} assertions organized into {{% siteparam "metrics.domains" %}} domains. Start here to understand the API structure.
 {{% /notice %}}
 
-Testify v2 provides **over 40 core assertion types** (76+ functions including inverse variants and all naming styles) organized into clear domains. This guide explains how to navigate the API and use the naming conventions effectively.
+Testify v2 provides **{{% siteparam "metrics.functions" %}} functions** ({{% siteparam "metrics.assertions" %}} assertions including {{% siteparam "metrics.generics" %}} generic variants, plus {{% siteparam "metrics.helpers" %}} helper functions) organized into {{% siteparam "metrics.domains" %}} domains. This guide explains how to navigate the API and use the naming conventions effectively.
 
 ## How the API is Organized
 
@@ -17,17 +17,24 @@ Assertions are grouped by domain for easier discovery:
 
 | Domain | Examples | Count |
 |--------|----------|-------|
-| **Boolean** | `True`, `False` | 2 |
-| **Equality** | `Equal`, `NotEqual`, `EqualValues`, `Same`, `Exactly` | 8 |
-| **Comparison** | `Greater`, `Less`, `Positive` | 8 |
-| **Collection** | `Contains`, `Len`, `Empty`, `ElementsMatch` | 18 |
-| **Error** | `Error`, `NoError`, `ErrorIs`, `ErrorAs`, `ErrorContains` | 8 |
-| **Type** | `IsType`, `Implements`, `Zero` | 7 |
-| **String** | `Regexp`, `NotRegexp` | 4 |
-| **Numeric** | `InDelta`, `InEpsilon` | 6 |
-| **Ordering** | `IsIncreasing`, `Sorted` | 8 |
-| **Panic** | `Panics`, `NotPanics` | 4 |
-| **Others** | HTTP, JSON, YAML, Time, File assertions | 12 |
+| **Boolean** | `True`, `False` | {{% siteparam "metrics.by_domain.boolean.count" %}} |
+| **Collection** | `Contains`, `Len`, `Empty`, `ElementsMatch` | {{% siteparam "metrics.by_domain.collection.count" %}} |
+| **Comparison** | `Greater`, `Less`, `Positive` | {{% siteparam "metrics.by_domain.comparison.count" %}} |
+| **Condition** | `Eventually`, `Never`, `Consistently` | {{% siteparam "metrics.by_domain.condition.count" %}} |
+| **Equality** | `Equal`, `NotEqual`, `EqualValues`, `Same`, `Exactly` | {{% siteparam "metrics.by_domain.equality.count" %}} |
+| **Error** | `Error`, `NoError`, `ErrorIs`, `ErrorAs`, `ErrorContains` | {{% siteparam "metrics.by_domain.error.count" %}} |
+| **File** | `FileExists`, `DirExists`, `FileEmpty` | {{% siteparam "metrics.by_domain.file.count" %}} |
+| **HTTP** | `HTTPSuccess`, `HTTPRedirect`, `HTTPError` | {{% siteparam "metrics.by_domain.http.count" %}} |
+| **JSON** | `JSONEq`, `JSONEqBytes`, `JSONMarshalAs` | {{% siteparam "metrics.by_domain.json.count" %}} |
+| **Number** | `InDelta`, `InEpsilon` | {{% siteparam "metrics.by_domain.number.count" %}} |
+| **Ordering** | `IsIncreasing`, `Sorted` | {{% siteparam "metrics.by_domain.ordering.count" %}} |
+| **Panic** | `Panics`, `NotPanics` | {{% siteparam "metrics.by_domain.panic.count" %}} |
+| **Safety** | `NoGoRoutineLeak`, `NoFileDescriptorLeak` | {{% siteparam "metrics.by_domain.safety.count" %}} |
+| **String** | `Regexp`, `NotRegexp` | {{% siteparam "metrics.by_domain.string.count" %}} |
+| **Testing** | `CallerInfo`, `FailNow` | {{% siteparam "metrics.by_domain.testing.count" %}} |
+| **Time** | `WithinDuration`, `WithinRange` | {{% siteparam "metrics.by_domain.time.count" %}} |
+| **Type** | `IsType`, `Implements`, `Zero` | {{% siteparam "metrics.by_domain.type.count" %}} |
+| **YAML** | `YAMLEq`, `YAMLEqBytes`, `YAMLMarshalAs` | {{% siteparam "metrics.by_domain.yaml.count" %}} |
 
 {{% notice style="info" title="Browse by Domain" icon="book" %}}
 See the complete [API Reference](../api/_index.md) organized by domain for a detailed documentation of all assertions.

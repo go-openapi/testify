@@ -23,6 +23,7 @@ import "fmt"
 //	failure: &staticVar, ptr("static string")
 func Same(t T, expected, actual any, msgAndArgs ...any) bool {
 	// Domain: equality
+	// Opposite: NotSame
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -56,6 +57,7 @@ func Same(t T, expected, actual any, msgAndArgs ...any) bool {
 //	failure: &staticVar, ptr("static string")
 func SameT[P any](t T, expected, actual *P, msgAndArgs ...any) bool {
 	// Domain: equality
+	// Opposite: NotSameT
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}

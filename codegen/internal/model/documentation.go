@@ -85,6 +85,8 @@ type Document struct {
 	ExtraPackages ExtraPackages
 	RefCount      int
 	Weight        int
+	Metrics       Metrics
+	QuickIndex    QuickIndex
 }
 
 func (d Document) HasGenerics() bool {
@@ -145,4 +147,33 @@ type IndexEntry struct {
 	Link        string
 	RefCount    int
 	Weight      int
+}
+
+//nolint:tagliatelle // not using camelcase
+type Metrics struct {
+	Domains     int                      `yaml:"domains"`
+	Functions   int                      `yaml:"functions"`
+	Assertions  int                      `yaml:"assertions"`
+	Generics    int                      `yaml:"generics"`
+	NonGenerics int                      `yaml:"nongeneric_assertions"`
+	Helpers     int                      `yaml:"helpers"`
+	Others      int                      `yaml:"others"`
+	ByDomain    map[string]DomainMetrics `yaml:"by_domain"`
+}
+
+type DomainMetrics struct {
+	Name  string `yaml:"name"`
+	Count int    `yaml:"count"`
+}
+
+type QuickIndex []QuickIndexEntry
+
+type QuickIndexEntry struct {
+	Name           string
+	Anchor         string
+	Opposite       string
+	OppositeAnchor string
+	Domain         string
+	IsGeneric      bool
+	IsHelper       bool
 }

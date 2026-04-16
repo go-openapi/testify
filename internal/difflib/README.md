@@ -23,7 +23,7 @@ This fork of testify maintains **zero external dependencies** for the core asser
 By internalizing `difflib`, we:
 
 1. Eliminate the external dependency on an **unmaintained package** (last updated 2014)
-2. Gain full control to apply modernizations aligned with our go1.24 target
+2. Gain full control to apply modernizations aligned with our go1.25 target
 3. Can apply targeted fixes and optimizations specific to testify's use cases
 
 ## Modernizations Applied
@@ -94,7 +94,7 @@ As an internalized dependency, this copy can receive targeted improvements:
 
 ## Maintenance
 
-This internalized copy is maintained as part of github.com/go-openapi/testify/v2 and follows the same Go version requirements (currently go1.24). It does not track upstream go-difflib releases, as the original repository is no longer maintained and this copy has diverged through modernization and refactoring.
+This internalized copy is maintained as part of github.com/go-openapi/testify/v2 and follows the same Go version requirements (currently go1.25). It does not track upstream go-difflib releases, as the original repository is no longer maintained and this copy has diverged through modernization and refactoring.
 
 For issues or improvements specific to this internalized version, please file issues at:
 https://github.com/go-openapi/testify/issues

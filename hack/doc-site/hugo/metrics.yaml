@@ -1,0 +1,67 @@
+params:
+    metrics:
+        domains: 19
+        functions: 135
+        assertions: 131
+        generics: 49
+        nongeneric_assertions: 86
+        helpers: 4
+        others: 0
+        by_domain:
+            boolean:
+                name: Boolean
+                count: 4
+            collection:
+                name: Collection
+                count: 23
+            common:
+                name: Common
+                count: 0
+            comparison:
+                name: Comparison
+                count: 12
+            condition:
+                name: Condition
+                count: 5
+            equality:
+                name: Equality
+                count: 16
+            error:
+                name: Error
+                count: 8
+            file:
+                name: File
+                count: 6
+            http:
+                name: Http
+                count: 6
+            json:
+                name: Json
+                count: 5
+            number:
+                name: Number
+                count: 7
+            ordering:
+                name: Ordering
+                count: 10
+            panic:
+                name: Panic
+                count: 4
+            safety:
+                name: Safety
+                count: 2
+            string:
+                name: String
+                count: 4
+            testing:
+                name: Testing
+                count: 2
+            time:
+                name: Time
+                count: 2
+            type:
+                name: Type
+                count: 10
+            yaml:
+                name: Yaml
+                count: 5

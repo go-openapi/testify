@@ -20,6 +20,7 @@ import (
 //	failure: (*error)(nil), new(testing.T)
 func Implements(t T, interfaceObject any, object any, msgAndArgs ...any) bool {
 	// Domain: type
+	// Opposite: NotImplements
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -74,6 +75,7 @@ func NotImplements(t T, interfaceObject any, object any, msgAndArgs ...any) bool
 //	failure: int32(123), int64(456)
 func IsType(t T, expectedType, object any, msgAndArgs ...any) bool {
 	// Domain: type
+	// Opposite: IsNotType
 	if isType(expectedType, object) {
 		return true
 	}
@@ -95,6 +97,7 @@ func IsType(t T, expectedType, object any, msgAndArgs ...any) bool {
 //	failure: 123.123
 func IsOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool {
 	// Domain: type
+	// Opposite: IsNotOfTypeT
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -164,6 +167,7 @@ func IsNotOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool {
 //	failure: 1
 func Zero(t T, i any, msgAndArgs ...any) bool {
 	// Domain: type
+	// Opposite: NotZero
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -209,6 +213,7 @@ func NotZero(t T, i any, msgAndArgs ...any) bool {
 //	failure: reflect.String, 0
 func Kind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool {
 	// Domain: type
+	// Opposite: NotKind
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}

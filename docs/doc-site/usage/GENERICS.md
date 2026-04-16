@@ -4,7 +4,7 @@ description: Using generic assertions.
 weight: 10
 ---
 
-Testify v2 provides **46 generic assertion functions** that offer compile-time type safety alongside
+Testify v2 provides **{{% siteparam "metrics.generics" %}} generic assertion functions** that offer compile-time type safety alongside
 the traditional reflection-based assertions. Generic variants are identified by the `T` suffix
 (e.g., `EqualT`, `GreaterT`, `ElementsMatchT`).
 

@@ -142,7 +142,7 @@ func main() {
 |--|--|
 | [`assertions.NotPanics(t T, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotPanics) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotPanics](https://github.com/go-openapi/testify/blob/master/internal/assertions/panic.go#L111)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotPanics](https://github.com/go-openapi/testify/blob/master/internal/assertions/panic.go#L112)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -374,7 +374,7 @@ func main() {
 |--|--|
 | [`assertions.PanicsWithError(t T, errString string, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#PanicsWithError) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#PanicsWithError](https://github.com/go-openapi/testify/blob/master/internal/assertions/panic.go#L77)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#PanicsWithError](https://github.com/go-openapi/testify/blob/master/internal/assertions/panic.go#L78)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -490,7 +490,7 @@ func main() {
 |--|--|
 | [`assertions.PanicsWithValue(t T, expected any, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#PanicsWithValue) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#PanicsWithValue](https://github.com/go-openapi/testify/blob/master/internal/assertions/panic.go#L49)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#PanicsWithValue](https://github.com/go-openapi/testify/blob/master/internal/assertions/panic.go#L50)
 {{% /tab %}}
 {{< /tabs >}}
 

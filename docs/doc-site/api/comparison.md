@@ -286,7 +286,7 @@ func main() {
 |--|--|
 | [`assertions.GreaterOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#GreaterOrEqual) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#GreaterOrEqual](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L91)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#GreaterOrEqual](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L93)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -407,7 +407,7 @@ func main() {
 |--|--|
 | [`assertions.GreaterOrEqualT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#GreaterOrEqualT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#GreaterOrEqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L124)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#GreaterOrEqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L127)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -527,7 +527,7 @@ func main() {
 |--|--|
 | [`assertions.GreaterT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#GreaterT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#GreaterT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L62)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#GreaterT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L63)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -643,7 +643,7 @@ func main() {
 |--|--|
 | [`assertions.Less(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Less) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Less](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L153)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Less](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L157)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -757,7 +757,7 @@ func main() {
 |--|--|
 | [`assertions.LessOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#LessOrEqual) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#LessOrEqual](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L211)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#LessOrEqual](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L215)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -877,7 +877,7 @@ func main() {
 |--|--|
 | [`assertions.LessOrEqualT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#LessOrEqualT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#LessOrEqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L243)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#LessOrEqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L247)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -996,7 +996,7 @@ func main() {
 |--|--|
 | [`assertions.LessT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#LessT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#LessT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L184)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#LessT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L188)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1108,7 +1108,7 @@ func main() {
 |--|--|
 | [`assertions.Negative(t T, e any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Negative) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Negative](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L314)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Negative](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L320)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1216,7 +1216,7 @@ func main() {
 |--|--|
 | [`assertions.NegativeT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NegativeT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NegativeT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L335)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NegativeT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L341)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1328,7 +1328,7 @@ func main() {
 |--|--|
 | [`assertions.Positive(t T, e any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Positive) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Positive](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L268)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Positive](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L272)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1436,7 +1436,7 @@ func main() {
 |--|--|
 | [`assertions.PositiveT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#PositiveT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#PositiveT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L289)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#PositiveT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L294)
 {{% /tab %}}
 {{< /tabs >}}
 
