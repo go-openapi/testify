@@ -6,6 +6,7 @@ package assertions
 import (
 	"context"
 	"errors"
+	"fmt"
 	"iter"
 	"slices"
 	"sort"
@@ -710,5 +711,154 @@ func pollUntilTimeoutCases() iter.Seq[pollUntilTimeoutCase] {
 			assertion: Consistently[func() bool],
 			goodValue: true, // Consistently succeeds when the condition always returns true ("always true")
 		},
+	})
+}
+
+func TestConditionPanicRecovery(t *testing.T) {
+	t.Parallel()
+
+	t.Run("Eventually survives a panicking condition and retries", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(errorsCapturingT)
+		var counter int
+		var mu sync.Mutex
+
+		condition := func() bool {
+			mu.Lock()
+			counter++
+			n := counter
+			mu.Unlock()
+			if n < 3 {
+				panic("boom")
+			}
+
+			return true
+		}
+
+		if !Eventually(mock, condition, testTimeout, testTick) {
+			t.Error("expected Eventually to return true after recovering from panics")
+		}
+		mu.Lock()
+		got := counter
+		mu.Unlock()
+		if got < 3 {
+			t.Errorf("expected at least 3 calls, got %d", got)
+		}
+	})
+
+	t.Run("Eventually fails when condition always panics", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(errorsCapturingT)
+		condition := func() bool {
+			panic("persistent failure")
+		}
+
+		if Eventually(mock, condition, testTimeout, testTick) {
+			t.Error("expected Eventually to return false when condition always panics")
+		}
+	})
+
+	t.Run("Never fails when condition panics", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(errorsCapturingT)
+		condition := func() bool {
+			panic("unexpected")
+		}
+
+		if Never(mock, condition, testTimeout, testTick) {
+			t.Error("expected Never to return false when condition panics")
+		}
+	})
+
+	t.Run("Consistently fails when condition panics", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(errorsCapturingT)
+		condition := func() bool {
+			panic("unexpected")
+		}
+
+		if Consistently(mock, condition, testTimeout, testTick) {
+			t.Error("expected Consistently to return false when condition panics")
+		}
+	})
+
+	t.Run("EventuallyWith survives a panicking condition and retries", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(errorsCapturingT)
+		var counter int
+		var mu sync.Mutex
+
+		condition := func(_ *CollectT) {
+			mu.Lock()
+			counter++
+			n := counter
+			mu.Unlock()
+			if n < 3 {
+				panic("boom in collect")
+			}
+		}
+
+		if !EventuallyWith(mock, condition, testTimeout, testTick) {
+			t.Error("expected EventuallyWith to return true after recovering from panics")
+		}
+		mu.Lock()
+		got := counter
+		mu.Unlock()
+		if got < 3 {
+			t.Errorf("expected at least 3 calls, got %d", got)
+		}
+	})
+
+	t.Run("EventuallyWith fails when condition always panics", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(errorsCapturingT)
+		condition := func(_ *CollectT) {
+			panic("always panics")
+		}
+
+		if EventuallyWith(mock, condition, testTimeout, testTick) {
+			t.Error("expected EventuallyWith to return false when condition always panics")
+		}
+	})
+
+	t.Run("EventuallyWith collects panic error via sentinel", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(errorsCapturingT)
+		var counter int
+		var mu sync.Mutex
+
+		condition := func(collect *CollectT) {
+			mu.Lock()
+			counter++
+			n := counter
+			mu.Unlock()
+
+			if n == 1 {
+				panic("boom on first tick")
+			}
+			// Subsequent ticks fail normally, preserving the panic error
+			// from the first tick in lastCollectedErrors.
+			Fail(collect, "still failing")
+		}
+
+		if EventuallyWith(mock, condition, testTimeout, testTick) {
+			t.Error("expected EventuallyWith to return false")
+		}
+	})
+
+	t.Run("errConditionPanicked sentinel is detectable with errors.Is", func(t *testing.T) {
+		t.Parallel()
+
+		err := fmt.Errorf("%w: %v", errConditionPanicked, "test panic")
+		if !errors.Is(err, errConditionPanicked) {
+			t.Error("expected errors.Is to detect errConditionPanicked sentinel")
+		}
 	})
 }

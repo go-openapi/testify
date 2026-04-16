@@ -179,6 +179,11 @@ This is consistent with [Eventually](https://pkg.go.dev/github.com/go-openapi/te
 It will be executed with the context of the assertion, which inherits the [testing.T.Context](https://pkg.go.dev/testing#T.Context) and
 is cancelled on timeout.
 
+#### Panic recovery
+
+A panicking condition is treated as an error, causing [Consistently](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Consistently) to fail immediately.
+See [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Eventually) for details.
+
 #### Concurrency
 
 See [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Eventually).
@@ -192,7 +197,7 @@ See [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Even
 {{% tab title="Usage" %}}
 ```go
 	assertions.Consistently(t, func() bool { return true }, time.Second, 10*time.Millisecond)
-See also [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Eventually) for details about using context and concurrency.
+See also [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Eventually) for details about using context, concurrency, and panic recovery.
 	success:  func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond
 	failure:  func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond
 ```
@@ -444,7 +449,7 @@ func main() {
 |--|--|
 | [`assertions.Consistently[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Consistently) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Consistently](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L204)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Consistently](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L225)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -500,6 +505,17 @@ It may thus write to variables outside its scope without triggering race conditi
 A blocking condition will cause [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Eventually) to hang until it returns.
 
 Notice that time ticks may be skipped if the condition takes longer than the tick interval.
+
+#### Panic recovery
+
+If the condition panics, the panic is recovered and treated as a failed tick
+(equivalent to returning false or a non-nil error). For [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Eventually), this means
+the poller retries on the next tick — if a later tick succeeds, the assertion
+succeeds. For [Never](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Never) and [Consistently](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Consistently), a panic is treated as the condition
+erroring, which causes immediate failure.
+
+The recovered panic is wrapped as an error with the sentinel [errConditionPanicked](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#errConditionPanicked),
+detectable with [errors.Is](https://pkg.go.dev/errors#Is).
 
 #### Attention point
 
@@ -781,7 +797,7 @@ func main() {
 |--|--|
 | [`assertions.Eventually[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Eventually) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Eventually](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L108)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Eventually](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L119)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -814,6 +830,15 @@ It may write to variables outside its scope without triggering race conditions.
 The condition is wrapped in its own goroutine, so a call to [runtime.Goexit](https://pkg.go.dev/runtime#Goexit)
 (e.g. via [require](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#require) assertions or [CollectT.FailNow](https://pkg.go.dev/CollectT#FailNow)) cleanly aborts only the
 current tick.
+
+#### Panic recovery
+
+If the condition panics, the panic is recovered and recorded as an error in the
+[CollectT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#CollectT) for that tick. The poller treats it as a failed tick and retries on the
+next one. If the assertion times out, the panic error is included in the collected
+errors reported on the parent t.
+
+See [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Eventually) for the general panic recovery semantics.
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -935,7 +960,7 @@ func main() {
 |--|--|
 | [`assertions.EventuallyWith[C CollectibleConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L264)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L294)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -956,6 +981,11 @@ The simplest form of condition is:
 
 Use [Consistently](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Consistently) instead if you want to use a condition returning an error.
 
+#### Panic recovery
+
+A panicking condition is treated as an error, causing [Never](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Never) to fail immediately.
+See [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Eventually) for details.
+
 #### Concurrency
 
 See [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Eventually).
@@ -969,7 +999,7 @@ See [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Even
 {{% tab title="Usage" %}}
 ```go
 	assertions.Never(t, func() bool { return false }, time.Second, 10*time.Millisecond)
-See also [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Eventually) for details about using context and concurrency.
+See also [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Eventually) for details about using context, concurrency, and panic recovery.
 	success:  func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond
 	failure:  func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond
 ```
@@ -1157,7 +1187,7 @@ func main() {
 |--|--|
 | [`assertions.Never(t T, condition func() bool, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Never) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Never](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L151)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Never](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L167)
 {{% /tab %}}
 {{< /tabs >}}
 

@@ -93,6 +93,17 @@ func Condition(t T, comp func() bool, msgAndArgs ...any) bool {
 //
 // Notice that time ticks may be skipped if the condition takes longer than the tick interval.
 //
+// # Panic recovery
+//
+// If the condition panics, the panic is recovered and treated as a failed tick
+// (equivalent to returning false or a non-nil error). For [Eventually], this means
+// the poller retries on the next tick — if a later tick succeeds, the assertion
+// succeeds. For [Never] and [Consistently], a panic is treated as the condition
+// erroring, which causes immediate failure.
+//
+// The recovered panic is wrapped as an error with the sentinel [errConditionPanicked],
+// detectable with [errors.Is].
+//
 // # Attention point
 //
 // Time-based tests may be flaky in a resource-constrained environment such as a CI runner and may produce
@@ -126,7 +137,7 @@ func Eventually[C Conditioner](t T, condition C, timeout time.Duration, tick tim
 //
 //	assertions.Never(t, func() bool { return false }, time.Second, 10*time.Millisecond)
 //
-// See also [Eventually] for details about using context and concurrency.
+// See also [Eventually] for details about using context, concurrency, and panic recovery.
 //
 // # Alternative condition signature
 //
@@ -135,6 +146,11 @@ func Eventually[C Conditioner](t T, condition C, timeout time.Duration, tick tim
 //	func() bool
 //
 // Use [Consistently] instead if you want to use a condition returning an error.
+//
+// # Panic recovery
+//
+// A panicking condition is treated as an error, causing [Never] to fail immediately.
+// See [Eventually] for details.
 //
 // # Concurrency
 //
@@ -168,7 +184,7 @@ func Never(t T, condition func() bool, timeout time.Duration, tick time.Duration
 //
 //	assertions.Consistently(t, func() bool { return true }, time.Second, 10*time.Millisecond)
 //
-// See also [Eventually] for details about using context and concurrency.
+// See also [Eventually] for details about using context, concurrency, and panic recovery.
 //
 // # Alternative condition signature
 //
@@ -188,6 +204,11 @@ func Never(t T, condition func() bool, timeout time.Duration, tick time.Duration
 //
 // It will be executed with the context of the assertion, which inherits the [testing.T.Context] and
 // is cancelled on timeout.
+//
+// # Panic recovery
+//
+// A panicking condition is treated as an error, causing [Consistently] to fail immediately.
+// See [Eventually] for details.
 //
 // # Concurrency
 //
@@ -256,6 +277,15 @@ func Consistently[C Conditioner](t T, condition C, timeout time.Duration, tick t
 // (e.g. via [require] assertions or [CollectT.FailNow]) cleanly aborts only the
 // current tick.
 //
+// # Panic recovery
+//
+// If the condition panics, the panic is recovered and recorded as an error in the
+// [CollectT] for that tick. The poller treats it as a failed tick and retries on the
+// next one. If the assertion times out, the panic error is included in the collected
+// errors reported on the parent t.
+//
+// See [Eventually] for the general panic recovery semantics.
+//
 // # Examples
 //
 //	success: func(c *CollectT) { True(c,true) }, 100*time.Millisecond, 20*time.Millisecond
@@ -318,13 +348,21 @@ func eventuallyWithT[C CollectibleConditioner](t T, collectCondition C, timeout 
 	var cancelFunc func() // will be set by pollCondition via onSetup
 	fn := makeCollectibleCondition(collectCondition)
 
-	condition := func(ctx context.Context) error {
+	condition := func(ctx context.Context) (err error) {
 		collector := new(CollectT).withCancelFunc(cancelFunc)
+
+		defer func() {
+			if r := recover(); r != nil {
+				err = fmt.Errorf("%w: %v", errConditionPanicked, r)
+				collector.errors = append(collector.errors, err)
+			}
+			if collector.failed() {
+				lastCollectedErrors = collector.collected()
+				err = collector.last()
+			}
+		}()
+
 		fn(ctx, collector)
-		if collector.failed() {
-			lastCollectedErrors = collector.collected()
-			return collector.last()
-		}
 
 		return nil
 	}
@@ -408,6 +446,18 @@ func makeCollectibleCondition[C CollectibleConditioner](condition C) func(contex
 	}
 }
 
+func recoverCondition(fn func(context.Context) error) func(context.Context) error {
+	return func(ctx context.Context) (err error) {
+		defer func() {
+			if r := recover(); r != nil {
+				err = fmt.Errorf("%w: %v", errConditionPanicked, r)
+			}
+		}()
+
+		return fn(ctx)
+	}
+}
+
 type conditionPoller struct {
 	pollOptions
 
@@ -461,6 +511,8 @@ func (p *conditionPoller) pollCondition(t T, condition func(context.Context) err
 	if p.onSetup != nil {
 		p.onSetup(cancel)
 	}
+
+	condition = recoverCondition(condition)
 
 	p.ticker = time.NewTicker(tick)
 	defer p.ticker.Stop()
@@ -691,13 +743,15 @@ func (p *conditionPoller) cancellableContext(parentCtx context.Context, timeout 
 	return ctx, cancel
 }
 
-// Sentinel errors recorded by [CollectT.FailNow] and [CollectT.Cancel].
+// Sentinel errors recorded by async condition assertions.
 // Kept package-private: callers should rely on observable behavior, not on
 // the marker shape. They are distinguishable so future tooling can tell apart
-// "tick aborted by require" from "user explicitly cancelled the assertion".
+// "tick aborted by require", "user explicitly cancelled the assertion",
+// and "condition panicked".
 var (
-	errFailNow   = errors.New("collect: failed now (tick aborted)")
-	errCancelled = errors.New("collect: cancelled (assertion aborted)")
+	errFailNow           = errors.New("collect: failed now (tick aborted)")
+	errCancelled         = errors.New("collect: cancelled (assertion aborted)")
+	errConditionPanicked = errors.New("condition panicked")
 )
 
 // CollectT implements the [T] interface and collects all errors.
