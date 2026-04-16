@@ -817,6 +817,12 @@ func (c *CollectT) Cancel() {
 	runtime.Goexit()
 }
 
+// Cancelf records a failure like [Cancel], with an additional custom message recorded.
+func (c *CollectT) Cancelf(format string, msgAndArgs ...any) {
+	c.errors = append(c.errors, fmt.Errorf(format, msgAndArgs...))
+	c.Cancel()
+}
+
 func (c *CollectT) failed() bool {
 	return len(c.errors) != 0
 }
