@@ -45,7 +45,7 @@ func Condition(t T, comp func() bool, msgAndArgs ...any) bool {
 //
 //	assertions.Consistently(t, func() bool { return true }, time.Second, 10*time.Millisecond)
 //
-// See also [Eventually] for details about using context and concurrency.
+// See also [Eventually] for details about using context, concurrency, and panic recovery.
 //
 // # Alternative condition signature
 //
@@ -65,6 +65,11 @@ func Condition(t T, comp func() bool, msgAndArgs ...any) bool {
 //
 // It will be executed with the context of the assertion, which inherits the [testing.T.Context] and
 // is cancelled on timeout.
+//
+// # Panic recovery
+//
+// A panicking condition is treated as an error, causing [Consistently] to fail immediately.
+// See [Eventually] for details.
 //
 // # Concurrency
 //
@@ -483,6 +488,17 @@ func ErrorIs(t T, err error, target error, msgAndArgs ...any) bool {
 //
 // Notice that time ticks may be skipped if the condition takes longer than the tick interval.
 //
+// # Panic recovery
+//
+// If the condition panics, the panic is recovered and treated as a failed tick
+// (equivalent to returning false or a non-nil error). For [Eventually], this means
+// the poller retries on the next tick — if a later tick succeeds, the assertion
+// succeeds. For [Never] and [Consistently], a panic is treated as the condition
+// erroring, which causes immediate failure.
+//
+// The recovered panic is wrapped as an error with the sentinel [errConditionPanicked],
+// detectable with [errors.Is].
+//
 // # Attention point
 //
 // Time-based tests may be flaky in a resource-constrained environment such as a CI runner and may produce
@@ -549,6 +565,15 @@ func Eventually[C Conditioner](t T, condition C, timeout time.Duration, tick tim
 // The condition is wrapped in its own goroutine, so a call to [runtime.Goexit]
 // (e.g. via [require] assertions or [CollectT.FailNow]) cleanly aborts only the
 // current tick.
+//
+// # Panic recovery
+//
+// If the condition panics, the panic is recovered and recorded as an error in the
+// [CollectT] for that tick. The poller treats it as a failed tick and retries on the
+// next one. If the assertion times out, the panic error is included in the collected
+// errors reported on the parent t.
+//
+// See [Eventually] for the general panic recovery semantics.
 //
 // # Examples
 //
@@ -1868,7 +1893,7 @@ func NegativeT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...an
 //
 //	assertions.Never(t, func() bool { return false }, time.Second, 10*time.Millisecond)
 //
-// See also [Eventually] for details about using context and concurrency.
+// See also [Eventually] for details about using context, concurrency, and panic recovery.
 //
 // # Alternative condition signature
 //
@@ -1877,6 +1902,11 @@ func NegativeT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...an
 //	func() bool
 //
 // Use [Consistently] instead if you want to use a condition returning an error.
+//
+// # Panic recovery
+//
+// A panicking condition is treated as an error, causing [Never] to fail immediately.
+// See [Eventually] for details.
 //
 // # Concurrency
 //
