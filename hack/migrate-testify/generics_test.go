@@ -136,6 +136,78 @@ func TestContains(t *testing.T) {
 			expected: `assert.MapContainsT(t, map[string]int{"a": 1}, "a")`,
 		},
 		{
+			name: "equal slice int upgrade",
+			input: `package p
+import (
+	"testing"
+	"github.com/go-openapi/testify/v2/assert"
+)
+func TestSliceEqual(t *testing.T) {
+	assert.Equal(t, []int{1, 2}, []int{3, 4})
+}`,
+			expected: `assert.SliceEqualT(t, []int{1, 2}, []int{3, 4})`,
+		},
+		{
+			name: "notequal slice string upgrade",
+			input: `package p
+import (
+	"testing"
+	"github.com/go-openapi/testify/v2/assert"
+)
+func TestSliceNotEqual(t *testing.T) {
+	assert.NotEqual(t, []string{"a"}, []string{"b"})
+}`,
+			expected: `assert.SliceNotEqualT(t, []string{"a"}, []string{"b"})`,
+		},
+		{
+			name: "equal map upgrade",
+			input: `package p
+import (
+	"testing"
+	"github.com/go-openapi/testify/v2/assert"
+)
+func TestMapEqual(t *testing.T) {
+	assert.Equal(t, map[string]int{"a": 1}, map[string]int{"b": 2})
+}`,
+			expected: `assert.MapEqualT(t, map[string]int{"a": 1}, map[string]int{"b": 2})`,
+		},
+		{
+			name: "notequal map upgrade",
+			input: `package p
+import (
+	"testing"
+	"github.com/go-openapi/testify/v2/assert"
+)
+func TestMapNotEqual(t *testing.T) {
+	assert.NotEqual(t, map[string]int{"a": 1}, map[string]int{"b": 2})
+}`,
+			expected: `assert.MapNotEqualT(t, map[string]int{"a": 1}, map[string]int{"b": 2})`,
+		},
+		{
+			name: "equalf slice format variant",
+			input: `package p
+import (
+	"testing"
+	"github.com/go-openapi/testify/v2/assert"
+)
+func TestSliceEqualf(t *testing.T) {
+	assert.Equalf(t, []int{1, 2}, []int{3, 4}, "should match")
+}`,
+			expected: `assert.SliceEqualTf(t, []int{1, 2}, []int{3, 4}, "should match")`,
+		},
+		{
+			name: "skip slice non-comparable element",
+			input: `package p
+import (
+	"testing"
+	"github.com/go-openapi/testify/v2/assert"
+)
+func TestSkipSliceNonComparable(t *testing.T) {
+	assert.Equal(t, [][]int{{1}}, [][]int{{2}})
+}`,
+			expected: `assert.Equal(t, [][]int{{1}}, [][]int{{2}})`,
+		},
+		{
 			name: "true/false bool upgrade",
 			input: `package p
 import (
@@ -386,6 +458,16 @@ func typeCheckWithMockAssert(t *testing.T, fset *token.FileSet, f *ast.File) *ty
 	makeAssertFunc("StringContainsT", anyParam("s"), anyParam("contains"))
 	makeAssertFunc("SliceContainsT", anyParam("s"), anyParam("contains"))
 	makeAssertFunc("MapContainsT", anyParam("s"), anyParam("contains"))
+	makeAssertFunc("Equalf", anyParam("expected"), anyParam("actual"))
+	makeAssertFunc("NotEqualf", anyParam("expected"), anyParam("actual"))
+	makeAssertFunc("SliceEqualT", anyParam("expected"), anyParam("actual"))
+	makeAssertFunc("SliceEqualTf", anyParam("expected"), anyParam("actual"))
+	makeAssertFunc("SliceNotEqualT", anyParam("expected"), anyParam("actual"))
+	makeAssertFunc("SliceNotEqualTf", anyParam("expected"), anyParam("actual"))
+	makeAssertFunc("MapEqualT", anyParam("expected"), anyParam("actual"))
+	makeAssertFunc("MapEqualTf", anyParam("expected"), anyParam("actual"))
+	makeAssertFunc("MapNotEqualT", anyParam("expected"), anyParam("actual"))
+	makeAssertFunc("MapNotEqualTf", anyParam("expected"), anyParam("actual"))
 	makeAssertFunc("True", anyParam("value"))
 	makeAssertFunc("TrueT", anyParam("value"))
 	makeAssertFunc("False", anyParam("value"))

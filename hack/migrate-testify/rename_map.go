@@ -277,6 +277,9 @@ const (
 	skipNotSlice                   skipReason = "argument is not a slice type"
 	skipNotRegExp                  skipReason = "type does not satisfy RegExp constraint"
 	skipSliceElemNotDeepComparable skipReason = "slice element not deeply comparable"
+	skipSliceElemNotComparable     skipReason = "slice element not comparable"
 	skipSliceElemNotOrdered        skipReason = "slice element not ordered"
+	skipMapKeyNotComparable        skipReason = "map key not comparable"
+	skipMapValNotComparable        skipReason = "map value not comparable"
 	skipContainerTypeUnknown       skipReason = "container is not string, slice, or map"
 )

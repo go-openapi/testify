@@ -229,6 +229,13 @@ func trySimpleUpgrade(
 	switch baseName {
 	case "Equal", "NotEqual":
 		result = checkDeepComparablePair(argTypes, rule)
+		if !result.ok {
+			// Fallback: try slice or map equality upgrade.
+			isNot := baseName == "NotEqual"
+			if alt := tryEqualityFallback(argTypes, isNot); alt.ok {
+				return applyUpgrade(sel, funcName, alt.target, isFormat, rpt, filename, pos, verbose)
+			}
+		}
 	case "Greater", "GreaterOrEqual", "Less", "LessOrEqual":
 		result = checkPairConstraint(argTypes, constraintOrdered, skipNotOrdered, rule)
 	case "InDelta", "InEpsilon":
@@ -270,6 +277,70 @@ func trySimpleUpgrade(
 
 	sel.Sel.Name = newName
 	return true
+}
+
+// applyUpgrade rewrites the selector name and records the upgrade.
+func applyUpgrade(
+	sel *ast.SelectorExpr,
+	funcName, target string,
+	isFormat bool,
+	rpt *report,
+	filename string,
+	pos token.Position,
+	verbose bool,
+) bool {
+	newName := target
+	if isFormat {
+		newName += "f"
+	}
+	if verbose {
+		rpt.info(filename, pos.Line, fmt.Sprintf("upgraded %s → %s", funcName, newName))
+	}
+	rpt.trackUpgrade(funcName, newName)
+	sel.Sel.Name = newName
+	return true
+}
+
+// tryEqualityFallback attempts slice or map equality upgrades when the
+// standard Equal → EqualT path is not applicable (e.g., slices and maps
+// are not deep-comparable scalars).
+func tryEqualityFallback(argTypes []types.Type, isNot bool) containerCheckResult {
+	if len(argTypes) < minPairArgs {
+		return containerCheckResult{}
+	}
+
+	if !sameType(argTypes[0], argTypes[1]) {
+		return containerCheckResult{checkResult: checkSkip(skipTypeMismatch, argTypes[0].String()+" vs "+argTypes[1].String())}
+	}
+
+	// Try slice equality: both args are []E with E comparable.
+	if elem, ok := isSliceType(argTypes[0]); ok {
+		if !isComparable(elem) {
+			return containerCheckResult{checkResult: checkSkip(skipSliceElemNotComparable, elem.String())}
+		}
+		target := "SliceEqualT"
+		if isNot {
+			target = "SliceNotEqualT"
+		}
+		return containerCheckResult{checkResult: checkOK, target: target}
+	}
+
+	// Try map equality: both args are map[K]V with K and V comparable.
+	if key, val, ok := isMapType(argTypes[0]); ok {
+		if !isComparable(key) {
+			return containerCheckResult{checkResult: checkSkip(skipMapKeyNotComparable, key.String())}
+		}
+		if !isComparable(val) {
+			return containerCheckResult{checkResult: checkSkip(skipMapValNotComparable, val.String())}
+		}
+		target := "MapEqualT"
+		if isNot {
+			target = "MapNotEqualT"
+		}
+		return containerCheckResult{checkResult: checkOK, target: target}
+	}
+
+	return containerCheckResult{}
 }
 
 // checkDeepComparablePair checks that both arguments are deeply comparable and have matching types.
