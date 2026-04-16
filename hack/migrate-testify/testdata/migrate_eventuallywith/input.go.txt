@@ -1,0 +1,14 @@
+package example
+
+import (
+	"testing"
+	"time"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func TestEventuallyWith(t *testing.T) {
+	assert.EventuallyWithT(t, func(c *assert.CollectT) {
+		assert.True(c, true)
+	}, 100*time.Millisecond, 20*time.Millisecond)
+}
