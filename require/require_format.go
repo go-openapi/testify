@@ -1064,11 +1064,11 @@ func NegativeTf[SignedNumber SignedNumeric](t T, e SignedNumber, msg string, arg
 // Neverf is the same as [Never], but it accepts a format string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func Neverf(t T, condition func() bool, timeout time.Duration, tick time.Duration, msg string, args ...any) {
+func Neverf[C NeverConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msg string, args ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.Never(t, condition, timeout, tick, forwardArgs(msg, args)) {
+	if assertions.Never[C](t, condition, timeout, tick, forwardArgs(msg, args)) {
 		return
 	}
 

@@ -780,6 +780,83 @@ func TestEventuallyWithCancel(t *testing.T) {
 4. Use `Eventually` for simple boolean conditions (faster, simpler)
 5. Use `Never` to verify invariants over time (no race conditions, no invalid state)
 
+#### Deterministic polling with synctest (opt-in)
+
+All four async assertions (`Eventually`, `Never`, `Consistently`, `EventuallyWith`)
+accept an **opt-in wrapper** that runs the polling loop inside a [testing/synctest]
+bubble. Inside the bubble, `time.Ticker`, `time.After`, and `context.WithTimeout`
+use a **fake clock** that advances only when all goroutines are durably blocked —
+so the tick count is deterministic and long timeouts cost zero real wall-clock time.
+
+Wrappers:
+
+| Wrapper | Underlying condition form | Used by |
+|---------|---------------------------|---------|
+| `WithSynctest` | `func() bool` | `Eventually`, `Never`, `Consistently` |
+| `WithSynctestContext` | `func(context.Context) error` | `Eventually`, `Consistently` |
+| `WithSynctestCollect` | `func(*CollectT)` | `EventuallyWith` |
+| `WithSynctestCollectContext` | `func(context.Context, *CollectT)` | `EventuallyWith` |
+
+Minimal example:
+
+```go
+import (
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func TestDeterministicPolling(t *testing.T) {
+	attempts := 0
+	cond := func() bool {
+		attempts++
+		return attempts == 5 // converges on the 5th tick
+	}
+
+	// 1-hour timeout with 1-minute tick completes in microseconds of real
+	// wall-clock time under the fake clock. Exactly 5 calls to the condition.
+	assert.Eventually(t, assert.WithSynctest(cond), 1*time.Hour, 1*time.Minute)
+}
+```
+
+{{% notice info %}}
+**When to use synctest wrappers:** the condition is pure compute, or uses
+`time.Sleep`/timers/tickers/channels created inside the condition. These
+are ideal for deterministic tests of retry logic and polling loops.
+{{% /notice %}}
+
+{{% notice warning %}}
+**When NOT to use them:**
+
+- The condition performs real I/O (network, filesystem, syscalls): those
+  block goroutines non-durably, so the fake clock stalls and the timeout
+  may not fire.
+- External goroutines drive state change via real time (e.g. a
+  `go func() { time.Sleep(...); flag = true }()` started *before* the
+  assertion call): the external goroutine runs on real time, while the
+  bubble advances fake time independently.
+- The test body is already running inside a `synctest.Test` bubble:
+  nested bubbles are forbidden and will panic. In that case, just use
+  the plain condition form — the outer bubble already gives you fake time.
+- The caller is not a `*testing.T` (e.g. a mock): activation requires a
+  concrete `*testing.T`; with other `T` implementations, the wrapper
+  silently falls back to real-time polling.
+{{% /notice %}}
+
+Shared state between the condition and enclosing scope (counters, atomics,
+flags) works as expected. Polling is already serialized (see **Concurrency**
+in the `Eventually` godoc), so no additional synchronization is required
+inside the condition.
+
+See also the testable examples:
+
+- [`ExampleWithSynctest_asyncReady`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#example-package-WithSynctest-asyncReady)
+- [`ExampleWithSynctestContext_healthCheck`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#example-package-WithSynctestContext-healthCheck)
+- [`ExampleWithSynctestCollect_convergence`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#example-package-WithSynctestCollect-convergence)
+
+[testing/synctest]: https://pkg.go.dev/testing/synctest
+
 ### Goroutine Leak Detection
 
 Use `NoGoRoutineLeak` to verify that your code doesn't leak goroutines. This is critical for long-running applications, connection pools, and worker patterns.

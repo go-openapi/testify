@@ -37,7 +37,7 @@ timeline
                     : Eventually, Eventually (with context), Consistently
                     : Migration tool
     section Q2 2026
-    📝 v2.5 (May 2026) : synctest for Eventually/Consistently
+    📝 v2.5 (May 2026) : synctest opt-in for Eventually/Never/Consistently/EventuallyWith (done)
                     : NoFileDescriptorLeak (macOS, Windows)
                     : New candidate features from upstream
                     : export internal tools (spew, difflib)

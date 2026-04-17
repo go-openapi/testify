@@ -67,14 +67,74 @@ type (
 	// Conditioner is a function used in asynchronous condition assertions.
 	//
 	// This type constraint allows for "overloaded" versions of the condition assertions ([Eventually], [Consistently]).
+	//
+	// The [WithSynctest] and [WithSynctestContext] wrappers opt a call into
+	// fake-time polling via [testing/synctest]. See [WithSynctest] for details.
 	Conditioner interface {
-		func() bool | func(context.Context) error
+		func() bool | func(context.Context) error | WithSynctest | WithSynctestContext
+	}
+
+	// NeverConditioner is a function used by [Never].
+	//
+	// Unlike [Conditioner], [Never] does not accept the context-returning-error
+	// form to avoid the double-negation confusion ("never returns no error").
+	//
+	// The [WithSynctest] wrapper opts a call into fake-time polling.
+	NeverConditioner interface {
+		func() bool | WithSynctest
 	}
 
 	// CollectibleConditioner is a function used in asynchronous condition assertions that use [CollectT].
 	//
 	// This type constraint allows for "overloaded" versions of the condition assertions ([EventuallyWith]).
+	//
+	// The [WithSynctestCollect] and [WithSynctestCollectContext] wrappers opt a
+	// call into fake-time polling. See [WithSynctest] for details.
 	CollectibleConditioner interface {
-		func(*CollectT) | func(context.Context, *CollectT)
+		func(*CollectT) | func(context.Context, *CollectT) |
+			WithSynctestCollect | WithSynctestCollectContext
 	}
+
+	// WithSynctest wraps a [func() bool] condition to run [Eventually] /
+	// [Never] / [Consistently] polling inside a [testing/synctest] bubble,
+	// so `time.Ticker`, `time.After`, and `context.WithTimeout` use a fake
+	// clock. Activation requires the caller to pass a real `*testing.T`;
+	// with mocks or other [T] implementations, the wrapper falls back to
+	// real-time polling.
+	//
+	// # When to use
+	//
+	// Use when the condition is pure compute, relies on `time.Sleep`, or
+	// coordinates via channels created inside the condition. Fake time
+	// eliminates timing-induced flakiness and enables deterministic tick
+	// counts.
+	//
+	// # When not to use
+	//
+	// Do NOT use when the condition performs real I/O (network, filesystem,
+	// syscalls): those block goroutines non-durably, so the fake clock
+	// stalls and the timeout may not fire. Also do NOT use inside a test
+	// that is already running in a [synctest.Test] bubble — nested bubbles
+	// are forbidden and will panic.
+	//
+	// # Shared state
+	//
+	// The condition may read and write variables captured from the enclosing
+	// scope; condition execution is serialized by design (see [Eventually]'s
+	// Concurrency section). Avoid sharing channels or mutexes with goroutines
+	// outside the bubble, as this will stall the fake clock.
+	WithSynctest func() bool
+
+	// WithSynctestContext is the [func(context.Context) error] counterpart
+	// of [WithSynctest]. See [WithSynctest] for details.
+	WithSynctestContext func(context.Context) error
+
+	// WithSynctestCollect is the [func(*CollectT)] counterpart of
+	// [WithSynctest] for use with [EventuallyWith]. See [WithSynctest] for details.
+	WithSynctestCollect func(*CollectT)
+
+	// WithSynctestCollectContext is the [func(context.Context, *CollectT)]
+	// counterpart of [WithSynctest] for use with [EventuallyWith]. See
+	// [WithSynctest] for details.
+	WithSynctestCollectContext func(context.Context, *CollectT)
 )

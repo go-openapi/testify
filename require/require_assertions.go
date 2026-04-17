@@ -83,6 +83,14 @@ func Condition(t T, comp func() bool, msgAndArgs ...any) {
 //
 // See [Eventually].
 //
+// # Synctest (opt-in)
+//
+// Wrap the condition with [WithSynctest] (or [WithSynctestContext]) to run
+// the polling loop inside a [testing/synctest] bubble, which uses a fake
+// clock. This eliminates timing-induced flakiness and makes the tick count
+// deterministic. See [WithSynctest] for the constraints (no real I/O in
+// the condition, requires [*testing.T]).
+//
 // # Examples
 //
 //	success:  func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond
@@ -575,6 +583,14 @@ func ErrorIs(t T, err error, target error, msgAndArgs ...any) {
 // To avoid flaky tests, always make sure that ticks and timeouts differ by at least an order of magnitude (tick <<
 // timeout).
 //
+// # Synctest (opt-in)
+//
+// Wrap the condition with [WithSynctest] (or [WithSynctestContext]) to run
+// the polling loop inside a [testing/synctest] bubble, which uses a fake
+// clock. This eliminates timing-induced flakiness and makes the tick count
+// deterministic. See [WithSynctest] for the constraints (no real I/O in
+// the condition, requires `*testing.T`).
+//
 // # Examples
 //
 //	success:  func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond
@@ -646,6 +662,14 @@ func Eventually[C Conditioner](t T, condition C, timeout time.Duration, tick tim
 // errors reported on the parent t.
 //
 // See [Eventually] for the general panic recovery semantics.
+//
+// # Synctest (opt-in)
+//
+// Wrap the condition with [WithSynctestCollect] (or [WithSynctestCollectContext])
+// to run the polling loop inside a [testing/synctest] bubble, which uses
+// a fake clock. This eliminates timing-induced flakiness and makes the
+// tick count deterministic. See [WithSynctest] for the constraints (no
+// real I/O in the condition, requires [*testing.T]).
 //
 // # Examples
 //
@@ -2236,17 +2260,26 @@ func NegativeT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...an
 //
 // See [Eventually].
 //
+// # Synctest (opt-in)
+//
+// Wrap the condition with [WithSynctest] to run the polling loop inside a
+// [testing/synctest] bubble, which uses a fake clock. This eliminates
+// timing-induced flakiness and makes the tick count deterministic. See
+// [WithSynctest] for the constraints (no real I/O in the condition,
+// requires [*testing.T]). Note: [Never] does not accept the context/error
+// form of condition, so [WithSynctestContext] does not apply here.
+//
 // # Examples
 //
 //	success:  func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond
 //	failure:  func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
-func Never(t T, condition func() bool, timeout time.Duration, tick time.Duration, msgAndArgs ...any) {
+func Never[C NeverConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	if assertions.Never(t, condition, timeout, tick, msgAndArgs...) {
+	if assertions.Never[C](t, condition, timeout, tick, msgAndArgs...) {
 		return
 	}
 

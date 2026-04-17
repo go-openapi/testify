@@ -34,7 +34,7 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 - [Consistently[C Conditioner]](#consistentlyc-conditioner) | star | orange
 - [Eventually[C Conditioner]](#eventuallyc-conditioner) | star | orange
 - [EventuallyWith[C CollectibleConditioner]](#eventuallywithc-collectibleconditioner) | star | orange
-- [Never](#never) | angles-right
+- [Never[C NeverConditioner]](#neverc-neverconditioner) | star | orange
 ```
 
 ### Condition{#condition}
@@ -148,7 +148,7 @@ func main() {
 |--|--|
 | [`assertions.Condition(t T, comp func() bool, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Condition) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Condition](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L26)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Condition](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L28)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -191,6 +191,14 @@ See [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Even
 #### Attention point
 
 See [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Eventually).
+
+#### Synctest (opt-in)
+
+Wrap the condition with [WithSynctest](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#WithSynctest) (or [WithSynctestContext](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#WithSynctestContext)) to run
+the polling loop inside a [testing/synctest] bubble, which uses a fake
+clock. This eliminates timing-induced flakiness and makes the tick count
+deterministic. See [WithSynctest](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#WithSynctest) for the constraints (no real I/O in
+the condition, requires [*testing.T]).
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -310,6 +318,43 @@ func main() {
 {{% /card %}}
 
 
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestConsistently(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // normally provided by test
+
+	// An invariant that must hold throughout the observation period.
+	var counter atomic.Int32
+	counter.Store(5)
+	invariant := func() bool { return counter.Load() < 10 }
+
+	result := assert.Consistently(t, assert.WithSynctest(invariant), 1*time.Hour, 1*time.Minute)
+
+	fmt.Printf("invariant held: %t", result)
+
+}
+
+```
+{{% /card %}}
+
+
 {{% /cards %}}
 {{< /tab >}}
 
@@ -422,6 +467,43 @@ func main() {
 {{% /card %}}
 
 
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestConsistently(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // normally provided by test
+
+	// An invariant that must hold throughout the observation period.
+	var counter atomic.Int32
+	counter.Store(5)
+	invariant := func() bool { return counter.Load() < 10 }
+
+	require.Consistently(t, require.WithSynctest(invariant), 1*time.Hour, 1*time.Minute)
+
+	fmt.Printf("invariant held: %t", !t.Failed())
+
+}
+
+```
+{{% /card %}}
+
+
 {{% /cards %}}
 {{< /tab >}}
 
@@ -449,7 +531,7 @@ func main() {
 |--|--|
 | [`assertions.Consistently[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Consistently) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Consistently](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L226)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Consistently](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L253)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -524,6 +606,14 @@ counter-intuitive results, such as ticks or timeouts not firing in time as expec
 
 To avoid flaky tests, always make sure that ticks and timeouts differ by at least an order of magnitude (tick <<
 timeout).
+
+#### Synctest (opt-in)
+
+Wrap the condition with [WithSynctest](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#WithSynctest) (or [WithSynctestContext](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#WithSynctestContext)) to run
+the polling loop inside a [testing/synctest] bubble, which uses a fake
+clock. This eliminates timing-induced flakiness and makes the tick count
+deterministic. See [WithSynctest](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#WithSynctest) for the constraints (no real I/O in
+the condition, requires `*testing.T`).
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -643,6 +733,89 @@ func main() {
 	result := assert.Eventually(t, healthCheck, 200*time.Millisecond, 10*time.Millisecond)
 
 	fmt.Printf("eventually healthy: %t", result)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestEventually(t *testing.T)
+package main
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // normally provided by test
+
+	var attempts atomic.Int32
+	healthCheck := func(_ context.Context) error {
+		if attempts.Add(1) < 3 {
+			return errors.New("service not ready")
+		}
+
+		return nil
+	}
+
+	result := assert.Eventually(t, assert.WithSynctestContext(healthCheck), 1*time.Hour, 1*time.Minute)
+
+	fmt.Printf("healthy: %t, attempts: %d", result, attempts.Load())
+
+}
+
+```
+{{% /card %}}
+
+
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestEventually(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // normally provided by test
+
+	// A counter that converges on the 5th poll — no external time pressure.
+	var attempts atomic.Int32
+	cond := func() bool {
+		return attempts.Add(1) == 5
+	}
+
+	// 1-hour/1-minute: under fake time this is instantaneous and
+	// deterministic — exactly 5 calls to the condition.
+	result := assert.Eventually(t, assert.WithSynctest(cond), 1*time.Hour, 1*time.Minute)
+
+	fmt.Printf("ready: %t, attempts: %d", result, attempts.Load())
 
 }
 
@@ -770,6 +943,89 @@ func main() {
 {{% /card %}}
 
 
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestEventually(t *testing.T)
+package main
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // normally provided by test
+
+	var attempts atomic.Int32
+	healthCheck := func(_ context.Context) error {
+		if attempts.Add(1) < 3 {
+			return errors.New("service not ready")
+		}
+
+		return nil
+	}
+
+	require.Eventually(t, require.WithSynctestContext(healthCheck), 1*time.Hour, 1*time.Minute)
+
+	fmt.Printf("healthy: %t, attempts: %d", !t.Failed(), attempts.Load())
+
+}
+
+```
+{{% /card %}}
+
+
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestEventually(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // normally provided by test
+
+	// A counter that converges on the 5th poll — no external time pressure.
+	var attempts atomic.Int32
+	cond := func() bool {
+		return attempts.Add(1) == 5
+	}
+
+	// 1-hour/1-minute: under fake time this is instantaneous and
+	// deterministic — exactly 5 calls to the condition.
+	require.Eventually(t, require.WithSynctest(cond), 1*time.Hour, 1*time.Minute)
+
+	fmt.Printf("ready: %t, attempts: %d", !t.Failed(), attempts.Load())
+
+}
+
+```
+{{% /card %}}
+
+
 {{% /cards %}}
 {{< /tab >}}
 
@@ -797,7 +1053,7 @@ func main() {
 |--|--|
 | [`assertions.Eventually[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Eventually) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Eventually](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L119)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Eventually](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L129)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -839,6 +1095,14 @@ next one. If the assertion times out, the panic error is included in the collect
 errors reported on the parent t.
 
 See [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Eventually) for the general panic recovery semantics.
+
+#### Synctest (opt-in)
+
+Wrap the condition with [WithSynctestCollect](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#WithSynctestCollect) (or [WithSynctestCollectContext](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#WithSynctestCollectContext))
+to run the polling loop inside a [testing/synctest] bubble, which uses
+a fake clock. This eliminates timing-induced flakiness and makes the
+tick count deterministic. See [WithSynctest](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#WithSynctest) for the constraints (no
+real I/O in the condition, requires [*testing.T]).
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -895,6 +1159,44 @@ func main() {
 {{% /card %}}
 
 
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestEventuallyWith(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // normally provided by test
+
+	var attempts atomic.Int32
+	cond := func(c *assert.CollectT) {
+		n := attempts.Add(1)
+		assert.Equal(c, int32(3), n, "not yet converged")
+	}
+
+	result := assert.EventuallyWith(t, assert.WithSynctestCollect(cond), 1*time.Hour, 1*time.Minute)
+
+	fmt.Printf("converged: %t, attempts: %d", result, attempts.Load())
+
+}
+
+```
+{{% /card %}}
+
+
 {{% /cards %}}
 {{< /tab >}}
 
@@ -933,6 +1235,44 @@ func main() {
 {{% /card %}}
 
 
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestEventuallyWith(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // normally provided by test
+
+	var attempts atomic.Int32
+	cond := func(c *require.CollectT) {
+		n := attempts.Add(1)
+		require.Equal(c, int32(3), n, "not yet converged")
+	}
+
+	require.EventuallyWith(t, require.WithSynctestCollect(cond), 1*time.Hour, 1*time.Minute)
+
+	fmt.Printf("converged: %t, attempts: %d", !t.Failed(), attempts.Load())
+
+}
+
+```
+{{% /card %}}
+
+
 {{% /cards %}}
 {{< /tab >}}
 
@@ -960,11 +1300,11 @@ func main() {
 |--|--|
 | [`assertions.EventuallyWith[C CollectibleConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L295)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L330)
 {{% /tab %}}
 {{< /tabs >}}
 
-### Never{#never}
+### Never[C NeverConditioner] {{% icon icon="star" color=orange %}}{#neverc-neverconditioner}
 Never asserts that the given condition is never satisfied until timeout,
 periodically checking the target function at each tick.
 
@@ -993,6 +1333,15 @@ See [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Even
 #### Attention point
 
 See [Eventually](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Eventually).
+
+#### Synctest (opt-in)
+
+Wrap the condition with [WithSynctest](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#WithSynctest) to run the polling loop inside a
+[testing/synctest] bubble, which uses a fake clock. This eliminates
+timing-induced flakiness and makes the tick count deterministic. See
+[WithSynctest](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#WithSynctest) for the constraints (no real I/O in the condition,
+requires [*testing.T]). Note: [Never](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Never) does not accept the context/error
+form of condition, so [WithSynctestContext](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#WithSynctestContext) does not apply here.
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -1078,6 +1427,40 @@ func main() {
 {{% /card %}}
 
 
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestNever(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // normally provided by test
+
+	// A flag that should remain false across the whole observation period.
+	var flipped atomic.Bool
+	result := assert.Never(t, assert.WithSynctest(flipped.Load), 1*time.Hour, 1*time.Minute)
+
+	fmt.Printf("never flipped: %t", result)
+
+}
+
+```
+{{% /card %}}
+
+
 {{% /cards %}}
 {{< /tab >}}
 
@@ -1156,6 +1539,40 @@ func main() {
 {{% /card %}}
 
 
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestNever(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // normally provided by test
+
+	// A flag that should remain false across the whole observation period.
+	var flipped atomic.Bool
+	require.Never(t, require.WithSynctest(flipped.Load), 1*time.Hour, 1*time.Minute)
+
+	fmt.Printf("never flipped: %t", !t.Failed())
+
+}
+
+```
+{{% /card %}}
+
+
 {{% /cards %}}
 {{< /tab >}}
 
@@ -1168,26 +1585,22 @@ func main() {
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`assert.Never(t T, condition func() bool, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Never) | package-level function |
-| [`assert.Neverf(t T, condition func() bool, timeout time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Neverf) | formatted variant |
-| [`assert.(*Assertions).Never(condition func() bool, timeout time.Duration, tick time.Duration) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Never) | method variant |
-| [`assert.(*Assertions).Neverf(condition func() bool, timeout time.Duration, tick time.Duration, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Neverf) | method formatted variant |
+| [`assert.Never[C NeverConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Never) | package-level function |
+| [`assert.Neverf[C NeverConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Neverf) | formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Never(t T, condition func() bool, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Never) | package-level function |
-| [`require.Neverf(t T, condition func() bool, timeout time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Neverf) | formatted variant |
-| [`require.(*Assertions).Never(condition func() bool, timeout time.Duration, tick time.Duration) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Never) | method variant |
-| [`require.(*Assertions).Neverf(condition func() bool, timeout time.Duration, tick time.Duration, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Neverf) | method formatted variant |
+| [`require.Never[C NeverConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Never) | package-level function |
+| [`require.Neverf[C NeverConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Neverf) | formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--|
-| [`assertions.Never(t T, condition func() bool, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Never) | internal implementation |
+| [`assertions.Never[C NeverConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Never) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Never](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L168)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Never](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L187)
 {{% /tab %}}
 {{< /tabs >}}
 
