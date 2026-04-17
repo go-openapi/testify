@@ -10,6 +10,8 @@ import (
 	"runtime"
 	"sync"
 	"sync/atomic"
+	"testing"
+	"testing/synctest"
 	"time"
 )
 
@@ -112,6 +114,14 @@ func Condition(t T, comp func() bool, msgAndArgs ...any) bool {
 // To avoid flaky tests, always make sure that ticks and timeouts differ by at least an order of magnitude (tick <<
 // timeout).
 //
+// # Synctest (opt-in)
+//
+// Wrap the condition with [WithSynctest] (or [WithSynctestContext]) to run
+// the polling loop inside a [testing/synctest] bubble, which uses a fake
+// clock. This eliminates timing-induced flakiness and makes the tick count
+// deterministic. See [WithSynctest] for the constraints (no real I/O in
+// the condition, requires `*testing.T`).
+//
 // # Examples
 //
 //	success:  func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond
@@ -161,11 +171,20 @@ func Eventually[C Conditioner](t T, condition C, timeout time.Duration, tick tim
 //
 // See [Eventually].
 //
+// # Synctest (opt-in)
+//
+// Wrap the condition with [WithSynctest] to run the polling loop inside a
+// [testing/synctest] bubble, which uses a fake clock. This eliminates
+// timing-induced flakiness and makes the tick count deterministic. See
+// [WithSynctest] for the constraints (no real I/O in the condition,
+// requires [*testing.T]). Note: [Never] does not accept the context/error
+// form of condition, so [WithSynctestContext] does not apply here.
+//
 // # Examples
 //
 //	success:  func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond
 //	failure:  func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond
-func Never(t T, condition func() bool, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+func Never[C NeverConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
 	// Domain: condition
 	if h, ok := t.(H); ok {
 		h.Helper()
@@ -218,6 +237,14 @@ func Never(t T, condition func() bool, timeout time.Duration, tick time.Duration
 // # Attention point
 //
 // See [Eventually].
+//
+// # Synctest (opt-in)
+//
+// Wrap the condition with [WithSynctest] (or [WithSynctestContext]) to run
+// the polling loop inside a [testing/synctest] bubble, which uses a fake
+// clock. This eliminates timing-induced flakiness and makes the tick count
+// deterministic. See [WithSynctest] for the constraints (no real I/O in
+// the condition, requires [*testing.T]).
 //
 // # Examples
 //
@@ -287,6 +314,14 @@ func Consistently[C Conditioner](t T, condition C, timeout time.Duration, tick t
 //
 // See [Eventually] for the general panic recovery semantics.
 //
+// # Synctest (opt-in)
+//
+// Wrap the condition with [WithSynctestCollect] (or [WithSynctestCollectContext])
+// to run the polling loop inside a [testing/synctest] bubble, which uses
+// a fake clock. This eliminates timing-induced flakiness and makes the
+// tick count deterministic. See [WithSynctest] for the constraints (no
+// real I/O in the condition, requires [*testing.T]).
+//
 // # Examples
 //
 //	success: func(c *CollectT) { True(c,true) }, 100*time.Millisecond, 20*time.Millisecond
@@ -306,25 +341,27 @@ func eventually[C Conditioner](t T, condition C, timeout time.Duration, tick tim
 		h.Helper()
 	}
 
+	wantsBubble, cond := makeCondition(condition, false)
 	p := newConditionPoller(pollOptions{
 		mode:        pollUntilTrue,
 		failMessage: "condition never satisfied",
 	})
 
-	return p.pollCondition(t, makeCondition(condition, false), timeout, tick, msgAndArgs...)
+	return runPoller(t, p, cond, timeout, tick, wantsBubble, msgAndArgs...)
 }
 
-func never(t T, condition func() bool, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
+func never[C NeverConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 
+	wantsBubble, cond := makeCondition(condition, true)
 	p := newConditionPoller(pollOptions{
 		mode:        pollUntilTimeout,
 		failMessage: "condition satisfied",
 	})
 
-	return p.pollCondition(t, makeCondition(condition, true), timeout, tick, msgAndArgs...)
+	return runPoller(t, p, cond, timeout, tick, wantsBubble, msgAndArgs...)
 }
 
 func consistently[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
@@ -332,12 +369,13 @@ func consistently[C Conditioner](t T, condition C, timeout time.Duration, tick t
 		h.Helper()
 	}
 
+	wantsBubble, cond := makeCondition(condition, false)
 	p := newConditionPoller(pollOptions{
 		mode:        pollUntilTimeout,
 		failMessage: "condition failed once",
 	})
 
-	return p.pollCondition(t, makeCondition(condition, false), timeout, tick, msgAndArgs...)
+	return runPoller(t, p, cond, timeout, tick, wantsBubble, msgAndArgs...)
 }
 
 func eventuallyWithT[C CollectibleConditioner](t T, collectCondition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
@@ -347,7 +385,7 @@ func eventuallyWithT[C CollectibleConditioner](t T, collectCondition C, timeout 
 
 	var lastCollectedErrors []error
 	var cancelFunc func() // will be set by pollCondition via onSetup
-	fn := makeCollectibleCondition(collectCondition)
+	wantsBubble, fn := makeCollectibleCondition(collectCondition)
 
 	condition := func(ctx context.Context) (err error) {
 		collector := new(CollectT).withCancelFunc(cancelFunc)
@@ -381,16 +419,51 @@ func eventuallyWithT[C CollectibleConditioner](t T, collectCondition C, timeout 
 		onSetup:     func(cancel func()) { cancelFunc = cancel },
 	})
 
-	return p.pollCondition(t, condition, timeout, tick, msgAndArgs...)
+	return runPoller(t, p, condition, timeout, tick, wantsBubble, msgAndArgs...)
 }
 
-func makeCondition[C Conditioner](condition C, reverse bool) func(context.Context) error {
-	fn := any(condition)
+// runPoller dispatches the polling to either the real-time or the
+// [synctest] bubble-wrapped path, based on whether the condition opted into
+// fake time AND the caller passed a concrete [*testing.T].
+//
+// When `wantsBubble` is true but `t` is not a `*testing.T` (e.g. a mock or
+// [CollectT]), the call silently falls back to real-time polling. The
+// synctest bubble requires a real `*testing.T`.
+func runPoller(t T, p *conditionPoller, cond func(context.Context) error, timeout, tick time.Duration, wantsBubble bool, msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
 
-	switch typed := fn.(type) {
+	testingT, canBubble := t.(*testing.T)
+	if !wantsBubble || !canBubble {
+		return p.pollCondition(t, cond, timeout, tick, msgAndArgs...)
+	}
+
+	var result bool
+	synctest.Test(testingT, func(inner *testing.T) {
+		result = p.pollCondition(inner, cond, timeout, tick, msgAndArgs...)
+	})
+
+	return result
+}
+
+// makeCondition normalizes any variant from [Conditioner] or [NeverConditioner]
+// into the unified `func(context.Context) error` form used by [pollCondition],
+// and reports whether the caller opted into synctest-bubble polling.
+//
+// [WithSynctest] and [WithSynctestContext] are recognized as their underlying
+// `func() bool` and `func(context.Context) error` forms with `wantsBubble = true`.
+func makeCondition(condition any, reverse bool) (wantsBubble bool, cond func(context.Context) error) {
+	switch typed := condition.(type) {
+	case WithSynctest:
+		_, cond = makeCondition((func() bool)(typed), reverse)
+		return true, cond
+	case WithSynctestContext:
+		_, cond = makeCondition((func(context.Context) error)(typed), reverse)
+		return true, cond
 	case func() bool:
 		if !reverse {
-			return func(ctx context.Context) error {
+			return false, func(ctx context.Context) error {
 				select {
 				case <-ctx.Done():
 					return ctx.Err()
@@ -405,7 +478,7 @@ func makeCondition[C Conditioner](condition C, reverse bool) func(context.Contex
 		}
 
 		// inverse bool <-> error logic for Never
-		return func(ctx context.Context) error {
+		return false, func(ctx context.Context) error {
 			select {
 			case <-ctx.Done():
 				return nil
@@ -421,18 +494,25 @@ func makeCondition[C Conditioner](condition C, reverse bool) func(context.Contex
 		// No reversal needed: the poller already uses err != nil as "condition happened".
 		// For Eventually: err == nil = success. For Never: err != nil = failure.
 		// Both align with the natural error semantics without inversion.
-		return typed
+		return false, typed
 	default: // unreachable
 		panic(fmt.Errorf("unsupported Conditioner type. Mismatch with type constraint: %T", condition))
 	}
 }
 
-func makeCollectibleCondition[C CollectibleConditioner](condition C) func(context.Context, *CollectT) {
-	fn := any(condition)
-
-	switch typed := fn.(type) {
+// makeCollectibleCondition normalizes any [CollectibleConditioner] variant
+// into the unified `func(context.Context, *CollectT)` form, and reports
+// whether the caller opted into synctest-bubble polling.
+func makeCollectibleCondition(condition any) (wantsBubble bool, fn func(context.Context, *CollectT)) {
+	switch typed := condition.(type) {
+	case WithSynctestCollect:
+		_, fn = makeCollectibleCondition((func(*CollectT))(typed))
+		return true, fn
+	case WithSynctestCollectContext:
+		_, fn = makeCollectibleCondition((func(context.Context, *CollectT))(typed))
+		return true, fn
 	case func(*CollectT):
-		return func(ctx context.Context, collector *CollectT) {
+		return false, func(ctx context.Context, collector *CollectT) {
 			select {
 			case <-ctx.Done():
 				collector.Errorf("%v", ctx.Err())
@@ -441,7 +521,7 @@ func makeCollectibleCondition[C CollectibleConditioner](condition C) func(contex
 			}
 		}
 	case func(context.Context, *CollectT):
-		return typed
+		return false, typed
 	default: // unreachable
 		panic(fmt.Errorf("unsupported CollectibleConditioner type. Mismatch with type constraint: %T", condition))
 	}
@@ -470,10 +550,17 @@ type conditionPoller struct {
 
 func newConditionPoller(o pollOptions) *conditionPoller {
 	return &conditionPoller{
-		pollOptions:   o,
-		conditionChan: make(chan func(context.Context) error, 1),
-		doneChan:      make(chan struct{}),
+		pollOptions: o,
 	}
+}
+
+// initChannels creates the polling channels. MUST be called from inside
+// [pollCondition] so that — when the caller activated a [synctest] bubble
+// — the channels are bubble-owned. Receives on channels created outside
+// the bubble do NOT count as durably blocking, which stalls the fake clock.
+func (p *conditionPoller) initChannels() {
+	p.conditionChan = make(chan func(context.Context) error, 1)
+	p.doneChan = make(chan struct{})
 }
 
 // pollMode determines how the condition polling should behave.
@@ -514,6 +601,12 @@ func (p *conditionPoller) pollCondition(t T, condition func(context.Context) err
 	}
 
 	condition = recoverCondition(condition)
+
+	// Channels and ticker MUST be created inside pollCondition so that,
+	// when the caller activated a synctest bubble, they are bubble-owned
+	// primitives. Channels created outside the bubble do not count as
+	// durably blocking and would stall the fake clock.
+	p.initChannels()
 
 	p.ticker = time.NewTicker(tick)
 	defer p.ticker.Stop()

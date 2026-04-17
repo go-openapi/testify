@@ -214,6 +214,19 @@ See also a quick [migration guide](./MIGRATION.md).
 | `Consistently[C Conditioner]` | `func() bool` or `func(context.Context) error` | async assertion to express "always true" (adapted proposal [#1606], [#1087]) |
 | `(*CollectT).Cancel` | — | explicit escape hatch to abort an `EventuallyWith` assertion immediately (adapted proposal [#1830]) |
 
+#### New Types — synctest opt-in (4)
+
+| Type | Underlying | Purpose |
+|------|------------|---------|
+| `WithSynctest` | `func() bool` | Opt-in wrapper for `Eventually`, `Never`, `Consistently` — runs the polling loop inside a [`testing/synctest`](https://pkg.go.dev/testing/synctest) bubble with a fake clock |
+| `WithSynctestContext` | `func(context.Context) error` | Same as above, for the context/error condition form (`Eventually`, `Consistently`) |
+| `WithSynctestCollect` | `func(*CollectT)` | Same as above, for `EventuallyWith` |
+| `WithSynctestCollectContext` | `func(context.Context, *CollectT)` | Same as above, for the `EventuallyWith` context variant |
+
+**Benefits**: deterministic tick counts, zero real wall-clock time for long timeouts, elimination of timing-induced flakiness in test suites.
+
+**Constraints**: requires Go 1.25+; caller must pass a concrete `*testing.T`; condition must not perform real I/O and must not be started from an external goroutine driving state change via real time. See the [`WithSynctest` godoc](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#WithSynctest) and the [Async Testing section of EXAMPLES.md](./EXAMPLES.md#deterministic-polling-with-synctest-opt-in).
+
 [#1087]: https://github.com/stretchr/testify/issues/1087
 [#1606]: https://github.com/stretchr/testify/pulls/1606
 
@@ -226,9 +239,11 @@ See also a quick [migration guide](./MIGRATION.md).
 | Unified implementation | Internal refactoring | Single implementation eliminates code duplication and prevents resource leaks |
 | `func(context.Context) error` conditions | extensions to the async domain | control over context allows for more complex cases to be supported |
 | Type parameter | Internal refactoring | `Eventually` now accepts several signatures for its condition and uses a type parameter (non-breaking) |
+| `Never[C NeverConditioner]` now generic | synctest opt-in | `Never` gained a narrow type constraint (`func() bool | WithSynctest`) to accept the synctest wrapper. Existing call sites are unaffected; only code that stores `Never` in a function value of type `func(T, func() bool, ...)` needs to specify `Never[func() bool]` (non-breaking for typical use) |
 | `CollectT.FailNow` now per-tick | aligns with [stretchr/testify] semantics and [#1819] | `FailNow` aborts the current tick only; the poller retries on the next tick. This makes `require`-style assertions inside `EventuallyWith` behave naturally (was: cancel the whole assertion immediately) |
 | New `CollectT.Cancel` | implements [#1830] | Explicit escape hatch to abort the whole `EventuallyWith` assertion immediately, cancelling the polling context before exiting via `runtime.Goexit` |
 | Per-tick goroutine wrap | implements [#1819] | The condition function is evaluated in its own goroutine so that `runtime.Goexit` (including transitively via `require`) only aborts the current tick and not the surrounding poll loop |
+| Channels now bubble-owned | synctest opt-in | `conditionChan` and `doneChan` moved from `newConditionPoller` into `pollCondition` so that they are created inside a synctest bubble when the caller opts in. This is a correctness fix for synctest activation AND a general lifecycle cleanup (per-call, not per-struct). |
 
 **Impact**: This fix eliminates goroutine leaks that could occur when using `Eventually` or `Never` assertions. The new implementation uses a context-based approach that properly manages resources and provides a cleaner shutdown mechanism. Callers should **NOT** assume that the call to `Eventually` or `Never` exits before the condition is evaluated.
 

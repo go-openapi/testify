@@ -15,4 +15,16 @@
   /* Auto-adapt to 2 columns when a container has exactly 2 cards. */
   grid-template-columns: repeat(2, 1fr);
 }
+.card-container .card {
+  /* Relearn's theme.css caps cards at max-height: 600px with overflow: hidden,
+     which truncates long testable examples. Let them grow vertically and
+     scroll when needed. */
+  max-height: none;
+  overflow-y: auto;
+}
+.card-container .card pre {
+  /* Ensure horizontal scrolling on long lines inside code blocks. */
+  overflow-x: auto;
+  white-space: pre;
+}
 </style>

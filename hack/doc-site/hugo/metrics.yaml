@@ -3,8 +3,8 @@ params:
         domains: 19
         functions: 135
         assertions: 131
-        generics: 49
-        nongeneric_assertions: 86
+        generics: 50
+        nongeneric_assertions: 85
         helpers: 4
         others: 0
         by_domain:

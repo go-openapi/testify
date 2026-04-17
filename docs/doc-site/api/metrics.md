@@ -17,7 +17,7 @@ Counts for core functionality, excluding variants (formatted, forward, forward-f
 | ------------------------ | ----------------- |
 | All functions            | 135  |
 | All core assertions      | 131 |
-| Generic assertions       | 49   |
+| Generic assertions       | 50   |
 | Helpers (not assertions) | 4    |
 | Others                   | 0     |
 
@@ -45,7 +45,7 @@ Table of core assertions, excluding variants. Each function is side by side with
 | [ErrorContains](error/#errorcontains) |  | error |  |
 | [ErrorIs](error/#erroris) | [NotErrorIs](error/#noterroris) | error |  |
 | [EventuallyWith[C CollectibleConditioner]](condition/#eventuallywithc-collectibleconditioner) {{% icon icon="star" color=orange %}} |  | condition |  |
-| [Eventually[C Conditioner]](condition/#eventuallyc-conditioner) {{% icon icon="star" color=orange %}} | [Never](condition/#never) | condition |  |
+| [Eventually[C Conditioner]](condition/#eventuallyc-conditioner) {{% icon icon="star" color=orange %}} | [Never](condition/#neverc-neverconditioner) | condition |  |
 | [Exactly](equality/#exactly) |  | equality |  |
 | [Fail](testing/#fail) |  | testing |  |
 | [FailNow](testing/#failnow) |  | testing |  |

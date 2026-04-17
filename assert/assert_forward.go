@@ -1010,26 +1010,6 @@ func (a *Assertions) Negativef(e any, msg string, args ...any) bool {
 	return assertions.Negative(a.T, e, forwardArgs(msg, args))
 }
 
-// Never is the same as [Never], as a method rather than a package-level function.
-//
-// Upon failure, the test [T] is marked as failed and continues execution.
-func (a *Assertions) Never(condition func() bool, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool {
-	if h, ok := a.T.(H); ok {
-		h.Helper()
-	}
-	return assertions.Never(a.T, condition, timeout, tick, msgAndArgs...)
-}
-
-// Neverf is the same as [Assertions.Never], but it accepts a format string to format arguments like [fmt.Printf].
-//
-// Upon failure, the test [T] is marked as failed and continues execution.
-func (a *Assertions) Neverf(condition func() bool, timeout time.Duration, tick time.Duration, msg string, args ...any) bool {
-	if h, ok := a.T.(H); ok {
-		h.Helper()
-	}
-	return assertions.Never(a.T, condition, timeout, tick, forwardArgs(msg, args))
-}
-
 // Nil is the same as [Nil], as a method rather than a package-level function.
 //
 // Upon failure, the test [T] is marked as failed and continues execution.

@@ -174,7 +174,7 @@ func main() {
 |--|--|
 | [`assertions.NoFileDescriptorLeak(t T, tested func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NoFileDescriptorLeak) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoFileDescriptorLeak](https://github.com/go-openapi/testify/blob/master/internal/assertions/safety.go#L98)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoFileDescriptorLeak](https://github.com/go-openapi/testify/blob/master/internal/assertions/safety.go#L100)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -429,7 +429,7 @@ func (m *mockFailNowT) Failed() bool {
 |--|--|
 | [`assertions.NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NoGoRoutineLeak) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoGoRoutineLeak](https://github.com/go-openapi/testify/blob/master/internal/assertions/safety.go#L45)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoGoRoutineLeak](https://github.com/go-openapi/testify/blob/master/internal/assertions/safety.go#L47)
 {{% /tab %}}
 {{< /tabs >}}
 

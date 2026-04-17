@@ -1415,35 +1415,6 @@ func TestAssertionsNegative(t *testing.T) {
 	})
 }
 
-func TestAssertionsNever(t *testing.T) {
-	t.Parallel()
-
-	t.Run("success", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		a := New(mock)
-		result := a.Never(func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond)
-		if !result {
-			t.Error("Assertions.Never should return true on success")
-		}
-	})
-
-	t.Run("failure", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		a := New(mock)
-		result := a.Never(func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond)
-		if result {
-			t.Error("Assertions.Never should return false on failure")
-		}
-		if !mock.failed {
-			t.Error("Assertions.Never should mark test as failed")
-		}
-	})
-}
-
 func TestAssertionsNil(t *testing.T) {
 	t.Parallel()
 
@@ -3721,35 +3692,6 @@ func TestAssertionsNegativef(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("Assertions.Negativef should mark test as failed")
-		}
-	})
-}
-
-func TestAssertionsNeverf(t *testing.T) {
-	t.Parallel()
-
-	t.Run("success", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		a := New(mock)
-		result := a.Neverf(func() bool { return false }, 100*time.Millisecond, 20*time.Millisecond, "test message")
-		if !result {
-			t.Error("Assertions.Neverf should return true on success")
-		}
-	})
-
-	t.Run("failure", func(t *testing.T) {
-		t.Parallel()
-
-		mock := new(mockT)
-		a := New(mock)
-		result := a.Neverf(func() bool { return true }, 100*time.Millisecond, 20*time.Millisecond, "test message")
-		if result {
-			t.Error("Assertions.Neverf should return false on failure")
-		}
-		if !mock.failed {
-			t.Error("Assertions.Neverf should mark test as failed")
 		}
 	})
 }
