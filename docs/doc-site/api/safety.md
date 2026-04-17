@@ -30,15 +30,16 @@ This domain exposes 2 functionalities.
 ### NoFileDescriptorLeak{#nofiledescriptorleak}
 NoFileDescriptorLeak ensures that no file descriptor leaks from inside the tested function.
 
-This assertion works on Linux only (via /proc/self/fd).
+This assertion works on Linux (via /proc/self/fd) and macOS (via fstat probing).
 On other platforms, the test is skipped.
 
 NOTE: this assertion is not compatible with parallel tests.
 File descriptors are a process-wide resource; concurrent tests
 opening files would cause false positives.
 
-Sockets, pipes, and anonymous inodes are filtered out by default,
-as these are typically managed by the Go runtime.
+Sockets, pipes, and other kernel-internal descriptors (Linux anon_inode,
+darwin kqueue) are filtered out by default, as these are typically
+managed by the Go runtime.
 
 #### Concurrency
 
@@ -174,7 +175,7 @@ func main() {
 |--|--|
 | [`assertions.NoFileDescriptorLeak(t T, tested func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NoFileDescriptorLeak) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoFileDescriptorLeak](https://github.com/go-openapi/testify/blob/master/internal/assertions/safety.go#L100)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoFileDescriptorLeak](https://github.com/go-openapi/testify/blob/master/internal/assertions/safety.go#L110)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -429,7 +430,7 @@ func (m *mockFailNowT) Failed() bool {
 |--|--|
 | [`assertions.NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NoGoRoutineLeak) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoGoRoutineLeak](https://github.com/go-openapi/testify/blob/master/internal/assertions/safety.go#L47)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NoGoRoutineLeak](https://github.com/go-openapi/testify/blob/master/internal/assertions/safety.go#L56)
 {{% /tab %}}
 {{< /tabs >}}
 

@@ -4,85 +4,98 @@
 package fdleak
 
 import (
-	"errors"
 	"fmt"
-	"os"
-	"runtime"
 	"sort"
-	"strconv"
 	"strings"
 	"sync"
 )
 
+// Kind classifies an open file descriptor independently of platform-specific target-string conventions.
+type Kind int
+
+const (
+	// KindUnknown is used when the descriptor kind could not be determined.
+	KindUnknown Kind = iota
+
+	// KindFile denotes anything backed by a path in the file system:
+	// regular files, directories, symlinks, block devices.
+	KindFile
+
+	// KindSocket denotes a socket (AF_UNIX, AF_INET, …).
+	KindSocket
+
+	// KindPipe denotes a pipe or FIFO.
+	KindPipe
+
+	// KindChar denotes a character device without a resolvable path
+	// (fallback for darwin when F_GETPATH fails on a char device).
+	KindChar
+
+	// KindOther covers kernel-level descriptors that are not directly
+	// opened by user code: Linux anon_inode (epoll, timerfd, …), darwin
+	// kqueue, and similar.
+	KindOther
+)
+
 // FDInfo describes an open file descriptor.
+//
+// It should remain a human-readable description: a file-system path for vnode-backed FDs,
+// or a synthetic label such as "socket:[<inode>]" for non-vnode kinds.
+//
+// [Kind] is the authoritative classification; use it rather than parsing Target when filtering.
 type FDInfo struct {
 	FD     int
-	Target string // readlink target (e.g. "/tmp/foo.txt", "socket:[12345]")
+	Kind   Kind
+	Target string
 }
 
-// isFiltered returns true if this FD should be excluded from leak reports.
-// Sockets, pipes, and anonymous inodes are filtered out by default.
+// isFiltered reports whether this FD should be excluded from leak reports.
+// Sockets, pipes, and other kernel-internal descriptors are filtered by default,
+// because they are typically managed by the Go runtime or external libraries
+// and their lifecycles do not correlate with user-level resource management.
 func (f FDInfo) isFiltered() bool {
-	return strings.HasPrefix(f.Target, "socket:[") ||
-		strings.HasPrefix(f.Target, "pipe:[") ||
-		strings.HasPrefix(f.Target, "anon_inode:[")
+	switch f.Kind {
+	case KindSocket, KindPipe, KindOther:
+		return true
+	default:
+		return false
+	}
 }
 
 // snapshotMu serializes Leaked calls to prevent false positives
 // from concurrent tests.
-var snapshotMu sync.Mutex //nolint:gochecknoglobals // serializes process-wide /proc/self/fd access
+var snapshotMu sync.Mutex //nolint:gochecknoglobals // serializes process-wide FD table access
 
-const procSelfFD = "/proc/self/fd"
-
-// Snapshot reads /proc/self/fd and returns a map of currently open file descriptors.
+// Snapshot returns a map of currently open file descriptors for the
+// running process.
 //
-// FDs that close between ReadDir and Readlink are silently skipped.
-// Returns an error if not running on Linux.
+// The set of supported platforms is determined at build time; see the
+// per-platform implementations (fdleak_linux.go, fdleak_darwin.go).
+//
+// On unsupported platforms, Snapshot returns an error.
+//
+// FDs that close between enumeration and resolution are silently skipped.
 func Snapshot() (map[int]FDInfo, error) {
-	if runtime.GOOS != "linux" {
-		return nil, errors.New("file descriptor leak detection requires Linux (/proc/self/fd)")
-	}
-
-	entries, err := os.ReadDir(procSelfFD)
-	if err != nil {
-		return nil, fmt.Errorf("reading %s: %w", procSelfFD, err)
-	}
-
-	fds := make(map[int]FDInfo, len(entries))
-	for _, e := range entries {
-		fd, err := strconv.Atoi(e.Name())
-		if err != nil {
-			continue
-		}
-
-		target, err := os.Readlink(procSelfFD + "/" + e.Name())
-		if err != nil {
-			continue // FD closed between ReadDir and Readlink
-		}
-
-		fds[fd] = FDInfo{FD: fd, Target: target}
-	}
-
-	return fds, nil
+	return snapshot()
 }
 
 // Leaked takes a before/after snapshot around the tested function
 // and returns a formatted description of leaked file descriptors.
 //
 // Returns the empty string if no leaks are found.
-// The caller is responsible for checking [runtime.GOOS] before calling.
+// On unsupported platforms, Leaked returns an error.
 func Leaked(tested func()) (string, error) {
 	snapshotMu.Lock()
 	defer snapshotMu.Unlock()
 
-	before, err := Snapshot()
+	before, err := snapshot()
 	if err != nil {
 		return "", err
 	}
 
 	tested()
 
-	after, err := Snapshot()
+	after, err := snapshot()
 	if err != nil {
 		return "", err
 	}
@@ -93,7 +106,7 @@ func Leaked(tested func()) (string, error) {
 }
 
 // Diff returns file descriptors present in after but not in before,
-// excluding filtered FD types (sockets, pipes, anonymous inodes).
+// excluding filtered FD kinds (sockets, pipes, other kernel descriptors).
 func Diff(before, after map[int]FDInfo) []FDInfo {
 	var leaked []FDInfo
 

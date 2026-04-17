@@ -4,132 +4,27 @@
 package fdleak
 
 import (
-	"context"
-	"net"
-	"os"
-	"runtime"
 	"testing"
 )
 
-func skipIfNotLinux(t *testing.T) {
-	t.Helper()
-
-	if runtime.GOOS != "linux" {
-		t.Skip("file descriptor leak detection requires Linux")
-	}
-}
-
-func TestSnapshot(t *testing.T) {
-	skipIfNotLinux(t)
-
-	fds, err := Snapshot()
-	if err != nil {
-		t.Fatalf("Snapshot() error: %v", err)
-	}
-
-	// stdin, stdout, stderr should always be present.
-	for _, fd := range []int{0, 1, 2} {
-		if _, ok := fds[fd]; !ok {
-			t.Errorf("expected fd %d (stdin/stdout/stderr) in snapshot", fd)
-		}
-	}
-}
-
-func TestLeaked_NoLeak(t *testing.T) {
-	skipIfNotLinux(t)
-
-	leaked, err := Leaked(func() {
-		// Clean function — no file descriptors opened.
-	})
-	if err != nil {
-		t.Fatalf("Leaked() error: %v", err)
-	}
-
-	if leaked != "" {
-		t.Errorf("expected no leaked file descriptors, got:\n%s", leaked)
-	}
-}
-
-func TestLeaked_WithLeak(t *testing.T) {
-	skipIfNotLinux(t)
-
-	var leakedFile *os.File
-
-	leaked, err := Leaked(func() {
-		f, err := os.CreateTemp(t.TempDir(), "fdleak-test-*")
-		if err != nil {
-			t.Fatalf("CreateTemp: %v", err)
-		}
-
-		leakedFile = f // intentionally not closed
-	})
-
-	t.Cleanup(func() {
-		if leakedFile != nil {
-			leakedFile.Close()
-			os.Remove(leakedFile.Name())
-		}
-	})
-
-	if err != nil {
-		t.Fatalf("Leaked() error: %v", err)
-	}
-
-	if leaked == "" {
-		t.Error("expected leaked file descriptor to be detected, but found none")
-	} else {
-		t.Logf("detected leak:\n%s", leaked)
-	}
-}
-
-func TestLeaked_SocketsFiltered(t *testing.T) {
-	skipIfNotLinux(t)
-
-	var leakedListener net.Listener
-
-	leaked, err := Leaked(func() {
-		var lc net.ListenConfig
-		ln, err := lc.Listen(context.Background(), "tcp", "127.0.0.1:0")
-		if err != nil {
-			t.Fatalf("net.Listen: %v", err)
-		}
-
-		leakedListener = ln // intentionally not closed — socket FD should be filtered
-	})
-
-	t.Cleanup(func() {
-		if leakedListener != nil {
-			leakedListener.Close()
-		}
-	})
-
-	if err != nil {
-		t.Fatalf("Leaked() error: %v", err)
-	}
-
-	if leaked != "" {
-		t.Errorf("expected socket FD to be filtered, but got:\n%s", leaked)
-	}
-}
-
 func TestDiff(t *testing.T) {
 	before := map[int]FDInfo{
-		0: {FD: 0, Target: "/dev/stdin"},
-		1: {FD: 1, Target: "/dev/stdout"},
-		2: {FD: 2, Target: "/dev/stderr"},
-		3: {FD: 3, Target: "pipe:[12345]"},
+		0: {FD: 0, Kind: KindChar, Target: "/dev/stdin"},
+		1: {FD: 1, Kind: KindChar, Target: "/dev/stdout"},
+		2: {FD: 2, Kind: KindChar, Target: "/dev/stderr"},
+		3: {FD: 3, Kind: KindPipe, Target: "pipe:[12345]"},
 	}
 
 	after := map[int]FDInfo{
-		0: {FD: 0, Target: "/dev/stdin"},
-		1: {FD: 1, Target: "/dev/stdout"},
-		2: {FD: 2, Target: "/dev/stderr"},
-		3: {FD: 3, Target: "pipe:[12345]"},
-		5: {FD: 5, Target: "/tmp/leaked.txt"},        // leaked regular file
-		6: {FD: 6, Target: "socket:[67890]"},         // filtered: socket
-		7: {FD: 7, Target: "pipe:[11111]"},           // filtered: pipe
-		8: {FD: 8, Target: "anon_inode:[eventpoll]"}, // filtered: anon_inode
-		9: {FD: 9, Target: "/dev/null"},              // leaked device
+		0: {FD: 0, Kind: KindChar, Target: "/dev/stdin"},
+		1: {FD: 1, Kind: KindChar, Target: "/dev/stdout"},
+		2: {FD: 2, Kind: KindChar, Target: "/dev/stderr"},
+		3: {FD: 3, Kind: KindPipe, Target: "pipe:[12345]"},
+		5: {FD: 5, Kind: KindFile, Target: "/tmp/leaked.txt"},         // leaked regular file
+		6: {FD: 6, Kind: KindSocket, Target: "socket:[67890]"},        // filtered: socket
+		7: {FD: 7, Kind: KindPipe, Target: "pipe:[11111]"},            // filtered: pipe
+		8: {FD: 8, Kind: KindOther, Target: "anon_inode:[eventpoll]"}, // filtered: other
+		9: {FD: 9, Kind: KindFile, Target: "/dev/null"},               // leaked device
 	}
 
 	leaked := Diff(before, after)
@@ -150,8 +45,8 @@ func TestDiff(t *testing.T) {
 
 func TestDiff_NoLeaks(t *testing.T) {
 	fds := map[int]FDInfo{
-		0: {FD: 0, Target: "/dev/stdin"},
-		1: {FD: 1, Target: "/dev/stdout"},
+		0: {FD: 0, Kind: KindChar, Target: "/dev/stdin"},
+		1: {FD: 1, Kind: KindChar, Target: "/dev/stdout"},
 	}
 
 	leaked := Diff(fds, fds)
@@ -163,8 +58,8 @@ func TestDiff_NoLeaks(t *testing.T) {
 
 func TestFormatLeaked(t *testing.T) {
 	leaked := []FDInfo{
-		{FD: 7, Target: "/tmp/unclosed.txt"},
-		{FD: 9, Target: "/dev/null"},
+		{FD: 7, Kind: KindFile, Target: "/tmp/unclosed.txt"},
+		{FD: 9, Kind: KindFile, Target: "/dev/null"},
 	}
 
 	result := FormatLeaked(leaked)
@@ -180,5 +75,29 @@ func TestFormatLeaked_Empty(t *testing.T) {
 
 	if result != "" {
 		t.Errorf("expected empty string for nil input, got %q", result)
+	}
+}
+
+func TestFDInfo_isFiltered(t *testing.T) {
+	cases := []struct {
+		name     string
+		kind     Kind
+		filtered bool
+	}{
+		{"file", KindFile, false},
+		{"char", KindChar, false},
+		{"unknown", KindUnknown, false},
+		{"socket", KindSocket, true},
+		{"pipe", KindPipe, true},
+		{"other", KindOther, true},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			got := FDInfo{Kind: tc.kind}.isFiltered()
+			if got != tc.filtered {
+				t.Errorf("Kind=%v isFiltered = %v, want %v", tc.kind, got, tc.filtered)
+			}
+		})
 	}
 }

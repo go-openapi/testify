@@ -33,16 +33,30 @@ timeline
                     : NoGoRoutineLeak
                     : more documentation and examples
     ✅ v2.4 (Mar 2026) : Stabilize API (no more removals)
-                    : NoFileDescriptorLeak (unix)
+                    : NoFileDescriptorLeak (Linux)
                     : Eventually, Eventually (with context), Consistently
                     : Migration tool
     section Q2 2026
-    📝 v2.5 (May 2026) : synctest opt-in for Eventually/Never/Consistently/EventuallyWith (done)
-                    : NoFileDescriptorLeak (macOS, Windows)
-                    : New candidate features from upstream
+    📝 v2.5 (May 2026) : synctest opt-in for Eventually, Never, Consistently, EventuallyWith
+                    : NoFileDescriptorLeak (macOS)
                     : export internal tools (spew, difflib)
+                    : New candidate features from upstream
                     : go1.25+
+    🔍 v2.6 (June 2026) : (tentative)
+                    : go build guards (codegen)
+                    : ErrorAsType (go1.26+)
 {{< /mermaid >}}
+
+## Dropped enveavors 
+
+For the moment, and after some research, we punt on the following features.
+We might reconsider these choices in the future, but for now, we are unsure about whether they are worth the added complexity.
+
+* Enrich `CollectT` (either as an interface or an extended type that wraps `testing.TB`) - for `EventuallyWith`
+  (see also [#1862](https://github.com/stretchr/testify/issues/1862)).
+* Expose the internal go routine leak detection package as a drop-in replacement for `go.uber.org/go-leak`
+* Port `NoFileDescriptorLeak` to Windows OS 
+* Consider hijacking [msgAndArgs ...any] to pass options into assertions
 
 ## Notes
 

@@ -408,7 +408,7 @@ Removed extraneous type declaration `PanicTestFunc` (`func()`).
 | Function | Type | Description |
 |----------|------|-------------|
 | `NoGoRoutineLeak` | Reflection | Assert that no goroutines leak from a tested function |
-| `NoFileDescriptorLeak` | Reflection | Assert that no file descriptors leak from a tested function (Linux) |
+| `NoFileDescriptorLeak` | Reflection | Assert that no file descriptors leak from a tested function (Linux, macOS) |
 
 #### Implementation
 
@@ -418,7 +418,9 @@ Removed extraneous type declaration `PanicTestFunc` (`func()`).
 - No configuration or filter lists needed
 - Works safely with `t.Parallel()`
 
-`NoFileDescriptorLeak` compares open file descriptors before and after the tested function (Linux only, via `/proc/self/fd`).
+`NoFileDescriptorLeak` compares open file descriptors before and after the tested function.
+Linux uses `/proc/self/fd`; macOS probes the process FD table with `fstat` and resolves vnode paths via `fcntl(F_GETPATH)`.
+On other platforms the assertion skips cleanly.
 
 See [Examples](./EXAMPLES.md#goroutine-leak-detection) for usage patterns.
 
