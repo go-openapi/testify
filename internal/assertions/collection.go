@@ -528,7 +528,7 @@ func SliceNotSubsetT[Slice ~[]E, E comparable](t T, list, subset Slice, msgAndAr
 		}
 	}
 
-	return Fail(t, fmt.Sprintf("%s is a subset of %s", truncatingFormat("%q", subset), truncatingFormat("%q", list)), msgAndArgs...)
+	return Fail(t, fmt.Sprintf("%s is a subset of %s", truncatingFormat("%#v", subset), truncatingFormat("%#v", list)), msgAndArgs...)
 }
 
 // ElementsMatch asserts that the specified listA(array, slice...) is equal to specified
@@ -805,7 +805,7 @@ func isNotSubsetMap(t T, list, subset any, subsetMap, actualMap reflect.Value, m
 		}
 	}
 
-	return Fail(t, fmt.Sprintf("%s is a subset of %s", truncatingFormat("%q", subset), truncatingFormat("%q", list)), msgAndArgs...)
+	return Fail(t, fmt.Sprintf("%s is a subset of %s", truncatingFormat("%#v", subset), truncatingFormat("%#v", list)), msgAndArgs...)
 }
 
 func isSubsetList(t T, list any, subsetList reflect.Value, msgAndArgs ...any) bool {
@@ -829,7 +829,7 @@ func isNotSubsetList(t T, list, subset any, subsetList reflect.Value, msgAndArgs
 		}
 	}
 
-	return Fail(t, fmt.Sprintf("%s is a subset of %s", truncatingFormat("%q", subset), truncatingFormat("%q", list)), msgAndArgs...)
+	return Fail(t, fmt.Sprintf("%s is a subset of %s", truncatingFormat("%#v", subset), truncatingFormat("%#v", list)), msgAndArgs...)
 }
 
 // containsElement tries to loop over the list check if the list includes the element.

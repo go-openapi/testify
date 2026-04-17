@@ -1272,8 +1272,8 @@ func collectionErrorMessageCases() iter.Seq[failCase] {
 			name:      "truncation/NotSubset(longSlice)",
 			assertion: func(t T) bool { return NotSubset(t, longSlice, longSlice) },
 			wantContains: []string{
-				`['\x00' '\x00' '\x00'`,
-				`<... truncated> is a subset of ['\x00' '\x00' '\x00'`,
+				`[]int{0, 0, 0,`,
+				`<... truncated> is a subset of []int{0, 0, 0,`,
 			},
 		},
 		{
@@ -1282,9 +1282,40 @@ func collectionErrorMessageCases() iter.Seq[failCase] {
 				return NotSubset(t, map[int][]int{1: longSlice}, map[int][]int{1: longSlice})
 			},
 			wantContains: []string{
-				`map['\x01':['\x00' '\x00' '\x00'`,
-				`<... truncated> is a subset of map['\x01':['\x00' '\x00' '\x00'`,
+				`map[int][]int{1:[]int{0, 0, 0,`,
+				`<... truncated> is a subset of map[int][]int{1:[]int{0, 0, 0,`,
 			},
+		},
+
+		// NotSubset/SliceNotSubsetT fail messages — regression coverage for
+		// upstream stretchr/testify#1800 / #1848: previously %q produced
+		// broken output like "%!q(bool=true)" or "'\x01'" for non-string types.
+		{
+			name:         "NotSubset(bools)",
+			assertion:    func(t T) bool { return NotSubset(t, []bool{true}, []bool{true}) },
+			wantContains: []string{`[]bool{true} is a subset of []bool{true}`},
+		},
+		{
+			name:         "NotSubset(ints)",
+			assertion:    func(t T) bool { return NotSubset(t, []int{1, 2, 3}, []int{1, 2}) },
+			wantContains: []string{`[]int{1, 2} is a subset of []int{1, 2, 3}`},
+		},
+		{
+			name: "NotSubset(map-int)",
+			assertion: func(t T) bool {
+				return NotSubset(t, map[int]string{1: "one"}, map[int]string{1: "one"})
+			},
+			wantContains: []string{`map[int]string{1:"one"} is a subset of map[int]string{1:"one"}`},
+		},
+		{
+			name:         "SliceNotSubsetT(bools)",
+			assertion:    func(t T) bool { return SliceNotSubsetT(t, []bool{true}, []bool{true}) },
+			wantContains: []string{`[]bool{true} is a subset of []bool{true}`},
+		},
+		{
+			name:         "SliceNotSubsetT(ints)",
+			assertion:    func(t T) bool { return SliceNotSubsetT(t, []int{1, 2, 3}, []int{1, 2}) },
+			wantContains: []string{`[]int{1, 2} is a subset of []int{1, 2, 3}`},
 		},
 	})
 }
