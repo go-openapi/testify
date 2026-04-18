@@ -55,7 +55,7 @@ All these variants make up several hundreds functions, which poses a challenge f
 
 We have adopted code and documentation generation as a mean to mitigate this issue.
 
-#### Current (v2.3.0-unreleased)
+#### Current (v2.5.0-unreleased)
 
  1. Generic assertions (with type parameters): {{% siteparam "metrics.generics" %}} functions
  2. Non-generic assertions (with t T parameter, no type parameters): {{% siteparam "metrics.nongeneric_assertions" %}} functions
@@ -65,12 +65,11 @@ We have adopted code and documentation generation as a mean to mitigate this iss
 
  **Generated Functions**
 
- 1. Generic assertions: {{% siteparam "metrics.generated_generic" %}}
- 2. Non-generic assertions: {{% siteparam "metrics.generated_nongeneric" %}}
- 3. Helper functions: {{% siteparam "metrics.generated_helpers" %}}
- 4. Constructors: 2
+ 1. Generated variants in each package (assert/require): {{% siteparam "metrics.package_variants" %}}
+ 2. Helpers:  {{% siteparam "metrics.helpers" %}}
+ 3. Constructors: 2 (1 in assert, 1 in require)
 
- Total: {{% siteparam "metrics.generated_total" %}} functions
+ Overall: {{% siteparam "metrics.total_functions" %}} generated functions
 
 ## Architecture Overview
 

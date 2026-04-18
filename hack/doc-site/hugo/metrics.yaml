@@ -4,7 +4,7 @@ params:
         functions: 135
         assertions: 131
         generics: 50
-        nongeneric_assertions: 85
+        nongeneric_assertions: 81
         helpers: 4
         others: 0
         by_domain:
@@ -65,3 +65,6 @@ params:
             yaml:
                 name: Yaml
                 count: 5
+        package_variants: 424
+        total_variants: 848
+        total_functions: 858

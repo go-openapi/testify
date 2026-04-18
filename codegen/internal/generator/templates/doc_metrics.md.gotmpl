@@ -13,15 +13,18 @@ All assertions are classified into **{{ .Domains }}** domains to help navigate t
 
 ## API metrics
 
-Counts for core functionality, excluding variants (formatted, forward, forward-formatted).
+Counts for core functionality, and generated variants (formatted, forward, forward-formatted).
 
-| Kind                     | Count             |
-| ------------------------ | ----------------- |
-| All functions            | {{ .Functions }}  |
-| All core assertions      | {{ .Assertions }} |
-| Generic assertions       | {{ .Generics }}   |
-| Helpers (not assertions) | {{ .Helpers }}    |
-| Others                   | {{ .Others }}     |
+| Kind                      | Count             | Note |
+| ------------------------- | ----------------- | ---- |
+| All core functions             | {{ .Functions }} | Maintained core |
+| All core assertions       | {{ .Assertions }} | Usage with `*testing.T` |
+| Generic assertions        | {{ .Generics }}   | Type-safe assertions ("T" suffix) |
+| Helpers (not assertions)  | {{ .Helpers }}    | General-purpose utilities, not assertions |
+| Others                    | {{ .Others }}     | |
+| assert/require variants   | {{ .PackageVariants }} | Generated variants |
+| Total assertions variants | {{ .TotalVariants }} | Available assertions API |
+| Total API surface         | {{ .TotalFunctions }} | |
 
 {{- end }}
 

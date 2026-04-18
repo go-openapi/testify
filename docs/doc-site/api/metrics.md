@@ -11,15 +11,18 @@ All assertions are classified into **19** domains to help navigate the API, depe
 
 ## API metrics
 
-Counts for core functionality, excluding variants (formatted, forward, forward-formatted).
+Counts for core functionality, and generated variants (formatted, forward, forward-formatted).
 
-| Kind                     | Count             |
-| ------------------------ | ----------------- |
-| All functions            | 135  |
-| All core assertions      | 131 |
-| Generic assertions       | 50   |
-| Helpers (not assertions) | 4    |
-| Others                   | 0     |
+| Kind                      | Count             | Note |
+| ------------------------- | ----------------- | ---- |
+| All core functions             | 135 | Maintained core |
+| All core assertions       | 131 | Usage with `*testing.T` |
+| Generic assertions        | 50   | Type-safe assertions ("T" suffix) |
+| Helpers (not assertions)  | 4    | General-purpose utilities, not assertions |
+| Others                    | 0     | |
+| assert/require variants   | 424 | Generated variants |
+| Total assertions variants | 848 | Available assertions API |
+| Total API surface         | 858 | |
 
 ## Quick index
 

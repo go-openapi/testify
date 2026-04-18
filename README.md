@@ -60,7 +60,8 @@ Feedback, contributions and proposals are welcome.
 
 > **Recent news**
 >
-> ✅ Preparing v2.5.0: new features, a few fixes (`EventuallyWithT`)
+> ✅ Preparing v2.5.0: new features: support for synctest, NoFileDescriptorLeak for macos,
+> plus a few fixes (`EventuallyWithT`, `Subset`).
 >
 > See also our [ROADMAP][doc-roadmap].
 

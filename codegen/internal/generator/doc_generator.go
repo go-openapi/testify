@@ -184,7 +184,7 @@ func (d *DocGenerator) buildIndexDocument(docsByDomain iter.Seq2[string, model.D
 	}
 
 	doc.RefCount = len(doc.Index)
-	doc.Metrics = buildMetrics(docsByDomain)
+	doc.Metrics = d.buildMetrics(docsByDomain)
 	doc.QuickIndex = buildQuickIndex(docsByDomain)
 
 	return doc
@@ -209,7 +209,7 @@ func buildIndexEntries(docsByDomain iter.Seq2[string, model.Document]) []model.I
 	return entries
 }
 
-func buildMetrics(docsByDomain iter.Seq2[string, model.Document]) (metrics model.Metrics) {
+func (d *DocGenerator) buildMetrics(docsByDomain iter.Seq2[string, model.Document]) (metrics model.Metrics) {
 	metrics.ByDomain = make(map[string]model.DomainMetrics)
 
 	for domain, doc := range docsByDomain {
@@ -240,7 +240,28 @@ func buildMetrics(docsByDomain iter.Seq2[string, model.Document]) (metrics model
 		metrics.ByDomain[domain] = domainMetrics
 	}
 
-	metrics.NonGenerics = metrics.Functions - metrics.Generics
+	metrics.NonGenerics = metrics.Assertions - metrics.Generics
+	variantsMultiplier := 1
+	genericsVariantsMultiplier := 1
+
+	if d.ctx.enableForward {
+		variantsMultiplier++
+		if d.ctx.enableFormat {
+			variantsMultiplier++
+		}
+	}
+
+	if d.ctx.enableFormat {
+		variantsMultiplier++
+		genericsVariantsMultiplier++
+	}
+
+	metrics.PackageVariants = metrics.NonGenerics*variantsMultiplier + metrics.Generics*genericsVariantsMultiplier
+
+	// caveat: assume 2 target packages (not really available from options atm).
+	const generatedPackages = 2
+	metrics.TotalVariants = generatedPackages * metrics.PackageVariants
+	metrics.TotalFunctions = generatedPackages * (metrics.PackageVariants + metrics.Helpers + 1) // add the Assertion constructor.
 
 	return metrics
 }
