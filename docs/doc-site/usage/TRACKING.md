@@ -16,6 +16,7 @@ We continue to monitor and selectively adopt changes from the upstream repositor
 - ✅ [#1828] - Spew panic fixes
 - ✅ [#1825], [#1818], [#1223], [#1813], [#1611], [#1822], [#1829] - Various bug fixes
 - ✅ [#1606], [#1087] - Consistently assertion
+- ✅ [#1848] - Subset error message
 
 ### Monitoring
 - 🔍 [#1601] - `NoFieldIsZero`
@@ -34,6 +35,7 @@ We continue to monitor and selectively adopt changes from the upstream repositor
 [#1824]: https://github.com/stretchr/testify/pull/1824
 [#1819]: https://github.com/stretchr/testify/pull/1819
 [#1845]: https://github.com/stretchr/testify/pull/1845
+[#1848]: https://github.com/stretchr/testify/pull/1848
 
 **Review frequency**: Quarterly (next review: May 2026)
 
@@ -82,6 +84,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | [#1813] | Issue | Panic with unexported fields | ✅ Fixed via #1828 in internalized spew |
 | [#1087] | Issue | Consistently assertion | ✅ Adapted |
 | [#1606] | PR | Consistently assertion | ✅ Adapted |
+| [#1848] | PR | Subset (garbled error message) | ✅ Adapted |
 
 [#994]: https://github.com/stretchr/testify/pull/994
 [#1232]: https://github.com/stretchr/testify/pull/1232
@@ -95,6 +98,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 [#1829]: https://github.com/stretchr/testify/issues/1829
 [#1087]: https://github.com/stretchr/testify/issues/1087
 [#1606]: https://github.com/stretchr/testify/pull/1606
+[#1848]: https://github.com/stretchr/testify/pull/1848
 
 ### Superseded by Our Implementation
 
@@ -103,10 +107,8 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | [#1845] | PR | Fix Eventually/Never regression | Superseded by context-based pollCondition implementation (we don't have this bug) |
 | [#1819] | PR | Handle unexpected exits in Eventually | Implemented in v2.4 via per-tick goroutine wrap — a `runtime.Goexit` in the condition only aborts the current tick |
 | [#1824] | PR | Spew testing improvements | Superseded by property-based fuzzing with random type generator |
-| [#1830] | PR | CollectT.Halt() for stopping tests | Implemented in v2.4 as `CollectT.Cancel()` — see [CHANGES](./CHANGES.md) |
+| [#1830] | PR | `CollectT.Halt()` for stopping tests | Implemented in v2.4 as `CollectT.Cancel()` — see [CHANGES](./CHANGES.md) |
 
-[#1819]: https://github.com/stretchr/testify/pull/1819
-[#1845]: https://github.com/stretchr/testify/pull/1845
 
 ### Under Consideration (Monitoring)
 
@@ -114,6 +116,9 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 |-----------|------|---------|--------|
 | [#1601] | Issue | `NoFieldIsZero` assertion | 🔍 Monitoring - Considering implementation |
 | [#1840] | Issue | JSON presence check without exact values | 🔍 Monitoring - Interesting for testing APIs with generated IDs |
+| [#1859] | Issue | Channel assertions | 🔍 Monitoring - aligned with synctest support |
+| [#1860] | Issue+PR | `ErrorAsType[E]` for Go 1.26+ - PR: [#1861] | 🔍 Monitoring - Interesting UX syntax |
+| [#1863] | PR | Number equality with symmetric role | 🔍 Monitoring  |
 
 ### Informational (Not Implemented)
 
@@ -121,19 +126,27 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 |-----------|------|---------|---------|
 | [#1147] | Issue | General discussion about generics adoption | ℹ️ Marked "Not Planned" upstream - We implemented our own generics approach ({{% siteparam "metrics.generics" %}} functions) |
 | [#1308] | PR | Comprehensive refactor with generic type parameters | ℹ️ Draft for v2.0.0 upstream - We took a different approach with the same objective |
+| [#1862] | Issue | `CollectT` extension/redesign | 🔍 Monitoring - Breaking change |
 
+[#1819]: https://github.com/stretchr/testify/pull/1819
+[#1845]: https://github.com/stretchr/testify/pull/1845
 [#1147]: https://github.com/stretchr/testify/issues/1147
 [#1308]: https://github.com/stretchr/testify/pull/1308
+[#1859]: https://github.com/stretchr/testify/pull/1859
+[#1860]: https://github.com/stretchr/testify/pull/1860
+[#1861]: https://github.com/stretchr/testify/pull/1861
+[#1862]: https://github.com/stretchr/testify/pull/1862
+[#1863]: https://github.com/stretchr/testify/pull/1863
 
 ### Summary Statistics
 
 | Category | Count |
 |----------|-------|
-| **Implemented/Merged** | 23 |
+| **Implemented/Merged** | 24 |
 | **Superseded** | 4 |
-| **Monitoring** | 2 |
-| **Informational** | 2 |
-| **Total Processed** | 31 |
+| **Monitoring** | 5 |
+| **Informational** | 3 |
+| **Total Processed** | 36 |
 
 **Note**: This fork maintains an active relationship with upstream, regularly reviewing new PRs and issues. The quarterly review process ensures we stay informed about upstream developments while maintaining our architectural independence.
 

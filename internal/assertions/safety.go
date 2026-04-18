@@ -11,7 +11,16 @@ import (
 	"github.com/go-openapi/testify/v2/internal/leak"
 )
 
-const linuxOS = "linux"
+// fdLeakSupported reports whether the current platform has an fdleak
+// implementation. Mirrors the build tags in internal/fdleak.
+func fdLeakSupported() bool {
+	switch runtime.GOOS {
+	case "linux", "darwin":
+		return true
+	default:
+		return false
+	}
+}
 
 // NoGoRoutineLeak ensures that no goroutine did leak from inside the tested function.
 //
@@ -69,15 +78,16 @@ func NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any) bool {
 
 // NoFileDescriptorLeak ensures that no file descriptor leaks from inside the tested function.
 //
-// This assertion works on Linux only (via /proc/self/fd).
+// This assertion works on Linux (via /proc/self/fd) and macOS (via fstat probing).
 // On other platforms, the test is skipped.
 //
 // NOTE: this assertion is not compatible with parallel tests.
 // File descriptors are a process-wide resource; concurrent tests
 // opening files would cause false positives.
 //
-// Sockets, pipes, and anonymous inodes are filtered out by default,
-// as these are typically managed by the Go runtime.
+// Sockets, pipes, and other kernel-internal descriptors (Linux anon_inode,
+// darwin kqueue) are filtered out by default, as these are typically
+// managed by the Go runtime.
 //
 // # Concurrency
 //
@@ -103,9 +113,9 @@ func NoFileDescriptorLeak(t T, tested func(), msgAndArgs ...any) bool {
 		h.Helper()
 	}
 
-	if runtime.GOOS != linuxOS {
+	if !fdLeakSupported() {
 		if s, ok := t.(skipper); ok {
-			s.Skip("NoFileDescriptorLeak requires Linux (/proc/self/fd)")
+			s.Skip("NoFileDescriptorLeak is not supported on " + runtime.GOOS)
 		}
 
 		return true
