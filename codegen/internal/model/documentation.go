@@ -151,14 +151,17 @@ type IndexEntry struct {
 
 //nolint:tagliatelle // not using camelcase
 type Metrics struct {
-	Domains     int                      `yaml:"domains"`
-	Functions   int                      `yaml:"functions"`
-	Assertions  int                      `yaml:"assertions"`
-	Generics    int                      `yaml:"generics"`
-	NonGenerics int                      `yaml:"nongeneric_assertions"`
-	Helpers     int                      `yaml:"helpers"`
-	Others      int                      `yaml:"others"`
-	ByDomain    map[string]DomainMetrics `yaml:"by_domain"`
+	Domains         int                      `yaml:"domains"`
+	Functions       int                      `yaml:"functions"`
+	Assertions      int                      `yaml:"assertions"`
+	Generics        int                      `yaml:"generics"`
+	NonGenerics     int                      `yaml:"nongeneric_assertions"`
+	Helpers         int                      `yaml:"helpers"`
+	Others          int                      `yaml:"others"`
+	ByDomain        map[string]DomainMetrics `yaml:"by_domain"`
+	PackageVariants int                      `yaml:"package_variants"`
+	TotalVariants   int                      `yaml:"total_variants"`
+	TotalFunctions  int                      `yaml:"total_functions"`
 }
 
 type DomainMetrics struct {
