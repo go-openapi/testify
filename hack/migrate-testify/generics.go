@@ -246,7 +246,7 @@ func trySimpleUpgrade(
 		result = checkSingleConstraint(argTypes, constraintBoolean, skipNotBoolean)
 	case "Same", "NotSame":
 		result = checkPairConstraint(argTypes, constraintPointer, skipNotPointer, rule)
-	case "ElementsMatch", "Subset":
+	case "ElementsMatch", "NotElementsMatch", "Subset", "NotSubset":
 		result = checkSlicePairConstraint(argTypes, rule)
 	case "IsIncreasing", "IsDecreasing", "IsNonIncreasing", "IsNonDecreasing":
 		result = checkOrderedSliceConstraint(argTypes)

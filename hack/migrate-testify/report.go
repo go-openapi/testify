@@ -14,6 +14,8 @@ import (
 	"strings"
 )
 
+const warn = "warning"
+
 // diagnostic represents a single warning or info message from the migration tool.
 type diagnostic struct {
 	file    string
@@ -44,7 +46,7 @@ type report struct {
 }
 
 func (r *report) warn(file string, line int, msg string) {
-	r.diagnostics = append(r.diagnostics, diagnostic{file: file, line: line, message: msg, kind: "warning"})
+	r.diagnostics = append(r.diagnostics, diagnostic{file: file, line: line, message: msg, kind: warn})
 }
 
 func (r *report) info(file string, line int, msg string) {
@@ -115,7 +117,7 @@ func (r *report) printPass1Summary() {
 
 	warnings := 0
 	for _, d := range r.diagnostics {
-		if d.kind == "warning" {
+		if d.kind == warn {
 			warnings++
 		}
 	}
