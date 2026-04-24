@@ -53,7 +53,7 @@ one "forward" variant and one "forward formatted" variant (as methods).
 
 All these variants make up several hundreds functions, which poses a challenge for maintenance and documentation.
 
-We have adopted code and documentation generation as a mean to mitigate this issue.
+We have adopted code and documentation generation as a means to mitigate this issue.
 
 #### Current (v2.5.0-unreleased)
 
@@ -115,7 +115,7 @@ Everything in these packages is generated. Never edit generated files directly.
 
 Exceptions:
 * `doc.go` is not generated
-* ad'hoc testable examples are not generated
+* ad hoc testable examples are not generated
 
 **Optional Feature Packages: `enable/`**
 
