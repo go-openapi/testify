@@ -175,8 +175,18 @@ var genericUpgrades = map[string]upgradeRule{ //nolint:gochecknoglobals // looku
 		argConstraints: []constraintKind{constraintComparable},
 		sameType:       true,
 	},
+	"NotElementsMatch": {
+		target:         "NotElementsMatchT",
+		argConstraints: []constraintKind{constraintComparable},
+		sameType:       true,
+	},
 	"Subset": {
 		target:         "SliceSubsetT",
+		argConstraints: []constraintKind{constraintComparable},
+		sameType:       true,
+	},
+	"NotSubset": {
+		target:         "SliceNotSubsetT",
 		argConstraints: []constraintKind{constraintComparable},
 		sameType:       true,
 	},
@@ -236,6 +246,11 @@ var genericUpgrades = map[string]upgradeRule{ //nolint:gochecknoglobals // looku
 	// Type (manual review — arg count changes)
 	"IsType": {
 		target:         "IsOfTypeT",
+		manualReview:   true,
+		argConstraints: []constraintKind{},
+	},
+	"IsNotType": {
+		target:         "IsNotOfTypeT",
 		manualReview:   true,
 		argConstraints: []constraintKind{},
 	},

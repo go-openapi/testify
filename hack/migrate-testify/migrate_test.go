@@ -115,7 +115,7 @@ func runMigrateSubtest(t *testing.T, c migrateTestCase) {
 	if c.warnContains != "" {
 		found := false
 		for _, d := range rpt.diagnostics {
-			if d.kind == "warning" && strings.Contains(d.message, c.warnContains) {
+			if d.kind == warn && strings.Contains(d.message, c.warnContains) {
 				found = true
 				break
 			}

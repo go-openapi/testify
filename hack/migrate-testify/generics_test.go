@@ -220,6 +220,90 @@ func TestBool(t *testing.T) {
 }`,
 			expected: "assert.TrueT(t, true)\n\tassert.FalseT(t, false)",
 		},
+		{
+			name: "elementsmatch slice upgrade",
+			input: `package p
+import (
+	"testing"
+	"github.com/go-openapi/testify/v2/assert"
+)
+func TestElementsMatch(t *testing.T) {
+	assert.ElementsMatch(t, []int{1, 2, 3}, []int{3, 2, 1})
+}`,
+			expected: `assert.ElementsMatchT(t, []int{1, 2, 3}, []int{3, 2, 1})`,
+		},
+		{
+			name: "notelementsmatch slice upgrade",
+			input: `package p
+import (
+	"testing"
+	"github.com/go-openapi/testify/v2/assert"
+)
+func TestNotElementsMatch(t *testing.T) {
+	assert.NotElementsMatch(t, []int{1, 2, 3}, []int{1, 2, 4})
+}`,
+			expected: `assert.NotElementsMatchT(t, []int{1, 2, 3}, []int{1, 2, 4})`,
+		},
+		{
+			name: "notelementsmatchf slice format variant",
+			input: `package p
+import (
+	"testing"
+	"github.com/go-openapi/testify/v2/assert"
+)
+func TestNotElementsMatchf(t *testing.T) {
+	assert.NotElementsMatchf(t, []int{1, 2, 3}, []int{1, 2, 4}, "should differ")
+}`,
+			expected: `assert.NotElementsMatchTf(t, []int{1, 2, 3}, []int{1, 2, 4}, "should differ")`,
+		},
+		{
+			name: "subset slice upgrade",
+			input: `package p
+import (
+	"testing"
+	"github.com/go-openapi/testify/v2/assert"
+)
+func TestSubset(t *testing.T) {
+	assert.Subset(t, []int{1, 2, 3}, []int{1, 2})
+}`,
+			expected: `assert.SliceSubsetT(t, []int{1, 2, 3}, []int{1, 2})`,
+		},
+		{
+			name: "notsubset slice upgrade",
+			input: `package p
+import (
+	"testing"
+	"github.com/go-openapi/testify/v2/assert"
+)
+func TestNotSubset(t *testing.T) {
+	assert.NotSubset(t, []int{1, 2, 3}, []int{4, 5})
+}`,
+			expected: `assert.SliceNotSubsetT(t, []int{1, 2, 3}, []int{4, 5})`,
+		},
+		{
+			name: "notsubsetf slice format variant",
+			input: `package p
+import (
+	"testing"
+	"github.com/go-openapi/testify/v2/assert"
+)
+func TestNotSubsetf(t *testing.T) {
+	assert.NotSubsetf(t, []int{1, 2, 3}, []int{4, 5}, "should not contain")
+}`,
+			expected: `assert.SliceNotSubsetTf(t, []int{1, 2, 3}, []int{4, 5}, "should not contain")`,
+		},
+		{
+			name: "skip notsubset map (not a slice)",
+			input: `package p
+import (
+	"testing"
+	"github.com/go-openapi/testify/v2/assert"
+)
+func TestNotSubsetMap(t *testing.T) {
+	assert.NotSubset(t, map[string]int{"a": 1}, map[string]int{"b": 2})
+}`,
+			expected: `assert.NotSubset(t, map[string]int{"a": 1}, map[string]int{"b": 2})`,
+		},
 	})
 }
 
@@ -402,6 +486,88 @@ func TestSkipDifferent(t *testing.T) {
 	}
 }
 
+func TestGenericUpgradeManualReview(t *testing.T) {
+	t.Parallel()
+
+	// IsType and IsNotType both change argument count when upgraded to the
+	// generic form (IsOfTypeT / IsNotOfTypeT take the expected type as a
+	// type parameter). The tool must not rewrite the call; it must emit a
+	// manual-review warning.
+	cases := []struct {
+		name       string
+		source     string
+		wantTarget string
+	}{
+		{
+			name: "IsType",
+			source: `package p
+import (
+	"testing"
+	"github.com/go-openapi/testify/v2/assert"
+)
+type MyType struct{}
+func TestIsType(t *testing.T) {
+	assert.IsType(t, &MyType{}, &MyType{})
+}`,
+			wantTarget: "IsOfTypeT",
+		},
+		{
+			name: "IsNotType",
+			source: `package p
+import (
+	"testing"
+	"github.com/go-openapi/testify/v2/assert"
+)
+type MyType struct{}
+func TestIsNotType(t *testing.T) {
+	assert.IsNotType(t, &MyType{}, 42)
+}`,
+			wantTarget: "IsNotOfTypeT",
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			fset := token.NewFileSet()
+			f, err := parser.ParseFile(fset, "test.go", tc.source, parser.ParseComments)
+			if err != nil {
+				t.Fatalf("parse: %v", err)
+			}
+
+			info := typeCheckWithMockAssert(t, fset, f)
+			if info == nil {
+				t.Fatal("type-check failed")
+			}
+
+			pkg := &packages.Package{
+				TypesInfo: info,
+				Syntax:    []*ast.File{f},
+				GoFiles:   []string{"test.go"},
+			}
+
+			rpt := &report{}
+			changes := upgradeFile(f, pkg, fset, rpt, "test.go", false)
+
+			if changes != 0 {
+				t.Errorf("expected 0 changes (manual review), got %d", changes)
+			}
+
+			found := false
+			for _, d := range rpt.diagnostics {
+				if d.kind == "warning" && strings.Contains(d.message, tc.wantTarget) && strings.Contains(d.message, "manual review") {
+					found = true
+					break
+				}
+			}
+			if !found {
+				t.Errorf("expected manual-review warning mentioning %s, got diagnostics: %v", tc.wantTarget, rpt.diagnostics)
+			}
+		})
+	}
+}
+
 // typeCheckWithMockAssert creates a mock "assert" package that has a few functions
 // taking (testing.T, any...) and type-checks the file against it.
 func typeCheckWithMockAssert(t *testing.T, fset *token.FileSet, f *ast.File) *types.Info {
@@ -472,6 +638,20 @@ func typeCheckWithMockAssert(t *testing.T, fset *token.FileSet, f *ast.File) *ty
 	makeAssertFunc("TrueT", anyParam("value"))
 	makeAssertFunc("False", anyParam("value"))
 	makeAssertFunc("FalseT", anyParam("value"))
+	makeAssertFunc("ElementsMatch", anyParam("listA"), anyParam("listB"))
+	makeAssertFunc("ElementsMatchT", anyParam("listA"), anyParam("listB"))
+	makeAssertFunc("NotElementsMatch", anyParam("listA"), anyParam("listB"))
+	makeAssertFunc("NotElementsMatchT", anyParam("listA"), anyParam("listB"))
+	makeAssertFunc("NotElementsMatchf", anyParam("listA"), anyParam("listB"))
+	makeAssertFunc("NotElementsMatchTf", anyParam("listA"), anyParam("listB"))
+	makeAssertFunc("Subset", anyParam("list"), anyParam("subset"))
+	makeAssertFunc("SliceSubsetT", anyParam("list"), anyParam("subset"))
+	makeAssertFunc("NotSubset", anyParam("list"), anyParam("subset"))
+	makeAssertFunc("NotSubsetf", anyParam("list"), anyParam("subset"))
+	makeAssertFunc("SliceNotSubsetT", anyParam("list"), anyParam("subset"))
+	makeAssertFunc("SliceNotSubsetTf", anyParam("list"), anyParam("subset"))
+	makeAssertFunc("IsType", anyParam("expectedType"), anyParam("object"))
+	makeAssertFunc("IsNotType", anyParam("theType"), anyParam("object"))
 
 	assertPkg.MarkComplete()
 
