@@ -115,7 +115,7 @@ Everything in these packages is generated. Never edit generated files directly.
 
 Exceptions:
 * `doc.go` is not generated
-* ad'hoc testable examples are not generated
+* ad hoc testable examples are not generated
 
 **Optional Feature Packages: `enable/`**
 
