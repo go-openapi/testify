@@ -11,7 +11,7 @@ weight: 2
 We want the maintenance of dozens of test assertions, times many variants, to remain reasonably low.
 
 The maintenance flow is intended to require different activities and levels of understanding,
-dependending on the complexity of a planned evolution.
+depending on the complexity of a planned evolution.
 
 {{< mermaid align="center" zoom="true" >}}
 journey
