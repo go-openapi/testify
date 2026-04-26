@@ -30,6 +30,34 @@ func New(t T) *Assertions {
 	}
 }
 
+// Blocked is the same as [Blocked], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) Blocked(ch any, msgAndArgs ...any) {
+	if h, ok := a.T.(H); ok {
+		h.Helper()
+	}
+	if assertions.Blocked(a.T, ch, msgAndArgs...) {
+		return
+	}
+
+	a.T.FailNow()
+}
+
+// Blockedf is the same as [Assertions.Blocked], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) Blockedf(ch any, msg string, args ...any) {
+	if h, ok := a.T.(H); ok {
+		h.Helper()
+	}
+	if assertions.Blocked(a.T, ch, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.T.FailNow()
+}
+
 // Condition is the same as [Condition], as a method rather than a package-level function.
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
@@ -1528,6 +1556,34 @@ func (a *Assertions) NoGoRoutineLeakf(tested func(), msg string, args ...any) {
 		h.Helper()
 	}
 	if assertions.NoGoRoutineLeak(a.T, tested, forwardArgs(msg, args)) {
+		return
+	}
+
+	a.T.FailNow()
+}
+
+// NotBlocked is the same as [NotBlocked], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) NotBlocked(ch any, msgAndArgs ...any) {
+	if h, ok := a.T.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotBlocked(a.T, ch, msgAndArgs...) {
+		return
+	}
+
+	a.T.FailNow()
+}
+
+// NotBlockedf is the same as [Assertions.NotBlocked], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func (a *Assertions) NotBlockedf(ch any, msg string, args ...any) {
+	if h, ok := a.T.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotBlocked(a.T, ch, forwardArgs(msg, args)) {
 		return
 	}
 

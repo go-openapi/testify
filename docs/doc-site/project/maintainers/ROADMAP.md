@@ -39,8 +39,8 @@ timeline
     section Q2 2026
     📝 v2.5 (May 2026) : synctest opt-in for Eventually, Never, Consistently, EventuallyWith
                     : NoFileDescriptorLeak (macOS)
+                    : InEpsilonSymmetric, Blocked/NotBlocked  
                     : export internal tools (spew, difflib)
-                    : New candidate features from upstream
                     : go1.25+
     🔍 v2.6 (June 2026) : (tentative)
                     : go build guards (codegen)

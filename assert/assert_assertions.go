@@ -15,6 +15,48 @@ import (
 	"github.com/go-openapi/testify/v2/internal/assertions"
 )
 
+// Blocked asserts that a channel is blocked on receive.
+//
+// It always fails if the operand is not a channel, or if the channel is send-only.
+//
+// # Usage
+//
+//	ch := make(chan struct{})
+//	assertions.Blocked(t, ch)
+//
+// # Examples
+//
+//	success:  make(chan struct{})
+//	failure:  sendChanMessage()
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func Blocked(t T, ch any, msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.Blocked(t, ch, msgAndArgs...)
+}
+
+// BlockedT asserts that a channel is blocked on receive.
+//
+// # Usage
+//
+//	ch := make(chan struct{})
+//	assertions.BlockedT(t, ch)
+//
+// # Examples
+//
+//	success:  make(chan struct{})
+//	failure:  sendChanMessage()
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func BlockedT[E any, CHAN ~chan E](t T, ch CHAN, msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.BlockedT[E, CHAN](t, ch, msgAndArgs...)
+}
+
 // Condition uses a comparison function to assert a complex condition.
 //
 // # Usage
@@ -2166,6 +2208,56 @@ func NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any) bool {
 		h.Helper()
 	}
 	return assertions.NoGoRoutineLeak(t, tested, msgAndArgs...)
+}
+
+// NotBlocked asserts that a channel is not blocked on receive.
+//
+// It always fails if the operand is not a channel, or if the channel is send-only.
+//
+// A closed channel doesn't block and returns true.
+// Notice that this consumes any message available in the channel.
+//
+// # Usage
+//
+//	ch := make(chan struct{}, 1)
+//	ch <- struct{}{}
+//	assertions.NotBlocked(t, ch)
+//
+// # Examples
+//
+//	success:  sendChanMessage()
+//	failure:  make(chan struct{})
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func NotBlocked(t T, ch any, msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.NotBlocked(t, ch, msgAndArgs...)
+}
+
+// NotBlockedT asserts that a channel is not blocked on receive.
+//
+// A closed channel doesn't block and returns true.
+// Notice that this consumes any message available in the channel.
+//
+// # Usage
+//
+//	ch := make(chan struct{}, 1)
+//	ch <- struct{}{}
+//	assertions.NotBlockedT(t, ch)
+//
+// # Examples
+//
+//	success:  sendChanMessage()
+//	failure:  make(chan struct{})
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func NotBlockedT[E any, CHAN ~chan E](t T, ch CHAN, msgAndArgs ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.NotBlockedT[E, CHAN](t, ch, msgAndArgs...)
 }
 
 // NotContains asserts that the specified string, list(array, slice...) or map does NOT contain the

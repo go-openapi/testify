@@ -16,6 +16,31 @@ import (
 	"time"
 )
 
+func TestAssertionsBlocked(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.Blocked(make(chan struct{}))
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.Blocked(sendChanMessage())
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("Assertions.Blocked should call FailNow()")
+		}
+	})
+}
+
 func TestAssertionsCondition(t *testing.T) {
 	t.Parallel()
 
@@ -1324,6 +1349,31 @@ func TestAssertionsNoGoRoutineLeak(t *testing.T) {
 	})
 }
 
+func TestAssertionsNotBlocked(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.NotBlocked(sendChanMessage())
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.NotBlocked(make(chan struct{}))
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("Assertions.NotBlocked should call FailNow()")
+		}
+	})
+}
+
 func TestAssertionsNotContains(t *testing.T) {
 	t.Parallel()
 
@@ -2004,6 +2054,31 @@ func TestAssertionsZero(t *testing.T) {
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("Assertions.Zero should call FailNow()")
+		}
+	})
+}
+
+func TestAssertionsBlockedf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.Blockedf(make(chan struct{}), "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.Blockedf(sendChanMessage(), "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("Assertions.Blockedf should call FailNow()")
 		}
 	})
 }
@@ -3313,6 +3388,31 @@ func TestAssertionsNoGoRoutineLeakf(t *testing.T) {
 		a := New(mock)
 		a.NoGoRoutineLeakf(func() {}, "test message")
 		// require functions don't return a value
+	})
+}
+
+func TestAssertionsNotBlockedf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.NotBlockedf(sendChanMessage(), "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.NotBlockedf(make(chan struct{}), "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("Assertions.NotBlockedf should call FailNow()")
+		}
 	})
 }
 

@@ -15,14 +15,14 @@ Counts for core functionality, and generated variants (formatted, forward, forwa
 
 | Kind                      | Count             | Note |
 | ------------------------- | ----------------- | ---- |
-| All core functions             | 137 | Maintained core |
-| All core assertions       | 133 | Usage with `*testing.T` |
-| Generic assertions        | 51   | Type-safe assertions ("T" suffix) |
+| All core functions             | 141 | Maintained core |
+| All core assertions       | 137 | Usage with `*testing.T` |
+| Generic assertions        | 53   | Type-safe assertions ("T" suffix) |
 | Helpers (not assertions)  | 4    | General-purpose utilities, not assertions |
 | Others                    | 0     | |
-| assert/require variants   | 430 | Generated variants |
-| Total assertions variants | 860 | Available assertions API |
-| Total API surface         | 870 | |
+| assert/require variants   | 442 | Generated variants |
+| Total assertions variants | 884 | Available assertions API |
+| Total API surface         | 894 | |
 
 ## Quick index
 
@@ -30,6 +30,8 @@ Table of core assertions, excluding variants. Each function is side by side with
 
 | Assertion                | Opposite          | Domain | Kind |
 | ------------------------ | ----------------- | ------ | ---- |
+| [Blocked](condition/#blocked) | [NotBlocked](condition/#notblocked) | condition |  |
+| [BlockedT[E any, CHAN ~chan E]](condition/#blockedte-any-chan-chan-e) {{% icon icon="star" color=orange %}} | [NotBlockedT](condition/#notblockedte-any-chan-chan-e) | condition |  |
 | [CallerInfo](common/#callerinfo) |  | common | helper |
 | [Condition](condition/#condition) |  | condition |  |
 | [Consistently[C Conditioner]](condition/#consistentlyc-conditioner) {{% icon icon="star" color=orange %}} |  | condition |  |

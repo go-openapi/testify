@@ -20,6 +20,13 @@ func httpBody(w http.ResponseWriter, r *http.Request) {
 	_, _ = fmt.Fprintf(w, "Hello, %s!", name)
 }
 
+func sendChanMessage() chan struct{} {
+  ch := make(chan struct{}, 1)
+  ch <- struct{}{}
+
+  return ch
+}
+
 //nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
 var (
   staticVar = "static string"
@@ -44,6 +51,8 @@ type dummyError struct {
 func (d *dummyError) Error() string {
   return "dummy error"
 }
+
+var dummyChan = make(chan struct{})
 
 type myType float64
 {{- end }}
