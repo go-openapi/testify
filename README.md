@@ -43,14 +43,6 @@ This is the go-openapi fork of the great [testify](https://github.com/stretchr/t
 
 ## Announcements
 
-* **2025-12-19** : new community chat on discord
-  * a new discord community channel is available to be notified of changes and support users
-  * our venerable Slack channel remains open, and will be eventually discontinued on **2026-03-31**
-
-You may join the discord community by clicking the invite link on the discord badge (also above). [![Discord Channel][discord-badge]][discord-url]
-
-Or join our Slack channel: [![Slack Channel][slack-logo]![slack-badge]][slack-url]
-
 ### Status
 
 Design and exploration phase completed. The published API is now stable:
@@ -192,9 +184,6 @@ Maintainers can cut a new release by either:
 [example-with-generics-url]: https://go-openapi.github.io/testify#usage-with-generics
 [godoc-badge]: https://pkg.go.dev/badge/github.com/go-openapi/testify/v2
 [godoc-url]: https://pkg.go.dev/github.com/go-openapi/testify/v2
-[slack-logo]: https://a.slack-edge.com/e6a93c1/img/icons/favicon-32.png
-[slack-badge]: https://img.shields.io/badge/slack-blue?link=https%3A%2F%2Fgoswagger.slack.com%2Farchives%2FC04R30YM
-[slack-url]: https://goswagger.slack.com/archives/C04R30YMU
 [discord-badge]: https://img.shields.io/discord/1446918742398341256?logo=discord&label=discord&color=blue
 [discord-url]: https://discord.gg/FfnFYaC3k5
 
