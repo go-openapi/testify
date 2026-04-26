@@ -55,7 +55,7 @@ All these variants make up several hundreds functions, which poses a challenge f
 
 We have adopted code and documentation generation as a means to mitigate this issue.
 
-#### Current (v2.5.0-unreleased)
+#### Current
 
  1. Generic assertions (with type parameters): {{% siteparam "metrics.generics" %}} functions
  2. Non-generic assertions (with t T parameter, no type parameters): {{% siteparam "metrics.nongeneric_assertions" %}} functions

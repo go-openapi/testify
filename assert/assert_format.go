@@ -465,6 +465,26 @@ func InEpsilonSlicef(t T, expected any, actual any, epsilon float64, msg string,
 	return assertions.InEpsilonSlice(t, expected, actual, epsilon, forwardArgs(msg, args))
 }
 
+// InEpsilonSymmetricf is the same as [InEpsilonSymmetric], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func InEpsilonSymmetricf(t T, x any, y any, epsilon float64, msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.InEpsilonSymmetric(t, x, y, epsilon, forwardArgs(msg, args))
+}
+
+// InEpsilonSymmetricTf is the same as [InEpsilonSymmetricT], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func InEpsilonSymmetricTf[Number Measurable](t T, x Number, y Number, epsilon float64, msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.InEpsilonSymmetricT[Number](t, x, y, epsilon, forwardArgs(msg, args))
+}
+
 // InEpsilonTf is the same as [InEpsilonT], but it accepts a format string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.

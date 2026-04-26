@@ -92,6 +92,15 @@ func TestNumberInEpsilonSlice(t *testing.T) {
 	}
 }
 
+func TestNumberInEpsilonSymmetric(t *testing.T) {
+	t.Parallel()
+
+	// run all test cases with both InEpsilonSymmetric and InEpsilonSymmetricT
+	for tc := range inEpsilonSymmetricCases() {
+		t.Run(tc.name, tc.test)
+	}
+}
+
 func TestNumberErrorMessages(t *testing.T) {
 	t.Parallel()
 
@@ -585,6 +594,152 @@ func testEpsilonT[Number Measurable](expected, actual Number, epsilon float64, s
 	}
 }
 
+// =======================================
+// Test NumberInEpsilonSymmetric variants
+// =======================================
+
+func inEpsilonSymmetricCases() iter.Seq[genericTestCase] {
+	return slices.Values([]genericTestCase{
+		// Asymmetric-vs-symmetric — these are the cases that justify InEpsilonSymmetric.
+		// With InEpsilon the threshold is epsilon * |expected|; with InEpsilonSymmetric
+		// it is epsilon * max(|x|, |y|). When |y| > |x|, InEpsilonSymmetric is more lenient.
+		//
+		//   (10, 14, 0.3):    InEpsilon fails (4 > 3), InEpsilonSymmetric passes (4 <= 4.2)
+		//   (0.1, 0.14, 0.3): same ratio, scaled down
+		{"asymmetric/larger-second-arg", testAllSymmetric(10.0, 14.0, 0.3, true)},
+		{"asymmetric/larger-second-arg-small", testAllSymmetric(0.1, 0.14, 0.3, true)},
+		// And the symmetric counterpart: swapping arguments doesn't change the result.
+		{"asymmetric/larger-first-arg", testAllSymmetric(14.0, 10.0, 0.3, true)},
+		{"asymmetric/larger-first-arg-small", testAllSymmetric(0.14, 0.1, 0.3, true)},
+		// Just below the boundary — both must still fail.
+		{"asymmetric/just-below-boundary", testAllSymmetric(10.0, 14.0, 0.28, false)},
+
+		// Simple input cases
+		{"simple/1pct-error-within-2pct-epsilon", testAllSymmetric(100.0, 101.0, 0.02, true)},
+		{"simple/5pct-error-exceeds-2pct-epsilon", testAllSymmetric(100.0, 105.0, 0.02, false)},
+		{"simple/exact-match-zero-epsilon", testAllSymmetric(100.0, 100.0, 0.0, true)},
+
+		// Edge cases - NaN
+		{"edge/nan-for-actual", testAllSymmetric(42.0, math.NaN(), 0.01, false)},
+		{"edge/nan-for-expected", testAllSymmetric(math.NaN(), 42.0, 0.01, false)},
+		{"edge/nan-for-both", testAllSymmetric(math.NaN(), math.NaN(), 0.01, true)},
+
+		// Edge cases - both zero (passes whatever epsilon)
+		{"edge/both-zero", testAllSymmetric(0.0, 0.0, 0.01, true)},
+		{"edge/both-zero-zero-epsilon", testAllSymmetric(0.0, 0.0, 0.0, true)},
+		// One side is zero: amplitude == |non-zero side|, so 1 > epsilon must hold.
+		{"edge/zero-vs-nonzero-fails", testAllSymmetric(0.0, 0.5, 0.5, false)}, // 0.5 > 0.5*0.5 = 0.25
+		{"edge/zero-vs-nonzero-large-epsilon", testAllSymmetric(0.0, 0.5, 1.0, true)},
+
+		// All numeric types - basic success cases
+		{"int/success", testAllSymmetric(int(100), int(101), 0.02, true)},
+		{"int8/success", testAllSymmetric(int8(100), int8(101), 0.02, true)},
+		{"int16/success", testAllSymmetric(int16(100), int16(101), 0.02, true)},
+		{"int32/success", testAllSymmetric(int32(100), int32(101), 0.02, true)},
+		{"int64/success", testAllSymmetric(int64(100), int64(101), 0.02, true)},
+		{"uint/success", testAllSymmetric(uint(100), uint(101), 0.02, true)},
+		{"uint8/success", testAllSymmetric(uint8(100), uint8(101), 0.02, true)},
+		{"uint16/success", testAllSymmetric(uint16(100), uint16(101), 0.02, true)},
+		{"uint32/success", testAllSymmetric(uint32(100), uint32(101), 0.02, true)},
+		{"uint64/success", testAllSymmetric(uint64(100), uint64(101), 0.02, true)},
+		{"float32/success", testAllSymmetric(float32(100.0), float32(101.0), 0.02, true)},
+		{"float64/success", testAllSymmetric(100.0, 101.0, 0.02, true)},
+
+		// Basic failure cases
+		{"int/failure", testAllSymmetric(int(100), int(110), 0.05, false)},
+		{"uint/failure", testAllSymmetric(uint(100), uint(110), 0.05, false)},
+		{"float64/failure", testAllSymmetric(100.0, 110.0, 0.05, false)},
+
+		// Negative numbers
+		{"int/negative", testAllSymmetric(int(-100), int(-101), 0.02, true)},
+		{"int/negative-fail", testAllSymmetric(int(-100), int(-110), 0.05, false)},
+		{"float64/negative", testAllSymmetric(-100.0, -101.0, 0.02, true)},
+
+		// Mixed positive/negative — amplitude is max(|x|, |y|), so for (100, -100)
+		// delta = 200 and threshold = 100 * epsilon. Boundary is epsilon == 2.0.
+		{"mixed/at-boundary", testAllSymmetric(100.0, -100.0, 2.0, true)},
+		{"mixed/just-below", testAllSymmetric(100.0, -100.0, 1.99, false)},
+
+		// Float32 NaN cases
+		{"float32/both-nan", testAllSymmetric(float32(math.NaN()), float32(math.NaN()), 0.01, true)},
+		{"float32/expected-nan", testAllSymmetric(float32(math.NaN()), float32(42.0), 0.01, false)},
+		{"float32/actual-nan", testAllSymmetric(float32(42.0), float32(math.NaN()), 0.01, false)},
+
+		// Float32 +Inf cases
+		{"float32/both-plus-inf", testAllSymmetric(float32(math.Inf(1)), float32(math.Inf(1)), 0.01, true)},
+		{"float32/plus-inf-vs-minus-inf", testAllSymmetric(float32(math.Inf(1)), float32(math.Inf(-1)), 0.01, false)},
+		{"float32/plus-inf-vs-finite", testAllSymmetric(float32(math.Inf(1)), float32(100.0), 0.01, false)},
+		{"float32/finite-vs-plus-inf", testAllSymmetric(float32(100.0), float32(math.Inf(1)), 0.01, false)},
+
+		// Float64 +Inf cases
+		{"float64/both-plus-inf", testAllSymmetric(math.Inf(1), math.Inf(1), 0.01, true)},
+		{"float64/plus-inf-vs-minus-inf", testAllSymmetric(math.Inf(1), math.Inf(-1), 0.01, false)},
+		{"float64/plus-inf-vs-finite", testAllSymmetric(math.Inf(1), 100.0, 0.01, false)},
+
+		// Float64 -Inf cases
+		{"float64/both-minus-inf", testAllSymmetric(math.Inf(-1), math.Inf(-1), 0.01, true)},
+		{"float64/minus-inf-vs-finite", testAllSymmetric(math.Inf(-1), 100.0, 0.01, false)},
+
+		// Epsilon validation
+		{"epsilon-negative", testAllSymmetric(100.0, 100.0, -0.01, false)},
+		{"epsilon-nan", testAllSymmetric(100.0, 100.0, math.NaN(), false)},
+		{"epsilon-plus-inf", testAllSymmetric(100.0, 100.0, math.Inf(1), false)},
+		{"epsilon-minus-inf", testAllSymmetric(100.0, 100.0, math.Inf(-1), false)},
+
+		// Large values
+		{"int64/large-values", testAllSymmetric(int64(1000000000), int64(1010000000), 0.02, true)},
+		{"uint64/large-values", testAllSymmetric(uint64(1000000000), uint64(1010000000), 0.02, true)},
+		{"float64/large-values", testAllSymmetric(1e15, 1.01e15, 0.02, true)},
+
+		// time.Duration (covers toFloat time.Duration case in InEpsilonSymmetric)
+		{"duration/success", testAllSymmetric(100*time.Millisecond, 101*time.Millisecond, 0.02, true)},
+		{"duration/failure", testAllSymmetric(100*time.Millisecond, 110*time.Millisecond, 0.05, false)},
+
+		// custom float type (covers toFloat reflect conversion in InEpsilonSymmetric)
+		{"custom-float/success", testAllSymmetric(customFloat(100.0), customFloat(101.0), 0.02, true)},
+		{"custom-float/failure", testAllSymmetric(customFloat(100.0), customFloat(110.0), 0.05, false)},
+	})
+}
+
+// testAllSymmetric tests both InEpsilonSymmetric and InEpsilonSymmetricT with the same input.
+func testAllSymmetric[Number Measurable](x, y Number, epsilon float64, shouldPass bool) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		if shouldPass {
+			t.Run("should pass", func(t *testing.T) {
+				t.Run("with InEpsilonSymmetric", testSymmetric(x, y, epsilon, true))
+				t.Run("with InEpsilonSymmetricT", testSymmetricT(x, y, epsilon, true))
+			})
+		} else {
+			t.Run("should fail", func(t *testing.T) {
+				t.Run("with InEpsilonSymmetric", testSymmetric(x, y, epsilon, false))
+				t.Run("with InEpsilonSymmetricT", testSymmetricT(x, y, epsilon, false))
+			})
+		}
+	}
+}
+
+func testSymmetric[Number Measurable](x, y Number, epsilon float64, shouldPass bool) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := InEpsilonSymmetric(mock, x, y, epsilon)
+		shouldPassOrFail(t, mock, result, shouldPass)
+	}
+}
+
+func testSymmetricT[Number Measurable](x, y Number, epsilon float64, shouldPass bool) func(*testing.T) {
+	return func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := InEpsilonSymmetricT(mock, x, y, epsilon)
+		shouldPassOrFail(t, mock, result, shouldPass)
+	}
+}
+
 // Helper functions and test data for InDeltaSlice
 
 func deltaSliceCases() iter.Seq[genericTestCase] {
@@ -732,6 +887,16 @@ func numberFailCases() iter.Seq[failCase] {
 			name:         "InEpsilon/non-numeric-types",
 			assertion:    func(t T) bool { return InEpsilon(t, "", 0.5, 0.1) },
 			wantContains: []string{"Parameters must be numerical"},
+		},
+		{
+			name:         "InEpsilonSymmetric/non-numeric-types",
+			assertion:    func(t T) bool { return InEpsilonSymmetric(t, "", 0.5, 0.1) },
+			wantContains: []string{"Parameters must be numerical"},
+		},
+		{
+			name:         "InEpsilonSymmetricT/relative-error",
+			assertion:    func(t T) bool { return InEpsilonSymmetricT(t, 100.0, 110.0, 0.05) },
+			wantContains: []string{"Symmetric relative error is too high"},
 		},
 	})
 }

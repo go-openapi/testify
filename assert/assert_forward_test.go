@@ -1038,6 +1038,35 @@ func TestAssertionsInEpsilonSlice(t *testing.T) {
 	})
 }
 
+func TestAssertionsInEpsilonSymmetric(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		a := New(mock)
+		result := a.InEpsilonSymmetric(100.0, 101.0, 0.02)
+		if !result {
+			t.Error("Assertions.InEpsilonSymmetric should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		a := New(mock)
+		result := a.InEpsilonSymmetric(100.0, 110.0, 0.05)
+		if result {
+			t.Error("Assertions.InEpsilonSymmetric should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("Assertions.InEpsilonSymmetric should mark test as failed")
+		}
+	})
+}
+
 func TestAssertionsIsDecreasing(t *testing.T) {
 	t.Parallel()
 
@@ -3315,6 +3344,35 @@ func TestAssertionsInEpsilonSlicef(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("Assertions.InEpsilonSlicef should mark test as failed")
+		}
+	})
+}
+
+func TestAssertionsInEpsilonSymmetricf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		a := New(mock)
+		result := a.InEpsilonSymmetricf(100.0, 101.0, 0.02, "test message")
+		if !result {
+			t.Error("Assertions.InEpsilonSymmetricf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		a := New(mock)
+		result := a.InEpsilonSymmetricf(100.0, 110.0, 0.05, "test message")
+		if result {
+			t.Error("Assertions.InEpsilonSymmetricf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("Assertions.InEpsilonSymmetricf should mark test as failed")
 		}
 	})
 }

@@ -898,6 +898,31 @@ func TestAssertionsInEpsilonSlice(t *testing.T) {
 	})
 }
 
+func TestAssertionsInEpsilonSymmetric(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.InEpsilonSymmetric(100.0, 101.0, 0.02)
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.InEpsilonSymmetric(100.0, 110.0, 0.05)
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("Assertions.InEpsilonSymmetric should call FailNow()")
+		}
+	})
+}
+
 func TestAssertionsIsDecreasing(t *testing.T) {
 	t.Parallel()
 
@@ -2861,6 +2886,31 @@ func TestAssertionsInEpsilonSlicef(t *testing.T) {
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("Assertions.InEpsilonSlicef should call FailNow()")
+		}
+	})
+}
+
+func TestAssertionsInEpsilonSymmetricf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.InEpsilonSymmetricf(100.0, 101.0, 0.02, "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		a := New(mock)
+		a.InEpsilonSymmetricf(100.0, 110.0, 0.05, "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("Assertions.InEpsilonSymmetricf should call FailNow()")
 		}
 	})
 }

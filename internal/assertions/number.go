@@ -222,6 +222,100 @@ func InEpsilonT[Number Measurable](t T, expected, actual Number, epsilon float64
 	return true
 }
 
+// InEpsilonSymmetric asserts that 2 numbers are close, with a symmetric relative error.
+//
+// Unlike with [InEpsilon], both numbers play a symmetric role and the relative error is
+// computed relative to the number with greatest amplitude. This mirrors the behavior of
+// Python's [math.isclose] (with the relative-tolerance term only).
+//
+// See also [InEpsilon].
+//
+// # Behavior with IEEE floating point arithmetic
+//
+//   - NaN is matched only by a NaN, e.g. this works: [InEpsilonSymmetric]([math.NaN](), [math.Sqrt](-1), 0.0)
+//   - +Inf is matched only by a +Inf
+//   - -Inf is matched only by a -Inf
+//
+// Edge case: for very large integers that do not convert accurately to a float64 (e.g. uint64), prefer [InDelta].
+//
+// Formula:
+//
+//   - If x == 0 and y == 0: success
+//   - Otherwise fail if |x - y| > epsilon * max(|x|,|y|)
+//
+// # Usage
+//
+//	assertions.InEpsilonSymmetric(t, 100.0, 101.0, 0.02)
+//
+// # Examples
+//
+//	success: 100.0, 101.0, 0.02
+//	failure: 100.0, 110.0, 0.05
+//
+// [math.isclose]: https://docs.python.org/3/library/math.html#math.isclose
+func InEpsilonSymmetric(t T, x, y any, epsilon float64, msgAndArgs ...any) bool {
+	// Domain: number
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	af, aok := toFloat(x)
+	bf, bok := toFloat(y)
+	if !aok || !bok {
+		return Fail(t, "Parameters must be numerical", msgAndArgs...)
+	}
+
+	msg, skip, ok := checkDeltaEdgeCases(af, bf, epsilon)
+	if !ok {
+		return Fail(t, msg, msgAndArgs...)
+	}
+	if skip {
+		return true
+	}
+
+	msg, ok = compareSymmetricRelativeError(af, bf, epsilon)
+	if !ok {
+		return Fail(t, msg, msgAndArgs...)
+	}
+
+	return true
+}
+
+// InEpsilonSymmetricT is the type-safe version of [InEpsilonSymmetric], comparing numbers of the same numerical type.
+//
+// See [InEpsilonSymmetric].
+//
+// # Usage
+//
+//	assertions.InEpsilonSymmetricT(t, 100.0, 101.0, 0.02)
+//
+// # Examples
+//
+//	success: 100.0, 101.0, 0.02
+//	failure: 100.0, 110.0, 0.05
+func InEpsilonSymmetricT[Number Measurable](t T, x, y Number, epsilon float64, msgAndArgs ...any) bool {
+	// Domain: number
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+
+	af := float64(x)
+	bf := float64(y)
+	msg, skip, ok := checkDeltaEdgeCases(af, bf, epsilon)
+	if !ok {
+		return Fail(t, msg, msgAndArgs...)
+	}
+	if skip {
+		return true
+	}
+
+	msg, ok = compareSymmetricRelativeError(af, bf, epsilon)
+	if !ok {
+		return Fail(t, msg, msgAndArgs...)
+	}
+
+	return true
+}
+
 // InDeltaSlice is the same as [InDelta], except it compares two slices.
 //
 // See [InDelta].
@@ -429,6 +523,21 @@ func compareRelativeError(expected, actual, epsilon float64) (msg string, ok boo
 	if delta > epsilon*math.Abs(expected) {
 		return fmt.Sprintf("Relative error is too high: %#v (expected)\n"+
 			"        < %#v (actual)", epsilon, delta/math.Abs(expected)), false
+	}
+
+	return "", true
+}
+
+func compareSymmetricRelativeError(a, b, epsilon float64) (msg string, ok bool) {
+	delta := math.Abs(a - b)
+	if delta == 0 {
+		return "", true
+	}
+
+	amplitude := max(math.Abs(a), math.Abs(b))
+	if delta > epsilon*amplitude {
+		return fmt.Sprintf("Symmetric relative error is too high: %#v (expected)\n"+
+			"        < %#v (actual)", epsilon, delta/amplitude), false
 	}
 
 	return "", true

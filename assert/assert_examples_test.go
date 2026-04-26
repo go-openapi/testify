@@ -380,6 +380,22 @@ func ExampleInEpsilonSlice() {
 	// Output: success: true
 }
 
+func ExampleInEpsilonSymmetric() {
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonSymmetric(t *testing.T)
+	success := assert.InEpsilonSymmetric(t, 100.0, 101.0, 0.02)
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleInEpsilonSymmetricT() {
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonSymmetricT(t *testing.T)
+	success := assert.InEpsilonSymmetricT(t, 100.0, 101.0, 0.02)
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleInEpsilonT() {
 	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonT(t *testing.T)
 	success := assert.InEpsilonT(t, 100.0, 101.0, 0.02)

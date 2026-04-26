@@ -17,6 +17,10 @@ keywords:
   - "InEpsilonf"
   - "InEpsilonSlice"
   - "InEpsilonSlicef"
+  - "InEpsilonSymmetric"
+  - "InEpsilonSymmetricf"
+  - "InEpsilonSymmetricT"
+  - "InEpsilonSymmetricTf"
   - "InEpsilonT"
   - "InEpsilonTf"
 ---
@@ -30,7 +34,7 @@ Asserting Numbers
 
 _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
-This domain exposes 7 functionalities.
+This domain exposes 9 functionalities.
 Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 
 ```tree
@@ -40,6 +44,8 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 - [InDeltaT[Number Measurable]](#indeltatnumber-measurable) | star | orange
 - [InEpsilon](#inepsilon) | angles-right
 - [InEpsilonSlice](#inepsilonslice) | angles-right
+- [InEpsilonSymmetric](#inepsilonsymmetric) | angles-right
+- [InEpsilonSymmetricT[Number Measurable]](#inepsilonsymmetrictnumber-measurable) | star | orange
 - [InEpsilonT[Number Measurable]](#inepsilontnumber-measurable) | star | orange
 ```
 
@@ -275,7 +281,7 @@ func main() {
 |--|--|
 | [`assertions.InDeltaMapValues(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InDeltaMapValues) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaMapValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L273)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaMapValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L367)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -388,7 +394,7 @@ func main() {
 |--|--|
 | [`assertions.InDeltaSlice(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InDeltaSlice) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaSlice](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L237)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InDeltaSlice](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L331)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -746,7 +752,248 @@ func main() {
 |--|--|
 | [`assertions.InEpsilonSlice(t T, expected any, actual any, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InEpsilonSlice) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilonSlice](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L328)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilonSlice](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L422)
+{{% /tab %}}
+{{< /tabs >}}
+
+### InEpsilonSymmetric{#inepsilonsymmetric}
+InEpsilonSymmetric asserts that 2 numbers are close, with a symmetric relative error.
+
+Unlike with [InEpsilon](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilon), both numbers play a symmetric role and the relative error is
+computed relative to the number with greatest amplitude. This mirrors the behavior of
+Python's [math.isclose](https://docs.python.org/3/library/math.html#math.isclose) (with the relative-tolerance term only).
+
+See also [InEpsilon](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilon).
+
+
+
+#### Behavior with IEEE floating point arithmetic
+
+  - NaN is matched only by a NaN, e.g. this works: [InEpsilonSymmetric]([math.NaN](), [math.Sqrt](-1), 0.0)
+  - +Inf is matched only by a +Inf
+  - -Inf is matched only by a -Inf
+
+Edge case: for very large integers that do not convert accurately to a float64 (e.g. uint64), prefer [InDelta](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta).
+
+Formula:
+
+  - If x == 0 and y == 0: success
+  - Otherwise fail if |x - y| > epsilon * max(|x|,|y|)
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.InEpsilonSymmetric(t, 100.0, 101.0, 0.02)
+	success: 100.0, 101.0, 0.02
+	failure: 100.0, 110.0, 0.05
+```
+{{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestInEpsilonSymmetric(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonSymmetric(t *testing.T)
+	success := assert.InEpsilonSymmetric(t, 100.0, 101.0, 0.02)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestInEpsilonSymmetric(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonSymmetric(t *testing.T)
+	require.InEpsilonSymmetric(t, 100.0, 101.0, 0.02)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+  
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.InEpsilonSymmetric(t T, x any, y any, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilonSymmetric) | package-level function |
+| [`assert.InEpsilonSymmetricf(t T, x any, y any, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilonSymmetricf) | formatted variant |
+| [`assert.(*Assertions).InEpsilonSymmetric(x any, y any, epsilon float64) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InEpsilonSymmetric) | method variant |
+| [`assert.(*Assertions).InEpsilonSymmetricf(x any, y any, epsilon float64, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InEpsilonSymmetricf) | method formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.InEpsilonSymmetric(t T, x any, y any, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonSymmetric) | package-level function |
+| [`require.InEpsilonSymmetricf(t T, x any, y any, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonSymmetricf) | formatted variant |
+| [`require.(*Assertions).InEpsilonSymmetric(x any, y any, epsilon float64) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonSymmetric) | method variant |
+| [`require.(*Assertions).InEpsilonSymmetricf(x any, y any, epsilon float64, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonSymmetricf) | method formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--|
+| [`assertions.InEpsilonSymmetric(t T, x any, y any, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InEpsilonSymmetric) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilonSymmetric](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L256)
+{{% /tab %}}
+{{< /tabs >}}
+
+### InEpsilonSymmetricT[Number Measurable] {{% icon icon="star" color=orange %}}{#inepsilonsymmetrictnumber-measurable}
+InEpsilonSymmetricT is the type-safe version of [InEpsilonSymmetric](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilonSymmetric), comparing numbers of the same numerical type.
+
+See [InEpsilonSymmetric](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilonSymmetric).
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	assertions.InEpsilonSymmetricT(t, 100.0, 101.0, 0.02)
+	success: 100.0, 101.0, 0.02
+	failure: 100.0, 110.0, 0.05
+```
+{{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestInEpsilonSymmetricT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonSymmetricT(t *testing.T)
+	success := assert.InEpsilonSymmetricT(t, 100.0, 101.0, 0.02)
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestInEpsilonSymmetricT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonSymmetricT(t *testing.T)
+	require.InEpsilonSymmetricT(t, 100.0, 101.0, 0.02)
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+  
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.InEpsilonSymmetricT[Number Measurable](t T, x Number, y Number, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilonSymmetricT) | package-level function |
+| [`assert.InEpsilonSymmetricTf[Number Measurable](t T, x Number, y Number, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilonSymmetricTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.InEpsilonSymmetricT[Number Measurable](t T, x Number, y Number, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonSymmetricT) | package-level function |
+| [`require.InEpsilonSymmetricTf[Number Measurable](t T, x Number, y Number, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonSymmetricTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--|
+| [`assertions.InEpsilonSymmetricT[Number Measurable](t T, x Number, y Number, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#InEpsilonSymmetricT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#InEpsilonSymmetricT](https://github.com/go-openapi/testify/blob/master/internal/assertions/number.go#L295)
 {{% /tab %}}
 {{< /tabs >}}
 

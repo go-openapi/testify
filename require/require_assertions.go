@@ -1385,6 +1385,75 @@ func InEpsilonSlice(t T, expected any, actual any, epsilon float64, msgAndArgs .
 	t.FailNow()
 }
 
+// InEpsilonSymmetric asserts that 2 numbers are close, with a symmetric relative error.
+//
+// Unlike with [InEpsilon], both numbers play a symmetric role and the relative error is
+// computed relative to the number with greatest amplitude. This mirrors the behavior of
+// Python's [math.isclose] (with the relative-tolerance term only).
+//
+// See also [InEpsilon].
+//
+// # Behavior with IEEE floating point arithmetic
+//
+//   - NaN is matched only by a NaN, e.g. this works: [InEpsilonSymmetric]([math.NaN](), [math.Sqrt](-1), 0.0)
+//   - +Inf is matched only by a +Inf
+//   - -Inf is matched only by a -Inf
+//
+// Edge case: for very large integers that do not convert accurately to a float64 (e.g. uint64), prefer [InDelta].
+//
+// Formula:
+//
+//   - If x == 0 and y == 0: success
+//   - Otherwise fail if |x - y| > epsilon * max(|x|,|y|)
+//
+// # Usage
+//
+//	assertions.InEpsilonSymmetric(t, 100.0, 101.0, 0.02)
+//
+// # Examples
+//
+//	success: 100.0, 101.0, 0.02
+//	failure: 100.0, 110.0, 0.05
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+//
+// [math.isclose]: https://docs.python.org/3/library/math.html#math.isclose
+func InEpsilonSymmetric(t T, x any, y any, epsilon float64, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.InEpsilonSymmetric(t, x, y, epsilon, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// InEpsilonSymmetricT is the type-safe version of [InEpsilonSymmetric], comparing numbers of the same numerical type.
+//
+// See [InEpsilonSymmetric].
+//
+// # Usage
+//
+//	assertions.InEpsilonSymmetricT(t, 100.0, 101.0, 0.02)
+//
+// # Examples
+//
+//	success: 100.0, 101.0, 0.02
+//	failure: 100.0, 110.0, 0.05
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func InEpsilonSymmetricT[Number Measurable](t T, x Number, y Number, epsilon float64, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.InEpsilonSymmetricT[Number](t, x, y, epsilon, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
 // InEpsilonT asserts that expected and actual have a relative error less than epsilon.
 //
 // When expected is zero, epsilon is interpreted as an absolute error threshold,
