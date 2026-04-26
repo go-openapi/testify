@@ -86,12 +86,14 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | [#1606] | PR | Consistently assertion | ✅ Adapted |
 | [#1848] | PR | Subset (garbled error message) | ✅ Adapted |
 | [#1839] | PR | Number equality with symmetric role | ✅ Adapted  |
+| [#1859] | Issue | Channel assertions | ✅ Adapted |
 
 [#994]: https://github.com/stretchr/testify/pull/994
 [#1232]: https://github.com/stretchr/testify/pull/1232
 [#1356]: https://github.com/stretchr/testify/pull/1356
 [#1467]: https://github.com/stretchr/testify/pull/1467
 [#1480]: https://github.com/stretchr/testify/pull/1480
+[#1576]: https://github.com/stretchr/testify/pull/1576
 [#1772]: https://github.com/stretchr/testify/pull/1772
 [#1797]: https://github.com/stretchr/testify/pull/1797
 [#1816]: https://github.com/stretchr/testify/issues/1816
@@ -101,7 +103,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 [#1606]: https://github.com/stretchr/testify/pull/1606
 [#1839]: https://github.com/stretchr/testify/pull/1839
 [#1848]: https://github.com/stretchr/testify/pull/1848
-[#1876]: https://github.com/stretchr/testify/pull/1876
+[#1859]: https://github.com/stretchr/testify/pull/1859
 
 ### Superseded by Our Implementation
 
@@ -120,7 +122,6 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | [#1576] | Issue/PR | `EqualValues` assertion | 🔍 Monitoring [#1863]- Wrong equality when comparing float32 and float64|
 | [#1601] | Issue | `NoFieldIsZero` assertion | 🔍 Monitoring - Considering implementation |
 | [#1840] | Issue | JSON presence check without exact values | 🔍 Monitoring - Interesting for testing APIs with generated IDs |
-| [#1859] | Issue | Channel assertions | 🔍 Monitoring - aligned with synctest support |
 | [#1860] | Issue+PR | `ErrorAsType[E]` for Go 1.26+ - PR: [#1861] | 🔍 Monitoring - Interesting UX syntax |
 
 ### Informational (Not Implemented)
@@ -135,7 +136,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 [#1845]: https://github.com/stretchr/testify/pull/1845
 [#1147]: https://github.com/stretchr/testify/issues/1147
 [#1308]: https://github.com/stretchr/testify/pull/1308
-[#576]: https://github.com/stretchr/testify/pull/1576
+[#1576]: https://github.com/stretchr/testify/pull/1576
 [#1859]: https://github.com/stretchr/testify/pull/1859
 [#1860]: https://github.com/stretchr/testify/pull/1860
 [#1861]: https://github.com/stretchr/testify/pull/1861
@@ -146,9 +147,9 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 
 | Category | Count |
 |----------|-------|
-| **Implemented/Merged** | 25 |
+| **Implemented/Merged** | 26 |
 | **Superseded** | 4 |
-| **Monitoring** | 5 |
+| **Monitoring** | 4 |
 | **Informational** | 3 |
 | **Total Processed** | 37 |
 

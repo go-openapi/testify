@@ -15,6 +15,26 @@ import (
 	"github.com/go-openapi/testify/v2/internal/assertions"
 )
 
+// Blockedf is the same as [Blocked], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func Blockedf(t T, ch any, msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.Blocked(t, ch, forwardArgs(msg, args))
+}
+
+// BlockedTf is the same as [BlockedT], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func BlockedTf[E any, CHAN ~chan E](t T, ch CHAN, msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.BlockedT[E, CHAN](t, ch, forwardArgs(msg, args))
+}
+
 // Conditionf is the same as [Condition], but it accepts a format string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
@@ -833,6 +853,26 @@ func NoGoRoutineLeakf(t T, tested func(), msg string, args ...any) bool {
 		h.Helper()
 	}
 	return assertions.NoGoRoutineLeak(t, tested, forwardArgs(msg, args))
+}
+
+// NotBlockedf is the same as [NotBlocked], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func NotBlockedf(t T, ch any, msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.NotBlocked(t, ch, forwardArgs(msg, args))
+}
+
+// NotBlockedTf is the same as [NotBlockedT], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func NotBlockedTf[E any, CHAN ~chan E](t T, ch CHAN, msg string, args ...any) bool {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	return assertions.NotBlockedT[E, CHAN](t, ch, forwardArgs(msg, args))
 }
 
 // NotContainsf is the same as [NotContains], but it accepts a format string to format arguments like [fmt.Printf].

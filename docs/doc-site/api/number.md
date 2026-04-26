@@ -765,8 +765,6 @@ Python's [math.isclose](https://docs.python.org/3/library/math.html#math.isclose
 
 See also [InEpsilon](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilon).
 
-
-
 #### Behavior with IEEE floating point arithmetic
 
   - NaN is matched only by a NaN, e.g. this works: [InEpsilonSymmetric]([math.NaN](), [math.Sqrt](-1), 0.0)

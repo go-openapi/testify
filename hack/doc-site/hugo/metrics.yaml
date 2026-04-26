@@ -1,10 +1,10 @@
 params:
     metrics:
         domains: 19
-        functions: 137
-        assertions: 133
-        generics: 51
-        nongeneric_assertions: 82
+        functions: 141
+        assertions: 137
+        generics: 53
+        nongeneric_assertions: 84
         helpers: 4
         others: 0
         by_domain:
@@ -22,7 +22,7 @@ params:
                 count: 12
             condition:
                 name: Condition
-                count: 5
+                count: 9
             equality:
                 name: Equality
                 count: 16
@@ -65,6 +65,6 @@ params:
             yaml:
                 name: Yaml
                 count: 5
-        package_variants: 430
-        total_variants: 860
-        total_functions: 870
+        package_variants: 442
+        total_variants: 884
+        total_functions: 894

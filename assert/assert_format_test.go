@@ -17,6 +17,60 @@ import (
 	"time"
 )
 
+func TestBlockedf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := Blockedf(mock, make(chan struct{}), "test message")
+		if !result {
+			t.Error("Blockedf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := Blockedf(mock, sendChanMessage(), "test message")
+		if result {
+			t.Error("Blockedf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("Blockedf should mark test as failed")
+		}
+	})
+}
+
+func TestBlockedTf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := BlockedTf(mock, make(chan struct{}), "test message")
+		if !result {
+			t.Error("BlockedTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := BlockedTf(mock, sendChanMessage(), "test message")
+		if result {
+			t.Error("BlockedTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("BlockedTf should mark test as failed")
+		}
+	})
+}
+
 func TestConditionf(t *testing.T) {
 	t.Parallel()
 
@@ -2194,6 +2248,60 @@ func TestNoGoRoutineLeakf(t *testing.T) {
 		result := NoGoRoutineLeakf(mock, func() {}, "test message")
 		if !result {
 			t.Error("NoGoRoutineLeakf should return true on success")
+		}
+	})
+}
+
+func TestNotBlockedf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := NotBlockedf(mock, sendChanMessage(), "test message")
+		if !result {
+			t.Error("NotBlockedf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := NotBlockedf(mock, make(chan struct{}), "test message")
+		if result {
+			t.Error("NotBlockedf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("NotBlockedf should mark test as failed")
+		}
+	})
+}
+
+func TestNotBlockedTf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := NotBlockedTf(mock, sendChanMessage(), "test message")
+		if !result {
+			t.Error("NotBlockedTf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := NotBlockedTf(mock, make(chan struct{}), "test message")
+		if result {
+			t.Error("NotBlockedTf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("NotBlockedTf should mark test as failed")
 		}
 	})
 }

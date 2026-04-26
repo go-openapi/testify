@@ -15,6 +15,34 @@ import (
 	"github.com/go-openapi/testify/v2/internal/assertions"
 )
 
+// Blockedf is the same as [Blocked], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func Blockedf(t T, ch any, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.Blocked(t, ch, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// BlockedTf is the same as [BlockedT], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func BlockedTf[E any, CHAN ~chan E](t T, ch CHAN, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.BlockedT[E, CHAN](t, ch, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
 // Conditionf is the same as [Condition], but it accepts a format string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
@@ -1153,6 +1181,34 @@ func NoGoRoutineLeakf(t T, tested func(), msg string, args ...any) {
 		h.Helper()
 	}
 	if assertions.NoGoRoutineLeak(t, tested, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// NotBlockedf is the same as [NotBlocked], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func NotBlockedf(t T, ch any, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotBlocked(t, ch, forwardArgs(msg, args)) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// NotBlockedTf is the same as [NotBlockedT], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func NotBlockedTf[E any, CHAN ~chan E](t T, ch CHAN, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotBlockedT[E, CHAN](t, ch, forwardArgs(msg, args)) {
 		return
 	}
 

@@ -17,6 +17,52 @@ import (
 	"time"
 )
 
+func TestBlocked(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		Blocked(mock, make(chan struct{}))
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		Blocked(mock, sendChanMessage())
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("Blocked should call FailNow()")
+		}
+	})
+}
+
+func TestBlockedT(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		BlockedT(mock, make(chan struct{}))
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		BlockedT(mock, sendChanMessage())
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("BlockedT should call FailNow()")
+		}
+	})
+}
+
 func TestCondition(t *testing.T) {
 	t.Parallel()
 
@@ -1876,6 +1922,52 @@ func TestNoGoRoutineLeak(t *testing.T) {
 	})
 }
 
+func TestNotBlocked(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NotBlocked(mock, sendChanMessage())
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NotBlocked(mock, make(chan struct{}))
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("NotBlocked should call FailNow()")
+		}
+	})
+}
+
+func TestNotBlockedT(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NotBlockedT(mock, sendChanMessage())
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NotBlockedT(mock, make(chan struct{}))
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("NotBlockedT should call FailNow()")
+		}
+	})
+}
+
 func TestNotContains(t *testing.T) {
 	t.Parallel()
 
@@ -3062,6 +3154,13 @@ func httpBody(w http.ResponseWriter, r *http.Request) {
 	_, _ = fmt.Fprintf(w, "Hello, %s!", name)
 }
 
+func sendChanMessage() chan struct{} {
+	ch := make(chan struct{}, 1)
+	ch <- struct{}{}
+
+	return ch
+}
+
 //nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
 var (
 	staticVar      = "static string"
@@ -3086,5 +3185,7 @@ type dummyError struct {
 func (d *dummyError) Error() string {
 	return "dummy error"
 }
+
+var dummyChan = make(chan struct{})
 
 type myType float64

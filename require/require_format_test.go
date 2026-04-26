@@ -17,6 +17,52 @@ import (
 	"time"
 )
 
+func TestBlockedf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		Blockedf(mock, make(chan struct{}), "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		Blockedf(mock, sendChanMessage(), "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("Blockedf should call FailNow()")
+		}
+	})
+}
+
+func TestBlockedTf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		BlockedTf(mock, make(chan struct{}), "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		BlockedTf(mock, sendChanMessage(), "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("BlockedTf should call FailNow()")
+		}
+	})
+}
+
 func TestConditionf(t *testing.T) {
 	t.Parallel()
 
@@ -1873,6 +1919,52 @@ func TestNoGoRoutineLeakf(t *testing.T) {
 		mock := new(mockFailNowT)
 		NoGoRoutineLeakf(mock, func() {}, "test message")
 		// require functions don't return a value
+	})
+}
+
+func TestNotBlockedf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NotBlockedf(mock, sendChanMessage(), "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NotBlockedf(mock, make(chan struct{}), "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("NotBlockedf should call FailNow()")
+		}
+	})
+}
+
+func TestNotBlockedTf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NotBlockedTf(mock, sendChanMessage(), "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NotBlockedTf(mock, make(chan struct{}), "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("NotBlockedTf should call FailNow()")
+		}
 	})
 }
 

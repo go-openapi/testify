@@ -5,6 +5,10 @@ weight: 4
 domains:
   - "condition"
 keywords:
+  - "Blocked"
+  - "Blockedf"
+  - "BlockedT"
+  - "BlockedTf"
   - "Condition"
   - "Conditionf"
   - "Consistently"
@@ -15,6 +19,10 @@ keywords:
   - "EventuallyWithf"
   - "Never"
   - "Neverf"
+  - "NotBlocked"
+  - "NotBlockedf"
+  - "NotBlockedT"
+  - "NotBlockedTf"
 ---
 
 Expressing Assertions Using Conditions
@@ -26,16 +34,242 @@ Expressing Assertions Using Conditions
 
 _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
-This domain exposes 5 functionalities.
+This domain exposes 9 functionalities.
 Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 
 ```tree
+- [Blocked](#blocked) | angles-right
+- [BlockedT[E any, CHAN ~chan E]](#blockedte-any-chan-chan-e) | star | orange
 - [Condition](#condition) | angles-right
 - [Consistently[C Conditioner]](#consistentlyc-conditioner) | star | orange
 - [Eventually[C Conditioner]](#eventuallyc-conditioner) | star | orange
 - [EventuallyWith[C CollectibleConditioner]](#eventuallywithc-collectibleconditioner) | star | orange
 - [Never[C NeverConditioner]](#neverc-neverconditioner) | star | orange
+- [NotBlocked](#notblocked) | angles-right
+- [NotBlockedT[E any, CHAN ~chan E]](#notblockedte-any-chan-chan-e) | star | orange
 ```
+
+### Blocked{#blocked}
+Blocked asserts that a channel is blocked on receive.
+
+It always fails if the operand is not a channel, or if the channel is send-only.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	ch := make(chan struct{})
+	assertions.Blocked(t, ch)
+	success:  make(chan struct{})
+	failure:  sendChanMessage()
+```
+{{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestBlocked(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestBlocked(t *testing.T)
+	success := assert.Blocked(t, make(chan struct{}))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestBlocked(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestBlocked(t *testing.T)
+	require.Blocked(t, make(chan struct{}))
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+  
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.Blocked(t T, ch any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Blocked) | package-level function |
+| [`assert.Blockedf(t T, ch any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Blockedf) | formatted variant |
+| [`assert.(*Assertions).Blocked(ch any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Blocked) | method variant |
+| [`assert.(*Assertions).Blockedf(ch any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Blockedf) | method formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.Blocked(t T, ch any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Blocked) | package-level function |
+| [`require.Blockedf(t T, ch any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Blockedf) | formatted variant |
+| [`require.(*Assertions).Blocked(ch any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Blocked) | method variant |
+| [`require.(*Assertions).Blockedf(ch any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Blockedf) | method formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--|
+| [`assertions.Blocked(t T, ch any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Blocked) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Blocked](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L56)
+{{% /tab %}}
+{{< /tabs >}}
+
+### BlockedT[E any, CHAN ~chan E] {{% icon icon="star" color=orange %}}{#blockedte-any-chan-chan-e}
+BlockedT asserts that a channel is blocked on receive.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	ch := make(chan struct{})
+	assertions.BlockedT(t, ch)
+	success:  make(chan struct{})
+	failure:  sendChanMessage()
+```
+{{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestBlockedT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestBlockedT(t *testing.T)
+	success := assert.BlockedT(t, make(chan struct{}))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestBlockedT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestBlockedT(t *testing.T)
+	require.BlockedT(t, make(chan struct{}))
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+  
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.BlockedT[E any, CHAN ~chan E](t T, ch CHAN, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#BlockedT) | package-level function |
+| [`assert.BlockedTf[E any, CHAN ~chan E](t T, ch CHAN, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#BlockedTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.BlockedT[E any, CHAN ~chan E](t T, ch CHAN, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#BlockedT) | package-level function |
+| [`require.BlockedTf[E any, CHAN ~chan E](t T, ch CHAN, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#BlockedTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--|
+| [`assertions.BlockedT[E any, CHAN ~chan E](t T, ch CHAN, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#BlockedT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#BlockedT](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L104)
+{{% /tab %}}
+{{< /tabs >}}
 
 ### Condition{#condition}
 Condition uses a comparison function to assert a complex condition.
@@ -148,7 +382,7 @@ func main() {
 |--|--|
 | [`assertions.Condition(t T, comp func() bool, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Condition) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Condition](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L28)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Condition](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L29)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -531,7 +765,7 @@ func main() {
 |--|--|
 | [`assertions.Consistently[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Consistently) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Consistently](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L253)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Consistently](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L414)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1053,7 +1287,7 @@ func main() {
 |--|--|
 | [`assertions.Eventually[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Eventually) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Eventually](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L129)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Eventually](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L290)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1300,7 +1534,7 @@ func main() {
 |--|--|
 | [`assertions.EventuallyWith[C CollectibleConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L330)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EventuallyWith](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L491)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1600,7 +1834,265 @@ func main() {
 |--|--|
 | [`assertions.Never[C NeverConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Never) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Never](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L187)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Never](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L348)
+{{% /tab %}}
+{{< /tabs >}}
+
+### NotBlocked{#notblocked}
+NotBlocked asserts that a channel is not blocked on receive.
+
+It always fails if the operand is not a channel, or if the channel is send-only.
+
+A closed channel doesn't block and returns true.
+Notice that this consumes any message available in the channel.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	ch := make(chan struct{}, 1)
+	ch <- struct{}{}
+	assertions.NotBlocked(t, ch)
+	success:  sendChanMessage()
+	failure:  make(chan struct{})
+```
+{{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestNotBlocked(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotBlocked(t *testing.T)
+	success := assert.NotBlocked(t, sendChanMessage())
+	fmt.Printf("success: %t\n", success)
+
+}
+
+func sendChanMessage() chan struct{} {
+	ch := make(chan struct{}, 1)
+	ch <- struct{}{}
+
+	return ch
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestNotBlocked(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotBlocked(t *testing.T)
+	require.NotBlocked(t, sendChanMessage())
+	fmt.Println("passed")
+
+}
+
+func sendChanMessage() chan struct{} {
+	ch := make(chan struct{}, 1)
+	ch <- struct{}{}
+
+	return ch
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+  
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.NotBlocked(t T, ch any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotBlocked) | package-level function |
+| [`assert.NotBlockedf(t T, ch any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotBlockedf) | formatted variant |
+| [`assert.(*Assertions).NotBlocked(ch any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotBlocked) | method variant |
+| [`assert.(*Assertions).NotBlockedf(ch any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotBlockedf) | method formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.NotBlocked(t T, ch any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotBlocked) | package-level function |
+| [`require.NotBlockedf(t T, ch any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotBlockedf) | formatted variant |
+| [`require.(*Assertions).NotBlocked(ch any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotBlocked) | method variant |
+| [`require.(*Assertions).NotBlockedf(ch any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotBlockedf) | method formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--|
+| [`assertions.NotBlocked(t T, ch any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotBlocked) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotBlocked](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L141)
+{{% /tab %}}
+{{< /tabs >}}
+
+### NotBlockedT[E any, CHAN ~chan E] {{% icon icon="star" color=orange %}}{#notblockedte-any-chan-chan-e}
+NotBlockedT asserts that a channel is not blocked on receive.
+
+A closed channel doesn't block and returns true.
+Notice that this consumes any message available in the channel.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	ch := make(chan struct{}, 1)
+	ch <- struct{}{}
+	assertions.NotBlockedT(t, ch)
+	success:  sendChanMessage()
+	failure:  make(chan struct{})
+```
+{{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestNotBlockedT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotBlockedT(t *testing.T)
+	success := assert.NotBlockedT(t, sendChanMessage())
+	fmt.Printf("success: %t\n", success)
+
+}
+
+func sendChanMessage() chan struct{} {
+	ch := make(chan struct{}, 1)
+	ch <- struct{}{}
+
+	return ch
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestNotBlockedT(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotBlockedT(t *testing.T)
+	require.NotBlockedT(t, sendChanMessage())
+	fmt.Println("passed")
+
+}
+
+func sendChanMessage() chan struct{} {
+	ch := make(chan struct{}, 1)
+	ch <- struct{}{}
+
+	return ch
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+  
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.NotBlockedT[E any, CHAN ~chan E](t T, ch CHAN, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotBlockedT) | package-level function |
+| [`assert.NotBlockedTf[E any, CHAN ~chan E](t T, ch CHAN, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotBlockedTf) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.NotBlockedT[E any, CHAN ~chan E](t T, ch CHAN, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotBlockedT) | package-level function |
+| [`require.NotBlockedTf[E any, CHAN ~chan E](t T, ch CHAN, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotBlockedTf) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--|
+| [`assertions.NotBlockedT[E any, CHAN ~chan E](t T, ch CHAN, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotBlockedT) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotBlockedT](https://github.com/go-openapi/testify/blob/master/internal/assertions/condition.go#L188)
 {{% /tab %}}
 {{< /tabs >}}
 

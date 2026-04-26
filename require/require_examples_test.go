@@ -21,6 +21,22 @@ import (
 	"github.com/go-openapi/testify/v2/require"
 )
 
+func ExampleBlocked() {
+	t := new(testing.T) // should come from testing, e.g. func TestBlocked(t *testing.T)
+	require.Blocked(t, make(chan struct{}))
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleBlockedT() {
+	t := new(testing.T) // should come from testing, e.g. func TestBlockedT(t *testing.T)
+	require.BlockedT(t, make(chan struct{}))
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleCondition() {
 	t := new(testing.T) // should come from testing, e.g. func TestCondition(t *testing.T)
 	require.Condition(t, func() bool {
@@ -689,6 +705,22 @@ func ExampleNoGoRoutineLeak() {
 	// Output: passed
 }
 
+func ExampleNotBlocked() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotBlocked(t *testing.T)
+	require.NotBlocked(t, sendChanMessage())
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleNotBlockedT() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotBlockedT(t *testing.T)
+	require.NotBlockedT(t, sendChanMessage())
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleNotContains() {
 	t := new(testing.T) // should come from testing, e.g. func TestNotContains(t *testing.T)
 	require.NotContains(t, []string{"A", "B"}, "C")
@@ -1109,6 +1141,13 @@ func httpBody(w http.ResponseWriter, r *http.Request) {
 	_, _ = fmt.Fprintf(w, "Hello, %s!", name)
 }
 
+func sendChanMessage() chan struct{} {
+	ch := make(chan struct{}, 1)
+	ch <- struct{}{}
+
+	return ch
+}
+
 //nolint:gochecknoglobals // this is on purpose to share a common pointer when testing
 var (
 	staticVar      = "static string"
@@ -1133,5 +1172,7 @@ type dummyError struct {
 func (d *dummyError) Error() string {
 	return "dummy error"
 }
+
+var dummyChan = make(chan struct{})
 
 type myType float64
