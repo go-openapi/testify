@@ -14,26 +14,23 @@ We continue to monitor and selectively adopt changes from the upstream repositor
 - ✅ [#1805] - IsOfTypeT[T] generic assertions
 - ✅ [#1685] - Partial iterator support (SeqContainsT variants)
 - ✅ [#1828] - Spew panic fixes
-- ✅ [#1825], [#1818], [#1223], [#1813], [#1611], [#1822], [#1829] - Various bug fixes
+- ✅ [#1611] - Goroutine leak in Eventually/Never (drove the context-based pollCondition refactor)
+- ✅ [#1825], [#1818], [#1223], [#1813], [#1822], [#1829] - Various bug fixes
 - ✅ [#1606], [#1087] - Consistently assertion
 - ✅ [#1848] - Subset error message
-
-### Monitoring
-- 🔍 [#1601] - `NoFieldIsZero`
+- ✅ [#1839] - `InEpsilonSymmetric` (number equality with symmetric role)
+- ✅ [#1840] - JSON/YAML `Redactor` pattern (dynamic input redaction, inspired by Insta)
+- ✅ [#1859] - Channel assertions (`Blocked` / `NotBlocked`)
 
 ### Superseded by Our Implementation
+- ✅ [#1801] - Error message on large collections for `Len`
 - ⛔ [#1845] - Fix Eventually/Never regression (superseded by context-based pollCondition)
 - ✅ [#1830] - CollectT.Halt() (implemented as `CollectT.Cancel()` in v2.4 — see [CHANGES](./CHANGES.md))
 - ✅ [#1819] - Handle unexpected exits (handled by per-tick goroutine wrap in v2.4)
 - ⛔ [#1824] - Spew testing (superseded by property-based fuzzing)
 
-[#1087]: https://github.com/stretchr/testify/pull/1087
-[#1601]: https://github.com/stretchr/testify/issues/1601
 [#1830]: https://github.com/stretchr/testify/pull/1830
 [#1824]: https://github.com/stretchr/testify/pull/1824
-[#1819]: https://github.com/stretchr/testify/pull/1819
-[#1845]: https://github.com/stretchr/testify/pull/1845
-[#1848]: https://github.com/stretchr/testify/pull/1848
 
 **Review frequency**: Quarterly (next review: May 2026)
 
@@ -60,17 +57,21 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | Reference | Type | Summary | Outcome in Fork |
 |-----------|------|---------|-----------------|
 | [#994] | PR | Colorize expected vs actual values | ✅ Adapted into `enable/color` module with themes and configuration |
+| [#1087] | Issue | Consistently assertion | ✅ Adapted |
 | [#1223] | PR | Display uint values in decimal instead of hex | ✅ Merged - Applied to diff output |
 | [#1232] | PR | Colorized output for expected/actual/errors | ✅ Adapted into `enable/color` module |
 | [#1356] | PR | panic(nil) handling for Go 1.21+ | ✅ Merged - Updated panic assertions |
 | [#1467] | PR | Colorized output with terminal detection | ✅ Adapted into `enable/color` module (most mature implementation) |
 | [#1480] | PR | Colorized diffs via TESTIFY_COLORED_DIFF env var | ✅ Adapted with env var support in `enable/color` |
 | [#1513] | PR | JSONEqBytes for byte slice JSON comparison | ✅ Merged - Added to JSON domain |
+| [#1606] | PR | Consistently assertion | ✅ Adapted |
+| [#1611] | Issue | Goroutine leak in Eventually/Never | ✅ Fixed by using context.Context (consolidation into single pollCondition function) |
 | [#1685] | PR | Iterator support (`iter.Seq`) for Contains/ElementsMatch | ✅ Partial - Implemented SeqContainsT and SeqNotContainsT only |
 | [#1772] | PR | YAML library migration to maintained fork | ✅ Adapted - Used gopkg.in/yaml.v3 in optional `enable/yaml` module |
 | [#1797] | PR | Codegen package consolidation and licensing | ✅ Adapted - Complete rewrite of code generation system |
 | [#1803] | PR | Kind/NotKind assertions | ✅ Merged - Added to Type domain |
 | [#1805] | Issue | Generic `IsOfType[T]()` without dummy value | ✅ Implemented - IsOfTypeT and IsNotOfTypeT in Type domain |
+| [#1813] | Issue | Panic with unexported fields | ✅ Fixed via #1828 in internalized spew |
 | [#1816] | Issue | Fix panic on unexported struct key in map | ✅ Fixed in internalized go-spew |
 | [#1818] | PR | Fix panic on invalid regex in Regexp/NotRegexp | ✅ Merged - Added graceful error handling |
 | [#1822] | Issue | Deterministic map ordering in diffs | ✅ Fixed in internalized go-spew |
@@ -78,10 +79,6 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | [#1826] | Issue | Type safety with spew (meta-issue) | ✅ Addressed through comprehensive fuzzing and fixes |
 | [#1828] | PR | Fixed panic with unexported fields in maps | ✅ Merged into internalized go-spew |
 | [#1829] | Issue | Fix time.Time rendering in diffs | ✅ Fixed in internalized go-spew |
-| [#1611] | Issue | Goroutine leak in Eventually/Never | ✅ Fixed by using context.Context (consolidation into single pollCondition function) |
-| [#1813] | Issue | Panic with unexported fields | ✅ Fixed via #1828 in internalized spew |
-| [#1087] | Issue | Consistently assertion | ✅ Adapted |
-| [#1606] | PR | Consistently assertion | ✅ Adapted |
 | [#1848] | PR | Subset (garbled error message) | ✅ Adapted |
 | [#1839] | PR | Number equality with symmetric role | ✅ Adapted  |
 | [#1840] | Issue | JSON presence check without exact values | ✅ Adapted  |
@@ -93,6 +90,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 [#1467]: https://github.com/stretchr/testify/pull/1467
 [#1480]: https://github.com/stretchr/testify/pull/1480
 [#1576]: https://github.com/stretchr/testify/pull/1576
+[#1601]: https://github.com/stretchr/testify/issues/1601
 [#1772]: https://github.com/stretchr/testify/pull/1772
 [#1797]: https://github.com/stretchr/testify/pull/1797
 [#1816]: https://github.com/stretchr/testify/issues/1816
@@ -109,6 +107,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 
 | Reference | Type | Summary | Why Superseded |
 |-----------|------|---------|----------------|
+| [#1801] | Issue | `Len` error printing large collections | Duplicate issue upstream. This is fixed by generalized truncation |
 | [#1845] | PR | Fix Eventually/Never regression | Superseded by context-based pollCondition implementation (we don't have this bug) |
 | [#1819] | PR | Handle unexpected exits in Eventually | Implemented in v2.4 via per-tick goroutine wrap — a `runtime.Goexit` in the condition only aborts the current tick |
 | [#1824] | PR | Spew testing improvements | Superseded by property-based fuzzing with random type generator |
@@ -120,7 +119,6 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | Reference | Type | Summary | Status |
 |-----------|------|---------|--------|
 | [#1576] | Issue/PR | `EqualValues` assertion | 🔍 Monitoring [#1863]- Wrong equality when comparing float32 and float64|
-| [#1601] | Issue | `NoFieldIsZero` assertion | 🔍 Monitoring - Considering implementation |
 | [#1860] | Issue+PR | `ErrorAsType[E]` for Go 1.26+ - PR: [#1861] | 🔍 Monitoring - Interesting UX syntax |
 
 ### Informational (Not Implemented)
@@ -129,13 +127,16 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 |-----------|------|---------|---------|
 | [#1147] | Issue | General discussion about generics adoption | ℹ️ Marked "Not Planned" upstream - We implemented our own generics approach ({{% siteparam "metrics.generics" %}} functions) |
 | [#1308] | PR | Comprehensive refactor with generic type parameters | ℹ️ Draft for v2.0.0 upstream - We took a different approach with the same objective |
-| [#1862] | Issue | `CollectT` extension/redesign | 🔍 Monitoring - Breaking change |
+| [#1591], [#1601] | PR + Issue | `NoFieldIsZero` recursive zero-value assertion | ⛔ **Won't do** - Considered and prototyped (2026-04-26). Same conclusion as upstream maintainers: semantics is too ambiguous (map keys, []byte, pointer targets, unexported fields, cycles, time.Time-style smart-zero types) and overlaps too heavily with [Equal](...) for legitimate use cases. Each pitfall fix adds a knob; full version is a struct validator, not an assertion. |
+| [#1862] | Issue | `CollectT` redesign / `testing.TB` interop | ⛔ **Won't do (for now)** - Studied in depth (2026-04-17). All four design options (interface widening, embedding `*testing.T`, opt-in `CollectTB` wrapper, `CollectT`-as-interface) carry visible costs; Go's `testing.TB.private()` blocks any clean proxy. Workaround for affected users is a 3-line per-helper adapter. Revisit if traction warrants the breaking churn. |
 
-[#1819]: https://github.com/stretchr/testify/pull/1819
-[#1845]: https://github.com/stretchr/testify/pull/1845
 [#1147]: https://github.com/stretchr/testify/issues/1147
 [#1308]: https://github.com/stretchr/testify/pull/1308
+[#1591]: https://github.com/stretchr/testify/pull/1591
 [#1576]: https://github.com/stretchr/testify/pull/1576
+[#1801]: https://github.com/stretchr/testify/pull/1801
+[#1819]: https://github.com/stretchr/testify/pull/1819
+[#1845]: https://github.com/stretchr/testify/pull/1845
 [#1859]: https://github.com/stretchr/testify/pull/1859
 [#1860]: https://github.com/stretchr/testify/pull/1860
 [#1861]: https://github.com/stretchr/testify/pull/1861
@@ -147,10 +148,10 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | Category | Count |
 |----------|-------|
 | **Implemented/Merged** | 27 |
-| **Superseded** | 4 |
-| **Monitoring** | 3 |
-| **Informational** | 3 |
-| **Total Processed** | 37 |
+| **Superseded** | 5 |
+| **Monitoring** | 2 |
+| **Informational** | 4 |
+| **Total Processed** | 38 |
 
 **Note**: This fork maintains an active relationship with upstream, regularly reviewing new PRs and issues. The quarterly review process ensures we stay informed about upstream developments while maintaining our architectural independence.
 

@@ -37,9 +37,10 @@ timeline
                     : Eventually, Eventually (with context), Consistently
                     : Migration tool
     section Q2 2026
-    📝 v2.5 (May 2026) : synctest opt-in for Eventually, Never, Consistently, EventuallyWith
+    ✅ v2.5 (May 2026) : synctest opt-in for Eventually, Never, Consistently, EventuallyWith
                     : NoFileDescriptorLeak (macOS)
-                    : InEpsilonSymmetric, Blocked/NotBlocked  
+                    : InEpsilonSymmetric, Blocked/NotBlocked
+                    : redactor functons for JSON & YAML assertions
                     : export internal tools (spew, difflib)
                     : go1.25+
     🔍 v2.6 (June 2026) : (tentative)
