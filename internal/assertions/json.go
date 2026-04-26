@@ -1,13 +1,13 @@
 // SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
 // SPDX-License-Identifier: Apache-2.0
 
-//nolint:dupl // YAML is actually very similar to JSON but we can't easily factorize this.
 package assertions
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"reflect"
 )
 
 // JSONEqBytes asserts that two JSON slices of bytes are semantically equivalent.
@@ -52,6 +52,8 @@ func JSONEqBytes(t T, expected, actual []byte, msgAndArgs ...any) bool {
 //
 // Expected and actual must be valid JSON.
 //
+// For dynamic redaction of the input text via a callback, use [JSONEqT].
+//
 // # Usage
 //
 //	assertions.JSONEq(t, `{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
@@ -66,7 +68,7 @@ func JSONEq(t T, expected, actual string, msgAndArgs ...any) bool {
 		h.Helper()
 	}
 
-	return JSONEqBytes(t, []byte(expected), []byte(actual), msgAndArgs)
+	return JSONEqBytes(t, []byte(expected), []byte(actual), msgAndArgs...)
 }
 
 // JSONEqT asserts that two JSON documents are semantically equivalent.
@@ -74,6 +76,8 @@ func JSONEq(t T, expected, actual string, msgAndArgs ...any) bool {
 // The expected and actual arguments may be string or []byte. They do not need to be of the same type.
 //
 // Expected and actual must be valid JSON.
+//
+// NOTE: passed values (expected, actual) may be wrapped as functions to redact the input text dynamically.
 //
 // # Usage
 //
@@ -83,13 +87,13 @@ func JSONEq(t T, expected, actual string, msgAndArgs ...any) bool {
 //
 //	success: `{"hello": "world", "foo": "bar"}`, []byte(`{"foo": "bar", "hello": "world"}`)
 //	failure: `{"hello": "world", "foo": "bar"}`, `[{"foo": "bar"}, {"hello": "world"}]`
-func JSONEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool {
+func JSONEqT[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool {
 	// Domain: json
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 
-	return JSONEqBytes(t, []byte(expected), []byte(actual), msgAndArgs)
+	return JSONEqBytes(t, asBytes(expected), asBytes(actual), msgAndArgs...)
 }
 
 // JSONUnmarshalAsT wraps [Equal] after [json.Unmarshal].
@@ -100,6 +104,8 @@ func JSONEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any
 //
 // Be careful not to wrap the expected object into an "any" interface if this is not what you expected:
 // the unmarshaling would take this type to unmarshal as a map[string]any.
+//
+// NOTE: passed jazon value may be wrapped as a function to redact the input JSON dynamically.
 //
 // # Usage
 //
@@ -115,26 +121,28 @@ func JSONEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any
 //
 //	success: dummyStruct{A: "a"} , []byte(`{"A": "a"}`)
 //	failure: 1, `[{"foo": "bar"}, {"hello": "world"}]`
-func JSONUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool {
+func JSONUnmarshalAsT[Object any, ADoc RText](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool {
 	// Domain: json
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 
 	var actual Object
-	if err := json.Unmarshal([]byte(jazon), &actual); err != nil {
+	if err := json.Unmarshal(asBytes(jazon), &actual); err != nil {
 		return Fail(t, fmt.Sprintf("JSON unmarshal failed: %v", err), msgAndArgs...)
 	}
 
 	return Equal(t, expected, actual, msgAndArgs...)
 }
 
-// JSONMarshalAsT wraps [JSONEq] after [json.Marshal].
+// JSONMarshalAsT wraps [JSONEqT] after [json.Marshal].
 //
 // The input JSON may be a string or []byte.
 //
 // It fails if the marshaling returns an error or if the expected JSON bytes differ semantically
 // from the expected ones.
+//
+// NOTE: passed expected value may be wrapped as a function to redact the input text dynamically.
 //
 // # Usage
 //
@@ -150,7 +158,7 @@ func JSONUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, m
 //
 //	success: []byte(`{"A": "a"}`), dummyStruct{A: "a"}
 //	failure: `[{"foo": "bar"}, {"hello": "world"}]`, 1
-func JSONMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any) bool {
+func JSONMarshalAsT[EDoc RText](t T, expected EDoc, object any, msgAndArgs ...any) bool {
 	// Domain: json
 	if h, ok := t.(H); ok {
 		h.Helper()
@@ -161,5 +169,29 @@ func JSONMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any
 		return Fail(t, fmt.Sprintf("JSON marshal failed: %v", err), msgAndArgs...)
 	}
 
-	return JSONEqBytes(t, []byte(expected), actual, msgAndArgs...)
+	return JSONEqBytes(t, asBytes(expected), actual, msgAndArgs...)
+}
+
+func asBytes[EDoc RText](e EDoc) []byte {
+	ie := any(e)
+
+	switch typed := ie.(type) {
+	case func() string:
+		if typed == nil {
+			panic("passed Redactor cannot be nil")
+		}
+		return []byte(typed())
+	case func() []byte:
+		if typed == nil {
+			panic("passed Redactor cannot be nil")
+		}
+		return typed()
+	case string:
+		return []byte(typed)
+	case []byte:
+		return typed
+	default:
+		// this edge case (redefined type) requires the input to be converted: the type constraint warrants it to work
+		return convertReflectValue[[]byte](e, reflect.ValueOf(e))
+	}
 }

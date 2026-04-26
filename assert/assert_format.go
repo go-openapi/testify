@@ -658,7 +658,7 @@ func JSONEqBytesf(t T, expected []byte, actual []byte, msg string, args ...any) 
 // JSONEqTf is the same as [JSONEqT], but it accepts a format string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func JSONEqTf[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msg string, args ...any) bool {
+func JSONEqTf[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msg string, args ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -668,7 +668,7 @@ func JSONEqTf[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msg string, args
 // JSONMarshalAsTf is the same as [JSONMarshalAsT], but it accepts a format string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func JSONMarshalAsTf[EDoc Text](t T, expected EDoc, object any, msg string, args ...any) bool {
+func JSONMarshalAsTf[EDoc RText](t T, expected EDoc, object any, msg string, args ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -678,7 +678,7 @@ func JSONMarshalAsTf[EDoc Text](t T, expected EDoc, object any, msg string, args
 // JSONUnmarshalAsTf is the same as [JSONUnmarshalAsT], but it accepts a format string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func JSONUnmarshalAsTf[Object any, ADoc Text](t T, expected Object, jazon ADoc, msg string, args ...any) bool {
+func JSONUnmarshalAsTf[Object any, ADoc RText](t T, expected Object, jazon ADoc, msg string, args ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -1348,7 +1348,7 @@ func YAMLEqBytesf(t T, expected []byte, actual []byte, msg string, args ...any) 
 // YAMLEqTf is the same as [YAMLEqT], but it accepts a format string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func YAMLEqTf[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msg string, args ...any) bool {
+func YAMLEqTf[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msg string, args ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -1358,7 +1358,7 @@ func YAMLEqTf[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msg string, args
 // YAMLMarshalAsTf is the same as [YAMLMarshalAsT], but it accepts a format string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func YAMLMarshalAsTf[EDoc Text](t T, expected EDoc, object any, msg string, args ...any) bool {
+func YAMLMarshalAsTf[EDoc RText](t T, expected EDoc, object any, msg string, args ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -1368,11 +1368,11 @@ func YAMLMarshalAsTf[EDoc Text](t T, expected EDoc, object any, msg string, args
 // YAMLUnmarshalAsTf is the same as [YAMLUnmarshalAsT], but it accepts a format string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func YAMLUnmarshalAsTf[Object any, ADoc Text](t T, expected Object, jazon ADoc, msg string, args ...any) bool {
+func YAMLUnmarshalAsTf[Object any, ADoc RText](t T, expected Object, yamlDoc ADoc, msg string, args ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.YAMLUnmarshalAsT[Object, ADoc](t, expected, jazon, forwardArgs(msg, args))
+	return assertions.YAMLUnmarshalAsT[Object, ADoc](t, expected, yamlDoc, forwardArgs(msg, args))
 }
 
 // Zerof is the same as [Zero], but it accepts a format string to format arguments like [fmt.Printf].

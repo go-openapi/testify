@@ -26,6 +26,19 @@ type (
 		~string | ~[]byte
 	}
 
+	// RText extends [Text] by supporting dynamic construction of the
+	// expected or actual value, e.g. "redact" functions.
+	RText interface {
+		Text | Redactor
+	}
+
+	// Redactor allows dynamic construction of expected or actual values, e.g. "redacting" values dynamically.
+	//
+	// This is used by json and yaml assertions.
+	Redactor interface {
+		func() string | func() []byte
+	}
+
 	// Ordered is a standard ordered type (i.e. types that support "<": [cmp.Ordered]) plus []byte and [time.Time].
 	//
 	// This is used by [GreaterT], [GreaterOrEqualT], [LessT], [LessOrEqualT], [IsIncreasingT], [IsDecreasingT].
