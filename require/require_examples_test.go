@@ -381,6 +381,22 @@ func ExampleInEpsilonSlice() {
 	// Output: passed
 }
 
+func ExampleInEpsilonSymmetric() {
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonSymmetric(t *testing.T)
+	require.InEpsilonSymmetric(t, 100.0, 101.0, 0.02)
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleInEpsilonSymmetricT() {
+	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonSymmetricT(t *testing.T)
+	require.InEpsilonSymmetricT(t, 100.0, 101.0, 0.02)
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleInEpsilonT() {
 	t := new(testing.T) // should come from testing, e.g. func TestInEpsilonT(t *testing.T)
 	require.InEpsilonT(t, 100.0, 101.0, 0.02)

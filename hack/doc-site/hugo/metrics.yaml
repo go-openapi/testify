@@ -1,10 +1,10 @@
 params:
     metrics:
         domains: 19
-        functions: 135
-        assertions: 131
-        generics: 50
-        nongeneric_assertions: 81
+        functions: 137
+        assertions: 133
+        generics: 51
+        nongeneric_assertions: 82
         helpers: 4
         others: 0
         by_domain:
@@ -40,7 +40,7 @@ params:
                 count: 5
             number:
                 name: Number
-                count: 7
+                count: 9
             ordering:
                 name: Ordering
                 count: 10
@@ -65,6 +65,6 @@ params:
             yaml:
                 name: Yaml
                 count: 5
-        package_variants: 424
-        total_variants: 848
-        total_functions: 858
+        package_variants: 430
+        total_variants: 860
+        total_functions: 870

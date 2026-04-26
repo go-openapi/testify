@@ -8,7 +8,7 @@ weight: 15
 
 **Key Changes:**
 - ✅ **Zero Dependencies**: Completely self-contained
-- ✅ **New functions**: 58 additional assertions (43 generic + 15 reflection-based)
+- ✅ **New functions**: 60 additional assertions (44 generic + 16 reflection-based)
 - ✅ **Performance**: ~10x for generic variants (from 1.2x to 81x, your mileage may vary)
 - ✅ **Breaking changes**: Requires go1.25, removed suites, mocks, http tooling, and deprecated functions. YAMLEq becomes optional (panics by default).
 
@@ -42,7 +42,7 @@ See also a quick [migration guide](./MIGRATION.md).
 
 | Change | Origin | Description |
 |--------|--------|-------------|
-| **Generic assertions** | Multiple upstream proposals | Added 38 type-safe assertion functions with `T` suffix across 10 domains |
+| **Generic assertions** | Multiple upstream proposals | Added {{% siteparam "metrics.generics" %}} type-safe assertion functions with `T` suffix across {{% siteparam "metrics.domains" %}} domains |
 | **Zero dependencies** | Design goal | Internalized go-spew and difflib; removed all external dependencies |
 | **Optional YAML support** | Design goal | YAML assertions are now enabled via opt-in `enable/yaml` module |
 | **Colorized output** | [#1467], [#1480], [#1232], [#994] | Optional colorization via `enable/color` module with themes |

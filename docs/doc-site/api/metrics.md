@@ -15,14 +15,14 @@ Counts for core functionality, and generated variants (formatted, forward, forwa
 
 | Kind                      | Count             | Note |
 | ------------------------- | ----------------- | ---- |
-| All core functions             | 135 | Maintained core |
-| All core assertions       | 131 | Usage with `*testing.T` |
-| Generic assertions        | 50   | Type-safe assertions ("T" suffix) |
+| All core functions             | 137 | Maintained core |
+| All core assertions       | 133 | Usage with `*testing.T` |
+| Generic assertions        | 51   | Type-safe assertions ("T" suffix) |
 | Helpers (not assertions)  | 4    | General-purpose utilities, not assertions |
 | Others                    | 0     | |
-| assert/require variants   | 424 | Generated variants |
-| Total assertions variants | 848 | Available assertions API |
-| Total API surface         | 858 | |
+| assert/require variants   | 430 | Generated variants |
+| Total assertions variants | 860 | Available assertions API |
+| Total API surface         | 870 | |
 
 ## Quick index
 
@@ -71,6 +71,8 @@ Table of core assertions, excluding variants. Each function is side by side with
 | [InDeltaT[Number Measurable]](number/#indeltatnumber-measurable) {{% icon icon="star" color=orange %}} |  | number |  |
 | [InEpsilon](number/#inepsilon) |  | number |  |
 | [InEpsilonSlice](number/#inepsilonslice) |  | number |  |
+| [InEpsilonSymmetric](number/#inepsilonsymmetric) |  | number |  |
+| [InEpsilonSymmetricT[Number Measurable]](number/#inepsilonsymmetrictnumber-measurable) {{% icon icon="star" color=orange %}} |  | number |  |
 | [InEpsilonT[Number Measurable]](number/#inepsilontnumber-measurable) {{% icon icon="star" color=orange %}} |  | number |  |
 | [IsDecreasing](ordering/#isdecreasing) | [IsNonDecreasing](ordering/#isnondecreasing) | ordering |  |
 | [IsDecreasingT[OrderedSlice ~[]E, E Ordered]](ordering/#isdecreasingtorderedslice-e-e-ordered) {{% icon icon="star" color=orange %}} | [IsNonDecreasingT](ordering/#isnondecreasingtorderedslice-e-e-ordered) | ordering |  |

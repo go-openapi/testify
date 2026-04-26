@@ -1225,6 +1225,60 @@ func TestInEpsilonSlice(t *testing.T) {
 	})
 }
 
+func TestInEpsilonSymmetric(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := InEpsilonSymmetric(mock, 100.0, 101.0, 0.02)
+		if !result {
+			t.Error("InEpsilonSymmetric should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := InEpsilonSymmetric(mock, 100.0, 110.0, 0.05)
+		if result {
+			t.Error("InEpsilonSymmetric should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("InEpsilonSymmetric should mark test as failed")
+		}
+	})
+}
+
+func TestInEpsilonSymmetricT(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := InEpsilonSymmetricT(mock, 100.0, 101.0, 0.02)
+		if !result {
+			t.Error("InEpsilonSymmetricT should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := InEpsilonSymmetricT(mock, 100.0, 110.0, 0.05)
+		if result {
+			t.Error("InEpsilonSymmetricT should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("InEpsilonSymmetricT should mark test as failed")
+		}
+	})
+}
+
 func TestInEpsilonT(t *testing.T) {
 	t.Parallel()
 

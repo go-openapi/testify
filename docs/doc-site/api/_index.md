@@ -40,7 +40,7 @@ Each domain contains assertions regrouped by their use case (e.g. http, json, er
 - [File](./file.md) - Asserting OS Files (6)
 - [Http](./http.md) - Asserting HTTP Response And Body (7)
 - [Json](./json.md) - Asserting JSON Documents (5)
-- [Number](./number.md) - Asserting Numbers (7)
+- [Number](./number.md) - Asserting Numbers (9)
 - [Ordering](./ordering.md) - Asserting How Collections Are Ordered (10)
 - [Panic](./panic.md) - Asserting A Panic Behavior (4)
 - [Safety](./safety.md) - Checks Against Leaked Resources (Goroutines, File Descriptors) (2)

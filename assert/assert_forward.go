@@ -750,6 +750,26 @@ func (a *Assertions) InEpsilonSlicef(expected any, actual any, epsilon float64, 
 	return assertions.InEpsilonSlice(a.T, expected, actual, epsilon, forwardArgs(msg, args))
 }
 
+// InEpsilonSymmetric is the same as [InEpsilonSymmetric], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func (a *Assertions) InEpsilonSymmetric(x any, y any, epsilon float64, msgAndArgs ...any) bool {
+	if h, ok := a.T.(H); ok {
+		h.Helper()
+	}
+	return assertions.InEpsilonSymmetric(a.T, x, y, epsilon, msgAndArgs...)
+}
+
+// InEpsilonSymmetricf is the same as [Assertions.InEpsilonSymmetric], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func (a *Assertions) InEpsilonSymmetricf(x any, y any, epsilon float64, msg string, args ...any) bool {
+	if h, ok := a.T.(H); ok {
+		h.Helper()
+	}
+	return assertions.InEpsilonSymmetric(a.T, x, y, epsilon, forwardArgs(msg, args))
+}
+
 // IsDecreasing is the same as [IsDecreasing], as a method rather than a package-level function.
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
