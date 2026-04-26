@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
 // SPDX-License-Identifier: Apache-2.0
 
-//nolint:dupl // YAML is actually very similar to JSON but we can't easily factorize this.
 package assertions
 
 import (
@@ -24,6 +23,8 @@ import (
 //	import(
 //	  "github.com/go-openapi/testify/enable/yaml/v2"
 //	)
+//
+// For dynamic redaction of the input text via a callback, use [YAMLEqT].
 //
 // # Usage
 //
@@ -80,7 +81,7 @@ func YAMLEq(t T, expected, actual string, msgAndArgs ...any) bool {
 		h.Helper()
 	}
 
-	return YAMLEqBytes(t, []byte(expected), []byte(actual), msgAndArgs)
+	return YAMLEqBytes(t, []byte(expected), []byte(actual), msgAndArgs...)
 }
 
 // YAMLEqT asserts that two YAML documents are equivalent.
@@ -89,17 +90,19 @@ func YAMLEq(t T, expected, actual string, msgAndArgs ...any) bool {
 //
 // See [YAMLEqBytes].
 //
+// NOTE: passed values (expected, actual) may be wrapped as functions to redact the input text dynamically.
+//
 // # Examples
 //
 //	panic: "key: value", "key: value"
 //	should panic without the yaml feature enabled.
-func YAMLEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool {
+func YAMLEqT[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool {
 	// Domain: yaml
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 
-	return YAMLEqBytes(t, []byte(expected), []byte(actual), msgAndArgs)
+	return YAMLEqBytes(t, asBytes(expected), asBytes(actual), msgAndArgs...)
 }
 
 // YAMLUnmarshalAsT wraps [Equal] after [yaml.Unmarshal].
@@ -110,6 +113,8 @@ func YAMLEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any
 //
 // Be careful not to wrap the expected object into an "any" interface if this is not what you expected:
 // the unmarshaling would take this type to unmarshal as a map[string]any.
+//
+// NOTE: passed yamlDoc value may be wrapped as a function to redact the input text dynamically.
 //
 // # Usage
 //
@@ -125,14 +130,14 @@ func YAMLEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any
 //
 //	panic: "key: value", "key: value"
 //	should panic without the yaml feature enabled.
-func YAMLUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool {
+func YAMLUnmarshalAsT[Object any, ADoc RText](t T, expected Object, yamlDoc ADoc, msgAndArgs ...any) bool {
 	// Domain: yaml
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 
 	var actual Object
-	if err := yaml.Unmarshal([]byte(jazon), &actual); err != nil {
+	if err := yaml.Unmarshal(asBytes(yamlDoc), &actual); err != nil {
 		return Fail(t, fmt.Sprintf("YAML unmarshal failed: %v", err), msgAndArgs...)
 	}
 
@@ -145,6 +150,8 @@ func YAMLUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, m
 //
 // It fails if the marshaling returns an error or if the expected YAML bytes differ semantically
 // from the expected ones.
+//
+// NOTE: passed expected value may be wrapped as a function to redact the input text dynamically.
 //
 // # Usage
 //
@@ -160,7 +167,7 @@ func YAMLUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, m
 //
 //	panic: "key: value", "key: value"
 //	should panic without the yaml feature enabled.
-func YAMLMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any) bool {
+func YAMLMarshalAsT[EDoc RText](t T, expected EDoc, object any, msgAndArgs ...any) bool {
 	// Domain: yaml
 	if h, ok := t.(H); ok {
 		h.Helper()
@@ -171,5 +178,5 @@ func YAMLMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any
 		return Fail(t, fmt.Sprintf("YAML marshal failed: %v", err), msgAndArgs...)
 	}
 
-	return YAMLEqBytes(t, []byte(expected), actual, msgAndArgs...)
+	return YAMLEqBytes(t, asBytes(expected), actual, msgAndArgs...)
 }

@@ -32,9 +32,9 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 ```tree
 - [YAMLEq](#yamleq) | angles-right
 - [YAMLEqBytes](#yamleqbytes) | angles-right
-- [YAMLEqT[EDoc, ADoc Text]](#yamleqtedoc-adoc-text) | star | orange
-- [YAMLMarshalAsT[EDoc Text]](#yamlmarshalastedoc-text) | star | orange
-- [YAMLUnmarshalAsT[Object any, ADoc Text]](#yamlunmarshalastobject-any-adoc-text) | star | orange
+- [YAMLEqT[EDoc, ADoc RText]](#yamleqtedoc-adoc-rtext) | star | orange
+- [YAMLMarshalAsT[EDoc RText]](#yamlmarshalastedoc-rtext) | star | orange
+- [YAMLUnmarshalAsT[Object any, ADoc RText]](#yamlunmarshalastobject-any-adoc-rtext) | star | orange
 ```
 
 ### YAMLEq{#yamleq}
@@ -77,7 +77,7 @@ See [YAMLEqBytes](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAM
 |--|--|
 | [`assertions.YAMLEq(t T, expected string, actual string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLEq) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLEq](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L77)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLEq](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L79)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -95,6 +95,8 @@ To enable it, you should add a blank import like so:
 	import(
 	  "github.com/go-openapi/testify/enable/yaml/v2"
 	)
+
+For dynamic redaction of the input text via a callback, use [YAMLEqT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLEqT).
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -146,16 +148,18 @@ To enable it, you should add a blank import like so:
 |--|--|
 | [`assertions.YAMLEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLEqBytes) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLEqBytes](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L46)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLEqBytes](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L48)
 {{% /tab %}}
 {{< /tabs >}}
 
-### YAMLEqT[EDoc, ADoc Text] {{% icon icon="star" color=orange %}}{#yamleqtedoc-adoc-text}
+### YAMLEqT[EDoc, ADoc RText] {{% icon icon="star" color=orange %}}{#yamleqtedoc-adoc-rtext}
 YAMLEqT asserts that two YAML documents are equivalent.
 
 The expected and actual arguments may be string or []byte. They do not need to be of the same type.
 
 See [YAMLEqBytes](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLEqBytes).
+
+NOTE: passed values (expected, actual) may be wrapped as functions to redact the input text dynamically.
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -173,32 +177,34 @@ See [YAMLEqBytes](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAM
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`assert.YAMLEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLEqT) | package-level function |
-| [`assert.YAMLEqTf[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLEqTf) | formatted variant |
+| [`assert.YAMLEqT[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLEqT) | package-level function |
+| [`assert.YAMLEqTf[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLEqTf) | formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.YAMLEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLEqT) | package-level function |
-| [`require.YAMLEqTf[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLEqTf) | formatted variant |
+| [`require.YAMLEqT[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLEqT) | package-level function |
+| [`require.YAMLEqTf[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLEqTf) | formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--|
-| [`assertions.YAMLEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLEqT) | internal implementation |
+| [`assertions.YAMLEqT[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLEqT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLEqT](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L96)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLEqT](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L100)
 {{% /tab %}}
 {{< /tabs >}}
 
-### YAMLMarshalAsT[EDoc Text] {{% icon icon="star" color=orange %}}{#yamlmarshalastedoc-text}
+### YAMLMarshalAsT[EDoc RText] {{% icon icon="star" color=orange %}}{#yamlmarshalastedoc-rtext}
 YAMLMarshalAsT wraps [YAMLEq](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLEq) after [yaml.Marshal](https://pkg.go.dev/yaml#Marshal).
 
 The input YAML may be a string or []byte.
 
 It fails if the marshaling returns an error or if the expected YAML bytes differ semantically
 from the expected ones.
+
+NOTE: passed expected value may be wrapped as a function to redact the input text dynamically.
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -226,26 +232,26 @@ from the expected ones.
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`assert.YAMLMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLMarshalAsT) | package-level function |
-| [`assert.YAMLMarshalAsTf[EDoc Text](t T, expected EDoc, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLMarshalAsTf) | formatted variant |
+| [`assert.YAMLMarshalAsT[EDoc RText](t T, expected EDoc, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLMarshalAsT) | package-level function |
+| [`assert.YAMLMarshalAsTf[EDoc RText](t T, expected EDoc, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLMarshalAsTf) | formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.YAMLMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLMarshalAsT) | package-level function |
-| [`require.YAMLMarshalAsTf[EDoc Text](t T, expected EDoc, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLMarshalAsTf) | formatted variant |
+| [`require.YAMLMarshalAsT[EDoc RText](t T, expected EDoc, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLMarshalAsT) | package-level function |
+| [`require.YAMLMarshalAsTf[EDoc RText](t T, expected EDoc, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLMarshalAsTf) | formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--|
-| [`assertions.YAMLMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLMarshalAsT) | internal implementation |
+| [`assertions.YAMLMarshalAsT[EDoc RText](t T, expected EDoc, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLMarshalAsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLMarshalAsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L163)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLMarshalAsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L171)
 {{% /tab %}}
 {{< /tabs >}}
 
-### YAMLUnmarshalAsT[Object any, ADoc Text] {{% icon icon="star" color=orange %}}{#yamlunmarshalastobject-any-adoc-text}
+### YAMLUnmarshalAsT[Object any, ADoc RText] {{% icon icon="star" color=orange %}}{#yamlunmarshalastobject-any-adoc-rtext}
 YAMLUnmarshalAsT wraps [Equal](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Equal) after [yaml.Unmarshal](https://pkg.go.dev/yaml#Unmarshal).
 
 The input YAML may be a string or []byte.
@@ -254,6 +260,8 @@ It fails if the unmarshaling returns an error or if the resulting object is not 
 
 Be careful not to wrap the expected object into an "any" interface if this is not what you expected:
 the unmarshaling would take this type to unmarshal as a map[string](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#string)any.
+
+NOTE: passed yamlDoc value may be wrapped as a function to redact the input text dynamically.
 
 {{% expand title="Examples" %}}
 {{< tabs >}}
@@ -281,22 +289,22 @@ the unmarshaling would take this type to unmarshal as a map[string](https://pkg.
 {{% tab title="assert" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`assert.YAMLUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLUnmarshalAsT) | package-level function |
-| [`assert.YAMLUnmarshalAsTf[Object any, ADoc Text](t T, expected Object, jazon ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLUnmarshalAsTf) | formatted variant |
+| [`assert.YAMLUnmarshalAsT[Object any, ADoc RText](t T, expected Object, yamlDoc ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLUnmarshalAsT) | package-level function |
+| [`assert.YAMLUnmarshalAsTf[Object any, ADoc RText](t T, expected Object, yamlDoc ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLUnmarshalAsTf) | formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.YAMLUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLUnmarshalAsT) | package-level function |
-| [`require.YAMLUnmarshalAsTf[Object any, ADoc Text](t T, expected Object, jazon ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLUnmarshalAsTf) | formatted variant |
+| [`require.YAMLUnmarshalAsT[Object any, ADoc RText](t T, expected Object, yamlDoc ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLUnmarshalAsT) | package-level function |
+| [`require.YAMLUnmarshalAsTf[Object any, ADoc RText](t T, expected Object, yamlDoc ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLUnmarshalAsTf) | formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
 | Signature | Usage |
 |--|--|
-| [`assertions.YAMLUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLUnmarshalAsT) | internal implementation |
+| [`assertions.YAMLUnmarshalAsT[Object any, ADoc RText](t T, expected Object, yamlDoc ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLUnmarshalAsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLUnmarshalAsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L128)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLUnmarshalAsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L134)
 {{% /tab %}}
 {{< /tabs >}}
 

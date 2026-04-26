@@ -20,7 +20,6 @@ We continue to monitor and selectively adopt changes from the upstream repositor
 
 ### Monitoring
 - 🔍 [#1601] - `NoFieldIsZero`
-- 🔍 [#1840] - JSON presence check without exact values
 
 ### Superseded by Our Implementation
 - ⛔ [#1845] - Fix Eventually/Never regression (superseded by context-based pollCondition)
@@ -30,7 +29,6 @@ We continue to monitor and selectively adopt changes from the upstream repositor
 
 [#1087]: https://github.com/stretchr/testify/pull/1087
 [#1601]: https://github.com/stretchr/testify/issues/1601
-[#1840]: https://github.com/stretchr/testify/issues/1840
 [#1830]: https://github.com/stretchr/testify/pull/1830
 [#1824]: https://github.com/stretchr/testify/pull/1824
 [#1819]: https://github.com/stretchr/testify/pull/1819
@@ -86,6 +84,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | [#1606] | PR | Consistently assertion | ✅ Adapted |
 | [#1848] | PR | Subset (garbled error message) | ✅ Adapted |
 | [#1839] | PR | Number equality with symmetric role | ✅ Adapted  |
+| [#1840] | Issue | JSON presence check without exact values | ✅ Adapted  |
 | [#1859] | Issue | Channel assertions | ✅ Adapted |
 
 [#994]: https://github.com/stretchr/testify/pull/994
@@ -102,6 +101,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 [#1087]: https://github.com/stretchr/testify/issues/1087
 [#1606]: https://github.com/stretchr/testify/pull/1606
 [#1839]: https://github.com/stretchr/testify/pull/1839
+[#1840]: https://github.com/stretchr/testify/issues/1840
 [#1848]: https://github.com/stretchr/testify/pull/1848
 [#1859]: https://github.com/stretchr/testify/pull/1859
 
@@ -121,7 +121,6 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 |-----------|------|---------|--------|
 | [#1576] | Issue/PR | `EqualValues` assertion | 🔍 Monitoring [#1863]- Wrong equality when comparing float32 and float64|
 | [#1601] | Issue | `NoFieldIsZero` assertion | 🔍 Monitoring - Considering implementation |
-| [#1840] | Issue | JSON presence check without exact values | 🔍 Monitoring - Interesting for testing APIs with generated IDs |
 | [#1860] | Issue+PR | `ErrorAsType[E]` for Go 1.26+ - PR: [#1861] | 🔍 Monitoring - Interesting UX syntax |
 
 ### Informational (Not Implemented)
@@ -147,9 +146,9 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 
 | Category | Count |
 |----------|-------|
-| **Implemented/Merged** | 26 |
+| **Implemented/Merged** | 27 |
 | **Superseded** | 4 |
-| **Monitoring** | 4 |
+| **Monitoring** | 3 |
 | **Informational** | 3 |
 | **Total Processed** | 37 |
 

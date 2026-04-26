@@ -84,9 +84,9 @@ Table of core assertions, excluding variants. Each function is side by side with
 | [IsType](type/#istype) | [IsNotType](type/#isnottype) | type |  |
 | [JSONEq](json/#jsoneq) |  | json |  |
 | [JSONEqBytes](json/#jsoneqbytes) |  | json |  |
-| [JSONEqT[EDoc, ADoc Text]](json/#jsoneqtedoc-adoc-text) {{% icon icon="star" color=orange %}} |  | json |  |
-| [JSONMarshalAsT[EDoc Text]](json/#jsonmarshalastedoc-text) {{% icon icon="star" color=orange %}} |  | json |  |
-| [JSONUnmarshalAsT[Object any, ADoc Text]](json/#jsonunmarshalastobject-any-adoc-text) {{% icon icon="star" color=orange %}} |  | json |  |
+| [JSONEqT[EDoc, ADoc RText]](json/#jsoneqtedoc-adoc-rtext) {{% icon icon="star" color=orange %}} |  | json |  |
+| [JSONMarshalAsT[EDoc RText]](json/#jsonmarshalastedoc-rtext) {{% icon icon="star" color=orange %}} |  | json |  |
+| [JSONUnmarshalAsT[Object any, ADoc RText]](json/#jsonunmarshalastobject-any-adoc-rtext) {{% icon icon="star" color=orange %}} |  | json |  |
 | [Kind](type/#kind) | [NotKind](type/#notkind) | type |  |
 | [Len](collection/#len) |  | collection |  |
 | [MapContainsT[Map ~map[K]V, K comparable, V any]](collection/#mapcontainstmap-mapkv-k-comparable-v-any) {{% icon icon="star" color=orange %}} | [MapNotContainsT](collection/#mapnotcontainstmap-mapkv-k-comparable-v-any) | collection |  |
@@ -118,8 +118,8 @@ Table of core assertions, excluding variants. Each function is side by side with
 | [WithinRange](time/#withinrange) |  | time |  |
 | [YAMLEq](yaml/#yamleq) |  | yaml |  |
 | [YAMLEqBytes](yaml/#yamleqbytes) |  | yaml |  |
-| [YAMLEqT[EDoc, ADoc Text]](yaml/#yamleqtedoc-adoc-text) {{% icon icon="star" color=orange %}} |  | yaml |  |
-| [YAMLMarshalAsT[EDoc Text]](yaml/#yamlmarshalastedoc-text) {{% icon icon="star" color=orange %}} |  | yaml |  |
-| [YAMLUnmarshalAsT[Object any, ADoc Text]](yaml/#yamlunmarshalastobject-any-adoc-text) {{% icon icon="star" color=orange %}} |  | yaml |  |
+| [YAMLEqT[EDoc, ADoc RText]](yaml/#yamleqtedoc-adoc-rtext) {{% icon icon="star" color=orange %}} |  | yaml |  |
+| [YAMLMarshalAsT[EDoc RText]](yaml/#yamlmarshalastedoc-rtext) {{% icon icon="star" color=orange %}} |  | yaml |  |
+| [YAMLUnmarshalAsT[Object any, ADoc RText]](yaml/#yamlunmarshalastobject-any-adoc-rtext) {{% icon icon="star" color=orange %}} |  | yaml |  |
 | [Zero](type/#zero) | [NotZero](type/#notzero) | type |  |
 

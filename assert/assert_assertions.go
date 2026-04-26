@@ -1624,6 +1624,8 @@ func IsType(t T, expectedType any, object any, msgAndArgs ...any) bool {
 //
 // Expected and actual must be valid JSON.
 //
+// For dynamic redaction of the input text via a callback, use [JSONEqT].
+//
 // # Usage
 //
 //	assertions.JSONEq(t, `{"hello": "world", "foo": "bar"}`, `{"foo": "bar", "hello": "world"}`)
@@ -1668,6 +1670,8 @@ func JSONEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any) bool {
 //
 // Expected and actual must be valid JSON.
 //
+// NOTE: passed values (expected, actual) may be wrapped as functions to redact the input text dynamically.
+//
 // # Usage
 //
 //	assertions.JSONEqT(t, `{"hello": "world", "foo": "bar"}`, []byte(`{"foo": "bar", "hello": "world"}`))
@@ -1678,19 +1682,21 @@ func JSONEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any) bool {
 //	failure: `{"hello": "world", "foo": "bar"}`, `[{"foo": "bar"}, {"hello": "world"}]`
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func JSONEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool {
+func JSONEqT[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
 	return assertions.JSONEqT[EDoc, ADoc](t, expected, actual, msgAndArgs...)
 }
 
-// JSONMarshalAsT wraps [JSONEq] after [json.Marshal].
+// JSONMarshalAsT wraps [JSONEqT] after [json.Marshal].
 //
 // The input JSON may be a string or []byte.
 //
 // It fails if the marshaling returns an error or if the expected JSON bytes differ semantically
 // from the expected ones.
+//
+// NOTE: passed expected value may be wrapped as a function to redact the input text dynamically.
 //
 // # Usage
 //
@@ -1708,7 +1714,7 @@ func JSONEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any
 //	failure: `[{"foo": "bar"}, {"hello": "world"}]`, 1
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func JSONMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any) bool {
+func JSONMarshalAsT[EDoc RText](t T, expected EDoc, object any, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -1723,6 +1729,8 @@ func JSONMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any
 //
 // Be careful not to wrap the expected object into an "any" interface if this is not what you expected:
 // the unmarshaling would take this type to unmarshal as a map[string]any.
+//
+// NOTE: passed jazon value may be wrapped as a function to redact the input JSON dynamically.
 //
 // # Usage
 //
@@ -1740,7 +1748,7 @@ func JSONMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any
 //	failure: 1, `[{"foo": "bar"}, {"hello": "world"}]`
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func JSONUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool {
+func JSONUnmarshalAsT[Object any, ADoc RText](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -3258,6 +3266,8 @@ func YAMLEq(t T, expected string, actual string, msgAndArgs ...any) bool {
 //	  "github.com/go-openapi/testify/enable/yaml/v2"
 //	)
 //
+// For dynamic redaction of the input text via a callback, use [YAMLEqT].
+//
 // # Usage
 //
 //	expected := `---
@@ -3291,13 +3301,15 @@ func YAMLEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any) bool {
 //
 // See [YAMLEqBytes].
 //
+// NOTE: passed values (expected, actual) may be wrapped as functions to redact the input text dynamically.
+//
 // # Examples
 //
 //	panic: "key: value", "key: value"
 //	should panic without the yaml feature enabled.
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func YAMLEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool {
+func YAMLEqT[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -3310,6 +3322,8 @@ func YAMLEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any
 //
 // It fails if the marshaling returns an error or if the expected YAML bytes differ semantically
 // from the expected ones.
+//
+// NOTE: passed expected value may be wrapped as a function to redact the input text dynamically.
 //
 // # Usage
 //
@@ -3327,7 +3341,7 @@ func YAMLEqT[EDoc, ADoc Text](t T, expected EDoc, actual ADoc, msgAndArgs ...any
 //	should panic without the yaml feature enabled.
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func YAMLMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any) bool {
+func YAMLMarshalAsT[EDoc RText](t T, expected EDoc, object any, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -3342,6 +3356,8 @@ func YAMLMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any
 //
 // Be careful not to wrap the expected object into an "any" interface if this is not what you expected:
 // the unmarshaling would take this type to unmarshal as a map[string]any.
+//
+// NOTE: passed yamlDoc value may be wrapped as a function to redact the input text dynamically.
 //
 // # Usage
 //
@@ -3359,11 +3375,11 @@ func YAMLMarshalAsT[EDoc Text](t T, expected EDoc, object any, msgAndArgs ...any
 //	should panic without the yaml feature enabled.
 //
 // Upon failure, the test [T] is marked as failed and continues execution.
-func YAMLUnmarshalAsT[Object any, ADoc Text](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool {
+func YAMLUnmarshalAsT[Object any, ADoc RText](t T, expected Object, yamlDoc ADoc, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	return assertions.YAMLUnmarshalAsT[Object, ADoc](t, expected, jazon, msgAndArgs...)
+	return assertions.YAMLUnmarshalAsT[Object, ADoc](t, expected, yamlDoc, msgAndArgs...)
 }
 
 // Zero asserts that i is the zero value for its type.

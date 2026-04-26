@@ -86,6 +86,15 @@ type (
 	// for table driven tests.
 	PanicAssertionFunc func(t T, f func(), msgAndArgs ...any)
 
+	// RText extends [Text] by supporting dynamic construction of the
+	// expected or actual value, e.g. "redact" functions.
+	RText = assertions.RText
+
+	// Redactor allows dynamic construction of expected or actual values, e.g. "redacting" values dynamically.
+	//
+	// This is used by json and yaml assertions.
+	Redactor = assertions.Redactor
+
 	// RegExp is either a text containing a regular expression to compile (string or []byte), or directly the compiled regexp.
 	//
 	// This is used by [RegexpT] and [NotRegexpT].
