@@ -17,7 +17,7 @@ We thank these members for their service to this community.
 
 | Total Contributors | Total Contributions |
 | --- | --- |
-| 258  | 1243  |
+| 257  | 1242  |
 
 | Username | All Time Contribution Count | All Commits |
 | --- | --- | --- |
@@ -101,8 +101,8 @@ We thank these members for their service to this community.
 | @greg0ire | 2 | <https://github.com/go-openapi/testify/commits?author=greg0ire> |
 | @sikehish | 2 | <https://github.com/go-openapi/testify/commits?author=sikehish> |
 | @LandonTClipp | 2 | <https://github.com/go-openapi/testify/commits?author=LandonTClipp> |
-| @AchoArnold | 2 | <https://github.com/go-openapi/testify/commits?author=AchoArnold> |
 | @anupcshan | 2 | <https://github.com/go-openapi/testify/commits?author=anupcshan> |
+| @AchoArnold | 2 | <https://github.com/go-openapi/testify/commits?author=AchoArnold> |
 | @2pi | 2 | <https://github.com/go-openapi/testify/commits?author=2pi> |
 | @bboreham | 2 | <https://github.com/go-openapi/testify/commits?author=bboreham> |
 | @bmatsuo | 2 | <https://github.com/go-openapi/testify/commits?author=bmatsuo> |
@@ -128,7 +128,7 @@ We thank these members for their service to this community.
 | @peterebden | 1 | <https://github.com/go-openapi/testify/commits?author=peterebden> |
 | @pdbrito | 1 | <https://github.com/go-openapi/testify/commits?author=pdbrito> |
 | @pquerna | 1 | <https://github.com/go-openapi/testify/commits?author=pquerna> |
-| @bogdandrutu | 1 | <https://github.com/go-openapi/testify/commits?author=bogdandrutu> |
+| @pdufour | 1 | <https://github.com/go-openapi/testify/commits?author=pdufour> |
 | @moolmanruan | 1 | <https://github.com/go-openapi/testify/commits?author=moolmanruan> |
 | @rleungx | 1 | <https://github.com/go-openapi/testify/commits?author=rleungx> |
 | @sam-nelson-mcn | 1 | <https://github.com/go-openapi/testify/commits?author=sam-nelson-mcn> |
@@ -138,7 +138,7 @@ We thank these members for their service to this community.
 | @simonmulser | 1 | <https://github.com/go-openapi/testify/commits?author=simonmulser> |
 | @brahmaroutu | 1 | <https://github.com/go-openapi/testify/commits?author=brahmaroutu> |
 | @stdedos | 1 | <https://github.com/go-openapi/testify/commits?author=stdedos> |
-| @cuishuang | 1 | <https://github.com/go-openapi/testify/commits?author=cuishuang> |
+| @aldas | 1 | <https://github.com/go-openapi/testify/commits?author=aldas> |
 | @comogo | 1 | <https://github.com/go-openapi/testify/commits?author=comogo> |
 | @TechnotronicOz | 1 | <https://github.com/go-openapi/testify/commits?author=TechnotronicOz> |
 | @n9netales | 1 | <https://github.com/go-openapi/testify/commits?author=n9netales> |
@@ -158,7 +158,8 @@ We thank these members for their service to this community.
 | @parkr | 1 | <https://github.com/go-openapi/testify/commits?author=parkr> |
 | @pwfcurry | 1 | <https://github.com/go-openapi/testify/commits?author=pwfcurry> |
 | @phemmer | 1 | <https://github.com/go-openapi/testify/commits?author=phemmer> |
-| @pdufour | 1 | <https://github.com/go-openapi/testify/commits?author=pdufour> |
+| @stevenh | 1 | <https://github.com/go-openapi/testify/commits?author=stevenh> |
+| @cuishuang | 1 | <https://github.com/go-openapi/testify/commits?author=cuishuang> |
 | @dave | 1 | <https://github.com/go-openapi/testify/commits?author=dave> |
 | @GlenDC | 1 | <https://github.com/go-openapi/testify/commits?author=GlenDC> |
 | @egawata | 1 | <https://github.com/go-openapi/testify/commits?author=egawata> |
@@ -170,7 +171,6 @@ We thank these members for their service to this community.
 | @nicoche | 1 | <https://github.com/go-openapi/testify/commits?author=nicoche> |
 | @perrydunn | 1 | <https://github.com/go-openapi/testify/commits?author=perrydunn> |
 | @philtay | 1 | <https://github.com/go-openapi/testify/commits?author=philtay> |
-| @renzoarreaza | 1 | <https://github.com/go-openapi/testify/commits?author=renzoarreaza> |
 | @sarathsp06 | 1 | <https://github.com/go-openapi/testify/commits?author=sarathsp06> |
 | @sunpe | 1 | <https://github.com/go-openapi/testify/commits?author=sunpe> |
 | @timfeirg | 1 | <https://github.com/go-openapi/testify/commits?author=timfeirg> |
@@ -179,7 +179,6 @@ We thank these members for their service to this community.
 | @wwade | 1 | <https://github.com/go-openapi/testify/commits?author=wwade> |
 | @agonzalezro | 1 | <https://github.com/go-openapi/testify/commits?author=agonzalezro> |
 | @hikyaru-suzuki | 1 | <https://github.com/go-openapi/testify/commits?author=hikyaru-suzuki> |
-| @stevenh | 1 | <https://github.com/go-openapi/testify/commits?author=stevenh> |
 | @groz | 1 | <https://github.com/go-openapi/testify/commits?author=groz> |
 | @tedeh | 1 | <https://github.com/go-openapi/testify/commits?author=tedeh> |
 | @terinjokes | 1 | <https://github.com/go-openapi/testify/commits?author=terinjokes> |
@@ -200,6 +199,7 @@ We thank these members for their service to this community.
 | @ybrustin | 1 | <https://github.com/go-openapi/testify/commits?author=ybrustin> |
 | @yrk-lab | 1 | <https://github.com/go-openapi/testify/commits?author=yrk-lab> |
 | @ac7 | 1 | <https://github.com/go-openapi/testify/commits?author=ac7> |
+| @bogdandrutu | 1 | <https://github.com/go-openapi/testify/commits?author=bogdandrutu> |
 | @docbobo | 1 | <https://github.com/go-openapi/testify/commits?author=docbobo> |
 | @moorereason | 1 | <https://github.com/go-openapi/testify/commits?author=moorereason> |
 | @chakrit | 1 | <https://github.com/go-openapi/testify/commits?author=chakrit> |
@@ -218,7 +218,7 @@ We thank these members for their service to this community.
 | @davidjb | 1 | <https://github.com/go-openapi/testify/commits?author=davidjb> |
 | @dpw | 1 | <https://github.com/go-openapi/testify/commits?author=dpw> |
 | @dennwc | 1 | <https://github.com/go-openapi/testify/commits?author=dennwc> |
-| @dominicbarnes | 1 | <https://github.com/go-openapi/testify/commits?author=dominicbarnes> |
+| @lowjoel | 1 | <https://github.com/go-openapi/testify/commits?author=lowjoel> |
 | @3scalation | 1 | <https://github.com/go-openapi/testify/commits?author=3scalation> |
 | @AutomateAaron | 1 | <https://github.com/go-openapi/testify/commits?author=AutomateAaron> |
 | @adamluzsi | 1 | <https://github.com/go-openapi/testify/commits?author=adamluzsi> |
@@ -258,7 +258,7 @@ We thank these members for their service to this community.
 | @Lucaber | 1 | <https://github.com/go-openapi/testify/commits?author=Lucaber> |
 | @miparnisari | 1 | <https://github.com/go-openapi/testify/commits?author=miparnisari> |
 | @martin-sucha | 1 | <https://github.com/go-openapi/testify/commits?author=martin-sucha> |
-| @aldas | 1 | <https://github.com/go-openapi/testify/commits?author=aldas> |
+| @dominicbarnes | 1 | <https://github.com/go-openapi/testify/commits?author=dominicbarnes> |
 | @dlclark | 1 | <https://github.com/go-openapi/testify/commits?author=dlclark> |
 | @bits01 | 1 | <https://github.com/go-openapi/testify/commits?author=bits01> |
 | @dmacvicar | 1 | <https://github.com/go-openapi/testify/commits?author=dmacvicar> |
@@ -278,6 +278,5 @@ We thank these members for their service to this community.
 | @programmer04 | 1 | <https://github.com/go-openapi/testify/commits?author=programmer04> |
 | @jaguilar | 1 | <https://github.com/go-openapi/testify/commits?author=jaguilar> |
 | @jbowes | 1 | <https://github.com/go-openapi/testify/commits?author=jbowes> |
-| @lowjoel | 1 | <https://github.com/go-openapi/testify/commits?author=lowjoel> |
 
  _this file was generated by the [Contributors GitHub Action](https://github.com/github-community-projects/contributors)_
