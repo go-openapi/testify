@@ -148,7 +148,7 @@ func main() {
 |--|--|
 | [`assertions.JSONEq(t T, expected string, actual string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#JSONEq) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONEq](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L66)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONEq](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L65)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -261,7 +261,7 @@ func main() {
 |--|--|
 | [`assertions.JSONEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#JSONEqBytes) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONEqBytes](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L26)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONEqBytes](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L25)
 
 > **Maintainer Note**
 >
@@ -382,7 +382,7 @@ func main() {
 |--|--|
 | [`assertions.JSONEqT[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#JSONEqT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONEqT](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L91)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONEqT](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L90)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -511,7 +511,7 @@ type dummyStruct struct {
 |--|--|
 | [`assertions.JSONMarshalAsT[EDoc RText](t T, expected EDoc, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#JSONMarshalAsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONMarshalAsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L162)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONMarshalAsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L161)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -642,7 +642,7 @@ type dummyStruct struct {
 |--|--|
 | [`assertions.JSONUnmarshalAsT[Object any, ADoc RText](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#JSONUnmarshalAsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONUnmarshalAsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L125)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#JSONUnmarshalAsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/json.go#L124)
 {{% /tab %}}
 {{< /tabs >}}
 

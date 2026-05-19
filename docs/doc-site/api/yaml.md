@@ -77,7 +77,7 @@ See [YAMLEqBytes](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAM
 |--|--|
 | [`assertions.YAMLEq(t T, expected string, actual string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLEq) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLEq](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L79)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLEq](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L78)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -148,7 +148,7 @@ For dynamic redaction of the input text via a callback, use [YAMLEqT](https://pk
 |--|--|
 | [`assertions.YAMLEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLEqBytes) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLEqBytes](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L48)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLEqBytes](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L47)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -192,7 +192,7 @@ NOTE: passed values (expected, actual) may be wrapped as functions to redact the
 |--|--|
 | [`assertions.YAMLEqT[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLEqT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLEqT](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L100)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLEqT](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L99)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -247,7 +247,7 @@ NOTE: passed expected value may be wrapped as a function to redact the input tex
 |--|--|
 | [`assertions.YAMLMarshalAsT[EDoc RText](t T, expected EDoc, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLMarshalAsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLMarshalAsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L171)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLMarshalAsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L170)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -304,7 +304,7 @@ NOTE: passed yamlDoc value may be wrapped as a function to redact the input text
 |--|--|
 | [`assertions.YAMLUnmarshalAsT[Object any, ADoc RText](t T, expected Object, yamlDoc ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#YAMLUnmarshalAsT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLUnmarshalAsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L134)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#YAMLUnmarshalAsT](https://github.com/go-openapi/testify/blob/master/internal/assertions/yaml.go#L133)
 {{% /tab %}}
 {{< /tabs >}}
 

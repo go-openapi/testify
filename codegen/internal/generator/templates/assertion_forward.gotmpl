@@ -43,7 +43,7 @@ func (a *{{ $.Receiver }}) {{.Name}}({{ params .Params }}, msgAndArgs ...any) {{
 {{ docStringPackage $.Package }}
 func (a *{{ $.Receiver }}){{ .Name }}f({{ params .Params }}, msg string, args ...any) {{ returns .Returns }} {
 	if h, ok := a.T.(H); ok { h.Helper() }
-  return {{ .TargetPackage }}.{{ .Name }}(a.T, {{ forward .Params }}, forwardArgs(msg, args))
+  return {{ .TargetPackage }}.{{ .Name }}(a.T, {{ forward .Params }}, forwardArgs(msg, args)...)
 }
   {{- end }}
 {{- end }}

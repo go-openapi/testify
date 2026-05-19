@@ -47,7 +47,7 @@ func (a *Assertions) Blockedf(ch any, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Blocked(a.T, ch, forwardArgs(msg, args))
+	return assertions.Blocked(a.T, ch, forwardArgs(msg, args)...)
 }
 
 // Condition is the same as [Condition], as a method rather than a package-level function.
@@ -67,7 +67,7 @@ func (a *Assertions) Conditionf(comp func() bool, msg string, args ...any) bool 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Condition(a.T, comp, forwardArgs(msg, args))
+	return assertions.Condition(a.T, comp, forwardArgs(msg, args)...)
 }
 
 // Contains is the same as [Contains], as a method rather than a package-level function.
@@ -87,7 +87,7 @@ func (a *Assertions) Containsf(s any, contains any, msg string, args ...any) boo
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Contains(a.T, s, contains, forwardArgs(msg, args))
+	return assertions.Contains(a.T, s, contains, forwardArgs(msg, args)...)
 }
 
 // DirExists is the same as [DirExists], as a method rather than a package-level function.
@@ -107,7 +107,7 @@ func (a *Assertions) DirExistsf(path string, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.DirExists(a.T, path, forwardArgs(msg, args))
+	return assertions.DirExists(a.T, path, forwardArgs(msg, args)...)
 }
 
 // DirNotExists is the same as [DirNotExists], as a method rather than a package-level function.
@@ -127,7 +127,7 @@ func (a *Assertions) DirNotExistsf(path string, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.DirNotExists(a.T, path, forwardArgs(msg, args))
+	return assertions.DirNotExists(a.T, path, forwardArgs(msg, args)...)
 }
 
 // ElementsMatch is the same as [ElementsMatch], as a method rather than a package-level function.
@@ -147,7 +147,7 @@ func (a *Assertions) ElementsMatchf(listA any, listB any, msg string, args ...an
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.ElementsMatch(a.T, listA, listB, forwardArgs(msg, args))
+	return assertions.ElementsMatch(a.T, listA, listB, forwardArgs(msg, args)...)
 }
 
 // Empty is the same as [Empty], as a method rather than a package-level function.
@@ -167,7 +167,7 @@ func (a *Assertions) Emptyf(object any, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Empty(a.T, object, forwardArgs(msg, args))
+	return assertions.Empty(a.T, object, forwardArgs(msg, args)...)
 }
 
 // Equal is the same as [Equal], as a method rather than a package-level function.
@@ -187,7 +187,7 @@ func (a *Assertions) Equalf(expected any, actual any, msg string, args ...any) b
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Equal(a.T, expected, actual, forwardArgs(msg, args))
+	return assertions.Equal(a.T, expected, actual, forwardArgs(msg, args)...)
 }
 
 // EqualError is the same as [EqualError], as a method rather than a package-level function.
@@ -207,7 +207,7 @@ func (a *Assertions) EqualErrorf(err error, errString string, msg string, args .
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.EqualError(a.T, err, errString, forwardArgs(msg, args))
+	return assertions.EqualError(a.T, err, errString, forwardArgs(msg, args)...)
 }
 
 // EqualExportedValues is the same as [EqualExportedValues], as a method rather than a package-level function.
@@ -227,7 +227,7 @@ func (a *Assertions) EqualExportedValuesf(expected any, actual any, msg string, 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.EqualExportedValues(a.T, expected, actual, forwardArgs(msg, args))
+	return assertions.EqualExportedValues(a.T, expected, actual, forwardArgs(msg, args)...)
 }
 
 // EqualValues is the same as [EqualValues], as a method rather than a package-level function.
@@ -247,7 +247,7 @@ func (a *Assertions) EqualValuesf(expected any, actual any, msg string, args ...
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.EqualValues(a.T, expected, actual, forwardArgs(msg, args))
+	return assertions.EqualValues(a.T, expected, actual, forwardArgs(msg, args)...)
 }
 
 // Error is the same as [Error], as a method rather than a package-level function.
@@ -267,7 +267,7 @@ func (a *Assertions) Errorf(err error, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Error(a.T, err, forwardArgs(msg, args))
+	return assertions.Error(a.T, err, forwardArgs(msg, args)...)
 }
 
 // ErrorAs is the same as [ErrorAs], as a method rather than a package-level function.
@@ -287,7 +287,7 @@ func (a *Assertions) ErrorAsf(err error, target any, msg string, args ...any) bo
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.ErrorAs(a.T, err, target, forwardArgs(msg, args))
+	return assertions.ErrorAs(a.T, err, target, forwardArgs(msg, args)...)
 }
 
 // ErrorContains is the same as [ErrorContains], as a method rather than a package-level function.
@@ -307,7 +307,7 @@ func (a *Assertions) ErrorContainsf(err error, contains string, msg string, args
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.ErrorContains(a.T, err, contains, forwardArgs(msg, args))
+	return assertions.ErrorContains(a.T, err, contains, forwardArgs(msg, args)...)
 }
 
 // ErrorIs is the same as [ErrorIs], as a method rather than a package-level function.
@@ -327,7 +327,7 @@ func (a *Assertions) ErrorIsf(err error, target error, msg string, args ...any) 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.ErrorIs(a.T, err, target, forwardArgs(msg, args))
+	return assertions.ErrorIs(a.T, err, target, forwardArgs(msg, args)...)
 }
 
 // Exactly is the same as [Exactly], as a method rather than a package-level function.
@@ -347,7 +347,7 @@ func (a *Assertions) Exactlyf(expected any, actual any, msg string, args ...any)
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Exactly(a.T, expected, actual, forwardArgs(msg, args))
+	return assertions.Exactly(a.T, expected, actual, forwardArgs(msg, args)...)
 }
 
 // Fail is the same as [Fail], as a method rather than a package-level function.
@@ -367,7 +367,7 @@ func (a *Assertions) Failf(failureMessage string, msg string, args ...any) bool 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Fail(a.T, failureMessage, forwardArgs(msg, args))
+	return assertions.Fail(a.T, failureMessage, forwardArgs(msg, args)...)
 }
 
 // FailNow is the same as [FailNow], as a method rather than a package-level function.
@@ -387,7 +387,7 @@ func (a *Assertions) FailNowf(failureMessage string, msg string, args ...any) bo
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.FailNow(a.T, failureMessage, forwardArgs(msg, args))
+	return assertions.FailNow(a.T, failureMessage, forwardArgs(msg, args)...)
 }
 
 // False is the same as [False], as a method rather than a package-level function.
@@ -407,7 +407,7 @@ func (a *Assertions) Falsef(value bool, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.False(a.T, value, forwardArgs(msg, args))
+	return assertions.False(a.T, value, forwardArgs(msg, args)...)
 }
 
 // FileEmpty is the same as [FileEmpty], as a method rather than a package-level function.
@@ -427,7 +427,7 @@ func (a *Assertions) FileEmptyf(path string, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.FileEmpty(a.T, path, forwardArgs(msg, args))
+	return assertions.FileEmpty(a.T, path, forwardArgs(msg, args)...)
 }
 
 // FileExists is the same as [FileExists], as a method rather than a package-level function.
@@ -447,7 +447,7 @@ func (a *Assertions) FileExistsf(path string, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.FileExists(a.T, path, forwardArgs(msg, args))
+	return assertions.FileExists(a.T, path, forwardArgs(msg, args)...)
 }
 
 // FileNotEmpty is the same as [FileNotEmpty], as a method rather than a package-level function.
@@ -467,7 +467,7 @@ func (a *Assertions) FileNotEmptyf(path string, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.FileNotEmpty(a.T, path, forwardArgs(msg, args))
+	return assertions.FileNotEmpty(a.T, path, forwardArgs(msg, args)...)
 }
 
 // FileNotExists is the same as [FileNotExists], as a method rather than a package-level function.
@@ -487,7 +487,7 @@ func (a *Assertions) FileNotExistsf(path string, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.FileNotExists(a.T, path, forwardArgs(msg, args))
+	return assertions.FileNotExists(a.T, path, forwardArgs(msg, args)...)
 }
 
 // Greater is the same as [Greater], as a method rather than a package-level function.
@@ -507,7 +507,7 @@ func (a *Assertions) Greaterf(e1 any, e2 any, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Greater(a.T, e1, e2, forwardArgs(msg, args))
+	return assertions.Greater(a.T, e1, e2, forwardArgs(msg, args)...)
 }
 
 // GreaterOrEqual is the same as [GreaterOrEqual], as a method rather than a package-level function.
@@ -527,7 +527,7 @@ func (a *Assertions) GreaterOrEqualf(e1 any, e2 any, msg string, args ...any) bo
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.GreaterOrEqual(a.T, e1, e2, forwardArgs(msg, args))
+	return assertions.GreaterOrEqual(a.T, e1, e2, forwardArgs(msg, args)...)
 }
 
 // HTTPBodyContains is the same as [HTTPBodyContains], as a method rather than a package-level function.
@@ -547,7 +547,7 @@ func (a *Assertions) HTTPBodyContainsf(handler http.HandlerFunc, method string, 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.HTTPBodyContains(a.T, handler, method, url, values, str, forwardArgs(msg, args))
+	return assertions.HTTPBodyContains(a.T, handler, method, url, values, str, forwardArgs(msg, args)...)
 }
 
 // HTTPBodyNotContains is the same as [HTTPBodyNotContains], as a method rather than a package-level function.
@@ -567,7 +567,7 @@ func (a *Assertions) HTTPBodyNotContainsf(handler http.HandlerFunc, method strin
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.HTTPBodyNotContains(a.T, handler, method, url, values, str, forwardArgs(msg, args))
+	return assertions.HTTPBodyNotContains(a.T, handler, method, url, values, str, forwardArgs(msg, args)...)
 }
 
 // HTTPError is the same as [HTTPError], as a method rather than a package-level function.
@@ -587,7 +587,7 @@ func (a *Assertions) HTTPErrorf(handler http.HandlerFunc, method string, url str
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.HTTPError(a.T, handler, method, url, values, forwardArgs(msg, args))
+	return assertions.HTTPError(a.T, handler, method, url, values, forwardArgs(msg, args)...)
 }
 
 // HTTPRedirect is the same as [HTTPRedirect], as a method rather than a package-level function.
@@ -607,7 +607,7 @@ func (a *Assertions) HTTPRedirectf(handler http.HandlerFunc, method string, url 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.HTTPRedirect(a.T, handler, method, url, values, forwardArgs(msg, args))
+	return assertions.HTTPRedirect(a.T, handler, method, url, values, forwardArgs(msg, args)...)
 }
 
 // HTTPStatusCode is the same as [HTTPStatusCode], as a method rather than a package-level function.
@@ -627,7 +627,7 @@ func (a *Assertions) HTTPStatusCodef(handler http.HandlerFunc, method string, ur
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.HTTPStatusCode(a.T, handler, method, url, values, statuscode, forwardArgs(msg, args))
+	return assertions.HTTPStatusCode(a.T, handler, method, url, values, statuscode, forwardArgs(msg, args)...)
 }
 
 // HTTPSuccess is the same as [HTTPSuccess], as a method rather than a package-level function.
@@ -647,7 +647,7 @@ func (a *Assertions) HTTPSuccessf(handler http.HandlerFunc, method string, url s
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.HTTPSuccess(a.T, handler, method, url, values, forwardArgs(msg, args))
+	return assertions.HTTPSuccess(a.T, handler, method, url, values, forwardArgs(msg, args)...)
 }
 
 // Implements is the same as [Implements], as a method rather than a package-level function.
@@ -667,7 +667,7 @@ func (a *Assertions) Implementsf(interfaceObject any, object any, msg string, ar
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Implements(a.T, interfaceObject, object, forwardArgs(msg, args))
+	return assertions.Implements(a.T, interfaceObject, object, forwardArgs(msg, args)...)
 }
 
 // InDelta is the same as [InDelta], as a method rather than a package-level function.
@@ -687,7 +687,7 @@ func (a *Assertions) InDeltaf(expected any, actual any, delta float64, msg strin
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.InDelta(a.T, expected, actual, delta, forwardArgs(msg, args))
+	return assertions.InDelta(a.T, expected, actual, delta, forwardArgs(msg, args)...)
 }
 
 // InDeltaMapValues is the same as [InDeltaMapValues], as a method rather than a package-level function.
@@ -707,7 +707,7 @@ func (a *Assertions) InDeltaMapValuesf(expected any, actual any, delta float64, 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.InDeltaMapValues(a.T, expected, actual, delta, forwardArgs(msg, args))
+	return assertions.InDeltaMapValues(a.T, expected, actual, delta, forwardArgs(msg, args)...)
 }
 
 // InDeltaSlice is the same as [InDeltaSlice], as a method rather than a package-level function.
@@ -727,7 +727,7 @@ func (a *Assertions) InDeltaSlicef(expected any, actual any, delta float64, msg 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.InDeltaSlice(a.T, expected, actual, delta, forwardArgs(msg, args))
+	return assertions.InDeltaSlice(a.T, expected, actual, delta, forwardArgs(msg, args)...)
 }
 
 // InEpsilon is the same as [InEpsilon], as a method rather than a package-level function.
@@ -747,7 +747,7 @@ func (a *Assertions) InEpsilonf(expected any, actual any, epsilon float64, msg s
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.InEpsilon(a.T, expected, actual, epsilon, forwardArgs(msg, args))
+	return assertions.InEpsilon(a.T, expected, actual, epsilon, forwardArgs(msg, args)...)
 }
 
 // InEpsilonSlice is the same as [InEpsilonSlice], as a method rather than a package-level function.
@@ -767,7 +767,7 @@ func (a *Assertions) InEpsilonSlicef(expected any, actual any, epsilon float64, 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.InEpsilonSlice(a.T, expected, actual, epsilon, forwardArgs(msg, args))
+	return assertions.InEpsilonSlice(a.T, expected, actual, epsilon, forwardArgs(msg, args)...)
 }
 
 // InEpsilonSymmetric is the same as [InEpsilonSymmetric], as a method rather than a package-level function.
@@ -787,7 +787,7 @@ func (a *Assertions) InEpsilonSymmetricf(x any, y any, epsilon float64, msg stri
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.InEpsilonSymmetric(a.T, x, y, epsilon, forwardArgs(msg, args))
+	return assertions.InEpsilonSymmetric(a.T, x, y, epsilon, forwardArgs(msg, args)...)
 }
 
 // IsDecreasing is the same as [IsDecreasing], as a method rather than a package-level function.
@@ -807,7 +807,7 @@ func (a *Assertions) IsDecreasingf(collection any, msg string, args ...any) bool
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsDecreasing(a.T, collection, forwardArgs(msg, args))
+	return assertions.IsDecreasing(a.T, collection, forwardArgs(msg, args)...)
 }
 
 // IsIncreasing is the same as [IsIncreasing], as a method rather than a package-level function.
@@ -827,7 +827,7 @@ func (a *Assertions) IsIncreasingf(collection any, msg string, args ...any) bool
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsIncreasing(a.T, collection, forwardArgs(msg, args))
+	return assertions.IsIncreasing(a.T, collection, forwardArgs(msg, args)...)
 }
 
 // IsNonDecreasing is the same as [IsNonDecreasing], as a method rather than a package-level function.
@@ -847,7 +847,7 @@ func (a *Assertions) IsNonDecreasingf(collection any, msg string, args ...any) b
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsNonDecreasing(a.T, collection, forwardArgs(msg, args))
+	return assertions.IsNonDecreasing(a.T, collection, forwardArgs(msg, args)...)
 }
 
 // IsNonIncreasing is the same as [IsNonIncreasing], as a method rather than a package-level function.
@@ -867,7 +867,7 @@ func (a *Assertions) IsNonIncreasingf(collection any, msg string, args ...any) b
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsNonIncreasing(a.T, collection, forwardArgs(msg, args))
+	return assertions.IsNonIncreasing(a.T, collection, forwardArgs(msg, args)...)
 }
 
 // IsNotType is the same as [IsNotType], as a method rather than a package-level function.
@@ -887,7 +887,7 @@ func (a *Assertions) IsNotTypef(theType any, object any, msg string, args ...any
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsNotType(a.T, theType, object, forwardArgs(msg, args))
+	return assertions.IsNotType(a.T, theType, object, forwardArgs(msg, args)...)
 }
 
 // IsType is the same as [IsType], as a method rather than a package-level function.
@@ -907,7 +907,7 @@ func (a *Assertions) IsTypef(expectedType any, object any, msg string, args ...a
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.IsType(a.T, expectedType, object, forwardArgs(msg, args))
+	return assertions.IsType(a.T, expectedType, object, forwardArgs(msg, args)...)
 }
 
 // JSONEq is the same as [JSONEq], as a method rather than a package-level function.
@@ -927,7 +927,7 @@ func (a *Assertions) JSONEqf(expected string, actual string, msg string, args ..
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.JSONEq(a.T, expected, actual, forwardArgs(msg, args))
+	return assertions.JSONEq(a.T, expected, actual, forwardArgs(msg, args)...)
 }
 
 // JSONEqBytes is the same as [JSONEqBytes], as a method rather than a package-level function.
@@ -947,7 +947,7 @@ func (a *Assertions) JSONEqBytesf(expected []byte, actual []byte, msg string, ar
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.JSONEqBytes(a.T, expected, actual, forwardArgs(msg, args))
+	return assertions.JSONEqBytes(a.T, expected, actual, forwardArgs(msg, args)...)
 }
 
 // Kind is the same as [Kind], as a method rather than a package-level function.
@@ -967,7 +967,7 @@ func (a *Assertions) Kindf(expectedKind reflect.Kind, object any, msg string, ar
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Kind(a.T, expectedKind, object, forwardArgs(msg, args))
+	return assertions.Kind(a.T, expectedKind, object, forwardArgs(msg, args)...)
 }
 
 // Len is the same as [Len], as a method rather than a package-level function.
@@ -987,7 +987,7 @@ func (a *Assertions) Lenf(object any, length int, msg string, args ...any) bool 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Len(a.T, object, length, forwardArgs(msg, args))
+	return assertions.Len(a.T, object, length, forwardArgs(msg, args)...)
 }
 
 // Less is the same as [Less], as a method rather than a package-level function.
@@ -1007,7 +1007,7 @@ func (a *Assertions) Lessf(e1 any, e2 any, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Less(a.T, e1, e2, forwardArgs(msg, args))
+	return assertions.Less(a.T, e1, e2, forwardArgs(msg, args)...)
 }
 
 // LessOrEqual is the same as [LessOrEqual], as a method rather than a package-level function.
@@ -1027,7 +1027,7 @@ func (a *Assertions) LessOrEqualf(e1 any, e2 any, msg string, args ...any) bool 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.LessOrEqual(a.T, e1, e2, forwardArgs(msg, args))
+	return assertions.LessOrEqual(a.T, e1, e2, forwardArgs(msg, args)...)
 }
 
 // Negative is the same as [Negative], as a method rather than a package-level function.
@@ -1047,7 +1047,7 @@ func (a *Assertions) Negativef(e any, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Negative(a.T, e, forwardArgs(msg, args))
+	return assertions.Negative(a.T, e, forwardArgs(msg, args)...)
 }
 
 // Nil is the same as [Nil], as a method rather than a package-level function.
@@ -1067,7 +1067,7 @@ func (a *Assertions) Nilf(object any, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Nil(a.T, object, forwardArgs(msg, args))
+	return assertions.Nil(a.T, object, forwardArgs(msg, args)...)
 }
 
 // NoError is the same as [NoError], as a method rather than a package-level function.
@@ -1087,7 +1087,7 @@ func (a *Assertions) NoErrorf(err error, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NoError(a.T, err, forwardArgs(msg, args))
+	return assertions.NoError(a.T, err, forwardArgs(msg, args)...)
 }
 
 // NoFileDescriptorLeak is the same as [NoFileDescriptorLeak], as a method rather than a package-level function.
@@ -1107,7 +1107,7 @@ func (a *Assertions) NoFileDescriptorLeakf(tested func(), msg string, args ...an
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NoFileDescriptorLeak(a.T, tested, forwardArgs(msg, args))
+	return assertions.NoFileDescriptorLeak(a.T, tested, forwardArgs(msg, args)...)
 }
 
 // NoGoRoutineLeak is the same as [NoGoRoutineLeak], as a method rather than a package-level function.
@@ -1127,7 +1127,7 @@ func (a *Assertions) NoGoRoutineLeakf(tested func(), msg string, args ...any) bo
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NoGoRoutineLeak(a.T, tested, forwardArgs(msg, args))
+	return assertions.NoGoRoutineLeak(a.T, tested, forwardArgs(msg, args)...)
 }
 
 // NotBlocked is the same as [NotBlocked], as a method rather than a package-level function.
@@ -1147,7 +1147,7 @@ func (a *Assertions) NotBlockedf(ch any, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NotBlocked(a.T, ch, forwardArgs(msg, args))
+	return assertions.NotBlocked(a.T, ch, forwardArgs(msg, args)...)
 }
 
 // NotContains is the same as [NotContains], as a method rather than a package-level function.
@@ -1167,7 +1167,7 @@ func (a *Assertions) NotContainsf(s any, contains any, msg string, args ...any) 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NotContains(a.T, s, contains, forwardArgs(msg, args))
+	return assertions.NotContains(a.T, s, contains, forwardArgs(msg, args)...)
 }
 
 // NotElementsMatch is the same as [NotElementsMatch], as a method rather than a package-level function.
@@ -1187,7 +1187,7 @@ func (a *Assertions) NotElementsMatchf(listA any, listB any, msg string, args ..
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NotElementsMatch(a.T, listA, listB, forwardArgs(msg, args))
+	return assertions.NotElementsMatch(a.T, listA, listB, forwardArgs(msg, args)...)
 }
 
 // NotEmpty is the same as [NotEmpty], as a method rather than a package-level function.
@@ -1207,7 +1207,7 @@ func (a *Assertions) NotEmptyf(object any, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NotEmpty(a.T, object, forwardArgs(msg, args))
+	return assertions.NotEmpty(a.T, object, forwardArgs(msg, args)...)
 }
 
 // NotEqual is the same as [NotEqual], as a method rather than a package-level function.
@@ -1227,7 +1227,7 @@ func (a *Assertions) NotEqualf(expected any, actual any, msg string, args ...any
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NotEqual(a.T, expected, actual, forwardArgs(msg, args))
+	return assertions.NotEqual(a.T, expected, actual, forwardArgs(msg, args)...)
 }
 
 // NotEqualValues is the same as [NotEqualValues], as a method rather than a package-level function.
@@ -1247,7 +1247,7 @@ func (a *Assertions) NotEqualValuesf(expected any, actual any, msg string, args 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NotEqualValues(a.T, expected, actual, forwardArgs(msg, args))
+	return assertions.NotEqualValues(a.T, expected, actual, forwardArgs(msg, args)...)
 }
 
 // NotErrorAs is the same as [NotErrorAs], as a method rather than a package-level function.
@@ -1267,7 +1267,7 @@ func (a *Assertions) NotErrorAsf(err error, target any, msg string, args ...any)
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NotErrorAs(a.T, err, target, forwardArgs(msg, args))
+	return assertions.NotErrorAs(a.T, err, target, forwardArgs(msg, args)...)
 }
 
 // NotErrorIs is the same as [NotErrorIs], as a method rather than a package-level function.
@@ -1287,7 +1287,7 @@ func (a *Assertions) NotErrorIsf(err error, target error, msg string, args ...an
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NotErrorIs(a.T, err, target, forwardArgs(msg, args))
+	return assertions.NotErrorIs(a.T, err, target, forwardArgs(msg, args)...)
 }
 
 // NotImplements is the same as [NotImplements], as a method rather than a package-level function.
@@ -1307,7 +1307,7 @@ func (a *Assertions) NotImplementsf(interfaceObject any, object any, msg string,
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NotImplements(a.T, interfaceObject, object, forwardArgs(msg, args))
+	return assertions.NotImplements(a.T, interfaceObject, object, forwardArgs(msg, args)...)
 }
 
 // NotKind is the same as [NotKind], as a method rather than a package-level function.
@@ -1327,7 +1327,7 @@ func (a *Assertions) NotKindf(expectedKind reflect.Kind, object any, msg string,
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NotKind(a.T, expectedKind, object, forwardArgs(msg, args))
+	return assertions.NotKind(a.T, expectedKind, object, forwardArgs(msg, args)...)
 }
 
 // NotNil is the same as [NotNil], as a method rather than a package-level function.
@@ -1347,7 +1347,7 @@ func (a *Assertions) NotNilf(object any, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NotNil(a.T, object, forwardArgs(msg, args))
+	return assertions.NotNil(a.T, object, forwardArgs(msg, args)...)
 }
 
 // NotPanics is the same as [NotPanics], as a method rather than a package-level function.
@@ -1367,7 +1367,7 @@ func (a *Assertions) NotPanicsf(f func(), msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NotPanics(a.T, f, forwardArgs(msg, args))
+	return assertions.NotPanics(a.T, f, forwardArgs(msg, args)...)
 }
 
 // NotRegexp is the same as [NotRegexp], as a method rather than a package-level function.
@@ -1387,7 +1387,7 @@ func (a *Assertions) NotRegexpf(rx any, actual any, msg string, args ...any) boo
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NotRegexp(a.T, rx, actual, forwardArgs(msg, args))
+	return assertions.NotRegexp(a.T, rx, actual, forwardArgs(msg, args)...)
 }
 
 // NotSame is the same as [NotSame], as a method rather than a package-level function.
@@ -1407,7 +1407,7 @@ func (a *Assertions) NotSamef(expected any, actual any, msg string, args ...any)
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NotSame(a.T, expected, actual, forwardArgs(msg, args))
+	return assertions.NotSame(a.T, expected, actual, forwardArgs(msg, args)...)
 }
 
 // NotSubset is the same as [NotSubset], as a method rather than a package-level function.
@@ -1427,7 +1427,7 @@ func (a *Assertions) NotSubsetf(list any, subset any, msg string, args ...any) (
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NotSubset(a.T, list, subset, forwardArgs(msg, args))
+	return assertions.NotSubset(a.T, list, subset, forwardArgs(msg, args)...)
 }
 
 // NotZero is the same as [NotZero], as a method rather than a package-level function.
@@ -1447,7 +1447,7 @@ func (a *Assertions) NotZerof(i any, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.NotZero(a.T, i, forwardArgs(msg, args))
+	return assertions.NotZero(a.T, i, forwardArgs(msg, args)...)
 }
 
 // Panics is the same as [Panics], as a method rather than a package-level function.
@@ -1467,7 +1467,7 @@ func (a *Assertions) Panicsf(f func(), msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Panics(a.T, f, forwardArgs(msg, args))
+	return assertions.Panics(a.T, f, forwardArgs(msg, args)...)
 }
 
 // PanicsWithError is the same as [PanicsWithError], as a method rather than a package-level function.
@@ -1487,7 +1487,7 @@ func (a *Assertions) PanicsWithErrorf(errString string, f func(), msg string, ar
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.PanicsWithError(a.T, errString, f, forwardArgs(msg, args))
+	return assertions.PanicsWithError(a.T, errString, f, forwardArgs(msg, args)...)
 }
 
 // PanicsWithValue is the same as [PanicsWithValue], as a method rather than a package-level function.
@@ -1507,7 +1507,7 @@ func (a *Assertions) PanicsWithValuef(expected any, f func(), msg string, args .
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.PanicsWithValue(a.T, expected, f, forwardArgs(msg, args))
+	return assertions.PanicsWithValue(a.T, expected, f, forwardArgs(msg, args)...)
 }
 
 // Positive is the same as [Positive], as a method rather than a package-level function.
@@ -1527,7 +1527,7 @@ func (a *Assertions) Positivef(e any, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Positive(a.T, e, forwardArgs(msg, args))
+	return assertions.Positive(a.T, e, forwardArgs(msg, args)...)
 }
 
 // Regexp is the same as [Regexp], as a method rather than a package-level function.
@@ -1547,7 +1547,7 @@ func (a *Assertions) Regexpf(rx any, actual any, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Regexp(a.T, rx, actual, forwardArgs(msg, args))
+	return assertions.Regexp(a.T, rx, actual, forwardArgs(msg, args)...)
 }
 
 // Same is the same as [Same], as a method rather than a package-level function.
@@ -1567,7 +1567,7 @@ func (a *Assertions) Samef(expected any, actual any, msg string, args ...any) bo
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Same(a.T, expected, actual, forwardArgs(msg, args))
+	return assertions.Same(a.T, expected, actual, forwardArgs(msg, args)...)
 }
 
 // Subset is the same as [Subset], as a method rather than a package-level function.
@@ -1587,7 +1587,7 @@ func (a *Assertions) Subsetf(list any, subset any, msg string, args ...any) (ok 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Subset(a.T, list, subset, forwardArgs(msg, args))
+	return assertions.Subset(a.T, list, subset, forwardArgs(msg, args)...)
 }
 
 // True is the same as [True], as a method rather than a package-level function.
@@ -1607,7 +1607,7 @@ func (a *Assertions) Truef(value bool, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.True(a.T, value, forwardArgs(msg, args))
+	return assertions.True(a.T, value, forwardArgs(msg, args)...)
 }
 
 // WithinDuration is the same as [WithinDuration], as a method rather than a package-level function.
@@ -1627,7 +1627,7 @@ func (a *Assertions) WithinDurationf(expected time.Time, actual time.Time, delta
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.WithinDuration(a.T, expected, actual, delta, forwardArgs(msg, args))
+	return assertions.WithinDuration(a.T, expected, actual, delta, forwardArgs(msg, args)...)
 }
 
 // WithinRange is the same as [WithinRange], as a method rather than a package-level function.
@@ -1647,7 +1647,7 @@ func (a *Assertions) WithinRangef(actual time.Time, start time.Time, end time.Ti
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.WithinRange(a.T, actual, start, end, forwardArgs(msg, args))
+	return assertions.WithinRange(a.T, actual, start, end, forwardArgs(msg, args)...)
 }
 
 // YAMLEq is the same as [YAMLEq], as a method rather than a package-level function.
@@ -1667,7 +1667,7 @@ func (a *Assertions) YAMLEqf(expected string, actual string, msg string, args ..
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.YAMLEq(a.T, expected, actual, forwardArgs(msg, args))
+	return assertions.YAMLEq(a.T, expected, actual, forwardArgs(msg, args)...)
 }
 
 // YAMLEqBytes is the same as [YAMLEqBytes], as a method rather than a package-level function.
@@ -1687,7 +1687,7 @@ func (a *Assertions) YAMLEqBytesf(expected []byte, actual []byte, msg string, ar
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.YAMLEqBytes(a.T, expected, actual, forwardArgs(msg, args))
+	return assertions.YAMLEqBytes(a.T, expected, actual, forwardArgs(msg, args)...)
 }
 
 // Zero is the same as [Zero], as a method rather than a package-level function.
@@ -1707,5 +1707,5 @@ func (a *Assertions) Zerof(i any, msg string, args ...any) bool {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	return assertions.Zero(a.T, i, forwardArgs(msg, args))
+	return assertions.Zero(a.T, i, forwardArgs(msg, args)...)
 }
