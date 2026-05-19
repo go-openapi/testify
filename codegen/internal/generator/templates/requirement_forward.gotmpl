@@ -55,9 +55,9 @@ func (a *{{ $.Receiver }}){{ .Name }}f({{ params .Params }}, msg string, args ..
     h.Helper()
   }
     {{- if or (eq .Name "Fail") (eq .Name "FailNow") }}{{/* special sema.Tics for these two, which can only fail */}}
-	_ = {{ .TargetPackage }}.{{ .Name }}(a.T, {{ forward .Params }}, forwardArgs(msg, args))
+	_ = {{ .TargetPackage }}.{{ .Name }}(a.T, {{ forward .Params }}, forwardArgs(msg, args)...)
     {{- else }}
-	if {{ .TargetPackage }}.{{ .Name }}(a.T, {{ forward .Params }}, forwardArgs(msg, args)) {
+	if {{ .TargetPackage }}.{{ .Name }}(a.T, {{ forward .Params }}, forwardArgs(msg, args)...) {
 		return
 	}
     {{- end }}

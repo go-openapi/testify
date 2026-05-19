@@ -51,7 +51,7 @@ func (a *Assertions) Blockedf(ch any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Blocked(a.T, ch, forwardArgs(msg, args)) {
+	if assertions.Blocked(a.T, ch, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -79,7 +79,7 @@ func (a *Assertions) Conditionf(comp func() bool, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Condition(a.T, comp, forwardArgs(msg, args)) {
+	if assertions.Condition(a.T, comp, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -107,7 +107,7 @@ func (a *Assertions) Containsf(s any, contains any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Contains(a.T, s, contains, forwardArgs(msg, args)) {
+	if assertions.Contains(a.T, s, contains, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -135,7 +135,7 @@ func (a *Assertions) DirExistsf(path string, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.DirExists(a.T, path, forwardArgs(msg, args)) {
+	if assertions.DirExists(a.T, path, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -163,7 +163,7 @@ func (a *Assertions) DirNotExistsf(path string, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.DirNotExists(a.T, path, forwardArgs(msg, args)) {
+	if assertions.DirNotExists(a.T, path, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -191,7 +191,7 @@ func (a *Assertions) ElementsMatchf(listA any, listB any, msg string, args ...an
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.ElementsMatch(a.T, listA, listB, forwardArgs(msg, args)) {
+	if assertions.ElementsMatch(a.T, listA, listB, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -219,7 +219,7 @@ func (a *Assertions) Emptyf(object any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Empty(a.T, object, forwardArgs(msg, args)) {
+	if assertions.Empty(a.T, object, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -247,7 +247,7 @@ func (a *Assertions) Equalf(expected any, actual any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Equal(a.T, expected, actual, forwardArgs(msg, args)) {
+	if assertions.Equal(a.T, expected, actual, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -275,7 +275,7 @@ func (a *Assertions) EqualErrorf(err error, errString string, msg string, args .
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.EqualError(a.T, err, errString, forwardArgs(msg, args)) {
+	if assertions.EqualError(a.T, err, errString, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -303,7 +303,7 @@ func (a *Assertions) EqualExportedValuesf(expected any, actual any, msg string, 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.EqualExportedValues(a.T, expected, actual, forwardArgs(msg, args)) {
+	if assertions.EqualExportedValues(a.T, expected, actual, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -331,7 +331,7 @@ func (a *Assertions) EqualValuesf(expected any, actual any, msg string, args ...
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.EqualValues(a.T, expected, actual, forwardArgs(msg, args)) {
+	if assertions.EqualValues(a.T, expected, actual, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -359,7 +359,7 @@ func (a *Assertions) Errorf(err error, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Error(a.T, err, forwardArgs(msg, args)) {
+	if assertions.Error(a.T, err, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -387,7 +387,7 @@ func (a *Assertions) ErrorAsf(err error, target any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.ErrorAs(a.T, err, target, forwardArgs(msg, args)) {
+	if assertions.ErrorAs(a.T, err, target, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -415,7 +415,7 @@ func (a *Assertions) ErrorContainsf(err error, contains string, msg string, args
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.ErrorContains(a.T, err, contains, forwardArgs(msg, args)) {
+	if assertions.ErrorContains(a.T, err, contains, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -443,7 +443,7 @@ func (a *Assertions) ErrorIsf(err error, target error, msg string, args ...any) 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.ErrorIs(a.T, err, target, forwardArgs(msg, args)) {
+	if assertions.ErrorIs(a.T, err, target, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -471,7 +471,7 @@ func (a *Assertions) Exactlyf(expected any, actual any, msg string, args ...any)
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Exactly(a.T, expected, actual, forwardArgs(msg, args)) {
+	if assertions.Exactly(a.T, expected, actual, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -497,7 +497,7 @@ func (a *Assertions) Failf(failureMessage string, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	_ = assertions.Fail(a.T, failureMessage, forwardArgs(msg, args))
+	_ = assertions.Fail(a.T, failureMessage, forwardArgs(msg, args)...)
 
 	a.T.FailNow()
 }
@@ -521,7 +521,7 @@ func (a *Assertions) FailNowf(failureMessage string, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	_ = assertions.FailNow(a.T, failureMessage, forwardArgs(msg, args))
+	_ = assertions.FailNow(a.T, failureMessage, forwardArgs(msg, args)...)
 
 	a.T.FailNow()
 }
@@ -547,7 +547,7 @@ func (a *Assertions) Falsef(value bool, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.False(a.T, value, forwardArgs(msg, args)) {
+	if assertions.False(a.T, value, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -575,7 +575,7 @@ func (a *Assertions) FileEmptyf(path string, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.FileEmpty(a.T, path, forwardArgs(msg, args)) {
+	if assertions.FileEmpty(a.T, path, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -603,7 +603,7 @@ func (a *Assertions) FileExistsf(path string, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.FileExists(a.T, path, forwardArgs(msg, args)) {
+	if assertions.FileExists(a.T, path, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -631,7 +631,7 @@ func (a *Assertions) FileNotEmptyf(path string, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.FileNotEmpty(a.T, path, forwardArgs(msg, args)) {
+	if assertions.FileNotEmpty(a.T, path, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -659,7 +659,7 @@ func (a *Assertions) FileNotExistsf(path string, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.FileNotExists(a.T, path, forwardArgs(msg, args)) {
+	if assertions.FileNotExists(a.T, path, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -687,7 +687,7 @@ func (a *Assertions) Greaterf(e1 any, e2 any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Greater(a.T, e1, e2, forwardArgs(msg, args)) {
+	if assertions.Greater(a.T, e1, e2, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -715,7 +715,7 @@ func (a *Assertions) GreaterOrEqualf(e1 any, e2 any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.GreaterOrEqual(a.T, e1, e2, forwardArgs(msg, args)) {
+	if assertions.GreaterOrEqual(a.T, e1, e2, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -743,7 +743,7 @@ func (a *Assertions) HTTPBodyContainsf(handler http.HandlerFunc, method string, 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.HTTPBodyContains(a.T, handler, method, url, values, str, forwardArgs(msg, args)) {
+	if assertions.HTTPBodyContains(a.T, handler, method, url, values, str, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -771,7 +771,7 @@ func (a *Assertions) HTTPBodyNotContainsf(handler http.HandlerFunc, method strin
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.HTTPBodyNotContains(a.T, handler, method, url, values, str, forwardArgs(msg, args)) {
+	if assertions.HTTPBodyNotContains(a.T, handler, method, url, values, str, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -799,7 +799,7 @@ func (a *Assertions) HTTPErrorf(handler http.HandlerFunc, method string, url str
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.HTTPError(a.T, handler, method, url, values, forwardArgs(msg, args)) {
+	if assertions.HTTPError(a.T, handler, method, url, values, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -827,7 +827,7 @@ func (a *Assertions) HTTPRedirectf(handler http.HandlerFunc, method string, url 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.HTTPRedirect(a.T, handler, method, url, values, forwardArgs(msg, args)) {
+	if assertions.HTTPRedirect(a.T, handler, method, url, values, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -855,7 +855,7 @@ func (a *Assertions) HTTPStatusCodef(handler http.HandlerFunc, method string, ur
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.HTTPStatusCode(a.T, handler, method, url, values, statuscode, forwardArgs(msg, args)) {
+	if assertions.HTTPStatusCode(a.T, handler, method, url, values, statuscode, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -883,7 +883,7 @@ func (a *Assertions) HTTPSuccessf(handler http.HandlerFunc, method string, url s
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.HTTPSuccess(a.T, handler, method, url, values, forwardArgs(msg, args)) {
+	if assertions.HTTPSuccess(a.T, handler, method, url, values, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -911,7 +911,7 @@ func (a *Assertions) Implementsf(interfaceObject any, object any, msg string, ar
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Implements(a.T, interfaceObject, object, forwardArgs(msg, args)) {
+	if assertions.Implements(a.T, interfaceObject, object, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -939,7 +939,7 @@ func (a *Assertions) InDeltaf(expected any, actual any, delta float64, msg strin
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.InDelta(a.T, expected, actual, delta, forwardArgs(msg, args)) {
+	if assertions.InDelta(a.T, expected, actual, delta, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -967,7 +967,7 @@ func (a *Assertions) InDeltaMapValuesf(expected any, actual any, delta float64, 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.InDeltaMapValues(a.T, expected, actual, delta, forwardArgs(msg, args)) {
+	if assertions.InDeltaMapValues(a.T, expected, actual, delta, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -995,7 +995,7 @@ func (a *Assertions) InDeltaSlicef(expected any, actual any, delta float64, msg 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.InDeltaSlice(a.T, expected, actual, delta, forwardArgs(msg, args)) {
+	if assertions.InDeltaSlice(a.T, expected, actual, delta, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1023,7 +1023,7 @@ func (a *Assertions) InEpsilonf(expected any, actual any, epsilon float64, msg s
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.InEpsilon(a.T, expected, actual, epsilon, forwardArgs(msg, args)) {
+	if assertions.InEpsilon(a.T, expected, actual, epsilon, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1051,7 +1051,7 @@ func (a *Assertions) InEpsilonSlicef(expected any, actual any, epsilon float64, 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.InEpsilonSlice(a.T, expected, actual, epsilon, forwardArgs(msg, args)) {
+	if assertions.InEpsilonSlice(a.T, expected, actual, epsilon, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1079,7 +1079,7 @@ func (a *Assertions) InEpsilonSymmetricf(x any, y any, epsilon float64, msg stri
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.InEpsilonSymmetric(a.T, x, y, epsilon, forwardArgs(msg, args)) {
+	if assertions.InEpsilonSymmetric(a.T, x, y, epsilon, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1107,7 +1107,7 @@ func (a *Assertions) IsDecreasingf(collection any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.IsDecreasing(a.T, collection, forwardArgs(msg, args)) {
+	if assertions.IsDecreasing(a.T, collection, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1135,7 +1135,7 @@ func (a *Assertions) IsIncreasingf(collection any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.IsIncreasing(a.T, collection, forwardArgs(msg, args)) {
+	if assertions.IsIncreasing(a.T, collection, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1163,7 +1163,7 @@ func (a *Assertions) IsNonDecreasingf(collection any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.IsNonDecreasing(a.T, collection, forwardArgs(msg, args)) {
+	if assertions.IsNonDecreasing(a.T, collection, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1191,7 +1191,7 @@ func (a *Assertions) IsNonIncreasingf(collection any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.IsNonIncreasing(a.T, collection, forwardArgs(msg, args)) {
+	if assertions.IsNonIncreasing(a.T, collection, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1219,7 +1219,7 @@ func (a *Assertions) IsNotTypef(theType any, object any, msg string, args ...any
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.IsNotType(a.T, theType, object, forwardArgs(msg, args)) {
+	if assertions.IsNotType(a.T, theType, object, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1247,7 +1247,7 @@ func (a *Assertions) IsTypef(expectedType any, object any, msg string, args ...a
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.IsType(a.T, expectedType, object, forwardArgs(msg, args)) {
+	if assertions.IsType(a.T, expectedType, object, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1275,7 +1275,7 @@ func (a *Assertions) JSONEqf(expected string, actual string, msg string, args ..
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.JSONEq(a.T, expected, actual, forwardArgs(msg, args)) {
+	if assertions.JSONEq(a.T, expected, actual, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1303,7 +1303,7 @@ func (a *Assertions) JSONEqBytesf(expected []byte, actual []byte, msg string, ar
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.JSONEqBytes(a.T, expected, actual, forwardArgs(msg, args)) {
+	if assertions.JSONEqBytes(a.T, expected, actual, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1331,7 +1331,7 @@ func (a *Assertions) Kindf(expectedKind reflect.Kind, object any, msg string, ar
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Kind(a.T, expectedKind, object, forwardArgs(msg, args)) {
+	if assertions.Kind(a.T, expectedKind, object, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1359,7 +1359,7 @@ func (a *Assertions) Lenf(object any, length int, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Len(a.T, object, length, forwardArgs(msg, args)) {
+	if assertions.Len(a.T, object, length, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1387,7 +1387,7 @@ func (a *Assertions) Lessf(e1 any, e2 any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Less(a.T, e1, e2, forwardArgs(msg, args)) {
+	if assertions.Less(a.T, e1, e2, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1415,7 +1415,7 @@ func (a *Assertions) LessOrEqualf(e1 any, e2 any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.LessOrEqual(a.T, e1, e2, forwardArgs(msg, args)) {
+	if assertions.LessOrEqual(a.T, e1, e2, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1443,7 +1443,7 @@ func (a *Assertions) Negativef(e any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Negative(a.T, e, forwardArgs(msg, args)) {
+	if assertions.Negative(a.T, e, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1471,7 +1471,7 @@ func (a *Assertions) Nilf(object any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Nil(a.T, object, forwardArgs(msg, args)) {
+	if assertions.Nil(a.T, object, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1499,7 +1499,7 @@ func (a *Assertions) NoErrorf(err error, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NoError(a.T, err, forwardArgs(msg, args)) {
+	if assertions.NoError(a.T, err, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1527,7 +1527,7 @@ func (a *Assertions) NoFileDescriptorLeakf(tested func(), msg string, args ...an
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NoFileDescriptorLeak(a.T, tested, forwardArgs(msg, args)) {
+	if assertions.NoFileDescriptorLeak(a.T, tested, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1555,7 +1555,7 @@ func (a *Assertions) NoGoRoutineLeakf(tested func(), msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NoGoRoutineLeak(a.T, tested, forwardArgs(msg, args)) {
+	if assertions.NoGoRoutineLeak(a.T, tested, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1583,7 +1583,7 @@ func (a *Assertions) NotBlockedf(ch any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotBlocked(a.T, ch, forwardArgs(msg, args)) {
+	if assertions.NotBlocked(a.T, ch, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1611,7 +1611,7 @@ func (a *Assertions) NotContainsf(s any, contains any, msg string, args ...any) 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotContains(a.T, s, contains, forwardArgs(msg, args)) {
+	if assertions.NotContains(a.T, s, contains, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1639,7 +1639,7 @@ func (a *Assertions) NotElementsMatchf(listA any, listB any, msg string, args ..
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotElementsMatch(a.T, listA, listB, forwardArgs(msg, args)) {
+	if assertions.NotElementsMatch(a.T, listA, listB, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1667,7 +1667,7 @@ func (a *Assertions) NotEmptyf(object any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotEmpty(a.T, object, forwardArgs(msg, args)) {
+	if assertions.NotEmpty(a.T, object, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1695,7 +1695,7 @@ func (a *Assertions) NotEqualf(expected any, actual any, msg string, args ...any
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotEqual(a.T, expected, actual, forwardArgs(msg, args)) {
+	if assertions.NotEqual(a.T, expected, actual, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1723,7 +1723,7 @@ func (a *Assertions) NotEqualValuesf(expected any, actual any, msg string, args 
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotEqualValues(a.T, expected, actual, forwardArgs(msg, args)) {
+	if assertions.NotEqualValues(a.T, expected, actual, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1751,7 +1751,7 @@ func (a *Assertions) NotErrorAsf(err error, target any, msg string, args ...any)
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotErrorAs(a.T, err, target, forwardArgs(msg, args)) {
+	if assertions.NotErrorAs(a.T, err, target, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1779,7 +1779,7 @@ func (a *Assertions) NotErrorIsf(err error, target error, msg string, args ...an
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotErrorIs(a.T, err, target, forwardArgs(msg, args)) {
+	if assertions.NotErrorIs(a.T, err, target, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1807,7 +1807,7 @@ func (a *Assertions) NotImplementsf(interfaceObject any, object any, msg string,
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotImplements(a.T, interfaceObject, object, forwardArgs(msg, args)) {
+	if assertions.NotImplements(a.T, interfaceObject, object, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1835,7 +1835,7 @@ func (a *Assertions) NotKindf(expectedKind reflect.Kind, object any, msg string,
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotKind(a.T, expectedKind, object, forwardArgs(msg, args)) {
+	if assertions.NotKind(a.T, expectedKind, object, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1863,7 +1863,7 @@ func (a *Assertions) NotNilf(object any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotNil(a.T, object, forwardArgs(msg, args)) {
+	if assertions.NotNil(a.T, object, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1891,7 +1891,7 @@ func (a *Assertions) NotPanicsf(f func(), msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotPanics(a.T, f, forwardArgs(msg, args)) {
+	if assertions.NotPanics(a.T, f, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1919,7 +1919,7 @@ func (a *Assertions) NotRegexpf(rx any, actual any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotRegexp(a.T, rx, actual, forwardArgs(msg, args)) {
+	if assertions.NotRegexp(a.T, rx, actual, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1947,7 +1947,7 @@ func (a *Assertions) NotSamef(expected any, actual any, msg string, args ...any)
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotSame(a.T, expected, actual, forwardArgs(msg, args)) {
+	if assertions.NotSame(a.T, expected, actual, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -1975,7 +1975,7 @@ func (a *Assertions) NotSubsetf(list any, subset any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotSubset(a.T, list, subset, forwardArgs(msg, args)) {
+	if assertions.NotSubset(a.T, list, subset, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -2003,7 +2003,7 @@ func (a *Assertions) NotZerof(i any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.NotZero(a.T, i, forwardArgs(msg, args)) {
+	if assertions.NotZero(a.T, i, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -2031,7 +2031,7 @@ func (a *Assertions) Panicsf(f func(), msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Panics(a.T, f, forwardArgs(msg, args)) {
+	if assertions.Panics(a.T, f, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -2059,7 +2059,7 @@ func (a *Assertions) PanicsWithErrorf(errString string, f func(), msg string, ar
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.PanicsWithError(a.T, errString, f, forwardArgs(msg, args)) {
+	if assertions.PanicsWithError(a.T, errString, f, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -2087,7 +2087,7 @@ func (a *Assertions) PanicsWithValuef(expected any, f func(), msg string, args .
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.PanicsWithValue(a.T, expected, f, forwardArgs(msg, args)) {
+	if assertions.PanicsWithValue(a.T, expected, f, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -2115,7 +2115,7 @@ func (a *Assertions) Positivef(e any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Positive(a.T, e, forwardArgs(msg, args)) {
+	if assertions.Positive(a.T, e, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -2143,7 +2143,7 @@ func (a *Assertions) Regexpf(rx any, actual any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Regexp(a.T, rx, actual, forwardArgs(msg, args)) {
+	if assertions.Regexp(a.T, rx, actual, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -2171,7 +2171,7 @@ func (a *Assertions) Samef(expected any, actual any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Same(a.T, expected, actual, forwardArgs(msg, args)) {
+	if assertions.Same(a.T, expected, actual, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -2199,7 +2199,7 @@ func (a *Assertions) Subsetf(list any, subset any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Subset(a.T, list, subset, forwardArgs(msg, args)) {
+	if assertions.Subset(a.T, list, subset, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -2227,7 +2227,7 @@ func (a *Assertions) Truef(value bool, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.True(a.T, value, forwardArgs(msg, args)) {
+	if assertions.True(a.T, value, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -2255,7 +2255,7 @@ func (a *Assertions) WithinDurationf(expected time.Time, actual time.Time, delta
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.WithinDuration(a.T, expected, actual, delta, forwardArgs(msg, args)) {
+	if assertions.WithinDuration(a.T, expected, actual, delta, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -2283,7 +2283,7 @@ func (a *Assertions) WithinRangef(actual time.Time, start time.Time, end time.Ti
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.WithinRange(a.T, actual, start, end, forwardArgs(msg, args)) {
+	if assertions.WithinRange(a.T, actual, start, end, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -2311,7 +2311,7 @@ func (a *Assertions) YAMLEqf(expected string, actual string, msg string, args ..
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.YAMLEq(a.T, expected, actual, forwardArgs(msg, args)) {
+	if assertions.YAMLEq(a.T, expected, actual, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -2339,7 +2339,7 @@ func (a *Assertions) YAMLEqBytesf(expected []byte, actual []byte, msg string, ar
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.YAMLEqBytes(a.T, expected, actual, forwardArgs(msg, args)) {
+	if assertions.YAMLEqBytes(a.T, expected, actual, forwardArgs(msg, args)...) {
 		return
 	}
 
@@ -2367,7 +2367,7 @@ func (a *Assertions) Zerof(i any, msg string, args ...any) {
 	if h, ok := a.T.(H); ok {
 		h.Helper()
 	}
-	if assertions.Zero(a.T, i, forwardArgs(msg, args)) {
+	if assertions.Zero(a.T, i, forwardArgs(msg, args)...) {
 		return
 	}
 

@@ -67,7 +67,7 @@ func typeAndKind(v any) (reflect.Type, reflect.Kind) {
 
 	k := t.Kind()
 
-	if k == reflect.Ptr {
+	if k == reflect.Pointer {
 		t = t.Elem()
 		k = t.Kind()
 	}

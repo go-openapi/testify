@@ -121,7 +121,7 @@ func isNil(object any) bool {
 	case
 		reflect.Chan, reflect.Func,
 		reflect.Interface, reflect.Map,
-		reflect.Ptr, reflect.Slice, reflect.UnsafePointer:
+		reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
 
 		return value.IsNil()
 	default:
@@ -151,7 +151,7 @@ func isEmptyValue(objValue reflect.Value) bool {
 	case reflect.Chan, reflect.Map, reflect.Slice:
 		return objValue.Len() == 0
 	// non-nil pointers are empty if the value they point to is empty
-	case reflect.Ptr:
+	case reflect.Pointer:
 		return isEmptyValue(objValue.Elem())
 	default:
 		return false

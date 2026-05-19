@@ -288,7 +288,7 @@ func kindCases() iter.Seq[kindCase] {
 		{reflect.Float64, 0.0345, true, "is float64"},
 		{reflect.Map, make(map[string]int), true, "is map"},
 		{reflect.Bool, true, true, "is bool"},
-		{reflect.Ptr, new(int), true, "is pointer"},
+		{reflect.Pointer, new(int), true, "is pointer"},
 		// False cases
 		{reflect.String, 13, false, "not string"},
 		{reflect.Int, [6]int{2, 3, 5, 7, 11, 13}, false, "not int"},
@@ -297,13 +297,13 @@ func kindCases() iter.Seq[kindCase] {
 		// Edge cases
 		// True
 		{reflect.Invalid, any(nil), true, "legitimate expectation of reflect.Invalid (any)"},
-		{reflect.Ptr, (*any)(nil), true, "legitimate expectation of reflect.Pointer (*any)"},
+		{reflect.Pointer, (*any)(nil), true, "legitimate expectation of reflect.Pointer (*any)"},
 		{reflect.Invalid, (error)(nil), true, "legitimate expectation of reflect.Invalid (error)"},
 		{reflect.Invalid, nil, true, "legitimate nil input"},
 		// False
 		{reflect.Interface, iface, false, "interface returns concrete type (any)"},
 		{reflect.Interface, errors.New("stuff"), false, "interface returns concrete type (error)"},
 		{reflect.Invalid, "string", false, "wrong expectation of reflect.Invalid"},
-		{reflect.Ptr, nil, false, "nil input"},
+		{reflect.Pointer, nil, false, "nil input"},
 	})
 }
