@@ -17,7 +17,7 @@ We thank these members for their service to this community.
 
 | Total Contributors | Total Contributions |
 | --- | --- |
-| 257  | 1243  |
+| 256  | 1241  |
 
 | Username | All Time Contribution Count | All Commits |
 | --- | --- | --- |
@@ -91,8 +91,8 @@ We thank these members for their service to this community.
 | @SuperQ | 2 | <https://github.com/go-openapi/testify/commits?author=SuperQ> |
 | @xsleonard | 2 | <https://github.com/go-openapi/testify/commits?author=xsleonard> |
 | @srenatus | 2 | <https://github.com/go-openapi/testify/commits?author=srenatus> |
-| @snirye | 2 | <https://github.com/go-openapi/testify/commits?author=snirye> |
 | @ryu-ton10 | 2 | <https://github.com/go-openapi/testify/commits?author=ryu-ton10> |
+| @anupcshan | 2 | <https://github.com/go-openapi/testify/commits?author=anupcshan> |
 | @izaurio | 2 | <https://github.com/go-openapi/testify/commits?author=izaurio> |
 | @gz-c | 2 | <https://github.com/go-openapi/testify/commits?author=gz-c> |
 | @techfg | 2 | <https://github.com/go-openapi/testify/commits?author=techfg> |
@@ -101,7 +101,6 @@ We thank these members for their service to this community.
 | @greg0ire | 2 | <https://github.com/go-openapi/testify/commits?author=greg0ire> |
 | @sikehish | 2 | <https://github.com/go-openapi/testify/commits?author=sikehish> |
 | @LandonTClipp | 2 | <https://github.com/go-openapi/testify/commits?author=LandonTClipp> |
-| @anupcshan | 2 | <https://github.com/go-openapi/testify/commits?author=anupcshan> |
 | @AchoArnold | 2 | <https://github.com/go-openapi/testify/commits?author=AchoArnold> |
 | @2pi | 2 | <https://github.com/go-openapi/testify/commits?author=2pi> |
 | @bboreham | 2 | <https://github.com/go-openapi/testify/commits?author=bboreham> |
