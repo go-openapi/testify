@@ -112,8 +112,6 @@ These entry points will remain backward compatible. Other assertions may evolve 
 [doc-url]: https://goswagger.io/go-openapi
 [godoc-badge]: https://pkg.go.dev/badge/github.com/go-openapi/testify
 [godoc-url]: http://pkg.go.dev/github.com/go-openapi/testify
-[slack-badge]: https://slackin.goswagger.io/badge.svg
-[slack-url]: https://slackin.goswagger.io
 <!-- Badges: license & compliance -->
 [license-badge]: http://img.shields.io/badge/license-Apache%20v2-orange.svg
 [license-url]: https://github.com/go-openapi/testify/?tab=Apache-2.0-1-ov-file#readme
