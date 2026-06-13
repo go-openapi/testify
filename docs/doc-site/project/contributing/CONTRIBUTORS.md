@@ -17,11 +17,11 @@ We thank these members for their service to this community.
 
 | Total Contributors | Total Contributions |
 | --- | --- |
-| 256  | 1242  |
+| 256  | 1243  |
 
 | Username | All Time Contribution Count | All Commits |
 | --- | --- | --- |
-| @fredbi | 182 | <https://github.com/go-openapi/testify/commits?author=fredbi> |
+| @fredbi | 183 | <https://github.com/go-openapi/testify/commits?author=fredbi> |
 | @ernesto-jimenez | 129 | <https://github.com/go-openapi/testify/commits?author=ernesto-jimenez> |
 | @brackendawson | 110 | <https://github.com/go-openapi/testify/commits?author=brackendawson> |
 | @dolmen | 103 | <https://github.com/go-openapi/testify/commits?author=dolmen> |
