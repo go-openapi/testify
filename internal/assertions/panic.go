@@ -5,6 +5,7 @@ package assertions
 
 import (
 	"fmt"
+	"runtime"
 	"runtime/debug"
 )
 
@@ -133,10 +134,8 @@ func didPanic(f func()) (didPanic bool, message any, stack string) {
 		}
 		// Go 1.21 introduces runtime.PanicNilError on panic(nil),
 		// so maintain the same logic going forward (https://github.com/golang/go/issues/25448).
-		if err, ok := message.(error); ok {
-			if err.Error() == "panic called with nil argument" {
-				message = nil
-			}
+		if _, ok := message.(*runtime.PanicNilError); ok {
+			message = nil
 		}
 	}()
 
