@@ -271,21 +271,39 @@ func NotErrorAs(t T, err error, target any, msgAndArgs ...any) bool {
 	), msgAndArgs...)
 }
 
-func unwrapAll(err error) (errs []error) {
+func unwrapAll(err error) []error {
+	return appendUnwrapped(nil, err, make(map[error]struct{}))
+}
+
+// appendUnwrapped flattens an error chain, guarding against cyclic chains that
+// would otherwise recurse until the goroutine stack overflows.
+//
+// Only comparable errors are tracked: using an incomparable error as a map key
+// would panic, so those simply skip cycle detection (mirroring how the standard
+// library's errors.Is guards its own comparisons).
+func appendUnwrapped(errs []error, err error, visited map[error]struct{}) []error {
+	if err != nil && reflect.TypeOf(err).Comparable() {
+		if _, ok := visited[err]; ok {
+			return errs // cyclic error chain: stop here
+		}
+		visited[err] = struct{}{}
+		defer delete(visited, err)
+	}
+
 	errs = append(errs, err)
 	switch x := err.(type) { //nolint:errorlint // false positive: this type switch is checking for interfaces
 	case interface{ Unwrap() error }:
-		err = x.Unwrap()
-		if err == nil {
-			return
+		next := x.Unwrap()
+		if next == nil {
+			return errs
 		}
-		errs = append(errs, unwrapAll(err)...)
+		errs = appendUnwrapped(errs, next, visited)
 	case interface{ Unwrap() []error }:
-		for _, err := range x.Unwrap() {
-			errs = append(errs, unwrapAll(err)...)
+		for _, next := range x.Unwrap() {
+			errs = appendUnwrapped(errs, next, visited)
 		}
 	}
-	return
+	return errs
 }
 
 func buildErrorChainString(err error, withType bool) string {

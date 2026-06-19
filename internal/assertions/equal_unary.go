@@ -141,6 +141,13 @@ func isEmpty(object any) bool {
 
 // isEmptyValue gets whether the specified reflect.Value is considered empty or not.
 func isEmptyValue(objValue reflect.Value) bool {
+	return isEmptyValueRec(objValue, nil)
+}
+
+// isEmptyValueRec carries the set of pointers already followed on the current
+// recursion path, so that a cyclic pointer chain (e.g. type P *P with p = &p)
+// breaks the recursion instead of overflowing the goroutine stack.
+func isEmptyValueRec(objValue reflect.Value, visited map[uintptr]struct{}) bool {
 	if objValue.IsZero() {
 		return true
 	}
@@ -152,7 +159,16 @@ func isEmptyValue(objValue reflect.Value) bool {
 		return objValue.Len() == 0
 	// non-nil pointers are empty if the value they point to is empty
 	case reflect.Pointer:
-		return isEmptyValue(objValue.Elem())
+		ptr := objValue.Pointer()
+		if _, ok := visited[ptr]; ok {
+			// a cyclic, non-nil pointer chain is not empty
+			return false
+		}
+		if visited == nil {
+			visited = make(map[uintptr]struct{})
+		}
+		visited[ptr] = struct{}{}
+		return isEmptyValueRec(objValue.Elem(), visited)
 	default:
 		return false
 	}
