@@ -350,77 +350,103 @@ func formatUnequalValues(expected, actual any) (e string, a string) {
 // copyExportedFields iterates downward through nested data structures and creates a copy
 // that only contains the exported struct fields.
 func copyExportedFields(expected any) any {
+	return copyExportedFieldsRec(expected, make(map[uintptr]struct{}))
+}
+
+// copyExportedFieldsRec carries a set of pointers currently being visited on the
+// recursion path, so that cyclic pointer references break the recursion instead
+// of overflowing the goroutine stack.
+func copyExportedFieldsRec(expected any, visited map[uintptr]struct{}) any {
 	if isNil(expected) {
 		return expected
 	}
 
 	expectedType := reflect.TypeOf(expected)
-	expectedKind := expectedType.Kind()
 	expectedValue := reflect.ValueOf(expected)
 
-	switch expectedKind {
+	switch expectedType.Kind() {
 	case reflect.Struct:
-		result := reflect.New(expectedType).Elem()
-		for i := range expectedType.NumField() {
-			field := expectedType.Field(i)
-			isExported := field.IsExported()
-			if isExported {
-				fieldValue := expectedValue.Field(i)
-				if isNil(fieldValue) || isNil(fieldValue.Interface()) {
-					continue
-				}
-				newValue := copyExportedFields(fieldValue.Interface())
-				result.Field(i).Set(reflect.ValueOf(newValue))
-			}
-		}
-		return result.Interface()
-
+		return copyExportedStruct(expectedType, expectedValue, visited)
 	case reflect.Pointer:
-		result := reflect.New(expectedType.Elem())
-		unexportedRemoved := copyExportedFields(expectedValue.Elem().Interface())
-		if unexportedRemoved != nil {
-			result.Elem().Set(reflect.ValueOf(unexportedRemoved))
-		}
-		return result.Interface()
-
+		return copyExportedPointer(expected, expectedType, expectedValue, visited)
 	case reflect.Array, reflect.Slice:
-		var result reflect.Value
-		if expectedKind == reflect.Array {
-			result = reflect.New(reflect.ArrayOf(expectedValue.Len(), expectedType.Elem())).Elem()
-		} else {
-			result = reflect.MakeSlice(expectedType, expectedValue.Len(), expectedValue.Len())
-		}
-		for i := range expectedValue.Len() {
-			index := expectedValue.Index(i)
-			if !index.CanInterface() {
-				// this should not be possible with current reflect, since values are retrieved from an array or slice, not a struct
-				panic(fmt.Errorf("internal error: can't resolve Interface() for value %v", index))
-			}
-			unexportedRemoved := copyExportedFields(index.Interface())
-			if unexportedRemoved != nil {
-				result.Index(i).Set(reflect.ValueOf(unexportedRemoved))
-			}
-		}
-		return result.Interface()
-
+		return copyExportedSequence(expectedType, expectedValue, visited)
 	case reflect.Map:
-		result := reflect.MakeMap(expectedType)
-		for _, k := range expectedValue.MapKeys() {
-			index := expectedValue.MapIndex(k)
-			if !index.CanInterface() {
-				// this should not be possible with current reflect, since values are retrieved from a map, not a struct
-				panic(fmt.Errorf("internal error: can't resolve Interface() for value %v", index))
-			}
-			unexportedRemoved := copyExportedFields(index.Interface())
-			if unexportedRemoved != nil {
-				result.SetMapIndex(k, reflect.ValueOf(unexportedRemoved))
-			}
-		}
-		return result.Interface()
-
+		return copyExportedMap(expectedType, expectedValue, visited)
 	default:
 		return expected
 	}
+}
+
+func copyExportedStruct(expectedType reflect.Type, expectedValue reflect.Value, visited map[uintptr]struct{}) any {
+	result := reflect.New(expectedType).Elem()
+	for i := range expectedType.NumField() {
+		if !expectedType.Field(i).IsExported() {
+			continue
+		}
+		fieldValue := expectedValue.Field(i)
+		if isNil(fieldValue) || isNil(fieldValue.Interface()) {
+			continue
+		}
+		newValue := copyExportedFieldsRec(fieldValue.Interface(), visited)
+		result.Field(i).Set(reflect.ValueOf(newValue))
+	}
+	return result.Interface()
+}
+
+func copyExportedPointer(expected any, expectedType reflect.Type, expectedValue reflect.Value, visited map[uintptr]struct{}) any {
+	// Guard against cyclic pointer references: if this pointer is already
+	// on the current recursion path, return it as-is to break the cycle.
+	ptr := expectedValue.Pointer()
+	if _, ok := visited[ptr]; ok {
+		return expected
+	}
+	visited[ptr] = struct{}{}
+	defer delete(visited, ptr)
+
+	result := reflect.New(expectedType.Elem())
+	unexportedRemoved := copyExportedFieldsRec(expectedValue.Elem().Interface(), visited)
+	if unexportedRemoved != nil {
+		result.Elem().Set(reflect.ValueOf(unexportedRemoved))
+	}
+	return result.Interface()
+}
+
+func copyExportedSequence(expectedType reflect.Type, expectedValue reflect.Value, visited map[uintptr]struct{}) any {
+	var result reflect.Value
+	if expectedType.Kind() == reflect.Array {
+		result = reflect.New(reflect.ArrayOf(expectedValue.Len(), expectedType.Elem())).Elem()
+	} else {
+		result = reflect.MakeSlice(expectedType, expectedValue.Len(), expectedValue.Len())
+	}
+	for i := range expectedValue.Len() {
+		index := expectedValue.Index(i)
+		if !index.CanInterface() {
+			// this should not be possible with current reflect, since values are retrieved from an array or slice, not a struct
+			panic(fmt.Errorf("internal error: can't resolve Interface() for value %v", index))
+		}
+		unexportedRemoved := copyExportedFieldsRec(index.Interface(), visited)
+		if unexportedRemoved != nil {
+			result.Index(i).Set(reflect.ValueOf(unexportedRemoved))
+		}
+	}
+	return result.Interface()
+}
+
+func copyExportedMap(expectedType reflect.Type, expectedValue reflect.Value, visited map[uintptr]struct{}) any {
+	result := reflect.MakeMap(expectedType)
+	for _, k := range expectedValue.MapKeys() {
+		index := expectedValue.MapIndex(k)
+		if !index.CanInterface() {
+			// this should not be possible with current reflect, since values are retrieved from a map, not a struct
+			panic(fmt.Errorf("internal error: can't resolve Interface() for value %v", index))
+		}
+		unexportedRemoved := copyExportedFieldsRec(index.Interface(), visited)
+		if unexportedRemoved != nil {
+			result.SetMapIndex(k, reflect.ValueOf(unexportedRemoved))
+		}
+	}
+	return result.Interface()
 }
 
 func isFunction(arg any) bool {
