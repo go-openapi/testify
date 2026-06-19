@@ -378,7 +378,9 @@ func copyExportedFields(expected any) any {
 	case reflect.Pointer:
 		result := reflect.New(expectedType.Elem())
 		unexportedRemoved := copyExportedFields(expectedValue.Elem().Interface())
-		result.Elem().Set(reflect.ValueOf(unexportedRemoved))
+		if unexportedRemoved != nil {
+			result.Elem().Set(reflect.ValueOf(unexportedRemoved))
+		}
 		return result.Interface()
 
 	case reflect.Array, reflect.Slice:
@@ -395,7 +397,9 @@ func copyExportedFields(expected any) any {
 				panic(fmt.Errorf("internal error: can't resolve Interface() for value %v", index))
 			}
 			unexportedRemoved := copyExportedFields(index.Interface())
-			result.Index(i).Set(reflect.ValueOf(unexportedRemoved))
+			if unexportedRemoved != nil {
+				result.Index(i).Set(reflect.ValueOf(unexportedRemoved))
+			}
 		}
 		return result.Interface()
 
@@ -408,7 +412,9 @@ func copyExportedFields(expected any) any {
 				panic(fmt.Errorf("internal error: can't resolve Interface() for value %v", index))
 			}
 			unexportedRemoved := copyExportedFields(index.Interface())
-			result.SetMapIndex(k, reflect.ValueOf(unexportedRemoved))
+			if unexportedRemoved != nil {
+				result.SetMapIndex(k, reflect.ValueOf(unexportedRemoved))
+			}
 		}
 		return result.Interface()
 
