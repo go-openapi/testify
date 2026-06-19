@@ -275,7 +275,11 @@ func Positive(t T, e any, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	zero := reflect.Zero(reflect.TypeOf(e))
+	eType := reflect.TypeOf(e)
+	if eType == nil {
+		return Fail(t, fmt.Sprintf("\"%v\" is not positive", e), msgAndArgs...)
+	}
+	zero := reflect.Zero(eType)
 	failMessage := fmt.Sprintf("\"%v\" is not positive", e)
 	return compareTwoValues(t, e, zero.Interface(), []compareResult{compareGreater}, failMessage, msgAndArgs...)
 }
@@ -322,7 +326,11 @@ func Negative(t T, e any, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	zero := reflect.Zero(reflect.TypeOf(e))
+	eType := reflect.TypeOf(e)
+	if eType == nil {
+		return Fail(t, fmt.Sprintf("\"%v\" is not negative", e), msgAndArgs...)
+	}
+	zero := reflect.Zero(eType)
 	failMessage := fmt.Sprintf("\"%v\" is not negative", e)
 	return compareTwoValues(t, e, zero.Interface(), []compareResult{compareLess}, failMessage, msgAndArgs...)
 }
