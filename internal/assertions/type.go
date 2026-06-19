@@ -24,7 +24,11 @@ func Implements(t T, interfaceObject any, object any, msgAndArgs ...any) bool {
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	interfaceType := reflect.TypeOf(interfaceObject).Elem()
+	ifType := reflect.TypeOf(interfaceObject)
+	if ifType == nil {
+		return Fail(t, "interfaceObject must be a pointer to an interface type", msgAndArgs...)
+	}
+	interfaceType := ifType.Elem()
 
 	if object == nil {
 		return Fail(t, fmt.Sprintf("Cannot check if nil implements %v", interfaceType), msgAndArgs...)
@@ -51,7 +55,11 @@ func NotImplements(t T, interfaceObject any, object any, msgAndArgs ...any) bool
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
-	interfaceType := reflect.TypeOf(interfaceObject).Elem()
+	ifType := reflect.TypeOf(interfaceObject)
+	if ifType == nil {
+		return Fail(t, "interfaceObject must be a pointer to an interface type", msgAndArgs...)
+	}
+	interfaceType := ifType.Elem()
 
 	if object == nil {
 		return Fail(t, fmt.Sprintf("Cannot check if nil does not implement %v", interfaceType), msgAndArgs...)

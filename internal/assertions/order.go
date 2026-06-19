@@ -4,6 +4,7 @@
 package assertions
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 	"slices"
@@ -320,7 +321,11 @@ func IsNonDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice
 // It returns an error if the object can't be ordered.
 // When not strictly ordered, it returns the first 2 offending values found.
 func isStrictlyOrdered(object any, reverseOrder bool) ([]any, bool, error) {
-	objKind := reflect.TypeOf(object).Kind()
+	objType := reflect.TypeOf(object)
+	if objType == nil {
+		return nil, false, errors.New("object <nil> is not an ordered collection")
+	}
+	objKind := objType.Kind()
 	if objKind != reflect.Slice && objKind != reflect.Array {
 		return nil, false, fmt.Errorf("object %T is not an ordered collection", object)
 	}

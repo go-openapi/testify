@@ -876,7 +876,12 @@ func containsElement(list any, element any) (ok, found bool) {
 
 // isList checks that the provided value is array or slice.
 func isList(t T, list any, msgAndArgs ...any) (ok bool) {
-	kind := reflect.TypeOf(list).Kind()
+	listType := reflect.TypeOf(list)
+	if listType == nil {
+		return Fail(t, fmt.Sprintf("%q has an unsupported type <nil>, expecting array or slice", list),
+			msgAndArgs...)
+	}
+	kind := listType.Kind()
 	if kind != reflect.Array && kind != reflect.Slice {
 		return Fail(t, fmt.Sprintf("%q has an unsupported type %s, expecting array or slice", list, kind),
 			msgAndArgs...)
