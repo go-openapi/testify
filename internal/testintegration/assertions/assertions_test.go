@@ -39,8 +39,6 @@ type silentT struct{}
 func (silentT) Errorf(string, ...any) {}
 func (silentT) Helper()               {}
 
-var sink bool
-
 // TestNilSafetyUnary verifies that unary assertion functions (taking a single
 // value of type any) never panic, even with nil, nil-pointer, or arbitrary
 // inputs.
@@ -52,14 +50,14 @@ func TestNilSafetyUnary(t *testing.T) {
 		mock := silentT{}
 
 		// These functions must never panic, regardless of the value passed.
-		sink = assertions.Nil(mock, value)
-		sink = assertions.NotNil(mock, value)
-		sink = assertions.Empty(mock, value)
-		sink = assertions.NotEmpty(mock, value)
-		sink = assertions.Zero(mock, value)
-		sink = assertions.NotZero(mock, value)
-		sink = assertions.Len(mock, value, 0)
-		sink = assertions.Len(mock, value, 1)
+		_ = assertions.Nil(mock, value)
+		_ = assertions.NotNil(mock, value)
+		_ = assertions.Empty(mock, value)
+		_ = assertions.NotEmpty(mock, value)
+		_ = assertions.Zero(mock, value)
+		_ = assertions.NotZero(mock, value)
+		_ = assertions.Len(mock, value, 0)
+		_ = assertions.Len(mock, value, 1)
 	})
 }
 
@@ -73,13 +71,13 @@ func TestNilSafetyBinary(t *testing.T) {
 		b := genAny().Draw(rt, "b")
 		mock := silentT{}
 
-		sink = assertions.Equal(mock, a, b)
-		sink = assertions.NotEqual(mock, a, b)
-		sink = assertions.EqualValues(mock, a, b)
-		sink = assertions.NotEqualValues(mock, a, b)
-		sink = assertions.Exactly(mock, a, b)
-		sink = assertions.Same(mock, a, b)
-		sink = assertions.NotSame(mock, a, b)
+		_ = assertions.Equal(mock, a, b)
+		_ = assertions.NotEqual(mock, a, b)
+		_ = assertions.EqualValues(mock, a, b)
+		_ = assertions.NotEqualValues(mock, a, b)
+		_ = assertions.Exactly(mock, a, b)
+		_ = assertions.Same(mock, a, b)
+		_ = assertions.NotSame(mock, a, b)
 		_ = assertions.ObjectsAreEqual(a, b)
 		_ = assertions.ObjectsAreEqualValues(a, b)
 	})
@@ -95,16 +93,16 @@ func TestNilSafetyCollections(t *testing.T) {
 		element := genAny().Draw(rt, "element")
 		mock := silentT{}
 
-		sink = assertions.Contains(mock, collection, element)
-		sink = assertions.NotContains(mock, collection, element)
-		sink = assertions.Subset(mock, collection, element)
-		sink = assertions.NotSubset(mock, collection, element)
-		sink = assertions.ElementsMatch(mock, collection, element)
-		sink = assertions.NotElementsMatch(mock, collection, element)
-		sink = assertions.IsIncreasing(mock, collection)
-		sink = assertions.IsDecreasing(mock, collection)
-		sink = assertions.IsNonIncreasing(mock, collection)
-		sink = assertions.IsNonDecreasing(mock, collection)
+		_ = assertions.Contains(mock, collection, element)
+		_ = assertions.NotContains(mock, collection, element)
+		_ = assertions.Subset(mock, collection, element)
+		_ = assertions.NotSubset(mock, collection, element)
+		_ = assertions.ElementsMatch(mock, collection, element)
+		_ = assertions.NotElementsMatch(mock, collection, element)
+		_ = assertions.IsIncreasing(mock, collection)
+		_ = assertions.IsDecreasing(mock, collection)
+		_ = assertions.IsNonIncreasing(mock, collection)
+		_ = assertions.IsNonDecreasing(mock, collection)
 	})
 }
 
@@ -118,14 +116,14 @@ func TestNilSafetyComparison(t *testing.T) {
 		b := genAny().Draw(rt, "b")
 		mock := silentT{}
 
-		sink = assertions.Greater(mock, a, b)
-		sink = assertions.GreaterOrEqual(mock, a, b)
-		sink = assertions.Less(mock, a, b)
-		sink = assertions.LessOrEqual(mock, a, b)
-		sink = assertions.Positive(mock, a)
-		sink = assertions.Negative(mock, a)
-		sink = assertions.InDelta(mock, a, b, 1.0)
-		sink = assertions.InEpsilon(mock, a, b, 0.01)
+		_ = assertions.Greater(mock, a, b)
+		_ = assertions.GreaterOrEqual(mock, a, b)
+		_ = assertions.Less(mock, a, b)
+		_ = assertions.LessOrEqual(mock, a, b)
+		_ = assertions.Positive(mock, a)
+		_ = assertions.Negative(mock, a)
+		_ = assertions.InDelta(mock, a, b, 1.0)
+		_ = assertions.InEpsilon(mock, a, b, 0.01)
 	})
 }
 
@@ -139,12 +137,12 @@ func TestNilSafetyType(t *testing.T) {
 		b := genAny().Draw(rt, "b")
 		mock := silentT{}
 
-		sink = assertions.IsType(mock, a, b)
-		sink = assertions.IsNotType(mock, a, b)
-		sink = assertions.Kind(mock, reflect.Int, a)
-		sink = assertions.NotKind(mock, reflect.Int, a)
-		sink = assertions.Kind(mock, reflect.Pointer, a)
-		sink = assertions.NotKind(mock, reflect.Pointer, a)
+		_ = assertions.IsType(mock, a, b)
+		_ = assertions.IsNotType(mock, a, b)
+		_ = assertions.Kind(mock, reflect.Int, a)
+		_ = assertions.NotKind(mock, reflect.Int, a)
+		_ = assertions.Kind(mock, reflect.Pointer, a)
+		_ = assertions.NotKind(mock, reflect.Pointer, a)
 	})
 }
 
@@ -157,7 +155,7 @@ func TestNilSafetyExportedValues(t *testing.T) {
 		b := genAny().Draw(rt, "b")
 		mock := silentT{}
 
-		sink = assertions.EqualExportedValues(mock, a, b)
+		_ = assertions.EqualExportedValues(mock, a, b)
 	})
 }
 
