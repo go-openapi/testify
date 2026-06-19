@@ -296,7 +296,7 @@ type myType float64
 |--|--|
 | [`assertions.IsNotOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNotOfTypeT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNotOfTypeT](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L144)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNotOfTypeT](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L152)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -407,7 +407,7 @@ func main() {
 |--|--|
 | [`assertions.IsNotType(t T, theType any, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNotType) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNotType](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L123)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNotType](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L131)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -518,7 +518,7 @@ type myType float64
 |--|--|
 | [`assertions.IsOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsOfTypeT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsOfTypeT](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L98)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsOfTypeT](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L106)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -629,7 +629,7 @@ func main() {
 |--|--|
 | [`assertions.IsType(t T, expectedType any, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsType) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsType](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L76)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsType](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L84)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -745,7 +745,7 @@ func main() {
 |--|--|
 | [`assertions.Kind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Kind) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Kind](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L214)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Kind](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L222)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -856,7 +856,7 @@ func main() {
 |--|--|
 | [`assertions.NotImplements(t T, interfaceObject any, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotImplements) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotImplements](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L49)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotImplements](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L53)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -972,7 +972,7 @@ func main() {
 |--|--|
 | [`assertions.NotKind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotKind) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotKind](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L248)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotKind](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L256)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1083,7 +1083,7 @@ func main() {
 |--|--|
 | [`assertions.NotZero(t T, i any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotZero) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotZero](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L190)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotZero](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L198)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1194,7 +1194,7 @@ func main() {
 |--|--|
 | [`assertions.Zero(t T, i any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Zero) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Zero](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L168)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Zero](https://github.com/go-openapi/testify/blob/master/internal/assertions/type.go#L176)
 {{% /tab %}}
 {{< /tabs >}}
 

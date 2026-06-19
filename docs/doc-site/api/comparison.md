@@ -1108,7 +1108,7 @@ func main() {
 |--|--|
 | [`assertions.Negative(t T, e any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Negative) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Negative](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L320)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Negative](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L324)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1216,7 +1216,7 @@ func main() {
 |--|--|
 | [`assertions.NegativeT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NegativeT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NegativeT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L341)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NegativeT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L349)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1436,7 +1436,7 @@ func main() {
 |--|--|
 | [`assertions.PositiveT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#PositiveT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#PositiveT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L294)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#PositiveT](https://github.com/go-openapi/testify/blob/master/internal/assertions/compare.go#L298)
 {{% /tab %}}
 {{< /tabs >}}
 

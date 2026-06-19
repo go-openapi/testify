@@ -161,7 +161,7 @@ func main() {
 |--|--|
 | [`assertions.IsDecreasing(t T, collection any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsDecreasing) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsDecreasing](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L205)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsDecreasing](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L206)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -270,7 +270,7 @@ func main() {
 |--|--|
 | [`assertions.IsDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsDecreasingT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsDecreasingT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L236)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsDecreasingT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L237)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -383,7 +383,7 @@ func main() {
 |--|--|
 | [`assertions.IsIncreasing(t T, collection any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsIncreasing) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsIncreasing](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L24)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsIncreasing](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L25)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -492,7 +492,7 @@ func main() {
 |--|--|
 | [`assertions.IsIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsIncreasingT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsIncreasingT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L54)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsIncreasingT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L55)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -611,7 +611,7 @@ func main() {
 |--|--|
 | [`assertions.IsNonDecreasing(t T, collection any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNonDecreasing) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNonDecreasing](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L269)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNonDecreasing](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L270)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -726,7 +726,7 @@ func main() {
 |--|--|
 | [`assertions.IsNonDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNonDecreasingT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNonDecreasingT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L304)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNonDecreasingT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L305)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -845,7 +845,7 @@ func main() {
 |--|--|
 | [`assertions.IsNonIncreasing(t T, collection any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNonIncreasing) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNonIncreasing](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L144)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNonIncreasing](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L145)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -960,7 +960,7 @@ func main() {
 |--|--|
 | [`assertions.IsNonIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#IsNonIncreasingT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNonIncreasingT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L179)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#IsNonIncreasingT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L180)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1071,7 +1071,7 @@ func main() {
 |--|--|
 | [`assertions.NotSortedT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotSortedT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSortedT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L112)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotSortedT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L113)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1182,7 +1182,7 @@ func main() {
 |--|--|
 | [`assertions.SortedT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#SortedT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SortedT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L83)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#SortedT](https://github.com/go-openapi/testify/blob/master/internal/assertions/order.go#L84)
 {{% /tab %}}
 {{< /tabs >}}
 
