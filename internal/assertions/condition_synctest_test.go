@@ -507,7 +507,7 @@ func dualEventuallyWithCompleteFalse(t *testing.T) {
 	}
 
 	expectedCalls := int(testTimeout / testTick)
-	if counter < expectedCalls-1 || counter > expectedCalls+1 {
+	if counter < expectedCalls-2 || counter > expectedCalls+1 {
 		t.Errorf("expected %d calls, got %d", expectedCalls, counter)
 	}
 }

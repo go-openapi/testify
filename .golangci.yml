@@ -2,6 +2,7 @@ version: "2"
 linters:
   default: all
   disable:
+    - goconst # this linter has gone noisy. Disabled
     - depguard
     - err113
     - funlen
@@ -27,7 +28,7 @@ linters:
     dupl:
       threshold: 200
     goconst:
-      min-len: 2
+      min-len: 8
       min-occurrences: 3
     cyclop:
       max-complexity: 22

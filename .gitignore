@@ -5,3 +5,4 @@ Godeps
 *.out
 .mcp.json
 go.work.sum
+.worktrees
