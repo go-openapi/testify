@@ -293,7 +293,22 @@ See also a quick [migration guide](./MIGRATION.md).
 
 ### Error
 
-**New functions**: None
+{{% expand title="Generics" %}}
+
+#### New Generic Functions (2)
+
+| Function | Type Parameters | Origin | Description |
+|----------|-----------------|--------|-------------|
+| `ErrorAsType[E error]` | Expected error type | [#1860] | Type-safe `ErrorAs` built on go1.26 `errors.AsType`; writes the matched error to a typed `*E` target (pass `nil` to only check) |
+| `NotErrorAsType[E error]` | Expected error type | [#1860] | Negative type-safe error-type check |
+
+**Origin**: [#1860] — adapted. We keep the `bool`-returning assertion convention and pass a typed `*E` target (the type-safe counterpart of `ErrorAs`'s untyped `any`), rather than the upstream `(E, bool)` return shape.
+
+**Note**: these assertions are guarded by `//go:build go1.26` and are only available when building with Go 1.26 or newer. On older toolchains they are transparently absent — the library still targets go1.25 oldstable. This is the first use of the codegen's go-version guard mechanism (see [ROADMAP](../project/maintainers/ROADMAP.md)).
+
+[#1860]: https://github.com/stretchr/testify/issues/1860
+
+{{% /expand %}}
 
 **Behavior changes**: None
 
