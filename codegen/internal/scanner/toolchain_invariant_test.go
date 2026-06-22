@@ -45,7 +45,7 @@ func TestToolchainFloorCoversGuards(t *testing.T) {
 func workToolchainMinor(t *testing.T, path string) int {
 	t.Helper()
 
-	data, err := os.ReadFile(path) //nolint:gosec // test reads a fixed in-repo file
+	data, err := os.ReadFile(path) // sometimes a false positive: nolint:gosec // test reads a fixed in-repo file
 	if err != nil {
 		t.Fatalf("read %s: %v", path, err)
 	}
