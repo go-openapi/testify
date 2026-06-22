@@ -35,6 +35,6 @@ Table of core assertions, excluding variants. Each function is side by side with
 | Assertion                | Opposite          | Domain | Kind |
 | ------------------------ | ----------------- | ------ | ---- |
 {{- range .QuickIndex }}
-| [{{ .Name }}]({{ .Domain }}/#{{ .Anchor }}){{ if .IsGeneric }} {{ hopen }}% icon icon="star" color=orange %{{ hclose }}{{ end }} | {{ if .Opposite }}[{{ .Opposite }}]({{ .Domain }}/#{{ .OppositeAnchor }}){{ end }} | {{ .Domain }} | {{ if .IsHelper }}helper{{ end }} |
+| [{{ .Name }}]({{ .Domain }}/#{{ .Anchor }}){{ if .IsGeneric }} {{ hopen }}% icon icon="star" color=orange %{{ hclose }}{{ end }}{{ if .GoBuild }} {{ hopen }}% goversion "{{ .GoBuild }}" %{{ hclose }}{{ end }} | {{ if .Opposite }}[{{ .Opposite }}]({{ .Domain }}/#{{ .OppositeAnchor }}){{ end }} | {{ .Domain }} | {{ if .IsHelper }}helper{{ end }} |
 {{- end }}
 

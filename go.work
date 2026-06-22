@@ -8,3 +8,10 @@ use (
 )
 
 go 1.25.0
+
+// Dev/codegen toolchain floor. Must be >= the highest //go:build go1.N guard used in
+// internal/assertions so codegen (run in workspace mode) always observes guarded files.
+// Enforced by TestToolchainFloorCoversGuards. This line is NOT published to consumers:
+// a dependency's toolchain directive is ignored downstream — only our go.mod `go 1.25.0`
+// floor reaches them, so go1.25 users still build (guarded files excluded).
+toolchain go1.26.0

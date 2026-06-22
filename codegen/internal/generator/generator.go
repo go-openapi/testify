@@ -4,12 +4,15 @@
 package generator
 
 import (
+	"bytes"
 	"embed"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"text/template"
 
 	"github.com/go-openapi/testify/codegen/v2/internal/model"
@@ -43,11 +46,13 @@ type Generator struct {
 type genCtx struct {
 	generateOptions
 
-	index      map[string]string
-	templates  map[string]*template.Template
-	target     *model.AssertionPackage
-	docs       *model.Documentation
-	targetBase string
+	index         map[string]string
+	templates     map[string]*template.Template
+	target        *model.AssertionPackage
+	docs          *model.Documentation
+	targetBase    string
+	variantSuffix string          // filename suffix for the current build-variant (e.g. "_go126"), empty for the default
+	rendered      map[string]bool // base filenames this run accounted for (written or removed-when-empty)
 }
 
 func New(source *model.AssertionPackage, opts ...Option) *Generator {
@@ -82,13 +87,111 @@ func (g *Generator) Generate(opts ...GenerateOption) error {
 		g.buildDocs()
 	}
 
-	{
-		// auto-generated assertions
+	// Type constraints are not version-guarded (functions-only scope): generate them once,
+	// from the full model, into the default (unsuffixed) file.
+	if err := g.generateTypes(); err != nil {
+		// assertion_types.gotmpl
+		return err
+	}
 
-		if err := g.generateTypes(); err != nil {
-			// assertion_types.gotmpl
+	// Build constraints are file-level in Go, so guarded functions must land in their own
+	// generated files carrying the same //go:build line. We partition the functions by
+	// constraint and render a parallel set of files per variant. Empty category files
+	// (e.g. a go1.26 variant with no helpers) are skipped by render().
+	full := g.ctx.target
+	for _, constraint := range full.Functions.BuildVariants() {
+		g.ctx.target = variantTarget(full, constraint)
+		g.ctx.variantSuffix = model.GoBuildTag(constraint)
+		if g.ctx.variantSuffix != "" {
+			g.ctx.variantSuffix = "_" + g.ctx.variantSuffix
+		}
+
+		if err := g.generateVariant(); err != nil {
 			return err
 		}
+	}
+	g.ctx.target = full // restore the full model for Documentation()
+
+	// Remove generated build-variant files left over from a variant that no longer exists
+	// (e.g. the last go1.26-guarded assertion was deleted). Without this, those files would
+	// linger and fail to compile against the now-missing source symbols.
+	if err := g.sweepOrphanVariants(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// orphanVariantRx matches a generated build-variant filename for the given target package,
+// e.g. "assert_assertions_go126.go" or "assert_forward_go126_test.go". The "_go<N>" infix is
+// what distinguishes a variant file from the default (unsuffixed) ones, which are always
+// regenerated and never swept.
+func orphanVariantRx(targetBase string) *regexp.Regexp {
+	return regexp.MustCompile(`^` + regexp.QuoteMeta(targetBase) + `_.+_go\d+(_test)?\.go$`)
+}
+
+// sweepOrphanVariants removes generated build-variant files in the target package directory
+// that were not produced by this run. To guard against deleting anything we shouldn't, a file
+// is removed only when it (a) matches the variant filename pattern, (b) was not rendered this
+// run, and (c) actually carries our generated-code marker. Hand-authored files — even ones
+// that happen to match the name pattern — are left untouched, and every removal is logged.
+//
+// Note on `go generate ./...`: that command eagerly snapshots every package's file list
+// before running directives, so the run that removes an orphan may then fail with a benign
+// "no such file" as go generate tries to scan the file we just deleted. The removal itself
+// succeeds and a rerun is clean; invoking codegen directly (go run ./codegen/main.go) avoids
+// the race entirely. This only happens when a whole guarded variant is deleted/renamed.
+func (g *Generator) sweepOrphanVariants() error {
+	dir := filepath.Join(g.ctx.targetRoot, g.ctx.targetBase)
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return fmt.Errorf("can't scan target folder for orphans: %w", err)
+	}
+
+	pattern := orphanVariantRx(g.ctx.targetBase)
+	for _, entry := range entries {
+		if entry.IsDir() {
+			continue
+		}
+
+		name := entry.Name()
+		if !pattern.MatchString(name) || g.ctx.rendered[name] {
+			continue
+		}
+
+		isGen, err := isGeneratedFile(filepath.Join(dir, name))
+		if err != nil {
+			return err
+		}
+		if !isGen {
+			continue // not ours: never remove a hand-authored file
+		}
+
+		if err := os.Remove(filepath.Join(dir, name)); err != nil {
+			return fmt.Errorf("can't remove orphaned variant file %q: %w", name, err)
+		}
+		// Announce every removal: an orphan disappearing should never be silent.
+		log.Printf("codegen: removed orphaned build-variant file %s (its guarded source no longer exists)", filepath.Join(g.ctx.targetBase, name))
+	}
+
+	return nil
+}
+
+// isGeneratedFile reports whether the file carries our "DO NOT EDIT" generated-code marker.
+func isGeneratedFile(path string) (bool, error) {
+	data, err := os.ReadFile(path) //nolint:gosec // path is built from a controlled target directory listing
+	if err != nil {
+		return false, fmt.Errorf("can't read candidate orphan %q: %w", path, err)
+	}
+
+	return bytes.Contains(data, []byte("DO NOT EDIT.")), nil
+}
+
+// generateVariant renders every per-function artifact (functions, format, forward,
+// helpers and their tests + examples) for the currently selected build-variant.
+func (g *Generator) generateVariant() error {
+	{
+		// auto-generated assertions
 
 		if err := g.generateAssertions(); err != nil {
 			return err
@@ -138,6 +241,23 @@ func (g *Generator) Generate(opts ...GenerateOption) error {
 	return nil
 }
 
+// variantTarget clones the transformed model, keeping only the functions belonging to the
+// given build constraint, and stamps the constraint so templates emit the //go:build line.
+func variantTarget(base *model.AssertionPackage, constraint string) *model.AssertionPackage {
+	tgt := base.Clone()
+	tgt.BuildConstraint = constraint
+
+	filtered := tgt.Functions[:0:0]
+	for _, fn := range base.Functions {
+		if fn.GoBuild == constraint {
+			filtered = append(filtered, fn)
+		}
+	}
+	tgt.Functions = filtered
+
+	return tgt
+}
+
 // Documentation yields the transformed package model as a [model.Documentation]
 // usable by a generation step by the [DocGenerator].
 func (g *Generator) Documentation() model.Documentation {
@@ -148,6 +268,7 @@ func (g *Generator) initContext(opts []GenerateOption) error {
 	// prepare options
 	g.ctx = &genCtx{
 		generateOptions: generateOptionsWithDefaults(opts),
+		rendered:        make(map[string]bool),
 	}
 	if g.ctx.targetPkg == "" {
 		return errors.New("a target package is required")
@@ -336,16 +457,31 @@ func (g *Generator) transformFunc(fn model.Function) model.Function {
 	return fn
 }
 
+// codeFile builds the path of a generated code file for a category, honoring the
+// current build-variant suffix (e.g. "assert/assert_assertions_go126.go").
+func (g *Generator) codeFile(category string) string {
+	name := g.ctx.targetBase + "_" + category + g.ctx.variantSuffix + ".go"
+
+	return filepath.Join(g.ctx.targetRoot, g.ctx.targetBase, name)
+}
+
+// testFile builds the path of a generated test file for a category, honoring the
+// current build-variant suffix (e.g. "assert/assert_assertions_go126_test.go").
+func (g *Generator) testFile(category string) string {
+	name := g.ctx.targetBase + "_" + category + g.ctx.variantSuffix + "_test.go"
+
+	return filepath.Join(g.ctx.targetRoot, g.ctx.targetBase, name)
+}
+
 func (g *Generator) generateTypes() error {
+	// type constraints are unguarded: always written to the default (unsuffixed) file
 	file := filepath.Join(g.ctx.targetRoot, g.ctx.targetBase, g.ctx.targetBase+"_types.go")
 
 	return g.render("types", file, g.ctx.target)
 }
 
 func (g *Generator) generateAssertions() error {
-	file := filepath.Join(g.ctx.targetRoot, g.ctx.targetBase, g.ctx.targetBase+"_assertions.go")
-
-	return g.render("assertions", file, g.ctx.target)
+	return g.render("assertions", g.codeFile("assertions"), g.ctx.target)
 }
 
 func (g *Generator) generateFormatFuncs() error {
@@ -353,9 +489,7 @@ func (g *Generator) generateFormatFuncs() error {
 		return nil
 	}
 
-	file := filepath.Join(g.ctx.targetRoot, g.ctx.targetBase, g.ctx.targetBase+"_format.go")
-
-	return g.render("format", file, g.ctx.target)
+	return g.render("format", g.codeFile("format"), g.ctx.target)
 }
 
 func (g *Generator) generateForwardFuncs() error {
@@ -363,18 +497,15 @@ func (g *Generator) generateForwardFuncs() error {
 		return nil
 	}
 
-	file := filepath.Join(g.ctx.targetRoot, g.ctx.targetBase, g.ctx.targetBase+"_forward.go")
-
-	return g.render("forward", file, g.ctx.target)
+	return g.render("forward", g.codeFile("forward"), g.ctx.target)
 }
 
 func (g *Generator) generateHelpers() error {
 	if !g.ctx.generateHelpers {
 		return nil
 	}
-	file := filepath.Join(g.ctx.targetRoot, g.ctx.targetBase, g.ctx.targetBase+"_helpers.go")
 
-	return g.render("helpers", file, g.ctx.target)
+	return g.render("helpers", g.codeFile("helpers"), g.ctx.target)
 }
 
 func (g *Generator) generateAssertionsTests() error {
@@ -382,9 +513,7 @@ func (g *Generator) generateAssertionsTests() error {
 		return nil
 	}
 
-	file := filepath.Join(g.ctx.targetRoot, g.ctx.targetBase, g.ctx.targetBase+"_assertions_test.go")
-
-	return g.render("assertions_test", file, g.ctx.target)
+	return g.render("assertions_test", g.testFile("assertions"), g.ctx.target)
 }
 
 func (g *Generator) generateFormatTests() error {
@@ -392,9 +521,7 @@ func (g *Generator) generateFormatTests() error {
 		return nil
 	}
 
-	file := filepath.Join(g.ctx.targetRoot, g.ctx.targetBase, g.ctx.targetBase+"_format_test.go")
-
-	return g.render("format_test", file, g.ctx.target)
+	return g.render("format_test", g.testFile("format"), g.ctx.target)
 }
 
 func (g *Generator) generateForwardTests() error {
@@ -402,9 +529,7 @@ func (g *Generator) generateForwardTests() error {
 		return nil
 	}
 
-	file := filepath.Join(g.ctx.targetRoot, g.ctx.targetBase, g.ctx.targetBase+"_forward_test.go")
-
-	return g.render("forward_test", file, g.ctx.target)
+	return g.render("forward_test", g.testFile("forward"), g.ctx.target)
 }
 
 func (g *Generator) generateExampleTests() error {
@@ -412,9 +537,7 @@ func (g *Generator) generateExampleTests() error {
 		return nil
 	}
 
-	file := filepath.Join(g.ctx.targetRoot, g.ctx.targetBase, g.ctx.targetBase+"_examples_test.go")
-
-	return g.render("examples_test", file, g.ctx.target)
+	return g.render("examples_test", g.testFile("examples"), g.ctx.target)
 }
 
 func (g *Generator) generateHelpersTests() error {
@@ -422,12 +545,12 @@ func (g *Generator) generateHelpersTests() error {
 		return nil
 	}
 
-	file := filepath.Join(g.ctx.targetRoot, g.ctx.targetBase, g.ctx.targetBase+"_helpers_test.go")
-
-	return g.render("helpers_test", file, g.ctx.target)
+	return g.render("helpers_test", g.testFile("helpers"), g.ctx.target)
 }
 
 func (g *Generator) render(name string, target string, data any) error {
+	g.ctx.rendered[filepath.Base(target)] = true // account for this file even if render() drops it when empty
+
 	return renderTemplate(
 		g.ctx.index,
 		g.ctx.templates,

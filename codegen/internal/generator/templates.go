@@ -14,6 +14,9 @@ import (
 	"github.com/go-openapi/testify/codegen/v2/internal/generator/funcmaps"
 )
 
+// goTplExt is the file extension of Go code templates (as opposed to ".md.gotmpl" docs).
+const goTplExt = ".gotmpl"
+
 // buildTemplateIndex extracts template names from the index and returns them sorted.
 //
 // This helper reduces duplication between Generator and DocGenerator template loading.
@@ -49,6 +52,9 @@ func loadTemplatesFromIndex(
 	for _, name := range needed {
 		file := name + tplExt
 		files := []string{path.Join("templates", file)}
+		if tplExt == goTplExt { // Go code templates share the file header (copyright, DO NOT EDIT, //go:build guard)
+			files = append(files, path.Join("templates", "header.gotmpl"))
+		}
 		if strings.Contains(name, "_test") { // test templates use a set of shared definitions
 			files = append(files, path.Join("templates", "assertion_test_shared.gotmpl"))
 		}

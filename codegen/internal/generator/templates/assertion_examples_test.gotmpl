@@ -1,6 +1,4 @@
-{{ comment .Copyright }}
-
-// Code generated with {{ .Tool }}; DO NOT EDIT.
+{{ template "header" . }}
 
 package {{ .Package }}_test
 
@@ -67,7 +65,9 @@ func Example{{ .Name }}() {
   {{- end }}
 {{- end }}
 
+{{- if not .BuildConstraint }}{{/* shared test fixtures belong only to the default (unguarded) test file */}}
 // Test helpers (also in the tests for package {{ .Package }}.
 //
 // This code is duplicated because the current test is run as a separate test package: {{ .Package }}_test.
 {{ template "test-helpers" .WithTestPackage }}
+{{- end }}

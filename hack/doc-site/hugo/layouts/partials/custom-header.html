@@ -6,6 +6,21 @@
   /* This allows a markdown badge to remain left-aligned */
   margin: 10px !important;
 }
+.go-version-badge {
+  /* Explicit "minimum Go version" pill for build-guarded assertions (e.g. go1.26).
+     Uses the official Go brand blue. Rendered via the goversion shortcode. */
+  display: inline-block;
+  padding: 0.05em 0.55em;
+  border-radius: 0.9em;
+  background-color: #00ADD8;
+  color: #fff;
+  font-family: var(--CODE-font, monospace);
+  font-size: 0.78em;
+  font-weight: 600;
+  line-height: 1.5;
+  vertical-align: middle;
+  white-space: nowrap;
+}
 .card-container > li:only-child {
   /* When a card container has a single card (e.g. one code example per tab),
      span the full grid width instead of being squished to 1/3. */
