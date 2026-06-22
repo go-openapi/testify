@@ -1,6 +1,4 @@
-{{ comment .Copyright }}
-
-// Code generated with {{ .Tool }}; DO NOT EDIT.
+{{ template "header" . }}
 
 package {{ .Package }}
 
@@ -10,6 +8,7 @@ import (
 {{ imports .Imports }}
 )
 {{- end }}
+{{- if not .BuildConstraint }}{{/* the receiver type and its constructor belong only to the default (unguarded) file */}}
 
 // {{ .Receiver }} exposes all assertion functions as methods.
 //
@@ -26,8 +25,9 @@ func New(t T) *{{ .Receiver }} {
     T: t,
   }
 }
+{{- end }}
 
-{{- range .Functions }} 
+{{- range .Functions }}
   {{- if and (not .IsGeneric) (not .IsHelper) (not .IsConstructor) }}{{/* generics can't be added to the receiver */}}
 
 {{ docStringFor "forward" .Name }}

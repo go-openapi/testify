@@ -36,7 +36,7 @@ Each domain contains assertions regrouped by their use case (e.g. http, json, er
 - [Comparison](./comparison.md) - Comparing Ordered Values (12)
 - [Condition](./condition.md) - Expressing Assertions Using Conditions (9)
 - [Equality](./equality.md) - Asserting Two Things Are Equal (16)
-- [Error](./error.md) - Asserting Errors (8)
+- [Error](./error.md) - Asserting Errors (10)
 - [File](./file.md) - Asserting OS Files (6)
 - [Http](./http.md) - Asserting HTTP Response And Body (7)
 - [Json](./json.md) - Asserting JSON Documents (5)

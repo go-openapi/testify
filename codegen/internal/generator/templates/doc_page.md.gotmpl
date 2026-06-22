@@ -2,7 +2,7 @@
 ```tree
 {{- with .Package }}
   {{- range .Functions.Scope "include-generics" . }}{{/* functions in internal/assertions annotated with "domain:" */}}
-- [{{ .GenericName }}](#{{ slugize .GenericName }}) | {{ if .IsGeneric}}star | orange{{ else }}angles-right{{ end }}
+- [{{ .GenericName }}](#{{ slugize .GenericName }}){{ if .GoBuild }} ({{ .GoBuild }}+){{ end }} | {{ if .IsGeneric}}star | orange{{ else }}angles-right{{ end }}
   {{- end }}
 {{- end }}
 ```
@@ -62,7 +62,7 @@
 {{- end }}
 
 {{- define "FUNC-SECTION" }}{{/* data: Function ; complete description of an assertion function */}}
-### {{ .GenericName }}{{ if .IsGeneric }} {{ hopen }}% icon icon="star" color=orange %{{ hclose }}{{ end }}{#{{ slugize .GenericName }}}
+### {{ .GenericName }}{{ if .IsGeneric }} {{ hopen }}% icon icon="star" color=orange %{{ hclose }}{{ end }}{{ if .GoBuild }} {{ hopen }}% goversion "{{ .GoBuild }}" %{{ hclose }}{{ end }}{#{{ slugize .GenericName }}}
 
   {{- if .IsDeprecated }}
 
@@ -106,6 +106,9 @@ _All links point to <{{ .PkgGoDevURL }}>_
 This domain exposes {{ .RefCount }} functionalities.
 {{- if .HasGenerics }}
 Generic assertions are marked with a {{ hopen }}% icon icon="star" color=orange %{{ hclose }}.
+{{- end }}
+{{- if .HasGoGuards }}
+Assertions requiring a newer Go toolchain are marked with a version badge, e.g. {{ hopen }}% goversion "go1.26" %{{ hclose }} (the assertion is unavailable on older toolchains).
 {{- end }}
 {{ template "TOC" . }}
 

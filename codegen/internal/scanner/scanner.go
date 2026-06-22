@@ -31,6 +31,7 @@ type Scanner struct {
 	typedPackage     *types.Package
 	typesInfo        *types.Info
 	filesMap         map[*token.File]*ast.File
+	fileConstraints  map[*token.File]string // per-file //go:build constraint (e.g. "go1.26")
 	fileSet          *token.FileSet
 	importAliases    map[string]string // import path -> alias name used in source
 	sigExtractor     *signature.Extractor
@@ -80,6 +81,7 @@ func (s *Scanner) Scan() (*model.AssertionPackage, error) {
 	// stash everything we need from [packages.Package]
 	s.typesInfo = pkg.TypesInfo
 	s.filesMap = comments.BuildFilesMap(pkg)
+	s.fileConstraints = buildFileConstraints(pkg)
 	s.fileSet = pkg.Fset
 	s.importAliases = buildImportAliases(pkg)
 	s.sigExtractor = signature.New(s.typedPackage, s.importAliases)
@@ -155,6 +157,22 @@ func (s *Scanner) resolveScope() error {
 	return nil
 }
 
+// objectConstraint returns the //go:build version constraint guarding the source file
+// where object is declared (e.g. "go1.26"), or "" when it is unguarded.
+func (s *Scanner) objectConstraint(object types.Object) string {
+	pos := object.Pos()
+	if !pos.IsValid() {
+		return ""
+	}
+
+	tokenFile := s.fileSet.File(pos)
+	if tokenFile == nil {
+		return ""
+	}
+
+	return s.fileConstraints[tokenFile]
+}
+
 func (s *Scanner) addImport(pkg *types.Package) {
 	if s.result.Imports == nil {
 		s.result.Imports = make(model.ImportMap)
@@ -180,6 +198,7 @@ func (s *Scanner) addFunction(object *types.Func) {
 	function.ID = object.Id()
 	function.SourcePackage = object.Pkg().Path() // full package name
 	function.TargetPackage = object.Pkg().Name() // short package name
+	function.GoBuild = s.objectConstraint(object)
 	function.DocString = docComment.Text()
 	function.Tests = parser.ParseTestExamples(docComment.Text())
 

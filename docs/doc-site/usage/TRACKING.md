@@ -21,6 +21,7 @@ We continue to monitor and selectively adopt changes from the upstream repositor
 - ✅ [#1839] - `InEpsilonSymmetric` (number equality with symmetric role)
 - ✅ [#1840] - JSON/YAML `Redactor` pattern (dynamic input redaction, inspired by Insta)
 - ✅ [#1859] - Channel assertions (`Blocked` / `NotBlocked`)
+- ✅ [#1860] - `ErrorAsType` / `NotErrorAsType` (go1.26+, adapted with a typed `*E` target)
 
 ### Superseded by Our Implementation
 - ✅ [#1801] - Error message on large collections for `Len`
@@ -83,6 +84,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | [#1839] | PR | Number equality with symmetric role | ✅ Adapted  |
 | [#1840] | Issue | JSON presence check without exact values | ✅ Adapted  |
 | [#1859] | Issue | Channel assertions | ✅ Adapted |
+| [#1860] | Issue (PR [#1861]) | `ErrorAsType[E]` for Go 1.26+ | ✅ Adapted - implemented as `ErrorAsType` / `NotErrorAsType` with a typed `*E` target and a `bool` return (not the upstream `(E, bool)` shape), guarded by `//go:build go1.26`. First user of the codegen go-version guard. |
 
 [#994]: https://github.com/stretchr/testify/pull/994
 [#1232]: https://github.com/stretchr/testify/pull/1232
@@ -119,7 +121,6 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | Reference | Type | Summary | Status |
 |-----------|------|---------|--------|
 | [#1576] | Issue/PR | `EqualValues` assertion | 🔍 Monitoring [#1863]- Wrong equality when comparing float32 and float64|
-| [#1860] | Issue+PR | `ErrorAsType[E]` for Go 1.26+ - PR: [#1861] | 🔍 Monitoring - Interesting UX syntax |
 
 ### Informational (Not Implemented)
 
@@ -147,9 +148,9 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 
 | Category | Count |
 |----------|-------|
-| **Implemented/Merged** | 27 |
+| **Implemented/Merged** | 28 |
 | **Superseded** | 5 |
-| **Monitoring** | 2 |
+| **Monitoring** | 1 |
 | **Informational** | 4 |
 | **Total Processed** | 38 |
 

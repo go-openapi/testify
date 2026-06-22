@@ -1,9 +1,9 @@
 params:
     metrics:
         domains: 19
-        functions: 141
-        assertions: 137
-        generics: 53
+        functions: 143
+        assertions: 139
+        generics: 55
         nongeneric_assertions: 84
         helpers: 4
         others: 0
@@ -28,7 +28,7 @@ params:
                 count: 16
             error:
                 name: Error
-                count: 8
+                count: 10
             file:
                 name: File
                 count: 6
@@ -65,6 +65,6 @@ params:
             yaml:
                 name: Yaml
                 count: 5
-        package_variants: 442
-        total_variants: 884
-        total_functions: 894
+        package_variants: 446
+        total_variants: 892
+        total_functions: 902

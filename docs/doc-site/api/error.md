@@ -11,6 +11,8 @@ keywords:
   - "Errorf"
   - "ErrorAs"
   - "ErrorAsf"
+  - "ErrorAsType"
+  - "ErrorAsTypef"
   - "ErrorContains"
   - "ErrorContainsf"
   - "ErrorIs"
@@ -19,6 +21,8 @@ keywords:
   - "NoErrorf"
   - "NotErrorAs"
   - "NotErrorAsf"
+  - "NotErrorAsType"
+  - "NotErrorAsTypef"
   - "NotErrorIs"
   - "NotErrorIsf"
 ---
@@ -32,16 +36,20 @@ Asserting Errors
 
 _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
-This domain exposes 8 functionalities.
+This domain exposes 10 functionalities.
+Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
+Assertions requiring a newer Go toolchain are marked with a version badge, e.g. {{% goversion "go1.26" %}} (the assertion is unavailable on older toolchains).
 
 ```tree
 - [EqualError](#equalerror) | angles-right
 - [Error](#error) | angles-right
 - [ErrorAs](#erroras) | angles-right
+- [ErrorAsType[E error]](#errorastypee-error) (go1.26+) | star | orange
 - [ErrorContains](#errorcontains) | angles-right
 - [ErrorIs](#erroris) | angles-right
 - [NoError](#noerror) | angles-right
 - [NotErrorAs](#noterroras) | angles-right
+- [NotErrorAsType[E error]](#noterrorastypee-error) (go1.26+) | star | orange
 - [NotErrorIs](#noterroris) | angles-right
 ```
 
@@ -394,6 +402,101 @@ func (d *dummyError) Error() string {
 | [`assertions.ErrorAs(t T, err error, target any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ErrorAs) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorAs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L222)
+{{% /tab %}}
+{{< /tabs >}}
+
+### ErrorAsType[E error] {{% icon icon="star" color=orange %}} {{% goversion "go1.26" %}}{#errorastypee-error}
+ErrorAsType asserts that at least one of the errors in err's chain is of type E.
+
+It is the type-safe counterpart of [ErrorAs](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorAs), built on the go1.26 [errors.AsType](https://pkg.go.dev/errors#AsType):
+the expected type is the type parameter E (checked at compile time, no reflection),
+rather than the untyped any target used by [ErrorAs](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorAs).
+
+target receives the matched error when the assertion succeeds. It may be nil, for
+callers that only want to know whether the chain holds an error of type E: in that
+case E cannot be inferred and must be supplied explicitly.
+
+This assertion requires go1.26 or newer; it is unavailable on older toolchains.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	// capture the matched error (E is inferred from target):
+	var target *MyError
+	assertions.ErrorAsType(t, err, &target)
+	// only check, discarding the value (E given explicitly):
+	assertions.ErrorAsType[*MyError](t, err, nil)
+	success: fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError)
+	failure: ErrTest, new(*dummyError)
+```
+{{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestErrorAsType(t *testing.T)
+t := new(testing.T)
+success := assert.ErrorAsType(t, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
+fmt.Printf("success: %t\n", success)
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestErrorAsType(t *testing.T)
+t := new(testing.T)
+require.ErrorAsType(t, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
+fmt.Println("passed")
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+  
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.ErrorAsType[E error](t T, err error, target *E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorAsType) | package-level function |
+| [`assert.ErrorAsTypef[E error](t T, err error, target *E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorAsTypef) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.ErrorAsType[E error](t T, err error, target *E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorAsType) | package-level function |
+| [`require.ErrorAsTypef[E error](t T, err error, target *E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorAsTypef) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--|
+| [`assertions.ErrorAsType[E error](t T, err error, target *E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ErrorAsType) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorAsType](https://github.com/go-openapi/testify/blob/master/internal/assertions/error_go126.go#L39)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -862,6 +965,97 @@ func (d *dummyError) Error() string {
 | [`assertions.NotErrorAs(t T, err error, target any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotErrorAs) | internal implementation |
 
 **Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotErrorAs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L257)
+{{% /tab %}}
+{{< /tabs >}}
+
+### NotErrorAsType[E error] {{% icon icon="star" color=orange %}} {{% goversion "go1.26" %}}{#noterrorastypee-error}
+NotErrorAsType asserts that none of the errors in err's chain is of type E.
+
+It is the type-safe counterpart of [NotErrorAs](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotErrorAs), built on the go1.26 [errors.AsType](https://pkg.go.dev/errors#AsType).
+
+target is only used to infer the type parameter E and is never assigned; it may be nil,
+in which case E must be supplied explicitly.
+
+This assertion requires go1.26 or newer; it is unavailable on older toolchains.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	var target *MyError
+	assertions.NotErrorAsType(t, err, &target)
+	// or, supplying E explicitly:
+	assertions.NotErrorAsType[*MyError](t, err, nil)
+	success: ErrTest, new(*dummyError)
+	failure: fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError)
+```
+{{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestNotErrorAsType(t *testing.T)
+t := new(testing.T)
+success := assert.NotErrorAsType(t, assert.ErrTest, new(*dummyError))
+fmt.Printf("success: %t\n", success)
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestNotErrorAsType(t *testing.T)
+t := new(testing.T)
+require.NotErrorAsType(t, require.ErrTest, new(*dummyError))
+fmt.Println("passed")
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+  
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.NotErrorAsType[E error](t T, err error, target *E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotErrorAsType) | package-level function |
+| [`assert.NotErrorAsTypef[E error](t T, err error, target *E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotErrorAsTypef) | formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.NotErrorAsType[E error](t T, err error, target *E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotErrorAsType) | package-level function |
+| [`require.NotErrorAsTypef[E error](t T, err error, target *E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotErrorAsTypef) | formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--|
+| [`assertions.NotErrorAsType[E error](t T, err error, target *E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotErrorAsType) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotErrorAsType](https://github.com/go-openapi/testify/blob/master/internal/assertions/error_go126.go#L87)
 {{% /tab %}}
 {{< /tabs >}}
 

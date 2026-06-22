@@ -1,0 +1,9 @@
+{{- define "header" -}}
+{{ comment .Copyright }}
+
+// Code generated with {{ .Tool }}; DO NOT EDIT.
+{{- if .BuildConstraint }}
+
+//go:build {{ .BuildConstraint }}
+{{- end -}}
+{{- end -}}

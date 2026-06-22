@@ -1,6 +1,4 @@
-{{ comment .Copyright }}
-
-// Code generated with {{ .Tool }}; DO NOT EDIT.
+{{ template "header" . }}
 
 package {{ .Package }}
 
@@ -17,6 +15,7 @@ func Test{{ .Name }}(t *testing.T) {
 {{- template "test-case" (testSetup . "assertions" "") }}
 }
 {{- end }}
+{{- if not .BuildConstraint }}{{/* shared test fixtures belong only to the default (unguarded) test file */}}
 
 // mockT is a mock testing.T for assertion tests
 type mockT struct {
@@ -46,3 +45,4 @@ func (m *mockFailNowT) FailNow() {
 }
 
 {{ template "test-helpers" . }}
+{{- end }}

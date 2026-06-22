@@ -302,6 +302,7 @@ func buildQuickIndex(docsByDomain iter.Seq2[string, model.Document]) model.Quick
 				Domain:    domain,
 				IsGeneric: fn.IsGeneric,
 				IsHelper:  fn.IsHelper,
+				GoBuild:   fn.GoBuild,
 			}
 			if opposite != "" {
 				if gn, ok := genericNames[opposite]; ok {

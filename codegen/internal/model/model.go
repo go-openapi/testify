@@ -38,6 +38,11 @@ type AssertionPackage struct {
 	Consts    []Ident
 	Vars      []Ident
 
+	// BuildConstraint, when non-empty, is the //go:build expression to stamp on a
+	// rendered file (e.g. "go1.26"). It is set per build-variant during generation
+	// and is empty for the default (unguarded) partition.
+	BuildConstraint string
+
 	// extraneous information when scanning in collectDoc mode
 	ExtraComments []ExtraComment
 	Context       *Document
@@ -126,6 +131,43 @@ const (
 	ScopeKindHelpers         ScopeKind = "only-helpers"
 )
 
+// GoBuildTag converts a //go:build version expression into a filename-safe suffix tag,
+// e.g. "go1.26" -> "go126". Returns "" for an empty constraint (the default partition).
+//
+// Only simple single-term go-version constraints are supported for now; dots and spaces
+// are stripped to keep the suffix free of any implicit GOOS/GOARCH filename semantics.
+func GoBuildTag(expr string) string {
+	if expr == "" {
+		return ""
+	}
+
+	r := strings.NewReplacer(".", "", " ", "")
+
+	return r.Replace(expr)
+}
+
+// BuildVariants returns the distinct //go:build constraints across the functions,
+// in deterministic order, always starting with the default (empty) partition.
+func (f Functions) BuildVariants() []string {
+	seen := map[string]struct{}{"": {}}
+	variants := []string{""} // default partition is always present
+
+	for _, fn := range f {
+		if fn.GoBuild == "" {
+			continue
+		}
+		if _, ok := seen[fn.GoBuild]; ok {
+			continue
+		}
+		seen[fn.GoBuild] = struct{}{}
+		variants = append(variants, fn.GoBuild)
+	}
+
+	slices.Sort(variants[1:]) // keep "" first, sort the rest for stable output
+
+	return variants
+}
+
 type Functions []Function
 
 func (f Functions) Scope(scope ScopeKind, ctx *AssertionPackage) (iter.Seq[Function], error) {
@@ -192,6 +234,9 @@ type Function struct {
 	TargetPackage string
 	DocString     string
 	UseMock       string
+	// GoBuild is the //go:build version constraint guarding the source file this
+	// function was declared in (e.g. "go1.26"). Empty when the function is unguarded.
+	GoBuild       string
 	Params        Parameters
 	AllParams     Parameters
 	Returns       Parameters

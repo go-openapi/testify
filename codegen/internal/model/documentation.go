@@ -103,6 +103,22 @@ func (d Document) HasGenerics() bool {
 	return false
 }
 
+// HasGoGuards reports whether any function in the document requires a minimum Go version
+// (carries a //go:build go1.N guard), used to decide whether to show the version-badge legend.
+func (d Document) HasGoGuards() bool {
+	if d.Package == nil {
+		return false
+	}
+
+	for _, fn := range d.Package.Functions {
+		if fn.GoBuild != "" {
+			return true
+		}
+	}
+
+	return false
+}
+
 type ExtraPackages []*AssertionPackage
 
 func (pkgs ExtraPackages) LookupFunction(name string) []FunctionWithContext {
@@ -179,4 +195,5 @@ type QuickIndexEntry struct {
 	Domain         string
 	IsGeneric      bool
 	IsHelper       bool
+	GoBuild        string // //go:build version guard (e.g. "go1.26"); empty when unguarded
 }

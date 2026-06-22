@@ -43,9 +43,12 @@ timeline
                     : redactor functons for JSON & YAML assertions
                     : export internal tools (spew, difflib)
                     : go1.25+
-    🔍 v2.6 (June 2026) : (tentative)
-                    : go build guards (codegen)
-                    : ErrorAsType (go1.26+)
+    ✅ v2.6 (June 2026) : go build guards (codegen)
+                    : ErrorAsType, NotErrorAsType (go1.26+)
+    section Q3 2026
+    🔍 v2.7 (Sep 2026) : (tentative)
+                    : generic assertions as forward methods (go1.27+)
+                    : go1.27+
 {{< /mermaid >}}
 
 ## Dropped enveavors 
@@ -89,7 +92,7 @@ We actively monitor [github.com/stretchr/testify](https://github.com/stretchr/te
 
 **Review frequency**: Quarterly (next review: April 2026)
 
-**Processed items**: 31 upstream PRs and issues have been reviewed, with 23 implemented/merged, 4 superseded by our implementation, 2 informational, and 2 currently under consideration.
+**Processed items**: 38 upstream PRs and issues have been reviewed, with 28 implemented/merged, 5 superseded by our implementation, 4 informational, and 1 currently under consideration.
 
 For a complete catalog of all upstream PRs and issues we've processed (implemented, adapted, superseded, or monitoring), see the [Upstream Tracking](../../usage/TRACKING.md).
 
