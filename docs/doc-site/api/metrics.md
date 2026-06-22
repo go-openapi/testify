@@ -15,14 +15,14 @@ Counts for core functionality, and generated variants (formatted, forward, forwa
 
 | Kind                      | Count             | Note |
 | ------------------------- | ----------------- | ---- |
-| All core functions             | 141 | Maintained core |
-| All core assertions       | 137 | Usage with `*testing.T` |
-| Generic assertions        | 53   | Type-safe assertions ("T" suffix) |
+| All core functions             | 143 | Maintained core |
+| All core assertions       | 139 | Usage with `*testing.T` |
+| Generic assertions        | 55   | Type-safe assertions ("T" suffix) |
 | Helpers (not assertions)  | 4    | General-purpose utilities, not assertions |
 | Others                    | 0     | |
-| assert/require variants   | 442 | Generated variants |
-| Total assertions variants | 884 | Available assertions API |
-| Total API surface         | 894 | |
+| assert/require variants   | 446 | Generated variants |
+| Total assertions variants | 892 | Available assertions API |
+| Total API surface         | 902 | |
 
 ## Quick index
 
@@ -47,6 +47,7 @@ Table of core assertions, excluding variants. Each function is side by side with
 | [EqualValues](equality/#equalvalues) | [NotEqualValues](equality/#notequalvalues) | equality |  |
 | [Error](error/#error) | [NoError](error/#noerror) | error |  |
 | [ErrorAs](error/#erroras) | [NotErrorAs](error/#noterroras) | error |  |
+| [ErrorAsType[E error]](error/#errorastypee-error) {{% icon icon="star" color=orange %}} {{% goversion "go1.26" %}} | [NotErrorAsType](error/#noterrorastypee-error) | error |  |
 | [ErrorContains](error/#errorcontains) |  | error |  |
 | [ErrorIs](error/#erroris) | [NotErrorIs](error/#noterroris) | error |  |
 | [EventuallyWith[C CollectibleConditioner]](condition/#eventuallywithc-collectibleconditioner) {{% icon icon="star" color=orange %}} |  | condition |  |
