@@ -43,28 +43,21 @@ This is the go-openapi fork of the great [testify](https://github.com/stretchr/t
 
 ## Announcements
 
-### Status
+* **2026-06-22** : preparing v2.6.0 (ETA within 2-3 days)
+  - go1.26 optional support
+  - `ErrorWithType[E error]` available with go1.26
+  - a few minor fixes (reflection-based assertion robustness) thanks to your awesome feedback.
+
+* **2026-06-22** : [ROADMAP][doc-roadmap] to v2.7.0 (ETA Sept. 2026)
+  - minor version releases will slow down from monthly to quarterly. Next planned for September
+  - go1.27 optional support, with forward methods supporting generics.
+
+## Status
 
 Design and exploration phase completed. The published API is now stable:
 moving forward, API changes will remain backward-compatible with v2.4.0.
 
 Feedback, contributions and proposals are welcome.
-
-* **2026-06-22** : preparing v2.6.0 (ETA within 2-3 days)
-  * go1.26 optional support
-  * `ErrorWithType[E error]` available with go1.26
-  * a few minor fixes (reflection-based assertion robustness) thanks to your awesome feedback.
-
-* **2026-06-22** : roadmap to v2.7.0 (ETA Sept. 2026)
-  * minor version releases will slow down from monthly to quarterly. Next planned for September
-  * go1.27 optional support, with forward methods supporting generics.
- 
-> **Recent news**
->
-> ✅ Preparing v2.5.0: new features: support for synctest, NoFileDescriptorLeak for macos,
-> plus a few fixes (`EventuallyWithT`, `Subset`).
->
-> See also our [ROADMAP][doc-roadmap].
 
 ## Getting started
 
@@ -85,13 +78,13 @@ import (
         "testing"
     )
     ...
-    
+
     const expected = "expected result"
 
 	result := printImports(input)
 	if result != expected {
 		t.Errorf(
-            "Expected: %s. Got: %s", expected, result, 
+            "Expected: %s. Got: %s", expected, result,
         )
 
         return
@@ -111,7 +104,7 @@ import (
 
 	require.Equalf(t,
         expected, printImports(input), "Expected: %s. Got: %s",
-        expected, result, 
+        expected, result,
     )
 ```
 
