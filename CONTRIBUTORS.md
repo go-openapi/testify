@@ -4,7 +4,7 @@
 
 | Total Contributors | Total Contributions |
 | --- | --- |
-| 256  | 1257  |
+| 255  | 1256  |
 
 | Username | All Time Contribution Count | All Commits |
 | --- | --- | --- |
@@ -124,7 +124,7 @@
 | @simonmulser | 1 | <https://github.com/go-openapi/testify/commits?author=simonmulser> |
 | @brahmaroutu | 1 | <https://github.com/go-openapi/testify/commits?author=brahmaroutu> |
 | @stdedos | 1 | <https://github.com/go-openapi/testify/commits?author=stdedos> |
-| @aldas | 1 | <https://github.com/go-openapi/testify/commits?author=aldas> |
+| @bogdandrutu | 1 | <https://github.com/go-openapi/testify/commits?author=bogdandrutu> |
 | @comogo | 1 | <https://github.com/go-openapi/testify/commits?author=comogo> |
 | @TechnotronicOz | 1 | <https://github.com/go-openapi/testify/commits?author=TechnotronicOz> |
 | @n9netales | 1 | <https://github.com/go-openapi/testify/commits?author=n9netales> |
@@ -185,7 +185,6 @@
 | @ybrustin | 1 | <https://github.com/go-openapi/testify/commits?author=ybrustin> |
 | @yrk-lab | 1 | <https://github.com/go-openapi/testify/commits?author=yrk-lab> |
 | @ac7 | 1 | <https://github.com/go-openapi/testify/commits?author=ac7> |
-| @bogdandrutu | 1 | <https://github.com/go-openapi/testify/commits?author=bogdandrutu> |
 | @docbobo | 1 | <https://github.com/go-openapi/testify/commits?author=docbobo> |
 | @moorereason | 1 | <https://github.com/go-openapi/testify/commits?author=moorereason> |
 | @chakrit | 1 | <https://github.com/go-openapi/testify/commits?author=chakrit> |
@@ -242,8 +241,8 @@
 | @leepa | 1 | <https://github.com/go-openapi/testify/commits?author=leepa> |
 | @luan | 1 | <https://github.com/go-openapi/testify/commits?author=luan> |
 | @Lucaber | 1 | <https://github.com/go-openapi/testify/commits?author=Lucaber> |
-| @miparnisari | 1 | <https://github.com/go-openapi/testify/commits?author=miparnisari> |
 | @martin-sucha | 1 | <https://github.com/go-openapi/testify/commits?author=martin-sucha> |
+| @aldas | 1 | <https://github.com/go-openapi/testify/commits?author=aldas> |
 | @dominicbarnes | 1 | <https://github.com/go-openapi/testify/commits?author=dominicbarnes> |
 | @dlclark | 1 | <https://github.com/go-openapi/testify/commits?author=dlclark> |
 | @bits01 | 1 | <https://github.com/go-openapi/testify/commits?author=bits01> |
