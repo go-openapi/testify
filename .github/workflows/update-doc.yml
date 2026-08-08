@@ -100,7 +100,7 @@ jobs:
           version: v0.153.3  # <- pin the HUGO version, as they often break things
           extended: true
           args: >
-            --config hugo.yaml,testify.yaml
+            --config hugo.yaml,testify.yaml,metrics.yaml
             --buildDrafts
             --cleanDestinationDir
             --minify

@@ -24,14 +24,15 @@ This is the go-openapi fork of the great [testify](https://github.com/stretchr/t
 ## Why choose `go-openapi/testify/v2`
 
 * 95% compatible with `stretchr/testify` — if you already use it, our migration tool automates the switch
-* Actively maintained: regular fixes and evolutions, many PRs proposed upstream are already in
+* Actively maintained: regular fixes and evolutions, many PRs proposed upstream are already in. [See our tracking board][upstream-tracking-url]
 * Zero external dependencies — you import what you need, with opt-in modules for extras (e.g. YAML, colorized output)
 * Modernized codebase targeting go1.25+
 * Go routine leak detection built in: zero-setup, no false positives, works with parallel tests (unlike `go.uber.org/goleak`)
 * File descriptor leak detection (linux-only)
 * Type-safe assertions with generics (see [a basic example][example-with-generics-url]) — migration to generics can be automated too. [Read the full story][doc-generics]
 * Safe async assertions, extended JSON & YAML assertions
-* Coming in `v2.5.0`: non-flaky async assertions using `synctest`, and internal tools exposed as standalone modules (spew, unified diff, goleak)
+* Non-flaky async assertions using `synctest`, and internal tools exposed as standalone modules (spew, unified diff, goleak)
+* Extensible `Assertion` type
 * We take documentation seriously: [searchable doc site][doc-url] with testable examples and a complete tutorial, plus detailed [godoc][godoc-url] for every assertion
 
 ### This fork isn't for everyone
@@ -43,10 +44,7 @@ This is the go-openapi fork of the great [testify](https://github.com/stretchr/t
 
 ## Announcements
 
-* **2026-06-22** : preparing v2.6.0 (ETA within 2-3 days)
-  - go1.26 optional support
-  - `ErrorWithType[E error]` available with go1.26
-  - a few minor fixes (reflection-based assertion robustness) thanks to your awesome feedback.
+* **2026-08-08** : v2.7.0 landing soon (ETA Sept. 2026)
 
 * **2026-06-22** : [ROADMAP][doc-roadmap] to v2.7.0 (ETA Sept. 2026)
   - minor version releases will slow down from monthly to quarterly. Next planned for September
@@ -184,6 +182,7 @@ Maintainers can cut a new release by either:
 [doc-examples]: https://go-openapi.github.io/testify/usage/examples
 [doc-generics]: https://go-openapi.github.io/testify/usage/generics
 [example-with-generics-url]: https://go-openapi.github.io/testify#usage-with-generics
+[upstream-tracking-url]: https://go-openapi.github.io/testify/usage/tracking
 [godoc-badge]: https://pkg.go.dev/badge/github.com/go-openapi/testify/v2
 [godoc-url]: https://pkg.go.dev/github.com/go-openapi/testify/v2
 [discord-badge]: https://img.shields.io/discord/1446918742398341256?logo=discord&label=discord&color=blue
