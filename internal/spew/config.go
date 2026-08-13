@@ -42,7 +42,7 @@ type ConfigState struct {
 	Indent string
 
 	// MaxDepth controls the maximum number of levels to descend into nested
-	// data structures.  The default, 0, means there is no limit.
+	// data structures. The default is 1000. The value 0 means there is no limit.
 	//
 	// NOTE: Circular data structures are properly detected, so it is not
 	// necessary to set this value unless you specifically want to limit deeply
@@ -107,22 +107,24 @@ type ConfigState struct {
 }
 
 // Config is the active configuration of the top-level functions.
+//
 // The configuration can be changed by modifying the contents of [spew.Config].
 var Config = ConfigState{ //nolint:gochecknoglobals // this is global configuration and we leave it for backward-compatibility
 	Indent:             " ",
 	EnableTimeStringer: true,
+	MaxDepth:           maxDepth,
 }
 
 // NewDefaultConfig returns a [ConfigState] with the following default settings.
 //
 //	Indent: " "
-//	MaxDepth: 0
+//	MaxDepth: 1000
 //	DisableMethods: false
 //	DisablePointerMethods: false
 //	ContinueOnMethod: false
 //	SortKeys: false
 func NewDefaultConfig() *ConfigState {
-	return &ConfigState{Indent: " "}
+	return &ConfigState{Indent: " ", MaxDepth: maxDepth}
 }
 
 // Errorf is a wrapper for [fmt.Errorf] that treats each argument as if it were
