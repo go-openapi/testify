@@ -9,7 +9,6 @@ import (
 	"net/url"
 	"path"
 	"path/filepath"
-	"slices"
 	"sort"
 	"strings"
 	"text/template"
@@ -100,7 +99,7 @@ func comment(str string) string {
 
 func rTrimEmpty(lines []string) []string {
 	var i int
-	for i := range slices.Backward(lines) {
+	for i = len(lines) - 1; i >= 0; i-- { //nolint:modernize // slicesbackward: we actually need the index, not the value.
 		if lines[i] != "" {
 			break
 		}
