@@ -289,12 +289,6 @@ func (x TestableExample) Render() string {
 	}
 
 	return x.renderBody()
-
-	// Previous routing: stripped package/imports/main scaffolding.
-	// if x.WholeFile && x.play != nil {
-	// 	return x.renderWholeFile()
-	// }
-	// return x.renderBody()
 }
 
 // renderPlay renders the Play AST as-is:
@@ -323,7 +317,9 @@ func (x TestableExample) renderBody() string {
 		return ""
 	}
 
-	// Print the raw AST node.
+	// Print the raw AST node as valid, formatted go code.
+	// This allows to generate code from the testable values
+	// captured in the godoc of an assertion.
 	var buf bytes.Buffer
 	p := printer.Config{Mode: printer.UseSpaces, Tabwidth: tabWidth}
 	if err := p.Fprint(&buf, x.fset, x.code); err != nil {
@@ -351,36 +347,6 @@ func (x TestableExample) renderBody() string {
 
 	return extractFuncBody(string(formatted))
 }
-
-/*
-// renderWholeFile renders a whole-file example, stripping the package clause
-// and imports, and renaming "func main()" back to the example function name.
-func (x TestableExample) renderWholeFile() string {
-	// Print the entire Play file.
-	var buf bytes.Buffer
-	p := printer.Config{Mode: printer.UseSpaces, Tabwidth: tabWidth}
-	if err := p.Fprint(&buf, x.fset, x.play); err != nil {
-		return ""
-	}
-
-	raw := buf.String()
-
-	// Remove "// Output:" comments.
-	raw = stripOutputComments(raw)
-
-	// Format with goimports.
-	formatted, err := imports.Process("example.go", []byte(raw), &imports.Options{
-		Fragment:   true,
-		FormatOnly: true,
-	})
-	if err != nil {
-		formatted = []byte(raw)
-	}
-
-	// Strip package clause and imports, rename main -> Example function.
-	return extractWholeFileBody(string(formatted), "Example"+x.Name)
-}
-*/
 
 // extractWholeFileBody strips the package clause and import blocks from a
 // formatted Go file, and renames "func main()" to the given example function name.

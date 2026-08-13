@@ -58,7 +58,8 @@ func markdownLinks(in string) (string, []string) {
 	// Pattern: [text]: url (at start of line or after whitespace)
 	refLinks := make(map[string]string)
 
-	// Extract all reference links
+	// Extract all reference links: godoc-style links need to be reworked as proper markdown.
+	// We extract the detected links (regexp match) before further reprocessing (below).
 	matches := refLinkPattern.FindAllStringSubmatch(in, -1)
 	const expectedGroups = 2
 	for _, match := range matches {
@@ -70,7 +71,7 @@ func markdownLinks(in string) (string, []string) {
 	// Remove reference link definitions from input
 	processed := refLinkPattern.ReplaceAllString(in, "")
 
-	// Convert reference-style links to inline links
+	// Convert reference-style links to inline links.
 	// Replace [text] with [text](url) where we have the reference
 	usedRefs := make(map[string]bool)
 	for refText, refURL := range refLinks {

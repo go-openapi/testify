@@ -68,8 +68,6 @@ func NoPanicProp(ctx context.Context, g *rapid.Generator[any]) func(*rapid.T) {
 			}()
 
 			value = spew.Sdump(value)
-			// fmt.Printf("%v", value)
-
 			close(done)
 		}()
 

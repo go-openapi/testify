@@ -46,7 +46,11 @@ func ParseTestValues(input string) []model.TestValue {
 		}}
 	}
 
-	// Extract elements from the composite literal
+	// Extract elements from the composite literal.
+	// The godoc comment contains testable values as legit go literals.
+	//
+	// We parse this snippet and produce a documented version of it [model.TestValue]
+	// for proper rendering (either as code or as documentation).
 	compositeLit, ok := expr.(*ast.CompositeLit)
 	if !ok {
 		// Should never happen if parser succeeded

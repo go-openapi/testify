@@ -20,18 +20,6 @@ const (
 	brightYellowMark = "\033[0;93m" // aka yellow
 	brightCyanMark   = "\033[0;96m" // aka turquoise
 
-	// color codes for future use.
-
-	// blackMark   = "\033[0;30m"
-	// blueMark    = "\033[0;34m"
-	// magentaMark = "\033[0;35m"
-	// greyMark    = "\033[0;37m".
-
-	// darkGreyMark      = "\033[0;90m"
-	// brightBlueMark    = "\033[0;94m"
-	// brightMagentaMark = "\033[0;95m"
-	// brightWhiteMark   = "\033[0;97m".
-
 	endMark = "\033[0m"
 )
 
@@ -56,13 +44,9 @@ func noopColorizer(s string) string {
 var (
 	greenColorizer = makeColorizer(greenMark)
 	redColorizer   = makeColorizer(redMark)
-	// yellowColorizer = makeColorizer(yellowMark)
-	// cyanColorizer   = makeColorizer(cyanMark).
 
 	brightGreenColorizer = makeColorizer(brightGreenMark)
 	brightRedColorizer   = makeColorizer(brightRedMark)
-	// brightYellowColorizer = makeColorizer(brightYellowMark)
-	// brightCyanColorizer   = makeColorizer(brightCyanMark).
 )
 
 //nolint:gochecknoglobals // internal printer builders may safely be shared at the package-level
@@ -76,12 +60,6 @@ var (
 	brightRedPrinterBuilder    = ansiPrinterBuilder(brightRedMark)
 	brightYellowPrinterBuilder = ansiPrinterBuilder(brightYellowMark)
 	brightCyanPrinterBuilder   = ansiPrinterBuilder(brightCyanMark)
-
-	// magentaPrinterBuilder = ansiPrinterBuilder(magentaMark)
-	// bluePrinterBuilder    = ansiPrinterBuilder(blueMark).
-
-	// brightMagentaPrinterBuilder = ansiPrinterBuilder(brightMagentaMark)
-	// brightBluePrinterBuilder    = ansiPrinterBuilder(brightBlueMark).
 )
 
 func ansiPrinterBuilder(mark string) difflib.PrinterBuilder {
