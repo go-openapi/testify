@@ -1,3 +1,8 @@
+---
+name: writing-test-for-generics
+description: How to write tests that cover both generic and reflection-based assertions
+---
+
 # Testing Generic Functions with Table-Driven Tests
 
 ## The Challenge

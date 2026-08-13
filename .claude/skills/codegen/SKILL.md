@@ -1,3 +1,8 @@
+---
+name: regenerate-code-and-doc
+description: How to regenerate code and documentation after a maintenance that changes the API
+---
+
 # Code Generation
 
 How the testify code and documentation generator works.
