@@ -25,9 +25,10 @@ func Implements(t T, interfaceObject any, object any, msgAndArgs ...any) bool {
 		h.Helper()
 	}
 	ifType := reflect.TypeOf(interfaceObject)
-	if ifType == nil {
+	if ifType == nil || ifType.Kind() != reflect.Pointer {
 		return Fail(t, "interfaceObject must be a pointer to an interface type", msgAndArgs...)
 	}
+	// ifType is a pointer: Elem() works
 	interfaceType := ifType.Elem()
 
 	if object == nil {
@@ -56,7 +57,7 @@ func NotImplements(t T, interfaceObject any, object any, msgAndArgs ...any) bool
 		h.Helper()
 	}
 	ifType := reflect.TypeOf(interfaceObject)
-	if ifType == nil {
+	if ifType == nil || ifType.Kind() != reflect.Pointer {
 		return Fail(t, "interfaceObject must be a pointer to an interface type", msgAndArgs...)
 	}
 	interfaceType := ifType.Elem()

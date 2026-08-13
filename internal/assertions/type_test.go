@@ -24,6 +24,9 @@ func TestTypeImplements(t *testing.T) {
 	if Implements(mock, (*AssertionTesterInterface)(nil), nil) {
 		t.Error("Implements method should return false: nil does not implement AssertionTesterInterface")
 	}
+	if Implements(mock, "not a pointer", nil) {
+		t.Error("Implements method should return false: expected must be a pointer")
+	}
 }
 
 func TestTypeNotImplements(t *testing.T) {
@@ -38,6 +41,9 @@ func TestTypeNotImplements(t *testing.T) {
 	}
 	if NotImplements(mock, (*AssertionTesterInterface)(nil), nil) {
 		t.Error("NotImplements method should return false: nil can't be checked to be implementing AssertionTesterInterface or not")
+	}
+	if NotImplements(mock, "not a pointer", nil) {
+		t.Error("Implements method should return false: expected must be a pointer")
 	}
 }
 

@@ -294,7 +294,7 @@ func SeqNotContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs 
 
 	for iterated := range iter {
 		if iterated == element {
-			return Fail(t, fmt.Sprintf("sequence does not contain %#v", element), msgAndArgs...)
+			return Fail(t, fmt.Sprintf("sequence should not contain %#v", element), msgAndArgs...)
 		}
 	}
 

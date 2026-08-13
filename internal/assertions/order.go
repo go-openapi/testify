@@ -215,7 +215,6 @@ func IsDecreasing(t T, collection any, msgAndArgs ...any) bool {
 		return Fail(t, err.Error(), msgAndArgs...)
 	}
 	if !ok {
-		values = append(values, msgAndArgs...)
 		return Fail(t, fmt.Sprintf("\"%v\" is not greater than \"%v\"", values...), msgAndArgs...)
 	}
 
@@ -320,6 +319,8 @@ func IsNonDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice
 //
 // It returns an error if the object can't be ordered.
 // When not strictly ordered, it returns the first 2 offending values found.
+//
+// The returned slice always contains either 0 or 2 values.
 func isStrictlyOrdered(object any, reverseOrder bool) ([]any, bool, error) {
 	objType := reflect.TypeOf(object)
 	if objType == nil {

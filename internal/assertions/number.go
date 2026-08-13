@@ -347,7 +347,10 @@ func InDeltaSlice(t T, expected, actual any, delta float64, msgAndArgs ...any) b
 	lenActual := actualSlice.Len()
 	lenExpected := expectedSlice.Len()
 	if lenActual != lenExpected {
-		return Fail(t, "Parameters must be slice", msgAndArgs...)
+		return Fail(t,
+			fmt.Sprintf("Parameters must be slices of equal length to be compared, but got len(expected)=%d != len(actual)=%d", lenExpected, lenActual),
+			msgAndArgs...,
+		)
 	}
 
 	for i := range lenActual {

@@ -16,8 +16,11 @@ func TestIsTime(t *testing.T) {
 			t.Parallel()
 
 			val := reflect.ValueOf(tt.value)
-			if result := isTime(val); result != tt.expectedTime {
+			if result := isTime(val, 0); result != tt.expectedTime {
 				t.Errorf("expected %v to be considered a time.Time", tt.value)
+			}
+			if result := isTime(val, 1001); result == true {
+				t.Errorf("expected %v to NOT be considered a time.Time (even if it is: we simulate a depth-bound check)", tt.value)
 			}
 		})
 	}

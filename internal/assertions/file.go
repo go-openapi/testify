@@ -145,6 +145,14 @@ func FileEmpty(t T, path string, msgAndArgs ...any) bool {
 		h.Helper()
 	}
 
+	return fileEmpty(t, path, 0, msgAndArgs...)
+}
+
+func fileEmpty(t T, path string, depth int, msgAndArgs ...any) bool {
+	if depth > maxDepth {
+		return Fail(t, fmt.Sprintf("chain of symlinks too long, stopped at %d nested symlinks", maxDepth), msgAndArgs...)
+	}
+
 	info, err := lstat(path, "file")
 	if err != nil {
 		return Fail(t, err.Error(), msgAndArgs...)
@@ -159,7 +167,7 @@ func FileEmpty(t T, path string, msgAndArgs ...any) bool {
 		return Fail(t, err.Error(), msgAndArgs...)
 	}
 	if isSymlink {
-		return FileEmpty(t, target, msgAndArgs...)
+		return fileEmpty(t, target, depth+1, msgAndArgs...)
 	}
 
 	if info.Size() > 0 {
@@ -186,6 +194,14 @@ func FileNotEmpty(t T, path string, msgAndArgs ...any) bool {
 		h.Helper()
 	}
 
+	return fileNotEmpty(t, path, 0, msgAndArgs...)
+}
+
+func fileNotEmpty(t T, path string, depth int, msgAndArgs ...any) bool {
+	if depth > maxDepth {
+		return Fail(t, fmt.Sprintf("chain of symlinks too long, stopped at %d nested symlinks", maxDepth), msgAndArgs...)
+	}
+
 	info, err := lstat(path, "file")
 	if err != nil {
 		return Fail(t, err.Error(), msgAndArgs...)
@@ -200,7 +216,7 @@ func FileNotEmpty(t T, path string, msgAndArgs ...any) bool {
 		return Fail(t, err.Error(), msgAndArgs...)
 	}
 	if isSymlink {
-		return FileNotEmpty(t, target, msgAndArgs...)
+		return fileNotEmpty(t, target, depth+1, msgAndArgs...)
 	}
 
 	if info.Size() == 0 {

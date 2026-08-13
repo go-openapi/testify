@@ -470,6 +470,8 @@ func (t CommentTag) String() string {
 		return "comment-tag-note"
 	case CommentTagDomainDescription:
 		return "comment-tag-domain-description"
+	case CommentTagOpposite:
+		return "comment-tag-opposite"
 	default:
 		return "invalid-value"
 	}

@@ -58,8 +58,7 @@ type dumpState struct {
 	cs               *ConfigState
 }
 
-// indent performs indentation according to the depth level and cs.Indent
-// option.
+// indent performs indentation according to the depth level and cs.Indent option.
 func (d *dumpState) indent() {
 	if d.ignoreNextIndent {
 		d.ignoreNextIndent = false
@@ -69,6 +68,7 @@ func (d *dumpState) indent() {
 }
 
 // unpackValue returns values inside of non-nil interfaces when possible.
+//
 // This is useful for data types like structs, arrays, slices, and maps which
 // can contain varying types packed inside an interface.
 func (d *dumpState) unpackValue(v reflect.Value) reflect.Value {

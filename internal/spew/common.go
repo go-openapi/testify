@@ -286,7 +286,7 @@ func printHexPtr(w io.Writer, p uintptr) {
 // Stringer/error methods and invokes them if so. Returns true if the value
 // was handled.
 func tryHandleMethods(cs *ConfigState, w io.Writer, v reflect.Value, kind reflect.Kind) bool {
-	if cs.DisableMethods && (!cs.EnableTimeStringer || !isTime(v)) {
+	if cs.DisableMethods && (!cs.EnableTimeStringer || !isTime(v, 0)) {
 		return false
 	}
 	if kind == reflect.Invalid || kind == reflect.Interface {
@@ -384,7 +384,7 @@ type valuesSorter struct {
 func newValuesSorter(values []reflect.Value, cs *ConfigState) sort.Interface {
 	vs := &valuesSorter{values: values, cs: cs}
 	v0 := vs.values[0]
-	if canSortSimply(v0.Kind()) || isTime(v0) {
+	if canSortSimply(v0.Kind()) || isTime(v0, 0) {
 		return vs
 	}
 
@@ -459,9 +459,9 @@ func (s *valuesSorter) Less(i, j int) bool {
 	return s.strings[i] < s.strings[j]
 }
 
-// valueSortLess returns whether the first value should sort before the second
-// value.  It is used by valueSorter.Less as part of the sort.Interface
-// implementation.
+// valueSortLess returns whether the first value should sort before the second value.
+//
+// It is used by valueSorter.Less as part of the sort.Interface implementation.
 func valueSortLess(a, b reflect.Value) bool {
 	switch a.Kind() {
 	case reflect.Bool:
@@ -495,8 +495,8 @@ func valueSortLess(a, b reflect.Value) bool {
 		}
 		fallthrough
 	default:
-		isTimeA := isTime(a)
-		isTimeB := isTime(b)
+		isTimeA := isTime(a, 0)
+		isTimeB := isTime(b, 0)
 		if !isTimeA || !isTimeB {
 			return a.String() < b.String()
 		}
@@ -552,7 +552,7 @@ func timeLess(a, b reflect.Value) bool {
 		return a.String() < b.String()
 	}
 
-	return tA.Compare(tB) <= 0
+	return tA.Compare(tB) < 0
 }
 
 // sortValues is a sort function that handles both native types and any type that

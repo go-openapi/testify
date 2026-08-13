@@ -122,6 +122,12 @@ func (g *Generator) Generate(opts ...GenerateOption) error {
 	return nil
 }
 
+// Documentation yields the transformed package model as a [model.Documentation]
+// usable by a generation step by the [DocGenerator].
+func (g *Generator) Documentation() model.Documentation {
+	return g.docs
+}
+
 // orphanVariantRx matches a generated build-variant filename for the given target package,
 // e.g. "assert_assertions_go126.go" or "assert_forward_go126_test.go". The "_go<N>" infix is
 // what distinguishes a variant file from the default (unsuffixed) ones, which are always
@@ -179,7 +185,7 @@ func (g *Generator) sweepOrphanVariants() error {
 
 // isGeneratedFile reports whether the file carries our "DO NOT EDIT" generated-code marker.
 func isGeneratedFile(path string) (bool, error) {
-	data, err := os.ReadFile(path) //nolint:gosec // path is built from a controlled target directory listing
+	data, err := os.ReadFile(path) // path is built from a controlled target directory listing
 	if err != nil {
 		return false, fmt.Errorf("can't read candidate orphan %q: %w", path, err)
 	}
@@ -256,12 +262,6 @@ func variantTarget(base *model.AssertionPackage, constraint string) *model.Asser
 	tgt.Functions = filtered
 
 	return tgt
-}
-
-// Documentation yields the transformed package model as a [model.Documentation]
-// usable by a generation step by the [DocGenerator].
-func (g *Generator) Documentation() model.Documentation {
-	return g.docs
 }
 
 func (g *Generator) initContext(opts []GenerateOption) error {
