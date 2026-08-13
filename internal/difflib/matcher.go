@@ -3,6 +3,8 @@
 
 package difflib
 
+import "slices"
+
 type Match struct {
 	A    int
 	B    int
@@ -76,16 +78,16 @@ func (m *SequenceMatcher) SetSeqs(a, b []string) {
 
 // SetSeq1 sets the first sequence to be compared. The second sequence to be compared is not changed.
 //
-// [SequenceMatcher] computes and caches detailed information about the second
-// sequence, so if you want to compare one sequence S against many sequences,
-// use .SetSeq2(s) once and call .SetSeq1(x) repeatedly for each of the other
-// sequences.
+// [SequenceMatcher] computes and caches detailed information about the second sequence,
+// so if you want to compare one sequence S against many sequences,
+// use [SequenceMatcher.SetSeq2] once and call .SetSeq1(x) repeatedly for each of the other sequences.
 //
 // See also [SequenceMatcher.SetSeqs] and [SequenceMatcher.SetSeq2].
 func (m *SequenceMatcher) SetSeq1(a []string) {
-	if &a == &m.a {
+	if slices.Compare(a, m.a) == 0 {
 		return
 	}
+
 	m.a = a
 	m.matchingBlocks = nil
 	m.opCodes = nil
@@ -93,9 +95,10 @@ func (m *SequenceMatcher) SetSeq1(a []string) {
 
 // SetSeq2 sets the second sequence to be compared. The first sequence to be compared is not changed.
 func (m *SequenceMatcher) SetSeq2(b []string) {
-	if &b == &m.b {
+	if slices.Compare(b, m.b) == 0 {
 		return
 	}
+
 	m.b = b
 	m.matchingBlocks = nil
 	m.opCodes = nil
