@@ -58,29 +58,11 @@ func ParseTestValues(input string) []model.TestValue {
 	}
 
 	// Convert each element to TestValue
-	result := make([]model.TestValue, 0, len(compositeLit.Elts))
 
 	// We need to extract the original source text for each element
 	// Since we don't have position info for the original input, we'll format the AST
 	fset := token.NewFileSet()
-	for _, elt := range compositeLit.Elts {
-		// Format the expression back to source code
-		var buf strings.Builder
-		if err := format.Node(&buf, fset, elt); err != nil {
-			result = append(result, model.TestValue{
-				Raw:   "<formatting error>",
-				Expr:  elt,
-				Error: fmt.Errorf("failed to format expression: %w", err),
-			})
-			continue
-		}
-
-		result = append(result, model.TestValue{
-			Raw:   buf.String(),
-			Expr:  elt,
-			Error: nil,
-		})
-	}
+	result := formatLiteralExpression(compositeLit, fset)
 
 	return result
 }
@@ -120,6 +102,16 @@ func ParseExprWithFileSet(fset *token.FileSet, filename string, input string) ([
 	}
 
 	// Convert each element to TestValue
+	result := formatLiteralExpression(compositeLit, fset)
+
+	return result, nil
+}
+
+func formatLiteralExpression(compositeLit *ast.CompositeLit, fset *token.FileSet) []model.TestValue {
+	if compositeLit == nil {
+		return nil
+	}
+
 	result := make([]model.TestValue, 0, len(compositeLit.Elts))
 
 	for _, elt := range compositeLit.Elts {
@@ -141,5 +133,5 @@ func ParseExprWithFileSet(fset *token.FileSet, filename string, input string) ([
 		})
 	}
 
-	return result, nil
+	return result
 }

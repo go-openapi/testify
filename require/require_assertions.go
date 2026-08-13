@@ -1314,6 +1314,8 @@ func InDeltaMapValues(t T, expected any, actual any, delta float64, msgAndArgs .
 
 // InDeltaSlice is the same as [InDelta], except it compares two slices.
 //
+// It returns false if the compared slices are not of the same length.
+//
 // See [InDelta].
 //
 // # Usage
