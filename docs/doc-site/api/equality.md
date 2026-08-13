@@ -303,7 +303,7 @@ func main() {
 |--|--|
 | [`assertions.Equal(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Equal) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Equal](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L30)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Equal](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L33)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -434,7 +434,7 @@ type dummyStruct struct {
 |--|--|
 | [`assertions.EqualExportedValues(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EqualExportedValues) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualExportedValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L217)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualExportedValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L220)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -548,7 +548,7 @@ func main() {
 |--|--|
 | [`assertions.EqualT[V comparable](t T, expected V, actual V, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EqualT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L68)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L71)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -662,7 +662,7 @@ func main() {
 |--|--|
 | [`assertions.EqualValues(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#EqualValues) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L144)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#EqualValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L147)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -773,7 +773,7 @@ func main() {
 |--|--|
 | [`assertions.Exactly(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#Exactly) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Exactly](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L259)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#Exactly](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L270)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1111,7 +1111,7 @@ func main() {
 |--|--|
 | [`assertions.NotEqual(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotEqual) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEqual](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L93)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEqual](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L96)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1220,7 +1220,7 @@ func main() {
 |--|--|
 | [`assertions.NotEqualT[V comparable](t T, expected V, actual V, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotEqualT) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L122)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEqualT](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L125)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1333,7 +1333,7 @@ func main() {
 |--|--|
 | [`assertions.NotEqualValues(t T, expected any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotEqualValues) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEqualValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L179)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotEqualValues](https://github.com/go-openapi/testify/blob/master/internal/assertions/equal.go#L182)
 {{% /tab %}}
 {{< /tabs >}}
 

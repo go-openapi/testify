@@ -645,7 +645,7 @@ func testDataPath() string {
 |--|--|
 | [`assertions.FileNotEmpty(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FileNotEmpty) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileNotEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L183)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FileNotEmpty](https://github.com/go-openapi/testify/blob/master/internal/assertions/file.go#L191)
 {{% /tab %}}
 {{< /tabs >}}
 
