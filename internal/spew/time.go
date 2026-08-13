@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+const maxDepth = 1000
+
 // isTime detects if a value may be assimilated to time.Time.
 //
 // It may be time.Time or a *time.Time,
@@ -12,7 +14,15 @@ import (
 //
 // Conversely, a struct that embeds a time.Time or *time.Time is not considered a time.Time
 // and we'll have to dig the individual fields.
-func isTime(v reflect.Value) bool {
+//
+// Drilling down pointers indirections stops at depth 1000. Over that limit, the check assumes
+// that this is (probably) not a time.Time... That's a theoretical bound, nothing practical
+// describes a **** ... ***time.Time with 1000 stars.
+func isTime(v reflect.Value, depth int) bool {
+	if depth > maxDepth {
+		return false
+	}
+
 	if !v.IsValid() {
 		return false
 	}
@@ -22,7 +32,7 @@ func isTime(v reflect.Value) bool {
 
 	// for pointers, we reason about the pointer type, because the value may be nil
 	if k == reflect.Pointer && t.Elem().Kind() == reflect.Pointer {
-		return isTime(v.Elem())
+		return isTime(v.Elem(), depth+1)
 	}
 
 	if k == reflect.Struct || (k == reflect.Pointer && t.Elem().Kind() == reflect.Struct) {
