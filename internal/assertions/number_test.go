@@ -774,7 +774,24 @@ func deltaSliceCases() iter.Seq[genericTestCase] {
 				false,
 			),
 		},
-
+		{
+			"slices-of-different-lengths-1",
+			testDeltaSlice(
+				[]float64{1},
+				[]float64{1, 1},
+				0.1,
+				false,
+			),
+		},
+		{
+			"slices-of-different-lengths-2",
+			testDeltaSlice(
+				[]float64{1, 1},
+				[]float64{1},
+				0.1,
+				false,
+			),
+		},
 		// Edge cases - invalid inputs
 		{
 			"invalid-non-slice-inputs",
