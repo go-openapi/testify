@@ -272,7 +272,7 @@ func NotErrorAs(t T, err error, target any, msgAndArgs ...any) bool {
 }
 
 func unwrapAll(err error) []error {
-	return appendUnwrapped(nil, err, make(map[error]struct{}))
+	return appendUnwrapped(nil, err, make(map[error]struct{}), 0)
 }
 
 // appendUnwrapped flattens an error chain, guarding against cyclic chains that
@@ -281,7 +281,13 @@ func unwrapAll(err error) []error {
 // Only comparable errors are tracked: using an incomparable error as a map key
 // would panic, so those simply skip cycle detection (mirroring how the standard
 // library's errors.Is guards its own comparisons).
-func appendUnwrapped(errs []error, err error, visited map[error]struct{}) []error {
+//
+// Unwrapping stops at 1000 nest levels, which should cover most practical usage of it.
+func appendUnwrapped(errs []error, err error, visited map[error]struct{}, depth int) []error {
+	if depth > maxDepth {
+		return nil
+	}
+
 	if err != nil && reflect.TypeOf(err).Comparable() {
 		if _, ok := visited[err]; ok {
 			return errs // cyclic error chain: stop here
@@ -297,12 +303,13 @@ func appendUnwrapped(errs []error, err error, visited map[error]struct{}) []erro
 		if next == nil {
 			return errs
 		}
-		errs = appendUnwrapped(errs, next, visited)
+		errs = appendUnwrapped(errs, next, visited, depth+1)
 	case interface{ Unwrap() []error }:
 		for _, next := range x.Unwrap() {
-			errs = appendUnwrapped(errs, next, visited)
+			errs = appendUnwrapped(errs, next, visited, depth+1)
 		}
 	}
+
 	return errs
 }
 
