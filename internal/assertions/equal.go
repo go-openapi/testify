@@ -12,6 +12,9 @@ import (
 	"github.com/go-openapi/testify/v2/internal/assertions/enable/colors"
 )
 
+// maxDepth is the maximum exploration depth for copyExportedFields.
+const maxDepth = 1000
+
 // Equal asserts that two objects are equal.
 //
 // Pointer variable equality is determined based on the equality of the
@@ -220,7 +223,8 @@ func EqualExportedValues(t T, expected, actual any, msgAndArgs ...any) bool {
 		h.Helper()
 	}
 
-	if err := validateEqualArgs(expected, actual); err != nil {
+	err := validateEqualArgs(expected, actual)
+	if err != nil {
 		return Fail(t, fmt.Sprintf("Invalid operation: %#v == %#v (%s)",
 			expected, actual, err), msgAndArgs...)
 	}
@@ -232,8 +236,15 @@ func EqualExportedValues(t T, expected, actual any, msgAndArgs ...any) bool {
 		return Fail(t, fmt.Sprintf("Types expected to match exactly\n\t%v != %v", aType, bType), msgAndArgs...)
 	}
 
-	expected = copyExportedFields(expected)
-	actual = copyExportedFields(actual)
+	expected, err = copyExportedFields(expected)
+	if err != nil {
+		return Fail(t, fmt.Sprintf("An error occurred while exploring the expected value: %v", err), msgAndArgs...)
+	}
+
+	actual, err = copyExportedFields(actual)
+	if err != nil {
+		return Fail(t, fmt.Sprintf("An error occurred while exploring the actual value: %v", err), msgAndArgs...)
+	}
 
 	if !ObjectsAreEqualValues(expected, actual) {
 		diff := diff(expected, actual)
@@ -349,16 +360,23 @@ func formatUnequalValues(expected, actual any) (e string, a string) {
 
 // copyExportedFields iterates downward through nested data structures and creates a copy
 // that only contains the exported struct fields.
-func copyExportedFields(expected any) any {
-	return copyExportedFieldsRec(expected, make(map[uintptr]struct{}))
+//
+// Exploration down the rabbit hole is limited to a depth of 1000.
+// An error is returned if the introspection goes wrong.
+func copyExportedFields(expected any) (any, error) {
+	return copyExportedFieldsRec(expected, make(map[uintptr]struct{}), 0)
 }
 
 // copyExportedFieldsRec carries a set of pointers currently being visited on the
 // recursion path, so that cyclic pointer references break the recursion instead
 // of overflowing the goroutine stack.
-func copyExportedFieldsRec(expected any, visited map[uintptr]struct{}) any {
+func copyExportedFieldsRec(expected any, visited map[uintptr]struct{}, depth int) (any, error) {
+	if depth > maxDepth {
+		return nil, fmt.Errorf("stopped recursing value after %d nested levels", maxDepth)
+	}
+
 	if isNil(expected) {
-		return expected
+		return expected, nil
 	}
 
 	expectedType := reflect.TypeOf(expected)
@@ -366,19 +384,23 @@ func copyExportedFieldsRec(expected any, visited map[uintptr]struct{}) any {
 
 	switch expectedType.Kind() {
 	case reflect.Struct:
-		return copyExportedStruct(expectedType, expectedValue, visited)
+		return copyExportedStruct(expectedType, expectedValue, visited, depth+1)
 	case reflect.Pointer:
-		return copyExportedPointer(expected, expectedType, expectedValue, visited)
+		return copyExportedPointer(expected, expectedType, expectedValue, visited, depth+1)
 	case reflect.Array, reflect.Slice:
-		return copyExportedSequence(expectedType, expectedValue, visited)
+		return copyExportedSequence(expectedType, expectedValue, visited, depth+1)
 	case reflect.Map:
-		return copyExportedMap(expectedType, expectedValue, visited)
+		return copyExportedMap(expectedType, expectedValue, visited, depth+1)
 	default:
-		return expected
+		return expected, nil
 	}
 }
 
-func copyExportedStruct(expectedType reflect.Type, expectedValue reflect.Value, visited map[uintptr]struct{}) any {
+func copyExportedStruct(expectedType reflect.Type, expectedValue reflect.Value, visited map[uintptr]struct{}, depth int) (any, error) {
+	if depth > maxDepth {
+		return nil, fmt.Errorf("stopped recursing value after %d nested levels", maxDepth)
+	}
+
 	result := reflect.New(expectedType).Elem()
 	for i := range expectedType.NumField() {
 		if !expectedType.Field(i).IsExported() {
@@ -388,52 +410,77 @@ func copyExportedStruct(expectedType reflect.Type, expectedValue reflect.Value, 
 		if isNil(fieldValue) || isNil(fieldValue.Interface()) {
 			continue
 		}
-		newValue := copyExportedFieldsRec(fieldValue.Interface(), visited)
+		newValue, err := copyExportedFieldsRec(fieldValue.Interface(), visited, depth+1)
+		if err != nil {
+			return nil, err
+		}
 		result.Field(i).Set(reflect.ValueOf(newValue))
 	}
-	return result.Interface()
+
+	return result.Interface(), nil
 }
 
-func copyExportedPointer(expected any, expectedType reflect.Type, expectedValue reflect.Value, visited map[uintptr]struct{}) any {
+func copyExportedPointer(expected any, expectedType reflect.Type, expectedValue reflect.Value, visited map[uintptr]struct{}, depth int) (any, error) {
+	if depth > maxDepth {
+		return nil, fmt.Errorf("stopped recursing value after %d nested levels", maxDepth)
+	}
+
 	// Guard against cyclic pointer references: if this pointer is already
 	// on the current recursion path, return it as-is to break the cycle.
 	ptr := expectedValue.Pointer()
 	if _, ok := visited[ptr]; ok {
-		return expected
+		return expected, nil
 	}
 	visited[ptr] = struct{}{}
 	defer delete(visited, ptr)
 
 	result := reflect.New(expectedType.Elem())
-	unexportedRemoved := copyExportedFieldsRec(expectedValue.Elem().Interface(), visited)
+	unexportedRemoved, err := copyExportedFieldsRec(expectedValue.Elem().Interface(), visited, depth+1)
+	if err != nil {
+		return nil, err
+	}
 	if unexportedRemoved != nil {
 		result.Elem().Set(reflect.ValueOf(unexportedRemoved))
 	}
-	return result.Interface()
+
+	return result.Interface(), nil
 }
 
-func copyExportedSequence(expectedType reflect.Type, expectedValue reflect.Value, visited map[uintptr]struct{}) any {
+func copyExportedSequence(expectedType reflect.Type, expectedValue reflect.Value, visited map[uintptr]struct{}, depth int) (any, error) {
+	if depth > maxDepth {
+		return nil, fmt.Errorf("stopped recursing value after %d nested levels", maxDepth)
+	}
+
 	var result reflect.Value
 	if expectedType.Kind() == reflect.Array {
 		result = reflect.New(reflect.ArrayOf(expectedValue.Len(), expectedType.Elem())).Elem()
 	} else {
 		result = reflect.MakeSlice(expectedType, expectedValue.Len(), expectedValue.Len())
 	}
+
 	for i := range expectedValue.Len() {
 		index := expectedValue.Index(i)
 		if !index.CanInterface() {
 			// this should not be possible with current reflect, since values are retrieved from an array or slice, not a struct
 			panic(fmt.Errorf("internal error: can't resolve Interface() for value %v", index))
 		}
-		unexportedRemoved := copyExportedFieldsRec(index.Interface(), visited)
+		unexportedRemoved, err := copyExportedFieldsRec(index.Interface(), visited, depth+1)
+		if err != nil {
+			return nil, err
+		}
 		if unexportedRemoved != nil {
 			result.Index(i).Set(reflect.ValueOf(unexportedRemoved))
 		}
 	}
-	return result.Interface()
+
+	return result.Interface(), nil
 }
 
-func copyExportedMap(expectedType reflect.Type, expectedValue reflect.Value, visited map[uintptr]struct{}) any {
+func copyExportedMap(expectedType reflect.Type, expectedValue reflect.Value, visited map[uintptr]struct{}, depth int) (any, error) {
+	if depth > maxDepth {
+		return nil, fmt.Errorf("stopped recursing value after %d nested levels", maxDepth)
+	}
+
 	result := reflect.MakeMap(expectedType)
 	for _, k := range expectedValue.MapKeys() {
 		index := expectedValue.MapIndex(k)
@@ -441,17 +488,22 @@ func copyExportedMap(expectedType reflect.Type, expectedValue reflect.Value, vis
 			// this should not be possible with current reflect, since values are retrieved from a map, not a struct
 			panic(fmt.Errorf("internal error: can't resolve Interface() for value %v", index))
 		}
-		unexportedRemoved := copyExportedFieldsRec(index.Interface(), visited)
+		unexportedRemoved, err := copyExportedFieldsRec(index.Interface(), visited, depth+1)
+		if err != nil {
+			return nil, err
+		}
 		if unexportedRemoved != nil {
 			result.SetMapIndex(k, reflect.ValueOf(unexportedRemoved))
 		}
 	}
-	return result.Interface()
+
+	return result.Interface(), nil
 }
 
 func isFunction(arg any) bool {
 	if arg == nil {
 		return false
 	}
+
 	return reflect.TypeOf(arg).Kind() == reflect.Func
 }
