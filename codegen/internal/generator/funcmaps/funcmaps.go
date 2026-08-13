@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"path"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strings"
 	"text/template"
@@ -99,7 +100,7 @@ func comment(str string) string {
 
 func rTrimEmpty(lines []string) []string {
 	var i int
-	for i = len(lines) - 1; i >= 0; i-- {
+	for i := range slices.Backward(lines) {
 		if lines[i] != "" {
 			break
 		}
