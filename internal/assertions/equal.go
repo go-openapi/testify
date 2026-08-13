@@ -236,22 +236,22 @@ func EqualExportedValues(t T, expected, actual any, msgAndArgs ...any) bool {
 		return Fail(t, fmt.Sprintf("Types expected to match exactly\n\t%v != %v", aType, bType), msgAndArgs...)
 	}
 
-	expected, err = copyExportedFields(expected)
+	thisExpected, err := copyExportedFields(expected)
 	if err != nil {
 		return Fail(t, fmt.Sprintf("An error occurred while exploring the expected value: %v", err), msgAndArgs...)
 	}
 
-	actual, err = copyExportedFields(actual)
+	thisActual, err := copyExportedFields(actual)
 	if err != nil {
 		return Fail(t, fmt.Sprintf("An error occurred while exploring the actual value: %v", err), msgAndArgs...)
 	}
 
-	if !ObjectsAreEqualValues(expected, actual) {
-		diff := diff(expected, actual)
-		expected, actual = formatUnequalValues(expected, actual)
+	if !ObjectsAreEqualValues(thisExpected, thisActual) {
+		diff := diff(thisExpected, thisActual)
+		thisExpected, thisActual = formatUnequalValues(thisExpected, thisActual)
 		return Fail(t, fmt.Sprintf("Not equal (comparing only exported fields): \n"+
 			"expected: %s\n"+
-			"actual  : %s%s", expected, actual, diff), msgAndArgs...)
+			"actual  : %s%s", thisExpected, thisActual, diff), msgAndArgs...)
 	}
 
 	return true

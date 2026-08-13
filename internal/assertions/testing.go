@@ -115,18 +115,21 @@ func errorWithCallerInfo(t T, offset int, failureMessage string, msgAndArgs ...a
 }
 
 func callerInfo(offset int) []string {
-	var pc uintptr
-	var file string
-	var line int
-	var name string
+	var (
+		pc   uintptr
+		file string
+		line int
+		name string
+	)
 
 	const stackFrameBufferSize = 10
 	pcs := make([]uintptr, stackFrameBufferSize)
 
 	callers := []string{}
+	newOffset := offset
 
 	for {
-		n := runtime.Callers(offset, pcs)
+		n := runtime.Callers(newOffset, pcs)
 
 		if n == 0 {
 			break
@@ -184,7 +187,7 @@ func callerInfo(offset int) []string {
 		}
 
 		// Next batch
-		offset += cap(pcs)
+		newOffset += cap(pcs)
 	}
 
 	return callers
