@@ -72,7 +72,12 @@ func ParseTestExamples(text string) []model.Test {
 			continue
 		}
 
-		// skip until we find the Examples section
+		// skip until we find the Examples section.
+		//
+		// This assumes that the godoc comment is organized in sections ("# {section}"):
+		// we'll start processing only when we find an "# Example[s]" section.
+		//
+		// In this section, we expect to find example values that fit the documented assertion (both success and fail).
 		if !inExamplesSection {
 			continue
 		}

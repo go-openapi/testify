@@ -318,6 +318,8 @@ func InEpsilonSymmetricT[Number Measurable](t T, x, y Number, epsilon float64, m
 
 // InDeltaSlice is the same as [InDelta], except it compares two slices.
 //
+// It returns false if the compared slices are not of the same length.
+//
 // See [InDelta].
 //
 // # Usage
@@ -342,7 +344,13 @@ func InDeltaSlice(t T, expected, actual any, delta float64, msgAndArgs ...any) b
 	actualSlice := reflect.ValueOf(actual)
 	expectedSlice := reflect.ValueOf(expected)
 
-	for i := range actualSlice.Len() {
+	lenActual := actualSlice.Len()
+	lenExpected := expectedSlice.Len()
+	if lenActual != lenExpected {
+		return Fail(t, "Parameters must be slice", msgAndArgs...)
+	}
+
+	for i := range lenActual {
 		result := InDelta(t, actualSlice.Index(i).Interface(), expectedSlice.Index(i).Interface(), delta, msgAndArgs...)
 		if !result {
 			return result

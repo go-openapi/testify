@@ -4,6 +4,7 @@
 package domains
 
 import (
+	"fmt"
 	"iter"
 	"path"
 	"slices"
@@ -15,25 +16,30 @@ import (
 const (
 	nodomain   = "common"
 	assertions = "assertions"
+	maxDepth   = 10
 )
 
 // FlattenDocumentation flattens a nested documentation structure into a map of packages.
 func FlattenDocumentation(documentation model.Documentation) map[string]model.Document {
 	index := make(map[string]model.Document, len(documentation.Documents))
 
-	flattenDocuments(index, documentation.Documents)
+	flattenDocuments(index, documentation.Documents, 0)
 
 	return index
 }
 
-func flattenDocuments(index map[string]model.Document, docs []model.Document) {
+func flattenDocuments(index map[string]model.Document, docs []model.Document, depth int) {
+	if depth > maxDepth {
+		panic(fmt.Errorf("dev error: there is no sensible reason why we should recurse more than %d here", maxDepth))
+	}
+
 	for _, doc := range docs {
 		key := doc.Package.Package
 		if _, ok := index[key]; !ok {
 			index[key] = doc
 		}
 
-		flattenDocuments(index, doc.Documents)
+		flattenDocuments(index, doc.Documents, depth+1)
 	}
 }
 

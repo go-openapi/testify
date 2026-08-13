@@ -283,7 +283,8 @@ func relocate(values []model.TestValue, pkg string) string {
 		return strings.Join(parts, ", ")
 	}
 
-	// Relocate each value
+	// Relocate each value: the original "assertions" package moves to the
+	// target package where the value is generated.
 	relocated := make([]string, 0, len(values))
 	for _, tv := range values {
 		// If parse failed, use original (fallback)

@@ -1,3 +1,8 @@
+---
+name: documentation-site
+description: How to run and test the hugo doc site locally
+---
+
 # Documentation Site
 
 Hugo-based documentation site for testify, auto-generated from source code.

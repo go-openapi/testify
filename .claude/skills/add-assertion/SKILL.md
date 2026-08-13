@@ -1,3 +1,8 @@
+---
+name: add-assertion
+description: adding a new assertion to the library
+---
+
 # Adding a New Assertion
 
 Step-by-step workflow for adding a new assertion function to testify.

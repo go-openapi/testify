@@ -130,6 +130,9 @@ func isNil(object any) bool {
 }
 
 // isEmpty gets whether the specified object is considered empty or not.
+//
+// It stops following pointers with a depth of 1000, assuming a "not-empty" state
+// when the recursion depth is reached.
 func isEmpty(object any) bool {
 	// get nil case out of the way
 	if object == nil {
@@ -141,16 +144,21 @@ func isEmpty(object any) bool {
 
 // isEmptyValue gets whether the specified reflect.Value is considered empty or not.
 func isEmptyValue(objValue reflect.Value) bool {
-	return isEmptyValueRec(objValue, nil)
+	return isEmptyValueRec(objValue, nil, 0)
 }
 
 // isEmptyValueRec carries the set of pointers already followed on the current
 // recursion path, so that a cyclic pointer chain (e.g. type P *P with p = &p)
 // breaks the recursion instead of overflowing the goroutine stack.
-func isEmptyValueRec(objValue reflect.Value, visited map[uintptr]struct{}) bool {
+func isEmptyValueRec(objValue reflect.Value, visited map[uintptr]struct{}, depth int) bool {
+	if depth > maxDepth {
+		return false
+	}
+
 	if objValue.IsZero() {
 		return true
 	}
+
 	// Special cases of non-zero values that we consider empty
 	switch objValue.Kind() {
 	// collection types are empty when they have no element
@@ -168,7 +176,7 @@ func isEmptyValueRec(objValue reflect.Value, visited map[uintptr]struct{}) bool 
 			visited = make(map[uintptr]struct{})
 		}
 		visited[ptr] = struct{}{}
-		return isEmptyValueRec(objValue.Elem(), visited)
+		return isEmptyValueRec(objValue.Elem(), visited, depth+1)
 	default:
 		return false
 	}

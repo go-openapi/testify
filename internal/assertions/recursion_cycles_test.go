@@ -66,7 +66,10 @@ func TestCopyExportedFieldsCycle(t *testing.T) {
 		a.Next = a
 
 		// Direct call: the only property under test is that it returns.
-		_ = copyExportedFields(a)
+		_, err := copyExportedFields(a)
+		if err != nil {
+			t.Errorf("should not error")
+		}
 	})
 }
 
