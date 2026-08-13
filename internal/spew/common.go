@@ -459,9 +459,9 @@ func (s *valuesSorter) Less(i, j int) bool {
 	return s.strings[i] < s.strings[j]
 }
 
-// valueSortLess returns whether the first value should sort before the second
-// value.  It is used by valueSorter.Less as part of the sort.Interface
-// implementation.
+// valueSortLess returns whether the first value should sort before the second value.
+//
+// It is used by valueSorter.Less as part of the sort.Interface implementation.
 func valueSortLess(a, b reflect.Value) bool {
 	switch a.Kind() {
 	case reflect.Bool:
@@ -552,7 +552,7 @@ func timeLess(a, b reflect.Value) bool {
 		return a.String() < b.String()
 	}
 
-	return tA.Compare(tB) <= 0
+	return tA.Compare(tB) < 0
 }
 
 // sortValues is a sort function that handles both native types and any type that
