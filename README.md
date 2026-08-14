@@ -128,6 +128,19 @@ This library ships under the [SPDX-License-Identifier: Apache-2.0](./LICENSE).
 See the license [NOTICE](./NOTICE), which recalls the licensing terms of all the pieces of software
 distributed with this fork, including internalized libraries.
 
+We'd like to give credit and pay a big and loud thank you to the people who wrote these amazing pieces of software.
+We maintain and continue improving their original work here.
+
+* Mat Ryer, Tyler Bunnell and the stretchr/testify contributors - who made this new project possible
+* thank you to the maintainers of that library, @ccoveille, @dolmen for their feedback and advice
+* Dave Collins <dave@davec.name> who wrote the spew library
+* Patrick Mezard who wrote the difflib library - originally a go port from python's difflib
+
+Also special thanks to:
+
+* Gregory Petrosyan (@flyingmutant) - we use his amazing "rapid" library for our integration tests, with property-based testing
+* the authors and maintainers of github.com/yaml/go-yaml, which we rely on for our YAML work
+
 ## Other documentation
 
 * [Getting started][doc-examples]
