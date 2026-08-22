@@ -35,9 +35,10 @@ updates:
     directories:
       - "**/*"
     schedule:
-      interval: "weekly"
-      day: "friday"
-    open-pull-requests-limit: 4
+      interval: "cron"
+      cronjob: "35 7 * * 1,4"    # => update twice a week
+      timezone: CEST
+    open-pull-requests-limit: 24
     allow:
       - dependency-type: all
     groups:
