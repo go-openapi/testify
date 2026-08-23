@@ -163,6 +163,21 @@ func TestNumberInDeltaMapValuesMessage(t *testing.T) {
 	})
 }
 
+// TestNumberInDeltaSliceMessage pins the order of the two values in a per-element failure.
+// The verdict does not depend on it, since the delta is symmetric, so only the message can
+// catch the arguments being passed the wrong way round.
+func TestNumberInDeltaSliceMessage(t *testing.T) {
+	t.Parallel()
+
+	mock := new(captureT)
+	InDeltaSlice(mock, []float64{2}, []float64{9}, 0.5)
+
+	// InDelta reports "Max difference between <expected> and <actual> allowed is ..."
+	if !strings.Contains(mock.msg, "between 2") || !strings.Contains(mock.msg, "and 9") {
+		t.Errorf("message %q should name expected 2 before actual 9", mock.msg)
+	}
+}
+
 func TestNumberInEpsilonSymmetric(t *testing.T) {
 	t.Parallel()
 

@@ -354,7 +354,7 @@ func InDeltaSlice(t T, expected, actual any, delta float64, msgAndArgs ...any) b
 	}
 
 	for i := range lenActual {
-		result := InDelta(t, actualSlice.Index(i).Interface(), expectedSlice.Index(i).Interface(), delta, msgAndArgs...)
+		result := InDelta(t, expectedSlice.Index(i).Interface(), actualSlice.Index(i).Interface(), delta, msgAndArgs...)
 		if !result {
 			return result
 		}
