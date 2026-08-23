@@ -7,6 +7,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"reflect"
 	"strings"
 )
 
@@ -27,6 +28,18 @@ func truncatingFormat(format string, data any) string {
 	}
 
 	return value
+}
+
+// truncatingValue formats a value for a failure message, quoting it when it is a string.
+//
+// Without the quotes a string made of whitespace, or an empty one, leaves nothing on screen:
+// "Should be empty, but was" followed by two spaces reads as a message with its value missing.
+func truncatingValue(data any) string {
+	if reflect.ValueOf(data).Kind() == reflect.String {
+		return truncatingFormat("%q", data)
+	}
+
+	return truncatingFormat("%v", data)
 }
 
 // Aligns the provided message so that all lines after the first line start at the same location as the first line.
