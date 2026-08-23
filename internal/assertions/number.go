@@ -453,7 +453,13 @@ func InEpsilonSlice(t T, expected, actual any, epsilon float64, msgAndArgs ...an
 	}
 
 	for i := range expectedLen {
-		if !InEpsilon(t, expectedSlice.Index(i).Interface(), actualSlice.Index(i).Interface(), epsilon, "at index %d", i) {
+		if !InEpsilon(
+			t,
+			expectedSlice.Index(i).Interface(),
+			actualSlice.Index(i).Interface(),
+			epsilon,
+			withContext(fmt.Sprintf("at index %d", i), msgAndArgs)...,
+		) {
 			return false
 		}
 	}

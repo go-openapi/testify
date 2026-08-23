@@ -42,6 +42,22 @@ func truncatingValue(data any) string {
 	return truncatingFormat("%v", data)
 }
 
+// withContext prepends positional context to the caller's message, for an assertion that
+// delegates to another one element by element.
+//
+// InEpsilonSlice checks each element with InEpsilon, and the failure comes from InEpsilon,
+// which knows the two values but not which element they came from. Passing the context
+// through msgAndArgs keeps the index in the message without dropping what the caller asked
+// to see.
+func withContext(context string, msgAndArgs []any) []any {
+	caller := messageFromMsgAndArgs(msgAndArgs...)
+	if caller == "" {
+		return []any{context}
+	}
+
+	return []any{context + ": " + caller}
+}
+
 // Aligns the provided message so that all lines after the first line start at the same location as the first line.
 //
 // Assumes that the first line starts at the correct location (after carriage return, tab, label, spacer and tab).

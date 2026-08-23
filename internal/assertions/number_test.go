@@ -7,6 +7,7 @@ import (
 	"iter"
 	"math"
 	"slices"
+	"strings"
 	"testing"
 	"time"
 )
@@ -90,6 +91,37 @@ func TestNumberInEpsilonSlice(t *testing.T) {
 	for tc := range epsilonSliceCases() {
 		t.Run(tc.name, tc.test)
 	}
+}
+
+// TestNumberInEpsilonSliceMessage checks that a per-element failure names the element and
+// still carries the message the caller passed. Both land in the "Messages" part of the
+// envelope, which is why this does not go through the failCase harness.
+func TestNumberInEpsilonSliceMessage(t *testing.T) {
+	t.Parallel()
+
+	t.Run("keeps the index and the caller message", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(captureT)
+		InEpsilonSlice(mock, []float64{1, 2}, []float64{1, 3}, 0.01, "checking %s", "widths")
+
+		for _, want := range []string{"at index 1", "checking widths"} {
+			if !strings.Contains(mock.msg, want) {
+				t.Errorf("message %q does not contain %q", mock.msg, want)
+			}
+		}
+	})
+
+	t.Run("names the index when the caller passed no message", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(captureT)
+		InEpsilonSlice(mock, []float64{1, 2}, []float64{1, 3}, 0.01)
+
+		if !strings.Contains(mock.msg, "at index 1") {
+			t.Errorf("message %q does not contain %q", mock.msg, "at index 1")
+		}
+	})
 }
 
 func TestNumberInEpsilonSymmetric(t *testing.T) {
