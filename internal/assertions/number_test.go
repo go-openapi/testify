@@ -124,6 +124,45 @@ func TestNumberInEpsilonSliceMessage(t *testing.T) {
 	})
 }
 
+// TestNumberInDeltaMapValuesMessage checks that a failure names the key it came from.
+// InDelta reports the two values but has no idea which key they belong to.
+func TestNumberInDeltaMapValuesMessage(t *testing.T) {
+	t.Parallel()
+
+	t.Run("names the key and keeps the caller message", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(captureT)
+		InDeltaMapValues(mock,
+			map[string]float64{"width": 1, "height": 2},
+			map[string]float64{"width": 1, "height": 9},
+			0.5,
+			"comparing %s", "boxes",
+		)
+
+		for _, want := range []string{"at key height", "comparing boxes"} {
+			if !strings.Contains(mock.msg, want) {
+				t.Errorf("message %q does not contain %q", mock.msg, want)
+			}
+		}
+	})
+
+	t.Run("names the key when the caller passed no message", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(captureT)
+		InDeltaMapValues(mock,
+			map[string]float64{"height": 2},
+			map[string]float64{"height": 9},
+			0.5,
+		)
+
+		if !strings.Contains(mock.msg, "at key height") {
+			t.Errorf("message %q does not contain %q", mock.msg, "at key height")
+		}
+	})
+}
+
 func TestNumberInEpsilonSymmetric(t *testing.T) {
 	t.Parallel()
 

@@ -409,7 +409,7 @@ func InDeltaMapValues(t T, expected, actual any, delta float64, msgAndArgs ...an
 			ev.Interface(),
 			av.Interface(),
 			delta,
-			msgAndArgs...,
+			withContext(fmt.Sprintf("at key %v", k), msgAndArgs)...,
 		) {
 			return false
 		}
