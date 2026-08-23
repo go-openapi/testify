@@ -44,6 +44,13 @@ This is the go-openapi fork of the great [testify](https://github.com/stretchr/t
 
 ## Announcements
 
+* **2026-08-23** :
+  * v2.7.0 lands today - for go1.27, users generic assertions are now available as methods
+  * v2.8.0 will land end of Sept., with go1.26+ required
+  * besides patch releases, only one more minor release v2.9.0 is currently planned till the end of this year:
+    the contemplated topic is the revival of test suites.
+
+
 * **2026-08-08** : v2.7.0 landing soon (ETA Sept. 2026)
 
 * **2026-06-22** : [ROADMAP][doc-roadmap] to v2.7.0 (ETA Sept. 2026)

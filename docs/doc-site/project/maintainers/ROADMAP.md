@@ -46,9 +46,13 @@ timeline
     ✅ v2.6 (June 2026) : go build guards (codegen)
                     : ErrorAsType, NotErrorAsType (go1.26+)
     section Q3 2026
-    🔍 v2.7 (Sep 2026) : (tentative)
+    ✅ v2.7 (August 2026) :
                     : generic assertions as forward methods (go1.27+)
-                    : go1.27+
+                    : ErrorNotContains
+    ⏳ v2.8 (September 2026) :
+                    : go1.26+ required
+    ⏳ v2.9 (December 2026) : (tentative)
+                    : revive test suites
 {{< /mermaid >}}
 
 ## Dropped enveavors 
