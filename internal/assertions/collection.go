@@ -837,6 +837,32 @@ func isNotSubsetList(t T, list, subset any, subsetList reflect.Value, msgAndArgs
 // return (false, false) if impossible.
 // return (true, false) if element was not found.
 // return (true, true) if element was found.
+// stringContainsElement reports whether str contains element, where element is either a
+// substring or a single character.
+//
+// A character reaches us as a rune or a byte, and [reflect.Value.String] renders those as
+// "<int32 Value>" and "<uint8 Value>" rather than as the character, so a plain
+// strings.Contains on that rendering never matches: Contains(t, "héllo", 'é') has to be
+// dispatched on the element's kind instead.
+func stringContainsElement(str string, element any) bool {
+	switch e := element.(type) {
+	case string:
+		return strings.Contains(str, e)
+	case rune: // int32
+		return strings.ContainsRune(str, e)
+	case byte: // uint8
+		return strings.IndexByte(str, e) >= 0
+	}
+
+	// a named string type, e.g. type Doc string
+	if elementValue := reflect.ValueOf(element); elementValue.Kind() == reflect.String {
+		return strings.Contains(str, elementValue.String())
+	}
+
+	// anything else cannot occur in a string
+	return false
+}
+
 func containsElement(list any, element any) (ok, found bool) {
 	listValue := reflect.ValueOf(list)
 	listType := reflect.TypeOf(list)
@@ -852,8 +878,7 @@ func containsElement(list any, element any) (ok, found bool) {
 	}()
 
 	if listKind == reflect.String {
-		elementValue := reflect.ValueOf(element)
-		return true, strings.Contains(listValue.String(), elementValue.String())
+		return true, stringContainsElement(listValue.String(), element)
 	}
 
 	if listKind == reflect.Map {

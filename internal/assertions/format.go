@@ -7,6 +7,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"reflect"
 	"strings"
 )
 
@@ -27,6 +28,34 @@ func truncatingFormat(format string, data any) string {
 	}
 
 	return value
+}
+
+// truncatingValue formats a value for a failure message, quoting it when it is a string.
+//
+// Without the quotes a string made of whitespace, or an empty one, leaves nothing on screen:
+// "Should be empty, but was" followed by two spaces reads as a message with its value missing.
+func truncatingValue(data any) string {
+	if reflect.ValueOf(data).Kind() == reflect.String {
+		return truncatingFormat("%q", data)
+	}
+
+	return truncatingFormat("%v", data)
+}
+
+// withContext prepends positional context to the caller's message, for an assertion that
+// delegates to another one element by element.
+//
+// InEpsilonSlice checks each element with InEpsilon, and the failure comes from InEpsilon,
+// which knows the two values but not which element they came from. Passing the context
+// through msgAndArgs keeps the index in the message without dropping what the caller asked
+// to see.
+func withContext(context string, msgAndArgs []any) []any {
+	caller := messageFromMsgAndArgs(msgAndArgs...)
+	if caller == "" {
+		return []any{context}
+	}
+
+	return []any{context + ": " + caller}
 }
 
 // Aligns the provided message so that all lines after the first line start at the same location as the first line.

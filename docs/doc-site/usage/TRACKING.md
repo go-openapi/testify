@@ -22,7 +22,11 @@ We continue to monitor and selectively adopt changes from the upstream repositor
 - ✅ [#1840] - JSON/YAML `Redactor` pattern (dynamic input redaction, inspired by Insta)
 - ✅ [#1859] - Channel assertions (`Blocked` / `NotBlocked`)
 - ✅ [#1860] - `ErrorAsType` / `NotErrorAsType` (go1.26+, adapted with a typed `*E` target)
-- ✅ [#1940] - `ErrorNotContains` (the opposite of `ErrorContains`)
+- ✅ [#1940], [#1942] - `ErrorNotContains` (the opposite of `ErrorContains`)
+- ✅ [#1908] - `Contains` with a rune or byte element
+- ✅ [#1874], [#1875] - quoted string values in `Empty` / `NotEmpty` failures
+- ✅ [#1931], [#1899] - `InEpsilonSlice` keeps the caller's message
+- ✅ [#1898] - `InDeltaMapValues` names the failing key
 
 ### Superseded by Our Implementation
 - ✅ [#1801] - Error message on large collections for `Len`
@@ -34,7 +38,7 @@ We continue to monitor and selectively adopt changes from the upstream repositor
 [#1830]: https://github.com/stretchr/testify/pull/1830
 [#1824]: https://github.com/stretchr/testify/pull/1824
 
-**Review frequency**: Quarterly (next review: May 2026)
+**Review frequency**: Quarterly (last review: August 2026, next review: November 2026)
 
 ---
 [#1223]: https://github.com/stretchr/testify/pull/1223
@@ -87,7 +91,11 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | [#1859] | Issue | Channel assertions | ✅ Adapted |
 | [#1860] | Issue (PR [#1861]) | `ErrorAsType[E]` for Go 1.26+ | ✅ Adapted - implemented as `ErrorAsType` / `NotErrorAsType` with a typed `*E` target and a `bool` return (not the upstream `(E, bool)` shape), guarded by `//go:build go1.26`. First user of the codegen go-version guard. |
 | [#1915] | Issue | Stack overflow on recursive walk | ✅ Fixed (detected and fixed independently) |
-| [#1940] | Issue/PR | `ErrorNotContains` assertion | ✅ Adapted - implemented as `ErrorNotContains` in the error domain, the opposite of `ErrorContains`: a nil error fails, and so does an error whose message contains the substring. |
+| [#1874], [#1875] | PR | Quote string values in empty assertion failures | ✅ Adapted - `Empty`/`NotEmpty` render a string value with `%q`, so whitespace and the empty string stay visible. `NotEmpty` also gained the truncation every other failure message has. |
+| [#1898] | PR | Include the map key in `InDeltaMapValues` error message | ✅ Adapted - the per-key call carries `at key <k>`, alongside the caller's own message. |
+| [#1899], [#1931] | PR | Pass the custom message through `InEpsilonSlice` | ✅ Adapted - the index context no longer replaces the caller's message; both are joined. |
+| [#1908] | PR | `Contains` is not rune-safe on Unicode strings | ✅ Adapted - `Contains(t, "héllo", 'é')` compared against the literal `"<int32 Value>"`. Dispatch is now on the element kind (string, rune, byte, defined string type). The invalid-UTF-8 half of the upstream report is deliberately left as byte semantics. |
+| [#1940], [#1942] | Issue/PR | `ErrorNotContains` assertion | ✅ Adapted - implemented as `ErrorNotContains` in the error domain, the opposite of `ErrorContains`: a nil error fails, and so does an error whose message contains the substring. |
 
 [#994]: https://github.com/stretchr/testify/pull/994
 [#1232]: https://github.com/stretchr/testify/pull/1232
@@ -100,7 +108,6 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 [#1797]: https://github.com/stretchr/testify/pull/1797
 [#1816]: https://github.com/stretchr/testify/issues/1816
 [#1826]: https://github.com/stretchr/testify/issues/1826
-[#1829]: https://github.com/stretchr/testify/issues/1829
 [#1087]: https://github.com/stretchr/testify/issues/1087
 [#1606]: https://github.com/stretchr/testify/pull/1606
 [#1839]: https://github.com/stretchr/testify/pull/1839
@@ -108,7 +115,15 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 [#1848]: https://github.com/stretchr/testify/pull/1848
 [#1859]: https://github.com/stretchr/testify/pull/1859
 [#1915]: https://github.com/stretchr/testify/issues/1915
+[#1874]: https://github.com/stretchr/testify/pull/1874
+[#1875]: https://github.com/stretchr/testify/pull/1875
+[#1898]: https://github.com/stretchr/testify/pull/1898
+[#1899]: https://github.com/stretchr/testify/pull/1899
+[#1908]: https://github.com/stretchr/testify/pull/1908
+[#1931]: https://github.com/stretchr/testify/pull/1931
+[#1937]: https://github.com/stretchr/testify/pull/1937
 [#1940]: https://github.com/stretchr/testify/pull/1940
+[#1942]: https://github.com/stretchr/testify/pull/1942
 
 ### Superseded by Our Implementation
 
@@ -136,16 +151,16 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | [#1147] | Issue | General discussion about generics adoption | ℹ️ Marked "Not Planned" upstream - We implemented our own generics approach ({{% siteparam "metrics.generics" %}} functions) |
 | [#1308] | PR | Comprehensive refactor with generic type parameters | ℹ️ Draft for v2.0.0 upstream - We took a different approach with the same objective |
 | [#1591], [#1601] | PR + Issue | `NoFieldIsZero` recursive zero-value assertion | ⛔ **Won't do** - Considered and prototyped (2026-04-26). Same conclusion as upstream maintainers: semantics is too ambiguous (map keys, []byte, pointer targets, unexported fields, cycles, time.Time-style smart-zero types) and overlaps too heavily with [Equal](...) for legitimate use cases. Each pitfall fix adds a knob; full version is a struct validator, not an assertion. |
+| [#1776] | Issue | `require` doc-comment examples call functions that return no value | ℹ️ Same defect in our generated API pages, found and fixed independently: the signature tables listed a `bool` return for every `require` row. Nothing to adopt. |
 | [#1862] | Issue | `CollectT` redesign / `testing.TB` interop | ⛔ **Won't do (for now)** - Studied in depth (2026-04-17). All four design options (interface widening, embedding `*testing.T`, opt-in `CollectTB` wrapper, `CollectT`-as-interface) carry visible costs; Go's `testing.TB.private()` blocks any clean proxy. Workaround for affected users is a 3-line per-helper adapter. Revisit if traction warrants the breaking churn. |
 
 [#1147]: https://github.com/stretchr/testify/issues/1147
+[#1776]: https://github.com/stretchr/testify/issues/1776
 [#1308]: https://github.com/stretchr/testify/pull/1308
 [#1591]: https://github.com/stretchr/testify/pull/1591
-[#1576]: https://github.com/stretchr/testify/pull/1576
 [#1801]: https://github.com/stretchr/testify/pull/1801
 [#1819]: https://github.com/stretchr/testify/pull/1819
 [#1845]: https://github.com/stretchr/testify/pull/1845
-[#1859]: https://github.com/stretchr/testify/pull/1859
 [#1860]: https://github.com/stretchr/testify/pull/1860
 [#1861]: https://github.com/stretchr/testify/pull/1861
 [#1862]: https://github.com/stretchr/testify/pull/1862
@@ -156,11 +171,11 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 
 | Category | Count |
 |----------|-------|
-| **Implemented/Merged** | 30 |
+| **Implemented/Merged** | 34 |
 | **Superseded** | 6 |
 | **Monitoring** | 2 |
-| **Informational** | 4 |
-| **Total Processed** | 42 |
+| **Informational** | 5 |
+| **Total Processed** | 47 |
 
 **Note**: This fork maintains an active relationship with upstream, regularly reviewing new PRs and issues. The quarterly review process ensures we stay informed about upstream developments while maintaining our architectural independence.
 

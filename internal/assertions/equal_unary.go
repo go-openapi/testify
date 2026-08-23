@@ -4,7 +4,6 @@
 package assertions
 
 import (
-	"fmt"
 	"reflect"
 )
 
@@ -79,7 +78,7 @@ func Empty(t T, object any, msgAndArgs ...any) bool {
 		if h, ok := t.(H); ok {
 			h.Helper()
 		}
-		Fail(t, "Should be empty, but was "+truncatingFormat("%v", object), msgAndArgs...)
+		Fail(t, "Should be empty, but was "+truncatingValue(object), msgAndArgs...)
 	}
 
 	return pass
@@ -104,7 +103,7 @@ func NotEmpty(t T, object any, msgAndArgs ...any) bool {
 		if h, ok := t.(H); ok {
 			h.Helper()
 		}
-		Fail(t, fmt.Sprintf("Should NOT be empty, but was %v", object), msgAndArgs...)
+		Fail(t, "Should NOT be empty, but was "+truncatingValue(object), msgAndArgs...)
 	}
 
 	return pass

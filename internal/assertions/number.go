@@ -354,7 +354,7 @@ func InDeltaSlice(t T, expected, actual any, delta float64, msgAndArgs ...any) b
 	}
 
 	for i := range lenActual {
-		result := InDelta(t, actualSlice.Index(i).Interface(), expectedSlice.Index(i).Interface(), delta, msgAndArgs...)
+		result := InDelta(t, expectedSlice.Index(i).Interface(), actualSlice.Index(i).Interface(), delta, msgAndArgs...)
 		if !result {
 			return result
 		}
@@ -409,7 +409,7 @@ func InDeltaMapValues(t T, expected, actual any, delta float64, msgAndArgs ...an
 			ev.Interface(),
 			av.Interface(),
 			delta,
-			msgAndArgs...,
+			withContext(fmt.Sprintf("at key %v", k), msgAndArgs)...,
 		) {
 			return false
 		}
@@ -453,7 +453,13 @@ func InEpsilonSlice(t T, expected, actual any, epsilon float64, msgAndArgs ...an
 	}
 
 	for i := range expectedLen {
-		if !InEpsilon(t, expectedSlice.Index(i).Interface(), actualSlice.Index(i).Interface(), epsilon, "at index %d", i) {
+		if !InEpsilon(
+			t,
+			expectedSlice.Index(i).Interface(),
+			actualSlice.Index(i).Interface(),
+			epsilon,
+			withContext(fmt.Sprintf("at index %d", i), msgAndArgs)...,
+		) {
 			return false
 		}
 	}

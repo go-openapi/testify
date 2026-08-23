@@ -468,6 +468,9 @@ const (
 	testStringFoo = "Foo"
 )
 
+// namedString exercises the reflect fallback for a string element of a defined type.
+type namedString string
+
 func unifiedContainsCases() iter.Seq[containsTestCase] {
 	list := []string{testStringFoo, testStringBar}
 	complexList := []*containsStruct{
@@ -483,6 +486,14 @@ func unifiedContainsCases() iter.Seq[containsTestCase] {
 		// String contains
 		{"string/contains", func() (any, any) { return "Hello World", "Hello" }, crContains, false},
 		{"string/not-contains", func() (any, any) { return "Hello World", "Salut" }, crNotContains, false},
+		// A single character reaches Contains as a rune or a byte, never as a string.
+		// Reflection-only: the generic variants constrain the element to Text.
+		{"string/contains-rune", func() (any, any) { return "héllo", 'é' }, crContains, true},
+		{"string/not-contains-rune", func() (any, any) { return "héllo", 'z' }, crNotContains, true},
+		{"string/contains-byte", func() (any, any) { return "Hello World", byte('W') }, crContains, true},
+		{"string/not-contains-byte", func() (any, any) { return "Hello World", byte('z') }, crNotContains, true},
+		{"string/contains-named-string", func() (any, any) { return "Hello World", namedString("World") }, crContains, true},
+		{"string/not-contains-other-kind", func() (any, any) { return "Hello World", 42 }, crNotContains, true},
 
 		// Slice contains
 		{"slice-string/contains", func() (any, any) { return list, testStringBar }, crContains, false},

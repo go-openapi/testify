@@ -171,7 +171,18 @@ func equalUnaryFailCases() iter.Seq[failCase] {
 		{
 			name:      "Empty/non-empty-string",
 			assertion: func(t T) bool { return Empty(t, "something") },
-			wantError: "Should be empty, but was something",
+			wantError: `Should be empty, but was "something"`,
+		},
+		{
+			// without the quotes these two report a message that looks like it lost its value
+			name:      "Empty/whitespace-string",
+			assertion: func(t T) bool { return Empty(t, "  ") },
+			wantError: `Should be empty, but was "  "`,
+		},
+		{
+			name:      "NotEmpty/empty-string",
+			assertion: func(t T) bool { return NotEmpty(t, "") },
+			wantError: `Should NOT be empty, but was ""`,
 		},
 		{
 			name:      "Empty/non-nil-error",
@@ -206,7 +217,7 @@ func equalUnaryFailCases() iter.Seq[failCase] {
 		{
 			name:      "Empty/aliased-string",
 			assertion: func(t T) bool { return Empty(t, TString("abc")) },
-			wantError: "Should be empty, but was abc",
+			wantError: `Should be empty, but was "abc"`,
 		},
 		{
 			name:         "Empty/ptr-to-non-nil",

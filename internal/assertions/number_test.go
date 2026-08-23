@@ -7,6 +7,7 @@ import (
 	"iter"
 	"math"
 	"slices"
+	"strings"
 	"testing"
 	"time"
 )
@@ -89,6 +90,91 @@ func TestNumberInEpsilonSlice(t *testing.T) {
 
 	for tc := range epsilonSliceCases() {
 		t.Run(tc.name, tc.test)
+	}
+}
+
+// TestNumberInEpsilonSliceMessage checks that a per-element failure names the element and
+// still carries the message the caller passed. Both land in the "Messages" part of the
+// envelope, which is why this does not go through the failCase harness.
+func TestNumberInEpsilonSliceMessage(t *testing.T) {
+	t.Parallel()
+
+	t.Run("keeps the index and the caller message", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(captureT)
+		InEpsilonSlice(mock, []float64{1, 2}, []float64{1, 3}, 0.01, "checking %s", "widths")
+
+		for _, want := range []string{"at index 1", "checking widths"} {
+			if !strings.Contains(mock.msg, want) {
+				t.Errorf("message %q does not contain %q", mock.msg, want)
+			}
+		}
+	})
+
+	t.Run("names the index when the caller passed no message", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(captureT)
+		InEpsilonSlice(mock, []float64{1, 2}, []float64{1, 3}, 0.01)
+
+		if !strings.Contains(mock.msg, "at index 1") {
+			t.Errorf("message %q does not contain %q", mock.msg, "at index 1")
+		}
+	})
+}
+
+// TestNumberInDeltaMapValuesMessage checks that a failure names the key it came from.
+// InDelta reports the two values but has no idea which key they belong to.
+func TestNumberInDeltaMapValuesMessage(t *testing.T) {
+	t.Parallel()
+
+	t.Run("names the key and keeps the caller message", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(captureT)
+		InDeltaMapValues(mock,
+			map[string]float64{"width": 1, "height": 2},
+			map[string]float64{"width": 1, "height": 9},
+			0.5,
+			"comparing %s", "boxes",
+		)
+
+		for _, want := range []string{"at key height", "comparing boxes"} {
+			if !strings.Contains(mock.msg, want) {
+				t.Errorf("message %q does not contain %q", mock.msg, want)
+			}
+		}
+	})
+
+	t.Run("names the key when the caller passed no message", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(captureT)
+		InDeltaMapValues(mock,
+			map[string]float64{"height": 2},
+			map[string]float64{"height": 9},
+			0.5,
+		)
+
+		if !strings.Contains(mock.msg, "at key height") {
+			t.Errorf("message %q does not contain %q", mock.msg, "at key height")
+		}
+	})
+}
+
+// TestNumberInDeltaSliceMessage pins the order of the two values in a per-element failure.
+// The verdict does not depend on it, since the delta is symmetric, so only the message can
+// catch the arguments being passed the wrong way round.
+func TestNumberInDeltaSliceMessage(t *testing.T) {
+	t.Parallel()
+
+	mock := new(captureT)
+	InDeltaSlice(mock, []float64{2}, []float64{9}, 0.5)
+
+	// InDelta reports "Max difference between <expected> and <actual> allowed is ..."
+	if !strings.Contains(mock.msg, "between 2") || !strings.Contains(mock.msg, "and 9") {
+		t.Errorf("message %q should name expected 2 before actual 9", mock.msg)
 	}
 }
 
