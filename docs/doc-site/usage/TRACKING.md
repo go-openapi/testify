@@ -85,6 +85,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | [#1840] | Issue | JSON presence check without exact values | ✅ Adapted  |
 | [#1859] | Issue | Channel assertions | ✅ Adapted |
 | [#1860] | Issue (PR [#1861]) | `ErrorAsType[E]` for Go 1.26+ | ✅ Adapted - implemented as `ErrorAsType` / `NotErrorAsType` with a typed `*E` target and a `bool` return (not the upstream `(E, bool)` shape), guarded by `//go:build go1.26`. First user of the codegen go-version guard. |
+| [#1915] | Issue | Stack overflow on recursive walk | ✅ Fixed (detected and fixed independently) |
 
 [#994]: https://github.com/stretchr/testify/pull/994
 [#1232]: https://github.com/stretchr/testify/pull/1232
@@ -104,6 +105,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 [#1840]: https://github.com/stretchr/testify/issues/1840
 [#1848]: https://github.com/stretchr/testify/pull/1848
 [#1859]: https://github.com/stretchr/testify/pull/1859
+[#1915]: https://github.com/stretchr/testify/issues/1915
 
 ### Superseded by Our Implementation
 
@@ -114,6 +116,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | [#1819] | PR | Handle unexpected exits in Eventually | Implemented in v2.4 via per-tick goroutine wrap — a `runtime.Goexit` in the condition only aborts the current tick |
 | [#1824] | PR | Spew testing improvements | Superseded by property-based fuzzing with random type generator |
 | [#1830] | PR | `CollectT.Halt()` for stopping tests | Implemented in v2.4 as `CollectT.Cancel()` — see [CHANGES](./CHANGES.md) |
+| [#1937] | PR | `ErrorAsType` (go1.27) | Superseded by our implementation |
 
 
 ### Under Consideration (Monitoring)
@@ -121,6 +124,8 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | Reference | Type | Summary | Status |
 |-----------|------|---------|--------|
 | [#1576] | Issue/PR | `EqualValues` assertion | 🔍 Monitoring [#1863]- Wrong equality when comparing float32 and float64|
+| [#1878] | Issue    | diff hunk size | 🔍 Monitoring - parameterized hunk size is an API challenge |
+| [#1940] | Issue/PR | `ErrorNotContains` assertion | 🔍 Monitoring - symmetry is a good justification |
 
 ### Informational (Not Implemented)
 
@@ -143,6 +148,8 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 [#1861]: https://github.com/stretchr/testify/pull/1861
 [#1862]: https://github.com/stretchr/testify/pull/1862
 [#1863]: https://github.com/stretchr/testify/pull/1863
+[#1878]: https://github.com/stretchr/testify/pull/1878
+[#1940]: https://github.com/stretchr/testify/pull/1940
 
 ### Summary Statistics
 
