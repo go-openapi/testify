@@ -120,6 +120,7 @@ func EqualError(t T, err error, errString string, msgAndArgs ...any) bool {
 //	failure: ErrTest, "not in message"
 func ErrorContains(t T, err error, contains string, msgAndArgs ...any) bool {
 	// Domain: error
+	// Opposite: ErrorNotContains
 	if h, ok := t.(H); ok {
 		h.Helper()
 	}
@@ -130,6 +131,38 @@ func ErrorContains(t T, err error, contains string, msgAndArgs ...any) bool {
 	actual := err.Error()
 	if !strings.Contains(actual, contains) {
 		return Fail(t, fmt.Sprintf("Error %s does not contain %#v", truncatingFormat("%#v", actual), contains), msgAndArgs...)
+	}
+
+	return true
+}
+
+// ErrorNotContains asserts that a function returned a non-nil error (i.e. an
+// error) and that the error does not contain the specified substring.
+//
+// A nil error fails this assertion. Use [NoError] to assert that a function
+// returned no error at all.
+//
+// # Usage
+//
+//	actualObj, err := SomeFunction()
+//	assertions.ErrorNotContains(t, err, unexpectedErrorSubString)
+//
+// # Examples
+//
+//	success: ErrTest, "not in message"
+//	failure: ErrTest, "general error"
+func ErrorNotContains(t T, err error, contains string, msgAndArgs ...any) bool {
+	// Domain: error
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if !Error(t, err, msgAndArgs...) {
+		return false
+	}
+
+	actual := err.Error()
+	if strings.Contains(actual, contains) {
+		return Fail(t, fmt.Sprintf("Error %s contains %#v", truncatingFormat("%#v", actual), contains), msgAndArgs...)
 	}
 
 	return true

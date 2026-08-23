@@ -19,14 +19,14 @@ on methods; on go1.26 those two variants per generic assertion are excluded by t
 
 | Kind                      | Count             | Note |
 | ------------------------- | ----------------- | ---- |
-| All core functions             | 143 | Maintained core |
-| All core assertions       | 139 | Usage with `*testing.T` |
+| All core functions             | 144 | Maintained core |
+| All core assertions       | 140 | Usage with `*testing.T` |
 | Generic assertions        | 55   | Type-safe assertions ("T" suffix) |
 | Helpers (not assertions)  | 4    | General-purpose utilities, not assertions |
 | Others                    | 0     | |
-| assert/require variants   | 556 | Generated variants |
-| Total assertions variants | 1112 | Available assertions API |
-| Total API surface         | 1122 | |
+| assert/require variants   | 560 | Generated variants |
+| Total assertions variants | 1120 | Available assertions API |
+| Total API surface         | 1130 | |
 
 ## Quick index
 
@@ -52,7 +52,7 @@ Table of core assertions, excluding variants. Each function is side by side with
 | [Error](error/#error) | [NoError](error/#noerror) | error |  |
 | [ErrorAs](error/#erroras) | [NotErrorAs](error/#noterroras) | error |  |
 | [ErrorAsType[E error]](error/#errorastypee-error) {{% icon icon="star" color=orange %}} {{% goversion "go1.26" %}} | [NotErrorAsType](error/#noterrorastypee-error) | error |  |
-| [ErrorContains](error/#errorcontains) |  | error |  |
+| [ErrorContains](error/#errorcontains) | [ErrorNotContains](error/#errornotcontains) | error |  |
 | [ErrorIs](error/#erroris) | [NotErrorIs](error/#noterroris) | error |  |
 | [EventuallyWith[C CollectibleConditioner]](condition/#eventuallywithc-collectibleconditioner) {{% icon icon="star" color=orange %}} |  | condition |  |
 | [Eventually[C Conditioner]](condition/#eventuallyc-conditioner) {{% icon icon="star" color=orange %}} | [Never](condition/#neverc-neverconditioner) | condition |  |

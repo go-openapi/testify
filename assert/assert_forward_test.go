@@ -451,6 +451,35 @@ func TestAssertionsErrorIs(t *testing.T) {
 	})
 }
 
+func TestAssertionsErrorNotContains(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		a := New(mock)
+		result := a.ErrorNotContains(ErrTest, "not in message")
+		if !result {
+			t.Error("Assertions.ErrorNotContains should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		a := New(mock)
+		result := a.ErrorNotContains(ErrTest, "general error")
+		if result {
+			t.Error("Assertions.ErrorNotContains should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("Assertions.ErrorNotContains should mark test as failed")
+		}
+	})
+}
+
 func TestAssertionsExactly(t *testing.T) {
 	t.Parallel()
 
@@ -2815,6 +2844,35 @@ func TestAssertionsErrorIsf(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("Assertions.ErrorIsf should mark test as failed")
+		}
+	})
+}
+
+func TestAssertionsErrorNotContainsf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		a := New(mock)
+		result := a.ErrorNotContainsf(ErrTest, "not in message", "test message")
+		if !result {
+			t.Error("Assertions.ErrorNotContainsf should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		a := New(mock)
+		result := a.ErrorNotContainsf(ErrTest, "general error", "test message")
+		if result {
+			t.Error("Assertions.ErrorNotContainsf should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("Assertions.ErrorNotContainsf should mark test as failed")
 		}
 	})
 }

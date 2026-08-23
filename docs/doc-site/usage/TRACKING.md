@@ -22,6 +22,7 @@ We continue to monitor and selectively adopt changes from the upstream repositor
 - ✅ [#1840] - JSON/YAML `Redactor` pattern (dynamic input redaction, inspired by Insta)
 - ✅ [#1859] - Channel assertions (`Blocked` / `NotBlocked`)
 - ✅ [#1860] - `ErrorAsType` / `NotErrorAsType` (go1.26+, adapted with a typed `*E` target)
+- ✅ [#1940] - `ErrorNotContains` (the opposite of `ErrorContains`)
 
 ### Superseded by Our Implementation
 - ✅ [#1801] - Error message on large collections for `Len`
@@ -86,6 +87,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | [#1859] | Issue | Channel assertions | ✅ Adapted |
 | [#1860] | Issue (PR [#1861]) | `ErrorAsType[E]` for Go 1.26+ | ✅ Adapted - implemented as `ErrorAsType` / `NotErrorAsType` with a typed `*E` target and a `bool` return (not the upstream `(E, bool)` shape), guarded by `//go:build go1.26`. First user of the codegen go-version guard. |
 | [#1915] | Issue | Stack overflow on recursive walk | ✅ Fixed (detected and fixed independently) |
+| [#1940] | Issue/PR | `ErrorNotContains` assertion | ✅ Adapted - implemented as `ErrorNotContains` in the error domain, the opposite of `ErrorContains`: a nil error fails, and so does an error whose message contains the substring. |
 
 [#994]: https://github.com/stretchr/testify/pull/994
 [#1232]: https://github.com/stretchr/testify/pull/1232
@@ -106,6 +108,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 [#1848]: https://github.com/stretchr/testify/pull/1848
 [#1859]: https://github.com/stretchr/testify/pull/1859
 [#1915]: https://github.com/stretchr/testify/issues/1915
+[#1940]: https://github.com/stretchr/testify/pull/1940
 
 ### Superseded by Our Implementation
 
@@ -125,7 +128,6 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 |-----------|------|---------|--------|
 | [#1576] | Issue/PR | `EqualValues` assertion | 🔍 Monitoring [#1863]- Wrong equality when comparing float32 and float64|
 | [#1878] | Issue    | diff hunk size | 🔍 Monitoring - parameterized hunk size is an API challenge |
-| [#1940] | Issue/PR | `ErrorNotContains` assertion | 🔍 Monitoring - symmetry is a good justification |
 
 ### Informational (Not Implemented)
 
@@ -149,17 +151,16 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 [#1862]: https://github.com/stretchr/testify/pull/1862
 [#1863]: https://github.com/stretchr/testify/pull/1863
 [#1878]: https://github.com/stretchr/testify/pull/1878
-[#1940]: https://github.com/stretchr/testify/pull/1940
 
 ### Summary Statistics
 
 | Category | Count |
 |----------|-------|
-| **Implemented/Merged** | 28 |
-| **Superseded** | 5 |
-| **Monitoring** | 1 |
+| **Implemented/Merged** | 30 |
+| **Superseded** | 6 |
+| **Monitoring** | 2 |
 | **Informational** | 4 |
-| **Total Processed** | 38 |
+| **Total Processed** | 42 |
 
 **Note**: This fork maintains an active relationship with upstream, regularly reviewing new PRs and issues. The quarterly review process ensures we stay informed about upstream developments while maintaining our architectural independence.
 

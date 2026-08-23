@@ -454,6 +454,29 @@ func TestErrorIsf(t *testing.T) {
 	})
 }
 
+func TestErrorNotContainsf(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		ErrorNotContainsf(mock, ErrTest, "not in message", "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		ErrorNotContainsf(mock, ErrTest, "general error", "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("ErrorNotContainsf should call FailNow()")
+		}
+	})
+}
+
 func TestEventuallyf(t *testing.T) {
 	t.Parallel()
 

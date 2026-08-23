@@ -558,6 +558,34 @@ func ErrorIs(t T, err error, target error, msgAndArgs ...any) {
 	t.FailNow()
 }
 
+// ErrorNotContains asserts that a function returned a non-nil error (i.e. an
+// error) and that the error does not contain the specified substring.
+//
+// A nil error fails this assertion. Use [NoError] to assert that a function
+// returned no error at all.
+//
+// # Usage
+//
+//	actualObj, err := SomeFunction()
+//	assertions.ErrorNotContains(t, err, unexpectedErrorSubString)
+//
+// # Examples
+//
+//	success: ErrTest, "not in message"
+//	failure: ErrTest, "general error"
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func ErrorNotContains(t T, err error, contains string, msgAndArgs ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.ErrorNotContains(t, err, contains, msgAndArgs...) {
+		return
+	}
+
+	t.FailNow()
+}
+
 // Eventually asserts that the given condition will be met before timeout,
 // periodically checking the target function on each tick.
 //
