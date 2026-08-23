@@ -17,6 +17,8 @@ keywords:
   - "ErrorContainsf"
   - "ErrorIs"
   - "ErrorIsf"
+  - "ErrorNotContains"
+  - "ErrorNotContainsf"
   - "NoError"
   - "NoErrorf"
   - "NotErrorAs"
@@ -36,7 +38,7 @@ Asserting Errors
 
 _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
-This domain exposes 10 functionalities.
+This domain exposes 11 functionalities.
 Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 Their method variants carry a {{% goversion "go1.27" %}} badge: methods take type
 parameters only from go1.27 onwards, so on an older toolchain a generic assertion is available as a
@@ -50,6 +52,7 @@ Assertions requiring a newer Go toolchain are marked with a version badge, e.g. 
 - [ErrorAsType[E error]](#errorastypee-error) (go1.26+) | star | orange
 - [ErrorContains](#errorcontains) | angles-right
 - [ErrorIs](#erroris) | angles-right
+- [ErrorNotContains](#errornotcontains) | angles-right
 - [NoError](#noerror) | angles-right
 - [NotErrorAs](#noterroras) | angles-right
 - [NotErrorAsType[E error]](#noterrorastypee-error) (go1.26+) | star | orange
@@ -404,7 +407,7 @@ func (d *dummyError) Error() string {
 |--|--|
 | [`assertions.ErrorAs(t T, err error, target any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ErrorAs) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorAs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L222)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorAs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L255)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -731,7 +734,123 @@ func main() {
 |--|--|
 | [`assertions.ErrorIs(t T, err error, target error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ErrorIs) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorIs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L150)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorIs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L183)
+{{% /tab %}}
+{{< /tabs >}}
+
+### ErrorNotContains{#errornotcontains}
+ErrorNotContains asserts that a function returned a non-nil error (i.e. an
+error) and that the error does not contain the specified substring.
+
+A nil error fails this assertion. Use [NoError](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoError) to assert that a function
+returned no error at all.
+
+{{% expand title="Examples" %}}
+{{< tabs >}}
+{{% tab title="Usage" %}}
+```go
+	actualObj, err := SomeFunction()
+	assertions.ErrorNotContains(t, err, unexpectedErrorSubString)
+	success: ErrTest, "not in message"
+	failure: ErrTest, "general error"
+```
+{{< /tab >}}
+{{% tab title="Testable Examples (assert)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestErrorNotContains(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestErrorNotContains(t *testing.T)
+	success := assert.ErrorNotContains(t, assert.ErrTest, "not in message")
+	fmt.Printf("success: %t\n", success)
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{% tab title="Testable Examples (require)" %}}
+{{% cards %}}
+{{% card %}}
+
+
+*[Copy and click to open Go Playground](https://go.dev/play/)*
+
+
+```go
+// real-world test would inject *testing.T from TestErrorNotContains(t *testing.T)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestErrorNotContains(t *testing.T)
+	require.ErrorNotContains(t, require.ErrTest, "not in message")
+	fmt.Println("passed")
+
+}
+
+```
+{{% /card %}}
+
+
+{{% /cards %}}
+{{< /tab >}}
+
+
+{{< /tabs >}}
+{{% /expand %}}
+
+{{< tabs >}}
+  
+{{% tab title="assert" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`assert.ErrorNotContains(t T, err error, contains string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorNotContains) | package-level function |
+| [`assert.ErrorNotContainsf(t T, err error, contains string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorNotContainsf) | formatted variant |
+| [`assert.(*Assertions).ErrorNotContains(err error, contains string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorNotContains) | method variant |
+| [`assert.(*Assertions).ErrorNotContainsf(err error, contains string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorNotContainsf) | method formatted variant |
+{{% /tab %}}
+{{% tab title="require" style="secondary" %}}
+| Signature | Usage |
+|--|--|
+| [`require.ErrorNotContains(t T, err error, contains string, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorNotContains) | package-level function |
+| [`require.ErrorNotContainsf(t T, err error, contains string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorNotContainsf) | formatted variant |
+| [`require.(*Assertions).ErrorNotContains(err error, contains string)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorNotContains) | method variant |
+| [`require.(*Assertions).ErrorNotContainsf(err error, contains string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorNotContainsf) | method formatted variant |
+{{% /tab %}}
+
+{{% tab title="internal" style="accent" icon="wrench" %}}
+| Signature | Usage |
+|--|--|
+| [`assertions.ErrorNotContains(t T, err error, contains string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ErrorNotContains) | internal implementation |
+
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorNotContains](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L154)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -971,7 +1090,7 @@ func (d *dummyError) Error() string {
 |--|--|
 | [`assertions.NotErrorAs(t T, err error, target any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotErrorAs) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotErrorAs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L257)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotErrorAs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L290)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1181,7 +1300,7 @@ func main() {
 |--|--|
 | [`assertions.NotErrorIs(t T, err error, target error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotErrorIs) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotErrorIs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L188)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotErrorIs](https://github.com/go-openapi/testify/blob/master/internal/assertions/error.go#L221)
 {{% /tab %}}
 {{< /tabs >}}
 

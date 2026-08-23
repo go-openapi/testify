@@ -112,8 +112,9 @@ From a single function, `go generate` produces:
 
 Plus: tests for all variants, documentation entry in `docs/doc-site/api/<domain>.md`.
 
-Generic assertions (with type params) produce 4 variants (no forward methods --
-Go limitation).
+Generic assertions (with type params) produce the same 8 variants, but the 4 forward
+methods land in `assert/assert_forward_go127.go` and `require/require_forward_go127.go`,
+guarded by `//go:build go1.27`: methods take type parameters only from go1.27 on.
 
 ## Checklist
 

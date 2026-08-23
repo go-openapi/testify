@@ -177,6 +177,14 @@ func ExampleErrorIs() {
 	// Output: passed
 }
 
+func ExampleErrorNotContains() {
+	t := new(testing.T) // should come from testing, e.g. func TestErrorNotContains(t *testing.T)
+	require.ErrorNotContains(t, require.ErrTest, "not in message")
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleEventually() {
 	t := new(testing.T) // should come from testing, e.g. func TestEventually(t *testing.T)
 	require.Eventually(t, func() bool {

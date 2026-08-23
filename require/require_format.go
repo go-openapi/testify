@@ -281,6 +281,20 @@ func ErrorIsf(t T, err error, target error, msg string, args ...any) {
 	t.FailNow()
 }
 
+// ErrorNotContainsf is the same as [ErrorNotContains], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func ErrorNotContainsf(t T, err error, contains string, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.ErrorNotContains(t, err, contains, forwardArgs(msg, args)...) {
+		return
+	}
+
+	t.FailNow()
+}
+
 // Eventuallyf is the same as [Eventually], but it accepts a format string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.

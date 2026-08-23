@@ -176,6 +176,14 @@ func ExampleErrorIs() {
 	// Output: success: true
 }
 
+func ExampleErrorNotContains() {
+	t := new(testing.T) // should come from testing, e.g. func TestErrorNotContains(t *testing.T)
+	success := assert.ErrorNotContains(t, assert.ErrTest, "not in message")
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleEventually() {
 	t := new(testing.T) // should come from testing, e.g. func TestEventually(t *testing.T)
 	success := assert.Eventually(t, func() bool {

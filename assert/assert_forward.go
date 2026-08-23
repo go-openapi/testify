@@ -331,6 +331,26 @@ func (a *Assertions) ErrorIsf(err error, target error, msg string, args ...any) 
 	return assertions.ErrorIs(a.T, err, target, forwardArgs(msg, args)...)
 }
 
+// ErrorNotContains is the same as [ErrorNotContains], as a method rather than a package-level function.
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func (a *Assertions) ErrorNotContains(err error, contains string, msgAndArgs ...any) bool {
+	if h, ok := a.T.(H); ok {
+		h.Helper()
+	}
+	return assertions.ErrorNotContains(a.T, err, contains, msgAndArgs...)
+}
+
+// ErrorNotContainsf is the same as [Assertions.ErrorNotContains], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and continues execution.
+func (a *Assertions) ErrorNotContainsf(err error, contains string, msg string, args ...any) bool {
+	if h, ok := a.T.(H); ok {
+		h.Helper()
+	}
+	return assertions.ErrorNotContains(a.T, err, contains, forwardArgs(msg, args)...)
+}
+
 // Exactly is the same as [Exactly], as a method rather than a package-level function.
 //
 // Upon failure, the test [T] is marked as failed and continues execution.

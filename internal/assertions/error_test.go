@@ -121,6 +121,32 @@ func TestErrorContains(t *testing.T) {
 	}
 }
 
+func TestErrorNotContains(t *testing.T) {
+	t.Parallel()
+	mock := new(mockT)
+
+	// a nil error fails: the assertion wants an error that does not contain the substring
+	var err error
+	if ErrorNotContains(mock, err, "") {
+		t.Error("ErrorNotContains should return false for nil arg")
+	}
+
+	// now set an error
+	err = errors.New("some error: another error")
+	if !ErrorNotContains(mock, err, "bad error") {
+		t.Error("ErrorNotContains should return true for different error string")
+	}
+	if ErrorNotContains(mock, err, "some error") {
+		t.Error("ErrorNotContains should return false for 'some error'")
+	}
+	if ErrorNotContains(mock, err, "another error") {
+		t.Error("ErrorNotContains should return false for 'another error'")
+	}
+	if ErrorNotContains(mock, err, "") {
+		t.Error("ErrorNotContains should return false for the empty substring")
+	}
+}
+
 func TestErrorNotErrorAs(t *testing.T) {
 	t.Parallel()
 
@@ -289,6 +315,9 @@ func errorFailCases() iter.Seq[failCase] {
 		}),
 		truncationCase("ErrorContains/truncation", func(t T) bool {
 			return ErrorContains(t, fmt.Errorf("long: %v", longSlice), "EOF")
+		}),
+		truncationCase("ErrorNotContains/truncation", func(t T) bool {
+			return ErrorNotContains(t, fmt.Errorf("long: %v", longSlice), "long")
 		}),
 		truncationCase("ErrorIs/truncation", func(t T) bool {
 			return ErrorIs(t, fmt.Errorf("long: %v", longSlice), fmt.Errorf("also: %v", longSlice))
