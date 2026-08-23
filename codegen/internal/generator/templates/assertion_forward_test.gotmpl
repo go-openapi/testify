@@ -10,14 +10,14 @@ import (
 )
 {{- end }}
 
-{{- range .Functions.Scope "exclude-generics" . }}
+{{- range .Functions.Scope "include-generics" . }}
 
 func Test{{ $.Receiver }}{{ .Name }}(t *testing.T) {
 {{- template "test-case" (testSetup . "forward" $.Receiver) }}
 }
 {{- end }}
 {{- if $.EnableFormat }}
-  {{- range .Functions.Scope "exclude-generics" . }}
+  {{- range .Functions.Scope "include-generics" . }}
 
 func Test{{ $.Receiver }}{{ .Name }}f(t *testing.T) {
 {{- template "test-case" (testSetup . "forward-format" $.Receiver) }}

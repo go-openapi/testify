@@ -26,6 +26,9 @@ _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
 This domain exposes 4 functionalities.
 Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
+Their method variants carry a {{% goversion "go1.27" %}} badge: methods take type
+parameters only from go1.27 onwards, so on an older toolchain a generic assertion is available as a
+package-level function alone.
 
 ```tree
 - [False](#false) | angles-right
@@ -125,15 +128,15 @@ func main() {
 | [`assert.False(t T, value bool, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#False) | package-level function |
 | [`assert.Falsef(t T, value bool, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Falsef) | formatted variant |
 | [`assert.(*Assertions).False(value bool) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.False) | method variant |
-| [`assert.(*Assertions).Falsef(value bool, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Falsef) | method formatted variant |
+| [`assert.(*Assertions).Falsef(value bool, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Falsef) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.False(t T, value bool, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#False) | package-level function |
-| [`require.Falsef(t T, value bool, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Falsef) | formatted variant |
-| [`require.(*Assertions).False(value bool) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.False) | method variant |
-| [`require.(*Assertions).Falsef(value bool, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Falsef) | method formatted variant |
+| [`require.False(t T, value bool, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#False) | package-level function |
+| [`require.Falsef(t T, value bool, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Falsef) | formatted variant |
+| [`require.(*Assertions).False(value bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.False) | method variant |
+| [`require.(*Assertions).Falsef(value bool, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Falsef) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -239,12 +242,16 @@ func main() {
 |--|--|
 | [`assert.FalseT[B Boolean](t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#FalseT) | package-level function |
 | [`assert.FalseTf[B Boolean](t T, value B, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#FalseTf) | formatted variant |
+| [`assert.(*Assertions).FalseT[B Boolean](value B) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FalseT) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).FalseTf[B Boolean](value B, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FalseTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.FalseT[B Boolean](t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FalseT) | package-level function |
-| [`require.FalseTf[B Boolean](t T, value B, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FalseTf) | formatted variant |
+| [`require.FalseT[B Boolean](t T, value B, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FalseT) | package-level function |
+| [`require.FalseTf[B Boolean](t T, value B, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FalseTf) | formatted variant |
+| [`require.(*Assertions).FalseT[B Boolean](value B)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FalseT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).FalseTf[B Boolean](value B, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FalseTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -347,15 +354,15 @@ func main() {
 | [`assert.True(t T, value bool, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#True) | package-level function |
 | [`assert.Truef(t T, value bool, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Truef) | formatted variant |
 | [`assert.(*Assertions).True(value bool) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.True) | method variant |
-| [`assert.(*Assertions).Truef(value bool, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Truef) | method formatted variant |
+| [`assert.(*Assertions).Truef(value bool, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Truef) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.True(t T, value bool, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#True) | package-level function |
-| [`require.Truef(t T, value bool, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Truef) | formatted variant |
-| [`require.(*Assertions).True(value bool) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.True) | method variant |
-| [`require.(*Assertions).Truef(value bool, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Truef) | method formatted variant |
+| [`require.True(t T, value bool, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#True) | package-level function |
+| [`require.Truef(t T, value bool, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Truef) | formatted variant |
+| [`require.(*Assertions).True(value bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.True) | method variant |
+| [`require.(*Assertions).Truef(value bool, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Truef) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -461,12 +468,16 @@ func main() {
 |--|--|
 | [`assert.TrueT[B Boolean](t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#TrueT) | package-level function |
 | [`assert.TrueTf[B Boolean](t T, value B, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#TrueTf) | formatted variant |
+| [`assert.(*Assertions).TrueT[B Boolean](value B) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.TrueT) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).TrueTf[B Boolean](value B, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.TrueTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.TrueT[B Boolean](t T, value B, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#TrueT) | package-level function |
-| [`require.TrueTf[B Boolean](t T, value B, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#TrueTf) | formatted variant |
+| [`require.TrueT[B Boolean](t T, value B, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#TrueT) | package-level function |
+| [`require.TrueTf[B Boolean](t T, value B, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#TrueTf) | formatted variant |
+| [`require.(*Assertions).TrueT[B Boolean](value B)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.TrueT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).TrueTf[B Boolean](value B, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.TrueTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

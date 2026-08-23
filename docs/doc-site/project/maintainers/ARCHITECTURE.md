@@ -41,14 +41,17 @@ Fixes and enhancements propagate naturally to the variants without the need to r
 
 Each test assertion produces 2 base variants (assert, require).
 
-Each of these variants produces another formatted variant. Except for generic assertions, we produce
-one "forward" variant and one "forward formatted" variant (as methods).
+Each of these variants produces another formatted variant, plus one "forward" variant and one
+"forward formatted" variant (as methods of the `Assertions` type).
 
-**For every non-generic assertion: 8 variants.**
-
-**For every generic assertion: 4 variants.**
+**For every assertion: 8 variants.**
 
 **For every "helper" function (not an assertion): 2 variants.**
+
+Generic assertions reach 8 variants only from go1.27, the first release that accepts type parameters
+on methods. Their 4 method variants are generated into files guarded by `//go:build go1.27`
+(`assert/assert_forward_go127.go`, `require/require_forward_go127.go`), so a go1.25 or go1.26 build
+drops them and keeps the 4 package-level variants. The counts below assume go1.27.
 
 
 All these variants make up several hundreds functions, which poses a challenge for maintenance and documentation.

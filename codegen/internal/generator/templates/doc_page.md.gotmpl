@@ -42,18 +42,21 @@
 
   {{- with $extraPackages }}
     {{- range .LookupFunction $funcName }}
+      {{- $returns := returns .Returns }}
+      {{- if and (eq .Package "require") (not .IsHelper) }}{{ $returns = "" }}{{ end }}{{/* a require assertion calls FailNow instead of returning */}}
+      {{- $hasVariants := not .IsHelper }}{{/* helpers are generated as package-level functions only */}}
 {{ hopen }}% tab title="{{ .Package }}" style="secondary" %{{ hclose }}
 | Signature | Usage |
 |--|--|
-| [`{{.Package }}.{{ .GenericName }}({{ params .AllParams }}) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Name }}) | package-level function |
-      {{- if .EnableFormat }}
-| [`{{ .Package }}.{{ .GenericName "f" }}(t T, {{ params .Params }}, msg string, args ...any) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Name }}f) | formatted variant |
+| [`{{.Package }}.{{ .GenericName }}({{ params .AllParams }}){{ with $returns }} {{ . }}{{ end }}`]({{ $godoc }}/{{ .Package }}#{{ .Name }}) | package-level function |
+      {{- if and .EnableFormat $hasVariants }}
+| [`{{ .Package }}.{{ .GenericName "f" }}(t T, {{ params .Params }}, msg string, args ...any){{ with $returns }} {{ . }}{{ end }}`]({{ $godoc }}/{{ .Package }}#{{ .Name }}f) | formatted variant |
       {{- end }}
-      {{- if and .EnableForward (not .IsGeneric) }}
-| [`{{ .Package}}.(*{{ .Receiver }}).{{ .Name }}({{ params .Params }}) {{ returns .Returns }}`]({{ $godoc }}/{{ .Package }}#{{ .Receiver }}.{{ .Name }}) | method variant |
+      {{- if and .EnableForward $hasVariants }}
+| [`{{ .Package}}.(*{{ .Receiver }}).{{ .GenericName }}({{ params .Params }}){{ with $returns }} {{ . }}{{ end }}`]({{ $godoc }}/{{ .Package }}#{{ .Receiver }}.{{ .Name }}) | method variant{{ if .IsGeneric }} {{ hopen }}% goversion "{{ .ForwardGoBuild }}" %{{ hclose }}{{ end }} |
       {{- end }}
-      {{- if and .EnableForward .EnableFormat (not .IsGeneric) }}
-| [`{{ .Package }}.(*{{ .Receiver }}).{{ .Name }}f({{ params .Params }}, msg string, args ..any)`]({{ $godoc }}/{{ .Package }}#{{ .Receiver }}.{{ .Name }}f) | method formatted variant |
+      {{- if and .EnableForward .EnableFormat $hasVariants }}
+| [`{{ .Package }}.(*{{ .Receiver }}).{{ .GenericName "f" }}({{ params .Params }}, msg string, args ...any){{ with $returns }} {{ . }}{{ end }}`]({{ $godoc }}/{{ .Package }}#{{ .Receiver }}.{{ .Name }}f) | method formatted variant{{ if .IsGeneric }} {{ hopen }}% goversion "{{ .ForwardGoBuild }}" %{{ hclose }}{{ end }} |
       {{- end }}
 {{ hopen }}% /tab %{{ hclose }}
     {{- end }}
@@ -106,6 +109,9 @@ _All links point to <{{ .PkgGoDevURL }}>_
 This domain exposes {{ .RefCount }} functionalities.
 {{- if .HasGenerics }}
 Generic assertions are marked with a {{ hopen }}% icon icon="star" color=orange %{{ hclose }}.
+Their method variants carry a {{ hopen }}% goversion "{{ .GenericMethodsGoBuild }}" %{{ hclose }} badge: methods take type
+parameters only from {{ .GenericMethodsGoBuild }} onwards, so on an older toolchain a generic assertion is available as a
+package-level function alone.
 {{- end }}
 {{- if .HasGoGuards }}
 Assertions requiring a newer Go toolchain are marked with a version badge, e.g. {{ hopen }}% goversion "go1.26" %{{ hclose }} (the assertion is unavailable on older toolchains).

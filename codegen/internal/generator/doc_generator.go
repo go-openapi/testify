@@ -242,8 +242,12 @@ func (d *DocGenerator) buildMetrics(docsByDomain iter.Seq2[string, model.Documen
 	}
 
 	metrics.NonGenerics = metrics.Assertions - metrics.Generics
+
+	// Since go1.27 a generic assertion produces the same variants as a non-generic one:
+	// methods take type parameters, so the forward and forward-format variants exist for
+	// both. The count therefore describes a go1.27 build; on go1.26 the method variants of
+	// the generic assertions are excluded by their //go:build guard.
 	variantsMultiplier := 1
-	genericsVariantsMultiplier := 1
 
 	if d.ctx.enableForward {
 		variantsMultiplier++
@@ -254,10 +258,9 @@ func (d *DocGenerator) buildMetrics(docsByDomain iter.Seq2[string, model.Documen
 
 	if d.ctx.enableFormat {
 		variantsMultiplier++
-		genericsVariantsMultiplier++
 	}
 
-	metrics.PackageVariants = metrics.NonGenerics*variantsMultiplier + metrics.Generics*genericsVariantsMultiplier
+	metrics.PackageVariants = metrics.Assertions * variantsMultiplier
 
 	// caveat: assume 2 target packages (not really available from options atm).
 	const generatedPackages = 2

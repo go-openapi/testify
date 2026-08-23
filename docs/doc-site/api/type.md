@@ -38,6 +38,9 @@ _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
 This domain exposes 10 functionalities.
 Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
+Their method variants carry a {{% goversion "go1.27" %}} badge: methods take type
+parameters only from go1.27 onwards, so on an older toolchain a generic assertion is available as a
+package-level function alone.
 
 ```tree
 - [Implements](#implements) | angles-right
@@ -169,15 +172,15 @@ func ptr[T any](value T) *T {
 | [`assert.Implements(t T, interfaceObject any, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Implements) | package-level function |
 | [`assert.Implementsf(t T, interfaceObject any, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Implementsf) | formatted variant |
 | [`assert.(*Assertions).Implements(interfaceObject any, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Implements) | method variant |
-| [`assert.(*Assertions).Implementsf(interfaceObject any, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Implementsf) | method formatted variant |
+| [`assert.(*Assertions).Implementsf(interfaceObject any, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Implementsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Implements(t T, interfaceObject any, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Implements) | package-level function |
-| [`require.Implementsf(t T, interfaceObject any, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Implementsf) | formatted variant |
-| [`require.(*Assertions).Implements(interfaceObject any, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Implements) | method variant |
-| [`require.(*Assertions).Implementsf(interfaceObject any, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Implementsf) | method formatted variant |
+| [`require.Implements(t T, interfaceObject any, object any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Implements) | package-level function |
+| [`require.Implementsf(t T, interfaceObject any, object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Implementsf) | formatted variant |
+| [`require.(*Assertions).Implements(interfaceObject any, object any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Implements) | method variant |
+| [`require.(*Assertions).Implementsf(interfaceObject any, object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Implementsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -283,12 +286,16 @@ type myType float64
 |--|--|
 | [`assert.IsNotOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsNotOfTypeT) | package-level function |
 | [`assert.IsNotOfTypeTf[EType any](t T, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsNotOfTypeTf) | formatted variant |
+| [`assert.(*Assertions).IsNotOfTypeT[EType any](object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNotOfTypeT) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).IsNotOfTypeTf[EType any](object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNotOfTypeTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.IsNotOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNotOfTypeT) | package-level function |
-| [`require.IsNotOfTypeTf[EType any](t T, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNotOfTypeTf) | formatted variant |
+| [`require.IsNotOfTypeT[EType any](t T, object any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNotOfTypeT) | package-level function |
+| [`require.IsNotOfTypeTf[EType any](t T, object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNotOfTypeTf) | formatted variant |
+| [`require.(*Assertions).IsNotOfTypeT[EType any](object any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNotOfTypeT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).IsNotOfTypeTf[EType any](object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNotOfTypeTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -391,15 +398,15 @@ func main() {
 | [`assert.IsNotType(t T, theType any, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsNotType) | package-level function |
 | [`assert.IsNotTypef(t T, theType any, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsNotTypef) | formatted variant |
 | [`assert.(*Assertions).IsNotType(theType any, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNotType) | method variant |
-| [`assert.(*Assertions).IsNotTypef(theType any, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNotTypef) | method formatted variant |
+| [`assert.(*Assertions).IsNotTypef(theType any, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNotTypef) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.IsNotType(t T, theType any, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNotType) | package-level function |
-| [`require.IsNotTypef(t T, theType any, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNotTypef) | formatted variant |
-| [`require.(*Assertions).IsNotType(theType any, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNotType) | method variant |
-| [`require.(*Assertions).IsNotTypef(theType any, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNotTypef) | method formatted variant |
+| [`require.IsNotType(t T, theType any, object any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNotType) | package-level function |
+| [`require.IsNotTypef(t T, theType any, object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNotTypef) | formatted variant |
+| [`require.(*Assertions).IsNotType(theType any, object any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNotType) | method variant |
+| [`require.(*Assertions).IsNotTypef(theType any, object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNotTypef) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -505,12 +512,16 @@ type myType float64
 |--|--|
 | [`assert.IsOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsOfTypeT) | package-level function |
 | [`assert.IsOfTypeTf[EType any](t T, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsOfTypeTf) | formatted variant |
+| [`assert.(*Assertions).IsOfTypeT[EType any](object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsOfTypeT) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).IsOfTypeTf[EType any](object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsOfTypeTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.IsOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsOfTypeT) | package-level function |
-| [`require.IsOfTypeTf[EType any](t T, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsOfTypeTf) | formatted variant |
+| [`require.IsOfTypeT[EType any](t T, object any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsOfTypeT) | package-level function |
+| [`require.IsOfTypeTf[EType any](t T, object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsOfTypeTf) | formatted variant |
+| [`require.(*Assertions).IsOfTypeT[EType any](object any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsOfTypeT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).IsOfTypeTf[EType any](object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsOfTypeTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -613,15 +624,15 @@ func main() {
 | [`assert.IsType(t T, expectedType any, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsType) | package-level function |
 | [`assert.IsTypef(t T, expectedType any, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsTypef) | formatted variant |
 | [`assert.(*Assertions).IsType(expectedType any, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsType) | method variant |
-| [`assert.(*Assertions).IsTypef(expectedType any, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsTypef) | method formatted variant |
+| [`assert.(*Assertions).IsTypef(expectedType any, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsTypef) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.IsType(t T, expectedType any, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsType) | package-level function |
-| [`require.IsTypef(t T, expectedType any, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsTypef) | formatted variant |
-| [`require.(*Assertions).IsType(expectedType any, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsType) | method variant |
-| [`require.(*Assertions).IsTypef(expectedType any, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsTypef) | method formatted variant |
+| [`require.IsType(t T, expectedType any, object any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsType) | package-level function |
+| [`require.IsTypef(t T, expectedType any, object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsTypef) | formatted variant |
+| [`require.(*Assertions).IsType(expectedType any, object any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsType) | method variant |
+| [`require.(*Assertions).IsTypef(expectedType any, object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsTypef) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -729,15 +740,15 @@ func main() {
 | [`assert.Kind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Kind) | package-level function |
 | [`assert.Kindf(t T, expectedKind reflect.Kind, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Kindf) | formatted variant |
 | [`assert.(*Assertions).Kind(expectedKind reflect.Kind, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Kind) | method variant |
-| [`assert.(*Assertions).Kindf(expectedKind reflect.Kind, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Kindf) | method formatted variant |
+| [`assert.(*Assertions).Kindf(expectedKind reflect.Kind, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Kindf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Kind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Kind) | package-level function |
-| [`require.Kindf(t T, expectedKind reflect.Kind, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Kindf) | formatted variant |
-| [`require.(*Assertions).Kind(expectedKind reflect.Kind, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Kind) | method variant |
-| [`require.(*Assertions).Kindf(expectedKind reflect.Kind, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Kindf) | method formatted variant |
+| [`require.Kind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Kind) | package-level function |
+| [`require.Kindf(t T, expectedKind reflect.Kind, object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Kindf) | formatted variant |
+| [`require.(*Assertions).Kind(expectedKind reflect.Kind, object any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Kind) | method variant |
+| [`require.(*Assertions).Kindf(expectedKind reflect.Kind, object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Kindf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -840,15 +851,15 @@ func main() {
 | [`assert.NotImplements(t T, interfaceObject any, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotImplements) | package-level function |
 | [`assert.NotImplementsf(t T, interfaceObject any, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotImplementsf) | formatted variant |
 | [`assert.(*Assertions).NotImplements(interfaceObject any, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotImplements) | method variant |
-| [`assert.(*Assertions).NotImplementsf(interfaceObject any, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotImplementsf) | method formatted variant |
+| [`assert.(*Assertions).NotImplementsf(interfaceObject any, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotImplementsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NotImplements(t T, interfaceObject any, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotImplements) | package-level function |
-| [`require.NotImplementsf(t T, interfaceObject any, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotImplementsf) | formatted variant |
-| [`require.(*Assertions).NotImplements(interfaceObject any, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotImplements) | method variant |
-| [`require.(*Assertions).NotImplementsf(interfaceObject any, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotImplementsf) | method formatted variant |
+| [`require.NotImplements(t T, interfaceObject any, object any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotImplements) | package-level function |
+| [`require.NotImplementsf(t T, interfaceObject any, object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotImplementsf) | formatted variant |
+| [`require.(*Assertions).NotImplements(interfaceObject any, object any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotImplements) | method variant |
+| [`require.(*Assertions).NotImplementsf(interfaceObject any, object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotImplementsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -956,15 +967,15 @@ func main() {
 | [`assert.NotKind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotKind) | package-level function |
 | [`assert.NotKindf(t T, expectedKind reflect.Kind, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotKindf) | formatted variant |
 | [`assert.(*Assertions).NotKind(expectedKind reflect.Kind, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotKind) | method variant |
-| [`assert.(*Assertions).NotKindf(expectedKind reflect.Kind, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotKindf) | method formatted variant |
+| [`assert.(*Assertions).NotKindf(expectedKind reflect.Kind, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotKindf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NotKind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotKind) | package-level function |
-| [`require.NotKindf(t T, expectedKind reflect.Kind, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotKindf) | formatted variant |
-| [`require.(*Assertions).NotKind(expectedKind reflect.Kind, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotKind) | method variant |
-| [`require.(*Assertions).NotKindf(expectedKind reflect.Kind, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotKindf) | method formatted variant |
+| [`require.NotKind(t T, expectedKind reflect.Kind, object any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotKind) | package-level function |
+| [`require.NotKindf(t T, expectedKind reflect.Kind, object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotKindf) | formatted variant |
+| [`require.(*Assertions).NotKind(expectedKind reflect.Kind, object any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotKind) | method variant |
+| [`require.(*Assertions).NotKindf(expectedKind reflect.Kind, object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotKindf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1067,15 +1078,15 @@ func main() {
 | [`assert.NotZero(t T, i any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotZero) | package-level function |
 | [`assert.NotZerof(t T, i any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotZerof) | formatted variant |
 | [`assert.(*Assertions).NotZero(i any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotZero) | method variant |
-| [`assert.(*Assertions).NotZerof(i any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotZerof) | method formatted variant |
+| [`assert.(*Assertions).NotZerof(i any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotZerof) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NotZero(t T, i any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotZero) | package-level function |
-| [`require.NotZerof(t T, i any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotZerof) | formatted variant |
-| [`require.(*Assertions).NotZero(i any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotZero) | method variant |
-| [`require.(*Assertions).NotZerof(i any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotZerof) | method formatted variant |
+| [`require.NotZero(t T, i any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotZero) | package-level function |
+| [`require.NotZerof(t T, i any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotZerof) | formatted variant |
+| [`require.(*Assertions).NotZero(i any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotZero) | method variant |
+| [`require.(*Assertions).NotZerof(i any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotZerof) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1178,15 +1189,15 @@ func main() {
 | [`assert.Zero(t T, i any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Zero) | package-level function |
 | [`assert.Zerof(t T, i any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Zerof) | formatted variant |
 | [`assert.(*Assertions).Zero(i any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Zero) | method variant |
-| [`assert.(*Assertions).Zerof(i any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Zerof) | method formatted variant |
+| [`assert.(*Assertions).Zerof(i any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Zerof) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Zero(t T, i any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Zero) | package-level function |
-| [`require.Zerof(t T, i any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Zerof) | formatted variant |
-| [`require.(*Assertions).Zero(i any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Zero) | method variant |
-| [`require.(*Assertions).Zerof(i any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Zerof) | method formatted variant |
+| [`require.Zero(t T, i any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Zero) | package-level function |
+| [`require.Zerof(t T, i any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Zerof) | formatted variant |
+| [`require.(*Assertions).Zero(i any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Zero) | method variant |
+| [`require.(*Assertions).Zerof(i any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Zerof) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

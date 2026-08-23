@@ -12,7 +12,8 @@ import (
 
 // {{ .Receiver }} exposes all assertion functions as methods.
 //
-// NOTE: assertion methods with parameterized types (generics) are not supported as methods.
+// NOTE: generic assertions are exposed as methods only when built with go1.27 or newer,
+// the first release that accepts type parameters on methods.
 //
 {{ docStringPackage .Package }}
 type {{ .Receiver }} struct {
@@ -27,23 +28,23 @@ func New(t T) *{{ .Receiver }} {
 }
 {{- end }}
 
-{{- range .Functions.Scope "exclude-generics" . }}{{/* generics can't be added to the receiver */}}
+{{- range .Functions.Scope "include-generics" . }}{{/* generic methods land in the go1.27 variant file */}}
 
 {{ docStringFor "forward" .Name }}
 //
 {{ docStringPackage $.Package }}
-func (a *{{ $.Receiver }}) {{.Name}}({{ params .Params }}, msgAndArgs ...any) {{ returns .Returns }} {
+func (a *{{ $.Receiver }}) {{ .GenericName }}({{ params .Params }}, msgAndArgs ...any) {{ returns .Returns }} {
 	if h, ok := a.T.(H); ok { h.Helper() }
-	return {{ .TargetPackage }}.{{.Name}}(a.T, {{ forward .Params }}, msgAndArgs...)
+	return {{ .TargetPackage }}.{{ .GenericCallName }}(a.T, {{ forward .Params }}, msgAndArgs...)
 }
   {{- if $.EnableFormat }}
 
 {{ docStringFor "format" (concat $.Receiver "." .Name ) }}
 //
 {{ docStringPackage $.Package }}
-func (a *{{ $.Receiver }}){{ .Name }}f({{ params .Params }}, msg string, args ...any) {{ returns .Returns }} {
+func (a *{{ $.Receiver }}) {{ .GenericName "f" }}({{ params .Params }}, msg string, args ...any) {{ returns .Returns }} {
 	if h, ok := a.T.(H); ok { h.Helper() }
-  return {{ .TargetPackage }}.{{ .Name }}(a.T, {{ forward .Params }}, forwardArgs(msg, args)...)
+  return {{ .TargetPackage }}.{{ .GenericCallName }}(a.T, {{ forward .Params }}, forwardArgs(msg, args)...)
 }
   {{- end }}
 {{- end }}

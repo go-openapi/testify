@@ -16,7 +16,8 @@ import (
 
 // Assertions exposes all assertion functions as methods.
 //
-// NOTE: assertion methods with parameterized types (generics) are not supported as methods.
+// NOTE: generic assertions are exposed as methods only when built with go1.27 or newer,
+// the first release that accepts type parameters on methods.
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
 type Assertions struct {

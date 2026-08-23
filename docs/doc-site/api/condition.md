@@ -36,6 +36,9 @@ _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
 This domain exposes 9 functionalities.
 Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
+Their method variants carry a {{% goversion "go1.27" %}} badge: methods take type
+parameters only from go1.27 onwards, so on an older toolchain a generic assertion is available as a
+package-level function alone.
 
 ```tree
 - [Blocked](#blocked) | angles-right
@@ -143,15 +146,15 @@ func main() {
 | [`assert.Blocked(t T, ch any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Blocked) | package-level function |
 | [`assert.Blockedf(t T, ch any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Blockedf) | formatted variant |
 | [`assert.(*Assertions).Blocked(ch any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Blocked) | method variant |
-| [`assert.(*Assertions).Blockedf(ch any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Blockedf) | method formatted variant |
+| [`assert.(*Assertions).Blockedf(ch any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Blockedf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Blocked(t T, ch any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Blocked) | package-level function |
-| [`require.Blockedf(t T, ch any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Blockedf) | formatted variant |
-| [`require.(*Assertions).Blocked(ch any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Blocked) | method variant |
-| [`require.(*Assertions).Blockedf(ch any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Blockedf) | method formatted variant |
+| [`require.Blocked(t T, ch any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Blocked) | package-level function |
+| [`require.Blockedf(t T, ch any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Blockedf) | formatted variant |
+| [`require.(*Assertions).Blocked(ch any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Blocked) | method variant |
+| [`require.(*Assertions).Blockedf(ch any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Blockedf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -254,12 +257,16 @@ func main() {
 |--|--|
 | [`assert.BlockedT[E any, CHAN ~chan E](t T, ch CHAN, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#BlockedT) | package-level function |
 | [`assert.BlockedTf[E any, CHAN ~chan E](t T, ch CHAN, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#BlockedTf) | formatted variant |
+| [`assert.(*Assertions).BlockedT[E any, CHAN ~chan E](ch CHAN) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.BlockedT) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).BlockedTf[E any, CHAN ~chan E](ch CHAN, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.BlockedTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.BlockedT[E any, CHAN ~chan E](t T, ch CHAN, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#BlockedT) | package-level function |
-| [`require.BlockedTf[E any, CHAN ~chan E](t T, ch CHAN, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#BlockedTf) | formatted variant |
+| [`require.BlockedT[E any, CHAN ~chan E](t T, ch CHAN, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#BlockedT) | package-level function |
+| [`require.BlockedTf[E any, CHAN ~chan E](t T, ch CHAN, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#BlockedTf) | formatted variant |
+| [`require.(*Assertions).BlockedT[E any, CHAN ~chan E](ch CHAN)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.BlockedT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).BlockedTf[E any, CHAN ~chan E](ch CHAN, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.BlockedTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -366,15 +373,15 @@ func main() {
 | [`assert.Condition(t T, comp func() bool, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Condition) | package-level function |
 | [`assert.Conditionf(t T, comp func() bool, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Conditionf) | formatted variant |
 | [`assert.(*Assertions).Condition(comp func() bool) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Condition) | method variant |
-| [`assert.(*Assertions).Conditionf(comp func() bool, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Conditionf) | method formatted variant |
+| [`assert.(*Assertions).Conditionf(comp func() bool, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Conditionf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Condition(t T, comp func() bool, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Condition) | package-level function |
-| [`require.Conditionf(t T, comp func() bool, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Conditionf) | formatted variant |
-| [`require.(*Assertions).Condition(comp func() bool) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Condition) | method variant |
-| [`require.(*Assertions).Conditionf(comp func() bool, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Conditionf) | method formatted variant |
+| [`require.Condition(t T, comp func() bool, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Condition) | package-level function |
+| [`require.Conditionf(t T, comp func() bool, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Conditionf) | formatted variant |
+| [`require.(*Assertions).Condition(comp func() bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Condition) | method variant |
+| [`require.(*Assertions).Conditionf(comp func() bool, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Conditionf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -752,12 +759,16 @@ func main() {
 |--|--|
 | [`assert.Consistently[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Consistently) | package-level function |
 | [`assert.Consistentlyf[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Consistentlyf) | formatted variant |
+| [`assert.(*Assertions).Consistently[C Conditioner](condition C, timeout time.Duration, tick time.Duration) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Consistently) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).Consistentlyf[C Conditioner](condition C, timeout time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Consistentlyf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Consistently[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Consistently) | package-level function |
-| [`require.Consistentlyf[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Consistentlyf) | formatted variant |
+| [`require.Consistently[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Consistently) | package-level function |
+| [`require.Consistentlyf[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Consistentlyf) | formatted variant |
+| [`require.(*Assertions).Consistently[C Conditioner](condition C, timeout time.Duration, tick time.Duration)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Consistently) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).Consistentlyf[C Conditioner](condition C, timeout time.Duration, tick time.Duration, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Consistentlyf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1274,12 +1285,16 @@ func main() {
 |--|--|
 | [`assert.Eventually[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Eventually) | package-level function |
 | [`assert.Eventuallyf[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Eventuallyf) | formatted variant |
+| [`assert.(*Assertions).Eventually[C Conditioner](condition C, timeout time.Duration, tick time.Duration) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Eventually) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).Eventuallyf[C Conditioner](condition C, timeout time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Eventuallyf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Eventually[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Eventually) | package-level function |
-| [`require.Eventuallyf[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Eventuallyf) | formatted variant |
+| [`require.Eventually[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Eventually) | package-level function |
+| [`require.Eventuallyf[C Conditioner](t T, condition C, timeout time.Duration, tick time.Duration, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Eventuallyf) | formatted variant |
+| [`require.(*Assertions).Eventually[C Conditioner](condition C, timeout time.Duration, tick time.Duration)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Eventually) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).Eventuallyf[C Conditioner](condition C, timeout time.Duration, tick time.Duration, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Eventuallyf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1521,12 +1536,16 @@ func main() {
 |--|--|
 | [`assert.EventuallyWith[C CollectibleConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EventuallyWith) | package-level function |
 | [`assert.EventuallyWithf[C CollectibleConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EventuallyWithf) | formatted variant |
+| [`assert.(*Assertions).EventuallyWith[C CollectibleConditioner](condition C, timeout time.Duration, tick time.Duration) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.EventuallyWith) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).EventuallyWithf[C CollectibleConditioner](condition C, timeout time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.EventuallyWithf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.EventuallyWith[C CollectibleConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EventuallyWith) | package-level function |
-| [`require.EventuallyWithf[C CollectibleConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EventuallyWithf) | formatted variant |
+| [`require.EventuallyWith[C CollectibleConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EventuallyWith) | package-level function |
+| [`require.EventuallyWithf[C CollectibleConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EventuallyWithf) | formatted variant |
+| [`require.(*Assertions).EventuallyWith[C CollectibleConditioner](condition C, timeout time.Duration, tick time.Duration)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.EventuallyWith) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).EventuallyWithf[C CollectibleConditioner](condition C, timeout time.Duration, tick time.Duration, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.EventuallyWithf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1821,12 +1840,16 @@ func main() {
 |--|--|
 | [`assert.Never[C NeverConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Never) | package-level function |
 | [`assert.Neverf[C NeverConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Neverf) | formatted variant |
+| [`assert.(*Assertions).Never[C NeverConditioner](condition C, timeout time.Duration, tick time.Duration) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Never) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).Neverf[C NeverConditioner](condition C, timeout time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Neverf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Never[C NeverConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Never) | package-level function |
-| [`require.Neverf[C NeverConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Neverf) | formatted variant |
+| [`require.Never[C NeverConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Never) | package-level function |
+| [`require.Neverf[C NeverConditioner](t T, condition C, timeout time.Duration, tick time.Duration, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Neverf) | formatted variant |
+| [`require.(*Assertions).Never[C NeverConditioner](condition C, timeout time.Duration, tick time.Duration)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Never) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).Neverf[C NeverConditioner](condition C, timeout time.Duration, tick time.Duration, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Neverf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1950,15 +1973,15 @@ func sendChanMessage() chan struct{} {
 | [`assert.NotBlocked(t T, ch any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotBlocked) | package-level function |
 | [`assert.NotBlockedf(t T, ch any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotBlockedf) | formatted variant |
 | [`assert.(*Assertions).NotBlocked(ch any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotBlocked) | method variant |
-| [`assert.(*Assertions).NotBlockedf(ch any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotBlockedf) | method formatted variant |
+| [`assert.(*Assertions).NotBlockedf(ch any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotBlockedf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NotBlocked(t T, ch any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotBlocked) | package-level function |
-| [`require.NotBlockedf(t T, ch any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotBlockedf) | formatted variant |
-| [`require.(*Assertions).NotBlocked(ch any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotBlocked) | method variant |
-| [`require.(*Assertions).NotBlockedf(ch any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotBlockedf) | method formatted variant |
+| [`require.NotBlocked(t T, ch any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotBlocked) | package-level function |
+| [`require.NotBlockedf(t T, ch any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotBlockedf) | formatted variant |
+| [`require.(*Assertions).NotBlocked(ch any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotBlocked) | method variant |
+| [`require.(*Assertions).NotBlockedf(ch any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotBlockedf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -2079,12 +2102,16 @@ func sendChanMessage() chan struct{} {
 |--|--|
 | [`assert.NotBlockedT[E any, CHAN ~chan E](t T, ch CHAN, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotBlockedT) | package-level function |
 | [`assert.NotBlockedTf[E any, CHAN ~chan E](t T, ch CHAN, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotBlockedTf) | formatted variant |
+| [`assert.(*Assertions).NotBlockedT[E any, CHAN ~chan E](ch CHAN) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotBlockedT) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).NotBlockedTf[E any, CHAN ~chan E](ch CHAN, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotBlockedTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NotBlockedT[E any, CHAN ~chan E](t T, ch CHAN, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotBlockedT) | package-level function |
-| [`require.NotBlockedTf[E any, CHAN ~chan E](t T, ch CHAN, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotBlockedTf) | formatted variant |
+| [`require.NotBlockedT[E any, CHAN ~chan E](t T, ch CHAN, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotBlockedT) | package-level function |
+| [`require.NotBlockedTf[E any, CHAN ~chan E](t T, ch CHAN, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotBlockedTf) | formatted variant |
+| [`require.(*Assertions).NotBlockedT[E any, CHAN ~chan E](ch CHAN)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotBlockedT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).NotBlockedTf[E any, CHAN ~chan E](ch CHAN, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotBlockedTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

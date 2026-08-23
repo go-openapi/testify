@@ -423,13 +423,13 @@ func testSetup(fn model.Function, variant string, receiver string) model.Functio
 		fn.TestMockFailure = fn.FailMsg("f")
 		fn.TestMsg = "test message"
 	case "forward":
-		fn.TestCall = "a." + fn.Name + "("
+		fn.TestCall = "a." + fn.Name + fn.GenericSuffix() + "("
 		fn.TestMock = fmt.Sprintf("mock := new(%s)\na := New(mock)", fn.UseMock)
 		fn.TestErrorPrefix = receiver + "." + fn.Name
 		fn.TestPanicWrapper = "a.Panics("
 		fn.TestMockFailure = fn.FailMsg(receiver, "")
 	case "forward-format":
-		fn.TestCall = "a." + fn.Name + "f("
+		fn.TestCall = "a." + fn.Name + "f" + fn.GenericSuffix() + "("
 		fn.TestMock = fmt.Sprintf("mock := new(%s)\na := New(mock)", fn.UseMock)
 		fn.TestErrorPrefix = receiver + "." + fn.Name + "f"
 		fn.TestPanicWrapper = "a.Panics("

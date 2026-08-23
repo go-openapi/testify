@@ -100,17 +100,26 @@ func (g *Generator) Generate(opts ...GenerateOption) error {
 	// (e.g. a go1.26 variant with no helpers) are skipped by render().
 	full := g.ctx.target
 	for _, constraint := range full.Functions.BuildVariants() {
-		g.ctx.target = variantTarget(full, constraint)
-		g.ctx.variantSuffix = model.GoBuildTag(constraint)
-		if g.ctx.variantSuffix != "" {
-			g.ctx.variantSuffix = "_" + g.ctx.variantSuffix
-		}
+		g.selectVariant(full, constraint, model.Function.SourceGoBuild)
 
 		if err := g.generateVariant(); err != nil {
 			return err
 		}
 	}
+
+	// Forward methods partition on their own constraint. A generic assertion becomes a
+	// method only from go1.27 onwards, whatever guard its source file carries, so the
+	// forward file it lands in is keyed on ForwardGoBuild, not GoBuild.
+	for _, constraint := range full.Functions.ForwardBuildVariants() {
+		g.selectVariant(full, constraint, model.Function.ForwardGoBuild)
+
+		if err := g.generateForwardVariant(); err != nil {
+			return err
+		}
+	}
+
 	g.ctx.target = full // restore the full model for Documentation()
+	g.ctx.variantSuffix = ""
 
 	// Remove generated build-variant files left over from a variant that no longer exists
 	// (e.g. the last go1.26-guarded assertion was deleted). Without this, those files would
@@ -193,8 +202,9 @@ func isGeneratedFile(path string) (bool, error) {
 	return bytes.Contains(data, []byte("DO NOT EDIT.")), nil
 }
 
-// generateVariant renders every per-function artifact (functions, format, forward,
-// helpers and their tests + examples) for the currently selected build-variant.
+// generateVariant renders every per-function artifact (functions, format, helpers and
+// their tests + examples) for the currently selected build-variant. Forward methods are
+// rendered apart, by [Generator.generateForwardVariant].
 func (g *Generator) generateVariant() error {
 	{
 		// auto-generated assertions
@@ -206,12 +216,6 @@ func (g *Generator) generateVariant() error {
 		if err := g.generateFormatFuncs(); err != nil {
 			// assertion_format.gotmpl
 			// requirement_format.gotmpl
-			return err
-		}
-
-		if err := g.generateForwardFuncs(); err != nil {
-			// assertion_forward.gotmpl
-			// requirement_forward.gotmpl
 			return err
 		}
 
@@ -231,10 +235,6 @@ func (g *Generator) generateVariant() error {
 			return err
 		}
 
-		if err := g.generateForwardTests(); err != nil {
-			return err
-		}
-
 		if err := g.generateExampleTests(); err != nil {
 			return err
 		}
@@ -247,15 +247,41 @@ func (g *Generator) generateVariant() error {
 	return nil
 }
 
+// generateForwardVariant renders the forward methods (and their tests) for the currently
+// selected forward build-variant.
+func (g *Generator) generateForwardVariant() error {
+	if err := g.generateForwardFuncs(); err != nil {
+		// assertion_forward.gotmpl
+		// requirement_forward.gotmpl
+		return err
+	}
+
+	return g.generateForwardTests()
+}
+
+// selectVariant points the generation context at the subset of functions belonging to the
+// given build constraint, and sets the filename suffix the rendered files carry.
+//
+// constraintOf picks which constraint a function is partitioned on: [model.Function.SourceGoBuild]
+// for the files mirroring the source guards, [model.Function.ForwardGoBuild] for the forward
+// files, where the generic assertions carry the go1.27 guard of generic methods.
+func (g *Generator) selectVariant(full *model.AssertionPackage, constraint string, constraintOf func(model.Function) string) {
+	g.ctx.target = variantTarget(full, constraint, constraintOf)
+	g.ctx.variantSuffix = model.GoBuildTag(constraint)
+	if g.ctx.variantSuffix != "" {
+		g.ctx.variantSuffix = "_" + g.ctx.variantSuffix
+	}
+}
+
 // variantTarget clones the transformed model, keeping only the functions belonging to the
 // given build constraint, and stamps the constraint so templates emit the //go:build line.
-func variantTarget(base *model.AssertionPackage, constraint string) *model.AssertionPackage {
+func variantTarget(base *model.AssertionPackage, constraint string, constraintOf func(model.Function) string) *model.AssertionPackage {
 	tgt := base.Clone()
 	tgt.BuildConstraint = constraint
 
 	filtered := tgt.Functions[:0:0]
 	for _, fn := range base.Functions {
-		if fn.GoBuild == constraint {
+		if constraintOf(fn) == constraint {
 			filtered = append(filtered, fn)
 		}
 	}

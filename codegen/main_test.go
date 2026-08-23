@@ -4,6 +4,8 @@
 package main
 
 import (
+	"go/parser"
+	"go/token"
 	"iter"
 	"os"
 	"os/exec"
@@ -12,11 +14,31 @@ import (
 	"testing"
 )
 
+// canParseGenericMethods reports whether the toolchain running this test accepts type
+// parameters on methods.
+//
+// codegen emits generic assertions as methods into the go1.27 forward files, and
+// x/tools/imports formats every file it writes with the go/parser of the running
+// toolchain. Before go1.27 that parser rejects a generic method with "method must have
+// no type parameters", whatever //go:build line the generated file carries — so a full
+// generation run only completes on go1.27 and later.
+func canParseGenericMethods() bool {
+	const src = "package p\ntype t struct{}\nfunc (t) m[T any](T) {}\n"
+
+	_, err := parser.ParseFile(token.NewFileSet(), "probe.go", src, parser.SkipObjectResolution)
+
+	return err == nil
+}
+
 // TestExecute verifies the execute function works with valid configuration.
 func TestExecute(t *testing.T) {
 	// Skip if we're in a short test run
 	if testing.Short() {
 		t.Skip("Skipping integration test in short mode")
+	}
+
+	if !canParseGenericMethods() {
+		t.Skip("Skipping full generation: this toolchain cannot parse the generic methods codegen emits")
 	}
 
 	tmpDir := t.TempDir()
