@@ -26,6 +26,9 @@ _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
 This domain exposes 4 functionalities.
 Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
+Their method variants carry a {{% goversion "go1.27" %}} badge: methods take type
+parameters only from go1.27 onwards, so on an older toolchain a generic assertion is available as a
+package-level function alone.
 
 ```tree
 - [NotRegexp](#notregexp) | angles-right
@@ -241,12 +244,16 @@ func main() {
 |--|--|
 | [`assert.NotRegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotRegexpT) | package-level function |
 | [`assert.NotRegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotRegexpTf) | formatted variant |
+| [`assert.(*Assertions).NotRegexpT[Rex RegExp, ADoc Text](rx Rex, actual ADoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotRegexpT) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).NotRegexpTf[Rex RegExp, ADoc Text](rx Rex, actual ADoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotRegexpTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
 | [`require.NotRegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotRegexpT) | package-level function |
 | [`require.NotRegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotRegexpTf) | formatted variant |
+| [`require.(*Assertions).NotRegexpT[Rex RegExp, ADoc Text](rx Rex, actual ADoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotRegexpT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).NotRegexpTf[Rex RegExp, ADoc Text](rx Rex, actual ADoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotRegexpTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -463,12 +470,16 @@ func main() {
 |--|--|
 | [`assert.RegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#RegexpT) | package-level function |
 | [`assert.RegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#RegexpTf) | formatted variant |
+| [`assert.(*Assertions).RegexpT[Rex RegExp, ADoc Text](rx Rex, actual ADoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.RegexpT) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).RegexpTf[Rex RegExp, ADoc Text](rx Rex, actual ADoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.RegexpTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
 | [`require.RegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#RegexpT) | package-level function |
 | [`require.RegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#RegexpTf) | formatted variant |
+| [`require.(*Assertions).RegexpT[Rex RegExp, ADoc Text](rx Rex, actual ADoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.RegexpT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).RegexpTf[Rex RegExp, ADoc Text](rx Rex, actual ADoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.RegexpTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

@@ -65,6 +65,6 @@ params:
             yaml:
                 name: Yaml
                 count: 5
-        package_variants: 446
-        total_variants: 892
-        total_functions: 902
+        package_variants: 556
+        total_variants: 1112
+        total_functions: 1122

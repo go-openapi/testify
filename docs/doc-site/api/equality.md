@@ -50,6 +50,9 @@ _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
 This domain exposes 16 functionalities.
 Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
+Their method variants carry a {{% goversion "go1.27" %}} badge: methods take type
+parameters only from go1.27 onwards, so on an older toolchain a generic assertion is available as a
+package-level function alone.
 
 ```tree
 - [Empty](#empty) | angles-right
@@ -535,12 +538,16 @@ func main() {
 |--|--|
 | [`assert.EqualT[V comparable](t T, expected V, actual V, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualT) | package-level function |
 | [`assert.EqualTf[V comparable](t T, expected V, actual V, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualTf) | formatted variant |
+| [`assert.(*Assertions).EqualT[V comparable](expected V, actual V) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.EqualT) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).EqualTf[V comparable](expected V, actual V, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.EqualTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
 | [`require.EqualT[V comparable](t T, expected V, actual V, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EqualT) | package-level function |
 | [`require.EqualTf[V comparable](t T, expected V, actual V, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EqualTf) | formatted variant |
+| [`require.(*Assertions).EqualT[V comparable](expected V, actual V) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.EqualT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).EqualTf[V comparable](expected V, actual V, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.EqualTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1207,12 +1214,16 @@ func main() {
 |--|--|
 | [`assert.NotEqualT[V comparable](t T, expected V, actual V, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotEqualT) | package-level function |
 | [`assert.NotEqualTf[V comparable](t T, expected V, actual V, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotEqualTf) | formatted variant |
+| [`assert.(*Assertions).NotEqualT[V comparable](expected V, actual V) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotEqualT) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).NotEqualTf[V comparable](expected V, actual V, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
 | [`require.NotEqualT[V comparable](t T, expected V, actual V, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotEqualT) | package-level function |
 | [`require.NotEqualTf[V comparable](t T, expected V, actual V, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotEqualTf) | formatted variant |
+| [`require.(*Assertions).NotEqualT[V comparable](expected V, actual V) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotEqualT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).NotEqualTf[V comparable](expected V, actual V, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1689,12 +1700,16 @@ func ptr[T any](value T) *T {
 |--|--|
 | [`assert.NotSameT[P any](t T, expected *P, actual *P, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotSameT) | package-level function |
 | [`assert.NotSameTf[P any](t T, expected *P, actual *P, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotSameTf) | formatted variant |
+| [`assert.(*Assertions).NotSameT[P any](expected *P, actual *P) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotSameT) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).NotSameTf[P any](expected *P, actual *P, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotSameTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
 | [`require.NotSameT[P any](t T, expected *P, actual *P, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotSameT) | package-level function |
 | [`require.NotSameTf[P any](t T, expected *P, actual *P, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotSameTf) | formatted variant |
+| [`require.(*Assertions).NotSameT[P any](expected *P, actual *P) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotSameT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).NotSameTf[P any](expected *P, actual *P, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotSameTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1939,12 +1954,16 @@ var (
 |--|--|
 | [`assert.SameT[P any](t T, expected *P, actual *P, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SameT) | package-level function |
 | [`assert.SameTf[P any](t T, expected *P, actual *P, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SameTf) | formatted variant |
+| [`assert.(*Assertions).SameT[P any](expected *P, actual *P) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SameT) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).SameTf[P any](expected *P, actual *P, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SameTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
 | [`require.SameT[P any](t T, expected *P, actual *P, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SameT) | package-level function |
 | [`require.SameTf[P any](t T, expected *P, actual *P, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SameTf) | formatted variant |
+| [`require.(*Assertions).SameT[P any](expected *P, actual *P) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SameT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).SameTf[P any](expected *P, actual *P, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SameTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

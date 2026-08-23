@@ -15,6 +15,10 @@ All assertions are classified into **{{ .Domains }}** domains to help navigate t
 
 Counts for core functionality, and generated variants (formatted, forward, forward-formatted).
 
+Counted for a go1.27 build. Generic assertions gain their forward and forward-formatted variants
+(the methods of the `Assertions` type) from go1.27 on, the first release that accepts type parameters
+on methods; on go1.26 those two variants per generic assertion are excluded by their `//go:build` guard.
+
 | Kind                      | Count             | Note |
 | ------------------------- | ----------------- | ---- |
 | All core functions             | {{ .Functions }} | Maintained core |

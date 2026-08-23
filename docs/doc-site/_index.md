@@ -86,7 +86,10 @@ import (
 Assertion functions that support go generic types are suffixed with `T` (for "Type safety").
 A formatted variant suffixed with `Tf` is also exposed.
 
-Obviously, the `Assertion` type cannot be extended with generic methods, as of `go1.25`.
+Build with go1.27 or newer and every generic assertion is also a method of the `Assertions` type:
+`a.EqualT(expected, result)` alongside `require.EqualT(t, expected, result)`. go1.27 is the first
+release that accepts type parameters on methods; on go1.25 and go1.26 those methods are excluded by
+a `//go:build go1.27` guard, and the package-level functions below are the only form available.
 
 {{< cards >}}
 {{% card title="EqualT" %}}

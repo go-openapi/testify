@@ -13,6 +13,10 @@ All assertions are classified into **19** domains to help navigate the API, depe
 
 Counts for core functionality, and generated variants (formatted, forward, forward-formatted).
 
+Counted for a go1.27 build. Generic assertions gain their forward and forward-formatted variants
+(the methods of the `Assertions` type) from go1.27 on, the first release that accepts type parameters
+on methods; on go1.26 those two variants per generic assertion are excluded by their `//go:build` guard.
+
 | Kind                      | Count             | Note |
 | ------------------------- | ----------------- | ---- |
 | All core functions             | 143 | Maintained core |
@@ -20,9 +24,9 @@ Counts for core functionality, and generated variants (formatted, forward, forwa
 | Generic assertions        | 55   | Type-safe assertions ("T" suffix) |
 | Helpers (not assertions)  | 4    | General-purpose utilities, not assertions |
 | Others                    | 0     | |
-| assert/require variants   | 446 | Generated variants |
-| Total assertions variants | 892 | Available assertions API |
-| Total API surface         | 902 | |
+| assert/require variants   | 556 | Generated variants |
+| Total assertions variants | 1112 | Available assertions API |
+| Total API surface         | 1122 | |
 
 ## Quick index
 

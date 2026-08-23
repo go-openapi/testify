@@ -38,6 +38,9 @@ _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
 This domain exposes 10 functionalities.
 Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
+Their method variants carry a {{% goversion "go1.27" %}} badge: methods take type
+parameters only from go1.27 onwards, so on an older toolchain a generic assertion is available as a
+package-level function alone.
 
 ```tree
 - [Implements](#implements) | angles-right
@@ -283,12 +286,16 @@ type myType float64
 |--|--|
 | [`assert.IsNotOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsNotOfTypeT) | package-level function |
 | [`assert.IsNotOfTypeTf[EType any](t T, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsNotOfTypeTf) | formatted variant |
+| [`assert.(*Assertions).IsNotOfTypeT[EType any](object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNotOfTypeT) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).IsNotOfTypeTf[EType any](object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNotOfTypeTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
 | [`require.IsNotOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNotOfTypeT) | package-level function |
 | [`require.IsNotOfTypeTf[EType any](t T, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNotOfTypeTf) | formatted variant |
+| [`require.(*Assertions).IsNotOfTypeT[EType any](object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNotOfTypeT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).IsNotOfTypeTf[EType any](object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNotOfTypeTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -505,12 +512,16 @@ type myType float64
 |--|--|
 | [`assert.IsOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsOfTypeT) | package-level function |
 | [`assert.IsOfTypeTf[EType any](t T, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsOfTypeTf) | formatted variant |
+| [`assert.(*Assertions).IsOfTypeT[EType any](object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsOfTypeT) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).IsOfTypeTf[EType any](object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsOfTypeTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
 | [`require.IsOfTypeT[EType any](t T, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsOfTypeT) | package-level function |
 | [`require.IsOfTypeTf[EType any](t T, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsOfTypeTf) | formatted variant |
+| [`require.(*Assertions).IsOfTypeT[EType any](object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsOfTypeT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).IsOfTypeTf[EType any](object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsOfTypeTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

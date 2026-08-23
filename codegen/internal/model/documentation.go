@@ -119,6 +119,12 @@ func (d Document) HasGoGuards() bool {
 	return false
 }
 
+// GenericMethodsGoBuild returns the //go:build constraint under which generic assertions
+// are exposed as methods, so doc templates can name the version instead of hard-coding it.
+func (d Document) GenericMethodsGoBuild() string {
+	return GenericMethodsGoBuild
+}
+
 type ExtraPackages []*AssertionPackage
 
 func (pkgs ExtraPackages) LookupFunction(name string) []FunctionWithContext {

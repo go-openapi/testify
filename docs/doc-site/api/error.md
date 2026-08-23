@@ -38,6 +38,9 @@ _All links point to <https://pkg.go.dev/github.com/go-openapi/testify/v2>_
 
 This domain exposes 10 functionalities.
 Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
+Their method variants carry a {{% goversion "go1.27" %}} badge: methods take type
+parameters only from go1.27 onwards, so on an older toolchain a generic assertion is available as a
+package-level function alone.
 Assertions requiring a newer Go toolchain are marked with a version badge, e.g. {{% goversion "go1.26" %}} (the assertion is unavailable on older toolchains).
 
 ```tree
@@ -483,12 +486,16 @@ fmt.Println("passed")
 |--|--|
 | [`assert.ErrorAsType[E error](t T, err error, target *E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorAsType) | package-level function |
 | [`assert.ErrorAsTypef[E error](t T, err error, target *E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorAsTypef) | formatted variant |
+| [`assert.(*Assertions).ErrorAsType[E error](err error, target *E) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorAsType) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).ErrorAsTypef[E error](err error, target *E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorAsTypef) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
 | [`require.ErrorAsType[E error](t T, err error, target *E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorAsType) | package-level function |
 | [`require.ErrorAsTypef[E error](t T, err error, target *E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorAsTypef) | formatted variant |
+| [`require.(*Assertions).ErrorAsType[E error](err error, target *E) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorAsType) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).ErrorAsTypef[E error](err error, target *E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorAsTypef) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1042,12 +1049,16 @@ fmt.Println("passed")
 |--|--|
 | [`assert.NotErrorAsType[E error](t T, err error, target *E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotErrorAsType) | package-level function |
 | [`assert.NotErrorAsTypef[E error](t T, err error, target *E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotErrorAsTypef) | formatted variant |
+| [`assert.(*Assertions).NotErrorAsType[E error](err error, target *E) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotErrorAsType) | method variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).NotErrorAsTypef[E error](err error, target *E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotErrorAsTypef) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
 | [`require.NotErrorAsType[E error](t T, err error, target *E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotErrorAsType) | package-level function |
 | [`require.NotErrorAsTypef[E error](t T, err error, target *E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotErrorAsTypef) | formatted variant |
+| [`require.(*Assertions).NotErrorAsType[E error](err error, target *E) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotErrorAsType) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).NotErrorAsTypef[E error](err error, target *E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotErrorAsTypef) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
