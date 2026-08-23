@@ -60,6 +60,14 @@ func ObjectsAreEqualValues(expected, actual any) bool {
 		return false
 	}
 
+	// A signed and an unsigned integer cannot be compared through a conversion: a negative
+	// value wraps to a huge positive one and matches it. Ordering the conversion from the
+	// smaller type to the larger one does not help either, since int8(-1) wraps to
+	// uint64(math.MaxUint64) exactly as int64(-1) does.
+	if isMixedSignIntegerPair(expectedType, actualType) {
+		return equalMixedSignIntegers(expectedValue, actualValue)
+	}
+
 	expectedConverted := expectedValue.Convert(actualType)
 	if !expectedConverted.CanInterface() {
 		// Unreachable with current Go reflection: values from reflect.ValueOf()
@@ -97,6 +105,40 @@ func ObjectsAreEqualValues(expected, actual any) bool {
 	}
 
 	return expectedConverted.Interface() == actual
+}
+
+// isSignedInteger reports whether the type is one of int, int8, int16, int32, int64.
+func isSignedInteger(t reflect.Type) bool {
+	return t.Kind() >= reflect.Int && t.Kind() <= reflect.Int64
+}
+
+// isUnsignedInteger reports whether the type is one of uint, uint8, uint16, uint32, uint64,
+// uintptr.
+func isUnsignedInteger(t reflect.Type) bool {
+	return t.Kind() >= reflect.Uint && t.Kind() <= reflect.Uintptr
+}
+
+// isMixedSignIntegerPair reports whether one type is a signed integer and the other an
+// unsigned one, in either order.
+func isMixedSignIntegerPair(a, b reflect.Type) bool {
+	return (isSignedInteger(a) && isUnsignedInteger(b)) || (isUnsignedInteger(a) && isSignedInteger(b))
+}
+
+// equalMixedSignIntegers compares a signed and an unsigned integer by value rather than by
+// conversion. A negative signed value equals no unsigned value at all; otherwise both fit in
+// a uint64 and compare directly.
+func equalMixedSignIntegers(a, b reflect.Value) bool {
+	signed, unsigned := a, b
+	if isSignedInteger(b.Type()) {
+		signed, unsigned = b, a
+	}
+
+	value := signed.Int()
+	if value < 0 {
+		return false
+	}
+
+	return uint64(value) == unsigned.Uint()
 }
 
 // isNumericType returns true if the type is one of:

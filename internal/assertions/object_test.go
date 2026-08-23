@@ -133,6 +133,15 @@ func objectEqualValuesCases() iter.Seq[objectEqualCase] {
 		{now, now.In(time.Local), false}, //nolint:gosmopolitan // ok in this context: this is precisely the goal of this test
 		{int(270), int8(14), false},      // should handle overflow/underflow
 		{int8(14), int(270), false},
+		// a negative signed value wraps to a huge unsigned one under conversion
+		{int64(-1), uint64(math.MaxUint64), false},
+		{uint64(math.MaxUint64), int64(-1), false},
+		{int8(-1), uint64(math.MaxUint64), false},
+		{int(-1), uint(math.MaxUint), false},
+		{int(-1), uint8(math.MaxUint8), false},
+		// mixed signedness still compares equal when the values are
+		{int64(1), uint64(1), true},
+		{uint8(200), int64(200), true},
 		{[]int{270, 270}, []int8{14, 14}, false},
 		{complex128(1e+100 + 1e+100i), complex64(complex(math.Inf(0), math.Inf(0))), false},
 		{complex64(complex(math.Inf(0), math.Inf(0))), complex128(1e+100 + 1e+100i), false},
