@@ -149,15 +149,15 @@ func main() {
 | [`assert.EqualError(t T, err error, errString string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualError) | package-level function |
 | [`assert.EqualErrorf(t T, err error, errString string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualErrorf) | formatted variant |
 | [`assert.(*Assertions).EqualError(err error, errString string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.EqualError) | method variant |
-| [`assert.(*Assertions).EqualErrorf(err error, errString string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.EqualErrorf) | method formatted variant |
+| [`assert.(*Assertions).EqualErrorf(err error, errString string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.EqualErrorf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.EqualError(t T, err error, errString string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EqualError) | package-level function |
-| [`require.EqualErrorf(t T, err error, errString string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EqualErrorf) | formatted variant |
-| [`require.(*Assertions).EqualError(err error, errString string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.EqualError) | method variant |
-| [`require.(*Assertions).EqualErrorf(err error, errString string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.EqualErrorf) | method formatted variant |
+| [`require.EqualError(t T, err error, errString string, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EqualError) | package-level function |
+| [`require.EqualErrorf(t T, err error, errString string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#EqualErrorf) | formatted variant |
+| [`require.(*Assertions).EqualError(err error, errString string)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.EqualError) | method variant |
+| [`require.(*Assertions).EqualErrorf(err error, errString string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.EqualErrorf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -261,15 +261,15 @@ func main() {
 | [`assert.Error(t T, err error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Error) | package-level function |
 | [`assert.Errorf(t T, err error, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Errorf) | formatted variant |
 | [`assert.(*Assertions).Error(err error) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Error) | method variant |
-| [`assert.(*Assertions).Errorf(err error, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Errorf) | method formatted variant |
+| [`assert.(*Assertions).Errorf(err error, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Errorf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Error(t T, err error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Error) | package-level function |
-| [`require.Errorf(t T, err error, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Errorf) | formatted variant |
-| [`require.(*Assertions).Error(err error) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Error) | method variant |
-| [`require.(*Assertions).Errorf(err error, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Errorf) | method formatted variant |
+| [`require.Error(t T, err error, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Error) | package-level function |
+| [`require.Errorf(t T, err error, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Errorf) | formatted variant |
+| [`require.(*Assertions).Error(err error)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Error) | method variant |
+| [`require.(*Assertions).Errorf(err error, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Errorf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -388,15 +388,15 @@ func (d *dummyError) Error() string {
 | [`assert.ErrorAs(t T, err error, target any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorAs) | package-level function |
 | [`assert.ErrorAsf(t T, err error, target any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorAsf) | formatted variant |
 | [`assert.(*Assertions).ErrorAs(err error, target any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorAs) | method variant |
-| [`assert.(*Assertions).ErrorAsf(err error, target any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorAsf) | method formatted variant |
+| [`assert.(*Assertions).ErrorAsf(err error, target any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorAsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.ErrorAs(t T, err error, target any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorAs) | package-level function |
-| [`require.ErrorAsf(t T, err error, target any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorAsf) | formatted variant |
-| [`require.(*Assertions).ErrorAs(err error, target any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorAs) | method variant |
-| [`require.(*Assertions).ErrorAsf(err error, target any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorAsf) | method formatted variant |
+| [`require.ErrorAs(t T, err error, target any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorAs) | package-level function |
+| [`require.ErrorAsf(t T, err error, target any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorAsf) | formatted variant |
+| [`require.(*Assertions).ErrorAs(err error, target any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorAs) | method variant |
+| [`require.(*Assertions).ErrorAsf(err error, target any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorAsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -487,15 +487,15 @@ fmt.Println("passed")
 | [`assert.ErrorAsType[E error](t T, err error, target *E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorAsType) | package-level function |
 | [`assert.ErrorAsTypef[E error](t T, err error, target *E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorAsTypef) | formatted variant |
 | [`assert.(*Assertions).ErrorAsType[E error](err error, target *E) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorAsType) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).ErrorAsTypef[E error](err error, target *E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorAsTypef) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).ErrorAsTypef[E error](err error, target *E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorAsTypef) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.ErrorAsType[E error](t T, err error, target *E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorAsType) | package-level function |
-| [`require.ErrorAsTypef[E error](t T, err error, target *E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorAsTypef) | formatted variant |
-| [`require.(*Assertions).ErrorAsType[E error](err error, target *E) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorAsType) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).ErrorAsTypef[E error](err error, target *E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorAsTypef) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.ErrorAsType[E error](t T, err error, target *E, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorAsType) | package-level function |
+| [`require.ErrorAsTypef[E error](t T, err error, target *E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorAsTypef) | formatted variant |
+| [`require.(*Assertions).ErrorAsType[E error](err error, target *E)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorAsType) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).ErrorAsTypef[E error](err error, target *E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorAsTypef) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -600,15 +600,15 @@ func main() {
 | [`assert.ErrorContains(t T, err error, contains string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorContains) | package-level function |
 | [`assert.ErrorContainsf(t T, err error, contains string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorContainsf) | formatted variant |
 | [`assert.(*Assertions).ErrorContains(err error, contains string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorContains) | method variant |
-| [`assert.(*Assertions).ErrorContainsf(err error, contains string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorContainsf) | method formatted variant |
+| [`assert.(*Assertions).ErrorContainsf(err error, contains string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorContainsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.ErrorContains(t T, err error, contains string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorContains) | package-level function |
-| [`require.ErrorContainsf(t T, err error, contains string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorContainsf) | formatted variant |
-| [`require.(*Assertions).ErrorContains(err error, contains string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorContains) | method variant |
-| [`require.(*Assertions).ErrorContainsf(err error, contains string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorContainsf) | method formatted variant |
+| [`require.ErrorContains(t T, err error, contains string, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorContains) | package-level function |
+| [`require.ErrorContainsf(t T, err error, contains string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorContainsf) | formatted variant |
+| [`require.(*Assertions).ErrorContains(err error, contains string)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorContains) | method variant |
+| [`require.(*Assertions).ErrorContainsf(err error, contains string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorContainsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -715,15 +715,15 @@ func main() {
 | [`assert.ErrorIs(t T, err error, target error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorIs) | package-level function |
 | [`assert.ErrorIsf(t T, err error, target error, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorIsf) | formatted variant |
 | [`assert.(*Assertions).ErrorIs(err error, target error) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorIs) | method variant |
-| [`assert.(*Assertions).ErrorIsf(err error, target error, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorIsf) | method formatted variant |
+| [`assert.(*Assertions).ErrorIsf(err error, target error, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ErrorIsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.ErrorIs(t T, err error, target error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorIs) | package-level function |
-| [`require.ErrorIsf(t T, err error, target error, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorIsf) | formatted variant |
-| [`require.(*Assertions).ErrorIs(err error, target error) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorIs) | method variant |
-| [`require.(*Assertions).ErrorIsf(err error, target error, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorIsf) | method formatted variant |
+| [`require.ErrorIs(t T, err error, target error, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorIs) | package-level function |
+| [`require.ErrorIsf(t T, err error, target error, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ErrorIsf) | formatted variant |
+| [`require.(*Assertions).ErrorIs(err error, target error)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorIs) | method variant |
+| [`require.(*Assertions).ErrorIsf(err error, target error, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ErrorIsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -829,15 +829,15 @@ func main() {
 | [`assert.NoError(t T, err error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoError) | package-level function |
 | [`assert.NoErrorf(t T, err error, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoErrorf) | formatted variant |
 | [`assert.(*Assertions).NoError(err error) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoError) | method variant |
-| [`assert.(*Assertions).NoErrorf(err error, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoErrorf) | method formatted variant |
+| [`assert.(*Assertions).NoErrorf(err error, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoErrorf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NoError(t T, err error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoError) | package-level function |
-| [`require.NoErrorf(t T, err error, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoErrorf) | formatted variant |
-| [`require.(*Assertions).NoError(err error) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoError) | method variant |
-| [`require.(*Assertions).NoErrorf(err error, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoErrorf) | method formatted variant |
+| [`require.NoError(t T, err error, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoError) | package-level function |
+| [`require.NoErrorf(t T, err error, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoErrorf) | formatted variant |
+| [`require.(*Assertions).NoError(err error)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoError) | method variant |
+| [`require.(*Assertions).NoErrorf(err error, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoErrorf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -955,15 +955,15 @@ func (d *dummyError) Error() string {
 | [`assert.NotErrorAs(t T, err error, target any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotErrorAs) | package-level function |
 | [`assert.NotErrorAsf(t T, err error, target any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotErrorAsf) | formatted variant |
 | [`assert.(*Assertions).NotErrorAs(err error, target any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotErrorAs) | method variant |
-| [`assert.(*Assertions).NotErrorAsf(err error, target any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotErrorAsf) | method formatted variant |
+| [`assert.(*Assertions).NotErrorAsf(err error, target any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotErrorAsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NotErrorAs(t T, err error, target any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotErrorAs) | package-level function |
-| [`require.NotErrorAsf(t T, err error, target any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotErrorAsf) | formatted variant |
-| [`require.(*Assertions).NotErrorAs(err error, target any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotErrorAs) | method variant |
-| [`require.(*Assertions).NotErrorAsf(err error, target any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotErrorAsf) | method formatted variant |
+| [`require.NotErrorAs(t T, err error, target any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotErrorAs) | package-level function |
+| [`require.NotErrorAsf(t T, err error, target any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotErrorAsf) | formatted variant |
+| [`require.(*Assertions).NotErrorAs(err error, target any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotErrorAs) | method variant |
+| [`require.(*Assertions).NotErrorAsf(err error, target any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotErrorAsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1050,15 +1050,15 @@ fmt.Println("passed")
 | [`assert.NotErrorAsType[E error](t T, err error, target *E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotErrorAsType) | package-level function |
 | [`assert.NotErrorAsTypef[E error](t T, err error, target *E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotErrorAsTypef) | formatted variant |
 | [`assert.(*Assertions).NotErrorAsType[E error](err error, target *E) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotErrorAsType) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).NotErrorAsTypef[E error](err error, target *E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotErrorAsTypef) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).NotErrorAsTypef[E error](err error, target *E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotErrorAsTypef) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NotErrorAsType[E error](t T, err error, target *E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotErrorAsType) | package-level function |
-| [`require.NotErrorAsTypef[E error](t T, err error, target *E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotErrorAsTypef) | formatted variant |
-| [`require.(*Assertions).NotErrorAsType[E error](err error, target *E) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotErrorAsType) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).NotErrorAsTypef[E error](err error, target *E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotErrorAsTypef) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.NotErrorAsType[E error](t T, err error, target *E, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotErrorAsType) | package-level function |
+| [`require.NotErrorAsTypef[E error](t T, err error, target *E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotErrorAsTypef) | formatted variant |
+| [`require.(*Assertions).NotErrorAsType[E error](err error, target *E)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotErrorAsType) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).NotErrorAsTypef[E error](err error, target *E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotErrorAsTypef) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1165,15 +1165,15 @@ func main() {
 | [`assert.NotErrorIs(t T, err error, target error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotErrorIs) | package-level function |
 | [`assert.NotErrorIsf(t T, err error, target error, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotErrorIsf) | formatted variant |
 | [`assert.(*Assertions).NotErrorIs(err error, target error) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotErrorIs) | method variant |
-| [`assert.(*Assertions).NotErrorIsf(err error, target error, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotErrorIsf) | method formatted variant |
+| [`assert.(*Assertions).NotErrorIsf(err error, target error, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotErrorIsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NotErrorIs(t T, err error, target error, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotErrorIs) | package-level function |
-| [`require.NotErrorIsf(t T, err error, target error, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotErrorIsf) | formatted variant |
-| [`require.(*Assertions).NotErrorIs(err error, target error) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotErrorIs) | method variant |
-| [`require.(*Assertions).NotErrorIsf(err error, target error, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotErrorIsf) | method formatted variant |
+| [`require.NotErrorIs(t T, err error, target error, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotErrorIs) | package-level function |
+| [`require.NotErrorIsf(t T, err error, target error, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotErrorIsf) | formatted variant |
+| [`require.(*Assertions).NotErrorIs(err error, target error)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotErrorIs) | method variant |
+| [`require.(*Assertions).NotErrorIsf(err error, target error, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotErrorIsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

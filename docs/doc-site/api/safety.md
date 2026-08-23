@@ -159,15 +159,15 @@ func main() {
 | [`assert.NoFileDescriptorLeak(t T, tested func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoFileDescriptorLeak) | package-level function |
 | [`assert.NoFileDescriptorLeakf(t T, tested func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoFileDescriptorLeakf) | formatted variant |
 | [`assert.(*Assertions).NoFileDescriptorLeak(tested func()) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoFileDescriptorLeak) | method variant |
-| [`assert.(*Assertions).NoFileDescriptorLeakf(tested func(), msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoFileDescriptorLeakf) | method formatted variant |
+| [`assert.(*Assertions).NoFileDescriptorLeakf(tested func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoFileDescriptorLeakf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NoFileDescriptorLeak(t T, tested func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoFileDescriptorLeak) | package-level function |
-| [`require.NoFileDescriptorLeakf(t T, tested func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoFileDescriptorLeakf) | formatted variant |
-| [`require.(*Assertions).NoFileDescriptorLeak(tested func()) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoFileDescriptorLeak) | method variant |
-| [`require.(*Assertions).NoFileDescriptorLeakf(tested func(), msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoFileDescriptorLeakf) | method formatted variant |
+| [`require.NoFileDescriptorLeak(t T, tested func(), msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoFileDescriptorLeak) | package-level function |
+| [`require.NoFileDescriptorLeakf(t T, tested func(), msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoFileDescriptorLeakf) | formatted variant |
+| [`require.(*Assertions).NoFileDescriptorLeak(tested func())`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoFileDescriptorLeak) | method variant |
+| [`require.(*Assertions).NoFileDescriptorLeakf(tested func(), msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoFileDescriptorLeakf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -414,15 +414,15 @@ func (m *mockFailNowT) Failed() bool {
 | [`assert.NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoGoRoutineLeak) | package-level function |
 | [`assert.NoGoRoutineLeakf(t T, tested func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NoGoRoutineLeakf) | formatted variant |
 | [`assert.(*Assertions).NoGoRoutineLeak(tested func()) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoGoRoutineLeak) | method variant |
-| [`assert.(*Assertions).NoGoRoutineLeakf(tested func(), msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoGoRoutineLeakf) | method formatted variant |
+| [`assert.(*Assertions).NoGoRoutineLeakf(tested func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NoGoRoutineLeakf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoGoRoutineLeak) | package-level function |
-| [`require.NoGoRoutineLeakf(t T, tested func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoGoRoutineLeakf) | formatted variant |
-| [`require.(*Assertions).NoGoRoutineLeak(tested func()) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoGoRoutineLeak) | method variant |
-| [`require.(*Assertions).NoGoRoutineLeakf(tested func(), msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoGoRoutineLeakf) | method formatted variant |
+| [`require.NoGoRoutineLeak(t T, tested func(), msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoGoRoutineLeak) | package-level function |
+| [`require.NoGoRoutineLeakf(t T, tested func(), msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NoGoRoutineLeakf) | formatted variant |
+| [`require.(*Assertions).NoGoRoutineLeak(tested func())`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoGoRoutineLeak) | method variant |
+| [`require.(*Assertions).NoGoRoutineLeakf(tested func(), msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NoGoRoutineLeakf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

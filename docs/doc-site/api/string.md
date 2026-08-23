@@ -131,15 +131,15 @@ func main() {
 | [`assert.NotRegexp(t T, rx any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotRegexp) | package-level function |
 | [`assert.NotRegexpf(t T, rx any, actual any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotRegexpf) | formatted variant |
 | [`assert.(*Assertions).NotRegexp(rx any, actual any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotRegexp) | method variant |
-| [`assert.(*Assertions).NotRegexpf(rx any, actual any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotRegexpf) | method formatted variant |
+| [`assert.(*Assertions).NotRegexpf(rx any, actual any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotRegexpf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NotRegexp(t T, rx any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotRegexp) | package-level function |
-| [`require.NotRegexpf(t T, rx any, actual any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotRegexpf) | formatted variant |
-| [`require.(*Assertions).NotRegexp(rx any, actual any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotRegexp) | method variant |
-| [`require.(*Assertions).NotRegexpf(rx any, actual any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotRegexpf) | method formatted variant |
+| [`require.NotRegexp(t T, rx any, actual any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotRegexp) | package-level function |
+| [`require.NotRegexpf(t T, rx any, actual any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotRegexpf) | formatted variant |
+| [`require.(*Assertions).NotRegexp(rx any, actual any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotRegexp) | method variant |
+| [`require.(*Assertions).NotRegexpf(rx any, actual any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotRegexpf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -245,15 +245,15 @@ func main() {
 | [`assert.NotRegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotRegexpT) | package-level function |
 | [`assert.NotRegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotRegexpTf) | formatted variant |
 | [`assert.(*Assertions).NotRegexpT[Rex RegExp, ADoc Text](rx Rex, actual ADoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotRegexpT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).NotRegexpTf[Rex RegExp, ADoc Text](rx Rex, actual ADoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotRegexpTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).NotRegexpTf[Rex RegExp, ADoc Text](rx Rex, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotRegexpTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NotRegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotRegexpT) | package-level function |
-| [`require.NotRegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotRegexpTf) | formatted variant |
-| [`require.(*Assertions).NotRegexpT[Rex RegExp, ADoc Text](rx Rex, actual ADoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotRegexpT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).NotRegexpTf[Rex RegExp, ADoc Text](rx Rex, actual ADoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotRegexpTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.NotRegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotRegexpT) | package-level function |
+| [`require.NotRegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotRegexpTf) | formatted variant |
+| [`require.(*Assertions).NotRegexpT[Rex RegExp, ADoc Text](rx Rex, actual ADoc)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotRegexpT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).NotRegexpTf[Rex RegExp, ADoc Text](rx Rex, actual ADoc, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotRegexpTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -361,15 +361,15 @@ func main() {
 | [`assert.Regexp(t T, rx any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Regexp) | package-level function |
 | [`assert.Regexpf(t T, rx any, actual any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Regexpf) | formatted variant |
 | [`assert.(*Assertions).Regexp(rx any, actual any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Regexp) | method variant |
-| [`assert.(*Assertions).Regexpf(rx any, actual any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Regexpf) | method formatted variant |
+| [`assert.(*Assertions).Regexpf(rx any, actual any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Regexpf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Regexp(t T, rx any, actual any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Regexp) | package-level function |
-| [`require.Regexpf(t T, rx any, actual any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Regexpf) | formatted variant |
-| [`require.(*Assertions).Regexp(rx any, actual any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Regexp) | method variant |
-| [`require.(*Assertions).Regexpf(rx any, actual any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Regexpf) | method formatted variant |
+| [`require.Regexp(t T, rx any, actual any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Regexp) | package-level function |
+| [`require.Regexpf(t T, rx any, actual any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Regexpf) | formatted variant |
+| [`require.(*Assertions).Regexp(rx any, actual any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Regexp) | method variant |
+| [`require.(*Assertions).Regexpf(rx any, actual any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Regexpf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -471,15 +471,15 @@ func main() {
 | [`assert.RegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#RegexpT) | package-level function |
 | [`assert.RegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#RegexpTf) | formatted variant |
 | [`assert.(*Assertions).RegexpT[Rex RegExp, ADoc Text](rx Rex, actual ADoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.RegexpT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).RegexpTf[Rex RegExp, ADoc Text](rx Rex, actual ADoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.RegexpTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).RegexpTf[Rex RegExp, ADoc Text](rx Rex, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.RegexpTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.RegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#RegexpT) | package-level function |
-| [`require.RegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#RegexpTf) | formatted variant |
-| [`require.(*Assertions).RegexpT[Rex RegExp, ADoc Text](rx Rex, actual ADoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.RegexpT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).RegexpTf[Rex RegExp, ADoc Text](rx Rex, actual ADoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.RegexpTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.RegexpT[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#RegexpT) | package-level function |
+| [`require.RegexpTf[Rex RegExp, ADoc Text](t T, rx Rex, actual ADoc, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#RegexpTf) | formatted variant |
+| [`require.(*Assertions).RegexpT[Rex RegExp, ADoc Text](rx Rex, actual ADoc)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.RegexpT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).RegexpTf[Rex RegExp, ADoc Text](rx Rex, actual ADoc, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.RegexpTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

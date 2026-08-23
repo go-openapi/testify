@@ -135,15 +135,15 @@ func main() {
 | [`assert.JSONEq(t T, expected string, actual string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#JSONEq) | package-level function |
 | [`assert.JSONEqf(t T, expected string, actual string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#JSONEqf) | formatted variant |
 | [`assert.(*Assertions).JSONEq(expected string, actual string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.JSONEq) | method variant |
-| [`assert.(*Assertions).JSONEqf(expected string, actual string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.JSONEqf) | method formatted variant |
+| [`assert.(*Assertions).JSONEqf(expected string, actual string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.JSONEqf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.JSONEq(t T, expected string, actual string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONEq) | package-level function |
-| [`require.JSONEqf(t T, expected string, actual string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONEqf) | formatted variant |
-| [`require.(*Assertions).JSONEq(expected string, actual string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONEq) | method variant |
-| [`require.(*Assertions).JSONEqf(expected string, actual string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONEqf) | method formatted variant |
+| [`require.JSONEq(t T, expected string, actual string, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONEq) | package-level function |
+| [`require.JSONEqf(t T, expected string, actual string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONEqf) | formatted variant |
+| [`require.(*Assertions).JSONEq(expected string, actual string)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONEq) | method variant |
+| [`require.(*Assertions).JSONEqf(expected string, actual string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONEqf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -248,15 +248,15 @@ func main() {
 | [`assert.JSONEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#JSONEqBytes) | package-level function |
 | [`assert.JSONEqBytesf(t T, expected []byte, actual []byte, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#JSONEqBytesf) | formatted variant |
 | [`assert.(*Assertions).JSONEqBytes(expected []byte, actual []byte) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.JSONEqBytes) | method variant |
-| [`assert.(*Assertions).JSONEqBytesf(expected []byte, actual []byte, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.JSONEqBytesf) | method formatted variant |
+| [`assert.(*Assertions).JSONEqBytesf(expected []byte, actual []byte, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.JSONEqBytesf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.JSONEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONEqBytes) | package-level function |
-| [`require.JSONEqBytesf(t T, expected []byte, actual []byte, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONEqBytesf) | formatted variant |
-| [`require.(*Assertions).JSONEqBytes(expected []byte, actual []byte) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONEqBytes) | method variant |
-| [`require.(*Assertions).JSONEqBytesf(expected []byte, actual []byte, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONEqBytesf) | method formatted variant |
+| [`require.JSONEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONEqBytes) | package-level function |
+| [`require.JSONEqBytesf(t T, expected []byte, actual []byte, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONEqBytesf) | formatted variant |
+| [`require.(*Assertions).JSONEqBytes(expected []byte, actual []byte)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONEqBytes) | method variant |
+| [`require.(*Assertions).JSONEqBytesf(expected []byte, actual []byte, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONEqBytesf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -373,15 +373,15 @@ func main() {
 | [`assert.JSONEqT[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#JSONEqT) | package-level function |
 | [`assert.JSONEqTf[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#JSONEqTf) | formatted variant |
 | [`assert.(*Assertions).JSONEqT[EDoc, ADoc RText](expected EDoc, actual ADoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.JSONEqT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).JSONEqTf[EDoc, ADoc RText](expected EDoc, actual ADoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.JSONEqTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).JSONEqTf[EDoc, ADoc RText](expected EDoc, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.JSONEqTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.JSONEqT[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONEqT) | package-level function |
-| [`require.JSONEqTf[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONEqTf) | formatted variant |
-| [`require.(*Assertions).JSONEqT[EDoc, ADoc RText](expected EDoc, actual ADoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONEqT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).JSONEqTf[EDoc, ADoc RText](expected EDoc, actual ADoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONEqTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.JSONEqT[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONEqT) | package-level function |
+| [`require.JSONEqTf[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONEqTf) | formatted variant |
+| [`require.(*Assertions).JSONEqT[EDoc, ADoc RText](expected EDoc, actual ADoc)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONEqT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).JSONEqTf[EDoc, ADoc RText](expected EDoc, actual ADoc, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONEqTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -506,15 +506,15 @@ type dummyStruct struct {
 | [`assert.JSONMarshalAsT[EDoc RText](t T, expected EDoc, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#JSONMarshalAsT) | package-level function |
 | [`assert.JSONMarshalAsTf[EDoc RText](t T, expected EDoc, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#JSONMarshalAsTf) | formatted variant |
 | [`assert.(*Assertions).JSONMarshalAsT[EDoc RText](expected EDoc, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.JSONMarshalAsT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).JSONMarshalAsTf[EDoc RText](expected EDoc, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.JSONMarshalAsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).JSONMarshalAsTf[EDoc RText](expected EDoc, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.JSONMarshalAsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.JSONMarshalAsT[EDoc RText](t T, expected EDoc, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONMarshalAsT) | package-level function |
-| [`require.JSONMarshalAsTf[EDoc RText](t T, expected EDoc, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONMarshalAsTf) | formatted variant |
-| [`require.(*Assertions).JSONMarshalAsT[EDoc RText](expected EDoc, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONMarshalAsT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).JSONMarshalAsTf[EDoc RText](expected EDoc, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONMarshalAsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.JSONMarshalAsT[EDoc RText](t T, expected EDoc, object any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONMarshalAsT) | package-level function |
+| [`require.JSONMarshalAsTf[EDoc RText](t T, expected EDoc, object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONMarshalAsTf) | formatted variant |
+| [`require.(*Assertions).JSONMarshalAsT[EDoc RText](expected EDoc, object any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONMarshalAsT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).JSONMarshalAsTf[EDoc RText](expected EDoc, object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONMarshalAsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -641,15 +641,15 @@ type dummyStruct struct {
 | [`assert.JSONUnmarshalAsT[Object any, ADoc RText](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#JSONUnmarshalAsT) | package-level function |
 | [`assert.JSONUnmarshalAsTf[Object any, ADoc RText](t T, expected Object, jazon ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#JSONUnmarshalAsTf) | formatted variant |
 | [`assert.(*Assertions).JSONUnmarshalAsT[Object any, ADoc RText](expected Object, jazon ADoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.JSONUnmarshalAsT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).JSONUnmarshalAsTf[Object any, ADoc RText](expected Object, jazon ADoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.JSONUnmarshalAsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).JSONUnmarshalAsTf[Object any, ADoc RText](expected Object, jazon ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.JSONUnmarshalAsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.JSONUnmarshalAsT[Object any, ADoc RText](t T, expected Object, jazon ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONUnmarshalAsT) | package-level function |
-| [`require.JSONUnmarshalAsTf[Object any, ADoc RText](t T, expected Object, jazon ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONUnmarshalAsTf) | formatted variant |
-| [`require.(*Assertions).JSONUnmarshalAsT[Object any, ADoc RText](expected Object, jazon ADoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONUnmarshalAsT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).JSONUnmarshalAsTf[Object any, ADoc RText](expected Object, jazon ADoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONUnmarshalAsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.JSONUnmarshalAsT[Object any, ADoc RText](t T, expected Object, jazon ADoc, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONUnmarshalAsT) | package-level function |
+| [`require.JSONUnmarshalAsTf[Object any, ADoc RText](t T, expected Object, jazon ADoc, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#JSONUnmarshalAsTf) | formatted variant |
+| [`require.(*Assertions).JSONUnmarshalAsT[Object any, ADoc RText](expected Object, jazon ADoc)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONUnmarshalAsT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).JSONUnmarshalAsTf[Object any, ADoc RText](expected Object, jazon ADoc, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.JSONUnmarshalAsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

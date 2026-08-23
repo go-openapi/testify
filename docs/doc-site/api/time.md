@@ -120,15 +120,15 @@ func main() {
 | [`assert.WithinDuration(t T, expected time.Time, actual time.Time, delta time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#WithinDuration) | package-level function |
 | [`assert.WithinDurationf(t T, expected time.Time, actual time.Time, delta time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#WithinDurationf) | formatted variant |
 | [`assert.(*Assertions).WithinDuration(expected time.Time, actual time.Time, delta time.Duration) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.WithinDuration) | method variant |
-| [`assert.(*Assertions).WithinDurationf(expected time.Time, actual time.Time, delta time.Duration, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.WithinDurationf) | method formatted variant |
+| [`assert.(*Assertions).WithinDurationf(expected time.Time, actual time.Time, delta time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.WithinDurationf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.WithinDuration(t T, expected time.Time, actual time.Time, delta time.Duration, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#WithinDuration) | package-level function |
-| [`require.WithinDurationf(t T, expected time.Time, actual time.Time, delta time.Duration, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#WithinDurationf) | formatted variant |
-| [`require.(*Assertions).WithinDuration(expected time.Time, actual time.Time, delta time.Duration) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.WithinDuration) | method variant |
-| [`require.(*Assertions).WithinDurationf(expected time.Time, actual time.Time, delta time.Duration, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.WithinDurationf) | method formatted variant |
+| [`require.WithinDuration(t T, expected time.Time, actual time.Time, delta time.Duration, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#WithinDuration) | package-level function |
+| [`require.WithinDurationf(t T, expected time.Time, actual time.Time, delta time.Duration, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#WithinDurationf) | formatted variant |
+| [`require.(*Assertions).WithinDuration(expected time.Time, actual time.Time, delta time.Duration)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.WithinDuration) | method variant |
+| [`require.(*Assertions).WithinDurationf(expected time.Time, actual time.Time, delta time.Duration, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.WithinDurationf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -233,15 +233,15 @@ func main() {
 | [`assert.WithinRange(t T, actual time.Time, start time.Time, end time.Time, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#WithinRange) | package-level function |
 | [`assert.WithinRangef(t T, actual time.Time, start time.Time, end time.Time, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#WithinRangef) | formatted variant |
 | [`assert.(*Assertions).WithinRange(actual time.Time, start time.Time, end time.Time) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.WithinRange) | method variant |
-| [`assert.(*Assertions).WithinRangef(actual time.Time, start time.Time, end time.Time, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.WithinRangef) | method formatted variant |
+| [`assert.(*Assertions).WithinRangef(actual time.Time, start time.Time, end time.Time, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.WithinRangef) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.WithinRange(t T, actual time.Time, start time.Time, end time.Time, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#WithinRange) | package-level function |
-| [`require.WithinRangef(t T, actual time.Time, start time.Time, end time.Time, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#WithinRangef) | formatted variant |
-| [`require.(*Assertions).WithinRange(actual time.Time, start time.Time, end time.Time) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.WithinRange) | method variant |
-| [`require.(*Assertions).WithinRangef(actual time.Time, start time.Time, end time.Time, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.WithinRangef) | method formatted variant |
+| [`require.WithinRange(t T, actual time.Time, start time.Time, end time.Time, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#WithinRange) | package-level function |
+| [`require.WithinRangef(t T, actual time.Time, start time.Time, end time.Time, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#WithinRangef) | formatted variant |
+| [`require.(*Assertions).WithinRange(actual time.Time, start time.Time, end time.Time)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.WithinRange) | method variant |
+| [`require.(*Assertions).WithinRangef(actual time.Time, start time.Time, end time.Time, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.WithinRangef) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

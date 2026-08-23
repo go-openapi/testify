@@ -53,15 +53,15 @@ Fail reports a failure through.
 | [`assert.Fail(t T, failureMessage string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Fail) | package-level function |
 | [`assert.Failf(t T, failureMessage string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Failf) | formatted variant |
 | [`assert.(*Assertions).Fail(failureMessage string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Fail) | method variant |
-| [`assert.(*Assertions).Failf(failureMessage string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Failf) | method formatted variant |
+| [`assert.(*Assertions).Failf(failureMessage string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Failf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Fail(t T, failureMessage string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Fail) | package-level function |
-| [`require.Failf(t T, failureMessage string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Failf) | formatted variant |
-| [`require.(*Assertions).Fail(failureMessage string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Fail) | method variant |
-| [`require.(*Assertions).Failf(failureMessage string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Failf) | method formatted variant |
+| [`require.Fail(t T, failureMessage string, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Fail) | package-level function |
+| [`require.Failf(t T, failureMessage string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Failf) | formatted variant |
+| [`require.(*Assertions).Fail(failureMessage string)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Fail) | method variant |
+| [`require.(*Assertions).Failf(failureMessage string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Failf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -99,15 +99,15 @@ FailNow fails test.
 | [`assert.FailNow(t T, failureMessage string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#FailNow) | package-level function |
 | [`assert.FailNowf(t T, failureMessage string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#FailNowf) | formatted variant |
 | [`assert.(*Assertions).FailNow(failureMessage string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FailNow) | method variant |
-| [`assert.(*Assertions).FailNowf(failureMessage string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FailNowf) | method formatted variant |
+| [`assert.(*Assertions).FailNowf(failureMessage string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FailNowf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.FailNow(t T, failureMessage string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FailNow) | package-level function |
-| [`require.FailNowf(t T, failureMessage string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FailNowf) | formatted variant |
-| [`require.(*Assertions).FailNow(failureMessage string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FailNow) | method variant |
-| [`require.(*Assertions).FailNowf(failureMessage string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FailNowf) | method formatted variant |
+| [`require.FailNow(t T, failureMessage string, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FailNow) | package-level function |
+| [`require.FailNowf(t T, failureMessage string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FailNowf) | formatted variant |
+| [`require.(*Assertions).FailNow(failureMessage string)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FailNow) | method variant |
+| [`require.(*Assertions).FailNowf(failureMessage string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FailNowf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

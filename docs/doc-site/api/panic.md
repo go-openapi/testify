@@ -126,15 +126,15 @@ func main() {
 | [`assert.NotPanics(t T, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotPanics) | package-level function |
 | [`assert.NotPanicsf(t T, f func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotPanicsf) | formatted variant |
 | [`assert.(*Assertions).NotPanics(f func()) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotPanics) | method variant |
-| [`assert.(*Assertions).NotPanicsf(f func(), msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotPanicsf) | method formatted variant |
+| [`assert.(*Assertions).NotPanicsf(f func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotPanicsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NotPanics(t T, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotPanics) | package-level function |
-| [`require.NotPanicsf(t T, f func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotPanicsf) | formatted variant |
-| [`require.(*Assertions).NotPanics(f func()) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotPanics) | method variant |
-| [`require.(*Assertions).NotPanicsf(f func(), msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotPanicsf) | method formatted variant |
+| [`require.NotPanics(t T, f func(), msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotPanics) | package-level function |
+| [`require.NotPanicsf(t T, f func(), msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotPanicsf) | formatted variant |
+| [`require.(*Assertions).NotPanics(f func())`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotPanics) | method variant |
+| [`require.(*Assertions).NotPanicsf(f func(), msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotPanicsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -241,15 +241,15 @@ func main() {
 | [`assert.Panics(t T, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Panics) | package-level function |
 | [`assert.Panicsf(t T, f func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Panicsf) | formatted variant |
 | [`assert.(*Assertions).Panics(f func()) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Panics) | method variant |
-| [`assert.(*Assertions).Panicsf(f func(), msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Panicsf) | method formatted variant |
+| [`assert.(*Assertions).Panicsf(f func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Panicsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Panics(t T, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Panics) | package-level function |
-| [`require.Panicsf(t T, f func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Panicsf) | formatted variant |
-| [`require.(*Assertions).Panics(f func()) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Panics) | method variant |
-| [`require.(*Assertions).Panicsf(f func(), msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Panicsf) | method formatted variant |
+| [`require.Panics(t T, f func(), msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Panics) | package-level function |
+| [`require.Panicsf(t T, f func(), msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Panicsf) | formatted variant |
+| [`require.(*Assertions).Panics(f func())`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Panics) | method variant |
+| [`require.(*Assertions).Panicsf(f func(), msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Panicsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -358,15 +358,15 @@ func main() {
 | [`assert.PanicsWithError(t T, errString string, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#PanicsWithError) | package-level function |
 | [`assert.PanicsWithErrorf(t T, errString string, f func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#PanicsWithErrorf) | formatted variant |
 | [`assert.(*Assertions).PanicsWithError(errString string, f func()) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.PanicsWithError) | method variant |
-| [`assert.(*Assertions).PanicsWithErrorf(errString string, f func(), msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.PanicsWithErrorf) | method formatted variant |
+| [`assert.(*Assertions).PanicsWithErrorf(errString string, f func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.PanicsWithErrorf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.PanicsWithError(t T, errString string, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#PanicsWithError) | package-level function |
-| [`require.PanicsWithErrorf(t T, errString string, f func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#PanicsWithErrorf) | formatted variant |
-| [`require.(*Assertions).PanicsWithError(errString string, f func()) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.PanicsWithError) | method variant |
-| [`require.(*Assertions).PanicsWithErrorf(errString string, f func(), msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.PanicsWithErrorf) | method formatted variant |
+| [`require.PanicsWithError(t T, errString string, f func(), msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#PanicsWithError) | package-level function |
+| [`require.PanicsWithErrorf(t T, errString string, f func(), msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#PanicsWithErrorf) | formatted variant |
+| [`require.(*Assertions).PanicsWithError(errString string, f func())`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.PanicsWithError) | method variant |
+| [`require.(*Assertions).PanicsWithErrorf(errString string, f func(), msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.PanicsWithErrorf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -474,15 +474,15 @@ func main() {
 | [`assert.PanicsWithValue(t T, expected any, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#PanicsWithValue) | package-level function |
 | [`assert.PanicsWithValuef(t T, expected any, f func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#PanicsWithValuef) | formatted variant |
 | [`assert.(*Assertions).PanicsWithValue(expected any, f func()) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.PanicsWithValue) | method variant |
-| [`assert.(*Assertions).PanicsWithValuef(expected any, f func(), msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.PanicsWithValuef) | method formatted variant |
+| [`assert.(*Assertions).PanicsWithValuef(expected any, f func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.PanicsWithValuef) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.PanicsWithValue(t T, expected any, f func(), msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#PanicsWithValue) | package-level function |
-| [`require.PanicsWithValuef(t T, expected any, f func(), msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#PanicsWithValuef) | formatted variant |
-| [`require.(*Assertions).PanicsWithValue(expected any, f func()) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.PanicsWithValue) | method variant |
-| [`require.(*Assertions).PanicsWithValuef(expected any, f func(), msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.PanicsWithValuef) | method formatted variant |
+| [`require.PanicsWithValue(t T, expected any, f func(), msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#PanicsWithValue) | package-level function |
+| [`require.PanicsWithValuef(t T, expected any, f func(), msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#PanicsWithValuef) | formatted variant |
+| [`require.(*Assertions).PanicsWithValue(expected any, f func())`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.PanicsWithValue) | method variant |
+| [`require.(*Assertions).PanicsWithValuef(expected any, f func(), msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.PanicsWithValuef) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

@@ -148,15 +148,15 @@ func main() {
 | [`assert.IsDecreasing(t T, collection any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsDecreasing) | package-level function |
 | [`assert.IsDecreasingf(t T, collection any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsDecreasingf) | formatted variant |
 | [`assert.(*Assertions).IsDecreasing(collection any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsDecreasing) | method variant |
-| [`assert.(*Assertions).IsDecreasingf(collection any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsDecreasingf) | method formatted variant |
+| [`assert.(*Assertions).IsDecreasingf(collection any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsDecreasingf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.IsDecreasing(t T, collection any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsDecreasing) | package-level function |
-| [`require.IsDecreasingf(t T, collection any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsDecreasingf) | formatted variant |
-| [`require.(*Assertions).IsDecreasing(collection any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsDecreasing) | method variant |
-| [`require.(*Assertions).IsDecreasingf(collection any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsDecreasingf) | method formatted variant |
+| [`require.IsDecreasing(t T, collection any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsDecreasing) | package-level function |
+| [`require.IsDecreasingf(t T, collection any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsDecreasingf) | formatted variant |
+| [`require.(*Assertions).IsDecreasing(collection any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsDecreasing) | method variant |
+| [`require.(*Assertions).IsDecreasingf(collection any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsDecreasingf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -261,15 +261,15 @@ func main() {
 | [`assert.IsDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsDecreasingT) | package-level function |
 | [`assert.IsDecreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsDecreasingTf) | formatted variant |
 | [`assert.(*Assertions).IsDecreasingT[OrderedSlice ~[]E, E Ordered](collection OrderedSlice) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsDecreasingT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).IsDecreasingTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsDecreasingTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).IsDecreasingTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsDecreasingTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.IsDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsDecreasingT) | package-level function |
-| [`require.IsDecreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsDecreasingTf) | formatted variant |
-| [`require.(*Assertions).IsDecreasingT[OrderedSlice ~[]E, E Ordered](collection OrderedSlice) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsDecreasingT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).IsDecreasingTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsDecreasingTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.IsDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsDecreasingT) | package-level function |
+| [`require.IsDecreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsDecreasingTf) | formatted variant |
+| [`require.(*Assertions).IsDecreasingT[OrderedSlice ~[]E, E Ordered](collection OrderedSlice)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsDecreasingT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).IsDecreasingTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsDecreasingTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -374,15 +374,15 @@ func main() {
 | [`assert.IsIncreasing(t T, collection any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsIncreasing) | package-level function |
 | [`assert.IsIncreasingf(t T, collection any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsIncreasingf) | formatted variant |
 | [`assert.(*Assertions).IsIncreasing(collection any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsIncreasing) | method variant |
-| [`assert.(*Assertions).IsIncreasingf(collection any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsIncreasingf) | method formatted variant |
+| [`assert.(*Assertions).IsIncreasingf(collection any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsIncreasingf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.IsIncreasing(t T, collection any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsIncreasing) | package-level function |
-| [`require.IsIncreasingf(t T, collection any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsIncreasingf) | formatted variant |
-| [`require.(*Assertions).IsIncreasing(collection any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsIncreasing) | method variant |
-| [`require.(*Assertions).IsIncreasingf(collection any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsIncreasingf) | method formatted variant |
+| [`require.IsIncreasing(t T, collection any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsIncreasing) | package-level function |
+| [`require.IsIncreasingf(t T, collection any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsIncreasingf) | formatted variant |
+| [`require.(*Assertions).IsIncreasing(collection any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsIncreasing) | method variant |
+| [`require.(*Assertions).IsIncreasingf(collection any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsIncreasingf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -487,15 +487,15 @@ func main() {
 | [`assert.IsIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsIncreasingT) | package-level function |
 | [`assert.IsIncreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsIncreasingTf) | formatted variant |
 | [`assert.(*Assertions).IsIncreasingT[OrderedSlice ~[]E, E Ordered](collection OrderedSlice) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsIncreasingT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).IsIncreasingTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsIncreasingTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).IsIncreasingTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsIncreasingTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.IsIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsIncreasingT) | package-level function |
-| [`require.IsIncreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsIncreasingTf) | formatted variant |
-| [`require.(*Assertions).IsIncreasingT[OrderedSlice ~[]E, E Ordered](collection OrderedSlice) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsIncreasingT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).IsIncreasingTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsIncreasingTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.IsIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsIncreasingT) | package-level function |
+| [`require.IsIncreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsIncreasingTf) | formatted variant |
+| [`require.(*Assertions).IsIncreasingT[OrderedSlice ~[]E, E Ordered](collection OrderedSlice)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsIncreasingT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).IsIncreasingTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsIncreasingTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -606,15 +606,15 @@ func main() {
 | [`assert.IsNonDecreasing(t T, collection any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsNonDecreasing) | package-level function |
 | [`assert.IsNonDecreasingf(t T, collection any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsNonDecreasingf) | formatted variant |
 | [`assert.(*Assertions).IsNonDecreasing(collection any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNonDecreasing) | method variant |
-| [`assert.(*Assertions).IsNonDecreasingf(collection any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNonDecreasingf) | method formatted variant |
+| [`assert.(*Assertions).IsNonDecreasingf(collection any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNonDecreasingf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.IsNonDecreasing(t T, collection any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNonDecreasing) | package-level function |
-| [`require.IsNonDecreasingf(t T, collection any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNonDecreasingf) | formatted variant |
-| [`require.(*Assertions).IsNonDecreasing(collection any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNonDecreasing) | method variant |
-| [`require.(*Assertions).IsNonDecreasingf(collection any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNonDecreasingf) | method formatted variant |
+| [`require.IsNonDecreasing(t T, collection any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNonDecreasing) | package-level function |
+| [`require.IsNonDecreasingf(t T, collection any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNonDecreasingf) | formatted variant |
+| [`require.(*Assertions).IsNonDecreasing(collection any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNonDecreasing) | method variant |
+| [`require.(*Assertions).IsNonDecreasingf(collection any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNonDecreasingf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -725,15 +725,15 @@ func main() {
 | [`assert.IsNonDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsNonDecreasingT) | package-level function |
 | [`assert.IsNonDecreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsNonDecreasingTf) | formatted variant |
 | [`assert.(*Assertions).IsNonDecreasingT[OrderedSlice ~[]E, E Ordered](collection OrderedSlice) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNonDecreasingT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).IsNonDecreasingTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNonDecreasingTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).IsNonDecreasingTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNonDecreasingTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.IsNonDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNonDecreasingT) | package-level function |
-| [`require.IsNonDecreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNonDecreasingTf) | formatted variant |
-| [`require.(*Assertions).IsNonDecreasingT[OrderedSlice ~[]E, E Ordered](collection OrderedSlice) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNonDecreasingT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).IsNonDecreasingTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNonDecreasingTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.IsNonDecreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNonDecreasingT) | package-level function |
+| [`require.IsNonDecreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNonDecreasingTf) | formatted variant |
+| [`require.(*Assertions).IsNonDecreasingT[OrderedSlice ~[]E, E Ordered](collection OrderedSlice)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNonDecreasingT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).IsNonDecreasingTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNonDecreasingTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -844,15 +844,15 @@ func main() {
 | [`assert.IsNonIncreasing(t T, collection any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsNonIncreasing) | package-level function |
 | [`assert.IsNonIncreasingf(t T, collection any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsNonIncreasingf) | formatted variant |
 | [`assert.(*Assertions).IsNonIncreasing(collection any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNonIncreasing) | method variant |
-| [`assert.(*Assertions).IsNonIncreasingf(collection any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNonIncreasingf) | method formatted variant |
+| [`assert.(*Assertions).IsNonIncreasingf(collection any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNonIncreasingf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.IsNonIncreasing(t T, collection any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNonIncreasing) | package-level function |
-| [`require.IsNonIncreasingf(t T, collection any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNonIncreasingf) | formatted variant |
-| [`require.(*Assertions).IsNonIncreasing(collection any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNonIncreasing) | method variant |
-| [`require.(*Assertions).IsNonIncreasingf(collection any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNonIncreasingf) | method formatted variant |
+| [`require.IsNonIncreasing(t T, collection any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNonIncreasing) | package-level function |
+| [`require.IsNonIncreasingf(t T, collection any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNonIncreasingf) | formatted variant |
+| [`require.(*Assertions).IsNonIncreasing(collection any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNonIncreasing) | method variant |
+| [`require.(*Assertions).IsNonIncreasingf(collection any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNonIncreasingf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -963,15 +963,15 @@ func main() {
 | [`assert.IsNonIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsNonIncreasingT) | package-level function |
 | [`assert.IsNonIncreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#IsNonIncreasingTf) | formatted variant |
 | [`assert.(*Assertions).IsNonIncreasingT[OrderedSlice ~[]E, E Ordered](collection OrderedSlice) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNonIncreasingT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).IsNonIncreasingTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNonIncreasingTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).IsNonIncreasingTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.IsNonIncreasingTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.IsNonIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNonIncreasingT) | package-level function |
-| [`require.IsNonIncreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNonIncreasingTf) | formatted variant |
-| [`require.(*Assertions).IsNonIncreasingT[OrderedSlice ~[]E, E Ordered](collection OrderedSlice) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNonIncreasingT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).IsNonIncreasingTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNonIncreasingTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.IsNonIncreasingT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNonIncreasingT) | package-level function |
+| [`require.IsNonIncreasingTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#IsNonIncreasingTf) | formatted variant |
+| [`require.(*Assertions).IsNonIncreasingT[OrderedSlice ~[]E, E Ordered](collection OrderedSlice)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNonIncreasingT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).IsNonIncreasingTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.IsNonIncreasingTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1078,15 +1078,15 @@ func main() {
 | [`assert.NotSortedT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotSortedT) | package-level function |
 | [`assert.NotSortedTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotSortedTf) | formatted variant |
 | [`assert.(*Assertions).NotSortedT[OrderedSlice ~[]E, E Ordered](collection OrderedSlice) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotSortedT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).NotSortedTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotSortedTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).NotSortedTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotSortedTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NotSortedT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotSortedT) | package-level function |
-| [`require.NotSortedTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotSortedTf) | formatted variant |
-| [`require.(*Assertions).NotSortedT[OrderedSlice ~[]E, E Ordered](collection OrderedSlice) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotSortedT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).NotSortedTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotSortedTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.NotSortedT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotSortedT) | package-level function |
+| [`require.NotSortedTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotSortedTf) | formatted variant |
+| [`require.(*Assertions).NotSortedT[OrderedSlice ~[]E, E Ordered](collection OrderedSlice)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotSortedT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).NotSortedTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotSortedTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1193,15 +1193,15 @@ func main() {
 | [`assert.SortedT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SortedT) | package-level function |
 | [`assert.SortedTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SortedTf) | formatted variant |
 | [`assert.(*Assertions).SortedT[OrderedSlice ~[]E, E Ordered](collection OrderedSlice) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SortedT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).SortedTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SortedTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).SortedTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SortedTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.SortedT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SortedT) | package-level function |
-| [`require.SortedTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SortedTf) | formatted variant |
-| [`require.(*Assertions).SortedT[OrderedSlice ~[]E, E Ordered](collection OrderedSlice) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SortedT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).SortedTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SortedTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.SortedT[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SortedT) | package-level function |
+| [`require.SortedTf[OrderedSlice ~[]E, E Ordered](t T, collection OrderedSlice, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SortedTf) | formatted variant |
+| [`require.(*Assertions).SortedT[OrderedSlice ~[]E, E Ordered](collection OrderedSlice)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SortedT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).SortedTf[OrderedSlice ~[]E, E Ordered](collection OrderedSlice, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SortedTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

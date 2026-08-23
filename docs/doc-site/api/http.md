@@ -148,15 +148,15 @@ func httpBody(w http.ResponseWriter, r *http.Request) {
 | [`assert.HTTPBodyContains(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#HTTPBodyContains) | package-level function |
 | [`assert.HTTPBodyContainsf(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#HTTPBodyContainsf) | formatted variant |
 | [`assert.(*Assertions).HTTPBodyContains(handler http.HandlerFunc, method string, url string, values url.Values, str any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPBodyContains) | method variant |
-| [`assert.(*Assertions).HTTPBodyContainsf(handler http.HandlerFunc, method string, url string, values url.Values, str any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPBodyContainsf) | method formatted variant |
+| [`assert.(*Assertions).HTTPBodyContainsf(handler http.HandlerFunc, method string, url string, values url.Values, str any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPBodyContainsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.HTTPBodyContains(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPBodyContains) | package-level function |
-| [`require.HTTPBodyContainsf(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPBodyContainsf) | formatted variant |
-| [`require.(*Assertions).HTTPBodyContains(handler http.HandlerFunc, method string, url string, values url.Values, str any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPBodyContains) | method variant |
-| [`require.(*Assertions).HTTPBodyContainsf(handler http.HandlerFunc, method string, url string, values url.Values, str any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPBodyContainsf) | method formatted variant |
+| [`require.HTTPBodyContains(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPBodyContains) | package-level function |
+| [`require.HTTPBodyContainsf(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPBodyContainsf) | formatted variant |
+| [`require.(*Assertions).HTTPBodyContains(handler http.HandlerFunc, method string, url string, values url.Values, str any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPBodyContains) | method variant |
+| [`require.(*Assertions).HTTPBodyContainsf(handler http.HandlerFunc, method string, url string, values url.Values, str any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPBodyContainsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -276,15 +276,15 @@ func httpBody(w http.ResponseWriter, r *http.Request) {
 | [`assert.HTTPBodyNotContains(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#HTTPBodyNotContains) | package-level function |
 | [`assert.HTTPBodyNotContainsf(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#HTTPBodyNotContainsf) | formatted variant |
 | [`assert.(*Assertions).HTTPBodyNotContains(handler http.HandlerFunc, method string, url string, values url.Values, str any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPBodyNotContains) | method variant |
-| [`assert.(*Assertions).HTTPBodyNotContainsf(handler http.HandlerFunc, method string, url string, values url.Values, str any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPBodyNotContainsf) | method formatted variant |
+| [`assert.(*Assertions).HTTPBodyNotContainsf(handler http.HandlerFunc, method string, url string, values url.Values, str any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPBodyNotContainsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.HTTPBodyNotContains(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPBodyNotContains) | package-level function |
-| [`require.HTTPBodyNotContainsf(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPBodyNotContainsf) | formatted variant |
-| [`require.(*Assertions).HTTPBodyNotContains(handler http.HandlerFunc, method string, url string, values url.Values, str any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPBodyNotContains) | method variant |
-| [`require.(*Assertions).HTTPBodyNotContainsf(handler http.HandlerFunc, method string, url string, values url.Values, str any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPBodyNotContainsf) | method formatted variant |
+| [`require.HTTPBodyNotContains(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPBodyNotContains) | package-level function |
+| [`require.HTTPBodyNotContainsf(t T, handler http.HandlerFunc, method string, url string, values url.Values, str any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPBodyNotContainsf) | formatted variant |
+| [`require.(*Assertions).HTTPBodyNotContains(handler http.HandlerFunc, method string, url string, values url.Values, str any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPBodyNotContains) | method variant |
+| [`require.(*Assertions).HTTPBodyNotContainsf(handler http.HandlerFunc, method string, url string, values url.Values, str any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPBodyNotContainsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -399,15 +399,15 @@ func httpError(w http.ResponseWriter, _ *http.Request) {
 | [`assert.HTTPError(t T, handler http.HandlerFunc, method string, url string, values url.Values, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#HTTPError) | package-level function |
 | [`assert.HTTPErrorf(t T, handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#HTTPErrorf) | formatted variant |
 | [`assert.(*Assertions).HTTPError(handler http.HandlerFunc, method string, url string, values url.Values) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPError) | method variant |
-| [`assert.(*Assertions).HTTPErrorf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPErrorf) | method formatted variant |
+| [`assert.(*Assertions).HTTPErrorf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPErrorf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.HTTPError(t T, handler http.HandlerFunc, method string, url string, values url.Values, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPError) | package-level function |
-| [`require.HTTPErrorf(t T, handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPErrorf) | formatted variant |
-| [`require.(*Assertions).HTTPError(handler http.HandlerFunc, method string, url string, values url.Values) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPError) | method variant |
-| [`require.(*Assertions).HTTPErrorf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPErrorf) | method formatted variant |
+| [`require.HTTPError(t T, handler http.HandlerFunc, method string, url string, values url.Values, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPError) | package-level function |
+| [`require.HTTPErrorf(t T, handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPErrorf) | formatted variant |
+| [`require.(*Assertions).HTTPError(handler http.HandlerFunc, method string, url string, values url.Values)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPError) | method variant |
+| [`require.(*Assertions).HTTPErrorf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPErrorf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -522,15 +522,15 @@ func httpRedirect(w http.ResponseWriter, _ *http.Request) {
 | [`assert.HTTPRedirect(t T, handler http.HandlerFunc, method string, url string, values url.Values, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#HTTPRedirect) | package-level function |
 | [`assert.HTTPRedirectf(t T, handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#HTTPRedirectf) | formatted variant |
 | [`assert.(*Assertions).HTTPRedirect(handler http.HandlerFunc, method string, url string, values url.Values) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPRedirect) | method variant |
-| [`assert.(*Assertions).HTTPRedirectf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPRedirectf) | method formatted variant |
+| [`assert.(*Assertions).HTTPRedirectf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPRedirectf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.HTTPRedirect(t T, handler http.HandlerFunc, method string, url string, values url.Values, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPRedirect) | package-level function |
-| [`require.HTTPRedirectf(t T, handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPRedirectf) | formatted variant |
-| [`require.(*Assertions).HTTPRedirect(handler http.HandlerFunc, method string, url string, values url.Values) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPRedirect) | method variant |
-| [`require.(*Assertions).HTTPRedirectf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPRedirectf) | method formatted variant |
+| [`require.HTTPRedirect(t T, handler http.HandlerFunc, method string, url string, values url.Values, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPRedirect) | package-level function |
+| [`require.HTTPRedirectf(t T, handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPRedirectf) | formatted variant |
+| [`require.(*Assertions).HTTPRedirect(handler http.HandlerFunc, method string, url string, values url.Values)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPRedirect) | method variant |
+| [`require.(*Assertions).HTTPRedirectf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPRedirectf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -645,15 +645,15 @@ func httpOK(w http.ResponseWriter, _ *http.Request) {
 | [`assert.HTTPStatusCode(t T, handler http.HandlerFunc, method string, url string, values url.Values, statuscode int, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#HTTPStatusCode) | package-level function |
 | [`assert.HTTPStatusCodef(t T, handler http.HandlerFunc, method string, url string, values url.Values, statuscode int, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#HTTPStatusCodef) | formatted variant |
 | [`assert.(*Assertions).HTTPStatusCode(handler http.HandlerFunc, method string, url string, values url.Values, statuscode int) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPStatusCode) | method variant |
-| [`assert.(*Assertions).HTTPStatusCodef(handler http.HandlerFunc, method string, url string, values url.Values, statuscode int, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPStatusCodef) | method formatted variant |
+| [`assert.(*Assertions).HTTPStatusCodef(handler http.HandlerFunc, method string, url string, values url.Values, statuscode int, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPStatusCodef) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.HTTPStatusCode(t T, handler http.HandlerFunc, method string, url string, values url.Values, statuscode int, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPStatusCode) | package-level function |
-| [`require.HTTPStatusCodef(t T, handler http.HandlerFunc, method string, url string, values url.Values, statuscode int, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPStatusCodef) | formatted variant |
-| [`require.(*Assertions).HTTPStatusCode(handler http.HandlerFunc, method string, url string, values url.Values, statuscode int) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPStatusCode) | method variant |
-| [`require.(*Assertions).HTTPStatusCodef(handler http.HandlerFunc, method string, url string, values url.Values, statuscode int, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPStatusCodef) | method formatted variant |
+| [`require.HTTPStatusCode(t T, handler http.HandlerFunc, method string, url string, values url.Values, statuscode int, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPStatusCode) | package-level function |
+| [`require.HTTPStatusCodef(t T, handler http.HandlerFunc, method string, url string, values url.Values, statuscode int, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPStatusCodef) | formatted variant |
+| [`require.(*Assertions).HTTPStatusCode(handler http.HandlerFunc, method string, url string, values url.Values, statuscode int)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPStatusCode) | method variant |
+| [`require.(*Assertions).HTTPStatusCodef(handler http.HandlerFunc, method string, url string, values url.Values, statuscode int, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPStatusCodef) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -768,15 +768,15 @@ func httpOK(w http.ResponseWriter, _ *http.Request) {
 | [`assert.HTTPSuccess(t T, handler http.HandlerFunc, method string, url string, values url.Values, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#HTTPSuccess) | package-level function |
 | [`assert.HTTPSuccessf(t T, handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#HTTPSuccessf) | formatted variant |
 | [`assert.(*Assertions).HTTPSuccess(handler http.HandlerFunc, method string, url string, values url.Values) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPSuccess) | method variant |
-| [`assert.(*Assertions).HTTPSuccessf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPSuccessf) | method formatted variant |
+| [`assert.(*Assertions).HTTPSuccessf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPSuccessf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.HTTPSuccess(t T, handler http.HandlerFunc, method string, url string, values url.Values, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPSuccess) | package-level function |
-| [`require.HTTPSuccessf(t T, handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPSuccessf) | formatted variant |
-| [`require.(*Assertions).HTTPSuccess(handler http.HandlerFunc, method string, url string, values url.Values) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPSuccess) | method variant |
-| [`require.(*Assertions).HTTPSuccessf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPSuccessf) | method formatted variant |
+| [`require.HTTPSuccess(t T, handler http.HandlerFunc, method string, url string, values url.Values, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPSuccess) | package-level function |
+| [`require.HTTPSuccessf(t T, handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPSuccessf) | formatted variant |
+| [`require.(*Assertions).HTTPSuccess(handler http.HandlerFunc, method string, url string, values url.Values)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPSuccess) | method variant |
+| [`require.(*Assertions).HTTPSuccessf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPSuccessf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -803,17 +803,11 @@ It returns the empty string if building a new request fails.
 | Signature | Usage |
 |--|--|
 | [`assert.HTTPBody(handler http.HandlerFunc, method string, url string, values url.Values) string`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#HTTPBody) | package-level function |
-| [`assert.HTTPBodyf(t T, handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) string`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#HTTPBodyf) | formatted variant |
-| [`assert.(*Assertions).HTTPBody(handler http.HandlerFunc, method string, url string, values url.Values) string`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPBody) | method variant |
-| [`assert.(*Assertions).HTTPBodyf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.HTTPBodyf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
 | [`require.HTTPBody(handler http.HandlerFunc, method string, url string, values url.Values) string`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPBody) | package-level function |
-| [`require.HTTPBodyf(t T, handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ...any) string`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#HTTPBodyf) | formatted variant |
-| [`require.(*Assertions).HTTPBody(handler http.HandlerFunc, method string, url string, values url.Values) string`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPBody) | method variant |
-| [`require.(*Assertions).HTTPBodyf(handler http.HandlerFunc, method string, url string, values url.Values, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.HTTPBodyf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

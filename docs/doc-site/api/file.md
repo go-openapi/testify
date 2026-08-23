@@ -141,15 +141,15 @@ func testDataPath() string {
 | [`assert.DirExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#DirExists) | package-level function |
 | [`assert.DirExistsf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#DirExistsf) | formatted variant |
 | [`assert.(*Assertions).DirExists(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.DirExists) | method variant |
-| [`assert.(*Assertions).DirExistsf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.DirExistsf) | method formatted variant |
+| [`assert.(*Assertions).DirExistsf(path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.DirExistsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.DirExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#DirExists) | package-level function |
-| [`require.DirExistsf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#DirExistsf) | formatted variant |
-| [`require.(*Assertions).DirExists(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.DirExists) | method variant |
-| [`require.(*Assertions).DirExistsf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.DirExistsf) | method formatted variant |
+| [`require.DirExists(t T, path string, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#DirExists) | package-level function |
+| [`require.DirExistsf(t T, path string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#DirExistsf) | formatted variant |
+| [`require.(*Assertions).DirExists(path string)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.DirExists) | method variant |
+| [`require.(*Assertions).DirExistsf(path string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.DirExistsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -263,15 +263,15 @@ func testDataPath() string {
 | [`assert.DirNotExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#DirNotExists) | package-level function |
 | [`assert.DirNotExistsf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#DirNotExistsf) | formatted variant |
 | [`assert.(*Assertions).DirNotExists(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.DirNotExists) | method variant |
-| [`assert.(*Assertions).DirNotExistsf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.DirNotExistsf) | method formatted variant |
+| [`assert.(*Assertions).DirNotExistsf(path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.DirNotExistsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.DirNotExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#DirNotExists) | package-level function |
-| [`require.DirNotExistsf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#DirNotExistsf) | formatted variant |
-| [`require.(*Assertions).DirNotExists(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.DirNotExists) | method variant |
-| [`require.(*Assertions).DirNotExistsf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.DirNotExistsf) | method formatted variant |
+| [`require.DirNotExists(t T, path string, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#DirNotExists) | package-level function |
+| [`require.DirNotExistsf(t T, path string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#DirNotExistsf) | formatted variant |
+| [`require.(*Assertions).DirNotExists(path string)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.DirNotExists) | method variant |
+| [`require.(*Assertions).DirNotExistsf(path string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.DirNotExistsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -385,15 +385,15 @@ func testDataPath() string {
 | [`assert.FileEmpty(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#FileEmpty) | package-level function |
 | [`assert.FileEmptyf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#FileEmptyf) | formatted variant |
 | [`assert.(*Assertions).FileEmpty(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FileEmpty) | method variant |
-| [`assert.(*Assertions).FileEmptyf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FileEmptyf) | method formatted variant |
+| [`assert.(*Assertions).FileEmptyf(path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FileEmptyf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.FileEmpty(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FileEmpty) | package-level function |
-| [`require.FileEmptyf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FileEmptyf) | formatted variant |
-| [`require.(*Assertions).FileEmpty(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FileEmpty) | method variant |
-| [`require.(*Assertions).FileEmptyf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FileEmptyf) | method formatted variant |
+| [`require.FileEmpty(t T, path string, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FileEmpty) | package-level function |
+| [`require.FileEmptyf(t T, path string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FileEmptyf) | formatted variant |
+| [`require.(*Assertions).FileEmpty(path string)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FileEmpty) | method variant |
+| [`require.(*Assertions).FileEmptyf(path string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FileEmptyf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -507,15 +507,15 @@ func testDataPath() string {
 | [`assert.FileExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#FileExists) | package-level function |
 | [`assert.FileExistsf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#FileExistsf) | formatted variant |
 | [`assert.(*Assertions).FileExists(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FileExists) | method variant |
-| [`assert.(*Assertions).FileExistsf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FileExistsf) | method formatted variant |
+| [`assert.(*Assertions).FileExistsf(path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FileExistsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.FileExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FileExists) | package-level function |
-| [`require.FileExistsf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FileExistsf) | formatted variant |
-| [`require.(*Assertions).FileExists(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FileExists) | method variant |
-| [`require.(*Assertions).FileExistsf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FileExistsf) | method formatted variant |
+| [`require.FileExists(t T, path string, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FileExists) | package-level function |
+| [`require.FileExistsf(t T, path string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FileExistsf) | formatted variant |
+| [`require.(*Assertions).FileExists(path string)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FileExists) | method variant |
+| [`require.(*Assertions).FileExistsf(path string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FileExistsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -629,15 +629,15 @@ func testDataPath() string {
 | [`assert.FileNotEmpty(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#FileNotEmpty) | package-level function |
 | [`assert.FileNotEmptyf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#FileNotEmptyf) | formatted variant |
 | [`assert.(*Assertions).FileNotEmpty(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FileNotEmpty) | method variant |
-| [`assert.(*Assertions).FileNotEmptyf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FileNotEmptyf) | method formatted variant |
+| [`assert.(*Assertions).FileNotEmptyf(path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FileNotEmptyf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.FileNotEmpty(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FileNotEmpty) | package-level function |
-| [`require.FileNotEmptyf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FileNotEmptyf) | formatted variant |
-| [`require.(*Assertions).FileNotEmpty(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FileNotEmpty) | method variant |
-| [`require.(*Assertions).FileNotEmptyf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FileNotEmptyf) | method formatted variant |
+| [`require.FileNotEmpty(t T, path string, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FileNotEmpty) | package-level function |
+| [`require.FileNotEmptyf(t T, path string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FileNotEmptyf) | formatted variant |
+| [`require.(*Assertions).FileNotEmpty(path string)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FileNotEmpty) | method variant |
+| [`require.(*Assertions).FileNotEmptyf(path string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FileNotEmptyf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -751,15 +751,15 @@ func testDataPath() string {
 | [`assert.FileNotExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#FileNotExists) | package-level function |
 | [`assert.FileNotExistsf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#FileNotExistsf) | formatted variant |
 | [`assert.(*Assertions).FileNotExists(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FileNotExists) | method variant |
-| [`assert.(*Assertions).FileNotExistsf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FileNotExistsf) | method formatted variant |
+| [`assert.(*Assertions).FileNotExistsf(path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.FileNotExistsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.FileNotExists(t T, path string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FileNotExists) | package-level function |
-| [`require.FileNotExistsf(t T, path string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FileNotExistsf) | formatted variant |
-| [`require.(*Assertions).FileNotExists(path string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FileNotExists) | method variant |
-| [`require.(*Assertions).FileNotExistsf(path string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FileNotExistsf) | method formatted variant |
+| [`require.FileNotExists(t T, path string, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FileNotExists) | package-level function |
+| [`require.FileNotExistsf(t T, path string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#FileNotExistsf) | formatted variant |
+| [`require.(*Assertions).FileNotExists(path string)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FileNotExists) | method variant |
+| [`require.(*Assertions).FileNotExistsf(path string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.FileNotExistsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

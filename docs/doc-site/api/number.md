@@ -155,15 +155,15 @@ func main() {
 | [`assert.InDelta(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDelta) | package-level function |
 | [`assert.InDeltaf(t T, expected any, actual any, delta float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDeltaf) | formatted variant |
 | [`assert.(*Assertions).InDelta(expected any, actual any, delta float64) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InDelta) | method variant |
-| [`assert.(*Assertions).InDeltaf(expected any, actual any, delta float64, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InDeltaf) | method formatted variant |
+| [`assert.(*Assertions).InDeltaf(expected any, actual any, delta float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InDeltaf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.InDelta(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InDelta) | package-level function |
-| [`require.InDeltaf(t T, expected any, actual any, delta float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InDeltaf) | formatted variant |
-| [`require.(*Assertions).InDelta(expected any, actual any, delta float64) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InDelta) | method variant |
-| [`require.(*Assertions).InDeltaf(expected any, actual any, delta float64, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InDeltaf) | method formatted variant |
+| [`require.InDelta(t T, expected any, actual any, delta float64, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InDelta) | package-level function |
+| [`require.InDeltaf(t T, expected any, actual any, delta float64, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InDeltaf) | formatted variant |
+| [`require.(*Assertions).InDelta(expected any, actual any, delta float64)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InDelta) | method variant |
+| [`require.(*Assertions).InDeltaf(expected any, actual any, delta float64, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InDeltaf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -268,15 +268,15 @@ func main() {
 | [`assert.InDeltaMapValues(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDeltaMapValues) | package-level function |
 | [`assert.InDeltaMapValuesf(t T, expected any, actual any, delta float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDeltaMapValuesf) | formatted variant |
 | [`assert.(*Assertions).InDeltaMapValues(expected any, actual any, delta float64) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InDeltaMapValues) | method variant |
-| [`assert.(*Assertions).InDeltaMapValuesf(expected any, actual any, delta float64, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InDeltaMapValuesf) | method formatted variant |
+| [`assert.(*Assertions).InDeltaMapValuesf(expected any, actual any, delta float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InDeltaMapValuesf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.InDeltaMapValues(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InDeltaMapValues) | package-level function |
-| [`require.InDeltaMapValuesf(t T, expected any, actual any, delta float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InDeltaMapValuesf) | formatted variant |
-| [`require.(*Assertions).InDeltaMapValues(expected any, actual any, delta float64) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InDeltaMapValues) | method variant |
-| [`require.(*Assertions).InDeltaMapValuesf(expected any, actual any, delta float64, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InDeltaMapValuesf) | method formatted variant |
+| [`require.InDeltaMapValues(t T, expected any, actual any, delta float64, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InDeltaMapValues) | package-level function |
+| [`require.InDeltaMapValuesf(t T, expected any, actual any, delta float64, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InDeltaMapValuesf) | formatted variant |
+| [`require.(*Assertions).InDeltaMapValues(expected any, actual any, delta float64)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InDeltaMapValues) | method variant |
+| [`require.(*Assertions).InDeltaMapValuesf(expected any, actual any, delta float64, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InDeltaMapValuesf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -383,15 +383,15 @@ func main() {
 | [`assert.InDeltaSlice(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDeltaSlice) | package-level function |
 | [`assert.InDeltaSlicef(t T, expected any, actual any, delta float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDeltaSlicef) | formatted variant |
 | [`assert.(*Assertions).InDeltaSlice(expected any, actual any, delta float64) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InDeltaSlice) | method variant |
-| [`assert.(*Assertions).InDeltaSlicef(expected any, actual any, delta float64, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InDeltaSlicef) | method formatted variant |
+| [`assert.(*Assertions).InDeltaSlicef(expected any, actual any, delta float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InDeltaSlicef) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.InDeltaSlice(t T, expected any, actual any, delta float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InDeltaSlice) | package-level function |
-| [`require.InDeltaSlicef(t T, expected any, actual any, delta float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InDeltaSlicef) | formatted variant |
-| [`require.(*Assertions).InDeltaSlice(expected any, actual any, delta float64) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InDeltaSlice) | method variant |
-| [`require.(*Assertions).InDeltaSlicef(expected any, actual any, delta float64, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InDeltaSlicef) | method formatted variant |
+| [`require.InDeltaSlice(t T, expected any, actual any, delta float64, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InDeltaSlice) | package-level function |
+| [`require.InDeltaSlicef(t T, expected any, actual any, delta float64, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InDeltaSlicef) | formatted variant |
+| [`require.(*Assertions).InDeltaSlice(expected any, actual any, delta float64)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InDeltaSlice) | method variant |
+| [`require.(*Assertions).InDeltaSlicef(expected any, actual any, delta float64, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InDeltaSlicef) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -506,15 +506,15 @@ func main() {
 | [`assert.InDeltaT[Number Measurable](t T, expected Number, actual Number, delta Number, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDeltaT) | package-level function |
 | [`assert.InDeltaTf[Number Measurable](t T, expected Number, actual Number, delta Number, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InDeltaTf) | formatted variant |
 | [`assert.(*Assertions).InDeltaT[Number Measurable](expected Number, actual Number, delta Number) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InDeltaT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).InDeltaTf[Number Measurable](expected Number, actual Number, delta Number, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InDeltaTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).InDeltaTf[Number Measurable](expected Number, actual Number, delta Number, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InDeltaTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.InDeltaT[Number Measurable](t T, expected Number, actual Number, delta Number, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InDeltaT) | package-level function |
-| [`require.InDeltaTf[Number Measurable](t T, expected Number, actual Number, delta Number, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InDeltaTf) | formatted variant |
-| [`require.(*Assertions).InDeltaT[Number Measurable](expected Number, actual Number, delta Number) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InDeltaT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).InDeltaTf[Number Measurable](expected Number, actual Number, delta Number, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InDeltaTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.InDeltaT[Number Measurable](t T, expected Number, actual Number, delta Number, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InDeltaT) | package-level function |
+| [`require.InDeltaTf[Number Measurable](t T, expected Number, actual Number, delta Number, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InDeltaTf) | formatted variant |
+| [`require.(*Assertions).InDeltaT[Number Measurable](expected Number, actual Number, delta Number)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InDeltaT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).InDeltaTf[Number Measurable](expected Number, actual Number, delta Number, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InDeltaTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -632,15 +632,15 @@ func main() {
 | [`assert.InEpsilon(t T, expected any, actual any, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilon) | package-level function |
 | [`assert.InEpsilonf(t T, expected any, actual any, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilonf) | formatted variant |
 | [`assert.(*Assertions).InEpsilon(expected any, actual any, epsilon float64) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InEpsilon) | method variant |
-| [`assert.(*Assertions).InEpsilonf(expected any, actual any, epsilon float64, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InEpsilonf) | method formatted variant |
+| [`assert.(*Assertions).InEpsilonf(expected any, actual any, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InEpsilonf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.InEpsilon(t T, expected any, actual any, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilon) | package-level function |
-| [`require.InEpsilonf(t T, expected any, actual any, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonf) | formatted variant |
-| [`require.(*Assertions).InEpsilon(expected any, actual any, epsilon float64) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilon) | method variant |
-| [`require.(*Assertions).InEpsilonf(expected any, actual any, epsilon float64, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonf) | method formatted variant |
+| [`require.InEpsilon(t T, expected any, actual any, epsilon float64, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilon) | package-level function |
+| [`require.InEpsilonf(t T, expected any, actual any, epsilon float64, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonf) | formatted variant |
+| [`require.(*Assertions).InEpsilon(expected any, actual any, epsilon float64)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilon) | method variant |
+| [`require.(*Assertions).InEpsilonf(expected any, actual any, epsilon float64, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -745,15 +745,15 @@ func main() {
 | [`assert.InEpsilonSlice(t T, expected any, actual any, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilonSlice) | package-level function |
 | [`assert.InEpsilonSlicef(t T, expected any, actual any, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilonSlicef) | formatted variant |
 | [`assert.(*Assertions).InEpsilonSlice(expected any, actual any, epsilon float64) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InEpsilonSlice) | method variant |
-| [`assert.(*Assertions).InEpsilonSlicef(expected any, actual any, epsilon float64, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InEpsilonSlicef) | method formatted variant |
+| [`assert.(*Assertions).InEpsilonSlicef(expected any, actual any, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InEpsilonSlicef) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.InEpsilonSlice(t T, expected any, actual any, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonSlice) | package-level function |
-| [`require.InEpsilonSlicef(t T, expected any, actual any, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonSlicef) | formatted variant |
-| [`require.(*Assertions).InEpsilonSlice(expected any, actual any, epsilon float64) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonSlice) | method variant |
-| [`require.(*Assertions).InEpsilonSlicef(expected any, actual any, epsilon float64, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonSlicef) | method formatted variant |
+| [`require.InEpsilonSlice(t T, expected any, actual any, epsilon float64, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonSlice) | package-level function |
+| [`require.InEpsilonSlicef(t T, expected any, actual any, epsilon float64, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonSlicef) | formatted variant |
+| [`require.(*Assertions).InEpsilonSlice(expected any, actual any, epsilon float64)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonSlice) | method variant |
+| [`require.(*Assertions).InEpsilonSlicef(expected any, actual any, epsilon float64, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonSlicef) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -875,15 +875,15 @@ func main() {
 | [`assert.InEpsilonSymmetric(t T, x any, y any, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilonSymmetric) | package-level function |
 | [`assert.InEpsilonSymmetricf(t T, x any, y any, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilonSymmetricf) | formatted variant |
 | [`assert.(*Assertions).InEpsilonSymmetric(x any, y any, epsilon float64) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InEpsilonSymmetric) | method variant |
-| [`assert.(*Assertions).InEpsilonSymmetricf(x any, y any, epsilon float64, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InEpsilonSymmetricf) | method formatted variant |
+| [`assert.(*Assertions).InEpsilonSymmetricf(x any, y any, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InEpsilonSymmetricf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.InEpsilonSymmetric(t T, x any, y any, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonSymmetric) | package-level function |
-| [`require.InEpsilonSymmetricf(t T, x any, y any, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonSymmetricf) | formatted variant |
-| [`require.(*Assertions).InEpsilonSymmetric(x any, y any, epsilon float64) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonSymmetric) | method variant |
-| [`require.(*Assertions).InEpsilonSymmetricf(x any, y any, epsilon float64, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonSymmetricf) | method formatted variant |
+| [`require.InEpsilonSymmetric(t T, x any, y any, epsilon float64, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonSymmetric) | package-level function |
+| [`require.InEpsilonSymmetricf(t T, x any, y any, epsilon float64, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonSymmetricf) | formatted variant |
+| [`require.(*Assertions).InEpsilonSymmetric(x any, y any, epsilon float64)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonSymmetric) | method variant |
+| [`require.(*Assertions).InEpsilonSymmetricf(x any, y any, epsilon float64, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonSymmetricf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -988,15 +988,15 @@ func main() {
 | [`assert.InEpsilonSymmetricT[Number Measurable](t T, x Number, y Number, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilonSymmetricT) | package-level function |
 | [`assert.InEpsilonSymmetricTf[Number Measurable](t T, x Number, y Number, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilonSymmetricTf) | formatted variant |
 | [`assert.(*Assertions).InEpsilonSymmetricT[Number Measurable](x Number, y Number, epsilon float64) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InEpsilonSymmetricT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).InEpsilonSymmetricTf[Number Measurable](x Number, y Number, epsilon float64, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InEpsilonSymmetricTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).InEpsilonSymmetricTf[Number Measurable](x Number, y Number, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InEpsilonSymmetricTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.InEpsilonSymmetricT[Number Measurable](t T, x Number, y Number, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonSymmetricT) | package-level function |
-| [`require.InEpsilonSymmetricTf[Number Measurable](t T, x Number, y Number, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonSymmetricTf) | formatted variant |
-| [`require.(*Assertions).InEpsilonSymmetricT[Number Measurable](x Number, y Number, epsilon float64) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonSymmetricT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).InEpsilonSymmetricTf[Number Measurable](x Number, y Number, epsilon float64, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonSymmetricTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.InEpsilonSymmetricT[Number Measurable](t T, x Number, y Number, epsilon float64, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonSymmetricT) | package-level function |
+| [`require.InEpsilonSymmetricTf[Number Measurable](t T, x Number, y Number, epsilon float64, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonSymmetricTf) | formatted variant |
+| [`require.(*Assertions).InEpsilonSymmetricT[Number Measurable](x Number, y Number, epsilon float64)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonSymmetricT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).InEpsilonSymmetricTf[Number Measurable](x Number, y Number, epsilon float64, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonSymmetricTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1120,15 +1120,15 @@ func main() {
 | [`assert.InEpsilonT[Number Measurable](t T, expected Number, actual Number, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilonT) | package-level function |
 | [`assert.InEpsilonTf[Number Measurable](t T, expected Number, actual Number, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#InEpsilonTf) | formatted variant |
 | [`assert.(*Assertions).InEpsilonT[Number Measurable](expected Number, actual Number, epsilon float64) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InEpsilonT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).InEpsilonTf[Number Measurable](expected Number, actual Number, epsilon float64, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InEpsilonTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).InEpsilonTf[Number Measurable](expected Number, actual Number, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.InEpsilonTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.InEpsilonT[Number Measurable](t T, expected Number, actual Number, epsilon float64, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonT) | package-level function |
-| [`require.InEpsilonTf[Number Measurable](t T, expected Number, actual Number, epsilon float64, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonTf) | formatted variant |
-| [`require.(*Assertions).InEpsilonT[Number Measurable](expected Number, actual Number, epsilon float64) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).InEpsilonTf[Number Measurable](expected Number, actual Number, epsilon float64, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.InEpsilonT[Number Measurable](t T, expected Number, actual Number, epsilon float64, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonT) | package-level function |
+| [`require.InEpsilonTf[Number Measurable](t T, expected Number, actual Number, epsilon float64, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#InEpsilonTf) | formatted variant |
+| [`require.(*Assertions).InEpsilonT[Number Measurable](expected Number, actual Number, epsilon float64)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).InEpsilonTf[Number Measurable](expected Number, actual Number, epsilon float64, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.InEpsilonTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

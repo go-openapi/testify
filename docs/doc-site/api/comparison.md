@@ -157,15 +157,15 @@ func main() {
 | [`assert.Greater(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Greater) | package-level function |
 | [`assert.Greaterf(t T, e1 any, e2 any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Greaterf) | formatted variant |
 | [`assert.(*Assertions).Greater(e1 any, e2 any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Greater) | method variant |
-| [`assert.(*Assertions).Greaterf(e1 any, e2 any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Greaterf) | method formatted variant |
+| [`assert.(*Assertions).Greaterf(e1 any, e2 any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Greaterf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Greater(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Greater) | package-level function |
-| [`require.Greaterf(t T, e1 any, e2 any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Greaterf) | formatted variant |
-| [`require.(*Assertions).Greater(e1 any, e2 any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Greater) | method variant |
-| [`require.(*Assertions).Greaterf(e1 any, e2 any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Greaterf) | method formatted variant |
+| [`require.Greater(t T, e1 any, e2 any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Greater) | package-level function |
+| [`require.Greaterf(t T, e1 any, e2 any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Greaterf) | formatted variant |
+| [`require.(*Assertions).Greater(e1 any, e2 any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Greater) | method variant |
+| [`require.(*Assertions).Greaterf(e1 any, e2 any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Greaterf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -273,15 +273,15 @@ func main() {
 | [`assert.GreaterOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#GreaterOrEqual) | package-level function |
 | [`assert.GreaterOrEqualf(t T, e1 any, e2 any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#GreaterOrEqualf) | formatted variant |
 | [`assert.(*Assertions).GreaterOrEqual(e1 any, e2 any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.GreaterOrEqual) | method variant |
-| [`assert.(*Assertions).GreaterOrEqualf(e1 any, e2 any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.GreaterOrEqualf) | method formatted variant |
+| [`assert.(*Assertions).GreaterOrEqualf(e1 any, e2 any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.GreaterOrEqualf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.GreaterOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#GreaterOrEqual) | package-level function |
-| [`require.GreaterOrEqualf(t T, e1 any, e2 any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#GreaterOrEqualf) | formatted variant |
-| [`require.(*Assertions).GreaterOrEqual(e1 any, e2 any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.GreaterOrEqual) | method variant |
-| [`require.(*Assertions).GreaterOrEqualf(e1 any, e2 any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.GreaterOrEqualf) | method formatted variant |
+| [`require.GreaterOrEqual(t T, e1 any, e2 any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#GreaterOrEqual) | package-level function |
+| [`require.GreaterOrEqualf(t T, e1 any, e2 any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#GreaterOrEqualf) | formatted variant |
+| [`require.(*Assertions).GreaterOrEqual(e1 any, e2 any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.GreaterOrEqual) | method variant |
+| [`require.(*Assertions).GreaterOrEqualf(e1 any, e2 any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.GreaterOrEqualf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -398,15 +398,15 @@ func main() {
 | [`assert.GreaterOrEqualT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#GreaterOrEqualT) | package-level function |
 | [`assert.GreaterOrEqualTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#GreaterOrEqualTf) | formatted variant |
 | [`assert.(*Assertions).GreaterOrEqualT[Orderable Ordered](e1 Orderable, e2 Orderable) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.GreaterOrEqualT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).GreaterOrEqualTf[Orderable Ordered](e1 Orderable, e2 Orderable, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.GreaterOrEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).GreaterOrEqualTf[Orderable Ordered](e1 Orderable, e2 Orderable, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.GreaterOrEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.GreaterOrEqualT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#GreaterOrEqualT) | package-level function |
-| [`require.GreaterOrEqualTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#GreaterOrEqualTf) | formatted variant |
-| [`require.(*Assertions).GreaterOrEqualT[Orderable Ordered](e1 Orderable, e2 Orderable) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.GreaterOrEqualT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).GreaterOrEqualTf[Orderable Ordered](e1 Orderable, e2 Orderable, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.GreaterOrEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.GreaterOrEqualT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#GreaterOrEqualT) | package-level function |
+| [`require.GreaterOrEqualTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#GreaterOrEqualTf) | formatted variant |
+| [`require.(*Assertions).GreaterOrEqualT[Orderable Ordered](e1 Orderable, e2 Orderable)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.GreaterOrEqualT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).GreaterOrEqualTf[Orderable Ordered](e1 Orderable, e2 Orderable, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.GreaterOrEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -522,15 +522,15 @@ func main() {
 | [`assert.GreaterT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#GreaterT) | package-level function |
 | [`assert.GreaterTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#GreaterTf) | formatted variant |
 | [`assert.(*Assertions).GreaterT[Orderable Ordered](e1 Orderable, e2 Orderable) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.GreaterT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).GreaterTf[Orderable Ordered](e1 Orderable, e2 Orderable, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.GreaterTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).GreaterTf[Orderable Ordered](e1 Orderable, e2 Orderable, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.GreaterTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.GreaterT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#GreaterT) | package-level function |
-| [`require.GreaterTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#GreaterTf) | formatted variant |
-| [`require.(*Assertions).GreaterT[Orderable Ordered](e1 Orderable, e2 Orderable) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.GreaterT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).GreaterTf[Orderable Ordered](e1 Orderable, e2 Orderable, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.GreaterTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.GreaterT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#GreaterT) | package-level function |
+| [`require.GreaterTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#GreaterTf) | formatted variant |
+| [`require.(*Assertions).GreaterT[Orderable Ordered](e1 Orderable, e2 Orderable)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.GreaterT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).GreaterTf[Orderable Ordered](e1 Orderable, e2 Orderable, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.GreaterTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -638,15 +638,15 @@ func main() {
 | [`assert.Less(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Less) | package-level function |
 | [`assert.Lessf(t T, e1 any, e2 any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Lessf) | formatted variant |
 | [`assert.(*Assertions).Less(e1 any, e2 any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Less) | method variant |
-| [`assert.(*Assertions).Lessf(e1 any, e2 any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Lessf) | method formatted variant |
+| [`assert.(*Assertions).Lessf(e1 any, e2 any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Lessf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Less(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Less) | package-level function |
-| [`require.Lessf(t T, e1 any, e2 any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Lessf) | formatted variant |
-| [`require.(*Assertions).Less(e1 any, e2 any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Less) | method variant |
-| [`require.(*Assertions).Lessf(e1 any, e2 any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Lessf) | method formatted variant |
+| [`require.Less(t T, e1 any, e2 any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Less) | package-level function |
+| [`require.Lessf(t T, e1 any, e2 any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Lessf) | formatted variant |
+| [`require.(*Assertions).Less(e1 any, e2 any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Less) | method variant |
+| [`require.(*Assertions).Lessf(e1 any, e2 any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Lessf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -752,15 +752,15 @@ func main() {
 | [`assert.LessOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#LessOrEqual) | package-level function |
 | [`assert.LessOrEqualf(t T, e1 any, e2 any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#LessOrEqualf) | formatted variant |
 | [`assert.(*Assertions).LessOrEqual(e1 any, e2 any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.LessOrEqual) | method variant |
-| [`assert.(*Assertions).LessOrEqualf(e1 any, e2 any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.LessOrEqualf) | method formatted variant |
+| [`assert.(*Assertions).LessOrEqualf(e1 any, e2 any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.LessOrEqualf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.LessOrEqual(t T, e1 any, e2 any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#LessOrEqual) | package-level function |
-| [`require.LessOrEqualf(t T, e1 any, e2 any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#LessOrEqualf) | formatted variant |
-| [`require.(*Assertions).LessOrEqual(e1 any, e2 any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.LessOrEqual) | method variant |
-| [`require.(*Assertions).LessOrEqualf(e1 any, e2 any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.LessOrEqualf) | method formatted variant |
+| [`require.LessOrEqual(t T, e1 any, e2 any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#LessOrEqual) | package-level function |
+| [`require.LessOrEqualf(t T, e1 any, e2 any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#LessOrEqualf) | formatted variant |
+| [`require.(*Assertions).LessOrEqual(e1 any, e2 any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.LessOrEqual) | method variant |
+| [`require.(*Assertions).LessOrEqualf(e1 any, e2 any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.LessOrEqualf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -876,15 +876,15 @@ func main() {
 | [`assert.LessOrEqualT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#LessOrEqualT) | package-level function |
 | [`assert.LessOrEqualTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#LessOrEqualTf) | formatted variant |
 | [`assert.(*Assertions).LessOrEqualT[Orderable Ordered](e1 Orderable, e2 Orderable) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.LessOrEqualT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).LessOrEqualTf[Orderable Ordered](e1 Orderable, e2 Orderable, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.LessOrEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).LessOrEqualTf[Orderable Ordered](e1 Orderable, e2 Orderable, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.LessOrEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.LessOrEqualT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#LessOrEqualT) | package-level function |
-| [`require.LessOrEqualTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#LessOrEqualTf) | formatted variant |
-| [`require.(*Assertions).LessOrEqualT[Orderable Ordered](e1 Orderable, e2 Orderable) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.LessOrEqualT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).LessOrEqualTf[Orderable Ordered](e1 Orderable, e2 Orderable, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.LessOrEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.LessOrEqualT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#LessOrEqualT) | package-level function |
+| [`require.LessOrEqualTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#LessOrEqualTf) | formatted variant |
+| [`require.(*Assertions).LessOrEqualT[Orderable Ordered](e1 Orderable, e2 Orderable)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.LessOrEqualT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).LessOrEqualTf[Orderable Ordered](e1 Orderable, e2 Orderable, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.LessOrEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -999,15 +999,15 @@ func main() {
 | [`assert.LessT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#LessT) | package-level function |
 | [`assert.LessTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#LessTf) | formatted variant |
 | [`assert.(*Assertions).LessT[Orderable Ordered](e1 Orderable, e2 Orderable) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.LessT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).LessTf[Orderable Ordered](e1 Orderable, e2 Orderable, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.LessTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).LessTf[Orderable Ordered](e1 Orderable, e2 Orderable, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.LessTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.LessT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#LessT) | package-level function |
-| [`require.LessTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#LessTf) | formatted variant |
-| [`require.(*Assertions).LessT[Orderable Ordered](e1 Orderable, e2 Orderable) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.LessT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).LessTf[Orderable Ordered](e1 Orderable, e2 Orderable, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.LessTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.LessT[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#LessT) | package-level function |
+| [`require.LessTf[Orderable Ordered](t T, e1 Orderable, e2 Orderable, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#LessTf) | formatted variant |
+| [`require.(*Assertions).LessT[Orderable Ordered](e1 Orderable, e2 Orderable)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.LessT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).LessTf[Orderable Ordered](e1 Orderable, e2 Orderable, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.LessTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1111,15 +1111,15 @@ func main() {
 | [`assert.Negative(t T, e any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Negative) | package-level function |
 | [`assert.Negativef(t T, e any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Negativef) | formatted variant |
 | [`assert.(*Assertions).Negative(e any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Negative) | method variant |
-| [`assert.(*Assertions).Negativef(e any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Negativef) | method formatted variant |
+| [`assert.(*Assertions).Negativef(e any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Negativef) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Negative(t T, e any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Negative) | package-level function |
-| [`require.Negativef(t T, e any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Negativef) | formatted variant |
-| [`require.(*Assertions).Negative(e any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Negative) | method variant |
-| [`require.(*Assertions).Negativef(e any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Negativef) | method formatted variant |
+| [`require.Negative(t T, e any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Negative) | package-level function |
+| [`require.Negativef(t T, e any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Negativef) | formatted variant |
+| [`require.(*Assertions).Negative(e any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Negative) | method variant |
+| [`require.(*Assertions).Negativef(e any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Negativef) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1223,15 +1223,15 @@ func main() {
 | [`assert.NegativeT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NegativeT) | package-level function |
 | [`assert.NegativeTf[SignedNumber SignedNumeric](t T, e SignedNumber, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NegativeTf) | formatted variant |
 | [`assert.(*Assertions).NegativeT[SignedNumber SignedNumeric](e SignedNumber) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NegativeT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).NegativeTf[SignedNumber SignedNumeric](e SignedNumber, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NegativeTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).NegativeTf[SignedNumber SignedNumeric](e SignedNumber, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NegativeTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NegativeT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NegativeT) | package-level function |
-| [`require.NegativeTf[SignedNumber SignedNumeric](t T, e SignedNumber, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NegativeTf) | formatted variant |
-| [`require.(*Assertions).NegativeT[SignedNumber SignedNumeric](e SignedNumber) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NegativeT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).NegativeTf[SignedNumber SignedNumeric](e SignedNumber, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NegativeTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.NegativeT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NegativeT) | package-level function |
+| [`require.NegativeTf[SignedNumber SignedNumeric](t T, e SignedNumber, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NegativeTf) | formatted variant |
+| [`require.(*Assertions).NegativeT[SignedNumber SignedNumeric](e SignedNumber)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NegativeT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).NegativeTf[SignedNumber SignedNumeric](e SignedNumber, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NegativeTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1335,15 +1335,15 @@ func main() {
 | [`assert.Positive(t T, e any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Positive) | package-level function |
 | [`assert.Positivef(t T, e any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Positivef) | formatted variant |
 | [`assert.(*Assertions).Positive(e any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Positive) | method variant |
-| [`assert.(*Assertions).Positivef(e any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Positivef) | method formatted variant |
+| [`assert.(*Assertions).Positivef(e any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Positivef) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Positive(t T, e any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Positive) | package-level function |
-| [`require.Positivef(t T, e any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Positivef) | formatted variant |
-| [`require.(*Assertions).Positive(e any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Positive) | method variant |
-| [`require.(*Assertions).Positivef(e any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Positivef) | method formatted variant |
+| [`require.Positive(t T, e any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Positive) | package-level function |
+| [`require.Positivef(t T, e any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Positivef) | formatted variant |
+| [`require.(*Assertions).Positive(e any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Positive) | method variant |
+| [`require.(*Assertions).Positivef(e any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Positivef) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1447,15 +1447,15 @@ func main() {
 | [`assert.PositiveT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#PositiveT) | package-level function |
 | [`assert.PositiveTf[SignedNumber SignedNumeric](t T, e SignedNumber, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#PositiveTf) | formatted variant |
 | [`assert.(*Assertions).PositiveT[SignedNumber SignedNumeric](e SignedNumber) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.PositiveT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).PositiveTf[SignedNumber SignedNumeric](e SignedNumber, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.PositiveTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).PositiveTf[SignedNumber SignedNumeric](e SignedNumber, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.PositiveTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.PositiveT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#PositiveT) | package-level function |
-| [`require.PositiveTf[SignedNumber SignedNumeric](t T, e SignedNumber, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#PositiveTf) | formatted variant |
-| [`require.(*Assertions).PositiveT[SignedNumber SignedNumeric](e SignedNumber) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.PositiveT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).PositiveTf[SignedNumber SignedNumeric](e SignedNumber, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.PositiveTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.PositiveT[SignedNumber SignedNumeric](t T, e SignedNumber, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#PositiveT) | package-level function |
+| [`require.PositiveTf[SignedNumber SignedNumeric](t T, e SignedNumber, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#PositiveTf) | formatted variant |
+| [`require.(*Assertions).PositiveT[SignedNumber SignedNumeric](e SignedNumber)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.PositiveT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).PositiveTf[SignedNumber SignedNumeric](e SignedNumber, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.PositiveTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

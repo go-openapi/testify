@@ -188,15 +188,15 @@ func main() {
 | [`assert.Contains(t T, s any, contains any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Contains) | package-level function |
 | [`assert.Containsf(t T, s any, contains any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Containsf) | formatted variant |
 | [`assert.(*Assertions).Contains(s any, contains any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Contains) | method variant |
-| [`assert.(*Assertions).Containsf(s any, contains any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Containsf) | method formatted variant |
+| [`assert.(*Assertions).Containsf(s any, contains any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Containsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Contains(t T, s any, contains any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Contains) | package-level function |
-| [`require.Containsf(t T, s any, contains any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Containsf) | formatted variant |
-| [`require.(*Assertions).Contains(s any, contains any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Contains) | method variant |
-| [`require.(*Assertions).Containsf(s any, contains any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Containsf) | method formatted variant |
+| [`require.Contains(t T, s any, contains any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Contains) | package-level function |
+| [`require.Containsf(t T, s any, contains any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Containsf) | formatted variant |
+| [`require.(*Assertions).Contains(s any, contains any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Contains) | method variant |
+| [`require.(*Assertions).Containsf(s any, contains any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Containsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -301,15 +301,15 @@ func main() {
 | [`assert.ElementsMatch(t T, listA any, listB any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ElementsMatch) | package-level function |
 | [`assert.ElementsMatchf(t T, listA any, listB any, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ElementsMatchf) | formatted variant |
 | [`assert.(*Assertions).ElementsMatch(listA any, listB any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ElementsMatch) | method variant |
-| [`assert.(*Assertions).ElementsMatchf(listA any, listB any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ElementsMatchf) | method formatted variant |
+| [`assert.(*Assertions).ElementsMatchf(listA any, listB any, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ElementsMatchf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.ElementsMatch(t T, listA any, listB any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ElementsMatch) | package-level function |
-| [`require.ElementsMatchf(t T, listA any, listB any, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ElementsMatchf) | formatted variant |
-| [`require.(*Assertions).ElementsMatch(listA any, listB any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ElementsMatch) | method variant |
-| [`require.(*Assertions).ElementsMatchf(listA any, listB any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ElementsMatchf) | method formatted variant |
+| [`require.ElementsMatch(t T, listA any, listB any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ElementsMatch) | package-level function |
+| [`require.ElementsMatchf(t T, listA any, listB any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ElementsMatchf) | formatted variant |
+| [`require.(*Assertions).ElementsMatch(listA any, listB any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ElementsMatch) | method variant |
+| [`require.(*Assertions).ElementsMatchf(listA any, listB any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ElementsMatchf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -414,15 +414,15 @@ func main() {
 | [`assert.ElementsMatchT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ElementsMatchT) | package-level function |
 | [`assert.ElementsMatchTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ElementsMatchTf) | formatted variant |
 | [`assert.(*Assertions).ElementsMatchT[E comparable](listA []E, listB []E) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ElementsMatchT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).ElementsMatchTf[E comparable](listA []E, listB []E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ElementsMatchTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).ElementsMatchTf[E comparable](listA []E, listB []E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.ElementsMatchTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.ElementsMatchT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ElementsMatchT) | package-level function |
-| [`require.ElementsMatchTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ElementsMatchTf) | formatted variant |
-| [`require.(*Assertions).ElementsMatchT[E comparable](listA []E, listB []E) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ElementsMatchT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).ElementsMatchTf[E comparable](listA []E, listB []E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ElementsMatchTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.ElementsMatchT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ElementsMatchT) | package-level function |
+| [`require.ElementsMatchTf[E comparable](t T, listA []E, listB []E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#ElementsMatchTf) | formatted variant |
+| [`require.(*Assertions).ElementsMatchT[E comparable](listA []E, listB []E)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ElementsMatchT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).ElementsMatchTf[E comparable](listA []E, listB []E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.ElementsMatchTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -531,15 +531,15 @@ func main() {
 | [`assert.Len(t T, object any, length int, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Len) | package-level function |
 | [`assert.Lenf(t T, object any, length int, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Lenf) | formatted variant |
 | [`assert.(*Assertions).Len(object any, length int) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Len) | method variant |
-| [`assert.(*Assertions).Lenf(object any, length int, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Lenf) | method formatted variant |
+| [`assert.(*Assertions).Lenf(object any, length int, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Lenf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Len(t T, object any, length int, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Len) | package-level function |
-| [`require.Lenf(t T, object any, length int, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Lenf) | formatted variant |
-| [`require.(*Assertions).Len(object any, length int) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Len) | method variant |
-| [`require.(*Assertions).Lenf(object any, length int, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Lenf) | method formatted variant |
+| [`require.Len(t T, object any, length int, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Len) | package-level function |
+| [`require.Lenf(t T, object any, length int, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Lenf) | formatted variant |
+| [`require.(*Assertions).Len(object any, length int)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Len) | method variant |
+| [`require.(*Assertions).Lenf(object any, length int, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Lenf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -649,15 +649,15 @@ func main() {
 | [`assert.MapContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#MapContainsT) | package-level function |
 | [`assert.MapContainsTf[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#MapContainsTf) | formatted variant |
 | [`assert.(*Assertions).MapContainsT[Map ~map[K]V, K comparable, V any](m Map, key K) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.MapContainsT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).MapContainsTf[Map ~map[K]V, K comparable, V any](m Map, key K, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.MapContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).MapContainsTf[Map ~map[K]V, K comparable, V any](m Map, key K, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.MapContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.MapContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapContainsT) | package-level function |
-| [`require.MapContainsTf[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapContainsTf) | formatted variant |
-| [`require.(*Assertions).MapContainsT[Map ~map[K]V, K comparable, V any](m Map, key K) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.MapContainsT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).MapContainsTf[Map ~map[K]V, K comparable, V any](m Map, key K, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.MapContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.MapContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapContainsT) | package-level function |
+| [`require.MapContainsTf[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapContainsTf) | formatted variant |
+| [`require.(*Assertions).MapContainsT[Map ~map[K]V, K comparable, V any](m Map, key K)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.MapContainsT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).MapContainsTf[Map ~map[K]V, K comparable, V any](m Map, key K, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.MapContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -765,15 +765,15 @@ func main() {
 | [`assert.MapEqualT[K, V comparable](t T, listA map[K]V, listB map[K]V, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#MapEqualT) | package-level function |
 | [`assert.MapEqualTf[K, V comparable](t T, listA map[K]V, listB map[K]V, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#MapEqualTf) | formatted variant |
 | [`assert.(*Assertions).MapEqualT[K, V comparable](listA map[K]V, listB map[K]V) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.MapEqualT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).MapEqualTf[K, V comparable](listA map[K]V, listB map[K]V, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.MapEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).MapEqualTf[K, V comparable](listA map[K]V, listB map[K]V, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.MapEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.MapEqualT[K, V comparable](t T, listA map[K]V, listB map[K]V, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapEqualT) | package-level function |
-| [`require.MapEqualTf[K, V comparable](t T, listA map[K]V, listB map[K]V, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapEqualTf) | formatted variant |
-| [`require.(*Assertions).MapEqualT[K, V comparable](listA map[K]V, listB map[K]V) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.MapEqualT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).MapEqualTf[K, V comparable](listA map[K]V, listB map[K]V, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.MapEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.MapEqualT[K, V comparable](t T, listA map[K]V, listB map[K]V, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapEqualT) | package-level function |
+| [`require.MapEqualTf[K, V comparable](t T, listA map[K]V, listB map[K]V, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapEqualTf) | formatted variant |
+| [`require.(*Assertions).MapEqualT[K, V comparable](listA map[K]V, listB map[K]V)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.MapEqualT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).MapEqualTf[K, V comparable](listA map[K]V, listB map[K]V, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.MapEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -876,15 +876,15 @@ func main() {
 | [`assert.MapNotContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#MapNotContainsT) | package-level function |
 | [`assert.MapNotContainsTf[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#MapNotContainsTf) | formatted variant |
 | [`assert.(*Assertions).MapNotContainsT[Map ~map[K]V, K comparable, V any](m Map, key K) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.MapNotContainsT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).MapNotContainsTf[Map ~map[K]V, K comparable, V any](m Map, key K, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.MapNotContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).MapNotContainsTf[Map ~map[K]V, K comparable, V any](m Map, key K, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.MapNotContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.MapNotContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapNotContainsT) | package-level function |
-| [`require.MapNotContainsTf[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapNotContainsTf) | formatted variant |
-| [`require.(*Assertions).MapNotContainsT[Map ~map[K]V, K comparable, V any](m Map, key K) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.MapNotContainsT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).MapNotContainsTf[Map ~map[K]V, K comparable, V any](m Map, key K, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.MapNotContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.MapNotContainsT[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapNotContainsT) | package-level function |
+| [`require.MapNotContainsTf[Map ~map[K]V, K comparable, V any](t T, m Map, key K, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapNotContainsTf) | formatted variant |
+| [`require.(*Assertions).MapNotContainsT[Map ~map[K]V, K comparable, V any](m Map, key K)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.MapNotContainsT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).MapNotContainsTf[Map ~map[K]V, K comparable, V any](m Map, key K, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.MapNotContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -991,15 +991,15 @@ func main() {
 | [`assert.MapNotEqualT[K, V comparable](t T, listA map[K]V, listB map[K]V, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#MapNotEqualT) | package-level function |
 | [`assert.MapNotEqualTf[K, V comparable](t T, listA map[K]V, listB map[K]V, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#MapNotEqualTf) | formatted variant |
 | [`assert.(*Assertions).MapNotEqualT[K, V comparable](listA map[K]V, listB map[K]V) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.MapNotEqualT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).MapNotEqualTf[K, V comparable](listA map[K]V, listB map[K]V, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.MapNotEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).MapNotEqualTf[K, V comparable](listA map[K]V, listB map[K]V, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.MapNotEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.MapNotEqualT[K, V comparable](t T, listA map[K]V, listB map[K]V, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapNotEqualT) | package-level function |
-| [`require.MapNotEqualTf[K, V comparable](t T, listA map[K]V, listB map[K]V, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapNotEqualTf) | formatted variant |
-| [`require.(*Assertions).MapNotEqualT[K, V comparable](listA map[K]V, listB map[K]V) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.MapNotEqualT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).MapNotEqualTf[K, V comparable](listA map[K]V, listB map[K]V, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.MapNotEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.MapNotEqualT[K, V comparable](t T, listA map[K]V, listB map[K]V, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapNotEqualT) | package-level function |
+| [`require.MapNotEqualTf[K, V comparable](t T, listA map[K]V, listB map[K]V, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#MapNotEqualTf) | formatted variant |
+| [`require.(*Assertions).MapNotEqualT[K, V comparable](listA map[K]V, listB map[K]V)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.MapNotEqualT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).MapNotEqualTf[K, V comparable](listA map[K]V, listB map[K]V, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.MapNotEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1105,15 +1105,15 @@ func main() {
 | [`assert.NotContains(t T, s any, contains any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotContains) | package-level function |
 | [`assert.NotContainsf(t T, s any, contains any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotContainsf) | formatted variant |
 | [`assert.(*Assertions).NotContains(s any, contains any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotContains) | method variant |
-| [`assert.(*Assertions).NotContainsf(s any, contains any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotContainsf) | method formatted variant |
+| [`assert.(*Assertions).NotContainsf(s any, contains any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotContainsf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NotContains(t T, s any, contains any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotContains) | package-level function |
-| [`require.NotContainsf(t T, s any, contains any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotContainsf) | formatted variant |
-| [`require.(*Assertions).NotContains(s any, contains any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotContains) | method variant |
-| [`require.(*Assertions).NotContainsf(s any, contains any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotContainsf) | method formatted variant |
+| [`require.NotContains(t T, s any, contains any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotContains) | package-level function |
+| [`require.NotContainsf(t T, s any, contains any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotContainsf) | formatted variant |
+| [`require.(*Assertions).NotContains(s any, contains any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotContains) | method variant |
+| [`require.(*Assertions).NotContainsf(s any, contains any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotContainsf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1221,15 +1221,15 @@ func main() {
 | [`assert.NotElementsMatch(t T, listA any, listB any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotElementsMatch) | package-level function |
 | [`assert.NotElementsMatchf(t T, listA any, listB any, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotElementsMatchf) | formatted variant |
 | [`assert.(*Assertions).NotElementsMatch(listA any, listB any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotElementsMatch) | method variant |
-| [`assert.(*Assertions).NotElementsMatchf(listA any, listB any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotElementsMatchf) | method formatted variant |
+| [`assert.(*Assertions).NotElementsMatchf(listA any, listB any, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotElementsMatchf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NotElementsMatch(t T, listA any, listB any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotElementsMatch) | package-level function |
-| [`require.NotElementsMatchf(t T, listA any, listB any, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotElementsMatchf) | formatted variant |
-| [`require.(*Assertions).NotElementsMatch(listA any, listB any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotElementsMatch) | method variant |
-| [`require.(*Assertions).NotElementsMatchf(listA any, listB any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotElementsMatchf) | method formatted variant |
+| [`require.NotElementsMatch(t T, listA any, listB any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotElementsMatch) | package-level function |
+| [`require.NotElementsMatchf(t T, listA any, listB any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotElementsMatchf) | formatted variant |
+| [`require.(*Assertions).NotElementsMatch(listA any, listB any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotElementsMatch) | method variant |
+| [`require.(*Assertions).NotElementsMatchf(listA any, listB any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotElementsMatchf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1337,15 +1337,15 @@ func main() {
 | [`assert.NotElementsMatchT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotElementsMatchT) | package-level function |
 | [`assert.NotElementsMatchTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotElementsMatchTf) | formatted variant |
 | [`assert.(*Assertions).NotElementsMatchT[E comparable](listA []E, listB []E) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotElementsMatchT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).NotElementsMatchTf[E comparable](listA []E, listB []E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotElementsMatchTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).NotElementsMatchTf[E comparable](listA []E, listB []E, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotElementsMatchTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NotElementsMatchT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotElementsMatchT) | package-level function |
-| [`require.NotElementsMatchTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotElementsMatchTf) | formatted variant |
-| [`require.(*Assertions).NotElementsMatchT[E comparable](listA []E, listB []E) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotElementsMatchT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).NotElementsMatchTf[E comparable](listA []E, listB []E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotElementsMatchTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.NotElementsMatchT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotElementsMatchT) | package-level function |
+| [`require.NotElementsMatchTf[E comparable](t T, listA []E, listB []E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotElementsMatchTf) | formatted variant |
+| [`require.(*Assertions).NotElementsMatchT[E comparable](listA []E, listB []E)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotElementsMatchT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).NotElementsMatchTf[E comparable](listA []E, listB []E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotElementsMatchTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1454,15 +1454,15 @@ func main() {
 | [`assert.NotSubset(t T, list any, subset any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotSubset) | package-level function |
 | [`assert.NotSubsetf(t T, list any, subset any, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotSubsetf) | formatted variant |
 | [`assert.(*Assertions).NotSubset(list any, subset any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotSubset) | method variant |
-| [`assert.(*Assertions).NotSubsetf(list any, subset any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotSubsetf) | method formatted variant |
+| [`assert.(*Assertions).NotSubsetf(list any, subset any, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.NotSubsetf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.NotSubset(t T, list any, subset any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotSubset) | package-level function |
-| [`require.NotSubsetf(t T, list any, subset any, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotSubsetf) | formatted variant |
-| [`require.(*Assertions).NotSubset(list any, subset any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotSubset) | method variant |
-| [`require.(*Assertions).NotSubsetf(list any, subset any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotSubsetf) | method formatted variant |
+| [`require.NotSubset(t T, list any, subset any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotSubset) | package-level function |
+| [`require.NotSubsetf(t T, list any, subset any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#NotSubsetf) | formatted variant |
+| [`require.(*Assertions).NotSubset(list any, subset any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotSubset) | method variant |
+| [`require.(*Assertions).NotSubsetf(list any, subset any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.NotSubsetf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1571,15 +1571,15 @@ func main() {
 | [`assert.SeqContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SeqContainsT) | package-level function |
 | [`assert.SeqContainsTf[E comparable](t T, iter iter.Seq[E], element E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SeqContainsTf) | formatted variant |
 | [`assert.(*Assertions).SeqContainsT[E comparable](iter iter.Seq[E], element E) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SeqContainsT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).SeqContainsTf[E comparable](iter iter.Seq[E], element E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SeqContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).SeqContainsTf[E comparable](iter iter.Seq[E], element E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SeqContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.SeqContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SeqContainsT) | package-level function |
-| [`require.SeqContainsTf[E comparable](t T, iter iter.Seq[E], element E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SeqContainsTf) | formatted variant |
-| [`require.(*Assertions).SeqContainsT[E comparable](iter iter.Seq[E], element E) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SeqContainsT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).SeqContainsTf[E comparable](iter iter.Seq[E], element E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SeqContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.SeqContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SeqContainsT) | package-level function |
+| [`require.SeqContainsTf[E comparable](t T, iter iter.Seq[E], element E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SeqContainsTf) | formatted variant |
+| [`require.(*Assertions).SeqContainsT[E comparable](iter iter.Seq[E], element E)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SeqContainsT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).SeqContainsTf[E comparable](iter iter.Seq[E], element E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SeqContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1686,15 +1686,15 @@ func main() {
 | [`assert.SeqNotContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SeqNotContainsT) | package-level function |
 | [`assert.SeqNotContainsTf[E comparable](t T, iter iter.Seq[E], element E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SeqNotContainsTf) | formatted variant |
 | [`assert.(*Assertions).SeqNotContainsT[E comparable](iter iter.Seq[E], element E) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SeqNotContainsT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).SeqNotContainsTf[E comparable](iter iter.Seq[E], element E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SeqNotContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).SeqNotContainsTf[E comparable](iter iter.Seq[E], element E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SeqNotContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.SeqNotContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SeqNotContainsT) | package-level function |
-| [`require.SeqNotContainsTf[E comparable](t T, iter iter.Seq[E], element E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SeqNotContainsTf) | formatted variant |
-| [`require.(*Assertions).SeqNotContainsT[E comparable](iter iter.Seq[E], element E) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SeqNotContainsT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).SeqNotContainsTf[E comparable](iter iter.Seq[E], element E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SeqNotContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.SeqNotContainsT[E comparable](t T, iter iter.Seq[E], element E, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SeqNotContainsT) | package-level function |
+| [`require.SeqNotContainsTf[E comparable](t T, iter iter.Seq[E], element E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SeqNotContainsTf) | formatted variant |
+| [`require.(*Assertions).SeqNotContainsT[E comparable](iter iter.Seq[E], element E)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SeqNotContainsT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).SeqNotContainsTf[E comparable](iter iter.Seq[E], element E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SeqNotContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1799,15 +1799,15 @@ func main() {
 | [`assert.SliceContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceContainsT) | package-level function |
 | [`assert.SliceContainsTf[Slice ~[]E, E comparable](t T, s Slice, element E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceContainsTf) | formatted variant |
 | [`assert.(*Assertions).SliceContainsT[Slice ~[]E, E comparable](s Slice, element E) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SliceContainsT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).SliceContainsTf[Slice ~[]E, E comparable](s Slice, element E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SliceContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).SliceContainsTf[Slice ~[]E, E comparable](s Slice, element E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SliceContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.SliceContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceContainsT) | package-level function |
-| [`require.SliceContainsTf[Slice ~[]E, E comparable](t T, s Slice, element E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceContainsTf) | formatted variant |
-| [`require.(*Assertions).SliceContainsT[Slice ~[]E, E comparable](s Slice, element E) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceContainsT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).SliceContainsTf[Slice ~[]E, E comparable](s Slice, element E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.SliceContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceContainsT) | package-level function |
+| [`require.SliceContainsTf[Slice ~[]E, E comparable](t T, s Slice, element E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceContainsTf) | formatted variant |
+| [`require.(*Assertions).SliceContainsT[Slice ~[]E, E comparable](s Slice, element E)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceContainsT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).SliceContainsTf[Slice ~[]E, E comparable](s Slice, element E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -1915,15 +1915,15 @@ func main() {
 | [`assert.SliceEqualT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceEqualT) | package-level function |
 | [`assert.SliceEqualTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceEqualTf) | formatted variant |
 | [`assert.(*Assertions).SliceEqualT[E comparable](listA []E, listB []E) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SliceEqualT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).SliceEqualTf[E comparable](listA []E, listB []E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SliceEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).SliceEqualTf[E comparable](listA []E, listB []E, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SliceEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.SliceEqualT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceEqualT) | package-level function |
-| [`require.SliceEqualTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceEqualTf) | formatted variant |
-| [`require.(*Assertions).SliceEqualT[E comparable](listA []E, listB []E) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceEqualT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).SliceEqualTf[E comparable](listA []E, listB []E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.SliceEqualT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceEqualT) | package-level function |
+| [`require.SliceEqualTf[E comparable](t T, listA []E, listB []E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceEqualTf) | formatted variant |
+| [`require.(*Assertions).SliceEqualT[E comparable](listA []E, listB []E)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceEqualT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).SliceEqualTf[E comparable](listA []E, listB []E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -2028,15 +2028,15 @@ func main() {
 | [`assert.SliceNotContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceNotContainsT) | package-level function |
 | [`assert.SliceNotContainsTf[Slice ~[]E, E comparable](t T, s Slice, element E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceNotContainsTf) | formatted variant |
 | [`assert.(*Assertions).SliceNotContainsT[Slice ~[]E, E comparable](s Slice, element E) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SliceNotContainsT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).SliceNotContainsTf[Slice ~[]E, E comparable](s Slice, element E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SliceNotContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).SliceNotContainsTf[Slice ~[]E, E comparable](s Slice, element E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SliceNotContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.SliceNotContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceNotContainsT) | package-level function |
-| [`require.SliceNotContainsTf[Slice ~[]E, E comparable](t T, s Slice, element E, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceNotContainsTf) | formatted variant |
-| [`require.(*Assertions).SliceNotContainsT[Slice ~[]E, E comparable](s Slice, element E) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceNotContainsT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).SliceNotContainsTf[Slice ~[]E, E comparable](s Slice, element E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceNotContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.SliceNotContainsT[Slice ~[]E, E comparable](t T, s Slice, element E, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceNotContainsT) | package-level function |
+| [`require.SliceNotContainsTf[Slice ~[]E, E comparable](t T, s Slice, element E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceNotContainsTf) | formatted variant |
+| [`require.(*Assertions).SliceNotContainsT[Slice ~[]E, E comparable](s Slice, element E)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceNotContainsT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).SliceNotContainsTf[Slice ~[]E, E comparable](s Slice, element E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceNotContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -2143,15 +2143,15 @@ func main() {
 | [`assert.SliceNotEqualT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceNotEqualT) | package-level function |
 | [`assert.SliceNotEqualTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceNotEqualTf) | formatted variant |
 | [`assert.(*Assertions).SliceNotEqualT[E comparable](listA []E, listB []E) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SliceNotEqualT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).SliceNotEqualTf[E comparable](listA []E, listB []E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SliceNotEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).SliceNotEqualTf[E comparable](listA []E, listB []E, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SliceNotEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.SliceNotEqualT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceNotEqualT) | package-level function |
-| [`require.SliceNotEqualTf[E comparable](t T, listA []E, listB []E, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceNotEqualTf) | formatted variant |
-| [`require.(*Assertions).SliceNotEqualT[E comparable](listA []E, listB []E) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceNotEqualT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).SliceNotEqualTf[E comparable](listA []E, listB []E, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceNotEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.SliceNotEqualT[E comparable](t T, listA []E, listB []E, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceNotEqualT) | package-level function |
+| [`require.SliceNotEqualTf[E comparable](t T, listA []E, listB []E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceNotEqualTf) | formatted variant |
+| [`require.(*Assertions).SliceNotEqualT[E comparable](listA []E, listB []E)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceNotEqualT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).SliceNotEqualTf[E comparable](listA []E, listB []E, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceNotEqualTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -2254,15 +2254,15 @@ func main() {
 | [`assert.SliceNotSubsetT[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceNotSubsetT) | package-level function |
 | [`assert.SliceNotSubsetTf[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceNotSubsetTf) | formatted variant |
 | [`assert.(*Assertions).SliceNotSubsetT[Slice ~[]E, E comparable](list Slice, subset Slice) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SliceNotSubsetT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).SliceNotSubsetTf[Slice ~[]E, E comparable](list Slice, subset Slice, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SliceNotSubsetTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).SliceNotSubsetTf[Slice ~[]E, E comparable](list Slice, subset Slice, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SliceNotSubsetTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.SliceNotSubsetT[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceNotSubsetT) | package-level function |
-| [`require.SliceNotSubsetTf[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceNotSubsetTf) | formatted variant |
-| [`require.(*Assertions).SliceNotSubsetT[Slice ~[]E, E comparable](list Slice, subset Slice) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceNotSubsetT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).SliceNotSubsetTf[Slice ~[]E, E comparable](list Slice, subset Slice, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceNotSubsetTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.SliceNotSubsetT[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceNotSubsetT) | package-level function |
+| [`require.SliceNotSubsetTf[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceNotSubsetTf) | formatted variant |
+| [`require.(*Assertions).SliceNotSubsetT[Slice ~[]E, E comparable](list Slice, subset Slice)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceNotSubsetT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).SliceNotSubsetTf[Slice ~[]E, E comparable](list Slice, subset Slice, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceNotSubsetTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -2365,15 +2365,15 @@ func main() {
 | [`assert.SliceSubsetT[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceSubsetT) | package-level function |
 | [`assert.SliceSubsetTf[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#SliceSubsetTf) | formatted variant |
 | [`assert.(*Assertions).SliceSubsetT[Slice ~[]E, E comparable](list Slice, subset Slice) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SliceSubsetT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).SliceSubsetTf[Slice ~[]E, E comparable](list Slice, subset Slice, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SliceSubsetTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).SliceSubsetTf[Slice ~[]E, E comparable](list Slice, subset Slice, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.SliceSubsetTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.SliceSubsetT[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceSubsetT) | package-level function |
-| [`require.SliceSubsetTf[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceSubsetTf) | formatted variant |
-| [`require.(*Assertions).SliceSubsetT[Slice ~[]E, E comparable](list Slice, subset Slice) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceSubsetT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).SliceSubsetTf[Slice ~[]E, E comparable](list Slice, subset Slice, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceSubsetTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.SliceSubsetT[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceSubsetT) | package-level function |
+| [`require.SliceSubsetTf[Slice ~[]E, E comparable](t T, list Slice, subset Slice, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#SliceSubsetTf) | formatted variant |
+| [`require.(*Assertions).SliceSubsetT[Slice ~[]E, E comparable](list Slice, subset Slice)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceSubsetT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).SliceSubsetTf[Slice ~[]E, E comparable](list Slice, subset Slice, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.SliceSubsetTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -2478,15 +2478,15 @@ func main() {
 | [`assert.StringContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#StringContainsT) | package-level function |
 | [`assert.StringContainsTf[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#StringContainsTf) | formatted variant |
 | [`assert.(*Assertions).StringContainsT[ADoc, EDoc Text](str ADoc, substring EDoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.StringContainsT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).StringContainsTf[ADoc, EDoc Text](str ADoc, substring EDoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.StringContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).StringContainsTf[ADoc, EDoc Text](str ADoc, substring EDoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.StringContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.StringContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#StringContainsT) | package-level function |
-| [`require.StringContainsTf[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#StringContainsTf) | formatted variant |
-| [`require.(*Assertions).StringContainsT[ADoc, EDoc Text](str ADoc, substring EDoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.StringContainsT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).StringContainsTf[ADoc, EDoc Text](str ADoc, substring EDoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.StringContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.StringContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#StringContainsT) | package-level function |
+| [`require.StringContainsTf[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#StringContainsTf) | formatted variant |
+| [`require.(*Assertions).StringContainsT[ADoc, EDoc Text](str ADoc, substring EDoc)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.StringContainsT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).StringContainsTf[ADoc, EDoc Text](str ADoc, substring EDoc, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.StringContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -2591,15 +2591,15 @@ func main() {
 | [`assert.StringNotContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#StringNotContainsT) | package-level function |
 | [`assert.StringNotContainsTf[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#StringNotContainsTf) | formatted variant |
 | [`assert.(*Assertions).StringNotContainsT[ADoc, EDoc Text](str ADoc, substring EDoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.StringNotContainsT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).StringNotContainsTf[ADoc, EDoc Text](str ADoc, substring EDoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.StringNotContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).StringNotContainsTf[ADoc, EDoc Text](str ADoc, substring EDoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.StringNotContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.StringNotContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#StringNotContainsT) | package-level function |
-| [`require.StringNotContainsTf[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#StringNotContainsTf) | formatted variant |
-| [`require.(*Assertions).StringNotContainsT[ADoc, EDoc Text](str ADoc, substring EDoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.StringNotContainsT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).StringNotContainsTf[ADoc, EDoc Text](str ADoc, substring EDoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.StringNotContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.StringNotContainsT[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#StringNotContainsT) | package-level function |
+| [`require.StringNotContainsTf[ADoc, EDoc Text](t T, str ADoc, substring EDoc, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#StringNotContainsTf) | formatted variant |
+| [`require.(*Assertions).StringNotContainsT[ADoc, EDoc Text](str ADoc, substring EDoc)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.StringNotContainsT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).StringNotContainsTf[ADoc, EDoc Text](str ADoc, substring EDoc, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.StringNotContainsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -2711,15 +2711,15 @@ func main() {
 | [`assert.Subset(t T, list any, subset any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Subset) | package-level function |
 | [`assert.Subsetf(t T, list any, subset any, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Subsetf) | formatted variant |
 | [`assert.(*Assertions).Subset(list any, subset any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Subset) | method variant |
-| [`assert.(*Assertions).Subsetf(list any, subset any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Subsetf) | method formatted variant |
+| [`assert.(*Assertions).Subsetf(list any, subset any, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.Subsetf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.Subset(t T, list any, subset any, msgAndArgs ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Subset) | package-level function |
-| [`require.Subsetf(t T, list any, subset any, msg string, args ...any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Subsetf) | formatted variant |
-| [`require.(*Assertions).Subset(list any, subset any) (ok bool)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Subset) | method variant |
-| [`require.(*Assertions).Subsetf(list any, subset any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Subsetf) | method formatted variant |
+| [`require.Subset(t T, list any, subset any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Subset) | package-level function |
+| [`require.Subsetf(t T, list any, subset any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Subsetf) | formatted variant |
+| [`require.(*Assertions).Subset(list any, subset any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Subset) | method variant |
+| [`require.(*Assertions).Subsetf(list any, subset any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.Subsetf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}

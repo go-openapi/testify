@@ -64,15 +64,15 @@ See [YAMLEqBytes](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAM
 | [`assert.YAMLEq(t T, expected string, actual string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLEq) | package-level function |
 | [`assert.YAMLEqf(t T, expected string, actual string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLEqf) | formatted variant |
 | [`assert.(*Assertions).YAMLEq(expected string, actual string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.YAMLEq) | method variant |
-| [`assert.(*Assertions).YAMLEqf(expected string, actual string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.YAMLEqf) | method formatted variant |
+| [`assert.(*Assertions).YAMLEqf(expected string, actual string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.YAMLEqf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.YAMLEq(t T, expected string, actual string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLEq) | package-level function |
-| [`require.YAMLEqf(t T, expected string, actual string, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLEqf) | formatted variant |
-| [`require.(*Assertions).YAMLEq(expected string, actual string) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLEq) | method variant |
-| [`require.(*Assertions).YAMLEqf(expected string, actual string, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLEqf) | method formatted variant |
+| [`require.YAMLEq(t T, expected string, actual string, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLEq) | package-level function |
+| [`require.YAMLEqf(t T, expected string, actual string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLEqf) | formatted variant |
+| [`require.(*Assertions).YAMLEq(expected string, actual string)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLEq) | method variant |
+| [`require.(*Assertions).YAMLEqf(expected string, actual string, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLEqf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -135,15 +135,15 @@ For dynamic redaction of the input text via a callback, use [YAMLEqT](https://pk
 | [`assert.YAMLEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLEqBytes) | package-level function |
 | [`assert.YAMLEqBytesf(t T, expected []byte, actual []byte, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLEqBytesf) | formatted variant |
 | [`assert.(*Assertions).YAMLEqBytes(expected []byte, actual []byte) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.YAMLEqBytes) | method variant |
-| [`assert.(*Assertions).YAMLEqBytesf(expected []byte, actual []byte, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.YAMLEqBytesf) | method formatted variant |
+| [`assert.(*Assertions).YAMLEqBytesf(expected []byte, actual []byte, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.YAMLEqBytesf) | method formatted variant |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.YAMLEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLEqBytes) | package-level function |
-| [`require.YAMLEqBytesf(t T, expected []byte, actual []byte, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLEqBytesf) | formatted variant |
-| [`require.(*Assertions).YAMLEqBytes(expected []byte, actual []byte) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLEqBytes) | method variant |
-| [`require.(*Assertions).YAMLEqBytesf(expected []byte, actual []byte, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLEqBytesf) | method formatted variant |
+| [`require.YAMLEqBytes(t T, expected []byte, actual []byte, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLEqBytes) | package-level function |
+| [`require.YAMLEqBytesf(t T, expected []byte, actual []byte, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLEqBytesf) | formatted variant |
+| [`require.(*Assertions).YAMLEqBytes(expected []byte, actual []byte)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLEqBytes) | method variant |
+| [`require.(*Assertions).YAMLEqBytesf(expected []byte, actual []byte, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLEqBytesf) | method formatted variant |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -183,15 +183,15 @@ NOTE: passed values (expected, actual) may be wrapped as functions to redact the
 | [`assert.YAMLEqT[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLEqT) | package-level function |
 | [`assert.YAMLEqTf[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLEqTf) | formatted variant |
 | [`assert.(*Assertions).YAMLEqT[EDoc, ADoc RText](expected EDoc, actual ADoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.YAMLEqT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).YAMLEqTf[EDoc, ADoc RText](expected EDoc, actual ADoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.YAMLEqTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).YAMLEqTf[EDoc, ADoc RText](expected EDoc, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.YAMLEqTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.YAMLEqT[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLEqT) | package-level function |
-| [`require.YAMLEqTf[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLEqTf) | formatted variant |
-| [`require.(*Assertions).YAMLEqT[EDoc, ADoc RText](expected EDoc, actual ADoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLEqT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).YAMLEqTf[EDoc, ADoc RText](expected EDoc, actual ADoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLEqTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.YAMLEqT[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLEqT) | package-level function |
+| [`require.YAMLEqTf[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLEqTf) | formatted variant |
+| [`require.(*Assertions).YAMLEqT[EDoc, ADoc RText](expected EDoc, actual ADoc)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLEqT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).YAMLEqTf[EDoc, ADoc RText](expected EDoc, actual ADoc, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLEqTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -242,15 +242,15 @@ NOTE: passed expected value may be wrapped as a function to redact the input tex
 | [`assert.YAMLMarshalAsT[EDoc RText](t T, expected EDoc, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLMarshalAsT) | package-level function |
 | [`assert.YAMLMarshalAsTf[EDoc RText](t T, expected EDoc, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLMarshalAsTf) | formatted variant |
 | [`assert.(*Assertions).YAMLMarshalAsT[EDoc RText](expected EDoc, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.YAMLMarshalAsT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).YAMLMarshalAsTf[EDoc RText](expected EDoc, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.YAMLMarshalAsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).YAMLMarshalAsTf[EDoc RText](expected EDoc, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.YAMLMarshalAsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.YAMLMarshalAsT[EDoc RText](t T, expected EDoc, object any, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLMarshalAsT) | package-level function |
-| [`require.YAMLMarshalAsTf[EDoc RText](t T, expected EDoc, object any, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLMarshalAsTf) | formatted variant |
-| [`require.(*Assertions).YAMLMarshalAsT[EDoc RText](expected EDoc, object any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLMarshalAsT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).YAMLMarshalAsTf[EDoc RText](expected EDoc, object any, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLMarshalAsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.YAMLMarshalAsT[EDoc RText](t T, expected EDoc, object any, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLMarshalAsT) | package-level function |
+| [`require.YAMLMarshalAsTf[EDoc RText](t T, expected EDoc, object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLMarshalAsTf) | formatted variant |
+| [`require.(*Assertions).YAMLMarshalAsT[EDoc RText](expected EDoc, object any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLMarshalAsT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).YAMLMarshalAsTf[EDoc RText](expected EDoc, object any, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLMarshalAsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
@@ -303,15 +303,15 @@ NOTE: passed yamlDoc value may be wrapped as a function to redact the input text
 | [`assert.YAMLUnmarshalAsT[Object any, ADoc RText](t T, expected Object, yamlDoc ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLUnmarshalAsT) | package-level function |
 | [`assert.YAMLUnmarshalAsTf[Object any, ADoc RText](t T, expected Object, yamlDoc ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#YAMLUnmarshalAsTf) | formatted variant |
 | [`assert.(*Assertions).YAMLUnmarshalAsT[Object any, ADoc RText](expected Object, yamlDoc ADoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.YAMLUnmarshalAsT) | method variant {{% goversion "go1.27" %}} |
-| [`assert.(*Assertions).YAMLUnmarshalAsTf[Object any, ADoc RText](expected Object, yamlDoc ADoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.YAMLUnmarshalAsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`assert.(*Assertions).YAMLUnmarshalAsTf[Object any, ADoc RText](expected Object, yamlDoc ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Assertions.YAMLUnmarshalAsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 {{% tab title="require" style="secondary" %}}
 | Signature | Usage |
 |--|--|
-| [`require.YAMLUnmarshalAsT[Object any, ADoc RText](t T, expected Object, yamlDoc ADoc, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLUnmarshalAsT) | package-level function |
-| [`require.YAMLUnmarshalAsTf[Object any, ADoc RText](t T, expected Object, yamlDoc ADoc, msg string, args ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLUnmarshalAsTf) | formatted variant |
-| [`require.(*Assertions).YAMLUnmarshalAsT[Object any, ADoc RText](expected Object, yamlDoc ADoc) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLUnmarshalAsT) | method variant {{% goversion "go1.27" %}} |
-| [`require.(*Assertions).YAMLUnmarshalAsTf[Object any, ADoc RText](expected Object, yamlDoc ADoc, msg string, args ..any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLUnmarshalAsTf) | method formatted variant {{% goversion "go1.27" %}} |
+| [`require.YAMLUnmarshalAsT[Object any, ADoc RText](t T, expected Object, yamlDoc ADoc, msgAndArgs ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLUnmarshalAsT) | package-level function |
+| [`require.YAMLUnmarshalAsTf[Object any, ADoc RText](t T, expected Object, yamlDoc ADoc, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#YAMLUnmarshalAsTf) | formatted variant |
+| [`require.(*Assertions).YAMLUnmarshalAsT[Object any, ADoc RText](expected Object, yamlDoc ADoc)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLUnmarshalAsT) | method variant {{% goversion "go1.27" %}} |
+| [`require.(*Assertions).YAMLUnmarshalAsTf[Object any, ADoc RText](expected Object, yamlDoc ADoc, msg string, args ...any)`](https://pkg.go.dev/github.com/go-openapi/testify/v2/require#Assertions.YAMLUnmarshalAsTf) | method formatted variant {{% goversion "go1.27" %}} |
 {{% /tab %}}
 
 {{% tab title="internal" style="accent" icon="wrench" %}}
