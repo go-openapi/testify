@@ -1,6 +1,13 @@
 // SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
 // SPDX-License-Identifier: Apache-2.0
 
+// These tests make the generator emit generic methods, which x/tools/imports formats with
+// the go/parser of the toolchain running the test. Before go1.27 that parser rejects them
+// ("method must have no type parameters"), whatever //go:build line the generated file
+// carries, so the tests only build on go1.27 and later.
+
+//go:build go1.27
+
 package generator
 
 import (
