@@ -17,11 +17,11 @@ We thank these members for their service to this community.
 
 | Total Contributors | Total Contributions |
 | --- | --- |
-| 255  | 1256  |
+| 255  | 1307  |
 
 | Username | All Time Contribution Count | All Commits |
 | --- | --- | --- |
-| @fredbi | 194 | <https://github.com/go-openapi/testify/commits?author=fredbi> |
+| @fredbi | 245 | <https://github.com/go-openapi/testify/commits?author=fredbi> |
 | @ernesto-jimenez | 129 | <https://github.com/go-openapi/testify/commits?author=ernesto-jimenez> |
 | @brackendawson | 110 | <https://github.com/go-openapi/testify/commits?author=brackendawson> |
 | @dolmen | 103 | <https://github.com/go-openapi/testify/commits?author=dolmen> |
@@ -33,9 +33,9 @@ We thank these members for their service to this community.
 | @nelsam | 17 | <https://github.com/go-openapi/testify/commits?author=nelsam> |
 | @alexpantyukhin | 16 | <https://github.com/go-openapi/testify/commits?author=alexpantyukhin> |
 | @DAddYE | 14 | <https://github.com/go-openapi/testify/commits?author=DAddYE> |
-| @MovieStoreGuy | 11 | <https://github.com/go-openapi/testify/commits?author=MovieStoreGuy> |
-| @mikeauclair | 11 | <https://github.com/go-openapi/testify/commits?author=mikeauclair> |
 | @architagr | 11 | <https://github.com/go-openapi/testify/commits?author=architagr> |
+| @mikeauclair | 11 | <https://github.com/go-openapi/testify/commits?author=mikeauclair> |
+| @MovieStoreGuy | 11 | <https://github.com/go-openapi/testify/commits?author=MovieStoreGuy> |
 | @arjunmahishi | 10 | <https://github.com/go-openapi/testify/commits?author=arjunmahishi> |
 | @arjun-1 | 9 | <https://github.com/go-openapi/testify/commits?author=arjun-1> |
 | @esdrasbeleza | 9 | <https://github.com/go-openapi/testify/commits?author=esdrasbeleza> |
