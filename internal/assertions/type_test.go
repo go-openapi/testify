@@ -266,10 +266,10 @@ func typeNonZeros() iter.Seq[any] {
 		[]any{},
 		struct{ x int }{1},
 		(&i),
-		(func() {}),
+		func() {},
 		any(1),
 		map[any]any{},
-		(make(chan any)),
+		make(chan any),
 		(<-chan any)(make(chan any)),
 		(chan<- any)(make(chan any)),
 	})
@@ -304,7 +304,7 @@ func kindCases() iter.Seq[kindCase] {
 		// True
 		{reflect.Invalid, any(nil), true, "legitimate expectation of reflect.Invalid (any)"},
 		{reflect.Pointer, (*any)(nil), true, "legitimate expectation of reflect.Pointer (*any)"},
-		{reflect.Invalid, (error)(nil), true, "legitimate expectation of reflect.Invalid (error)"},
+		{reflect.Invalid, error(nil), true, "legitimate expectation of reflect.Invalid (error)"},
 		{reflect.Invalid, nil, true, "legitimate nil input"},
 		// False
 		{reflect.Interface, iface, false, "interface returns concrete type (any)"},

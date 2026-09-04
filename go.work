@@ -7,14 +7,15 @@ use (
 	./internal/testintegration
 )
 
-go 1.25.0
+go 1.26.0
 
 // Dev/codegen toolchain floor. Must be >= the highest //go:build go1.N guard in play:
 // the guards written by hand in internal/assertions (enforced by TestToolchainFloorCoversGuards),
 // and the go1.27 guard codegen stamps on the forward methods of the generic assertions.
 // Below that floor, guarded files are dropped before the compiler sees them: codegen would
 // emit incomplete output, and `go test ./...` would exercise none of the generic methods.
+//
 // This line is NOT published to consumers: a dependency's toolchain directive is ignored
-// downstream — only our go.mod `go 1.25.0` floor reaches them, so go1.25 users still build
+// downstream — only our go.mod `go 1.26.0` floor reaches them, so go1.26 users still build
 // (guarded files excluded).
 toolchain go1.27.0

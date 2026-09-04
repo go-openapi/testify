@@ -510,16 +510,17 @@ func compareSlice(obj1, obj2 any, obj1Value, obj2Value reflect.Value) (compareRe
 func convertReflectValue[V any](obj any, value reflect.Value) V { //nolint:ireturn // false positive
 	// we try and avoid calling [reflect.Value.Convert()] whenever possible,
 	// as this has a pretty big performance impact
-	converted, ok := obj.(V)
+	asserted, ok := obj.(V)
 	if !ok {
-		converted, ok = value.Convert(reflect.TypeFor[V]()).Interface().(V)
+		converted := value.Convert(reflect.TypeFor[V]())
+		asserted, ok = reflect.TypeAssert[V](converted)
 		if !ok {
 			// should never get there
-			panic("internal error: expected that reflect.Value.Convert yields its target type")
+			panic("internal error: expected that reflect.Value.TypeAssert matches the type it just converted to")
 		}
 	}
 
-	return converted
+	return asserted
 }
 
 // compareOrderedWithAny compares two [Ordered] values.

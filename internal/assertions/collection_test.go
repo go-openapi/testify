@@ -257,7 +257,7 @@ func collectionLenCases() iter.Seq[collectionLenCase] {
 		{"invalid type/rune", 'A', 0, "", false},
 		{"invalid type/struct", struct{}{}, 0, "", false},
 		{"invalid type/ptr-not-array", &longSlice, 1_000_000, `<... truncated>" could not be applied builtin len()`, false},
-		{"invalid type/ptr-anything", ptr(1), 0, `" could not be applied builtin len()`, false},
+		{"invalid type/ptr-anything", new(1), 0, `" could not be applied builtin len()`, false},
 
 		// Truncated message
 		{"truncated message/long slice", longSlice, 1_000_000, `<... truncated>" should have 1000001 item(s), but has 1000000`, true},

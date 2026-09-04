@@ -43,19 +43,18 @@ Generic assertions are marked with a {{% icon icon="star" color=orange %}}.
 Their method variants carry a {{% goversion "go1.27" %}} badge: methods take type
 parameters only from go1.27 onwards, so on an older toolchain a generic assertion is available as a
 package-level function alone.
-Assertions requiring a newer Go toolchain are marked with a version badge, e.g. {{% goversion "go1.26" %}} (the assertion is unavailable on older toolchains).
 
 ```tree
 - [EqualError](#equalerror) | angles-right
 - [Error](#error) | angles-right
 - [ErrorAs](#erroras) | angles-right
-- [ErrorAsType[E error]](#errorastypee-error) (go1.26+) | star | orange
+- [ErrorAsType[E error]](#errorastypee-error) | star | orange
 - [ErrorContains](#errorcontains) | angles-right
 - [ErrorIs](#erroris) | angles-right
 - [ErrorNotContains](#errornotcontains) | angles-right
 - [NoError](#noerror) | angles-right
 - [NotErrorAs](#noterroras) | angles-right
-- [NotErrorAsType[E error]](#noterrorastypee-error) (go1.26+) | star | orange
+- [NotErrorAsType[E error]](#noterrorastypee-error) | star | orange
 - [NotErrorIs](#noterroris) | angles-right
 ```
 
@@ -411,7 +410,7 @@ func (d *dummyError) Error() string {
 {{% /tab %}}
 {{< /tabs >}}
 
-### ErrorAsType[E error] {{% icon icon="star" color=orange %}} {{% goversion "go1.26" %}}{#errorastypee-error}
+### ErrorAsType[E error] {{% icon icon="star" color=orange %}}{#errorastypee-error}
 ErrorAsType asserts that at least one of the errors in err's chain is of type E.
 
 It is the type-safe counterpart of [ErrorAs](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#ErrorAs), built on the go1.26 [errors.AsType](https://pkg.go.dev/errors#AsType):
@@ -447,9 +446,29 @@ This assertion requires go1.26 or newer; it is unavailable on older toolchains.
 
 ```go
 // real-world test would inject *testing.T from TestErrorAsType(t *testing.T)
-t := new(testing.T)
-success := assert.ErrorAsType(t, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
-fmt.Printf("success: %t\n", success)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestErrorAsType(t *testing.T)
+	success := assert.ErrorAsType(t, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+type dummyError struct {
+}
+
+func (d *dummyError) Error() string {
+	return "dummy error"
+}
+
 ```
 {{% /card %}}
 
@@ -468,9 +487,29 @@ fmt.Printf("success: %t\n", success)
 
 ```go
 // real-world test would inject *testing.T from TestErrorAsType(t *testing.T)
-t := new(testing.T)
-require.ErrorAsType(t, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
-fmt.Println("passed")
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestErrorAsType(t *testing.T)
+	require.ErrorAsType(t, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
+	fmt.Println("passed")
+
+}
+
+type dummyError struct {
+}
+
+func (d *dummyError) Error() string {
+	return "dummy error"
+}
+
 ```
 {{% /card %}}
 
@@ -506,7 +545,7 @@ fmt.Println("passed")
 |--|--|
 | [`assertions.ErrorAsType[E error](t T, err error, target *E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#ErrorAsType) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorAsType](https://github.com/go-openapi/testify/blob/master/internal/assertions/error_go126.go#L39)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#ErrorAsType](https://github.com/go-openapi/testify/blob/master/internal/assertions/error_go126.go#L37)
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -1094,7 +1133,7 @@ func (d *dummyError) Error() string {
 {{% /tab %}}
 {{< /tabs >}}
 
-### NotErrorAsType[E error] {{% icon icon="star" color=orange %}} {{% goversion "go1.26" %}}{#noterrorastypee-error}
+### NotErrorAsType[E error] {{% icon icon="star" color=orange %}}{#noterrorastypee-error}
 NotErrorAsType asserts that none of the errors in err's chain is of type E.
 
 It is the type-safe counterpart of [NotErrorAs](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#NotErrorAs), built on the go1.26 [errors.AsType](https://pkg.go.dev/errors#AsType).
@@ -1126,9 +1165,29 @@ This assertion requires go1.26 or newer; it is unavailable on older toolchains.
 
 ```go
 // real-world test would inject *testing.T from TestNotErrorAsType(t *testing.T)
-t := new(testing.T)
-success := assert.NotErrorAsType(t, assert.ErrTest, new(*dummyError))
-fmt.Printf("success: %t\n", success)
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/assert"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotErrorAsType(t *testing.T)
+	success := assert.NotErrorAsType(t, assert.ErrTest, new(*dummyError))
+	fmt.Printf("success: %t\n", success)
+
+}
+
+type dummyError struct {
+}
+
+func (d *dummyError) Error() string {
+	return "dummy error"
+}
+
 ```
 {{% /card %}}
 
@@ -1147,9 +1206,29 @@ fmt.Printf("success: %t\n", success)
 
 ```go
 // real-world test would inject *testing.T from TestNotErrorAsType(t *testing.T)
-t := new(testing.T)
-require.NotErrorAsType(t, require.ErrTest, new(*dummyError))
-fmt.Println("passed")
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/go-openapi/testify/v2/require"
+)
+
+func main() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotErrorAsType(t *testing.T)
+	require.NotErrorAsType(t, require.ErrTest, new(*dummyError))
+	fmt.Println("passed")
+
+}
+
+type dummyError struct {
+}
+
+func (d *dummyError) Error() string {
+	return "dummy error"
+}
+
 ```
 {{% /card %}}
 
@@ -1185,7 +1264,7 @@ fmt.Println("passed")
 |--|--|
 | [`assertions.NotErrorAsType[E error](t T, err error, target *E, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#NotErrorAsType) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotErrorAsType](https://github.com/go-openapi/testify/blob/master/internal/assertions/error_go126.go#L87)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#NotErrorAsType](https://github.com/go-openapi/testify/blob/master/internal/assertions/error_go126.go#L85)
 {{% /tab %}}
 {{< /tabs >}}
 

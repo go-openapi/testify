@@ -157,7 +157,7 @@ func stripSections(in string, object any) (result, trailer []string) {
 		perPkgExamples []packageExamples
 		funcName       string
 	)
-	if function, ok := (object).(model.Function); ok {
+	if function, ok := object.(model.Function); ok {
 		funcName = function.Name
 
 		// Testable examples live in the generated packages (assert, require),

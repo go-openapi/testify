@@ -253,6 +253,20 @@ func ErrorAsf(t T, err error, target any, msg string, args ...any) {
 	t.FailNow()
 }
 
+// ErrorAsTypef is the same as [ErrorAsType], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func ErrorAsTypef[E error](t T, err error, target *E, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.ErrorAsType[E](t, err, target, forwardArgs(msg, args)...) {
+		return
+	}
+
+	t.FailNow()
+}
+
 // ErrorContainsf is the same as [ErrorContains], but it accepts a format string to format arguments like [fmt.Printf].
 //
 // Upon failure, the test [T] is marked as failed and stops execution.
@@ -1335,6 +1349,20 @@ func NotErrorAsf(t T, err error, target any, msg string, args ...any) {
 		h.Helper()
 	}
 	if assertions.NotErrorAs(t, err, target, forwardArgs(msg, args)...) {
+		return
+	}
+
+	t.FailNow()
+}
+
+// NotErrorAsTypef is the same as [NotErrorAsType], but it accepts a format string to format arguments like [fmt.Printf].
+//
+// Upon failure, the test [T] is marked as failed and stops execution.
+func NotErrorAsTypef[E error](t T, err error, target *E, msg string, args ...any) {
+	if h, ok := t.(H); ok {
+		h.Helper()
+	}
+	if assertions.NotErrorAsType[E](t, err, target, forwardArgs(msg, args)...) {
 		return
 	}
 
