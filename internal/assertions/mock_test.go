@@ -114,10 +114,6 @@ func shouldPassOrFail(t *testing.T, mock *mockT, result, shouldPass bool) {
 	}
 }
 
-func ptr(i int) *int {
-	return &i
-}
-
 // failCase defines a test case for verifying assertion error messages.
 //
 // Only one of wantError, wantMatch, or wantContains should be set per case.

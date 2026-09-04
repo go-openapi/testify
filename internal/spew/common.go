@@ -544,8 +544,8 @@ func timeLess(a, b reflect.Value) bool {
 		return a.String() < b.String()
 	}
 
-	tA, okTimeA := convertedA.Interface().(time.Time)
-	tB, okTimeB := convertedB.Interface().(time.Time)
+	tA, okTimeA := reflect.TypeAssert[time.Time](convertedA)
+	tB, okTimeB := reflect.TypeAssert[time.Time](convertedB)
 
 	if !okTimeA || !okTimeB {
 		// defensive safeguard (should never get there, since we have successfully indirected and converted)

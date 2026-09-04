@@ -476,6 +476,33 @@ func TestErrorAs(t *testing.T) {
 	})
 }
 
+func TestErrorAsType(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := ErrorAsType(mock, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
+		if !result {
+			t.Error("ErrorAsType should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := ErrorAsType(mock, ErrTest, new(*dummyError))
+		if result {
+			t.Error("ErrorAsType should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("ErrorAsType should mark test as failed")
+		}
+	})
+}
+
 func TestErrorContains(t *testing.T) {
 	t.Parallel()
 
@@ -2545,6 +2572,33 @@ func TestNotErrorAs(t *testing.T) {
 		}
 		if !mock.failed {
 			t.Error("NotErrorAs should mark test as failed")
+		}
+	})
+}
+
+func TestNotErrorAsType(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := NotErrorAsType(mock, ErrTest, new(*dummyError))
+		if !result {
+			t.Error("NotErrorAsType should return true on success")
+		}
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockT)
+		result := NotErrorAsType(mock, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
+		if result {
+			t.Error("NotErrorAsType should return false on failure")
+		}
+		if !mock.failed {
+			t.Error("NotErrorAsType should mark test as failed")
 		}
 	})
 }

@@ -1,6 +1,6 @@
 module github.com/go-openapi/testify/hack/migrate-testify/v2
 
-go 1.25.0
+go 1.26.0
 
 require (
 	golang.org/x/mod v0.40.0

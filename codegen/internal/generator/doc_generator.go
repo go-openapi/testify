@@ -108,62 +108,62 @@ func (d *DocGenerator) reorganizeByDomain() (iter.Seq2[string, model.Document], 
 	pkggodevURL := "https://pkg.go.dev/" + discoveredDomains.RootPackage()
 
 	return func(yield func(string, model.Document) bool) {
-			weight := 1
-			for domain, entry := range discoveredDomains.Entries() {
-				doc := model.Document{
-					Title:       funcmaps.Titleize(domain),
-					Domain:      domain,
-					Description: entry.Description(),
-					Kind:        model.KindPage,
-					File:        domain + ".md",
-					Package: &model.AssertionPackage{
-						Package:          assertions, // package that is the single source of truth
-						Tool:             discoveredDomains.Tool(),
-						Copyright:        discoveredDomains.Copyright(),
-						Receiver:         discoveredDomains.Receiver(),
-						Header:           discoveredDomains.Header(),
-						EnableFormat:     d.ctx.enableFormat,
-						EnableForward:    d.ctx.enableForward,
-						EnableGenerics:   d.ctx.enableGenerics,
-						EnableExamples:   d.ctx.generateExamples,
-						RunnableExamples: d.ctx.runnableExamples,
-						// skip package-level docstring
-						// skip other package-level extra comments
-						// filtered functions and types for this domain across all packages
-						Functions: entry.Functions(),
-						Types:     entry.Types(),
-						Vars:      entry.Vars(),
-						Consts:    entry.Consts(),
-					},
-					ExtraPackages: entry.ExtraPackages(),
-					GitHubURL:     githubURL,
-					PkgGoDevURL:   pkggodevURL,
-					RefCount:      entry.Len(),
-					Weight:        weight,
-				}
-				weight++
-
-				// populate document context in all children: at doc generation time,
-				// we need the full context to be available when iterating over functions.
-				doc.Package.Context = &doc
-				for i, fn := range doc.Package.Functions {
-					fn.Context = &doc
-					doc.Package.Functions[i] = fn
-				}
-
-				if !yield(doc.Domain, doc) {
-					return
-				}
+		weight := 1
+		for domain, entry := range discoveredDomains.Entries() {
+			doc := model.Document{
+				Title:       funcmaps.Titleize(domain),
+				Domain:      domain,
+				Description: entry.Description(),
+				Kind:        model.KindPage,
+				File:        domain + ".md",
+				Package: &model.AssertionPackage{
+					Package:          assertions, // package that is the single source of truth
+					Tool:             discoveredDomains.Tool(),
+					Copyright:        discoveredDomains.Copyright(),
+					Receiver:         discoveredDomains.Receiver(),
+					Header:           discoveredDomains.Header(),
+					EnableFormat:     d.ctx.enableFormat,
+					EnableForward:    d.ctx.enableForward,
+					EnableGenerics:   d.ctx.enableGenerics,
+					EnableExamples:   d.ctx.generateExamples,
+					RunnableExamples: d.ctx.runnableExamples,
+					// skip package-level docstring
+					// skip other package-level extra comments
+					// filtered functions and types for this domain across all packages
+					Functions: entry.Functions(),
+					Types:     entry.Types(),
+					Vars:      entry.Vars(),
+					Consts:    entry.Consts(),
+				},
+				ExtraPackages: entry.ExtraPackages(),
+				GitHubURL:     githubURL,
+				PkgGoDevURL:   pkggodevURL,
+				RefCount:      entry.Len(),
+				Weight:        weight,
 			}
-		}, uniqueValues{
-			// metadata that are unique
-			tool:        discoveredDomains.Tool(),
-			receiver:    discoveredDomains.Receiver(),
-			copyright:   discoveredDomains.Copyright(),
-			header:      discoveredDomains.Header(),
-			githubURL:   githubURL,
-			pkggodevURL: pkggodevURL,
+			weight++
+
+			// populate document context in all children: at doc generation time,
+			// we need the full context to be available when iterating over functions.
+			doc.Package.Context = &doc
+			for i, fn := range doc.Package.Functions {
+				fn.Context = &doc
+				doc.Package.Functions[i] = fn
+			}
+
+			if !yield(doc.Domain, doc) {
+				return
+			}
 		}
+	}, uniqueValues{
+		// metadata that are unique
+		tool:        discoveredDomains.Tool(),
+		receiver:    discoveredDomains.Receiver(),
+		copyright:   discoveredDomains.Copyright(),
+		header:      discoveredDomains.Header(),
+		githubURL:   githubURL,
+		pkggodevURL: pkggodevURL,
+	}
 }
 
 func (d *DocGenerator) buildIndexDocument(docsByDomain iter.Seq2[string, model.Document], extras uniqueValues) model.Document {

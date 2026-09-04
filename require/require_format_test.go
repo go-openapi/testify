@@ -408,6 +408,29 @@ func TestErrorAsf(t *testing.T) {
 	})
 }
 
+func TestErrorAsTypef(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		ErrorAsTypef(mock, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError), "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		ErrorAsTypef(mock, ErrTest, new(*dummyError), "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("ErrorAsTypef should call FailNow()")
+		}
+	})
+}
+
 func TestErrorContainsf(t *testing.T) {
 	t.Parallel()
 
@@ -2171,6 +2194,29 @@ func TestNotErrorAsf(t *testing.T) {
 		// require functions don't return a value
 		if !mock.failed {
 			t.Error("NotErrorAsf should call FailNow()")
+		}
+	})
+}
+
+func TestNotErrorAsTypef(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NotErrorAsTypef(mock, ErrTest, new(*dummyError), "test message")
+		// require functions don't return a value
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		mock := new(mockFailNowT)
+		NotErrorAsTypef(mock, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError), "test message")
+		// require functions don't return a value
+		if !mock.failed {
+			t.Error("NotErrorAsTypef should call FailNow()")
 		}
 	})
 }

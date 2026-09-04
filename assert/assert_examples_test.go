@@ -160,6 +160,14 @@ func ExampleErrorAs() {
 	// Output: success: true
 }
 
+func ExampleErrorAsType() {
+	t := new(testing.T) // should come from testing, e.g. func TestErrorAsType(t *testing.T)
+	success := assert.ErrorAsType(t, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
 func ExampleErrorContains() {
 	t := new(testing.T) // should come from testing, e.g. func TestErrorContains(t *testing.T)
 	success := assert.ErrorContains(t, assert.ErrTest, "general error")
@@ -787,6 +795,14 @@ func ExampleNotEqualValues() {
 func ExampleNotErrorAs() {
 	t := new(testing.T) // should come from testing, e.g. func TestNotErrorAs(t *testing.T)
 	success := assert.NotErrorAs(t, assert.ErrTest, new(*dummyError))
+	fmt.Printf("success: %t\n", success)
+
+	// Output: success: true
+}
+
+func ExampleNotErrorAsType() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotErrorAsType(t *testing.T)
+	success := assert.NotErrorAsType(t, assert.ErrTest, new(*dummyError))
 	fmt.Printf("success: %t\n", success)
 
 	// Output: success: true

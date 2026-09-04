@@ -128,7 +128,7 @@ func TestSortValues(t *testing.T) {
 		},
 		// indirection pointers: **time.Time
 		{
-			[]reflect.Value{v(pt0), v(ppt2), v((nilTimePtrPtr)), v(t1)},
+			[]reflect.Value{v(pt0), v(ppt2), v(nilTimePtrPtr), v(t1)},
 			[]reflect.Value{v(nilTimePtrPtr), v(pt0), v(t1), v(ppt2)},
 		},
 		// invalid **time.Time (nil)

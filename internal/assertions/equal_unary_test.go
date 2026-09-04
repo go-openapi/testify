@@ -64,7 +64,7 @@ func unifiedUnaryCases() iter.Seq[unaryTestCase] {
 		// Nil category
 		{"nil/nil-ptr", (*int)(nil), nilCategory},
 		{"nil/nil-slice", []int(nil), nilCategory},
-		{"nil/nil-interface", (any)(nil), nilCategory},
+		{"nil/nil-interface", any(nil), nilCategory},
 		{"nil/nil-struct-ptr", (*struct{})(nil), nilCategory},
 
 		// Empty non-nil category

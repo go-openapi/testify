@@ -51,7 +51,7 @@ Table of core assertions, excluding variants. Each function is side by side with
 | [EqualValues](equality/#equalvalues) | [NotEqualValues](equality/#notequalvalues) | equality |  |
 | [Error](error/#error) | [NoError](error/#noerror) | error |  |
 | [ErrorAs](error/#erroras) | [NotErrorAs](error/#noterroras) | error |  |
-| [ErrorAsType[E error]](error/#errorastypee-error) {{% icon icon="star" color=orange %}} {{% goversion "go1.26" %}} | [NotErrorAsType](error/#noterrorastypee-error) | error |  |
+| [ErrorAsType[E error]](error/#errorastypee-error) {{% icon icon="star" color=orange %}} | [NotErrorAsType](error/#noterrorastypee-error) | error |  |
 | [ErrorContains](error/#errorcontains) | [ErrorNotContains](error/#errornotcontains) | error |  |
 | [ErrorIs](error/#erroris) | [NotErrorIs](error/#noterroris) | error |  |
 | [EventuallyWith[C CollectibleConditioner]](condition/#eventuallywithc-collectibleconditioner) {{% icon icon="star" color=orange %}} |  | condition |  |

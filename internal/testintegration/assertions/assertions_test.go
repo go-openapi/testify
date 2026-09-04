@@ -214,9 +214,9 @@ func genNilValue(t *rapid.T) any {
 	case 9:
 		return (*struct{})(nil)
 	case 10:
-		return (error)(nil)
+		return error(nil)
 	default:
-		return (fmt.Stringer)(nil)
+		return fmt.Stringer(nil)
 	}
 }
 

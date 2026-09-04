@@ -294,7 +294,7 @@ func unifiedEqualityCases() iter.Seq[equalityTestCase] {
 	return slices.Values([]equalityTestCase{
 		// Both nil
 		{"both-nil/ptr", func() (any, any) { return (*int)(nil), (*int)(nil) }, eqBothNil, false},
-		{"both-nil/interface", func() (any, any) { return (any)(nil), (any)(nil) }, eqBothNil, true},
+		{"both-nil/interface", func() (any, any) { return any(nil), any(nil) }, eqBothNil, true},
 
 		// One nil (reflection only - type mismatch)
 		{"one-nil/first", func() (any, any) { v := 42; return nil, &v }, eqOneNil, true},
@@ -701,8 +701,8 @@ func objectEqualExportedValuesCases() iter.Seq[objectEqualExportedValuesCase] {
 		},
 		{
 			name:          "equal-values/slice-of-pointers",
-			expected:      []*int{ptr(1), nil, ptr(2)},
-			actual:        []*int{ptr(1), nil, ptr(2)},
+			expected:      []*int{new(1), nil, new(2)},
+			actual:        []*int{new(1), nil, new(2)},
 			expectedEqual: true,
 		},
 		{

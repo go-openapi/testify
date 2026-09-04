@@ -161,6 +161,14 @@ func ExampleErrorAs() {
 	// Output: passed
 }
 
+func ExampleErrorAsType() {
+	t := new(testing.T) // should come from testing, e.g. func TestErrorAsType(t *testing.T)
+	require.ErrorAsType(t, fmt.Errorf("wrap: %w", &dummyError{}), new(*dummyError))
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
 func ExampleErrorContains() {
 	t := new(testing.T) // should come from testing, e.g. func TestErrorContains(t *testing.T)
 	require.ErrorContains(t, require.ErrTest, "general error")
@@ -788,6 +796,14 @@ func ExampleNotEqualValues() {
 func ExampleNotErrorAs() {
 	t := new(testing.T) // should come from testing, e.g. func TestNotErrorAs(t *testing.T)
 	require.NotErrorAs(t, require.ErrTest, new(*dummyError))
+	fmt.Println("passed")
+
+	// Output: passed
+}
+
+func ExampleNotErrorAsType() {
+	t := new(testing.T) // should come from testing, e.g. func TestNotErrorAsType(t *testing.T)
+	require.NotErrorAsType(t, require.ErrTest, new(*dummyError))
 	fmt.Println("passed")
 
 	// Output: passed
