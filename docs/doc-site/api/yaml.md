@@ -1,7 +1,7 @@
 ---
 title: "Yaml"
 description: "Asserting Yaml Documents"
-weight: 18
+weight: 19
 domains:
   - "yaml"
 keywords:
@@ -217,7 +217,7 @@ NOTE: passed expected value may be wrapped as a function to redact the input tex
 {{< tabs >}}
 {{% tab title="Usage" %}}
 ```go
-	actual := struct {
+	expected := struct {
 		A int `yaml:"a"`
 	}{
 		A: 10,

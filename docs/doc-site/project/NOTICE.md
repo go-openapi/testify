@@ -1,7 +1,7 @@
 ---
 title: NOTICE
 description: Code attribution and other LICENSE terms
-weight: 11
+weight: 50
 ---
 ```
 // SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers

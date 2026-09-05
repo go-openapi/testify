@@ -540,7 +540,7 @@ See [Examples](./EXAMPLES.md#goroutine-leak-detection) for usage patterns.
 
 #### ⚠️ Behavior Changes
 
-**Architecture change**: YAML support is now opt-in via `import _ "github.com/go-openapi/testify/v2/enable/yaml"`
+**Architecture change**: YAML support is now opt-in via `import _ "github.com/go-openapi/testify/enable/yaml/v2"`
 
 **Behavior changes**: None
 

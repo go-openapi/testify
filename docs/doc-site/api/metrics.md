@@ -7,7 +7,7 @@ weight: -1
 
 ## Domains
 
-All assertions are classified into **19** domains to help navigate the API, depending on your use case.
+All assertions are classified into **20** domains to help navigate the API, depending on your use case.
 
 ## API metrics
 
@@ -38,7 +38,7 @@ Table of core assertions, excluding variants. Each function is side by side with
 | [BlockedT[E any, CHAN ~chan E]](condition/#blockedte-any-chan-chan-e) {{% icon icon="star" color=orange %}} | [NotBlockedT](condition/#notblockedte-any-chan-chan-e) | condition |  |
 | [CallerInfo](common/#callerinfo) |  | common | helper |
 | [Condition](condition/#condition) |  | condition |  |
-| [Consistently[C Conditioner]](condition/#consistentlyc-conditioner) {{% icon icon="star" color=orange %}} |  | condition |  |
+| [Consistently[C Conditioner]](async/#consistentlyc-conditioner) {{% icon icon="star" color=orange %}} |  | async |  |
 | [Contains](collection/#contains) | [NotContains](collection/#notcontains) | collection |  |
 | [DirExists](file/#direxists) | [DirNotExists](file/#dirnotexists) | file |  |
 | [ElementsMatch](collection/#elementsmatch) | [NotElementsMatch](collection/#notelementsmatch) | collection |  |
@@ -54,8 +54,8 @@ Table of core assertions, excluding variants. Each function is side by side with
 | [ErrorAsType[E error]](error/#errorastypee-error) {{% icon icon="star" color=orange %}} | [NotErrorAsType](error/#noterrorastypee-error) | error |  |
 | [ErrorContains](error/#errorcontains) | [ErrorNotContains](error/#errornotcontains) | error |  |
 | [ErrorIs](error/#erroris) | [NotErrorIs](error/#noterroris) | error |  |
-| [EventuallyWith[C CollectibleConditioner]](condition/#eventuallywithc-collectibleconditioner) {{% icon icon="star" color=orange %}} |  | condition |  |
-| [Eventually[C Conditioner]](condition/#eventuallyc-conditioner) {{% icon icon="star" color=orange %}} | [Never](condition/#neverc-neverconditioner) | condition |  |
+| [EventuallyWith[C CollectibleConditioner]](async/#eventuallywithc-collectibleconditioner) {{% icon icon="star" color=orange %}} |  | async |  |
+| [Eventually[C Conditioner]](async/#eventuallyc-conditioner) {{% icon icon="star" color=orange %}} | [Never](async/#neverc-neverconditioner) | async |  |
 | [Exactly](equality/#exactly) |  | equality |  |
 | [Fail](testing/#fail) |  | testing |  |
 | [FailNow](testing/#failnow) |  | testing |  |

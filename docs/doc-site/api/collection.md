@@ -1,7 +1,7 @@
 ---
 title: "Collection"
 description: "Asserting Slices And Maps"
-weight: 2
+weight: 3
 domains:
   - "collection"
 keywords:

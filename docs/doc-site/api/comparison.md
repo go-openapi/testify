@@ -1,7 +1,7 @@
 ---
 title: "Comparison"
 description: "Comparing Ordered Values"
-weight: 3
+weight: 4
 domains:
   - "comparison"
 keywords:

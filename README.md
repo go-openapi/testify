@@ -136,9 +136,9 @@ See the license [NOTICE](./NOTICE), which recalls the licensing terms of all the
 distributed with this fork, including internalized libraries.
 
 We'd like to give credit and pay a big and loud thank you to the people who wrote these amazing pieces of software.
-We maintain and continue improving their original work here.
+We maintain their original work here and continue improving it.
 
-* Mat Ryer, Tyler Bunnell and the stretchr/testify contributors - who made this new project possible
+* Mat Ryer, Tyler Bunnell and the `stretchr/testify` contributors - who made this new project possible
 * thank you to the maintainers of that library, @ccoveille, @dolmen for their feedback and advice
 * Dave Collins <dave@davec.name> who wrote the spew library
 * Patrick Mezard who wrote the difflib library - originally a go port from python's difflib

@@ -1,7 +1,7 @@
 ---
 title: "Ordering"
 description: "Asserting How Collections Are Ordered"
-weight: 11
+weight: 12
 domains:
   - "ordering"
 keywords:

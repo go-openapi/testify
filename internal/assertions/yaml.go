@@ -155,7 +155,7 @@ func YAMLUnmarshalAsT[Object any, ADoc RText](t T, expected Object, yamlDoc ADoc
 //
 // # Usage
 //
-//	actual := struct {
+//	expected := struct {
 //		A int `yaml:"a"`
 //	}{
 //		A: 10,

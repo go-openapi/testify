@@ -13,6 +13,7 @@
 //
 // # Domains
 //
+//   - async: running tests asynchronously against go routines
 //   - boolean: asserting boolean values
 //   - collection: asserting slices and maps
 //   - comparison: comparing ordered values

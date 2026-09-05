@@ -11,6 +11,10 @@ weight: 3
 
 ## What makes a good test?
 
+{{% notice primary "RFC" "meteor" %}}
+> This page holds quite a few opinions. Feel free to share your experience and thoughts and help contribute to this page!
+{{% /notice %}}
+
 A good test is:
 
 1. **Focused** - Tests one logical concept
@@ -104,9 +108,14 @@ func TestUserCreation(t *testing.T) {
 
 ### Table-Driven Tests with Iterator Pattern
 
-The **iterator pattern** is the idiomatic way to write table-driven tests in Go 1.23+. This repository uses it extensively, and you should too.
+The **iterator pattern** is a great and idiomatic way to write table-driven tests in Go 1.23+.
+This repository uses it extensively, and we think you should too.
 
 #### Why Table-Driven Tests?
+
+This separates the (repeated) logic a test from the test cases, making it easier to add or modify test cases.
+
+Each test case may be run in parallel. Typically, each subtest in the test loop is independent.
 
 Instead of writing separate test functions for each case:
 
@@ -139,12 +148,15 @@ Write one test function with multiple cases:
 ```go
 // ✅ Better - all cases in one place
 func TestAdd(t *testing.T) {
+    t.Parallel()
+
     // All test cases defined once
     // Test logic written once
     // Easy to add new cases
+
     for c := range addTestCases() {
         t.Run(c.name, func(t *testing.T) {
-            t.Parallel()
+            t.Parallel() // each iteration runs concurrently
 
             result := Add(c.a, c.b)
             assert.Equal(t, c.expected, result)
@@ -159,6 +171,12 @@ func addTestCases() iter.Seq[addTestCase] {
 
 #### The Iterator Pattern
 
+It values test cases as the main asset of your tests: by promoting testcases to their own
+function and type, they become reusable and parameterizable.
+
+In this project, we leverage testcase reusability a lot, for instance to make sure that both generic and non-generic assertions
+are subject to the same tests.
+
 **Structure:**
 
 ```go
@@ -172,7 +190,7 @@ import (
 
 // 1. Define a test case struct
 type addTestCase struct {
-	name     string
+	name     string // the test case name is documented in the test execution logs and identifiable when failing
 	a, b     int
 	expected int
 }
@@ -224,6 +242,9 @@ func TestAdd(t *testing.T) {
 
 #### Why This Pattern Is Better
 
+This is an opinionated pattern, based on our own experience with maintaining tens of thousands of tests.
+You might hold a different opinion. Here are the reasons that support the proposed approach.
+
 **Clean separation of concerns:**
 - Test data (in iterator function) separate from test logic (in test function)
 - Easy to see all test cases at a glance
@@ -246,8 +267,13 @@ func TestAdd(t *testing.T) {
 - Adding a case: just append to the slice
 - Changing test logic: edit one place
 - Renaming fields: IDE refactoring works
+- Test cases can be reused, composed, parameterized
 
 #### Comparison with Traditional Pattern
+
+The proposed pattern is slightly more verbose than the inlined pattern,
+but this is largely offset by the improved readability as soon as you get a few test cases.
+When your test logic gets more complex, the reader's focus is on what runs.
 
 **Traditional inline pattern:**
 
@@ -398,9 +424,9 @@ func userValidationCases() iter.Seq[userValidationCase] {
 
 ---
 
-### Using testify with Iterator Pattern
+### Using testify with an Iterator Pattern
 
-The iterator pattern works beautifully with testify's forward methods:
+The iterator pattern works beautifully with testify's forward methods: concise, yet accurate.
 
 ```go
 import (
@@ -501,7 +527,7 @@ func TestAdd(t *testing.T) {
 
 ### Setup and Teardown
 
-Use `defer` for cleanup:
+Use `t.Cleanup` for cleanup:
 
 ```go
 func TestDatabaseOperations(t *testing.T) {
@@ -530,7 +556,9 @@ func TestDatabaseOperations(t *testing.T) {
 
 ### Edge Cases to Test
 
-Always include these test categories:
+Remember to include limit cases to your tests. Always.
+
+Besides the happy path, include these test categories:
 
 #### 1. Empty/Zero Values
 
@@ -586,7 +614,7 @@ Always include these test categories:
 
 ### Testing Errors
 
-**Bad practice - checking error string:**
+**Bad practice - checking error string leads to extra test maintenance:**
 
 ```go
 // ❌ Fragile - breaks if error message changes
@@ -595,7 +623,7 @@ if err == nil || err.Error() != "division by zero" {
 }
 ```
 
-**Good practice - checking error chain:**
+**Better - checking error chain:**
 
 ```go
 // ✅ Semantic error checking
@@ -626,6 +654,26 @@ import (
 	"github.com/go-openapi/testify/v2/assert"
 	"github.com/go-openapi/testify/v2/require"
 )
+
+func TestDivide(t *testing.T) {
+	t.Parallel()
+
+	for c := range divideTestCases() {
+		t.Run(c.name, func(t *testing.T) {
+			t.Parallel()
+
+			result, err := Divide(c.a, c.b)
+
+			if c.shouldErr {
+				assert.Error(t, err)
+				assert.ErrorIs(t, err, ErrDivisionByZero)
+			} else {
+				require.NoError(t, err)
+				assert.Equal(t, c.expected, result)
+			}
+		})
+	}
+}
 
 type divideTestCase struct {
 	name      string
@@ -664,26 +712,6 @@ func divideTestCases() iter.Seq[divideTestCase] {
 			shouldErr: false,
 		},
 	})
-}
-
-func TestDivide(t *testing.T) {
-	t.Parallel()
-
-	for c := range divideTestCases() {
-		t.Run(c.name, func(t *testing.T) {
-			t.Parallel()
-
-			result, err := Divide(c.a, c.b)
-
-			if c.shouldErr {
-				assert.Error(t, err)
-				assert.ErrorIs(t, err, ErrDivisionByZero)
-			} else {
-				require.NoError(t, err)
-				assert.Equal(t, c.expected, result)
-			}
-		})
-	}
 }
 ```
 

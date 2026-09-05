@@ -1,7 +1,7 @@
 ---
 title: "Safety"
 description: "Checks Against Leaked Resources (Goroutines, File Descriptors)"
-weight: 13
+weight: 14
 domains:
   - "safety"
 keywords:

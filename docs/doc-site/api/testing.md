@@ -1,7 +1,7 @@
 ---
 title: "Testing"
 description: "Mimics Methods From The Testing Standard Library"
-weight: 15
+weight: 16
 domains:
   - "testing"
 keywords:

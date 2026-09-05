@@ -1,7 +1,7 @@
 ---
 title: "Error"
 description: "Asserting Errors"
-weight: 6
+weight: 7
 domains:
   - "error"
 keywords:

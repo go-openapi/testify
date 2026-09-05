@@ -24,17 +24,18 @@ with all documented exported variants documented in a more concise form than the
 
 ## Domains
 
-The `testify` API is organized in 19 logical domains shown below.
+The `testify` API is organized in 20 logical domains shown below.
 Each domain contains assertions regrouped by their use case (e.g. http, json, error).
 
 {{< children type="card" description="true" >}}
 
 ---
   
+- [Async](./async.md) - Running Tests Asynchronously Against Go Routines (4)
 - [Boolean](./boolean.md) - Asserting Boolean Values (4)
 - [Collection](./collection.md) - Asserting Slices And Maps (23)
 - [Comparison](./comparison.md) - Comparing Ordered Values (12)
-- [Condition](./condition.md) - Expressing Assertions Using Conditions (9)
+- [Condition](./condition.md) - Expressing Assertions Using Conditions (5)
 - [Equality](./equality.md) - Asserting Two Things Are Equal (16)
 - [Error](./error.md) - Asserting Errors (11)
 - [File](./file.md) - Asserting OS Files (6)

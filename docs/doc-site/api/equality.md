@@ -1,7 +1,7 @@
 ---
 title: "Equality"
 description: "Asserting Two Things Are Equal"
-weight: 5
+weight: 6
 domains:
   - "equality"
 keywords:

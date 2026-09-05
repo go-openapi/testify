@@ -4,115 +4,102 @@
 package scanner
 
 import (
-	"go/parser"
-	"go/token"
+	"errors"
 	"os"
 	"path/filepath"
-	"regexp"
-	"strconv"
+	"strings"
 	"testing"
+
+	"golang.org/x/tools/go/packages"
 )
 
-// repoRootFromScanner is the path from this test package to the repository root.
-const repoRootFromScanner = "../../.."
-
-var goMinorRx = regexp.MustCompile(`go1\.(\d+)`)
-
-// TestToolchainFloorCoversGuards enforces the invariant that every //go:build go1.N guard
-// used in internal/assertions is covered by the go.work toolchain floor.
+// TestGuardedFilesOnDisk checks which files the textual scan reports as go-version-guarded.
 //
-// codegen runs in workspace mode, where the go.work toolchain line selects the toolchain.
-// A guard above that floor could be silently dropped (go/packages would not even load the
-// file), producing incomplete generated output. Bumping the floor must therefore happen in
-// lockstep with introducing a higher guard.
-func TestToolchainFloorCoversGuards(t *testing.T) {
-	floor := workToolchainMinor(t, filepath.Join(repoRootFromScanner, "go.work"))
-	maxGuard := maxAssertionGuardMinor(t, filepath.Join(repoRootFromScanner, "internal", "assertions"))
+// Only a plain "go1.N" constraint counts. A file selected on an OS or an architecture is
+// absent on some machines by design, and a test file never reaches the load in the first
+// place: neither may be reported as dropped.
+func TestGuardedFilesOnDisk(t *testing.T) {
+	t.Parallel()
 
-	t.Logf("go.work toolchain floor: go1.%d, highest internal/assertions guard: go1.%d", floor, maxGuard)
+	dir := t.TempDir()
+	write := func(name, content string) {
+		t.Helper()
+		if err := os.WriteFile(filepath.Join(dir, name), []byte(content), 0o600); err != nil {
+			t.Fatalf("write %s: %v", name, err)
+		}
+	}
 
-	if maxGuard > floor {
-		t.Fatalf(
-			"internal/assertions uses //go:build go1.%d but the go.work toolchain floor is go1.%d; "+
-				"bump the go.work toolchain line to at least go1.%d so codegen observes the guarded file",
-			maxGuard, floor, maxGuard,
-		)
+	write("plain.go", "package assertions\n")
+	write("guarded.go", "//go:build go1.99\n\npackage assertions\n")
+	write("guarded_test.go", "//go:build go1.99\n\npackage assertions\n")
+	write("platform.go", "//go:build !windows\n\npackage assertions\n")
+	write("combined.go", "//go:build go1.99 && !windows\n\npackage assertions\n")
+	write("broken.go", "//go:build go1.99\n\npackage ***\n")
+	write("notgo.txt", "//go:build go1.99\n")
+
+	guarded, err := guardedFilesOnDisk(dir)
+	if err != nil {
+		t.Fatalf("guardedFilesOnDisk: %v", err)
+	}
+
+	if got, want := len(guarded), 1; got != want {
+		t.Fatalf("expected %d guarded file, got %d: %v", want, got, guarded)
+	}
+	if got, want := guarded["guarded.go"], "go1.99"; got != want {
+		t.Errorf("expected guarded.go to carry %q, got %q", want, got)
 	}
 }
 
-// workToolchainMinor returns the minor version of the go.work toolchain floor, falling back
-// to the workspace `go` directive when no explicit toolchain line is present.
-func workToolchainMinor(t *testing.T, path string) int {
-	t.Helper()
+// TestVerifyGuardedFilesLoaded covers the rail itself: a go-version-guarded file that exists
+// on disk but never reached the typed load means the go command running the scan is older
+// than the guard, and generating from that view would silently drop assertions.
+func TestVerifyGuardedFilesLoaded(t *testing.T) {
+	t.Parallel()
 
-	data, err := os.ReadFile(path) // sometimes a false positive: nolint:gosec // test reads a fixed in-repo file
-	if err != nil {
-		t.Fatalf("read %s: %v", path, err)
-	}
-
-	// Prefer the toolchain directive (e.g. "toolchain go1.26.0"); otherwise the go directive
-	// (e.g. "go 1.25.0") acts as the effective floor.
-	if m := regexp.MustCompile(`(?m)^toolchain go1\.(\d+)`).FindSubmatch(data); m != nil {
-		return mustAtoi(t, string(m[1]))
-	}
-	if m := regexp.MustCompile(`(?m)^go 1\.(\d+)`).FindSubmatch(data); m != nil {
-		return mustAtoi(t, string(m[1]))
-	}
-
-	t.Fatalf("could not find a toolchain or go directive in %s", path)
-
-	return 0
-}
-
-// maxAssertionGuardMinor textually scans every Go file in dir for //go:build go1.N guards
-// and returns the highest minor version found (0 when none).
-//
-// The scan is textual (via go/parser, not go/packages) on purpose: a guard above the
-// running toolchain would be excluded from a typed load, which is exactly the situation
-// this invariant must detect.
-func maxAssertionGuardMinor(t *testing.T, dir string) int {
-	t.Helper()
-
-	entries, err := os.ReadDir(dir)
-	if err != nil {
-		t.Fatalf("read dir %s: %v", dir, err)
-	}
-
-	fset := token.NewFileSet()
-	maxMinor := 0
-	for _, entry := range entries {
-		name := entry.Name()
-		if entry.IsDir() || filepath.Ext(name) != ".go" {
-			continue
+	dir := t.TempDir()
+	for name, content := range map[string]string{
+		"plain.go":   "package assertions\n",
+		"guarded.go": "//go:build go1.99\n\npackage assertions\n",
+	} {
+		if err := os.WriteFile(filepath.Join(dir, name), []byte(content), 0o600); err != nil {
+			t.Fatalf("write %s: %v", name, err)
 		}
+	}
 
-		file, err := parser.ParseFile(fset, filepath.Join(dir, name), nil, parser.ParseComments|parser.SkipObjectResolution)
-		if err != nil {
-			t.Fatalf("parse %s: %v", name, err)
+	t.Run("guard dropped by an older toolchain", func(t *testing.T) {
+		t.Parallel()
+
+		pkg := &packages.Package{Dir: dir, GoFiles: []string{filepath.Join(dir, "plain.go")}}
+
+		err := verifyGuardedFilesLoaded(pkg)
+		if !errors.Is(err, ErrGuardedFileDropped) {
+			t.Fatalf("expected ErrGuardedFileDropped, got %v", err)
 		}
-
-		constraintExpr := fileBuildConstraint(file)
-		if constraintExpr == "" {
-			continue
-		}
-
-		for _, m := range goMinorRx.FindAllStringSubmatch(constraintExpr, -1) {
-			if minor := mustAtoi(t, m[1]); minor > maxMinor {
-				maxMinor = minor
+		for _, want := range []string{"guarded.go", "go1.99", "GOTOOLCHAIN=go1.99.0"} {
+			if !strings.Contains(err.Error(), want) {
+				t.Errorf("expected the error to mention %q, got: %v", want, err)
 			}
 		}
-	}
+	})
 
-	return maxMinor
-}
+	t.Run("guard observed by the load", func(t *testing.T) {
+		t.Parallel()
 
-func mustAtoi(t *testing.T, s string) int {
-	t.Helper()
+		pkg := &packages.Package{Dir: dir, GoFiles: []string{
+			filepath.Join(dir, "plain.go"),
+			filepath.Join(dir, "guarded.go"),
+		}}
 
-	n, err := strconv.Atoi(s)
-	if err != nil {
-		t.Fatalf("invalid integer %q: %v", s, err)
-	}
+		if err := verifyGuardedFilesLoaded(pkg); err != nil {
+			t.Errorf("expected no error when every guarded file loaded, got %v", err)
+		}
+	})
 
-	return n
+	t.Run("no package directory", func(t *testing.T) {
+		t.Parallel()
+
+		if err := verifyGuardedFilesLoaded(&packages.Package{}); err != nil {
+			t.Errorf("expected no error without a package directory, got %v", err)
+		}
+	})
 }

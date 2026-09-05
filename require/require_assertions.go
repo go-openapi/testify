@@ -3961,7 +3961,7 @@ func YAMLEqT[EDoc, ADoc RText](t T, expected EDoc, actual ADoc, msgAndArgs ...an
 //
 // # Usage
 //
-//	actual := struct {
+//	expected := struct {
 //		A int `yaml:"a"`
 //	}{
 //		A: 10,

@@ -9,13 +9,13 @@ use (
 
 go 1.26.0
 
-// Dev/codegen toolchain floor. Must be >= the highest //go:build go1.N guard in play:
-// the guards written by hand in internal/assertions (enforced by TestToolchainFloorCoversGuards),
-// and the go1.27 guard codegen stamps on the forward methods of the generic assertions.
-// Below that floor, guarded files are dropped before the compiler sees them: codegen would
-// emit incomplete output, and `go test ./...` would exercise none of the generic methods.
+// No `toolchain` line on purpose. It applies to every command run in the workspace,
+// including CI's `go test work ./...`, which runs the oldstable/stable matrix. Pinning it
+// makes both matrix entries build the same toolchain, and the older one then stops compiling
+// the packages without their //go:build go1.N files.
 //
-// This line is NOT published to consumers: a dependency's toolchain directive is ignored
-// downstream — only our go.mod `go 1.26.0` floor reaches them, so go1.26 users still build
-// (guarded files excluded).
-toolchain go1.27.0
+// The toolchain a regeneration needs is named on the command instead:
+//
+//	cd codegen && go build -o codegen . && GOTOOLCHAIN=go1.N ./codegen
+//
+// See docs/doc-site/project/maintainers/CODEGEN.md ("Regenerating").

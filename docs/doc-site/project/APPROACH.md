@@ -240,6 +240,11 @@ var _ = ginkgo.Describe("User creation", func() {
 **The debate continues** across all programming communities. Neither style is objectively superior; they optimize for
 different values and team preferences.
 
+> My two-cents: I prefer assertion-style for unit and integration tests handled by development teams,
+> where code clarity prevails.
+> 
+> I resort to BDD-style for tests driven by QA or UAT teams, where using natural language helps.
+
 ---
 
 ## Assertion-Style and Go Values
@@ -438,6 +443,45 @@ var _ = Describe("User Creation", func() {
 
 Both approaches are valid. They reflect different testing philosophies that span the entire software industry. The
 question for Go developers is: **which style aligns with the values that drew you to Go in the first place?**
+
+---
+
+## Beyond style, approaches
+
+Style is after all not that important. Perhaps more interesting is to consider alternative approaches to construct
+tests and test harnesses. Here are a few fascinating approaches 
+
+**property-based testing**
+
+In this project, we've successfully experimented a _property-based testing_ approach to validate more systematically
+a few packages (see `internal/testintegration`).
+
+This is using the excellent library [`rapid`](https://pkg.go.dev/pgregory.net/rapid) to produce random structures
+submitted to `spew.Dump` and spotted quite a few actual bugs in there.
+
+**fuzzing**
+
+Also a randomized approach to testing. The fuzz driver that comes with the standard toolchain is smart: it selects
+the random candidates and track their code coverage path, so it biases its sampling toward exploring more code paths.
+
+Fuzzing may be nicely coupled with property-based testing. Again, feel free to take a peek at our integration tests.
+
+If you are interested, you may look at how fuzz tests are implemented in this project. We've also equipped our CI pipeline
+with a caching of the fuzz corpus and retrieval of captured failures.
+
+**mutesting**
+
+The "mutation testing" approach is more about assessing the quality of your tests, complementary to test coverage,
+rather than about testing functionality.
+
+The principle is to inject bugs randomly in your code and verify that your test suite actually catch them:
+good tests are tests that catch bugs, not tests that walk 100% of the code and do not verify anything.
+
+Unfortunately, support is still experimental for `golang`, although many languages already come with decent support for
+this technique.
+
+If you're interested, <https://github.com/zimmski/go-mutesting> provides an old but convincing experience. This fork would love to continue
+the work <https://github.com/fredbi/go-messmaker>, but we are currently a bit short of time to implement the ideas behind it.
 
 ---
 
