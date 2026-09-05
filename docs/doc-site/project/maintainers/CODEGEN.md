@@ -163,7 +163,7 @@ graph TD
     style require_group fill:#ffb6c1,color:#000
 {{< /mermaid >}}
 
-> **reflection-based assertions become 8, generic assertions become 4**
+> **reflection-based assertions become 8, generic assertions become 4 + 4 more available on go1.27)**
 >
 > (plus tests and documentation for each).
 
@@ -251,7 +251,182 @@ To cover these edge cases, a `relocate` function map currently rewrites the exam
 from an external package. The relocation uses go parsing capabilities. The only hard-coded exception if for `PanicFunc`.
 (see `codegen/internal/generator/funcmap.go`).
 
+---
+
+### Adding an assertion with go version gate
+
+Some assertions need a standard library function that only exists from a given Go release on.
+`ErrorAsType` was the first: it wraps `errors.AsType`, added in go1.26, at a time when the
+library still supported go1.25.
+
+Build constraints in Go apply to a whole file, so such an assertion gets its own source file,
+and the generator replicates that file's `//go:build` line onto a parallel set of generated
+files. Users on an older toolchain never see the file: it drops out before the compiler reads it.
+
+The walkthrough below follows what we did for `ErrorAsType` in v2.6. The gate is gone since
+v2.7 raised the floor to go1.26 (PR #164), so read the recipe here rather than in the tree.
+
+**1. Write the assertion in its own guarded file.**
+
+Name it `internal/assertions/<domain>_go1NN.go` — `error_go126.go` for `ErrorAsType` — and put
+the constraint between the SPDX header and the package clause, with a blank line on each side:
+
+```go
+// SPDX-FileCopyrightText: Copyright 2025 go-swagger maintainers
+// SPDX-License-Identifier: Apache-2.0
+
+//go:build go1.26
+
+package assertions
+```
+
+Write `go1.26`, not `1.26`; the latter parses as a plain tag name and gates nothing.
+
+Everything else stays as in [Adding a New Assertion](#adding-a-new-assertion): the same
+`// Domain: error` tag, the same `Examples:` block. The domain tag decides which page the
+assertion documents on, so a guarded assertion lands next to its unguarded siblings.
+Say in the doc comment that the assertion needs the newer toolchain — the generated variants
+copy the comment verbatim to `pkg.go.dev`, where nothing else marks the constraint.
+
+**2. Regenerate on a toolchain that can see the guard.**
+
+The generator never reads the guarded file itself. `packages.Load` shells out to `go list` in
+the work-dir, and that subprocess decides which files exist. Run it on a toolchain older than
+the guard and the file is simply absent: the assertion disappears from `assert/`, from
+`require/` and from the doc site, with no error and nothing in the diff to catch the eye.
+
+Two things that look like they would protect you, and do not:
+
+- **The toolchain you built the generator with.** The binary carries no toolchain. Build it
+  with go1.27 and run it with go1.26 on `PATH` and the scan still sees a go1.26 view.
+- **The `toolchain` directive in `codegen/go.mod`.** A module's directive is ignored in
+  workspace mode, and the scan's `go list` runs in the repository root with the workspace
+  active. That directive covers standalone use — `go run github.com/go-openapi/testify/codegen/v2@latest`,
+  or `GOWORK=off` inside `codegen/` — and nothing else.
+
+So name the toolchain on the regeneration command itself:
+
+```bash
+cd codegen
+go build -o codegen .
+GOTOOLCHAIN=go1.26.0 ./codegen
+```
+
+**Do not raise the `go.work` toolchain line to cover a guard.** That line applies to every
+command run in the workspace, and CI runs the whole `oldstable`/`stable` matrix through
+`go test work ./...`. Pin the workspace and both matrix entries build the same toolchain, so
+the older one stops exercising the exclusion path — which is the one property the guard exists
+to protect.
+
+{{% notice tip "The generator refuses an incomplete scan" "shield" %}}
+> You do not have to remember this. `verifyGuardedFilesLoaded` (`codegen/internal/scanner/buildtags.go`)
+> reads the package directory textually, compares the `//go:build go1.N` files it finds there against
+> the files the load actually returned, and stops the run when one is missing:
+>
+> ```
+> guarded source file missing from the scan: error_go127.go (//go:build go1.27). The go command
+> running the scan is older than these guards ... Rerun with GOTOOLCHAIN=go1.27.0
+> ```
+>
+> The scan on disk has to be textual: a file guarded above the running toolchain never appears in the
+> typed package, so the typed view cannot report what it is missing. Nothing is generated before the
+> check passes. Only a plain `go1.N` constraint counts — a file selected on an OS or an architecture is
+> absent on some machines by design.
+{{% /notice %}}
+
+**3. Add the hand-written tests that examples cannot express.**
+
+`Examples:` still drives the generated tests for all variants. Anything they cannot reach goes
+in `internal/assertions/<domain>_go1NN_test.go`, carrying the same `//go:build` line. For
+`ErrorAsType`, `error_go126_test.go` covered the nil-target form, where `E` cannot be inferred
+from the argument and has to be written out: `ErrorAsType[*customError](mock, err, nil)`.
+
+**4. Regenerate.**
+
+```bash
+go generate ./...
+```
+
+No change to the generator itself. Each category of generated file gains a guarded twin,
+suffixed with the constraint (`model.GoBuildTag` turns `go1.26` into `go126`):
+
+| Default file | Guarded twin |
+|--------------|--------------|
+| `assert/assert_assertions.go` | `assert/assert_assertions_go126.go` |
+| `assert/assert_format.go` | `assert/assert_format_go126.go` |
+| `assert/assert_assertions_test.go` | `assert/assert_assertions_go126_test.go` |
+| `assert/assert_format_test.go` | `assert/assert_format_go126_test.go` |
+| `assert/assert_examples_test.go` | `assert/assert_examples_go126_test.go` |
+
+`require/` gets the same five. Package boilerplate is not duplicated: the `Assertions` type,
+`New`, `forwardArgs`, the mock types and the shared test fixtures stay in the default files,
+gated in the templates behind `{{ if not .BuildConstraint }}`, and the guarded files refer to
+them. A category with nothing to declare produces no file at all.
+
+**The forward methods are keyed on a second constraint.** A generic assertion becomes a method
+only from go1.27 on, whatever guard its source carries, so `ErrorAsType`'s methods went to
+`assert_forward_go127.go` — `Function.ForwardGoBuild` returns the higher of the source guard
+and go1.27 for a generic function, and `Generate` partitions the forward files on that instead
+of on `GoBuild`. This is why the go1.26 batch above has no `assert_forward_go126.go`.
+
+On the doc site the badges are automatic. The domain page prints
+{{% goversion "go1.26" %}} next to the assertion heading and adds a line to the legend, and
+`metrics.md` badges the row. Nothing to hand-edit.
+
+**5. Removing the gate, later.**
+
+When the supported floor catches up, move the functions into the plain domain file, delete the
+two `//go:build` lines, fold the hand-written tests back into `<domain>_test.go`, and
+regenerate. `sweepOrphanVariants` deletes the ten `*_go126*.go` files this run no longer
+produces, logging each removal; it only touches files matching `<pkg>_*_go<N>[_test].go` that
+carry our "DO NOT EDIT" marker, so a hand-authored file of the same shape survives.
+
+> `go generate ./...` snapshots each package's file list before running the directives, so the
+> run that removes an orphan can end on a harmless "no such file". Rerun it, or call
+> `go run ./codegen/main.go` directly.
+
+Also re-enable `TestBuildConstraintDetection` in `codegen/internal/scanner/buildtags_test.go`
+when a guard comes back, and skip it again when the last one goes: it asserts that the scanner
+attaches the constraint to the guarded function, and needs a guarded assertion to look at.
+
+---
+
+### Regenerating
+
+Build the generator and run it from `codegen/`. Every flag defaults to what this repository
+needs — `-work-dir ..` to scan, `-target-root ..` to write — so the bare command is the whole
+procedure:
+
+```bash
+cd codegen
+go build -o codegen .
+./codegen
+```
+
+`go generate ./...` from the repository root does the same through the directive in `doc.go`.
+It is the shorter form, and the one to avoid when a run deletes a generated file: `go generate`
+snapshots each package's file list before it runs the directives, so it can end on a spurious
+"no such file" for the file just removed (see [Removing the gate](#adding-an-assertion-with-go-version-gate)).
+
+**Which Go runs the scan matters.** The generator reads `internal/assertions` through
+`packages.Load`, which shells out to `go list`; that subprocess uses the `go` on `PATH`, in the
+repository root, with the workspace active. The toolchain that compiled the generator has no
+say in it. This only bites when `internal/assertions` carries a `//go:build go1.N` file — see
+[Adding an assertion with go version gate](#adding-an-assertion-with-go-version-gate) — and the
+fix is to name the toolchain on the command: `GOTOOLCHAIN=go1.N ./codegen`.
+
+Then check the result:
+
+```bash
+git diff --stat        # generated files only; nothing under internal/assertions
+go test ./...
+```
+
+---
+
 ### Generator Flags
+
+> Defaults are defined so running the command is essentially hassle-free to maintain this project: no arguments needed.
 
 ```bash
 go run ./codegen/main.go \
@@ -259,13 +434,15 @@ go run ./codegen/main.go \
 	-input-package=github.com/go-openapi/testify/v2/internal/assertions \
 	-output-packages=assert,require \
 	-target-root=.. \
+	-target-doc=docs/doc-site/api \
 	-include-format-funcs=true \
 	-include-forward-funcs=true \
 	-include-tests=true \
+	-include-generics=true \
+	-include-helpers=true \
 	-include-examples=true \
 	-runnable-examples=true \
-	-include-helpers=true \
-	-include-generics=false
+	-include-doc=true
 ```
 
 Current usage with `go generate` (see `doc.go`):
@@ -274,7 +451,7 @@ Current usage with `go generate` (see `doc.go`):
 //go:generate go run ./codegen/main.go -target-root . -work-dir .
 ```
 
-**Note:** Generic functions are planned but not yet implemented.
+Pass `-include-doc=false` to regenerate the code alone and leave `docs/doc-site/api` untouched.
 
 ### Verification
 

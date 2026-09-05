@@ -16,6 +16,11 @@ With this fork, we want to:
 2. [x] make it easy to maintain and extend.
 3. [x] pare down some of the chrome that has been added over the years.
 
+As of September 2026, we think all the objectives of the fork have been achieved.
+It is now widely adopted across all go-openapi and go-swagger github projects. TL;DR: it just works.
+
+The project keeps adding features and fixes. We continue tracking upstream at least quarterly. Steady and easy.
+
 ---
 
 {{% notice style="primary" title="Extended hand" icon="hand" %}}

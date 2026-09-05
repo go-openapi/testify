@@ -18,13 +18,14 @@ This is the go-openapi fork of the great [testify](https://github.com/stretchr/t
 ### Status
 
 {{% button href="https://github.com/go-openapi/testify/fork" hint="fork me on github" style=primary icon=code-fork %}}Fork me{{% /button %}}
-Design and exploration phase. Feedback, contributions and proposals are welcome.
+Design and exploration phase completed. The published API is now stable:
+moving forward, API changes will remain backward-compatible with v2.4.0.
 
 See our [ROADMAP](./project/maintainers/ROADMAP.md).
 
 ### Motivation
 
-See [why we wanted a v2](./MOTIVATION.md).
+See [why we wanted a v2](./project/MOTIVATION.md).
 
 ### Getting started
 
@@ -138,6 +139,21 @@ This library ships under the [SPDX-License-Identifier: Apache-2.0](./project/LIC
 See the license [NOTICE](./project/NOTICE.md), which recalls the licensing terms of all the pieces of software
 distributed with this fork, including internalized libraries.
 
+---
+
+We'd like to give credit and pay a big and loud thank you to the people who wrote these amazing pieces of software.
+We maintain their original work here and continue improving it.
+
+* Mat Ryer, Tyler Bunnell and the `stretchr/testify` contributors - who made this new project possible
+* thank you to the maintainers of that library, @ccoveille, @dolmen for their feedback and advice
+* Dave Collins <dave@davec.name> who wrote the spew library
+* Patrick Mezard who wrote the difflib library - originally a go port from python's difflib
+
+Also special thanks to:
+
+* Gregory Petrosyan (@flyingmutant) - we use his amazing "rapid" library for our integration tests, with property-based testing
+* the authors and maintainers of github.com/yaml/go-yaml, which we rely on for our YAML work
+
 ## Contributing
 
 Feel free to submit issues, fork the repository and send pull requests!
@@ -161,7 +177,7 @@ See also our [CONTRIBUTING guidelines](./project/contributing/CONTRIBUTING.md).
 - [Generics Guide](./usage/GENERICS.md) - Type-safe assertions with generic functions
 - [Migration Guide](./usage/MIGRATION.md) - Migrating from stretchr/testify v1
 - [Changes from v1](./usage/CHANGES.md) - All changes and improvements in v2
-- [Benchmarks](./project/maintainers/benchmarks.md) - Performance improvements in v2
+- [Benchmarks](./project/maintainers/BENCHMARKS.md) - Performance improvements in v2
 
 **Reference:**
 - [API Reference](./api/_index.md) - Complete assertion catalog organized by domain

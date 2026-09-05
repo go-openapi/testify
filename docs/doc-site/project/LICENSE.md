@@ -1,7 +1,7 @@
 ---
 title: LICENSE
 description: Apache-2.0 License
-weight: 10
+weight: 30
 ---
 ```
                                  Apache License

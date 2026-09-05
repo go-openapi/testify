@@ -1,6 +1,6 @@
 params:
     metrics:
-        domains: 19
+        domains: 20
         functions: 144
         assertions: 140
         generics: 55
@@ -8,6 +8,9 @@ params:
         helpers: 4
         others: 0
         by_domain:
+            async:
+                name: Async
+                count: 4
             boolean:
                 name: Boolean
                 count: 4
@@ -22,7 +25,7 @@ params:
                 count: 12
             condition:
                 name: Condition
-                count: 9
+                count: 5
             equality:
                 name: Equality
                 count: 16

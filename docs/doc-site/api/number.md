@@ -1,7 +1,7 @@
 ---
 title: "Number"
 description: "Asserting Numbers"
-weight: 10
+weight: 11
 domains:
   - "number"
 keywords:

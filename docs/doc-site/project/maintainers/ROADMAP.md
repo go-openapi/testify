@@ -50,12 +50,14 @@ timeline
                     : generic assertions as forward methods (go1.27+)
                     : ErrorNotContains
     ⏳ v2.8 (September 2026) :
-                    : go1.26+ required
+                    : ⏳ Must helper
+                    : ⏳ Assertion with options
+                    : ✅ go1.26+ required
     ⏳ v2.9 (December 2026) : (tentative)
                     : revive test suites
 {{< /mermaid >}}
 
-## Dropped enveavors 
+## Dropped endeavors 
 
 For the moment, and after some research, we punt on the following features.
 We might reconsider these choices in the future, but for now, we are unsure about whether they are worth the added complexity.

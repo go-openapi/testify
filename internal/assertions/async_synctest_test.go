@@ -38,11 +38,11 @@ func runDualPath(t *testing.T, name string, fn func(t *testing.T)) {
 // Dual-path tests.
 // ===========================================================================
 
-// TestConditionDualPath_EventuallyBehavior exercises [Eventually]'s core
+// TestASyncDualPath_EventuallyBehavior exercises [Eventually]'s core
 // behavior through both real-time and bubble-wrapped test harnesses.
 // Using the harness-level bubble means the mock captures failures even
 // under fake time — the best of both worlds for behavior parity tests.
-func TestConditionDualPath_EventuallyBehavior(t *testing.T) {
+func TestASyncDualPath_EventuallyBehavior(t *testing.T) {
 	runDualPath(t, "succeeds on first call", func(t *testing.T) {
 		mock := new(errorsCapturingT)
 		if !Eventually(mock, func() bool { return true }, testTimeout, testTick) {
@@ -87,9 +87,9 @@ func TestConditionDualPath_EventuallyBehavior(t *testing.T) {
 	})
 }
 
-// TestConditionDualPath_EventuallyWithErrorBehavior exercises the
+// TestASyncDualPath_EventuallyWithErrorBehavior exercises the
 // context/error-returning variant of [Eventually] through both paths.
-func TestConditionDualPath_EventuallyWithErrorBehavior(t *testing.T) {
+func TestASyncDualPath_EventuallyWithErrorBehavior(t *testing.T) {
 	runDualPath(t, "succeeds after returning transient errors", func(t *testing.T) {
 		mock := new(errorsCapturingT)
 		state := 0
@@ -131,9 +131,9 @@ func TestConditionDualPath_EventuallyWithErrorBehavior(t *testing.T) {
 	})
 }
 
-// TestConditionDualPath_ConsistentlyWithErrorBehavior exercises the
+// TestASyncDualPath_ConsistentlyWithErrorBehavior exercises the
 // context/error-returning variant of [Consistently] through both paths.
-func TestConditionDualPath_ConsistentlyWithErrorBehavior(t *testing.T) {
+func TestASyncDualPath_ConsistentlyWithErrorBehavior(t *testing.T) {
 	runDualPath(t, "succeeds when always nil", func(t *testing.T) {
 		mock := new(errorsCapturingT)
 		cond := func(_ context.Context) error { return nil }
@@ -167,8 +167,8 @@ func TestConditionDualPath_ConsistentlyWithErrorBehavior(t *testing.T) {
 	})
 }
 
-// TestConditionDualPath_NeverBehavior exercises [Never] through both paths.
-func TestConditionDualPath_NeverBehavior(t *testing.T) {
+// TestASyncDualPath_NeverBehavior exercises [Never] through both paths.
+func TestASyncDualPath_NeverBehavior(t *testing.T) {
 	runDualPath(t, "succeeds when condition never true", func(t *testing.T) {
 		mock := new(errorsCapturingT)
 		if !Never(mock, func() bool { return false }, testTimeout, testTick) {
@@ -194,8 +194,8 @@ func TestConditionDualPath_NeverBehavior(t *testing.T) {
 	})
 }
 
-// TestConditionDualPath_ConsistentlyBehavior exercises [Consistently] through both paths.
-func TestConditionDualPath_ConsistentlyBehavior(t *testing.T) {
+// TestASyncDualPath_ConsistentlyBehavior exercises [Consistently] through both paths.
+func TestASyncDualPath_ConsistentlyBehavior(t *testing.T) {
 	runDualPath(t, "succeeds when condition always true", func(t *testing.T) {
 		mock := new(errorsCapturingT)
 		if !Consistently(mock, func() bool { return true }, testTimeout, testTick) {
@@ -221,8 +221,8 @@ func TestConditionDualPath_ConsistentlyBehavior(t *testing.T) {
 	})
 }
 
-// TestConditionDualPath_EventuallyWithBehavior exercises [EventuallyWith] through both paths.
-func TestConditionDualPath_EventuallyWithBehavior(t *testing.T) {
+// TestASyncDualPath_EventuallyWithBehavior exercises [EventuallyWith] through both paths.
+func TestASyncDualPath_EventuallyWithBehavior(t *testing.T) {
 	runDualPath(t, "succeeds when no errors collected", func(t *testing.T) {
 		mock := new(errorsCapturingT)
 		cond := func(_ *CollectT) {}
@@ -240,10 +240,10 @@ func TestConditionDualPath_EventuallyWithBehavior(t *testing.T) {
 	})
 }
 
-// TestConditionDualPath_EventuallyWithContextBehavior exercises the
+// TestASyncDualPath_EventuallyWithContextBehavior exercises the
 // context variant of [EventuallyWith] (`func(ctx, *CollectT)`) through
 // both paths.
-func TestConditionDualPath_EventuallyWithContextBehavior(t *testing.T) {
+func TestASyncDualPath_EventuallyWithContextBehavior(t *testing.T) {
 	runDualPath(t, "succeeds after a few calls via context variant", func(t *testing.T) {
 		mock := new(errorsCapturingT)
 		counter := 0
@@ -285,10 +285,10 @@ func TestConditionDualPath_EventuallyWithContextBehavior(t *testing.T) {
 	})
 }
 
-// TestConditionDualPath_EventuallySucceedQuickly verifies that Eventually
+// TestASyncDualPath_EventuallySucceedQuickly verifies that Eventually
 // checks the condition BEFORE the first tick — by using a tick longer than
 // the total duration, only the initial-check path can succeed.
-func TestConditionDualPath_EventuallySucceedQuickly(t *testing.T) {
+func TestASyncDualPath_EventuallySucceedQuickly(t *testing.T) {
 	t.Parallel()
 	runDualPath(t, "should succeed before the first tick", dualEventuallySucceedBeforeFirstTick)
 }
@@ -303,12 +303,12 @@ func dualEventuallySucceedBeforeFirstTick(t *testing.T) {
 	}
 }
 
-// TestConditionDualPath_EventuallyTimeoutBehavior verifies that Eventually
+// TestASyncDualPath_EventuallyTimeoutBehavior verifies that Eventually
 // fails correctly when the condition is slower than the timeout (issue 805)
 // and when the parent context is cancelled. Both subtests run under real
 // time and inside a synctest bubble — reassurance that no semantic shift
 // occurs when switching modes.
-func TestConditionDualPath_EventuallyTimeoutBehavior(t *testing.T) {
+func TestASyncDualPath_EventuallyTimeoutBehavior(t *testing.T) {
 	t.Parallel()
 	runDualPath(t, "should fail on timeout", dualEventuallyTimeoutOnSlowCondition)
 	runDualPath(t, "should fail when parent context is cancelled", dualEventuallyTimeoutOnParentCancellation)
@@ -369,12 +369,12 @@ func dualEventuallyTimeoutOnParentCancellation(t *testing.T) {
 	}
 }
 
-// TestConditionDualPath_PollUntilTimeoutBehavior exercises the shared
+// TestASyncDualPath_PollUntilTimeoutBehavior exercises the shared
 // poll-until-timeout subtests for [Never] and [Consistently] through both
 // real-time and synctest paths. These subtests cover timing-independent
 // invariants (initial-check before first tick, flipped-condition failure,
 // parent-context cancellation) and benefit from dual-path for determinism.
-func TestConditionDualPath_PollUntilTimeoutBehavior(t *testing.T) {
+func TestASyncDualPath_PollUntilTimeoutBehavior(t *testing.T) {
 	t.Parallel()
 	for c := range pollUntilTimeoutCases() {
 		t.Run(c.name, func(t *testing.T) {
@@ -460,15 +460,15 @@ func dualPollCaseParentCancelled(c pollUntilTimeoutCase) func(*testing.T) {
 	}
 }
 
-// TestConditionDualPath_EventuallyWithCollectBehavior exercises the
+// TestASyncDualPath_EventuallyWithCollectBehavior exercises the
 // behavioral subtests of [EventuallyWith] through both paths. The
 // [CollectT]-based invariants (FailNow retries, Cancel short-circuits,
 // initial-check before first tick, etc.) are independent of timing and
 // work identically under real time and fake time.
 //
 // The nanosecond-tick "race trigger" subtest of [EventuallyWith] is NOT
-// migrated here — see [TestConditionEventuallyWith] for the rationale.
-func TestConditionDualPath_EventuallyWithCollectBehavior(t *testing.T) {
+// migrated here — see [TestASyncEventuallyWith] for the rationale.
+func TestASyncDualPath_EventuallyWithCollectBehavior(t *testing.T) {
 	runDualPath(t, "should complete with false (tolerant count)", dualEventuallyWithCompleteFalse)
 	runDualPath(t, "should complete with true", dualEventuallyWithCompleteTrue)
 	runDualPath(t, "should complete with fail, with latest failed condition", dualEventuallyWithFailLatest)

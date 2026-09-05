@@ -6,6 +6,8 @@ weight: 2
 
 {{% notice primary "TL;DR" "meteor" %}}
 > If you've already used `github.com/stretchr/testify`, adopting v2 will be straightforward.
+>
+> The API remains largely the same, just more systematic and clarified.
 {{% /notice %}}
 
 More examples to showcase generic assertions specifically may be found [here](./GENERICS.md).
@@ -131,6 +133,7 @@ func TestCollections(t *testing.T) {
 
 ```go
 import (
+    "io/fs"
 	"testing"
 
 	"github.com/go-openapi/testify/v2/assert"
@@ -154,6 +157,9 @@ func TestErrors(t *testing.T) {
 
 	// Check error type with errors.Is
 	assert.ErrorIs(t, err, ErrDivisionByZero)
+
+    // Check error type with errors.AsType (without capturing the target error)
+	assert.ErrorAsType[*fs.PathError](t, err, nil)
 }
 ```
 
@@ -205,6 +211,8 @@ Testify provides multiple ways to call assertions:
 
 ### 1. Package-Level Functions
 
+Simple. Direct.
+
 ```go
 import (
 	"testing"
@@ -220,6 +228,8 @@ func TestPackageLevel(t *testing.T) {
 ```
 
 ### 2. Formatted Variants (Custom Messages)
+
+Be more explicit about why a test failed.
 
 ```go
 import (
@@ -237,6 +247,8 @@ func TestFormatted(t *testing.T) {
 ```
 
 ### 3. Forward Methods (Cleaner Syntax)
+
+Most concise for long sequences of assertions: avoid the constant reinjection of `t *testing.T`.
 
 ```go
 import (
@@ -261,6 +273,8 @@ func TestForward(t *testing.T) {
 
 ### 4. Forward Methods with Formatting
 
+The above, combined.
+
 ```go
 import (
 	"testing"
@@ -282,7 +296,7 @@ func TestForwardFormatted(t *testing.T) {
 
 ## Table-Driven Tests
 
-The idiomatic Go pattern for testing multiple cases should be:
+The idiomatic Go pattern for testing multiple cases should look something like:
 
 ```go
 import (
@@ -305,7 +319,7 @@ func TestAdd(t *testing.T) {
 	})
 
 	for tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
+		t.Run(tt.name, func(t *testing.T) { // the name of the testcase so a failure is easily found
 			result := Add(tt.a, tt.b)
 			assert.Equal(t, tt.expected, result)
 		})
@@ -313,7 +327,11 @@ func TestAdd(t *testing.T) {
 }
 ```
 
-With forward methods for cleaner syntax:
+> We also like to combine this with iterators like [this](../tutorial/index.html#table-driven-tests-with-iterator-pattern):
+> the logic of the test is not polluted by the list of test cases.
+> Testcase iterators may also be parameterized.
+
+You may use forward methods for a more concise syntax:
 
 ```go
 func TestAdd(t *testing.T) {
@@ -388,7 +406,13 @@ func TestJSONResponse(t *testing.T) {
 }
 ```
 
+> The same assertions are available for YAML. Don't forget to enable
+> YAML by importing `github.com/go-openapi/testify/enable/yaml/v2`.
+
 ### Testing with Subtests
+
+Each subtest documents a few assertions and shows as such in the test report.
+Prefer an explicit named subtest over a comment in code.
 
 ```go
 import (
@@ -441,6 +465,9 @@ func TestPanics(t *testing.T) {
 	assert.PanicsWithValue(t, "division by zero", func() {
 		Divide(10, 0)
 	})
+
+    // Function should panic with a specific error message
+	assert.PanicsWithError(t, "crazy error", func(){ GoCrazy() })
 }
 ```
 

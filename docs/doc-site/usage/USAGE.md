@@ -5,11 +5,15 @@ weight: 1
 ---
 
 {{% notice primary "TL;DR" "meteor" %}}
-> Learn testify's naming conventions (assert vs require, format variants, generic `T` suffix), argument order patterns, and how to navigate
-> {{% siteparam "metrics.assertions" %}} assertions organized into {{% siteparam "metrics.domains" %}} domains. Start here to understand the API structure.
+> Learn testify's naming conventions (assert vs require, format variants, generic `T` suffix), argument order patterns,
+> and how to navigate the {{% siteparam "metrics.assertions" %}} assertions organized into {{% siteparam "metrics.domains" %}} domains.
+>
+> Start here to understand the API structure.
 {{% /notice %}}
 
-Testify v2 provides **{{% siteparam "metrics.functions" %}} functions** ({{% siteparam "metrics.assertions" %}} assertions including {{% siteparam "metrics.generics" %}} generic variants, plus {{% siteparam "metrics.helpers" %}} helper functions) organized into {{% siteparam "metrics.domains" %}} domains. This guide explains how to navigate the API and use the naming conventions effectively.
+Testify v2 provides **{{% siteparam "metrics.functions" %}} functions** ({{% siteparam "metrics.assertions" %}} assertions including {{% siteparam "metrics.generics" %}} generic variants, plus {{% siteparam "metrics.helpers" %}} helper functions) organized into {{% siteparam "metrics.domains" %}} domains.
+
+This guide explains how to navigate the API and use the naming conventions effectively.
 
 ## How the API is Organized
 
@@ -17,10 +21,11 @@ Assertions are grouped by domain for easier discovery:
 
 | Domain | Examples | Count |
 |--------|----------|-------|
+| **Async** | `Eventually`, `Never` | {{% siteparam "metrics.by_domain.async.count" %}} |
 | **Boolean** | `True`, `False` | {{% siteparam "metrics.by_domain.boolean.count" %}} |
 | **Collection** | `Contains`, `Len`, `Empty`, `ElementsMatch` | {{% siteparam "metrics.by_domain.collection.count" %}} |
 | **Comparison** | `Greater`, `Less`, `Positive` | {{% siteparam "metrics.by_domain.comparison.count" %}} |
-| **Condition** | `Eventually`, `Never`, `Consistently` | {{% siteparam "metrics.by_domain.condition.count" %}} |
+| **Condition** | `Condition`, `Blocked` | {{% siteparam "metrics.by_domain.condition.count" %}} |
 | **Equality** | `Equal`, `NotEqual`, `EqualValues`, `Same`, `Exactly` | {{% siteparam "metrics.by_domain.equality.count" %}} |
 | **Error** | `Error`, `NoError`, `ErrorIs`, `ErrorAs`, `ErrorContains` | {{% siteparam "metrics.by_domain.error.count" %}} |
 | **File** | `FileExists`, `DirExists`, `FileEmpty` | {{% siteparam "metrics.by_domain.file.count" %}} |
@@ -44,10 +49,11 @@ See the complete [API Reference](../api/_index.md) organized by domain for a det
 
 ### Quick Reference
 
+- **[Quick index](../api/metrics.md)** - All in a single table, with semantic opposites side by side
 - **[Examples](./EXAMPLES.md)** - Practical code examples for common testing scenarios
 - **[API Reference](../api/_index.md)** - Complete assertion catalog organized by domain
-- **[Generics Guide](../GENERICS.md)** - Using type-safe assertions with the `T` suffix
-- **[Changes](../CHANGES.md)** - All changes since fork from stretchr/testify
+- **[Generics Guide](./GENERICS.md)** - Using type-safe assertions with the `T` suffix
+- **[Changes](./CHANGES.md)** - All changes since fork from stretchr/testify
 - **[pkg.go.dev](https://pkg.go.dev/github.com/go-openapi/testify/v2)** - godoc API reference with full signatures
 
 ### Finding the Right Assertion
@@ -158,7 +164,7 @@ Most assertions come with their opposite variant, typically formed by adding a `
 These exceptions follow natural English usage:
 - Testing for `False` is clearer than testing for "not true"
 - (strictly) `Negative` numbers are semantically opposite to (strictly) `Positive`,  unless when `Zero`, and not "not positive"
-- `Less` is the natural opposite of `Greater` in comparisons
+- (strictly) `Less` is the natural opposite of `GreaterOrEqual` in comparisons
 {{% /notice %}}
 
 **More semantic opposites:**
@@ -195,6 +201,10 @@ assert.YAMLEq(t, expected, actual)
 assert.WithinDuration(t, expected, actual, delta)
 assert.Implements(t, (*interface)(nil), object)  // Expected interface, actual object
 ```
+
+> What if I am wrong with the order?
+>
+> Most tests would still pass, but the error message will be misleading when they don't.
 
 #### Comparison Operators: e1, e2
 

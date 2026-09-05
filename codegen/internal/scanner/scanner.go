@@ -72,6 +72,13 @@ func (s *Scanner) Scan() (*model.AssertionPackage, error) {
 
 	// we consider only one package
 	pkg := pkgs[0]
+
+	// A file guarded above the toolchain running the load never reached pkg. Stop here rather
+	// than generate from a view that is quietly missing assertions.
+	if err := verifyGuardedFilesLoaded(pkg); err != nil {
+		return nil, err
+	}
+
 	s.syntaxPackage = pkg.Syntax
 	s.typedPackage = pkg.Types
 	if s.typedPackage == nil {

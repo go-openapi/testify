@@ -1,7 +1,7 @@
 ---
 title: "Type"
 description: "Asserting Types Rather Than Values"
-weight: 17
+weight: 18
 domains:
   - "type"
 keywords:

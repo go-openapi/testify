@@ -51,7 +51,7 @@ This pass handles:
 - Import path rewriting (`assert`, `require`, root package)
 - Function renames (`EventuallyWithT` to `EventuallyWith`, `NoDirExists` to `DirNotExists`, etc.)
 - Type replacement (`PanicTestFunc` to `func()`)
-- YAML enable import injection (adds `_ "github.com/go-openapi/testify/v2/enable/yaml"` when `YAMLEq` is used)
+- YAML enable import injection (adds `_ "github.com/go-openapi/testify/enable/yaml/v2"` when `YAMLEq` is used)
 - Incompatible import detection (`mock`, `suite`, `http` packages emit warnings with guidance)
 - `go.mod` update (drops `stretchr/testify`, adds `go-openapi/testify/v2`)
 

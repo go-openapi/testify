@@ -1,7 +1,7 @@
 ---
 title: "Panic"
 description: "Asserting A Panic Behavior"
-weight: 12
+weight: 13
 domains:
   - "panic"
 keywords:

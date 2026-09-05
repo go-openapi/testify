@@ -1,7 +1,7 @@
 ---
 title: "Boolean"
 description: "Asserting Boolean Values"
-weight: 1
+weight: 2
 domains:
   - "boolean"
 keywords:
