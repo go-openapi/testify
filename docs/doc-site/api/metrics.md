@@ -19,14 +19,15 @@ on methods; on go1.26 those two variants per generic assertion are excluded by t
 
 | Kind                      | Count             | Note |
 | ------------------------- | ----------------- | ---- |
-| All core functions             | 144 | Maintained core |
-| All core assertions       | 140 | Usage with `*testing.T` |
-| Generic assertions        | 55   | Type-safe assertions ("T" suffix) |
-| Helpers (not assertions)  | 4    | General-purpose utilities, not assertions |
+| All core functions             | 145 | Maintained core (internal) |
+| All core assertions       | 140 | Usage with `*testing.T` (per package) |
+| Generic assertions        | 55   | Type-safe assertions ("T" suffix) (per package) |
+| Helpers (not assertions)  | 5    | General-purpose utilities, not assertions (per package) |
 | Others                    | 0     | |
 | assert/require variants   | 560 | Generated variants |
 | Total assertions variants | 1120 | Available assertions API |
-| Total API surface         | 1130 | |
+| Constructors              | 2                     | Builders of Assertion values |
+| Total API surface         | 1132 | All variants, constructors and helpers over all packages |
 
 ## Quick index
 
@@ -119,6 +120,7 @@ Table of core assertions, excluding variants. Each function is side by side with
 | [Subset](collection/#subset) | [NotSubset](collection/#notsubset) | collection |  |
 | [True](boolean/#true) | [False](boolean/#false) | boolean |  |
 | [TrueT[B Boolean]](boolean/#truetb-boolean) {{% icon icon="star" color=orange %}} | [FalseT](boolean/#falsetb-boolean) | boolean |  |
+| [WithHunkSize](common/#withhunksize) |  | common | helper |
 | [WithinDuration](time/#withinduration) |  | time |  |
 | [WithinRange](time/#withinrange) |  | time |  |
 | [YAMLEq](yaml/#yamleq) |  | yaml |  |

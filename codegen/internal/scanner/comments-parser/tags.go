@@ -28,6 +28,7 @@ func ParseTaggedComments(text string) []model.ExtraComment {
 		notePrefix       = "note"
 		mentionPrefix    = "mention"
 		oppositePrefix   = "opposite"
+		excludedPrefix   = "excluded"
 	)
 
 	inValue := false
@@ -36,6 +37,7 @@ func ParseTaggedComments(text string) []model.ExtraComment {
 	startValueNote := StartValueFunc(notePrefix)
 	startValueMention := StartValueFunc(mentionPrefix)
 	startValueOpposite := StartValueFunc(oppositePrefix)
+	startValueExcluded := StartValueFunc(excludedPrefix)
 
 	startTaggedValue := func(line string) (key string, val string, tag model.CommentTag, multiline bool, ok bool) {
 		val, ok = startValueDomain(line)
@@ -57,6 +59,10 @@ func ParseTaggedComments(text string) []model.ExtraComment {
 		val, ok = startValueOpposite(line)
 		if ok {
 			return "", val, model.CommentTagOpposite, false, true
+		}
+		val, ok = startValueExcluded(line)
+		if ok {
+			return "", val, model.CommentTagExcluded, false, true
 		}
 
 		return "", "", model.CommentTagNone, false, false

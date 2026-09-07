@@ -24,9 +24,10 @@ func TestDiff(t *testing.T) {
 	type myTime time.Time
 	t0 := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
 	t1 := t0.Add(time.Second)
+	var opt options
 
 	t.Run("diff should render time with stringer", func(t *testing.T) {
-		diffResult := diff(t0, t1)
+		diffResult := diff(t0, t1, opt)
 		if strings.Contains(diffResult, "-(time.Time) 2026-01-01 00:00:00 +0000 UTC") &&
 			strings.Contains(diffResult, "+(time.Time) 2026-01-01 00:00:01 +0000 UTC") {
 			return
@@ -52,7 +53,7 @@ func TestDiff(t *testing.T) {
 			C: &t1,
 		}
 
-		diffResult := diff(expected, actual)
+		diffResult := diff(expected, actual, opt)
 		if strings.Contains(diffResult, "- A: (time.Time) 2026-01-01 00:00:00 +0000 UTC") &&
 			strings.Contains(diffResult, "- B: (assertions.myTime) 2026-01-01 00:00:00 +0000 UTC") &&
 			strings.Contains(diffResult, "- C: (*time.Time)(2026-01-01 00:00:00 +0000 UTC)") &&
@@ -68,12 +69,12 @@ func TestDiff(t *testing.T) {
 	t.Run("diff on nil/nil interface types should render empty", func(t *testing.T) {
 		var a, b error
 
-		diffResult := diff(a, &b)
+		diffResult := diff(a, &b, opt)
 		if diffResult != "" {
 			t.Errorf("expected an empty string to render the diff")
 		}
 
-		diffResult = diff((*error)(nil), (*error)(nil))
+		diffResult = diff((*error)(nil), (*error)(nil), opt)
 		if diffResult != "" {
 			t.Errorf("expected an empty string to render the diff")
 		}
@@ -110,6 +111,7 @@ func TestTypeDiffRace(t *testing.T) {
 		"e": "E",
 		"f": "F",
 	}
+	var opt options
 
 	// run diffs in parallel simulating tests with t.Parallel()
 	numRoutines := 10
@@ -118,7 +120,7 @@ func TestTypeDiffRace(t *testing.T) {
 		rChans[idx] = make(chan string)
 		go func(ch chan string) {
 			defer close(ch)
-			ch <- diff(expected, actual)
+			ch <- diff(expected, actual, opt)
 		}(rChans[idx])
 	}
 
@@ -140,9 +142,11 @@ func testDiff() func(*testing.T) {
 				t.Parallel()
 
 				for range min(1, tt.repeat) { // for tests on maps, need to verify the ordering is stable
+					var opts options
 					actual := diff(
 						tt.valueA,
 						tt.valueB,
+						opts,
 					)
 					if tt.expected != actual {
 						t.Errorf("expected diff:\n%s\ngot:\n%s", tt.expected, actual)

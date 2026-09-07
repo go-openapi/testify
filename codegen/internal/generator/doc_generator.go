@@ -218,6 +218,9 @@ func (d *DocGenerator) buildMetrics(docsByDomain iter.Seq2[string, model.Documen
 		var domainMetrics model.DomainMetrics
 		domainMetrics.Name = doc.Title
 		for _, fn := range doc.Package.Functions {
+			if fn.IsExcluded {
+				continue
+			}
 			metrics.Functions++
 
 			if fn.IsHelper {

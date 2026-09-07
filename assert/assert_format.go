@@ -1415,10 +1415,13 @@ func Zerof(t T, i any, msg string, args ...any) bool {
 	return assertions.Zero(t, i, forwardArgs(msg, args)...)
 }
 
-func forwardArgs(msg string, args []any) []any {
-	result := make([]any, len(args)+1)
+func forwardArgs(msg string, args []any, extras ...any) []any {
+	result := make([]any, len(args)+len(extras)+1)
 	result[0] = msg
 	copy(result[1:], args)
+	for i, extra := range extras {
+		result[len(args)+i+1] = extra
+	}
 
 	return result
 }

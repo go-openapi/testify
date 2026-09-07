@@ -157,7 +157,8 @@ func EqualValues(t T, expected, actual any, msgAndArgs ...any) bool {
 	}
 
 	if !ObjectsAreEqualValues(expected, actual) {
-		diff := diff(expected, actual)
+		msgAndArgs, o := splitArgs(msgAndArgs)
+		diff := diff(expected, actual, o)
 		expected, actual = formatUnequalValues(expected, actual)
 		return Fail(t, fmt.Sprintf("Not equal: \n"+
 			"expected: %s\n"+
@@ -247,7 +248,8 @@ func EqualExportedValues(t T, expected, actual any, msgAndArgs ...any) bool {
 	}
 
 	if !ObjectsAreEqualValues(thisExpected, thisActual) {
-		diff := diff(thisExpected, thisActual)
+		msgAndArgs, o := splitArgs(msgAndArgs)
+		diff := diff(thisExpected, thisActual, o)
 		thisExpected, thisActual = formatUnequalValues(thisExpected, thisActual)
 		return Fail(t, fmt.Sprintf("Not equal (comparing only exported fields): \n"+
 			"expected: %s\n"+
@@ -288,7 +290,8 @@ func failWithDiff(t T, expected, actual any, msgAndArgs ...any) bool {
 		h.Helper()
 	}
 
-	diff := diff(expected, actual)
+	msgAndArgs, o := splitArgs(msgAndArgs)
+	diff := diff(expected, actual, o)
 	expectedStr, actualStr := formatUnequalValues(expected, actual)
 
 	if colors.Enabled() {

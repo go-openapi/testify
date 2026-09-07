@@ -92,7 +92,7 @@ func TestForwardGenericsAssert(t *testing.T) {
 	for _, want := range []string{
 		"//go:build go1.27",
 		"func (a *Assertions) EqualT[V comparable](expected V, actual V, msgAndArgs ...any) bool {",
-		"return assertions.EqualT[V](a.T, expected, actual, msgAndArgs...)",
+		"return assertions.EqualT[V](a.T, expected, actual, append(msgAndArgs, a.o)...)",
 		"func (a *Assertions) EqualTf[V comparable](expected V, actual V, msg string, args ...any) bool {",
 	} {
 		if !strings.Contains(guarded, want) {
@@ -133,7 +133,7 @@ func TestForwardGenericsRequire(t *testing.T) {
 	for _, want := range []string{
 		"//go:build go1.27",
 		"func (a *Assertions) EqualT[V comparable](expected V, actual V, msgAndArgs ...any) {",
-		"if assertions.EqualT[V](a.T, expected, actual, msgAndArgs...) {",
+		"if assertions.EqualT[V](a.T, expected, actual, append(msgAndArgs, a.o)...) {",
 		"a.T.FailNow()",
 	} {
 		if !strings.Contains(guarded, want) {

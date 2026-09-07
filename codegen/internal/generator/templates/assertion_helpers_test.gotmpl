@@ -10,15 +10,13 @@ import (
 )
 {{- end }}
 
-{{- range .Functions }}
-  {{- if .IsHelper }}
+{{- range .Functions.Scope "only-helpers" . }} 
 
-func Test{{ .Name }}f(t *testing.T) {
+func Test{{ .Name }}(t *testing.T) {
   {{- if (not .HasTest) }}
 	t.Skip() // this function doesn't have tests yet
   {{- else }}
 	// TODO
   {{- end }}
 }
-  {{- end }}
 {{- end }}

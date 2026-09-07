@@ -66,12 +66,13 @@ func TestNumberInDeltaSlice(t *testing.T) {
 func TestNumberInDeltaMapValues(t *testing.T) {
 	t.Parallel()
 	mock := new(mockT)
+	var opts options
 
 	// only have a reflection-based assertion here
 	for tc := range numberInDeltaMapCases() {
 		result := InDeltaMapValues(mock, tc.expect, tc.actual, tc.delta)
 		if result != tc.shouldPass {
-			t.Errorf("%s: expected result=%v, got %v\n%s", tc.name, tc.shouldPass, result, diff(tc.expect, tc.actual))
+			t.Errorf("%s: expected result=%v, got %v\n%s", tc.name, tc.shouldPass, result, diff(tc.expect, tc.actual, opts))
 		}
 	}
 }

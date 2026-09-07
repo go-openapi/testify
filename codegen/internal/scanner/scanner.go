@@ -225,7 +225,9 @@ func (s *Scanner) addFunction(object *types.Func) {
 		function.SourceLink = &pos
 		function.Domain = parser.DomainFromExtraComments(function.ExtraComments)
 	}
+
 	function.IsDeprecated = isDeprecated(function.DocString)
+	function.IsExcluded = isExcluded(function.ExtraComments)
 
 	s.result.Functions = append(s.result.Functions, function)
 }
@@ -295,10 +297,10 @@ func (s *Scanner) addNamedType(object *types.TypeName) {
 		namedType.Function = &fn
 	}
 
+	namedType.ExtraComments = s.commentExtractor.ExtractExtraComments(object)
 	if s.collectDoc {
 		pos := s.fileSet.Position(object.Pos())
 		namedType.SourceLink = &pos
-		namedType.ExtraComments = s.commentExtractor.ExtractExtraComments(object)
 		namedType.Domain = parser.DomainFromExtraComments(namedType.ExtraComments)
 	}
 
@@ -313,4 +315,14 @@ var deprecatedRx = regexp.MustCompile(`(^|\n\s*\n)\s*Deprecated:`)
 
 func isDeprecated(comment string) bool {
 	return deprecatedRx.MatchString(comment)
+}
+
+func isExcluded(extras []model.ExtraComment) bool {
+	for _, extra := range extras {
+		if extra.IsExcluded() {
+			return true
+		}
+	}
+
+	return false
 }

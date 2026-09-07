@@ -47,8 +47,10 @@ See also a quick [migration guide](./MIGRATION.md).
 | **Optional YAML support** | Design goal | YAML assertions are now enabled via opt-in `enable/yaml` module |
 | **Colorized output** | [#1467], [#1480], [#1232], [#994] | Optional colorization via `enable/color` module with themes |
 | **Enhanced diff output** | [#1829] | Improved time.Time rendering, deterministic map ordering |
+| **Tunable diff context** | [#1878] | `assert.New(t, assert.WithHunkSize(n))` widens the unchanged context shown around each change |
 
 [#1829]: https://github.com/stretchr/testify/issues/1829
+[#1878]: https://github.com/stretchr/testify/pull/1878
 
 #### Maintainability
 

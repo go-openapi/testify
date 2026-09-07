@@ -354,6 +354,9 @@ func TestUser(t *testing.T) {
 {{% /tab %}}
 {{< /tabs >}}
 
+`New` also accepts options that tune how failures are reported. See
+[Widening the Diff Context](#widening-the-diff-context) for `WithHunkSize`.
+
 ## Common Usage Patterns
 
 {{% tabs %}}
@@ -511,6 +514,70 @@ func TestTypeSafety(t *testing.T) {
 ---
 
 ## Customization
+
+### Widening the Diff Context
+
+When `Equal` fails on a struct, map or slice, testify renders a unified diff of the two values. By default the diff
+shows **1 line** of unchanged context around each change, which keeps the failure short but can hide the fields that
+tell you which record you are looking at.
+
+Pass `WithHunkSize` to `assert.New` or `require.New` to show more context:
+
+```go
+func TestUser(t *testing.T) {
+	a := assert.New(t, assert.WithHunkSize(4))
+
+	a.Equal(expected, actual)
+}
+```
+
+{{< tabs >}}
+{{% tab title="Default (1 line)" %}}
+```text
+	Error:	Not equal:
+	     	expected: assert.User{ID:1, Name:"Alice", Email:"alice@example.com", Role:"admin", Active:true, Country:"FR", City:"Paris", Zip:"75001"}
+	     	actual  : assert.User{ID:1, Name:"Alice", Email:"alice@example.com", Role:"admin", Active:true, Country:"FR", City:"Paris", Zip:"75002"}
+
+	     	Diff:
+	     	--- Expected
+	     	+++ Actual
+	     	@@ -8,3 +8,3 @@
+	     	  City: (string) (len=5) "Paris",
+	     	- Zip: (string) (len=5) "75001"
+	     	+ Zip: (string) (len=5) "75002"
+	     	 }
+```
+{{% /tab %}}
+
+{{% tab title="WithHunkSize(4)" %}}
+```text
+	Error:	Not equal:
+	     	expected: assert.User{ID:1, Name:"Alice", Email:"alice@example.com", Role:"admin", Active:true, Country:"FR", City:"Paris", Zip:"75001"}
+	     	actual  : assert.User{ID:1, Name:"Alice", Email:"alice@example.com", Role:"admin", Active:true, Country:"FR", City:"Paris", Zip:"75002"}
+
+	     	Diff:
+	     	--- Expected
+	     	+++ Actual
+	     	@@ -5,7 +5,7 @@
+	     	  Role: (string) (len=5) "admin",
+	     	  Active: (bool) true,
+	     	  Country: (string) (len=2) "FR",
+	     	  City: (string) (len=5) "Paris",
+	     	- Zip: (string) (len=5) "75001"
+	     	+ Zip: (string) (len=5) "75002"
+	     	 }
+```
+{{% /tab %}}
+{{< /tabs >}}
+
+The hunk size counts unchanged lines on each side of a change. A value larger than the rendered value prints it whole,
+which is handy for small structs. Values below 1 are clamped to 1.
+
+{{% notice style="warning" title="Forward Methods Only" icon="triangle-exclamation" %}}
+Options are carried by the `Assertions` object returned by `New`, so `WithHunkSize` has no effect on the package-level
+functions: `assert.Equal(t, expected, actual)` always uses a hunk size of 1. Build an assertion object when you want a
+wider diff.
+{{% /notice %}}
 
 ### Using a Custom YAML Unmarshaler
 

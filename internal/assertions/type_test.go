@@ -163,6 +163,7 @@ func TestTypeKind(t *testing.T) {
 func TestTypeDiffEmptyCases(t *testing.T) {
 	t.Parallel()
 
+	var opts options
 	cases := []struct {
 		a, b any
 	}{
@@ -174,7 +175,7 @@ func TestTypeDiffEmptyCases(t *testing.T) {
 		{[]int{1}, []bool{true}},
 	}
 	for _, tc := range cases {
-		if result := diff(tc.a, tc.b); result != "" {
+		if result := diff(tc.a, tc.b, opts); result != "" {
 			t.Errorf("expected empty diff for (%v, %v), got %q", tc.a, tc.b, result)
 		}
 	}

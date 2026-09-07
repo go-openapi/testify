@@ -75,6 +75,14 @@ type (
 	// The [WithSynctest] wrapper opts a call into fake-time polling.
 	NeverConditioner = assertions.NeverConditioner
 
+	// Option to modify the behavior of an assertion.
+	//
+	// Options are specified when building an assertion type with [New].
+	//
+	// At this moment, the only supported option is to modify the context-width ("hunk") of the diff
+	// reported on the family of Equal assertions.
+	Option = assertions.Option
+
 	// Ordered is a standard ordered type (i.e. types that support "<": [cmp.Ordered]) plus []byte and [time.Time].
 	//
 	// This is used by [GreaterT], [GreaterOrEqualT], [LessT], [LessOrEqualT], [IsIncreasingT], [IsDecreasingT].
