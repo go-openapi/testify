@@ -37,3 +37,10 @@ func ObjectsAreEqual(expected any, actual any) bool {
 func ObjectsAreEqualValues(expected any, actual any) bool {
 	return assertions.ObjectsAreEqualValues(expected, actual)
 }
+
+// WithHunkSize modifies the size of the hunk context in diff.
+//
+// The default is 1.
+func WithHunkSize(n int) Option {
+	return assertions.WithHunkSize(n)
+}

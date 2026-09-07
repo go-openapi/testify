@@ -12,7 +12,7 @@ import (
 
 // diff returns a diff of both values as long as both are of the same type and
 // are a struct, map, slice, array or string. Otherwise it returns an empty string.
-func diff(expected any, actual any) string {
+func diff(expected any, actual any, o options) string {
 	if expected == nil || actual == nil {
 		return ""
 	}
@@ -47,7 +47,7 @@ func diff(expected any, actual any) string {
 		FromDate: "",
 		ToFile:   "Actual",
 		ToDate:   "",
-		Context:  1,
+		Context:  max(o.hunkSize, 1),
 	}
 
 	if colors.Enabled() {

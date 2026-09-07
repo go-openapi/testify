@@ -9,18 +9,22 @@ import (
 	"testing"
 )
 
-func TestCallerInfof(t *testing.T) {
+func TestCallerInfo(t *testing.T) {
 	t.Skip() // this function doesn't have tests yet
 }
 
-func TestHTTPBodyf(t *testing.T) {
+func TestHTTPBody(t *testing.T) {
 	t.Skip() // this function doesn't have tests yet
 }
 
-func TestObjectsAreEqualf(t *testing.T) {
+func TestObjectsAreEqual(t *testing.T) {
 	t.Skip() // this function doesn't have tests yet
 }
 
-func TestObjectsAreEqualValuesf(t *testing.T) {
+func TestObjectsAreEqualValues(t *testing.T) {
+	t.Skip() // this function doesn't have tests yet
+}
+
+func TestWithHunkSize(t *testing.T) {
 	t.Skip() // this function doesn't have tests yet
 }

@@ -59,7 +59,7 @@ func (a *AssertionPackage) WithTestPackage() *AssertionPackage {
 
 func (a *AssertionPackage) HasHelpers() (ok bool) {
 	for _, fn := range a.Functions {
-		if fn.IsHelper || fn.IsConstructor {
+		if (fn.IsHelper || fn.IsConstructor) && !fn.IsExcluded {
 			return true
 		}
 	}
@@ -101,11 +101,15 @@ func (a *AssertionPackage) Clone() *AssertionPackage {
 func (a *AssertionPackage) Names() iter.Seq[string] {
 	return func(yield func(string) bool) {
 		for _, fn := range a.Functions {
+			if fn.IsExcluded {
+				continue
+			}
+
 			if !yield(fn.Name) {
 				return
 			}
 
-			if !a.EnableFormat {
+			if !a.EnableFormat || fn.IsHelper || fn.IsConstructor {
 				continue
 			}
 
@@ -152,7 +156,7 @@ func (f Functions) Scope(scope ScopeKind, ctx *AssertionPackage) (iter.Seq[Funct
 func (f Functions) iterScopeWithGenerics(ctx *AssertionPackage) func(func(Function) bool) {
 	return func(yield func(Function) bool) {
 		for _, fn := range f {
-			if fn.IsConstructor || fn.IsHelper || (fn.IsGeneric && !ctx.EnableGenerics) {
+			if fn.IsConstructor || fn.IsHelper || (fn.IsGeneric && !ctx.EnableGenerics) || fn.IsExcluded {
 				continue
 			}
 
@@ -165,7 +169,7 @@ func (f Functions) iterScopeWithGenerics(ctx *AssertionPackage) func(func(Functi
 
 func (f Functions) iterScopeWithoutGenerics(yield func(Function) bool) {
 	for _, fn := range f {
-		if fn.IsConstructor || fn.IsHelper || fn.IsGeneric {
+		if fn.IsConstructor || fn.IsHelper || fn.IsGeneric || fn.IsExcluded {
 			continue
 		}
 
@@ -177,7 +181,7 @@ func (f Functions) iterScopeWithoutGenerics(yield func(Function) bool) {
 
 func (f Functions) iterScopeHelpers(yield func(Function) bool) {
 	for _, fn := range f {
-		if !fn.IsHelper {
+		if !fn.IsHelper || fn.IsExcluded {
 			continue
 		}
 
@@ -208,6 +212,7 @@ type Function struct {
 	IsHelper      bool
 	IsDeprecated  bool
 	IsConstructor bool
+	IsExcluded    bool
 	Tests         []Test
 	// extraneous information when scanning in collectDoc mode
 	Domain        string
@@ -435,6 +440,8 @@ func (t CommentTag) String() string {
 		return "comment-tag-domain-description"
 	case CommentTagOpposite:
 		return "comment-tag-opposite"
+	case CommentTagExcluded:
+		return "comment-tag-excluded"
 	default:
 		return "invalid-value"
 	}
@@ -448,6 +455,7 @@ const (
 	CommentTagNote
 	CommentTagDomainDescription
 	CommentTagOpposite
+	CommentTagExcluded
 )
 
 type ExtraComment struct {
@@ -474,4 +482,8 @@ func (c ExtraComment) Opposite() string {
 	}
 
 	return c.Text
+}
+
+func (c ExtraComment) IsExcluded() bool {
+	return c.Tag == CommentTagExcluded
 }

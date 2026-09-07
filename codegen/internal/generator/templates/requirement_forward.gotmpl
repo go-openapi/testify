@@ -18,12 +18,17 @@ import (
 {{ docStringPackage .Package }}
 type {{ .Receiver }} struct {
   T
+
+  o any
 }
 
 // New makes a new [{{ .Receiver }}] object for the specified [T] (e.g. [testing.T]).
-func New(t T) *{{ .Receiver }} {
+//
+// It may be tuned using [Option].
+func New(t T, opts ...Option) *{{ .Receiver }} {
   return &{{ .Receiver }}{
     T: t,
+    o: assertions.BuildOptions(opts),
   }
 }
 {{- end }}
@@ -36,9 +41,9 @@ func New(t T) *{{ .Receiver }} {
 func (a *{{ $.Receiver }}) {{ .GenericName }}({{ params .Params }}, msgAndArgs ...any) {
 	if h, ok := a.T.(H); ok { h.Helper() }
   {{- if or (eq .Name "Fail") (eq .Name "FailNow") }}{{/* special sema.Tics for these two, which can only fail */}}
-	_ = {{ .TargetPackage }}.{{ .GenericCallName }}(a.T, {{ forward .Params }}, msgAndArgs...)
+	_ = {{ .TargetPackage }}.{{ .GenericCallName }}(a.T, {{ forward .Params }}, append(msgAndArgs, a.o)...)
   {{- else }}
-	if {{ .TargetPackage }}.{{ .GenericCallName }}(a.T, {{ forward .Params }}, msgAndArgs...) {
+	if {{ .TargetPackage }}.{{ .GenericCallName }}(a.T, {{ forward .Params }}, append(msgAndArgs, a.o)...) {
 		return
 	}
   {{- end }}
@@ -55,9 +60,9 @@ func (a *{{ $.Receiver }}) {{ .GenericName "f" }}({{ params .Params }}, msg stri
     h.Helper()
   }
   {{- if or (eq .Name "Fail") (eq .Name "FailNow") }}{{/* special sema.Tics for these two, which can only fail */}}
-	_ = {{ .TargetPackage }}.{{ .GenericCallName }}(a.T, {{ forward .Params }}, forwardArgs(msg, args)...)
+	_ = {{ .TargetPackage }}.{{ .GenericCallName }}(a.T, {{ forward .Params }}, forwardArgs(msg, args, a.o)...)
   {{- else }}
-	if {{ .TargetPackage }}.{{ .GenericCallName }}(a.T, {{ forward .Params }}, forwardArgs(msg, args)...) {
+	if {{ .TargetPackage }}.{{ .GenericCallName }}(a.T, {{ forward .Params }}, forwardArgs(msg, args, a.o)...) {
 		return
 	}
   {{- end }}

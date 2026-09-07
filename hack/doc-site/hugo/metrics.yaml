@@ -1,11 +1,11 @@
 params:
     metrics:
         domains: 20
-        functions: 144
+        functions: 145
         assertions: 140
         generics: 55
         nongeneric_assertions: 85
-        helpers: 4
+        helpers: 5
         others: 0
         by_domain:
             async:
@@ -70,4 +70,4 @@ params:
                 count: 5
         package_variants: 560
         total_variants: 1120
-        total_functions: 1130
+        total_functions: 1132

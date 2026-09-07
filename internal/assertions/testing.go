@@ -26,6 +26,7 @@ func Fail(t T, failureMessage string, msgAndArgs ...any) bool {
 		h.Helper()
 	}
 
+	msgAndArgs, _ = splitArgs(msgAndArgs) // strip possible injected option
 	if failureMessage != "" || len(msgAndArgs) > 0 {
 		errorWithCallerInfo(t, 1, failureMessage, msgAndArgs...)
 	}

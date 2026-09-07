@@ -204,6 +204,10 @@ func findDescribedDomains(data *model.AssertionPackage, describedDomains map[str
 
 func discoverDomainsInFunctions(pkg string, data *model.AssertionPackage, discoveredDomains map[string]Entry) {
 	for _, fn := range data.Functions {
+		if fn.IsExcluded {
+			continue
+		}
+
 		domain := fn.Domain
 		if domain == "" {
 			entry := discoveredDomains[nodomain]

@@ -18,12 +18,17 @@ import (
 {{ docStringPackage .Package }}
 type {{ .Receiver }} struct {
   T
+
+  o any
 }
 
 // New makes a new [{{ .Receiver }}] object for the specified [T] (e.g. [testing.T]).
-func New(t T) *{{ .Receiver }} {
+//
+// It may be tuned using [Option].
+func New(t T, opts ...Option) *{{ .Receiver }} {
   return &{{ .Receiver }}{
     T: t,
+    o: assertions.BuildOptions(opts),
   }
 }
 {{- end }}
@@ -35,7 +40,7 @@ func New(t T) *{{ .Receiver }} {
 {{ docStringPackage $.Package }}
 func (a *{{ $.Receiver }}) {{ .GenericName }}({{ params .Params }}, msgAndArgs ...any) {{ returns .Returns }} {
 	if h, ok := a.T.(H); ok { h.Helper() }
-	return {{ .TargetPackage }}.{{ .GenericCallName }}(a.T, {{ forward .Params }}, msgAndArgs...)
+	return {{ .TargetPackage }}.{{ .GenericCallName }}(a.T, {{ forward .Params }}, append(msgAndArgs, a.o)...)
 }
   {{- if $.EnableFormat }}
 
@@ -44,7 +49,7 @@ func (a *{{ $.Receiver }}) {{ .GenericName }}({{ params .Params }}, msgAndArgs .
 {{ docStringPackage $.Package }}
 func (a *{{ $.Receiver }}) {{ .GenericName "f" }}({{ params .Params }}, msg string, args ...any) {{ returns .Returns }} {
 	if h, ok := a.T.(H); ok { h.Helper() }
-  return {{ .TargetPackage }}.{{ .GenericCallName }}(a.T, {{ forward .Params }}, forwardArgs(msg, args)...)
+  return {{ .TargetPackage }}.{{ .GenericCallName }}(a.T, {{ forward .Params }}, forwardArgs(msg, args, a.o)...)
 }
   {{- end }}
 {{- end }}

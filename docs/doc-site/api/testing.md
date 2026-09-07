@@ -115,7 +115,7 @@ FailNow fails test.
 |--|--|
 | [`assertions.FailNow(t T, failureMessage string, msgAndArgs ...any) bool`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#FailNow) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FailNow](https://github.com/go-openapi/testify/blob/master/internal/assertions/testing.go#L45)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#FailNow](https://github.com/go-openapi/testify/blob/master/internal/assertions/testing.go#L46)
 {{% /tab %}}
 {{< /tabs >}}
 

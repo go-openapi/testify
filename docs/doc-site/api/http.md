@@ -6,7 +6,6 @@ domains:
   - "http"
 keywords:
   - "HTTPBody"
-  - "HTTPBodyf"
   - "HTTPBodyContains"
   - "HTTPBodyContainsf"
   - "HTTPBodyNotContains"
