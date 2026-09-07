@@ -19,15 +19,15 @@ on methods; on go1.26 those two variants per generic assertion are excluded by t
 
 | Kind                      | Count             | Note |
 | ------------------------- | ----------------- | ---- |
-| All core functions             | 145 | Maintained core |
-| All core assertions       | 140 | Usage with `*testing.T` |
-| Generic assertions        | 55   | Type-safe assertions ("T" suffix) (per package)|
-| Helpers (not assertions)  | 5    | General-purpose utilities, not assertions (per package)|
+| All core functions             | 145 | Maintained core (internal) |
+| All core assertions       | 140 | Usage with `*testing.T` (per package) |
+| Generic assertions        | 55   | Type-safe assertions ("T" suffix) (per package) |
+| Helpers (not assertions)  | 5    | General-purpose utilities, not assertions (per package) |
 | Others                    | 0     | |
 | assert/require variants   | 560 | Generated variants |
 | Total assertions variants | 1120 | Available assertions API |
 | Constructors              | 2                     | Builders of Assertion values |
-| Total API surface         | 1132 | All variants, constructors and helpers |
+| Total API surface         | 1132 | All variants, constructors and helpers over all packages |
 
 ## Quick index
 

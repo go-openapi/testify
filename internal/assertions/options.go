@@ -31,9 +31,17 @@ func BuildOptions(opts []Option) any {
 	return o
 }
 
-// WithHunkSize modifies the size of the hunk context in diff.
+// WithHunkSize sets how many unchanged lines the diff shows around each change.
 //
-// The default is 1.
+// The diff appears in the failure message of [Equal], [EqualT], [EqualValues],
+// [EqualExportedValues] and [Exactly], whenever both values are a struct, map, slice, array
+// or string. The default is 1. A value below 1 is clamped to 1, and a value larger than the
+// rendered value prints it whole.
+//
+// Pass it to [New], which is the only place options are read:
+//
+//	a := assert.New(t, assert.WithHunkSize(4))
+//	a.Equal(expected, actual)
 func WithHunkSize(n int) Option {
 	return func(o options) options {
 		o.hunkSize = n

@@ -118,9 +118,17 @@ values are equal.
 {{< /tabs >}}
 
 ### WithHunkSize{#withhunksize}
-WithHunkSize modifies the size of the hunk context in diff.
+WithHunkSize sets how many unchanged lines the diff shows around each change.
 
-The default is 1.
+The diff appears in the failure message of [Equal](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Equal), [EqualT](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualT), [EqualValues](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualValues),
+[EqualExportedValues](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#EqualExportedValues) and [Exactly](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#Exactly), whenever both values are a struct, map, slice, array
+or string. The default is 1. A value below 1 is clamped to 1, and a value larger than the
+rendered value prints it whole.
+
+Pass it to [New](https://pkg.go.dev/github.com/go-openapi/testify/v2/assert#New), which is the only place options are read:
+
+	a := assert.New(t, assert.WithHunkSize(4))
+	a.Equal(expected, actual)
 
 
 {{< tabs >}}
@@ -141,7 +149,7 @@ The default is 1.
 |--|--|
 | [`assertions.WithHunkSize(n int) Option`](https://pkg.go.dev/github.com/go-openapi/testify/v2/internal/assertions#WithHunkSize) | internal implementation |
 
-**Source:** [github.com/go-openapi/testify/v2/internal/assertions#WithHunkSize](https://github.com/go-openapi/testify/blob/master/internal/assertions/options.go#L35)
+**Source:** [github.com/go-openapi/testify/v2/internal/assertions#WithHunkSize](https://github.com/go-openapi/testify/blob/master/internal/assertions/options.go#L45)
 {{% /tab %}}
 {{< /tabs >}}
 
