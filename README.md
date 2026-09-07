@@ -26,7 +26,7 @@ This is the go-openapi fork of the great [testify](https://github.com/stretchr/t
 * 95% compatible with `stretchr/testify` — if you already use it, our migration tool automates the switch
 * Actively maintained: regular fixes and evolutions, many PRs proposed upstream are already in. [See our tracking board][upstream-tracking-url]
 * Zero external dependencies — you import what you need, with opt-in modules for extras (e.g. YAML, colorized output)
-* Modernized codebase targeting go1.25+
+* Modernized codebase targeting go1.26+
 * Go routine leak detection built in: zero-setup, no false positives, works with parallel tests (unlike `go.uber.org/goleak`)
 * File descriptor leak detection (linux-only)
 * Type-safe assertions with generics (see [a basic example][example-with-generics-url]) — migration to generics can be automated too. [Read the full story][doc-generics]
@@ -38,11 +38,14 @@ This is the go-openapi fork of the great [testify](https://github.com/stretchr/t
 ### This fork isn't for everyone
 
 * You need the `mock` package — we removed it and won't bring it back. For suites, we're [open to discussion][suite-discussion] about a redesigned approach
-* Your project must support Go versions older than 1.25
+* Your project must support Go versions older than 1.26
 * You rely on `testifylint` or other tooling that expects the `stretchr/testify` import path
 * You need 100% API compatibility — we're at 95%, and the remaining 5% are intentional removals
 
 ## Announcements
+
+* **2026-09-07** :
+  * v2.8.0 lands today - go1.26 is now required
 
 * **2026-08-23** :
   * v2.7.0 lands today - for go1.27, users generic assertions are now available as methods
