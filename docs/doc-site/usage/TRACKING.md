@@ -96,6 +96,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | [#1899], [#1931] | PR | Pass the custom message through `InEpsilonSlice` | ✅ Adapted - the index context no longer replaces the caller's message; both are joined. |
 | [#1908] | PR | `Contains` is not rune-safe on Unicode strings | ✅ Adapted - `Contains(t, "héllo", 'é')` compared against the literal `"<int32 Value>"`. Dispatch is now on the element kind (string, rune, byte, defined string type). The invalid-UTF-8 half of the upstream report is deliberately left as byte semantics. |
 | [#1940], [#1942] | Issue/PR | `ErrorNotContains` assertion | ✅ Adapted - implemented as `ErrorNotContains` in the error domain, the opposite of `ErrorContains`: a nil error fails, and so does an error whose message contains the substring. |
+| [#1878] | Issue    | diff hunk size | ✅ Implemented (forward only) - parameterized hunk size is an API challenge |
 
 [#994]: https://github.com/stretchr/testify/pull/994
 [#1232]: https://github.com/stretchr/testify/pull/1232
@@ -117,6 +118,7 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 [#1915]: https://github.com/stretchr/testify/issues/1915
 [#1874]: https://github.com/stretchr/testify/pull/1874
 [#1875]: https://github.com/stretchr/testify/pull/1875
+[#1878]: https://github.com/stretchr/testify/pull/1878
 [#1898]: https://github.com/stretchr/testify/pull/1898
 [#1899]: https://github.com/stretchr/testify/pull/1899
 [#1908]: https://github.com/stretchr/testify/pull/1908
@@ -142,7 +144,9 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 | Reference | Type | Summary | Status |
 |-----------|------|---------|--------|
 | [#1576] | Issue/PR | `EqualValues` assertion | 🔍 Monitoring [#1863]- Wrong equality when comparing float32 and float64|
-| [#1878] | Issue    | diff hunk size | 🔍 Monitoring - parameterized hunk size is an API challenge |
+| [#1945] | PR | `Must` helper | 🔍 Monitoring [#1945]- Syntactic sugar to hand a value directly when no error |
+
+[#1945]: https://github.com/stretchr/testify/pull/1945
 
 ### Informational (Not Implemented)
 
@@ -165,15 +169,14 @@ This table catalogs all upstream PRs and issues from [github.com/stretchr/testif
 [#1861]: https://github.com/stretchr/testify/pull/1861
 [#1862]: https://github.com/stretchr/testify/pull/1862
 [#1863]: https://github.com/stretchr/testify/pull/1863
-[#1878]: https://github.com/stretchr/testify/pull/1878
 
 ### Summary Statistics
 
 | Category | Count |
 |----------|-------|
-| **Implemented/Merged** | 34 |
+| **Implemented/Merged** | 35 |
 | **Superseded** | 6 |
-| **Monitoring** | 2 |
+| **Monitoring** | 1 |
 | **Informational** | 5 |
 | **Total Processed** | 47 |
 
