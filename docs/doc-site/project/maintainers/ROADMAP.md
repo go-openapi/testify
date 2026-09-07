@@ -50,8 +50,7 @@ timeline
                     : generic assertions as forward methods (go1.27+)
                     : ErrorNotContains
     ⏳ v2.8 (September 2026) :
-                    : ⏳ Must helper
-                    : ⏳ Assertion with options
+                    : ✅ Assertion with options
                     : ✅ go1.26+ required
     ⏳ v2.9 (December 2026) : (tentative)
                     : revive test suites
