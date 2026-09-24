@@ -56,11 +56,14 @@ jobs:
         name: Initialize theme
         env:
           RELEARN_VERSION: 9.0.3
+          RELEARN_SUM: "4e7f8931e63eb2a3a05938e5dfd47a5678447329b98b8486a2d1169cb3d1aba9"
         run: |
           cd hack/doc-site/hugo
 
           # Clone theme
           curl -sL -o relearn.tgz https://github.com/McShelby/hugo-theme-relearn/archive/refs/tags/"${RELEARN_VERSION}".tar.gz
+          # verify that the downloaded asset is the expected one
+          echo "${RELEARN_SUM} relearn.tgz" | sha256sum -c -
           tar xf relearn.tgz
           rm -rf themes/hugo-relearn
           mv "hugo-theme-relearn-${RELEARN_VERSION}" hugo-relearn
