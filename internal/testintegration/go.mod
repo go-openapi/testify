@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	github.com/go-openapi/testify/enable/colors/v2 v2.4.0
 	github.com/go-openapi/testify/v2 v2.8.0
-	go.yaml.in/yaml/v3 v3.0.5
+	go.yaml.in/yaml/v3 v3.0.6
 	pgregory.net/rapid v1.3.0
 )
 
