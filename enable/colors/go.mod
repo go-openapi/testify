@@ -2,7 +2,7 @@ module github.com/go-openapi/testify/enable/colors/v2
 
 require (
 	github.com/go-openapi/testify/v2 v2.8.1
-	golang.org/x/term v0.47.0
+	golang.org/x/term v0.48.0
 )
 
 require golang.org/x/sys v0.50.0 // indirect
